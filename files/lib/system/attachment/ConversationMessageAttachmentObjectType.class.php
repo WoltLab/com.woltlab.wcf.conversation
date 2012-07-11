@@ -1,5 +1,6 @@
 <?php
 namespace wcf\system\attachment;
+use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\conversation\Conversation;
 use wcf\system\WCF;
 
