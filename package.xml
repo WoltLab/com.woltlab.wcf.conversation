@@ -25,5 +25,6 @@
 		<instruction type="userGroupOption">userGroupOption.xml</instruction>
 		<instruction type="templateListener">templateListener.xml</instruction>
 		<instruction type="language">language/*.xml</instruction>
+		<instruction type="objectType">objectType.xml</instruction>
 	</instructions>
 </package>

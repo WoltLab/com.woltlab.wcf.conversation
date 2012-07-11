@@ -23,7 +23,7 @@ class ConversationAddForm extends MessageForm {
 	/**
 	 * @see wcf\form\MessageForm::$attachmentObjectType
 	 */
-	//public $attachmentObjectType = 'com.woltlab.wcf.conversation.message';
+	public $attachmentObjectType = 'com.woltlab.wcf.conversation.message';
 	
 	/**
 	 * participants (user names)
