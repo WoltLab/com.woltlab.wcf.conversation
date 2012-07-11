@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/maelstrom/language.xsd" languagecode="de">
+	<category name="wcf.conversation">
+		<item name="wcf.conversation.conversations"><![CDATA[Konversationen]]></item>
+		<item name="wcf.conversation.subject"><![CDATA[Betreff]]></item>
+		<item name="wcf.conversation.replies"><![CDATA[Antworten]]></item>
+		<item name="wcf.conversation.participants"><![CDATA[Teilnehmer]]></item>
+		<item name="wcf.conversation.lastPostTime"><![CDATA[Letzte Antwort]]></item>
+		<item name="wcf.conversation.message.new"><![CDATA[Neu]]></item>
+		<item name="wcf.conversation.add"><![CDATA[Neue Konversation starten]]></item>
+		<item name="wcf.conversation.button.add"><![CDATA[Konversation starten]]></item>
+		<item name="wcf.conversation.message.add"><![CDATA[Neue Antwort erstellen]]></item>
+		<item name="wcf.conversation.message.button.add"><![CDATA[Antworten]]></item>
+	</category>
+</language>

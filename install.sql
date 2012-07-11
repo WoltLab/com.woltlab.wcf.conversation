@@ -15,7 +15,9 @@ CREATE TABLE wcf1_conversation (
 	participantCanInvite TINYINT(1) NOT NULL DEFAULT 0,
 	isClosed TINYINT(1) NOT NULL DEFAULT 0,
 	isDraft TINYINT(1) NOT NULL DEFAULT 0,
-	draftData MEDIUMTEXT
+	draftData MEDIUMTEXT,
+	
+	KEY (userID, isDraft)
 );
 
 DROP TABLE IF EXISTS wcf1_conversation_to_user;

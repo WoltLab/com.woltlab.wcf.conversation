@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/maelstrom/options.xsd">
+	<import>
+		<categories>
+			<category name="message.conversation">
+				<parent>message</parent>
+				<options>module_conversation</options>
+			</category>
+		</categories>
+
+		<options>
+			<option name="module_conversation">
+				<categoryname>module.content</categoryname>
+				<optiontype>boolean</optiontype>
+				<defaultvalue>1</defaultvalue>
+			</option>
+			
+			<option name="conversations_per_page">
+				<categoryname>message.conversation</categoryname>
+				<optiontype>integer</optiontype>
+				<defaultvalue><![CDATA[10]]></defaultvalue>
+			</option>
+			<option name="conversation_messages_per_page">
+				<categoryname>message.conversation</categoryname>
+				<optiontype>integer</optiontype>
+				<defaultvalue><![CDATA[20]]></defaultvalue>
+			</option>
+			
+			<option name="conversation_list_default_sort_field">
+				<categoryname>message.conversation</categoryname>
+				<optiontype>select</optiontype>
+				<defaultvalue>lastPostTime</defaultvalue>
+				<selectoptions><![CDATA[subject:wcf.pm.subject
+lastPostTime:wcf.pm.date]]></selectoptions>
+			</option>
+			<option name="conversation_list_default_sort_order">
+				<categoryname>message.conversation</categoryname>
+				<optiontype>select</optiontype>
+				<defaultvalue>DESC</defaultvalue>
+				<selectoptions><![CDATA[ASC:wcf.global.sortOrder.ascending
+DESC:wcf.global.sortOrder.descending]]></selectoptions>
+			</option>
+		</options>
+	</import>
+</data>

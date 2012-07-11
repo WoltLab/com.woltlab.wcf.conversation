@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/maelstrom/userGroupOption.xsd">
+	<import>
+		<categories>
+			<category name="user.conversation">
+				<parent>user</parent>
+				<options>module_conversation</options>
+			</category>
+		</categories>
+		
+		<options>
+			<option name="user.conversation.canUseConversation">
+				<categoryname>user.conversation</categoryname>
+				<optiontype>boolean</optiontype>
+				<defaultvalue>1</defaultvalue>
+				<enableoptions>user.conversation.maxParticipants,user.conversation.maxConversations,user.conversation.maxLabels,user.conversation.maxLength,user.conversation.canUploadAttachment</enableoptions>
+			</option>
+			<option name="user.conversation.maxParticipants">
+				<categoryname>user.conversation</categoryname>
+				<optiontype>integer</optiontype>
+				<defaultvalue>10</defaultvalue>
+			</option>
+			<option name="user.conversation.maxConversations">
+				<categoryname>user.conversation</categoryname>
+				<optiontype>integer</optiontype>
+				<defaultvalue>100</defaultvalue>
+			</option>
+			<option name="user.conversation.maxLabels">
+				<categoryname>user.conversation</categoryname>
+				<optiontype>integer</optiontype>
+				<defaultvalue>5</defaultvalue>
+			</option>
+			<option name="user.conversation.maxLength">
+				<categoryname>user.conversation</categoryname>
+				<optiontype>integer</optiontype>
+				<defaultvalue>10000</defaultvalue>
+			</option>
+			
+			<option name="user.conversation.canUploadAttachment">
+				<categoryname>user.conversation</categoryname>
+				<optiontype>boolean</optiontype>
+				<defaultvalue>1</defaultvalue>
+				<enableoptions>user.conversation.maxAttachmentSize,user.conversation.allowedAttachmentExtensions,user.conversation.maxAttachmentCount</enableoptions>
+				<options>module_attachment</options>
+			</option>
+			<option name="user.conversation.maxAttachmentSize">
+				<categoryname>user.conversation</categoryname>
+				<optiontype>integer</optiontype>
+				<defaultvalue>150000</defaultvalue>
+				<options>module_attachment</options>
+			</option>
+			<option name="user.conversation.allowedAttachmentExtensions">
+				<categoryname>user.conversation</categoryname>
+				<optiontype>textarea</optiontype>
+				<defaultvalue><![CDATA[gif
+jpg
+jpeg
+png
+bmp
+zip
+txt
+pdf]]></defaultvalue>
+				<options>module_attachment</options>
+			</option>
+			<option name="user.conversation.maxAttachmentCount">
+				<categoryname>user.conversation</categoryname>
+				<optiontype>integer</optiontype>
+				<defaultvalue>5</defaultvalue>
+				<options>module_attachment</options>
+			</option>
+		</options>
+	</import>
+</data>
