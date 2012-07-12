@@ -67,6 +67,11 @@ class ConversationAddForm extends MessageForm {
 		
 		$this->participantIDs = $this->validateParticipants($this->participants);
 		$this->invisibleParticipantIDs = $this->validateParticipants($this->invisibleParticipants, 'invisibleParticipants');
+		
+		// remove duplicates
+		$intersection = array_intersect($this->participantIDs, $this->invisibleParticipantIDs);
+		if (!empty($intersection)) $this->invisibleParticipantIDs = array_diff($this->invisibleParticipantIDs, $intersection);
+		
 		if (!count($this->participantIDs) && !count($this->invisibleParticipantIDs) && !$this->draft) {
 			throw new UserInputException('participants');
 		}
@@ -96,9 +101,11 @@ class ConversationAddForm extends MessageForm {
 			try {
 				// get participant's profile
 				$user = UserProfile::getUserProfileByUsername($participant);
-				if (!$user->userID) {
+				if ($user === null) {
 					throw new UserInputException('participant', 'notFound');
 				}
+				if (in_array($user->userID, $result)) continue; // ignore duplicates
+				if ($user->userID == WCF::getUser()->userID) continue; // ignore author
 				
 				// todo: check participant's settings and permissions
 				/*if (!$user->getPermission('user.conversation.canUseConversation')) {
@@ -124,7 +131,7 @@ class ConversationAddForm extends MessageForm {
 				$result[] = $user->userID;
 			}
 			catch (UserInputException $e) {
-				$error[] = array('type' => $e->getType(), 'username' => $recipient);
+				$error[] = array('type' => $e->getType(), 'username' => $participant);
 			}
 		}
 		

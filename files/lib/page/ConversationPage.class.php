@@ -160,7 +160,7 @@ class ConversationPage extends MultipleLinkPage {
 	 * Gets the id of the last post in this conversation and forwards the user to this post.
 	 */
 	protected function goToLastPost() {
-		$sql = "SELECT		message.messageID
+		$sql = "SELECT		conversation_message.messageID
 			FROM 		wcf".WCF_N."_conversation_message conversation_message
 			".$this->objectList->getConditionBuilder()."
 			ORDER BY 	time ".($this->sortOrder == 'ASC' ? 'DESC' : 'ASC');
