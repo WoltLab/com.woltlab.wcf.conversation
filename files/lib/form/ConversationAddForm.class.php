@@ -5,7 +5,9 @@ use wcf\data\user\UserProfile;
 use wcf\system\breadcrumb\Breadcrumb;
 use wcf\system\exception\UserInputException;
 use wcf\system\request\LinkHandler;
+use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\WCF;
+use wcf\util\ArrayUtil;
 use wcf\util\HeaderUtil;
 use wcf\util\StringUtil;
 
@@ -88,24 +90,31 @@ class ConversationAddForm extends MessageForm {
 	 * Validates the participants.
 	 */
 	protected function validateParticipants($participants, $field = 'participants') {
-		// explode multiple participants to an array
-		$participantList = explode(',', $participants);
 		$result = array();
 		$error = array();
 		
 		// loop through participants and check their settings
-		foreach ($participantList as $participant) {
-			$participant = StringUtil::trim($participant);
-			if (empty($participant)) continue;
-			
+		$participantList = UserProfile::getUserProfilesByUsername(ArrayUtil::trim(explode(',', $participants)));
+		
+		// load user storage at once to avoid multiple queries
+		$userIDs = array();
+		foreach ($participantList as $user) {
+			if ($user) {
+				$userIDs[] = $user->userID;
+			}
+		}
+		UserStorageHandler::getInstance()->loadStorage($userIDs);
+		
+		foreach ($participantList as $participant => $user) {
 			try {
-				// get participant's profile
-				$user = UserProfile::getUserProfileByUsername($participant);
 				if ($user === null) {
 					throw new UserInputException('participant', 'notFound');
 				}
-				if (in_array($user->userID, $result)) continue; // ignore duplicates
-				if ($user->userID == WCF::getUser()->userID) continue; // ignore author
+				
+				// ignore author as recipient and double recipients
+				if ($user->userID == WCF::getUser()->userID || in_array($user->userID, $result)) {
+					continue;
+				}
 				
 				// todo: check participant's settings and permissions
 				/*if (!$user->getPermission('user.conversation.canUseConversation')) {
