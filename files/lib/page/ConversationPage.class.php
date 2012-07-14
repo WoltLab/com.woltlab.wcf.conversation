@@ -3,7 +3,6 @@ namespace wcf\page;
 use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\conversation\ConversationAction;
 use wcf\data\conversation\Conversation;
-use wcf\data\conversation\ViewableConversation;
 use wcf\system\breadcrumb\Breadcrumb;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\PermissionDeniedException;
