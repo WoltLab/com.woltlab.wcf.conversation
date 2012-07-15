@@ -38,6 +38,16 @@ class ConversationPage extends MultipleLinkPage {
 	public $objectListClassName = 'wcf\data\conversation\message\ViewableConversationMessageList';
 	
 	/**
+	 * @see wcf\page\AbstractPage::$neededModules
+	 */
+	public $neededModules = array('MODULE_CONVERSATION');
+	
+	/**
+	 * @see wcf\page\AbstractPage::$neededPermissions
+	 */
+	public $neededPermissions = array('user.conversation.canUseConversation');
+	
+	/**
 	 * conversation id
 	 * @var integer
 	 */
@@ -80,7 +90,7 @@ class ConversationPage extends MultipleLinkPage {
 			if (!$this->message->messageID) {
 				throw new IllegalLinkException();
 			}
-			$this->conversationID = $this->message->messageID;
+			$this->conversationID = $this->message->conversationID;
 		}
 		
 		$this->conversation = Conversation::getUserConversation($this->conversationID, WCF::getUser()->userID);

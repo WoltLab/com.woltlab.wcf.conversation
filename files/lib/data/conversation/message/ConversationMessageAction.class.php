@@ -69,4 +69,16 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction {
 		// return new message
 		return $message;
 	}
+	
+	/**
+	 * @see wcf\data\AbstractDatabaseObjectAction::update()
+	 */
+	public function update() {
+		// count attachments
+		if (isset($this->parameters['attachmentHandler']) && $this->parameters['attachmentHandler'] !== null) {
+			$this->parameters['data']['attachments'] = count($this->parameters['attachmentHandler']);
+		}
+		
+		parent::update();
+	}
 }

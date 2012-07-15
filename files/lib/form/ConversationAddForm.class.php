@@ -3,6 +3,7 @@ namespace wcf\form;
 use wcf\data\conversation\ConversationAction;
 use wcf\data\user\UserProfile;
 use wcf\system\breadcrumb\Breadcrumb;
+use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
 use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
@@ -26,13 +27,23 @@ class ConversationAddForm extends MessageForm {
 	public $attachmentObjectType = 'com.woltlab.wcf.conversation.message';
 	
 	/**
-	 * participants (user names)
+	 * @see wcf\page\AbstractPage::$neededModules
+	 */
+	public $neededModules = array('MODULE_CONVERSATION');
+	
+	/**
+	 * @see wcf\page\AbstractPage::$neededPermissions
+	 */
+	public $neededPermissions = array('user.conversation.canUseConversation');
+	
+	/**
+	 * participants (comma separated user names)
 	 * @var string
 	 */
 	public $participants = '';
 	
 	/**
-	 * invisible participants (user names)
+	 * invisible participants (comma separated user names)
 	 * @var string
 	 */
 	public $invisibleParticipants = '';
@@ -43,7 +54,16 @@ class ConversationAddForm extends MessageForm {
 	 */
 	public $draft = 0;
 	
+	/**
+	 * participants (user ids)
+	 * @var array<integer>
+	 */
 	public $participantIDs = array();
+	
+	/**
+	 * invisible participants (user ids)
+	 * @var array<integer>
+	 */
 	public $invisibleParticipantIDs = array();
 	
 	/**
@@ -197,5 +217,16 @@ class ConversationAddForm extends MessageForm {
 			'participants' => $this->participants,
 			'invisibleParticipants' => $this->invisibleParticipants
 		));
+	}
+	
+	/**
+	 * @see wcf\page\IPage::show()
+	 */
+	public function show() {
+		if (!WCF::getUser()->userID) {
+			throw new PermissionDeniedException();
+		}
+		
+		parent::show();
 	}
 }

@@ -1,5 +1,6 @@
 <?php
 namespace wcf\data\conversation;
+use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\DatabaseObjectEditor;
 use wcf\system\WCF;
 
@@ -18,6 +19,23 @@ class ConversationEditor extends DatabaseObjectEditor {
 	 * @see	wcf\data\DatabaseObjectEditor::$baseClass
 	 */
 	protected static $baseClass = 'wcf\data\conversation\Conversation';
+	
+	/**
+	 * Adds a new message to this conversation.
+	 *
+	 * @param	wcf\data\conversation\message\ConversationMessage	$message
+	 */
+	public function addMessage(ConversationMessage $message) {
+		$data = array(
+			'lastPoster' => $message->username,
+			'lastPostTime' => $message->time,
+			'lastPosterID' => $message->userID,
+			'replies' => $this->replies + 1,
+			'attachments' => $this->attachments + $message->attachments
+		);
+		
+		$this->update($data);
+	}
 	
 	public function updateParticipantSummary() {
 		$users = array();
