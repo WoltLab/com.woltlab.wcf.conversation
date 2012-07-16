@@ -3,7 +3,7 @@
 <head>
 	<title>{lang}wcf.conversation.conversations{/lang} {if $pageNo > 1}- {lang}wcf.page.pageNo{/lang} {/if}- {PAGE_TITLE|language}</title>
 	
-	{include file='headInclude' sandbox=false}
+	{include file='headInclude'}
 </head>
 
 <body id="tpl{$templateName|ucfirst}">
@@ -26,7 +26,7 @@
 	</nav>	
 {/capture}
 
-{include file='header' sandbox=false sidebarOrientation='left'}
+{include file='header' sidebarOrientation='left'}
 
 <header class="boxHeadline">
 	<hgroup>
@@ -158,7 +158,7 @@
 	{/hascontent}
 </div>
 
-{include file='footer' sandbox=false}
+{include file='footer'}
 
 </body>
 </html>
