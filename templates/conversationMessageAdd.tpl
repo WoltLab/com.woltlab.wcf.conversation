@@ -52,9 +52,7 @@
 	
 	<div class="formSubmit">
 		<input type="submit" value="{lang}wcf.global.button.submit{/lang}" accesskey="s" />
-		<input type="hidden" name="tmpHash" value="{$tmpHash}" />
-		{@SID_INPUT_TAG}
- 	</div>
+	</div>
 </form>
 
 <header class="boxHeadline">
