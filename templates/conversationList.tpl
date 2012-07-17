@@ -5,10 +5,15 @@
 	
 	{include file='headInclude'}
 	
+	<script type="text/javascript" src="{@$__wcf->getPath()}js/WCF.Conversation.js"></script>
 	<script type="text/javascript">
 		//<![CDATA[
 		$(function() {
 			WCF.Clipboard.init('wcf\\page\\ConversationListPage', {@$hasMarkedItems}, { });
+			
+			var $editorHandler = new WCF.Conversation.EditorHandler();
+			var $inlineEditor = new WCF.Conversation.InlineEditor('.conversation');
+			$inlineEditor.setEditorHandler($editorHandler);
 		});
 		//]]>
 	</script>
@@ -80,7 +85,7 @@
 			
 			<tbody>
 				{foreach from=$objects item=conversation}
-					<tr class="wbbThread {if $conversation->isNew()} new{/if}">
+					<tr class="wbbThread conversation{if $conversation->isNew()} new{/if}" data-conversation-id="{@$conversation->conversationID}">
 						<td class="columnMark">
 							<label><input type="checkbox" class="jsClipboardItem" data-object-id="{@$conversation->conversationID}" /></label>
 						</td>
@@ -125,6 +130,7 @@
 							<small>
 								<a href="{link controller='User' object=$conversation->getUserProfile()->getDecoratedObject()}{/link}" class="userLink" data-user-id="{@$conversation->userID}">{$conversation->username}</a>
 								- {@$conversation->time|time}
+								- <a class="jsThreadInlineEditor">{lang}wcf.global.button.edit{/lang}</a>
 							</small>
 							
 							{if $conversation->getParticipantSummary()|count}
