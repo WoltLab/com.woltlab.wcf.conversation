@@ -94,7 +94,7 @@ class ConversationListPage extends SortablePage {
 		
 		WCF::getTPL()->assign(array(
 			'filter' => $this->filter,
-			'hasMarkedItems' => ClipboardHandler::getInstance()->hasMarkedItems(ClipboardHandler::getInstance()->getObjectTypeID('com.woltlab.wbb.post'))
+			'hasMarkedItems' => ClipboardHandler::getInstance()->hasMarkedItems(ClipboardHandler::getInstance()->getObjectTypeID('com.woltlab.wcf.conversation.conversation'))
 		));
 	}
 	
