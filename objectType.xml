@@ -12,5 +12,11 @@
 			<definitionname>com.woltlab.wcf.attachment.objectType</definitionname>
 			<classname>wcf\system\attachment\ConversationMessageAttachmentObjectType</classname>
 		</type>
+		
+		<type>
+			<name>com.woltlab.wcf.conversation.conversation</name>
+			<definitionname>com.woltlab.wcf.clipboardItem</definitionname>
+			<listclassname>wcf\data\conversation\ConversationList</listclassname>
+		</type>
 	</import>
 </data>
