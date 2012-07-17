@@ -34,6 +34,10 @@
 						<small class="innerError">
 							{if $errorType == 'empty'}
 								{lang}wcf.global.form.error.empty{/lang}
+							{elseif $errorType|is_array}
+								{foreach from=$errorType item='errorData'}
+									{lang}wcf.conversation.participants.error.{@$errorData.type}{/lang}
+								{/foreach}
 							{else}
 								{lang}wcf.conversation.participants.error.{@$errorType}{/lang}
 							{/if}
@@ -51,6 +55,10 @@
 						<small class="innerError">
 							{if $errorType == 'empty'}
 								{lang}wcf.global.form.error.empty{/lang}
+							{elseif $errorType|is_array}
+								{foreach from=$errorType item='errorData'}
+									{lang}wcf.conversation.participants.error.{@$errorData.type}{/lang}
+								{/foreach}
 							{else}
 								{lang}wcf.conversation.participants.error.{@$errorType}{/lang}
 							{/if}
