@@ -3,6 +3,7 @@ CREATE TABLE wcf1_conversation (
 	conversationID INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	subject VARCHAR(255) NOT NULL DEFAULT '',
 	time INT(10) NOT NULL DEFAULT 0,
+	firstMessageID INT(10),
 	userID INT(10),
 	username VARCHAR(255) NOT NULL DEFAULT '',
 	lastPostTime INT(10) NOT NULL DEFAULT 0,
@@ -70,6 +71,7 @@ CREATE TABLE wcf1_conversation_label_to_object (
 
 ALTER TABLE wcf1_conversation ADD FOREIGN KEY (userID) REFERENCES wcf1_user (userID) ON DELETE SET NULL;
 ALTER TABLE wcf1_conversation ADD FOREIGN KEY (lastPosterID) REFERENCES wcf1_user (userID) ON DELETE SET NULL;
+ALTER TABLE wcf1_conversation ADD FOREIGN KEY (firstMessageID) REFERENCES wcf1_conversation_message (messageID) ON DELETE SET NULL;
 
 ALTER TABLE wcf1_conversation_to_user ADD FOREIGN KEY (conversationID) REFERENCES wcf1_conversation (conversationID) ON DELETE CASCADE;
 ALTER TABLE wcf1_conversation_to_user ADD FOREIGN KEY (participantID) REFERENCES wcf1_user (userID) ON DELETE SET NULL;

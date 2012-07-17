@@ -39,27 +39,17 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 			$data['attachments'] = count($this->parameters['attachmentHandler']);
 		}
 		$conversation = call_user_func(array($this->className, 'create'), $data);
+		$conversationEditor = new ConversationEditor($conversation);
 		
 		// save participants
-		$sql = "INSERT INTO	wcf".WCF_N."_conversation_to_user
-					(conversationID, participantID, isInvisible)
-			VALUES		(?, ?, ?)";
-		$statement = WCF::getDB()->prepareStatement($sql);
-		if (!empty($this->parameters['participants'])) {
-			foreach ($this->parameters['participants'] as $userID) {
-				$statement->execute(array($conversation->conversationID, $userID, 0));
-			}
+		if (!$conversation->isDraft) {
+			$conversationEditor->updateParticipants((!empty($this->parameters['participants']) ? $this->parameters['participants'] : array()), (!empty($this->parameters['invisibleParticipants']) ? $this->parameters['invisibleParticipants'] : array()));
+			
+			// add author
+			$conversationEditor->updateParticipants(array($data['userID']));
 		}
-		if (!empty($this->parameters['invisibleParticipants'])) {
-			foreach ($this->parameters['invisibleParticipants'] as $userID) {
-				$statement->execute(array($conversation->conversationID, $userID, 1));
-			}
-		}
-		// add author
-		$statement->execute(array($conversation->conversationID, $data['userID'], 0));
 		
 		// update participant summary
-		$conversationEditor = new ConversationEditor($conversation);
 		$conversationEditor->updateParticipantSummary();
 		
 		// create message
@@ -79,7 +69,40 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 		));
 		$resultValues = $messageAction->executeAction();
 		
+		// update first message id 
+		$conversationEditor->update(array(
+			'firstMessageID' => $resultValues['returnValues']->messageID
+		));
+		
 		return $conversation;
+	}
+	
+	/**
+	 * @see	wcf\data\AbstractDatabaseObjectAction::update()
+	 */
+	public function update() {
+		// count participants
+		if (!empty($this->parameters['participants'])) {
+			$this->parameters['data']['participants'] = count($this->parameters['participants']);
+		}
+		
+		parent::update();
+		
+		foreach ($this->objects as $conversation) {
+			// partipants
+			if (!empty($this->parameters['participants']) || !empty($this->parameters['invisibleParticipants'])) {
+				$conversation->updateParticipants((!empty($this->parameters['participants']) ? $this->parameters['participants'] : array()), (!empty($this->parameters['invisibleParticipants']) ? $this->parameters['invisibleParticipants'] : array()));
+				$conversation->updateParticipantSummary();
+			}
+			
+			// draft status
+			if (isset($this->parameters['data']['isDraft'])) {
+				if ($conversation->isDraft && !$this->parameters['data']['isDraft']) {
+					// add author
+					$conversation->updateParticipants(array($conversation->userID));
+				}
+			}
+		}
 	}
 	
 	/**
@@ -105,7 +128,7 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 		
 		// reset storage
 		if (WCF::getUser()->userID) {
-			// todo UserStorageHandler::getInstance()->reset(array(WCF::getUser()->userID), 'unreadConversations', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
+			// @todo UserStorageHandler::getInstance()->reset(array(WCF::getUser()->userID), 'unreadConversations', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
 		}
 	}
 	
@@ -113,6 +136,6 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 	 * Validates the mark as read action.
 	 */
 	public function validateMarkAsRead() {
-		// todo
+		// @todo: implement me
 	}
 }

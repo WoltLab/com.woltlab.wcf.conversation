@@ -106,6 +106,7 @@
 	
 	<div class="formSubmit">
 		<input type="submit" value="{lang}wcf.global.button.submit{/lang}" accesskey="s" />
+		<button name="draft" accesskey="d" value="1">{lang}wcf.conversation.button.saveAsDraft{/lang}</button>
 		<input type="hidden" name="tmpHash" value="{$tmpHash}" />
 		{@SID_INPUT_TAG}
  	</div>

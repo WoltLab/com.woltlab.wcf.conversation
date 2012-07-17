@@ -1,5 +1,6 @@
 <?php
 namespace wcf\data\conversation;
+use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\DatabaseObject;
 use wcf\system\breadcrumb\Breadcrumb;
 use wcf\system\breadcrumb\IBreadcrumbProvider;
@@ -57,7 +58,21 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	 * @return boolean
 	 */
 	public function isNew() {
-		if ($this->lastPostTime > $this->lastVisitTime) {
+		if (!$this->isDraft && $this->lastPostTime > $this->lastVisitTime) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Returns true, if the active user doesn't have read the given message.
+	 * 
+	 * @param	wcf\data\conversation\message\ConversationMessage	$message
+	 * @return	boolean
+	 */
+	public function isNewMessage(ConversationMessage $message) {
+		if (!$this->isDraft && $message->time > $this->lastVisitTime) {
 			return true;
 		}
 		

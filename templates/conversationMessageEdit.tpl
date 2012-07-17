@@ -23,6 +23,64 @@
 
 <form method="post" action="{link controller='ConversationMessageEdit' id=$messageID}{/link}">
 	<div class="container containerPadding marginTop shadow">
+		{if $isFirstMessage}
+			<fieldset>
+				<legend>{lang}wcf.conversation.information{/lang}</legend>
+				
+				{if $conversation->isDraft}
+					<dl{if $errorField == 'participants'} class="formError"{/if}>
+						<dt><label for="participants">{lang}wcf.conversation.participants{/lang}</label></dt>
+						<dd>
+							<textarea id="participants" name="participants" class="long" cols="40" rows="2">{$participants}</textarea>
+							{if $errorField == 'participants'}
+								<small class="innerError">
+									{if $errorType == 'empty'}
+										{lang}wcf.global.form.error.empty{/lang}
+									{else}
+										{lang}wcf.conversation.participants.error.{@$errorType}{/lang}
+									{/if}
+								</small>
+							{/if}
+							<small>{lang}wcf.conversation.participants.description{/lang}</small>
+						</dd>
+					</dl>
+					
+					<dl{if $errorField == 'invisibleParticipants'} class="formError"{/if}>
+						<dt><label for="invisibleParticipants">{lang}wcf.conversation.invisibleParticipants{/lang}</label></dt>
+						<dd>
+							<textarea id="invisibleParticipants" name="invisibleParticipants" class="long" cols="40" rows="2">{$invisibleParticipants}</textarea>
+							{if $errorField == 'invisibleParticipants'}
+								<small class="innerError">
+									{if $errorType == 'empty'}
+										{lang}wcf.global.form.error.empty{/lang}
+									{else}
+										{lang}wcf.conversation.participants.error.{@$errorType}{/lang}
+									{/if}
+								</small>
+							{/if}
+							<small>{lang}wcf.conversation.invisibleParticipants.description{/lang}</small>
+						</dd>
+					</dl>
+				{/if}
+				
+				<dl{if $errorField == 'subject'} class="formError"{/if}>
+					<dt><label for="subject">{lang}wcf.conversation.subject{/lang}</label></dt>
+					<dd>
+						<input type="text" id="subject" name="subject" value="{$subject}" required="true" class="long" />
+						{if $errorField == 'subject'}
+							<small class="innerError">
+								{if $errorType == 'empty'}
+									{lang}wcf.global.form.error.empty{/lang}
+								{else}
+									{lang}wcf.conversation.subject.error.{@$errorType}{/lang}
+								{/if}
+							</small>
+						{/if}
+					</dd>
+				</dl>
+			</fieldset>
+		{/if}
+		
 		<fieldset>
 			<legend>{lang}wcf.conversation.message{/lang}</legend>
 			
@@ -52,70 +110,73 @@
 	
 	<div class="formSubmit">
 		<input type="submit" value="{lang}wcf.global.button.submit{/lang}" accesskey="s" />
+		{if $isFirstMessage && $conversation->isDraft}<button name="draft" accesskey="d" value="1">{lang}wcf.conversation.button.saveAsDraft{/lang}</button>{/if}
 		<input type="hidden" name="tmpHash" value="{$tmpHash}" />
 		{@SID_INPUT_TAG}
  	</div>
 </form>
 
-<header class="boxHeadline">
-	<hgroup>
-		<h1>{lang}wcf.conversation.message.add.previousPosts{/lang}</h1>
-	</hgroup>
-</header>
-
-<div>
-	<ul class="wbbThreadPostList">
-		{assign var='startIndex' value=$items}
-		{foreach from=$messages item=message}
-			{assign var='objectID' value=$message->messageID}
-			
-			<li class="marginTop shadow">
-				<article class="message messageReduced">
-					<div>
-						<section class="messageContent">
-							<div>
-								<header class="messageHeader">
-									<p class="messageCounter"><a href="{link controller='Conversation' object=$conversation}messageID={@$message->messageID}{/link}#message{@$message->messageID}" title="{lang}wcf.conversation.message.permalink{/lang}" class="button jsTooltip">{#$startIndex}</a></p>
-									
-									<div class="messageCredits box32">
-										{if $message->getUserProfile()->getAvatar()}
-											<a href="{link controller='User' object=$message->getUserProfile()}{/link}" class="framed">{@$message->getUserProfile()->getAvatar()->getImageTag(32)}</a>
-										{/if}
-										<div>
-											<p><a href="{link controller='User' object=$message->getUserProfile()}{/link}" class="userLink" data-user-id="{@$message->userID}">{$message->username}</a><p>
-											
-											{@$message->time|time}
+{if $messages|count}
+	<header class="boxHeadline">
+		<hgroup>
+			<h1>{lang}wcf.conversation.message.add.previousPosts{/lang}</h1>
+		</hgroup>
+	</header>
+	
+	<div>
+		<ul class="wbbThreadPostList">
+			{assign var='startIndex' value=$items}
+			{foreach from=$messages item=message}
+				{assign var='objectID' value=$message->messageID}
+				
+				<li class="marginTop shadow">
+					<article class="message messageReduced">
+						<div>
+							<section class="messageContent">
+								<div>
+									<header class="messageHeader">
+										<p class="messageCounter"><a href="{link controller='Conversation' object=$conversation}messageID={@$message->messageID}{/link}#message{@$message->messageID}" title="{lang}wcf.conversation.message.permalink{/lang}" class="button jsTooltip">{#$startIndex}</a></p>
+										
+										<div class="messageCredits box32">
+											{if $message->getUserProfile()->getAvatar()}
+												<a href="{link controller='User' object=$message->getUserProfile()}{/link}" class="framed">{@$message->getUserProfile()->getAvatar()->getImageTag(32)}</a>
+											{/if}
+											<div>
+												<p><a href="{link controller='User' object=$message->getUserProfile()}{/link}" class="userLink" data-user-id="{@$message->userID}">{$message->username}</a><p>
+												
+												{@$message->time|time}
+											</div>
 										</div>
-									</div>
-								</header>
-								
-								<div class="messageBody">
-									<div>
-										<div class="messageText">
-											{@$message->getFormattedMessage()}
+									</header>
+									
+									<div class="messageBody">
+										<div>
+											<div class="messageText">
+												{@$message->getFormattedMessage()}
+											</div>
+											
+											{include file='attachments'}
 										</div>
 										
-										{include file='attachments'}
+										<footer class="contentOptions clearfix">
+											<nav>
+												<ul class="smallButtons">
+													<li class="toTopLink"><a href="{@$__wcf->getAnchor('top')}" title="{lang}wcf.global.scrollUp{/lang}" class="button jsTooltip"><img src="{icon size='S'}circleArrowUp{/icon}" alt="" class="icon16" /> <span class="invisible">{lang}wcf.global.scrollUp{/lang}</span></a></li>
+												</ul>
+											</nav>
+										</footer>
 									</div>
-									
-									<footer class="contentOptions clearfix">
-										<nav>
-											<ul class="smallButtons">
-												<li class="toTopLink"><a href="{@$__wcf->getAnchor('top')}" title="{lang}wcf.global.scrollUp{/lang}" class="button jsTooltip"><img src="{icon size='S'}circleArrowUp{/icon}" alt="" class="icon16" /> <span class="invisible">{lang}wcf.global.scrollUp{/lang}</span></a></li>
-											</ul>
-										</nav>
-									</footer>
 								</div>
-							</div>
-						</section>
-					</div>
-				</article>
-			</li>
-			
-			{assign var='startIndex' value=$startIndex-1}
-		{/foreach}
-	</ul>
-</div>
+							</section>
+						</div>
+					</article>
+				</li>
+				
+				{assign var='startIndex' value=$startIndex-1}
+			{/foreach}
+		</ul>
+	</div>
+{/if}
 
 {include file='footer'}
 {include file='wysiwyg'}

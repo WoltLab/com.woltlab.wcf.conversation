@@ -55,10 +55,10 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction {
 			$conversationEditor->addMessage($message);
 		}
 		
-		// todo: reset storage
+		// @todo: reset storage
 		// UserStorageHandler::getInstance()->resetAll('unreadThreads', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wbb'));
 		
-		// todo: update search index
+		// @todo: update search index
 		//SearchIndexManager::getInstance()->add('com.woltlab.wbb.post', $post->postID, $post->message, $post->subject, $post->time, $post->userID, $post->username, $thread->languageID);
 		
 		// update attachments

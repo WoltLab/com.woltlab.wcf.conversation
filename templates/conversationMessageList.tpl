@@ -14,7 +14,7 @@
 								<a href="{link controller='Conversation' object=$conversation}messageID={@$message->messageID}{/link}#message{@$message->messageID}" title="{lang}wcf.conversation.message.permalink{/lang}" class="button jsTooltip">{#$startIndex}</a>
 							</p>
 							
-							{if $message->time > $conversation->lastVisitTime}<p class="newMessageBadge">{lang}wcf.conversation.message.new{/lang}</p>{/if}
+							{if $conversation->isNewMessage($message->getDecoratedObject())}<p class="newMessageBadge">{lang}wcf.conversation.message.new{/lang}</p>{/if}
 							
 							{@$message->time|time}
 							

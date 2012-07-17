@@ -37,6 +37,40 @@ class ConversationEditor extends DatabaseObjectEditor {
 		$this->update($data);
 	}
 	
+	/**
+	 * Resets the participants of this conversation.
+	 */
+	public function resetParticipants() {
+		$sql = "DELETE FROM	wcf".WCF_N."_ocnversation_to_user
+			WHERE		conversationID = ?
+					AND participantID <> ?";
+		$statement = WCF::getDB()->prepareStatement($sql);
+		$statement->execute(array($this->conversationID, $this->userID));
+	}
+	
+	/**
+	 * Updates the participants of this conversation.
+	 * 
+	 * @param	array<integer>	$participants
+	 * @param	array<integer>	$invisibleParticipants
+	 */
+	public function updateParticipants(array $participants, array $invisibleParticipants = array()) {
+		$sql = "INSERT INTO	wcf".WCF_N."_conversation_to_user
+					(conversationID, participantID, isInvisible)
+			VALUES		(?, ?, ?)";
+		$statement = WCF::getDB()->prepareStatement($sql);
+		if (!empty($participants)) {
+			foreach ($participants as $userID) {
+				$statement->execute(array($this->conversationID, $userID, 0));
+			}
+		}
+		if (!empty($this->parameters['invisibleParticipants'])) {
+			foreach ($this->parameters['invisibleParticipants'] as $userID) {
+				$statement->execute(array($conversation->conversationID, $userID, 1));
+			}
+		}
+	}
+	
 	public function updateParticipantSummary() {
 		$users = array();
 		$sql = "SELECT		conversation_to_user.participantID AS userID, conversation_to_user.hideConversation, user_table.username

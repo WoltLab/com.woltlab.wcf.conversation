@@ -74,7 +74,7 @@ class ConversationAddForm extends MessageForm {
 	public function readFormParameters() {
 		parent::readFormParameters();
 		
-		if (isset($_POST['draft'])) $this->draft = intval($_POST['draft']);
+		if (isset($_POST['draft'])) $this->draft = (bool) $_POST['draft'];
 		if (isset($_POST['participants'])) $this->participants = StringUtil::trim($_POST['participants']);
 		if (isset($_POST['invisibleParticipants'])) $this->invisibleParticipants = StringUtil::trim($_POST['invisibleParticipants']);
 	}
@@ -136,7 +136,7 @@ class ConversationAddForm extends MessageForm {
 					continue;
 				}
 				
-				// todo: check participant's settings and permissions
+				// @todo: check participant's settings and permissions
 				/*if (!$user->getPermission('user.conversation.canUseConversation')) {
 					throw new UserInputException('participant', 'canNotUseConversation');
 				}*/
@@ -151,7 +151,7 @@ class ConversationAddForm extends MessageForm {
 					throw new UserInputException('participant', 'ignoresYou');
 				}
 				
-				// todo: check participant's mailbox quota
+				// @todo: check participant's mailbox quota
 				if (false) {
 					throw new UserInputException('participant', 'mailboxIsFull');
 				}
@@ -182,18 +182,27 @@ class ConversationAddForm extends MessageForm {
 			'subject' => $this->subject,
 			'time' => TIME_NOW,
 			'userID' => WCF::getUser()->userID,
-			'username' => WCF::getUser()->username
+			'username' => WCF::getUser()->username,
+			'isDraft' => ($this->draft ? 1 : 0)
 		);
+		if ($this->draft) {
+			$data['draftData'] = serialize(array(
+				'participants' => $this->participantIDs,
+				'invisibleParticipants' => $this->invisibleParticipantIDs
+			));
+		}
 		
 		$conversationData = array(
 			'data' => $data,
-			'participants' => $this->participantIDs,
-			'invisibleParticipants' => $this->invisibleParticipantIDs,
 			'attachmentHandler' => $this->attachmentHandler,
 			'messageData' => array(
 				'message' => $this->text
 			)
 		);
+		if (!$this->draft) {
+			$conversationData['participants'] = $this->participantIDs;
+			$conversationData['invisibleParticipants'] = $this->invisibleParticipantIDs;
+		}
 		
 		$this->objectAction = new ConversationAction(array(), 'create', $conversationData);
 		$resultValues = $this->objectAction->executeAction();

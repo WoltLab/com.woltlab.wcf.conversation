@@ -54,7 +54,7 @@
 {if !$items}
 	<p class="info">{lang}wcf.conversation.noConversations{/lang}</p>
 {else}
-	<div class="marginTop tabularBox tabularBoxTitle shadow wbbThreadList"> {*todo: use generic css class*}
+	<div class="marginTop tabularBox tabularBoxTitle shadow wbbThreadList"> {* @todo: use generic css class*}
 		<hgroup>
 			<h1>{lang}wcf.conversation.conversations{/lang} <span class="badge badgeInverse">{#$items}</span></h1>
 		</hgroup>
@@ -87,7 +87,7 @@
 						</td>
 						<td class="columnText columnTopic">
 							<h1>
-								{*todo:if $thread->hasLabels()}
+								{* @todo: if $thread->hasLabels()}
 									<ul class="labelList">
 										{foreach from=$thread->getLabels() item=label}
 											<li><a href="#" class="badge label{if $label->cssClassName} {$label->cssClassName}{/if}">{lang}{$label->label}{/lang}</a></li>
@@ -115,10 +115,12 @@
 								- {@$conversation->time|time}
 							</small>
 							
-							<small>
-								{lang}wcf.conversation.participants{/lang}: {implode from=$conversation->getParticipantSummary() item=participant}<a href="{link controller='User' object=$participant}{/link}" class="userLink" data-user-id="{@$participant->userID}"{if $participant->hideConversation == 2} style="text-decoration: line-through"{/if}>{$participant->username}</a>{/implode}
-								{if $conversation->getParticipantSummary()|count < $conversation->participants - 1}{lang}wcf.conversation.participants.other{/lang}{/if}
-							</small>
+							{if $conversation->getParticipantSummary()|count}
+								<small>
+									{lang}wcf.conversation.participants{/lang}: {implode from=$conversation->getParticipantSummary() item=participant}<a href="{link controller='User' object=$participant}{/link}" class="userLink" data-user-id="{@$participant->userID}"{if $participant->hideConversation == 2} style="text-decoration: line-through"{/if}>{$participant->username}</a>{/implode}
+									{if $conversation->getParticipantSummary()|count < $conversation->participants - 1}{lang}wcf.conversation.participants.other{/lang}{/if}
+								</small>
+							{/if}
 						</td>
 						<td class="columnDigits columnReplies"><p>{#$conversation->replies}</p></td>
 						<td class="columnDigits columnParticipants"><p>{#$conversation->participants}</p></td>
