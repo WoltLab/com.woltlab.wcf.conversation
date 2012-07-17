@@ -1,0 +1,3 @@
+{if $__wcf->session->getPermission('user.conversation.canUseConversation') && $user->canSendConversation != 2 && ($user->canSendConversation != 1 || $__wcf->getProfileHandler()->isFollowing($user->userID))} {* todo: add check if $user can use conversations *}
+	<li><a class="jsTooltip" href="{link controller='ConversationAdd'}{* todo: add $user as parameter *}{/link}" title="{lang}wcf.conversation.add{/lang}"><img src="{icon}comment{/icon}" alt="" /></a></li>
+{/if}
