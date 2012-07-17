@@ -7,5 +7,12 @@
 			<eventname>menuItems</eventname>
 			<templatecode><![CDATA[{include file='__userPanelConversationsLink'}]]></templatecode>
 		</templatelistener>
+		
+		<templatelistener name="userInformation">
+			<environment>user</environment>
+			<templatename>userInformation</templatename>
+			<eventname>buttons</eventname>
+			<templatecode><![CDATA[{include file='__userInformationConversationLink'}]]></templatecode>
+		</templatelistener>
 	</import>
 </data>
