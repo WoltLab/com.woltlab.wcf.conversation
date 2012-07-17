@@ -111,9 +111,7 @@
 	<div class="formSubmit">
 		<input type="submit" value="{lang}wcf.global.button.submit{/lang}" accesskey="s" />
 		{if $isFirstMessage && $conversation->isDraft}<button name="draft" accesskey="d" value="1">{lang}wcf.conversation.button.saveAsDraft{/lang}</button>{/if}
-		<input type="hidden" name="tmpHash" value="{$tmpHash}" />
-		{@SID_INPUT_TAG}
- 	</div>
+	</div>
 </form>
 
 {if $messages|count}

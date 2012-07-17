@@ -3,7 +3,15 @@
 <head>
 	<title>{lang}wcf.conversation.conversations{/lang} {if $pageNo > 1}- {lang}wcf.page.pageNo{/lang} {/if}- {PAGE_TITLE|language}</title>
 	
-	{include file='headInclude' sandbox=false}
+	{include file='headInclude'}
+	
+	<script type="text/javascript">
+		//<![CDATA[
+		$(function() {
+			WCF.Clipboard.init('wcf\\page\\ConversationListPage', {@$hasMarkedItems}, { });
+		});
+		//]]>
+	</script>
 </head>
 
 <body id="tpl{$templateName|ucfirst}">
@@ -26,7 +34,7 @@
 	</nav>	
 {/capture}
 
-{include file='header' sandbox=false sidebarOrientation='left'}
+{include file='header' sidebarOrientation='left'}
 
 <header class="boxHeadline">
 	<hgroup>
@@ -54,7 +62,7 @@
 {if !$items}
 	<p class="info">{lang}wcf.conversation.noConversations{/lang}</p>
 {else}
-	<div class="marginTop tabularBox tabularBoxTitle shadow wbbThreadList"> {* @todo: use generic css class*}
+	<div class="marginTop tabularBox tabularBoxTitle shadow wbbThreadList jsClipboardContainer" data-type="com.woltlab.wcf.conversation.conversation"> {*todo: use generic css class*}
 		<hgroup>
 			<h1>{lang}wcf.conversation.conversations{/lang} <span class="badge badgeInverse">{#$items}</span></h1>
 		</hgroup>
@@ -62,6 +70,7 @@
 		<table class="table">
 			<thead>
 				<tr>
+					<th class="columnMark"><label><input type="checkbox" class="jsClipboardMarkAll" /></label></th>
 					<th colspan="2" class="columnTitle columnSubject{if $sortField == 'subject'} active{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=subject&sortOrder={if $sortField == 'subject' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.conversation.subject{/lang}{if $sortField == 'subject'} <img src="{icon size='S'}sort{@$sortOrder}{/icon}" alt="" />{/if}</a></th>
 					<th class="columnDigits columnReplies{if $sortField == 'replies'} active{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=replies&sortOrder={if $sortField == 'replies' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.conversation.replies{/lang}{if $sortField == 'replies'} <img src="{icon size='S'}sort{@$sortOrder}{/icon}" alt="" />{/if}</a></th>
 					<th class="columnDigits columnParticipants{if $sortField == 'participants'} active{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=participants&sortOrder={if $sortField == 'participants' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.conversation.participants{/lang}{if $sortField == 'participants'} <img src="{icon size='S'}sort{@$sortOrder}{/icon}" alt="" />{/if}</a></th>
@@ -72,6 +81,9 @@
 			<tbody>
 				{foreach from=$objects item=conversation}
 					<tr class="wbbThread {if $conversation->isNew()} new{/if}">
+						<td class="columnMark">
+							<label><input type="checkbox" class="jsClipboardItem" data-object-id="{@$conversation->conversationID}" /></label>
+						</td>
 						<td class="columnIcon columnAvatar">
 							{if $conversation->getUserProfile()->getAvatar()}
 								<div>
@@ -87,7 +99,7 @@
 						</td>
 						<td class="columnText columnTopic">
 							<h1>
-								{* @todo: if $thread->hasLabels()}
+								{* @todo:if $thread->hasLabels()}
 									<ul class="labelList">
 										{foreach from=$thread->getLabels() item=label}
 											<li><a href="#" class="badge label{if $label->cssClassName} {$label->cssClassName}{/if}">{lang}{$label->label}{/lang}</a></li>
@@ -148,6 +160,8 @@
 <div class="contentNavigation">
 	{@$pagesLinks}
 	
+	<div class="jsClipboardEditor" data-types="[ 'com.woltlab.wcf.conversation.conversation' ]"></div>
+	
 	{hascontent}
 		<nav>
 			<ul>
@@ -160,7 +174,7 @@
 	{/hascontent}
 </div>
 
-{include file='footer' sandbox=false}
+{include file='footer'}
 
 </body>
 </html>

@@ -2,6 +2,7 @@
 namespace wcf\page;
 use wcf\data\conversation\UserConversationList;
 use wcf\system\breadcrumb\Breadcrumb;
+use wcf\system\clipboard\ClipboardHandler;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
@@ -92,7 +93,8 @@ class ConversationListPage extends SortablePage {
 		parent::assignVariables();
 		
 		WCF::getTPL()->assign(array(
-			'filter' => $this->filter
+			'filter' => $this->filter,
+			'hasMarkedItems' => ClipboardHandler::getInstance()->hasMarkedItems(ClipboardHandler::getInstance()->getObjectTypeID('com.woltlab.wbb.post'))
 		));
 	}
 	
