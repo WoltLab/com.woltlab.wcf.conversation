@@ -23,6 +23,48 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 	protected $className = 'wcf\data\conversation\label\ConversationLabelEditor';
 	
 	/**
+	 * @see	wcf\data\AbstractDatabaseObjectAction::$permissionsDelete
+	 */
+	protected $permissionsDelete = array('user.conversation.canUseConversation');
+	
+	/**
+	 * @see	wcf\data\AbstractDatabaseObjectAction::$permissionsUpdate
+	 */
+	protected $permissionsUpdate = array('user.conversation.canUseConversation');
+	
+	/**
+	 * @see	wcf\data\AbstractDatabaseObjectAction::validateUpdate()
+	 */
+	public function validateUpdate() {
+		parent::validateUpdate();
+		
+		if (count($this->objects) != 1) {
+			throw new UserInputException('objectID');
+		}
+		
+		$label = current($this->objects);
+		if ($label->userID != WCF::getUser()->userID) {
+			throw new PermissionDeniedException();
+		}
+	}
+	
+	/**
+	 * @see	wcf\data\AbstractDatabaseObjectAction::validateDelete()
+	 */
+	public function validateDelete() {
+		parent::validateDelete();
+		
+		if (count($this->objects) != 1) {
+			throw new UserInputException('objectID');
+		}
+		
+		$label = current($this->objects);
+		if ($label->userID != WCF::getUser()->userID) {
+			throw new PermissionDeniedException();
+		}
+	}
+	
+	/**
 	 * Validates parameters to add a new label.
 	 */
 	public function validateAdd() {
@@ -35,7 +77,7 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 			throw new UserInputException('labelName');
 		}
 		
-		$this->parameters['data']['cssClassName'] = (isset($this->parameters['data']['cssClassName'])) ? StringUtil::trim($this->parameters['cssClassName']) : '';
+		$this->parameters['data']['cssClassName'] = (isset($this->parameters['data']['cssClassName'])) ? StringUtil::trim($this->parameters['data']['cssClassName']) : '';
 		if (empty($this->parameters['data']['cssClassName']) || !in_array($this->parameters['data']['cssClassName'], ConversationLabel::getLabelCssClassNames())) {
 			throw new UserInputException('cssClassName');
 		}

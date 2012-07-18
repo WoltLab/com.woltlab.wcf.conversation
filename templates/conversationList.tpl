@@ -14,7 +14,7 @@
 			var $editorHandler = new WCF.Conversation.EditorHandler();
 			var $inlineEditor = new WCF.Conversation.InlineEditor('.conversation');
 			$inlineEditor.setEditorHandler($editorHandler);
-			new WCF.Conversation.LabelManager('{link controller='ConversationList'}{if $filter}filter={@$filter}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}');
+			new WCF.Conversation.LabelManager('{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}');
 		});
 		//]]>
 	</script>
@@ -41,9 +41,9 @@
 				<fieldset>
 					<legend>{lang}wcf.conversation.label{/lang}</legend>
 					
-					<ul id="labelList" class="conversationLabelList">
+					<ul id="conversationLabelList" class="conversationLabelList">
 						{foreach from=$labelList item=label}
-							<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}&labelID={@$label->labelID}{/link}" class="badge label{if $label->cssClassName} {@$label->cssClassName}" data-label-id="{@$label->labelID}">{$label->label}</a></li>
+							<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}&labelID={@$label->labelID}{/link}" class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}" data-label-id="{@$label->labelID}">{$label->label}</a></li>
 						{/foreach}
 					</ul>
 					

@@ -27,8 +27,9 @@ class UserConversationList extends ConversationList {
 	 * 
 	 * @param	integer		$userID
 	 * @param	string		$filter
+	 * @param	integer		$labelID
 	 */
-	public function __construct($userID, $filter = '') {
+	public function __construct($userID, $filter = '', $labelID = 0) {
 		parent::__construct();
 		
 		$this->filter = $filter;
@@ -43,6 +44,16 @@ class UserConversationList extends ConversationList {
 			$this->getConditionBuilder()->add('conversation_to_user.hideConversation = ?', array(($this->filter == 'hidden' ? 1 : 0)));
 			$this->sqlConditionJoins = "LEFT JOIN wcf".WCF_N."_conversation conversation ON (conversation.conversationID = conversation_to_user.conversationID)";
 			if ($this->filter == 'outbox') $this->getConditionBuilder()->add('conversation.userID = ?', array($userID));
+		}
+		
+		// filter by label id
+		if ($labelID) {
+			// TODO: This is damn slow on MySQL
+			$this->getConditionBuilder()->add("conversation.conversationID IN (
+				SELECT	conversationID
+				FROM	wcf".WCF_N."_conversation_label_to_object
+				WHERE	labelID = ?
+			)", array($labelID));
 		}
 		
 		// own posts

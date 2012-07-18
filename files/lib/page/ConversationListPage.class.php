@@ -103,7 +103,7 @@ class ConversationListPage extends SortablePage {
 	 * @see wcf\page\MultipleLinkPage::initObjectList()
 	 */
 	protected function initObjectList() {
-		$this->objectList = new UserConversationList(WCF::getUser()->userID, $this->filter);
+		$this->objectList = new UserConversationList(WCF::getUser()->userID, $this->filter, $this->labelID);
 	}
 	
 	/**

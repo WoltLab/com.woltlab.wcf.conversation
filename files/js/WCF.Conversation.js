@@ -219,6 +219,12 @@ WCF.Conversation.LabelManager = Class.extend({
 	_link: '',
 	
 	/**
+	 * system notification object
+	 * @var	WCF.System.Notification
+	 */
+	_notification: '',
+	
+	/**
 	 * action proxy object
 	 * @var	WCF.Action.Proxy
 	 */
@@ -232,9 +238,10 @@ WCF.Conversation.LabelManager = Class.extend({
 	init: function(link) {
 		this._link = link;
 		
-		this._labels = $('#labelList');
+		this._labels = $('#conversationLabelList');
 		$('#manageLabel').click($.proxy(this._click, this));
 		
+		this._notification = new WCF.System.Notification(WCF.Language.get('wcf.conversation.label.management.addLabel.success'));
 		this._proxy = new WCF.Action.Proxy({
 			success: $.proxy(this._success, this)
 		});
@@ -279,6 +286,11 @@ WCF.Conversation.LabelManager = Class.extend({
 				// bind action listeners
 				this._bindListener();
 			break;
+			
+			default:
+				// reload page
+				window.location.reload();
+			break;
 		}
 	},
 	
@@ -287,11 +299,13 @@ WCF.Conversation.LabelManager = Class.extend({
 	 * 
 	 * @param	object		data
 	 */
-	_insertLabel(data) {
-		var $listItem = $('<li><a href="' + this._link + '&labelID=' + data.returnValues.labelID + '" class="badge label' + (if data.returnValues.cssClassName ? ' ' + data.returnValues.cssClassName : '') + '">' + data.returnValues.label + '</a></li>');
+	_insertLabel: function(data) {
+		var $listItem = $('<li><a href="' + this._link + '&labelID=' + data.returnValues.labelID + '" class="badge label' + (data.returnValues.cssClassName ? ' ' + data.returnValues.cssClassName : '') + '">' + data.returnValues.label + '</a></li>');
 		$listItem.children('a').data('labelID', data.returnValues.labelID);
 		
 		$listItem.appendTo(this._labels);
+		
+		this._notification.show();
 	},
 	
 	/**
@@ -299,7 +313,75 @@ WCF.Conversation.LabelManager = Class.extend({
 	 */
 	_bindListener: function() {
 		$('#labelName').keyup($.proxy(this._updateLabels, this));
-		$('#addLabel').disable().click($.proxy(this._addLabel, this));
+		$('#addLabel, #editLabel').disable().click($.proxy(this._addLabel, this));
+		
+		this._dialog.find('.conversationLabelList span.label').click($.proxy(this._edit, this));
+	},
+	
+	/**
+	 * Prepares a label for editing.
+	 * 
+	 * @param	object		event
+	 */
+	_edit: function(event) {
+		var $label = $(event.currentTarget);
+		
+		// replace legends
+		var $legend = WCF.Language.get('wcf.conversation.label.management.editLabel').replace(/#labelName#/, $label.text());
+		$('#conversationLabelManagementForm').data('labelID', $label.data('labelID')).children('legend').text($legend);
+		
+		// update text input
+		$('#labelName').val($label.text()).trigger('keyup');
+		
+		// select css class name
+		var $cssClassName = $label.data('cssClassName');
+		$('#labelManagementList input').each(function(index, input) {
+			var $input = $(input);
+			
+			if ($input.val() == $cssClassName) {
+				$input.attr('checked', 'checked');
+			}
+		});
+		
+		// toggle buttons
+		$('#addLabel').hide();
+		$('#editLabel').show().click($.proxy(this._editLabel, this));
+		$('#deleteLabel').show().click($.proxy(this._deleteLabel, this));
+	},
+	
+	/**
+	 * Edits a label.
+	 */
+	_editLabel: function() {
+		this._proxy.setOption('data', {
+			actionName: 'update',
+			className: 'wcf\\data\\conversation\\label\\ConversationLabelAction',
+			objectIDs: [ $('#labelManagementForm').data('labelID') ],
+			parameters: {
+				data: {
+					cssClassName: $('#labelManagementList input:checked').val(),
+					labelName: $('#labelName').val()
+				}
+			}
+		});
+		this._proxy.sendRequest();
+	},
+	
+	/**
+	 * Deletes a label.
+	 */
+	_deleteLabel: function() {
+		var $title = WCF.Language.get('wcf.conversation.label.management.deleteLabel.confirmMessage').replace(/#labelName#/, $('#labelName').val());
+		WCF.System.Confirmation.show($title, function(action) {
+			if (action === 'confirm') {
+				this._proxy.setOption('data', {
+					actionName: 'delete',
+					className: 'wcf\\data\\conversation\\label\\ConversationLabelAction',
+					objectIDs: [ $('#labelManagementForm').data('labelID') ]
+				});
+				this._proxy.sendRequest();
+			}
+		});
 	},
 	
 	/**
@@ -308,7 +390,7 @@ WCF.Conversation.LabelManager = Class.extend({
 	_updateLabels: function() {
 		var $value = $('#labelName').val();
 		if ($value) {
-			$('#addLabel').enable();
+			$('#addLabel, #editLabel').enable();
 		}
 		else {
 			$value = WCF.Language.get('wcf.conversation.label.placeholder');
@@ -322,7 +404,7 @@ WCF.Conversation.LabelManager = Class.extend({
 	 */
 	_addLabel: function() {
 		var $labelName = $('#labelName').val();
-		var $cssClassName = $('#labelManagementList').find('input:checked').val();
+		var $cssClassName = $('#labelManagementList input:checked').val();
 		
 		this._proxy.setOption('data', {
 			actionName: 'add',
@@ -335,5 +417,8 @@ WCF.Conversation.LabelManager = Class.extend({
 			}
 		});
 		this._proxy.sendRequest();
+		
+		// close dialog
+		this._dialog.wcfDialog('close');
 	}
 });
