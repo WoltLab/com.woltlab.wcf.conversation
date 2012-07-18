@@ -1,8 +1,10 @@
 <?php
 namespace wcf\page;
+use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\UserConversationList;
 use wcf\system\breadcrumb\Breadcrumb;
 use wcf\system\clipboard\ClipboardHandler;
+use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
@@ -55,6 +57,18 @@ class ConversationListPage extends SortablePage {
 	public $filter = '';
 	
 	/**
+	 * label id
+	 * @var	integer
+	 */
+	public $labelID = 0;
+	
+	/**
+	 * label list object
+	 * @var	wcf\data\conversation\label\ConversationLabelList
+	 */
+	public $labelList = null;
+	
+	/**
 	 * @see wcf\page\IPage::readParameters()
 	 */
 	public function readParameters() {
@@ -65,6 +79,24 @@ class ConversationListPage extends SortablePage {
 		
 		// user settings
 		if (WCF::getUser()->conversationsPerPage) $this->itemsPerPage = WCF::getUser()->conversationsPerPage;
+		
+		// labels
+		$this->labelList = ConversationLabel::getLabelsByUser();
+		if (isset($_REQUEST['labelID'])) {
+			$this->labelID = intval($_REQUEST['labelID']);
+			
+			$validLabel = false;
+			foreach ($this->labelList as $label) {
+				if ($label->labelID == $this->labelID) {
+					$validLabel = true;
+					break;
+				}
+			}
+			
+			if (!$validLabel) {
+				throw new IllegalLinkException();
+			}
+		}
 	}
 	
 	/**
@@ -94,7 +126,9 @@ class ConversationListPage extends SortablePage {
 		
 		WCF::getTPL()->assign(array(
 			'filter' => $this->filter,
-			'hasMarkedItems' => ClipboardHandler::getInstance()->hasMarkedItems(ClipboardHandler::getInstance()->getObjectTypeID('com.woltlab.wbb.post'))
+			'hasMarkedItems' => ClipboardHandler::getInstance()->hasMarkedItems(ClipboardHandler::getInstance()->getObjectTypeID('com.woltlab.wcf.conversation.conversation')),
+			'labelID' => $this->labelID,
+			'labelList' => $this->labelList
 		));
 	}
 	

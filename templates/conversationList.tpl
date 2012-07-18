@@ -14,6 +14,7 @@
 			var $editorHandler = new WCF.Conversation.EditorHandler();
 			var $inlineEditor = new WCF.Conversation.InlineEditor('.conversation');
 			$inlineEditor.setEditorHandler($editorHandler);
+			new WCF.Conversation.LabelManager('{link controller='ConversationList'}{if $filter}filter={@$filter}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}');
 		});
 		//]]>
 	</script>
@@ -34,6 +35,20 @@
 						<li{if $filter == 'hidden'} class="active"{/if}><a href="{link controller='ConversationList'}filter=hidden{/link}">{lang}wcf.conversation.folder.hidden{/lang}</a></li>
 					</ul>
 				</div>
+			</li>
+			
+			<li class="sidebarContainer">
+				<fieldset>
+					<legend>{lang}wcf.conversation.label{/lang}</legend>
+					
+					<ul id="labelList" class="conversationLabelList">
+						{foreach from=$labelList item=label}
+							<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}&labelID={@$label->labelID}{/link}" class="badge label{if $label->cssClassName} {@$label->cssClassName}" data-label-id="{@$label->labelID}">{$label->label}</a></li>
+						{/foreach}
+					</ul>
+					
+					<button id="manageLabel">{lang}wcf.conversation.label.management{/lang}</button>
+				</fieldset>
 			</li>
 		</ul>
 	</nav>	
@@ -76,10 +91,10 @@
 			<thead>
 				<tr>
 					<th class="columnMark"><label><input type="checkbox" class="jsClipboardMarkAll" /></label></th>
-					<th colspan="2" class="columnTitle columnSubject{if $sortField == 'subject'} active{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=subject&sortOrder={if $sortField == 'subject' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.conversation.subject{/lang}{if $sortField == 'subject'} <img src="{icon size='S'}sort{@$sortOrder}{/icon}" alt="" />{/if}</a></th>
-					<th class="columnDigits columnReplies{if $sortField == 'replies'} active{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=replies&sortOrder={if $sortField == 'replies' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.conversation.replies{/lang}{if $sortField == 'replies'} <img src="{icon size='S'}sort{@$sortOrder}{/icon}" alt="" />{/if}</a></th>
-					<th class="columnDigits columnParticipants{if $sortField == 'participants'} active{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=participants&sortOrder={if $sortField == 'participants' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.conversation.participants{/lang}{if $sortField == 'participants'} <img src="{icon size='S'}sort{@$sortOrder}{/icon}" alt="" />{/if}</a></th>
-					<th class="columnText columnLastPost{if $sortField == 'lastPostTime'} active{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=lastPostTime&sortOrder={if $sortField == 'lastPostTime' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.conversation.lastPostTime{/lang}{if $sortField == 'lastPostTime'} <img src="{icon size='S'}sort{@$sortOrder}{/icon}" alt="" />{/if}</a></th>
+					<th colspan="2" class="columnTitle columnSubject{if $sortField == 'subject'} active{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=subject&sortOrder={if $sortField == 'subject' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.conversation.subject{/lang}{if $sortField == 'subject'} <img src="{icon size='S'}sort{@$sortOrder}{/icon}" alt="" />{/if}</a></th>
+					<th class="columnDigits columnReplies{if $sortField == 'replies'} active{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=replies&sortOrder={if $sortField == 'replies' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.conversation.replies{/lang}{if $sortField == 'replies'} <img src="{icon size='S'}sort{@$sortOrder}{/icon}" alt="" />{/if}</a></th>
+					<th class="columnDigits columnParticipants{if $sortField == 'participants'} active{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=participants&sortOrder={if $sortField == 'participants' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.conversation.participants{/lang}{if $sortField == 'participants'} <img src="{icon size='S'}sort{@$sortOrder}{/icon}" alt="" />{/if}</a></th>
+					<th class="columnText columnLastPost{if $sortField == 'lastPostTime'} active{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=lastPostTime&sortOrder={if $sortField == 'lastPostTime' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.conversation.lastPostTime{/lang}{if $sortField == 'lastPostTime'} <img src="{icon size='S'}sort{@$sortOrder}{/icon}" alt="" />{/if}</a></th>
 				</tr>
 			</thead>
 			

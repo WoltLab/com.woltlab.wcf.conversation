@@ -1,7 +1,9 @@
 <?php
 namespace wcf\data\conversation;
 use wcf\data\AbstractDatabaseObjectAction;
+use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\message\ConversationMessageAction;
+use wcf\system\exception\PermissionDeniedException;
 use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\WCF;
 
@@ -137,5 +139,31 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 	 */
 	public function validateMarkAsRead() {
 		// @todo: implement me
+	}
+	
+	/**
+	 * Validates user access for label management.
+	 */
+	public function validateGetLabelmanagement() {
+		if (!WCF::getSession()->getPermission('user.conversation.canUseConversation')) {
+			throw new PermissionDeniedException();
+		}
+	}
+	
+	/**
+	 * Returns the conversation label management.
+	 * 
+	 * @return	array
+	 */
+	public function getLabelManagement() {
+		WCF::getTPL()->assign(array(
+			'cssClassNames' => ConversationLabel::getLabelCssClassNames(),
+			'labelList' => ConversationLabel::getLabelsByUser()
+		));
+		
+		return array(
+			'actionName' => 'getLabelManagement',
+			'template' => WCF::getTPL()->fetch('conversationLabelManagement')
+		);
 	}
 }
