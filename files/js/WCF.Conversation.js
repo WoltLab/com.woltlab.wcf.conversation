@@ -201,6 +201,12 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
  */
 WCF.Conversation.LabelManager = Class.extend({
 	/**
+	 * deleted label id
+	 * @var	integer
+	 */
+	_deletedLabelID: 0,
+	
+	/**
 	 * dialog object
 	 * @var	jQuery
 	 */
@@ -236,9 +242,10 @@ WCF.Conversation.LabelManager = Class.extend({
 	 * @param	string		link
 	 */
 	init: function(link) {
+		this._deletedLabelID = 0;
 		this._link = link;
 		
-		this._labels = $('#conversationLabelList');
+		this._labels = $('#conversationLabelFilter .dropdownMenu');
 		$('#manageLabel').click($.proxy(this._click, this));
 		
 		this._notification = new WCF.System.Notification(WCF.Language.get('wcf.conversation.label.management.addLabel.success'));
@@ -270,27 +277,35 @@ WCF.Conversation.LabelManager = Class.extend({
 			this._dialog = $('<div id="labelManagement" />').hide().appendTo(document.body);
 		}
 		
-		switch (data.returnValues.actionName) {
-			case 'add':
-				this._insertLabel(data);
-			break;
-			
-			case 'getLabelManagement':
-				// render dialog
-				this._dialog.empty().html(data.returnValues.template);
-				this._dialog.wcfDialog({
-					title: WCF.Language.get('wcf.conversation.label.management')
-				});
-				this._dialog.wcfDialog('render');
+		if (data.returnValues && data.returnValues.actionName) {
+			switch (data.returnValues.actionName) {
+				case 'add':
+					this._insertLabel(data);
+				break;
 				
-				// bind action listeners
-				this._bindListener();
-			break;
-			
-			default:
+				case 'getLabelManagement':
+					// render dialog
+					this._dialog.empty().html(data.returnValues.template);
+					this._dialog.wcfDialog({
+						title: WCF.Language.get('wcf.conversation.label.management')
+					});
+					this._dialog.wcfDialog('render');
+					
+					// bind action listeners
+					this._bindListener();
+				break;
+			}
+		}
+		else {
+			// check if delete label id is present within URL (causing an IllegalLinkException if reloading)
+			if (this._deletedLabelID) {
+				var $regex = new RegExp('(\\?|&)labelID=' + this._deletedLabelID);
+				window.location = window.location.toString().replace($regex, '');
+			}
+			else {
 				// reload page
 				window.location.reload();
-			break;
+			}
 		}
 	},
 	
@@ -300,10 +315,10 @@ WCF.Conversation.LabelManager = Class.extend({
 	 * @param	object		data
 	 */
 	_insertLabel: function(data) {
-		var $listItem = $('<li><a href="' + this._link + '&labelID=' + data.returnValues.labelID + '" class="badge label' + (data.returnValues.cssClassName ? ' ' + data.returnValues.cssClassName : '') + '">' + data.returnValues.label + '</a></li>');
+		var $listItem = $('<li><a href="' + this._link + '&labelID=' + data.returnValues.labelID + '"><span class="badge label' + (data.returnValues.cssClassName ? ' ' + data.returnValues.cssClassName : '') + '">' + data.returnValues.label + '</span></a></li>');
 		$listItem.children('a').data('labelID', data.returnValues.labelID);
 		
-		$listItem.appendTo(this._labels);
+		$listItem.insertBefore(this._labels.find('.dropdownDivider:eq(0)'));
 		
 		this._notification.show();
 	},
@@ -313,9 +328,10 @@ WCF.Conversation.LabelManager = Class.extend({
 	 */
 	_bindListener: function() {
 		$('#labelName').keyup($.proxy(this._updateLabels, this));
-		$('#addLabel, #editLabel').disable().click($.proxy(this._addLabel, this));
+		$('#addLabel').disable().click($.proxy(this._addLabel, this));
+		$('#editLabel').disable();
 		
-		this._dialog.find('.conversationLabelList span.label').click($.proxy(this._edit, this));
+		this._dialog.find('.conversationLabelList a.label').click($.proxy(this._edit, this));
 	},
 	
 	/**
@@ -356,11 +372,11 @@ WCF.Conversation.LabelManager = Class.extend({
 		this._proxy.setOption('data', {
 			actionName: 'update',
 			className: 'wcf\\data\\conversation\\label\\ConversationLabelAction',
-			objectIDs: [ $('#labelManagementForm').data('labelID') ],
+			objectIDs: [ $('#conversationLabelManagementForm').data('labelID') ],
 			parameters: {
 				data: {
 					cssClassName: $('#labelManagementList input:checked').val(),
-					labelName: $('#labelName').val()
+					label: $('#labelName').val()
 				}
 			}
 		});
@@ -372,16 +388,18 @@ WCF.Conversation.LabelManager = Class.extend({
 	 */
 	_deleteLabel: function() {
 		var $title = WCF.Language.get('wcf.conversation.label.management.deleteLabel.confirmMessage').replace(/#labelName#/, $('#labelName').val());
-		WCF.System.Confirmation.show($title, function(action) {
+		WCF.System.Confirmation.show($title, $.proxy(function(action) {
 			if (action === 'confirm') {
 				this._proxy.setOption('data', {
 					actionName: 'delete',
 					className: 'wcf\\data\\conversation\\label\\ConversationLabelAction',
-					objectIDs: [ $('#labelManagementForm').data('labelID') ]
+					objectIDs: [ $('#conversationLabelManagementForm').data('labelID') ]
 				});
 				this._proxy.sendRequest();
+				
+				this._deletedLabelID = $('#conversationLabelManagementForm').data('labelID');
 			}
-		});
+		}, this));
 	},
 	
 	/**

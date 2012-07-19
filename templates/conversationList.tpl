@@ -41,11 +41,29 @@
 				<fieldset>
 					<legend>{lang}wcf.conversation.label{/lang}</legend>
 					
-					<ul id="conversationLabelList" class="conversationLabelList">
-						{foreach from=$labelList item=label}
-							<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}&labelID={@$label->labelID}{/link}" class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}" data-label-id="{@$label->labelID}">{$label->label}</a></li>
-						{/foreach}
-					</ul>
+					{if $labelList|count}
+						<div id="conversationLabelFilter" class="dropdown">
+							<div class="dropdownToggle" data-toggle="conversationLabelFilter">
+								{if $labelID}
+									{foreach from=$labelList item=label}
+										{if $label->labelID == $labelID}
+											<span class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}">{$label->label}</span>
+										{/if}
+									{/foreach}
+								{else}
+									<span class="badge">{lang}wcf.conversation.label.filter{/lang}</span>
+								{/if}
+							</div>
+							
+							<ul class="dropdownMenu">
+								{foreach from=$labelList item=label}
+									<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}&labelID={@$label->labelID}{/link}"><span class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}" data-label-id="{@$label->labelID}">{$label->label}</span></a></li>
+								{/foreach}
+								<li class="dropdownDivider"></li>
+								<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}">{lang}wcf.conversation.label.disableFilter{/lang}</a></li>
+							</ul>
+						</div>
+					{/if}
 					
 					<button id="manageLabel">{lang}wcf.conversation.label.management{/lang}</button>
 				</fieldset>

@@ -6,12 +6,12 @@
 	<ul class="conversationLabelList">
 		{content}
 			{foreach from=$labelList item=label}
-				<li><span class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}" data-label-id="{@$label->labelID}" data-css-class-name="{if $label->cssClassName}{@$label->cssClassName}{else}none{/if}">{$label->label}</span></li>
+				<li><a class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}" data-label-id="{@$label->labelID}" data-css-class-name="{if $label->cssClassName}{@$label->cssClassName}{else}none{/if}">{$label->label}</a></li>
 			{/foreach}
 		{/content}
 	</ul>
 	
-	<small class="marginTop">{lang}wcf.conversation.label.management.edit.description{/lang}</small>
+	<small>{lang}wcf.conversation.label.management.edit.description{/lang}</small>
 {/hascontent}
 
 <fieldset id="conversationLabelManagementForm">
