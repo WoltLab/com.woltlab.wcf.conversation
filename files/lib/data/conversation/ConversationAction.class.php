@@ -4,6 +4,7 @@ use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\system\exception\PermissionDeniedException;
+use wcf\system\package\PackageDependencyHandler;
 use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\WCF;
 
@@ -129,9 +130,7 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 		}
 		
 		// reset storage
-		if (WCF::getUser()->userID) {
-			// @todo UserStorageHandler::getInstance()->reset(array(WCF::getUser()->userID), 'unreadConversations', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
-		}
+		UserStorageHandler::getInstance()->reset(array(WCF::getUser()->userID), 'unreadConversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
 	}
 	
 	/**

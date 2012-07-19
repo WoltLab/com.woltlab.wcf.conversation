@@ -116,4 +116,23 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 		
 		return false;
 	}
+	
+	/**
+	 * Gets a list of all participants.
+	 * 
+	 * @return	array<integer>
+	 */
+	public function getParticipantIDs() {
+		$participantIDs = array();
+		$sql = "SELECT 		participantID
+			FROM		wcf".WCF_N."_conversation_to_user
+			WHERE		conversationID = ?";
+		$statement = WCF::getDB()->prepareStatement($sql);
+		$statement->execute(array($this->conversationID));
+		while ($row = $statement->fetchArray()) {
+			$participantIDs[] = $row['participantID'];
+		}
+		
+		return $participantIDs;
+	}
 }

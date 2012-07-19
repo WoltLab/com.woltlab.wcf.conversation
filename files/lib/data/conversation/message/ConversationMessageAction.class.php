@@ -3,6 +3,8 @@ namespace wcf\data\conversation\message;
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationEditor;
 use wcf\data\AbstractDatabaseObjectAction;
+use wcf\system\package\PackageDependencyHandler;
+use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\WCF;
 
 /**
@@ -55,8 +57,8 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction {
 			$conversationEditor->addMessage($message);
 		}
 		
-		// @todo: reset storage
-		// UserStorageHandler::getInstance()->resetAll('unreadThreads', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wbb'));
+		// reset storage
+		UserStorageHandler::getInstance()->reset($converation->getParticipantIDs(), 'unreadConversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
 		
 		// @todo: update search index
 		//SearchIndexManager::getInstance()->add('com.woltlab.wbb.post', $post->postID, $post->message, $post->subject, $post->time, $post->userID, $post->username, $thread->languageID);

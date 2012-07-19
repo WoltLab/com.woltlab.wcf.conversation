@@ -27,5 +27,6 @@
 		<instruction type="language">language/*.xml</instruction>
 		<instruction type="objectType">objectType.xml</instruction>
 		<instruction type="clipboardAction">clipboardAction.xml</instruction>
+		<instruction type="coreObject">coreObject.xml</instruction>
 	</instructions>
 </package>
