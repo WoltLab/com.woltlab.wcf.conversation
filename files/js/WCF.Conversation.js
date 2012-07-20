@@ -14,12 +14,6 @@ WCF.Conversation = { };
  */
 WCF.Conversation.EditorHandler = Class.extend({
 	/**
-	 * list of available labels
-	 * @var	object
-	 */
-	_availableLabels: { },
-	
-	/**
 	 * list of attributes per conversation
 	 * @var	object
 	 */
@@ -39,11 +33,8 @@ WCF.Conversation.EditorHandler = Class.extend({
 	
 	/**
 	 * Initializes the core editor handler for conversations.
-	 * 
-	 * @param	object		availableLabels
 	 */
-	init: function(availableLabels) {
-		this._availableLabels = availableLabels || { };
+	init: function() {
 		this._conversations = { };
 		
 		var self = this;
