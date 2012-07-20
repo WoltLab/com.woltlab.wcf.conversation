@@ -41,29 +41,28 @@
 				<fieldset>
 					<legend>{lang}wcf.conversation.label{/lang}</legend>
 					
-					{if $labelList|count}
-						<div id="conversationLabelFilter" class="dropdown">
-							<div class="dropdownToggle" data-toggle="conversationLabelFilter">
-								{if $labelID}
-									{foreach from=$labelList item=label}
-										{if $label->labelID == $labelID}
-											<span class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}">{$label->label}</span>
-										{/if}
-									{/foreach}
-								{else}
-									<span class="badge">{lang}wcf.conversation.label.filter{/lang}</span>
-								{/if}
-							</div>
-							
-							<ul class="dropdownMenu">
+					
+					<div id="conversationLabelFilter" class="dropdown">
+						<div class="dropdownToggle" data-toggle="conversationLabelFilter">
+							{if $labelID}
 								{foreach from=$labelList item=label}
-									<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}&labelID={@$label->labelID}{/link}"><span class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}" data-label-id="{@$label->labelID}">{$label->label}</span></a></li>
+									{if $label->labelID == $labelID}
+										<span class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}">{$label->label}</span>
+									{/if}
 								{/foreach}
-								<li class="dropdownDivider"></li>
-								<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}">{lang}wcf.conversation.label.disableFilter{/lang}</a></li>
-							</ul>
+							{else}
+								<span class="badge">{lang}wcf.conversation.label.filter{/lang}</span>
+							{/if}
 						</div>
-					{/if}
+						
+						<ul class="dropdownMenu">
+							{foreach from=$labelList item=label}
+								<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}&labelID={@$label->labelID}{/link}"><span class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}" data-css-class-name="{if $label->cssClassName}{@$label->cssClassName}{/if}" data-label-id="{@$label->labelID}">{$label->label}</span></a></li>
+							{/foreach}
+							<li class="dropdownDivider"{if !$labelList|count} style="display: none;"{/if}>
+							<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}">{lang}wcf.conversation.label.disableFilter{/lang}</a></li>
+						</ul>
+					</div>
 					
 					<button id="manageLabel">{lang}wcf.conversation.label.management{/lang}</button>
 				</fieldset>
@@ -118,7 +117,7 @@
 			
 			<tbody>
 				{foreach from=$objects item=conversation}
-					<tr class="wbbThread conversation{if $conversation->isNew()} new{/if}" data-conversation-id="{@$conversation->conversationID}">
+					<tr class="wbbThread conversation{if $conversation->isNew()} new{/if}" data-conversation-id="{@$conversation->conversationID}" data-label-ids="[ {implode from=$conversation->getAssignedLabels() item=label}{@$label->labelID}{/implode} ]">
 						<td class="columnMark">
 							<label><input type="checkbox" class="jsClipboardItem" data-object-id="{@$conversation->conversationID}" /></label>
 						</td>

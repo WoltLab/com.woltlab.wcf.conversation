@@ -1,5 +1,6 @@
 <?php
 namespace wcf\data\conversation;
+use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\DatabaseObjectDecorator;
 use wcf\data\user\User;
 use wcf\data\user\UserProfile;
@@ -39,6 +40,12 @@ class ViewableConversation extends DatabaseObjectDecorator {
 	 * @see wcf\data\DatabaseObjectDecorator::$baseClass
 	 */
 	protected static $baseClass = 'wcf\data\conversation\Conversation';
+	
+	/**
+	 * list of assigned labels
+	 * @var	array<wcf\data\conversation\label\ConversationLabel>
+	 */
+	protected $labels = array();
 	
 	/**
 	 * Returns the user profile object.
@@ -121,5 +128,23 @@ class ViewableConversation extends DatabaseObjectDecorator {
 		}
 		
 		return $this->__participantSummary;
+	}
+	
+	/**
+	 * Assigns a label.
+	 * 
+	 * @param	wcf\data\conversation\label\ConversationLabel	$label
+	 */
+	public function assignLabel(ConversationLabel $label) {
+		$this->labels[$label->labelID] = $label;
+	}
+	
+	/**
+	 * Returns a list of assigned labels.
+	 * 
+	 * @return	array<wcf\data\conversation\label\ConversationLabel>
+	 */
+	public function getAssignedLabels() {
+		return $this->labels;
 	}
 }

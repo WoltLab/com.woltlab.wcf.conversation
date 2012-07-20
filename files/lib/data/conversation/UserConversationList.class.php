@@ -1,5 +1,8 @@
 <?php
 namespace wcf\data\conversation;
+use wcf\data\conversation\label\ConversationLabel;
+use wcf\data\conversation\label\ConversationLabelList;
+use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\WCF;
 
 /**
@@ -13,8 +16,23 @@ use wcf\system\WCF;
  * @category 	Community Framework
  */
 class UserConversationList extends ConversationList {
+	/**
+	 * list of available filters
+	 * @var	array<string>
+	 */
 	public static $availableFilters = array('hidden', 'draft', 'outbox');
+	
+	/**
+	 * active filter
+	 * @var	string
+	 */
 	public $filter = '';
+	
+	/**
+	 * label list object
+	 * @var	wcf\data\conversation\label\ConversationLabelList
+	 */
+	public $labelList = null;
 	
 	/**
 	 * decorator class name
@@ -79,6 +97,13 @@ class UserConversationList extends ConversationList {
 	}
 	
 	/**
+	 * @param	wcf\data\conversation\label\ConversationLabelList	$labelList
+	 */
+	public function setLabelList(ConversationLabelList $labelList) {
+		$this->labelList = $labelList;
+	}
+	
+	/**
 	 * @see	wcf\data\DatabaseObjectList::countObjects()
 	 */
 	public function countObjects() {
@@ -120,8 +145,57 @@ class UserConversationList extends ConversationList {
 		if ($this->objectIDs === null) $this->readObjectIDs();
 		parent::readObjects();
 		
-		foreach ($this->objects as $conversationID => $conversation) {
-			$this->objects[$conversationID] = new $this->decoratorClassName($conversation);
+		$labels = $this->loadLabelAssignments();
+		
+		foreach ($this->objects as $conversationID => &$conversation) {
+			$conversation = new $this->decoratorClassName($conversation);
+			
+			if (isset($labels[$conversationID])) {
+				foreach ($labels[$conversationID] as $label) {
+					$conversation->assignLabel($label);
+				}
+			}
 		}
+		unset($conversation);
+	}
+	
+	/**
+	 * Returns a list of conversation labels.
+	 * 
+	 * @return	array<wcf\data\conversation\label\ConversationLabel>
+	 */
+	protected function getLabels() {
+		if ($this->labelList === null) {
+			$this->labelList = ConversationLabel::getLabelsByUser();
+		}
+		
+		return $this->labelList->getObjects();
+	}
+	
+	/**
+	 * Returns label assignments per conversation.
+	 * 
+	 * @return	array<array>
+	 */
+	protected function loadLabelAssignments() {
+		$data = array();
+		$labels = $this->getLabels();
+		
+		$conditions = new PreparedStatementConditionBuilder();
+		$conditions->add("conversationID IN (?)", array(array_keys($this->objects)));
+		
+		$sql = "SELECT	labelID, conversationID
+			FROM	wcf".WCF_N."_conversation_label_to_object
+			".$conditions;
+		$statement = WCF::getDB()->prepareStatement($sql);
+		while ($row = $statement->fetchArray()) {
+			if (!isset($data[$row['conversationID']])) {
+				$data[$row['conversationID']] = array();
+			}
+			
+			$data[$row['conversationID']][$row['labelID']] = $labels[$row['labelID']];
+		}
+		
+		return $data;
 	}
 }

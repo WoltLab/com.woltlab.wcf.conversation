@@ -104,6 +104,7 @@ class ConversationListPage extends SortablePage {
 	 */
 	protected function initObjectList() {
 		$this->objectList = new UserConversationList(WCF::getUser()->userID, $this->filter, $this->labelID);
+		$this->objectList->setLabelList($this->labelList);
 	}
 	
 	/**
