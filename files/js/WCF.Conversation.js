@@ -44,10 +44,12 @@ WCF.Conversation.EditorHandler = Class.extend({
 			
 			if (!self._conversations[$conversationID]) {
 				self._conversations[$conversationID] = $conversation;
+				var $labelIDs = eval($conversation.data('labelIDs'));
 				
 				// set attributes
 				self._attributes[$conversationID] = {
-					isClosed: ($conversation.data('isClosed') ? true : false)
+					isClosed: ($conversation.data('isClosed') ? true : false),
+					labelIDs: $labelIDs
 				};
 				
 				// set permissions
@@ -103,7 +105,27 @@ WCF.Conversation.EditorHandler = Class.extend({
 	 * @return	integer
 	 */
 	countAvailableLabels: function() {
-		return $.getLength(this._availableLabels);
+		return (this.getAvailableLabels()).length;
+	},
+	
+	getAvailableLabels: function() {
+		var $labels = [ ];
+		
+		$('#conversationLabelFilter > .dropdownMenu li').each(function(index, listItem) {
+			var $listItem = $(listItem);
+			if ($listItem.hasClass('dropdownDivider')) {
+				return false;
+			}
+			
+			var $span = $listItem.find('span');
+			$labels.push({
+				cssClassName: $span.data('cssClassName'),
+				labelID: $span.data('labelID'),
+				label: $span.text()
+			});
+		});
+		
+		return $labels;
 	}
 });
 
@@ -309,7 +331,8 @@ WCF.Conversation.LabelManager = Class.extend({
 		var $listItem = $('<li><a href="' + this._link + '&labelID=' + data.returnValues.labelID + '"><span class="badge label' + (data.returnValues.cssClassName ? ' ' + data.returnValues.cssClassName : '') + '">' + data.returnValues.label + '</span></a></li>');
 		$listItem.children('a').data('labelID', data.returnValues.labelID);
 		
-		$listItem.insertBefore(this._labels.find('.dropdownDivider:eq(0)'));
+		var $divider = this._labels.find('.dropdownDivider:eq(0)').show();
+		$listItem.insertBefore($divider);
 		
 		this._notification.show();
 	},
