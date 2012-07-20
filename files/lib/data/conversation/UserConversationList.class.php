@@ -1,10 +1,8 @@
 <?php
 namespace wcf\data\conversation;
 use wcf\data\conversation\label\ConversationLabel;
-
-use wcf\system\database\util\PreparedStatementConditionBuilder;
-
 use wcf\data\conversation\label\ConversationLabelList;
+use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\WCF;
 
 /**
