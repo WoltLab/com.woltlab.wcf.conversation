@@ -53,7 +53,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction {
 		$converation = (isset($this->parameters['converation']) ? $this->parameters['converation'] : new Conversation($message->conversationID));
 		$conversationEditor = new ConversationEditor($converation);
 
-		if (!empty($this->parameters['isFirstPost'])) {
+		if (empty($this->parameters['isFirstPost'])) {
 			// update last message
 			$conversationEditor->addMessage($message);
 		}
