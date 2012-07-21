@@ -2,7 +2,7 @@
 <data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/maelstrom/clipboardAction.xsd">
 	<import>
 		<!-- conversation -->
-		<action name="label">
+		<action name="assignLabel">
 			<actionclassname><![CDATA[wcf\system\clipboard\action\ConversationClipboardAction]]></actionclassname>
 			<showorder>1</showorder>
 			<pages>

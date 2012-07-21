@@ -178,6 +178,51 @@ WCF.Conversation.EditorHandler = Class.extend({
 });
 
 /**
+ * Provides extended actions for thread clipboard actions.
+ */
+WCF.Conversation.Clipboard = Class.extend({
+	/**
+	 * editor handler
+	 * @var	WCF.Conversation.EditorHandler
+	 */
+	_editorHandler: null,
+	
+	/**
+	 * Initializes a new WCF.Conversation.Clipboard object.
+	 * 
+	 * @param	WCF.Conversation.EditorHandler	editorHandler
+	 */
+	init: function(editorHandler) {
+		this._editorHandler = editorHandler;
+		
+		// bind listener
+		$('.jsClipboardEditor').each($.proxy(function(index, container) {
+			var $container = $(container);
+			var $types = eval($container.data('types'));
+			if (WCF.inArray('com.woltlab.wcf.conversation.conversation', $types)) {
+				$container.on('clipboardAction', $.proxy(this._execute, this));
+				$container.on('clipboardActionResponse', $.proxy(this._evaluateResponse, this));
+				return false;
+			}
+		}, this));
+	},
+	
+	/**
+	 * Handles clipboard actions.
+	 * 
+	 * @param	object		event
+	 * @param	string		type
+	 * @param	string		actionName
+	 * @param	object		parameters
+	 */
+	_execute: function(event, type, actionName, parameters) {
+		if (type === 'com.woltlab.wcf.conversation.conversation' && actionName === 'conversation.assignLabel') {
+			new WCF.Conversation.Label.Editor(this._editorHandler, null, parameters.objectTypeIDs);
+		}
+	}
+});
+
+/**
  * Inline editor implementation for conversations.
  * 
  * @see	WCF.Inline.Editor

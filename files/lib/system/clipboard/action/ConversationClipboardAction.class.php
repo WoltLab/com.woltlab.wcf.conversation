@@ -32,10 +32,6 @@ class ConversationClipboardAction implements IClipboardAction {
 	public function execute(array $objects, $actionName, $typeData = array()) {
 		$item = new ClipboardEditorItem();
 		
-		// DEBUG ONLY
-		if ($actionName == 'label') $actionName = 'assignLabel';
-		// DEBUG ONLY
-		
 		switch ($actionName) {
 			case 'assignLabel':
 				$conversationIDs = $this->validateAssignLabels($objects);
@@ -45,7 +41,6 @@ class ConversationClipboardAction implements IClipboardAction {
 				
 				$item->addParameter('objectIDs', $conversationIDs);
 				$item->addParameter('actionName', 'assignLabel');
-				$item->addParameter('className', 'wcf\data\conversation\label\ConversationLabelAction');
 				$item->setName('conversation.assignLabel');
 			break;
 			

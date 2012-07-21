@@ -14,6 +14,8 @@
 			var $editorHandler = new WCF.Conversation.EditorHandler();
 			var $inlineEditor = new WCF.Conversation.InlineEditor('.conversation');
 			$inlineEditor.setEditorHandler($editorHandler);
+			
+			new WCF.Conversation.Clipboard($editorHandler);
 			new WCF.Conversation.Label.Manager('{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}');
 		});
 		//]]>
