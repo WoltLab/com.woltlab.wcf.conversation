@@ -183,11 +183,13 @@ class UserConversationList extends ConversationList {
 		
 		$conditions = new PreparedStatementConditionBuilder();
 		$conditions->add("conversationID IN (?)", array(array_keys($this->objects)));
+		$conditions->add("labelID IN (?)", array(array_keys($labels)));
 		
 		$sql = "SELECT	labelID, conversationID
 			FROM	wcf".WCF_N."_conversation_label_to_object
 			".$conditions;
 		$statement = WCF::getDB()->prepareStatement($sql);
+		$statement->execute($conditions->getParameters());
 		while ($row = $statement->fetchArray()) {
 			if (!isset($data[$row['conversationID']])) {
 				$data[$row['conversationID']] = array();

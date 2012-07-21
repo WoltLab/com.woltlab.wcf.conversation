@@ -126,6 +126,54 @@ WCF.Conversation.EditorHandler = Class.extend({
 		});
 		
 		return $labels;
+	},
+	
+	/**
+	 * Updates conversation data.
+	 * 
+	 * @param	integer		conversationID
+	 * @param	object		data
+	 */
+	update: function(conversationID, key, data) {
+		if (!this._conversations[conversationID]) {
+			console.debug("[WCF.Conversation.EditorHandler] Unknown conversation id '" + conversationID + "'");
+			return;
+		}
+		var $conversation = this._conversations[conversationID];
+		
+		switch (key) {
+			case 'labelIDs':
+				var $labels = { };
+				$('#conversationLabelFilter > .dropdownMenu > li > a > span').each(function(index, span) {
+					var $span = $(span);
+					
+					$labels[$span.data('labelID')] = {
+						cssClassName: $span.data('cssClassName'),
+						label: $span.text()
+					};
+				});
+				
+				var $labelList = $conversation.find('.columnTopic > h1 > .labelList');
+				if (!data.length) {
+					if ($labelList.length) $labelList.remove();
+				}
+				else {
+					// create label list if missing
+					if (!$labelList.length) {
+						$labelList = $('<ul class="labelList" />').prependTo($conversation.find('.columnTopic > h1'));
+					}
+					
+					// remove all existing labels
+					$labelList.empty();
+					
+					// insert labels
+					for (var $i = 0, $length = data.length; $i < $length; $i++) {
+						var $label = $labels[data[$i]];
+						$('<li><span class="badge label' + ($label.cssClassName ? " " + $label.cssClassName : "") + '">' + $label.label + '</span>&nbsp;</li>').appendTo($labelList);
+					}
+				}
+			break;
+		}
 	}
 });
 
@@ -204,6 +252,176 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
 		}
 		
 		return false;
+	},
+	
+	/**
+	 * @see	WCF.InlineEditor._execute()
+	 */
+	_execute: function(elementID, optionName) {
+		// abort if option is invalid or not accessible
+		if (!this._validate(elementID, optionName)) {
+			return false;
+		}
+		
+		switch (optionName) {
+			case 'assignLabel':
+				new WCF.Conversation.Label.Editor(this._editorHandler, elementID);
+			break;
+		}
+	}
+});
+
+/**
+ * Namespace for label-related classes.
+ */
+WCF.Conversation.Label = { };
+
+/**
+ * Providers an editor for conversation labels.
+ * 
+ * @param	WCF.Conversation.EditorHandler	editorHandler
+ * @param	string				elementID
+ */
+WCF.Conversation.Label.Editor = Class.extend({
+	/**
+	 * conversation id
+	 * @var	integer
+	 */
+	_conversationID: 0,
+	
+	/**
+	 * dialog object
+	 * @var	jQuery
+	 */
+	_dialog: null,
+	
+	/**
+	 * editor handler object
+	 * @var	WCF.Conversation.EditorHandler
+	 */
+	_editorHandler: null,
+	
+	/**
+	 * system notification object
+	 * @var	WCF.System.Notification
+	 */
+	_notification: null,
+	
+	/**
+	 * action proxy object
+	 * @var	WCF.Action.Proxy
+	 */
+	_proxy: null,
+	
+	/**
+	 * Initializes the label editor for given conversation.
+	 * 
+	 * @param	WCF.Conversation.EditorHandler	editorHandler
+	 * @param	string				elementID
+	 */
+	init: function(editorHandler, elementID) {
+		this._conversationID = $('#' + elementID).data('conversationID');
+		this._dialog = null;
+		this._editorHandler = editorHandler;
+		
+		this._notification = new WCF.System.Notification(WCF.Language.get('wcf.conversation.label.management.addLabel.success'));
+		this._proxy = new WCF.Action.Proxy({
+			success: $.proxy(this._success, this)
+		});
+		
+		this._loadDialog();
+	},
+	
+	/**
+	 * Loads label assignment dialog.
+	 */
+	_loadDialog: function() {
+		this._proxy.setOption('data', {
+			actionName: 'getLabelForm',
+			className: 'wcf\\data\\conversation\\label\\ConversationLabelAction',
+			parameters: {
+				conversationID: this._conversationID
+			}
+		});
+		this._proxy.sendRequest();
+	},
+	
+	/**
+	 * Handles successful AJAX requests.
+	 * 
+	 * @param	object		data
+	 * @param	string		textStatus
+	 * @param	jQuery		jqXHR
+	 */
+	_success: function(data, textStatus, jqXHR) {
+		switch (data.returnValues.actionName) {
+			case 'assignLabel':
+				this._assignLabels(data);
+			break;
+			
+			case 'getLabelForm':
+				this._renderDialog(data);
+			break;
+		}
+	},
+	
+	/**
+	 * Renders the label assignment form overlay.
+	 * 
+	 * @param	object		data
+	 */
+	_renderDialog: function(data) {
+		if (this._dialog === null) {
+			this._dialog = $('#conversationLabelForm');
+			if (!this._dialog.length) {
+				this._dialog = $('<div id="conversationLabelForm" />').hide().appendTo(document.body);
+			}
+		}
+		
+		this._dialog.html(data.returnValues.template);
+		this._dialog.wcfDialog({
+			title: WCF.Language.get('wcf.conversation.label.assignLabels')
+		});
+		this._dialog.wcfDialog('render');
+		
+		$('#assignLabels').click($.proxy(this._save, this));
+	},
+	
+	/**
+	 * Saves label assignments for current conversation id.
+	 */
+	_save: function() {
+		var $labelIDs = [ ];
+		this._dialog.find('input').each(function(index, checkbox) {
+			var $checkbox = $(checkbox);
+			if ($checkbox.is(':checked')) {
+				$labelIDs.push($checkbox.data('labelID'));
+			}
+		});
+		
+		this._proxy.setOption('data', {
+			actionName: 'assignLabel',
+			className: 'wcf\\data\\conversation\\label\\ConversationLabelAction',
+			parameters: {
+				conversationID: this._conversationID,
+				labelIDs: $labelIDs
+			}
+		});
+		this._proxy.sendRequest();
+	},
+	
+	/**
+	 * Updates conversation labels.
+	 * 
+	 * @param	object		data
+	 */
+	_assignLabels: function(data) {
+		// update conversation
+		this._editorHandler.update(this._conversationID, 'labelIDs', data.returnValues.labelIDs);
+		
+		// close dialog and show a 'success' notice
+		this._dialog.wcfDialog('close');
+		this._notification.show();
 	}
 });
 
@@ -212,7 +430,7 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
  * 
  * @param	string		link
  */
-WCF.Conversation.LabelManager = Class.extend({
+WCF.Conversation.Label.Manager = Class.extend({
 	/**
 	 * deleted label id
 	 * @var	integer
