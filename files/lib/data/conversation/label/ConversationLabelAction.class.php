@@ -131,30 +131,13 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 		}
 		
 		// validate conversation id
-		$this->parameters['conversationID'] = (isset($this->parameters['conversationID'])) ? intval($this->parameters['conversationID']) : 0;
-		$this->conversation = new Conversation($this->parameters['conversationID']);
-		if (!$this->conversation->conversationID) {
+		$this->parameters['conversationIDs'] = (isset($this->parameters['conversationIDs'])) ? ArrayUtil::toIntegerArray($this->parameters['conversationIDs']) : array();
+		if (empty($this->parameters['conversationIDs'])) {
 			throw new UserInputException('conversationID');
 		}
-		else {
-			// check if user is a participant if he's not the initial author
-			if ($this->conversation->userID != WCF::getUser()->userID) {
-				$sql = "SELECT	conversationID
-					FROM	wcf".WCF_N."_conversation_to_user
-					WHERE	conversationID = ?
-						AND participantID = ?";
-				$statement = WCF::getDB()->prepareStatement($sql);
-				$statement->execute(array(
-					$this->conversation->conversationID,
-					WCF::getUser()->userID
-				));
-				$row = $statement->fetchArray();
-				
-				// user is not a participant
-				if ($row === false) {
-					throw new PermissionDeniedException();
-				}
-			}
+		
+		if (!Conversation::isParticipant(array($this->parameters['conversationIDs']))) {
+			throw new PermissionDeniedException();
 		}
 		
 		// validate available labels
@@ -176,18 +159,24 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 			$labelIDs[] = $label->labelID;
 		}
 		
-		$conditions = new PreparedStatementConditionBuilder();
-		$conditions->add("conversationID = ?", array($this->conversation->conversationID));
-		$conditions->add("labelID IN (?)", array($labelIDs));
-		
-		$sql = "SELECT	labelID
-			FROM	wcf".WCF_N."_conversation_label_to_object
-			".$conditions;
-		$statement = WCF::getDB()->prepareStatement($sql);
-		$statement->execute($conditions->getParameters());
 		$assignedLabels = array();
-		while ($row = $statement->fetchArray()) {
-			$assignedLabels[] = $row['labelID'];
+		// read assigned labels if editing single conversation
+		if (count($this->parameters['conversationIDs']) == 1) {
+			$conversationID = current($this->parameters['conversationIDs']);
+			
+			$conditions = new PreparedStatementConditionBuilder();
+			$conditions->add("conversationID = ?", array($conversationID));
+			$conditions->add("labelID IN (?)", array($labelIDs));
+			
+			$sql = "SELECT	labelID
+				FROM	wcf".WCF_N."_conversation_label_to_object
+				".$conditions;
+			$statement = WCF::getDB()->prepareStatement($sql);
+			$statement->execute($conditions->getParameters());
+			$assignedLabels = array();
+			while ($row = $statement->fetchArray()) {
+				$assignedLabels[] = $row['labelID'];
+			}
 		}
 		
 		WCF::getTPL()->assign(array(
@@ -218,7 +207,7 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 					if ($labelID == $label->labelID) {
 						$isValid = true;
 						break;
-					}
+					} 
 				}
 				
 				if (!$isValid) {
@@ -239,7 +228,7 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 		}
 		
 		$conditions = new PreparedStatementConditionBuilder();
-		$conditions->add("conversationID = ?", array($this->conversation->conversationID));
+		$conditions->add("conversationID IN (?)", array($this->parameters['conversationIDs']));
 		$conditions->add("labelID IN (?)", array($labelIDs));
 		
 		$sql = "DELETE FROM	wcf".WCF_N."_conversation_label_to_object
@@ -256,10 +245,12 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 			
 			WCF::getDB()->beginTransaction();
 			foreach ($this->parameters['labelIDs'] as $labelID) {
-				$statement->execute(array(
-					$labelID,
-					$this->conversation->conversationID
-				));
+				foreach ($this->parameters['conversationIDs'] as $conversationID) {
+					$statement->execute(array(
+						$labelID,
+						$conversationID
+					));
+				}
 			}
 			WCF::getDB()->commitTransaction();
 		}

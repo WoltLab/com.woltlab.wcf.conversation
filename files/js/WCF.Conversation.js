@@ -281,13 +281,14 @@ WCF.Conversation.Label = { };
  * 
  * @param	WCF.Conversation.EditorHandler	editorHandler
  * @param	string				elementID
+ * @param	array<integer>			conversationIDs
  */
 WCF.Conversation.Label.Editor = Class.extend({
 	/**
-	 * conversation id
-	 * @var	integer
+	 * list of conversation id
+	 * @var	array<integer>
 	 */
-	_conversationID: 0,
+	_conversationIDs: 0,
 	
 	/**
 	 * dialog object
@@ -318,9 +319,16 @@ WCF.Conversation.Label.Editor = Class.extend({
 	 * 
 	 * @param	WCF.Conversation.EditorHandler	editorHandler
 	 * @param	string				elementID
+	 * @param	array<integer>			conversationIDs
 	 */
-	init: function(editorHandler, elementID) {
-		this._conversationID = $('#' + elementID).data('conversationID');
+	init: function(editorHandler, elementID, conversationIDs) {
+		if (elementID) {
+			this._conversationIDs = [ $('#' + elementID).data('conversationID') ];
+		}
+		else {
+			this._conversationIDs = conversationIDs;
+		}
+		
 		this._dialog = null;
 		this._editorHandler = editorHandler;
 		
@@ -340,7 +348,7 @@ WCF.Conversation.Label.Editor = Class.extend({
 			actionName: 'getLabelForm',
 			className: 'wcf\\data\\conversation\\label\\ConversationLabelAction',
 			parameters: {
-				conversationID: this._conversationID
+				conversationIDs: this._conversationIDs
 			}
 		});
 		this._proxy.sendRequest();
@@ -403,7 +411,7 @@ WCF.Conversation.Label.Editor = Class.extend({
 			actionName: 'assignLabel',
 			className: 'wcf\\data\\conversation\\label\\ConversationLabelAction',
 			parameters: {
-				conversationID: this._conversationID,
+				conversationIDs: this._conversationIDs,
 				labelIDs: $labelIDs
 			}
 		});
@@ -417,7 +425,9 @@ WCF.Conversation.Label.Editor = Class.extend({
 	 */
 	_assignLabels: function(data) {
 		// update conversation
-		this._editorHandler.update(this._conversationID, 'labelIDs', data.returnValues.labelIDs);
+		for (var $i = 0, $length = this._conversationIDs; $i < $length; $i++) {
+			this._editorHandler.update(this._conversationIDs[$i], 'labelIDs', data.returnValues.labelIDs);
+		}
 		
 		// close dialog and show a 'success' notice
 		this._dialog.wcfDialog('close');

@@ -1,5 +1,7 @@
 <?php
 namespace wcf\data\conversation;
+use wcf\system\database\util\PreparedStatementConditionBuilder;
+
 use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\DatabaseObject;
 use wcf\system\breadcrumb\Breadcrumb;
@@ -134,5 +136,56 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 		}
 		
 		return $participantIDs;
+	}
+	
+	/**
+	 * Returns true, if given user id (default: current user) is participant
+	 * of all given conversation ids. First parameter may be a list of
+	 * Conversation objects.
+	 * 
+	 * @param	array<integer>		$conversationIDs
+	 * @param	integer			$userID
+	 * @return	boolean
+	 */
+	public static function isParticipant(array $conversationIDs, $userID = null) {
+		if ($userID === null) $userID = WCF::getUser()->userID;
+		
+		// check if user is the initial author
+		$conditions = new PreparedStatementConditionBuilder();
+		$conditions->add("conversationID IN (?)", array($conversationIDs));
+		$conditions->add("userID = ?", array($userID));
+		
+		$sql = "SELECT	conversationID
+			FROM	wcf".WCF_N."_conversation
+			".$conditions;
+		$statement = WCF::getDB()->prepareStatement($sql);
+		$statement->execute($conditions->getParameters());
+		while ($row = $statement->fetchArray()) {
+			$index = array_search($conversationIDs, $row['conversationID']);
+			unset($conversationIDs[$index]);
+		}
+		
+		// check for participation
+		if (!empty($conversationIDs)) {
+			$conditions = new PreparedStatementConditionBuilder();
+			$conditions->add("conversationID IN (?)", array($conversationIDs));
+			$conditions->add("participantID = ?", array($userID));
+			
+			$sql = "SELECT	conversationID
+				FROM	wcf".WCF_N."_conversation_to_user
+				".$conditions;
+			$statement = WCF::getDB()->prepareStatement($sql);
+			$statement->execute($conditions->getParameters());
+			while ($row = $statement->fetchArray()) {
+				$index = array_search($conversationIDs, $row['conversationID']);
+				unset($conversationIDs[$index]);
+			}
+		}
+		
+		if (!empty($conversationIDs)) {
+			return false;
+		}
+		
+		return true;
 	}
 }
