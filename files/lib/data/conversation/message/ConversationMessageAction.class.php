@@ -4,6 +4,7 @@ use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationEditor;
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\system\package\PackageDependencyHandler;
+use wcf\system\search\SearchIndexManager;
 use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\WCF;
 
@@ -52,7 +53,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction {
 		$converation = (isset($this->parameters['converation']) ? $this->parameters['converation'] : new Conversation($message->conversationID));
 		$conversationEditor = new ConversationEditor($converation);
 
-		if (!isset($this->parameters['isFirstPost']) || !$this->parameters['isFirstPost']) {
+		if (!empty($this->parameters['isFirstPost'])) {
 			// update last message
 			$conversationEditor->addMessage($message);
 		}
@@ -60,8 +61,8 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction {
 		// reset storage
 		UserStorageHandler::getInstance()->reset($converation->getParticipantIDs(), 'unreadConversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
 		
-		// @todo: update search index
-		//SearchIndexManager::getInstance()->add('com.woltlab.wbb.post', $post->postID, $post->message, $post->subject, $post->time, $post->userID, $post->username, $thread->languageID);
+		// update search index
+		SearchIndexManager::getInstance()->add('com.woltlab.wcf.conversation.message', $message->messageID, $message->message, (!empty($this->parameters['isFirstPost']) ? $converation->subject : ''), $message->time, $message->userID, $message->username);
 		
 		// update attachments
 		if (isset($this->parameters['attachmentHandler']) && $this->parameters['attachmentHandler'] !== null) {
@@ -82,5 +83,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction {
 		}
 		
 		parent::update();
+		
+		// @todo: update search index
 	}
 }
