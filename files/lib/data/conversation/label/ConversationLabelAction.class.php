@@ -1,9 +1,13 @@
 <?php
 namespace wcf\data\conversation\label;
+use wcf\data\conversation\Conversation;
 use wcf\data\AbstractDatabaseObjectAction;
+use wcf\system\database\util\PreparedStatementConditionBuilder;
+use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
 use wcf\system\WCF;
+use wcf\util\ArrayUtil;
 use wcf\util\StringUtil;
 
 /**
@@ -31,6 +35,18 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 	 * @see	wcf\data\AbstractDatabaseObjectAction::$permissionsUpdate
 	 */
 	protected $permissionsUpdate = array('user.conversation.canUseConversation');
+	
+	/**
+	 * conversation object
+	 * @var	wcf\data\conversation\Conversation
+	 */
+	public $conversation = null;
+	
+	/**
+	 * conversation label list object
+	 * @var	wcf\data\conversation\label\ConversationLabelList
+	 */
+	public $labelList = null;
 	
 	/**
 	 * @see	wcf\data\AbstractDatabaseObjectAction::validateUpdate()
@@ -103,6 +119,154 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 			'cssClassName' => $label->cssClassName,
 			'label' => $label->label,
 			'labelID' => $label->labelID
+		);
+	}
+	
+	/**
+	 * Validates parameters for label assignment form.
+	 */
+	public function validateGetLabelForm() {
+		if (!WCF::getSession()->getPermission('user.conversation.canUseConversation')) {
+			throw new PermissionDeniedException();
+		}
+		
+		// validate conversation id
+		$this->parameters['conversationID'] = (isset($this->parameters['conversationID'])) ? intval($this->parameters['conversationID']) : 0;
+		$this->conversation = new Conversation($this->parameters['conversationID']);
+		if (!$this->conversation->conversationID) {
+			throw new UserInputException('conversationID');
+		}
+		else {
+			// check if user is a participant if he's not the initial author
+			if ($this->conversation->userID != WCF::getUser()->userID) {
+				$sql = "SELECT	conversationID
+					FROM	wcf".WCF_N."_conversation_to_user
+					WHERE	conversationID = ?
+						AND participantID = ?";
+				$statement = WCF::getDB()->prepareStatement($sql);
+				$statement->execute(array(
+					$this->conversation->conversationID,
+					WCF::getUser()->userID
+				));
+				$row = $statement->fetchArray();
+				
+				// user is not a participant
+				if ($row === false) {
+					throw new PermissionDeniedException();
+				}
+			}
+		}
+		
+		// validate available labels
+		$this->labelList = ConversationLabel::getLabelsByUser();
+		if (!count($this->labelList)) {
+			throw new IllegalLinkException();
+		}
+	}
+	
+	/**
+	 * Returns the label assignment form.
+	 * 
+	 * @return	array
+	 */
+	public function getLabelForm() {
+		// read assigned labels
+		$labelIDs = array();
+		foreach ($this->labelList as $label) {
+			$labelIDs[] = $label->labelID;
+		}
+		
+		$conditions = new PreparedStatementConditionBuilder();
+		$conditions->add("conversationID = ?", array($this->conversation->conversationID));
+		$conditions->add("labelID IN (?)", array($labelIDs));
+		
+		$sql = "SELECT	labelID
+			FROM	wcf".WCF_N."_conversation_label_to_object
+			".$conditions;
+		$statement = WCF::getDB()->prepareStatement($sql);
+		$statement->execute($conditions->getParameters());
+		$assignedLabels = array();
+		while ($row = $statement->fetchArray()) {
+			$assignedLabels[] = $row['labelID'];
+		}
+		
+		WCF::getTPL()->assign(array(
+			'assignedLabels' => $assignedLabels,
+			'conversation' => $this->conversation,
+			'labelList' => $this->labelList
+		));
+		
+		return array(
+			'actionName' => 'getLabelForm',
+			'template' => WCF::getTPL()->fetch('conversationLabelAssignment')
+		);
+	}
+	
+	/**
+	 * Validates parameters to assign labels for a conversation.
+	 */
+	public function validateAssignLabel() {
+		$this->validateGetLabelForm();
+		
+		// validate given labels
+		$this->parameters['labelIDs'] = (isset($this->parameters['labelIDs']) && is_array($this->parameters['labelIDs'])) ? ArrayUtil::toIntegerArray($this->parameters['labelIDs']) : array();
+		if (!empty($this->parameters['labelIDs'])) {
+			foreach ($this->parameters['labelIDs'] as $labelID) {
+				$isValid = false;
+				
+				foreach ($this->labelList as $label) {
+					if ($labelID == $label->labelID) {
+						$isValid = true;
+						break;
+					}
+				}
+				
+				if (!$isValid) {
+					throw new UserInputException('labelIDs');
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Assigns labels for a conversation.
+	 */
+	public function assignLabel() {
+		// remove previous labels (if any)
+		$labelIDs = array();
+		foreach ($this->labelList as $label) {
+			$labelIDs[] = $label->labelID;
+		}
+		
+		$conditions = new PreparedStatementConditionBuilder();
+		$conditions->add("conversationID = ?", array($this->conversation->conversationID));
+		$conditions->add("labelID IN (?)", array($labelIDs));
+		
+		$sql = "DELETE FROM	wcf".WCF_N."_conversation_label_to_object
+			".$conditions;
+		$statement = WCF::getDB()->prepareStatement($sql);
+		$statement->execute($conditions->getParameters());
+		
+		// assign label ids
+		if (!empty($this->parameters['labelIDs'])) {
+			$sql = "INSERT INTO	wcf".WCF_N."_conversation_label_to_object
+						(labelID, conversationID)
+				VALUES		(?, ?)";
+			$statement = WCF::getDB()->prepareStatement($sql);
+			
+			WCF::getDB()->beginTransaction();
+			foreach ($this->parameters['labelIDs'] as $labelID) {
+				$statement->execute(array(
+					$labelID,
+					$this->conversation->conversationID
+				));
+			}
+			WCF::getDB()->commitTransaction();
+		}
+		
+		return array(
+			'actionName' => 'assignLabel',
+			'labelIDs' => $this->parameters['labelIDs']
 		);
 	}
 }

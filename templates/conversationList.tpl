@@ -14,7 +14,7 @@
 			var $editorHandler = new WCF.Conversation.EditorHandler();
 			var $inlineEditor = new WCF.Conversation.InlineEditor('.conversation');
 			$inlineEditor.setEditorHandler($editorHandler);
-			new WCF.Conversation.LabelManager('{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}');
+			new WCF.Conversation.Label.Manager('{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}');
 		});
 		//]]>
 	</script>
@@ -136,13 +136,15 @@
 						</td>
 						<td class="columnText columnTopic">
 							<h1>
-								{* @todo:if $thread->hasLabels()}
+								{hascontent}
 									<ul class="labelList">
-										{foreach from=$thread->getLabels() item=label}
-											<li><a href="#" class="badge label{if $label->cssClassName} {$label->cssClassName}{/if}">{lang}{$label->label}{/lang}</a></li>
-										{/foreach}
+										{content}
+											{foreach from=$conversation->getAssignedLabels() item=label}
+												<li><span class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}">{$label->label}</span></li>
+											{/foreach}
+										{/content}
 									</ul>
-								{/if*}
+								{/hascontent}
 								
 								{if $conversation->isNew()}
 									<a href="{link controller='Conversation' object=$conversation}action=firstNew{/link}" class="jsTooltip" title="{lang}wcf.conversation.gotoFirstNewPost{/lang}"><img src="{icon size='S'}circleArrowDown{/icon}" alt="" class="wbbFirstNewPost icon16" /></a>
