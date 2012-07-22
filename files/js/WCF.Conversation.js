@@ -727,3 +727,50 @@ WCF.Conversation.Label.Manager = Class.extend({
 		this._dialog.wcfDialog('close');
 	}
 });
+
+/**
+ * Provides a flexible conversation preview.
+ * 
+ * @see	WCF.Popover
+ */
+WCF.Conversation.Preview = WCF.Popover.extend({
+	/**
+	 * action proxy
+	 * @var	WCF.Action.Proxy
+	 */
+	_proxy: null,
+	
+	/**
+	 * @see	WCF.Popover.init()
+	 */
+	init: function() {
+		this._super('.conversationLink');
+		
+		// init proxy
+		this._proxy = new WCF.Action.Proxy({
+			showLoadingOverlay: false
+		});
+		
+		WCF.DOMNodeInsertedHandler.addCallback('WCF.Conversation.Preview', $.proxy(this._initContainers, this));
+	},
+	
+	/**
+	 * @see	WCF.Popover._loadContent()
+	 */
+	_loadContent: function() {
+		var $link = $('#' + this._activeElementID);
+		
+		this._proxy.setOption('data', {
+			actionName: 'getMessagePreview',
+			className: 'wcf\\data\\conversation\\ConversationAction',
+			objectIDs: [ $link.data('conversationID') ]
+		});
+		
+		var $elementID = this._activeElementID;
+		var self = this;
+		this._proxy.setOption('success', function(data, textStatus, jqXHR) {
+			self._insertContent($elementID, data.returnValues.template, true);
+		});
+		this._proxy.sendRequest();
+	}
+});
