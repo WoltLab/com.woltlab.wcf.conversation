@@ -1,5 +1,6 @@
 <?php
 namespace wcf\system\clipboard\action;
+use wcf\data\conversation\Conversation;
 use wcf\system\clipboard\ClipboardEditorItem;
 use wcf\system\clipboard\action\IClipboardAction;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
@@ -20,6 +21,12 @@ use wcf\system\WCF;
  */
 class ConversationClipboardAction implements IClipboardAction {
 	/**
+	 * list of conversations
+	 * @var	array<wcf\data\conversation\Conversation>
+	 */
+	public $conversations = null;
+	
+	/**
 	 * @see	wcf\system\clipboard\action\IClipboardAction::getTypeName()
 	 */
 	public function getTypeName() {
@@ -30,60 +37,88 @@ class ConversationClipboardAction implements IClipboardAction {
 	 * @see	wcf\system\clipboard\action\IClipboardAction::execute()
 	 */
 	public function execute(array $objects, $actionName, $typeData = array()) {
+		if ($this->conversations === null) {
+			// validate conversations
+			$this->validateParticipation($objects);
+		}
+		
+		// check if no conversation was accessible
+		if (empty($this->conversations)) {
+			return null;
+		}
+		
 		$item = new ClipboardEditorItem();
 		
 		switch ($actionName) {
 			case 'assignLabel':
-				$conversationIDs = $this->validateAssignLabels($objects);
+				// check if user has labels
+				$sql = "SELECT	COUNT(*) AS count
+					FROM	wcf".WCF_N."_conversation_label
+					WHERE	userID = ?";
+				$statement = WCF::getDB()->prepareStatement($sql);
+				$statement->execute(array(WCF::getUser()->userID));
+				$row = $statement->fetchArray();
+				if ($row['count'] == 0) {
+					return null;
+				}
+				
+				$item->addParameter('objectIDs', array_keys($this->conversations));
+				$item->addParameter('actionName', 'assignLabel');
+				$item->setName('conversation.assignLabel');
+			break;
+			
+			case 'close':
+				$conversationIDs = $this->validateClose();
 				if (empty($conversationIDs)) {
 					return null;
 				}
 				
 				$item->addParameter('objectIDs', $conversationIDs);
-				$item->addParameter('actionName', 'assignLabel');
-				$item->setName('conversation.assignLabel');
+				$item->addParameter('actionName', 'close');
+				$item->setName('conversation.close');
+			break;
+			
+			case 'leave':
+				$item->addParameter('objectIDs', array_keys($this->conversations));
+				$item->addParameter('actionName', 'leave');
+				$item->setName('conversation.leave');
+			break;
+			
+			case 'leavePermanently':
+				$item->addParameter('objectIDs', array_keys($this->conversations));
+				$item->addParameter('actionName', 'leavePermanently');
+				$item->setName('conversation.leavePermanetly');
 			break;
 			
 			default:
-				die("implement me: ".$actionName);
+				throw new SystemException("Unknown action '".$actionName."'");
 			break;
 		}
+		
+		return $item;
 	}
 	
 	/**
-	 * Validates if user may assign labels to given conversations.
+	 * Returns a list of conversations with user participation.
 	 * 
-	 * @return	array<integer>
+	 * @param	array<wcf\data\conversation\Conversation>
+	 * @return	array<wcf\data\conversation\Conversation>
 	 */
-	protected function validateAssignLabel(array $conversations) {
-		$conversationIDs = $tmpIDs = array();
+	protected function validateParticipation(array $conversations) {
+		$conversationIDs = array();
 		
-		// check if user has labels
-		$sql = "SELECT	COUNT(*) AS count
-			FROM	wcf".WCF_N."_conversation_label
-			WHERE	userID = ?";
-		$statement = WCF::getDB()->prepareStatement($sql);
-		$statement->execute(array(WCF::getUser()->userID));
-		$row = $statement->fetchArray();
-		if ($row['count'] == 0) {
-			return array();
-		}
-		
-		// check if user is the author
+		// validate ownership
 		foreach ($conversations as $conversation) {
-			if ($conversation->userID == WCF::getUser()->userID) {
+			if ($conversation->userID != WCF::getUser()->userID) {
 				$conversationIDs[] = $conversation->conversationID;
 			}
-			else {
-				$tmpIDs[] = $conversation->conversationID;
-			}
 		}
 		
-		// check if user is a participant
-		if (!empty($tmpIDs)) {
+		// validate participation as non-owner
+		if (!empty($conversationIDs)) {
 			$conditions = new PreparedStatementConditionBuilder();
-			$conditions->add("conversationID IN (?)", array($tmpIDs));
-			$conditions->add("participantID = ?", array(WCF::getUser()->userID));
+			$conditions->add("conversationID IN (?)", array($conversationIDs));
+			$conditions->add("userID = ?", array(WCF::getUser()->userID));
 			
 			$sql = "SELECT	conversationID
 				FROM	wcf".WCF_N."_conversation_to_user
@@ -91,15 +126,36 @@ class ConversationClipboardAction implements IClipboardAction {
 			$statement = WCF::getDB()->prepareStatement($sql);
 			$statement->execute($conditions->getParameters());
 			while ($row = $statement->fetchArray()) {
-				$conversationIDs[] = $row['conversationID'];
-				
-				// remove id from temporary list
-				$index = array_search($row['conversationID'], $tmpIDs);
-				unset($tmpIDs[$index]);
+				$index = array_search($row['conversationID'], $conversationIDs);
+				unset($index);
 			}
 			
-			if (!empty($tmpIDs)) {
-				throw new PermissionDeniedException();
+			// remove unaccessible conversations
+			if (!empty($conversationIDs)) {
+				foreach ($conversations as $index => $conversation) {
+					if (in_array($conversation->conversationID, $conversationIDs)) {
+						unset($conversations[$index]);
+					}
+				}
+			}
+		}
+		
+		foreach ($conversations as $conversation) {
+			$this->conversations[$conversation->conversationID] = $conversation;
+		}
+	}
+	
+	/**
+	 * Validates if user may close the given conversations.
+	 * 
+	 * @return	array<integer>
+	 */
+	protected function validateClose() {
+		$conversationIDs = array();
+		
+		foreach ($this->conversations as $conversation) {
+			if ($conversation->userID == WCF::getUser()->userID) {
+				$conversationIDs[] = $conversation->conversationID;
 			}
 		}
 		

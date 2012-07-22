@@ -287,8 +287,8 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
 					return false;
 				}
 				
-				if (optionName === 'close') return !(this._getEditorHandler().getValue($conversationID, 'isClosed'));
-				else return (this._getEditorHandler().getValue($conversationID, 'isClosed'));
+				if (optionName === 'close') return !(this._editorHandler.getValue($conversationID, 'isClosed'));
+				else return (this._editorHandler.getValue($conversationID, 'isClosed'));
 			break;
 			
 			case 'leave':

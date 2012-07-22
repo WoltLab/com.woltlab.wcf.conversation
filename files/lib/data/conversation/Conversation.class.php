@@ -140,8 +140,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	
 	/**
 	 * Returns true, if given user id (default: current user) is participant
-	 * of all given conversation ids. First parameter may be a list of
-	 * Conversation objects.
+	 * of all given conversation ids.
 	 * 
 	 * @param	array<integer>		$conversationIDs
 	 * @param	integer			$userID
