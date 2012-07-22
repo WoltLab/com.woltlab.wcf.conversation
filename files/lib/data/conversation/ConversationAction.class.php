@@ -5,6 +5,7 @@ use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\data\conversation\message\ViewableConversationMessageList;
 use wcf\system\exception\PermissionDeniedException;
+use wcf\system\exception\ValidateActionException;
 use wcf\system\package\PackageDependencyHandler;
 use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\WCF;
@@ -24,6 +25,12 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 	 * @see wcf\data\AbstractDatabaseObjectAction::$className
 	 */
 	protected $className = 'wcf\data\conversation\ConversationEditor';
+	
+	/**
+	 * list of conversation data modifications
+	 * @var	array<array>
+	 */
+	protected $conversationData = array();
 	
 	/**
 	 * @see wcf\data\AbstractDatabaseObjectAction::create()
@@ -196,6 +203,104 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 		));
 		return array(
 			'template' => WCF::getTPL()->fetch('conversationMessagePreview')
+		);
+	}
+	
+	/**
+	 * Validates parameters to close conversations.
+	 */
+	public function validateClose() {
+		// read objects
+		if (empty($this->objects)) {
+			$this->readObjects();
+		}
+		
+		if (empty($this->objects)) {
+			throw new ValidateActionException('Invalid object id');
+		}
+		
+		// validate ownership
+		foreach ($this->objects as $conversation) {
+			if ($conversation->isClosed || ($conversation->userID != WCF::getUser()->userID)) {
+				throw new PermissionDeniedException();
+			}
+		}
+	}
+	
+	/**
+	 * Closes conversations.
+	 * 
+	 * @return	array<array>
+	 */
+	public function close() {
+		foreach ($this->objects as $conversation) {
+			// TODO: implement a method 'close()' in order to utilize modification log
+			$conversation->update(array('isClosed' => 1));
+			$this->addConversationData($conversation, 'isClosed', 1);
+		}
+		
+		return $this->getConversationData();
+	}
+	
+	/**
+	 * Validates parameters to open conversations.
+	 */
+	public function validateOpen() {
+		// read objects
+		if (empty($this->objects)) {
+			$this->readObjects();
+		}
+	
+		if (empty($this->objects)) {
+			throw new ValidateActionException('Invalid object id');
+		}
+	
+		// validate ownership
+		foreach ($this->objects as $conversation) {
+			if (!$conversation->isClosed || ($conversation->userID != WCF::getUser()->userID)) {
+				throw new PermissionDeniedException();
+			}
+		}
+	}
+	
+	/**
+	 * Opens conversations.
+	 *
+	 * @return	array<array>
+	 */
+	public function open() {
+		foreach ($this->objects as $conversation) {
+			// TODO: implement a method 'open()' in order to utilize modification log
+			$conversation->update(array('isClosed' => 0));
+			$this->addConversationData($conversation, 'isClosed', 0);
+		}
+	
+		return $this->getConversationData();
+	}
+	
+	/**
+	 * Adds conversation modification data.
+	 * 
+	 * @param	wcf\data\conversation\Conversation	$conversation
+	 * @param	string					$key
+	 * @param	mixed					$value
+	 */
+	protected function addConversationData(Conversation $conversation, $key, $value) {
+		if (!isset($this->conversationData[$conversation->conversationID])) {
+			$this->conversationData[$conversation->conversationID] = array();
+		}
+		
+		$this->conversationData[$conversation->conversationID][$key] = $value;
+	}
+	
+	/**
+	 * Returns thread data.
+	 *
+	 * @return	array<array>
+	 */
+	protected function getConversationData() {
+		return array(
+			'conversationData' => $this->conversationData
 		);
 	}
 }

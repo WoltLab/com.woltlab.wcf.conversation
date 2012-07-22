@@ -63,7 +63,6 @@ class ConversationClipboardAction implements IClipboardAction {
 				}
 				
 				$item->addParameter('objectIDs', array_keys($this->conversations));
-				$item->addParameter('actionName', 'assignLabel');
 				$item->setName('conversation.assignLabel');
 			break;
 			
@@ -75,19 +74,30 @@ class ConversationClipboardAction implements IClipboardAction {
 				
 				$item->addParameter('objectIDs', $conversationIDs);
 				$item->addParameter('actionName', 'close');
+				$item->addParameter('className', 'wcf\data\conversation\ConversationAction');
 				$item->setName('conversation.close');
 			break;
 			
 			case 'leave':
 				$item->addParameter('objectIDs', array_keys($this->conversations));
-				$item->addParameter('actionName', 'leave');
 				$item->setName('conversation.leave');
 			break;
 			
 			case 'leavePermanently':
 				$item->addParameter('objectIDs', array_keys($this->conversations));
-				$item->addParameter('actionName', 'leavePermanently');
 				$item->setName('conversation.leavePermanetly');
+			break;
+			
+			case 'open':
+				$conversationIDs = $this->validateOpen();
+				if (empty($conversationIDs)) {
+					return null;
+				}
+			
+				$item->addParameter('objectIDs', $conversationIDs);
+				$item->addParameter('actionName', 'open');
+				$item->addParameter('className', 'wcf\data\conversation\ConversationAction');
+				$item->setName('conversation.open');
 			break;
 			
 			default:
@@ -154,11 +164,28 @@ class ConversationClipboardAction implements IClipboardAction {
 		$conversationIDs = array();
 		
 		foreach ($this->conversations as $conversation) {
-			if ($conversation->userID == WCF::getUser()->userID) {
+			if (!$conversation->isClosed && $conversation->userID == WCF::getUser()->userID) {
 				$conversationIDs[] = $conversation->conversationID;
 			}
 		}
 		
+		return $conversationIDs;
+	}
+	
+	/**
+	 * Validates if user may open the given conversations.
+	 *
+	 * @return	array<integer>
+	 */
+	protected function validateOpen() {
+		$conversationIDs = array();
+	
+		foreach ($this->conversations as $conversation) {
+			if ($conversation->isClosed && $conversation->userID == WCF::getUser()->userID) {
+				$conversationIDs[] = $conversation->conversationID;
+			}
+		}
+	
 		return $conversationIDs;
 	}
 	
