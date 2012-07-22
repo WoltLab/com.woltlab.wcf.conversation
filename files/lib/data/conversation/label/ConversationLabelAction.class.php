@@ -3,9 +3,7 @@ namespace wcf\data\conversation\label;
 use wcf\data\conversation\Conversation;
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
-use wcf\system\exception\IllegalLinkException;
-use wcf\system\exception\PermissionDeniedException;
-use wcf\system\exception\UserInputException;
+use wcf\system\exception\ValidateActionException;
 use wcf\system\WCF;
 use wcf\util\ArrayUtil;
 use wcf\util\StringUtil;
@@ -55,12 +53,12 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 		parent::validateUpdate();
 		
 		if (count($this->objects) != 1) {
-			throw new UserInputException('objectID');
+			throw new ValidateActionException("Invalid 'objectIDs' parameter");
 		}
 		
 		$label = current($this->objects);
 		if ($label->userID != WCF::getUser()->userID) {
-			throw new PermissionDeniedException();
+			throw new ValidateActionException("Insufficient permissions");
 		}
 	}
 	
@@ -71,12 +69,12 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 		parent::validateDelete();
 		
 		if (count($this->objects) != 1) {
-			throw new UserInputException('objectID');
+			throw new ValidateActionException("Invalid 'objectIDs' parameter");
 		}
 		
 		$label = current($this->objects);
 		if ($label->userID != WCF::getUser()->userID) {
-			throw new PermissionDeniedException();
+			throw new ValidateActionException("Insufficient permissions");
 		}
 	}
 	
@@ -85,17 +83,17 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 	 */
 	public function validateAdd() {
 		if (!WCF::getSession()->getPermission('user.conversation.canUseConversation')) {
-			throw new PermissionDeniedException();
+			throw new ValidateActionException("Insufficient permissions");
 		}
 		
 		$this->parameters['data']['labelName'] = (isset($this->parameters['data']['labelName'])) ? StringUtil::trim($this->parameters['data']['labelName']) : '';
 		if (empty($this->parameters['data']['labelName'])) {
-			throw new UserInputException('labelName');
+			throw new ValidateActionException("Invalid 'labelName' data parameter");
 		}
 		
 		$this->parameters['data']['cssClassName'] = (isset($this->parameters['data']['cssClassName'])) ? StringUtil::trim($this->parameters['data']['cssClassName']) : '';
 		if (empty($this->parameters['data']['cssClassName']) || !in_array($this->parameters['data']['cssClassName'], ConversationLabel::getLabelCssClassNames())) {
-			throw new UserInputException('cssClassName');
+			throw new ValidateActionException("Invalid 'cssClassName' data parameter");
 		}
 		
 		// 'none' is a pseudo value
@@ -127,13 +125,13 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 	 */
 	public function validateGetLabelForm() {
 		if (!WCF::getSession()->getPermission('user.conversation.canUseConversation')) {
-			throw new PermissionDeniedException();
+			throw new ValidateActionException("Insufficient permissions");
 		}
 		
 		// validate conversation id
 		$this->parameters['conversationIDs'] = (isset($this->parameters['conversationIDs'])) ? ArrayUtil::toIntegerArray($this->parameters['conversationIDs']) : array();
 		if (empty($this->parameters['conversationIDs'])) {
-			throw new UserInputException('conversationID');
+			throw new ValidateActionException("Invalid 'conversationIDs' parameter");
 		}
 		
 		if (!Conversation::isParticipant(array($this->parameters['conversationIDs']))) {
@@ -143,7 +141,7 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 		// validate available labels
 		$this->labelList = ConversationLabel::getLabelsByUser();
 		if (!count($this->labelList)) {
-			throw new IllegalLinkException();
+			throw new ValidateActionException("User has no labels");
 		}
 	}
 	
@@ -211,7 +209,7 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 				}
 				
 				if (!$isValid) {
-					throw new UserInputException('labelIDs');
+					throw new ValidateActionException("Invalid 'labelIDs' parameter");
 				}
 			}
 		}
