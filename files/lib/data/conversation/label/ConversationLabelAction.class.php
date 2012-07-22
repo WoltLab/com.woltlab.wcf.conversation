@@ -136,7 +136,7 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 			throw new UserInputException('conversationID');
 		}
 		
-		if (!Conversation::isParticipant(array($this->parameters['conversationIDs']))) {
+		if (!Conversation::isParticipant($this->parameters['conversationIDs'])) {
 			throw new PermissionDeniedException();
 		}
 		
