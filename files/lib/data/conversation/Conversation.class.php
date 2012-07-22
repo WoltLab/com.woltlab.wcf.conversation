@@ -161,7 +161,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute($conditions->getParameters());
 		while ($row = $statement->fetchArray()) {
-			$index = array_search($conversationIDs, $row['conversationID']);
+			$index = array_search($row['conversationID'], $conversationIDs);
 			unset($conversationIDs[$index]);
 		}
 		
