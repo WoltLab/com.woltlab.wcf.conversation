@@ -178,8 +178,10 @@ class UserConversationList extends ConversationList {
 	 * @return	array<array>
 	 */
 	protected function loadLabelAssignments() {
-		$data = array();
 		$labels = $this->getLabels();
+		if (empty($labels)) {
+			return array();
+		}
 		
 		$conditions = new PreparedStatementConditionBuilder();
 		$conditions->add("conversationID IN (?)", array(array_keys($this->objects)));
@@ -190,6 +192,7 @@ class UserConversationList extends ConversationList {
 			".$conditions;
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute($conditions->getParameters());
+		$data = array();
 		while ($row = $statement->fetchArray()) {
 			if (!isset($data[$row['conversationID']])) {
 				$data[$row['conversationID']] = array();
