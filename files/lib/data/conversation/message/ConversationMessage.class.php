@@ -2,6 +2,7 @@
 namespace wcf\data\conversation\message;
 use wcf\data\DatabaseObject;
 use wcf\system\bbcode\MessageParser;
+use wcf\util\StringUtil;
 
 /**
  * Represents a conversation message.
@@ -32,5 +33,24 @@ class ConversationMessage extends DatabaseObject {
 	public function getFormattedMessage() {
 		MessageParser::getInstance()->setOutputType('text/html');
 		return MessageParser::getInstance()->parse($this->message, $this->enableSmilies, $this->enableHtml, $this->enableBBCodes);
+	}
+	
+	/**
+	 * Returns an excerpt of this message.
+	 *
+	 * @param	string		$maxLength
+	 * @return	string
+	 */
+	public function getExcerpt($maxLength = 255) {
+		MessageParser::getInstance()->setOutputType('text/plain');
+		$message = MessageParser::getInstance()->parse($this->message, $this->enableSmilies, $this->enableHtml, $this->enableBBCodes);
+		if (StringUtil::length($message) > $maxLength) {
+			$message = StringUtil::encodeHTML(StringUtil::substring($message, 0, $maxLength)).'&hellip;';
+		}
+		else {
+			$message = StringUtil::encodeHTML($message);
+		}
+		
+		return $message;
 	}
 }

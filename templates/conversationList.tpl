@@ -17,6 +17,8 @@
 			
 			new WCF.Conversation.Clipboard($editorHandler);
 			new WCF.Conversation.Label.Manager('{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}');
+
+			new WCF.Conversation.Preview();
 		});
 		//]]>
 	</script>
@@ -152,7 +154,7 @@
 									<a href="{link controller='Conversation' object=$conversation}action=firstNew{/link}" class="jsTooltip" title="{lang}wcf.conversation.gotoFirstNewPost{/lang}"><img src="{icon size='S'}circleArrowDown{/icon}" alt="" class="wbbFirstNewPost icon16" /></a>
 								{/if}
 								
-								<a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->threadID}">{$conversation->subject}</a>
+								<a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>
 							</h1>
 							
 							<aside class="statusDisplay">

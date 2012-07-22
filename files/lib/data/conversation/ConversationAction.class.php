@@ -3,6 +3,7 @@ namespace wcf\data\conversation;
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\message\ConversationMessageAction;
+use wcf\data\conversation\message\ViewableConversationMessageList;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\package\PackageDependencyHandler;
 use wcf\system\user\storage\UserStorageHandler;
@@ -163,6 +164,38 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 		return array(
 			'actionName' => 'getLabelManagement',
 			'template' => WCF::getTPL()->fetch('conversationLabelManagement')
+		);
+	}
+	
+	/**
+	 * Validates the get message preview action.
+	 */
+	public function validateGetMessagePreview() {
+		// read data
+		if (!count($this->objects)) {
+			$this->readObjects();
+		}
+		// @todo: implement me
+	}
+	
+	/**
+	 * Gets a preview of a message in a specific conversation.
+	 * 
+	 * @return array
+	 */
+	public function getMessagePreview() {
+		$messageList = new ViewableConversationMessageList();
+		$conversation = reset($this->objects);
+		
+		$messageList->getConditionBuilder()->add("conversation_message.messageID = ?", array($conversation->firstMessageID));
+		$messageList->readObjects();
+		$messages = $messageList->getObjects();
+		
+		WCF::getTPL()->assign(array(
+			'message' => reset($messages)
+		));
+		return array(
+			'template' => WCF::getTPL()->fetch('conversationMessagePreview')
 		);
 	}
 }
