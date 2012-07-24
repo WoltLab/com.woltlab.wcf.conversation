@@ -602,7 +602,7 @@ WCF.Conversation.Label.Manager = Class.extend({
 	 */
 	_insertLabel: function(data) {
 		var $listItem = $('<li><a href="' + this._link + '&labelID=' + data.returnValues.labelID + '"><span class="badge label' + (data.returnValues.cssClassName ? ' ' + data.returnValues.cssClassName : '') + '">' + data.returnValues.label + '</span></a></li>');
-		$listItem.children('a').data('labelID', data.returnValues.labelID);
+		$listItem.find('a > span').data('labelID', data.returnValues.labelID).data('cssClassName', data.returnValues.cssClassName);
 		
 		var $divider = this._labels.find('.dropdownDivider:eq(0)').show();
 		$listItem.insertBefore($divider);
