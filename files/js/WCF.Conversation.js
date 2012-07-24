@@ -149,7 +149,8 @@ WCF.Conversation.EditorHandler = Class.extend({
 					
 					$labels[$span.data('labelID')] = {
 						cssClassName: $span.data('cssClassName'),
-						label: $span.text()
+						label: $span.text(),
+						url: $span.parent().attr('href')
 					};
 				});
 				
@@ -169,7 +170,7 @@ WCF.Conversation.EditorHandler = Class.extend({
 					// insert labels
 					for (var $i = 0, $length = data.length; $i < $length; $i++) {
 						var $label = $labels[data[$i]];
-						$('<li><span class="badge label' + ($label.cssClassName ? " " + $label.cssClassName : "") + '">' + $label.label + '</span>&nbsp;</li>').appendTo($labelList);
+						$('<li><a href="' + $label.url + '" class="badge label' + ($label.cssClassName ? " " + $label.cssClassName : "") + '">' + $label.label + '</a>&nbsp;</li>').appendTo($labelList);
 					}
 				}
 			break;

@@ -144,7 +144,7 @@
 									<ul class="labelList">
 										{content}
 											{foreach from=$conversation->getAssignedLabels() item=label}
-												<li><span class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}">{$label->label}</span></li>
+												<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}&labelID={@$label->labelID}{/link}" class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}">{$label->label}</a></li>
 											{/foreach}
 										{/content}
 									</ul>
