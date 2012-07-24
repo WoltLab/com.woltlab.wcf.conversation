@@ -1,11 +1,10 @@
 <?php
 namespace wcf\data\conversation;
-use wcf\system\database\util\PreparedStatementConditionBuilder;
-
 use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\DatabaseObject;
 use wcf\system\breadcrumb\Breadcrumb;
 use wcf\system\breadcrumb\IBreadcrumbProvider;
+use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\request\IRouteController;
 use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
@@ -176,7 +175,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 			$statement = WCF::getDB()->prepareStatement($sql);
 			$statement->execute($conditions->getParameters());
 			while ($row = $statement->fetchArray()) {
-				$index = array_search($conversationIDs, $row['conversationID']);
+				$index = array_search($row['conversationID'], $conversationIDs);
 				unset($conversationIDs[$index]);
 			}
 		}
