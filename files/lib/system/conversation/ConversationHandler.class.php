@@ -14,6 +14,12 @@ class ConversationHandler extends SingletonFactory {
 	protected $unreadConversationCount = null;
 	
 	/**
+	 * number of conversations
+	 * @var integer
+	 */
+	protected $conversationCount = null;
+	
+	/**
 	 * Returns the number of unread conversations for the active user.
 	 * 
 	 * @return	integer
@@ -56,5 +62,54 @@ class ConversationHandler extends SingletonFactory {
 		}
 		
 		return $this->unreadConversationCount;
+	}
+	
+	/**
+	 * Returns the number of conversations for the active user.
+	 * 
+	 * @return	integer
+	 */
+	public function getConversationCount() {
+		if ($this->conversationCount === null) {
+			$this->conversationCount = 0;
+		
+			if (WCF::getUser()->userID) {
+				// load storage data
+				UserStorageHandler::getInstance()->loadStorage(array(WCF::getUser()->userID));
+					
+				// get ids
+				$data = UserStorageHandler::getInstance()->getStorage(array(WCF::getUser()->userID), 'conversationCount');
+				
+				// cache does not exist or is outdated
+				if ($data[WCF::getUser()->userID] === null) {
+					$conditionBuilder1 = new PreparedStatementConditionBuilder();
+					$conditionBuilder1->add('conversation_to_user.participantID = ?', array(WCF::getUser()->userID));
+					$conditionBuilder1->add('conversation_to_user.hideConversation IN (0,1)');
+					$conditionBuilder2 = new PreparedStatementConditionBuilder();
+					$conditionBuilder2->add('conversation.userID = ?', array(WCF::getUser()->userID));
+					$conditionBuilder2->add('conversation.isDraft = 1');
+					
+					$sql = "SELECT (SELECT	COUNT(*)
+							FROM	wcf".WCF_N."_conversation_to_user conversation_to_user
+							".$conditionBuilder1->__toString().")
+							+
+							(SELECT	COUNT(*)
+							FROM	wcf".WCF_N."_conversation conversation
+							".$conditionBuilder2->__toString().") AS count";
+					$statement = WCF::getDB()->prepareStatement($sql);
+					$statement->execute(array_merge($conditionBuilder1->getParameters(), $conditionBuilder2->getParameters()));
+					$row = $statement->fetchArray();
+					$this->conversationCount = $row['count'];
+					
+					// update storage data
+					UserStorageHandler::getInstance()->update(WCF::getUser()->userID, 'conversationCount', serialize($this->conversationCount), PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
+				}
+				else {
+					$this->conversationCount = unserialize($data[WCF::getUser()->userID]);
+				}
+			}
+		}
+		
+		return $this->conversationCount;
 	}
 }

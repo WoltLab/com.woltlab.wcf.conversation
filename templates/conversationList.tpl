@@ -45,7 +45,6 @@
 				<fieldset>
 					<legend>{lang}wcf.conversation.label{/lang}</legend>
 					
-					
 					<div id="conversationLabelFilter" class="dropdown">
 						<div class="dropdownToggle" data-toggle="conversationLabelFilter">
 							{if $labelID}
@@ -69,6 +68,19 @@
 					</div>
 					
 					<button id="manageLabel">{lang}wcf.conversation.label.management{/lang}</button>
+				</fieldset>
+			</li>
+			
+			<li class="sidebarContainer">
+				<fieldset>
+					<legend>{lang}wcf.conversation.quota{/lang}</legend>
+					
+					<div>
+						{* @todo: styling *}
+						<progress value="{@$__wcf->getConversationHandler()->getConversationCount()}" max="{@$__wcf->session->getPermission('user.conversation.maxConversations')}" title="{#$__wcf->getConversationHandler()->getConversationCount()/$__wcf->session->getPermission('user.conversation.maxConversations')*100}%">
+							<span>{#$__wcf->getConversationHandler()->getConversationCount()/$__wcf->session->getPermission('user.conversation.maxConversations')*100}%</span>
+						</progress>
+					</div>
 				</fieldset>
 			</li>
 		</ul>

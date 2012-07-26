@@ -3,6 +3,8 @@ namespace wcf\form;
 use wcf\data\conversation\ConversationAction;
 use wcf\data\user\UserProfile;
 use wcf\system\breadcrumb\Breadcrumb;
+use wcf\system\conversation\ConversationHandler;
+use wcf\system\exception\NamedUserException;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
 use wcf\system\request\LinkHandler;
@@ -243,6 +245,11 @@ class ConversationAddForm extends MessageForm {
 	public function show() {
 		if (!WCF::getUser()->userID) {
 			throw new PermissionDeniedException();
+		}
+		
+		// check max pc permission
+		if (ConversationHandler::getInstance()->getConversationCount() >= WCF::getSession()->getPermission('user.conversation.maxConversations')) {
+			throw new NamedUserException(WCF::getLanguage()->get('wcf.conversation.error.mailboxIsFull'));
 		}
 		
 		parent::show();

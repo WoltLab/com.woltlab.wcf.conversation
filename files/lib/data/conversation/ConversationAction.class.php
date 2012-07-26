@@ -58,6 +58,13 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 			
 			// add author
 			$conversationEditor->updateParticipants(array($data['userID']));
+			
+			// update conversation count
+			UserStorageHandler::getInstance()->reset(array($data['userID']), 'conversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
+		}
+		else {
+			// update conversation count
+			UserStorageHandler::getInstance()->reset($converation->getParticipantIDs(), 'conversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
 		}
 		
 		// update participant summary
@@ -111,6 +118,9 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 				if ($conversation->isDraft && !$this->parameters['data']['isDraft']) {
 					// add author
 					$conversation->updateParticipants(array($conversation->userID));
+					
+					// update conversation count
+					UserStorageHandler::getInstance()->reset($converation->getParticipantIDs(), 'conversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
 				}
 			}
 		}
