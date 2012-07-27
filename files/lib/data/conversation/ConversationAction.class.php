@@ -1,5 +1,9 @@
 <?php
 namespace wcf\data\conversation;
+use wcf\system\exception\UserInputException;
+
+use wcf\util\ArrayUtil;
+
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\message\ConversationMessageAction;
@@ -286,6 +290,94 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 		}
 	
 		return $this->getConversationData();
+	}
+	
+	/**
+	 * Validates conversations for leave form.
+	 */
+	public function validateGetLeaveForm() {
+		$this->parameters['conversationIDs'] = (isset($this->parameters['conversationIDs'])) ? ArrayUtil::toIntegerArray($this->parameters['conversationIDs']) : array();
+		if (empty($this->parameters['conversationIDs'])) {
+			throw new UserInputException('conversationIDs');
+		}
+		
+		// validate participation
+		if (!Conversation::isParticipant($this->parameters['conversationIDs'])) {
+			throw new PermissionDeniedException();
+		}
+	}
+	
+	/**
+	 * Returns dialog form to leave conversations.
+	 * 
+	 * @return	array
+	 */
+	public function getLeaveForm() {
+		// get hidden state from first conversation (all others have the same state)
+		$sql = "SELECT	hideConversation
+			FROM	wcf".WCF_N."_conversation_to_user
+			WHERE	conversationID = ?
+				AND participantID = ?";
+		$statement = WCF::getDB()->prepareStatement($sql);
+		$statement->execute(array(
+			current($this->parameters['conversationIDs']),
+			WCF::getUser()->userID
+		));
+		$row = $statement->fetchArray();
+		
+		WCF::getTPL()->assign('hideConversation', $row['hideConversation']);
+		
+		return array(
+			'actionName' => 'getLeaveForm',
+			'template' => WCF::getTPL()->fetch('conversationLeave')
+		);
+	}
+	
+	/**
+	 * Validates parameters to hide conversations.
+	 */
+	public function validateHideConversation() {
+		$this->parameters['hideConversation'] = (isset($this->parameters['hideConversation'])) ? intval($this->parameters['hideConversation']) : null;
+		if ($this->parameters['hideConversation'] === null || !in_array($this->parameters['hideConversation'], array(Conversation::STATE_DEFAULT, Conversation::STATE_HIDDEN, Conversation::STATE_LEFT))) {
+			throw new UserInputException('hideConversation');
+		}
+		
+		$this->parameters['conversationIDs'] = (isset($this->parameters['conversationIDs'])) ? ArrayUtil::toIntegerArray($this->parameters['conversationIDs']) : array();
+		if (empty($this->parameters['conversationIDs'])) {
+			throw new UserInputException('conversationIDs');
+		}
+		
+		// validate participation
+		if (!Conversation::isParticipant($this->parameters['conversationIDs'])) {
+			throw new PermissionDeniedException();
+		}
+	}
+	
+	/**
+	 * Hides or restores conversations.
+	 * 
+	 * @return	array
+	 */
+	public function hideConversation() {
+		$sql = "UPDATE	wcf".WCF_N."_conversation_to_user
+			SET	hideConversation = ?
+			WHERE	conversationID = ?
+				AND participantID = ?";
+		$statement = WCF::getDB()->prepareStatement($sql);
+		
+		WCF::getDB()->beginTransaction();
+		foreach ($this->parameters['conversationIDs'] as $conversationID) {
+			$statement->execute(array(
+				$this->parameters['hideConversation'],
+				$conversationID,
+				WCF::getUser()->userID
+			));
+		}
+		WCF::getDB()->commitTransaction();
+		
+		return array(
+			'actionName' => 'hideConversation'
+		);
 	}
 	
 	/**

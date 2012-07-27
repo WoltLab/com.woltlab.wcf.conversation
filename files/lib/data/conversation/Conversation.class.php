@@ -31,6 +31,24 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	protected static $databaseTableIndexName = 'conversationID';
 	
 	/**
+	 * default participation state
+	 * @var	integer
+	 */
+	const STATE_DEFAULT = 0;
+	
+	/**
+	 * conversation is hidden but returns visible upon new message
+	 * @var	integer
+	 */
+	const STATE_HIDDEN = 1;
+	
+	/**
+	 * conversation was left permanently
+	 * @var	integer
+	 */
+	const STATE_LEFT/*4DEAD*/ = 2;
+	
+	/**
 	 * @see	wcf\system\request\IRouteController::getID()
 	 */
 	public function getID() {
