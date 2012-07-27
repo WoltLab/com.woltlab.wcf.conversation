@@ -218,7 +218,7 @@ WCF.Conversation.Clipboard = Class.extend({
 	 */
 	_execute: function(event, type, actionName, parameters) {
 		if (type === 'com.woltlab.wcf.conversation.conversation' && actionName === 'conversation.assignLabel') {
-			new WCF.Conversation.Label.Editor(this._editorHandler, null, parameters.objectTypeIDs);
+			new WCF.Conversation.Label.Editor(this._editorHandler, null, parameters.objectIDs);
 		}
 	}
 });
@@ -471,7 +471,7 @@ WCF.Conversation.Label.Editor = Class.extend({
 	 */
 	_assignLabels: function(data) {
 		// update conversation
-		for (var $i = 0, $length = this._conversationIDs; $i < $length; $i++) {
+		for (var $i = 0, $length = this._conversationIDs.length; $i < $length; $i++) {
 			this._editorHandler.update(this._conversationIDs[$i], 'labelIDs', data.returnValues.labelIDs);
 		}
 		
