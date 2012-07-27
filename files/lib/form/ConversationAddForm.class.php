@@ -135,6 +135,10 @@ class ConversationAddForm extends MessageForm {
 	
 	/**
 	 * Validates the participants.
+	 * 
+	 * @param	string		$participants
+	 * @param	string		$field
+	 * @return	array		$result
 	 */
 	protected function validateParticipants($participants, $field = 'participants') {
 		$result = array();
@@ -181,11 +185,16 @@ class ConversationAddForm extends MessageForm {
 		return $result;
 	}
 	
+	/**
+	 * Validates the given participant.
+	 * 
+	 * @param	wcf\data\user\UserProfile	$user
+	 */
 	protected function validateParticipant(UserProfile $user) {
-		// @todo: check participant's settings and permissions
-		/*if (!$user->getPermission('user.conversation.canUseConversation')) {
+		// check participant's settings and permissions
+		if (!$user->getPermission('user.conversation.canUseConversation')) {
 			throw new UserInputException('participant', 'canNotUseConversation');
-		}*/
+		}
 				
 		// check privacy setting
 		if ($user->canSendConversation == 2 || ($user->canSendConversation == 1 && WCF::getProfileHandler()->isFollowing($user->userID))) {
@@ -197,8 +206,8 @@ class ConversationAddForm extends MessageForm {
 			throw new UserInputException('participant', 'ignoresYou');
 		}
 		
-		// @todo: check participant's mailbox quota
-		if (false) {
+		// check participant's mailbox quota
+		if (ConversationHandler::getInstance()->getConversationCount($user->userID) >= $user->getPermission('user.conversation.maxConversations')) {
 			throw new UserInputException('participant', 'mailboxIsFull');
 		}
 	}
