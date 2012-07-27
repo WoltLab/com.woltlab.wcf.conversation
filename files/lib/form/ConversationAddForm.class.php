@@ -4,6 +4,7 @@ use wcf\data\conversation\ConversationAction;
 use wcf\data\user\UserProfile;
 use wcf\system\breadcrumb\Breadcrumb;
 use wcf\system\conversation\ConversationHandler;
+use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\NamedUserException;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
@@ -71,6 +72,30 @@ class ConversationAddForm extends MessageForm {
 	public $invisibleParticipantIDs = array();
 	
 	/**
+	 * @see wcf\page\IPage::readParameters()
+	 */
+	public function readParameters() {
+		parent::readParameters();
+		
+		if (isset($_REQUEST['userID'])) {
+			$userID = intval($_REQUEST['userID']);
+			$user = UserProfile::getUserProfile($userID);
+			if ($user === null || $user->userID == WCF::getUser()->userID) {
+				throw new IllegalLinkException();
+			}
+			// validate user
+			try {
+				$this->validateParticipant($user);
+			}
+			catch (UserInputException $e) {
+				throw new NamedUserException(WCF::getLanguage()->getDynamicVariable('wcf.conversation.participants.error.'.$e->getType(), array('errorData' => array('username' => $user->username))));
+			}
+			
+			$this->participants = $user->username;
+		}
+	}
+	
+	/**
 	 * @see wcf\form\IForm::readFormParameters()
 	 */
 	public function readFormParameters() {
@@ -110,6 +135,10 @@ class ConversationAddForm extends MessageForm {
 	
 	/**
 	 * Validates the participants.
+	 * 
+	 * @param	string		$participants
+	 * @param	string		$field
+	 * @return	array		$result
 	 */
 	protected function validateParticipants($participants, $field = 'participants') {
 		$result = array();
@@ -138,25 +167,8 @@ class ConversationAddForm extends MessageForm {
 					continue;
 				}
 				
-				// @todo: check participant's settings and permissions
-				/*if (!$user->getPermission('user.conversation.canUseConversation')) {
-					throw new UserInputException('participant', 'canNotUseConversation');
-				}*/
-				
-				// check privacy setting
-				if ($user->canSendConversation == 2 || ($user->canSendConversation == 1 && WCF::getProfileHandler()->isFollowing($user->userID))) {
-					throw new UserInputException('participant', 'doesNotAcceptConversation');
-				}
-				
-				// active user is ignored by participant
-				if ($user->isIgnoredUser(WCF::getUser()->userID)) {
-					throw new UserInputException('participant', 'ignoresYou');
-				}
-				
-				// @todo: check participant's mailbox quota
-				if (false) {
-					throw new UserInputException('participant', 'mailboxIsFull');
-				}
+				// validate user
+				$this->validateParticipant($user);
 				
 				// no error
 				$result[] = $user->userID;
@@ -171,6 +183,33 @@ class ConversationAddForm extends MessageForm {
 		}
 		
 		return $result;
+	}
+	
+	/**
+	 * Validates the given participant.
+	 * 
+	 * @param	wcf\data\user\UserProfile	$user
+	 */
+	protected function validateParticipant(UserProfile $user) {
+		// check participant's settings and permissions
+		if (!$user->getPermission('user.conversation.canUseConversation')) {
+			throw new UserInputException('participant', 'canNotUseConversation');
+		}
+				
+		// check privacy setting
+		if ($user->canSendConversation == 2 || ($user->canSendConversation == 1 && WCF::getProfileHandler()->isFollowing($user->userID))) {
+			throw new UserInputException('participant', 'doesNotAcceptConversation');
+		}
+		
+		// active user is ignored by participant
+		if ($user->isIgnoredUser(WCF::getUser()->userID)) {
+			throw new UserInputException('participant', 'ignoresYou');
+		}
+		
+		// check participant's mailbox quota
+		if (ConversationHandler::getInstance()->getConversationCount($user->userID) >= $user->getPermission('user.conversation.maxConversations')) {
+			throw new UserInputException('participant', 'mailboxIsFull');
+		}
 	}
 	
 	/**
