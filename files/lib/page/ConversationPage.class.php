@@ -2,6 +2,7 @@
 namespace wcf\page;
 use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\conversation\ConversationAction;
+use wcf\data\conversation\ConversationParticipantList;
 use wcf\data\conversation\Conversation;
 use wcf\system\breadcrumb\Breadcrumb;
 use wcf\system\exception\IllegalLinkException;
@@ -77,6 +78,12 @@ class ConversationPage extends MultipleLinkPage {
 	public $sidebarFactory = null;
 	
 	/**
+	 * list of participants
+	 * @var	wcf\data\conversation\ConversationParticipantList
+	 */
+	public $participantList = null;
+	
+	/**
 	 * @see wcf\page\IPage::readParameters()
 	 */
 	public function readParameters() {
@@ -137,6 +144,10 @@ class ConversationPage extends MultipleLinkPage {
 			$conversationAction = new ConversationAction(array($this->conversation), 'markAsRead', array('visitTime' => $this->objectList->getMaxPostTime()));
 			$conversationAction->executeAction();
 		}
+		
+		// get participants
+		$this->participantList = new ConversationParticipantList($this->conversationID);
+		$this->participantList->readObjects();
 	}
 	
 	/**
@@ -150,7 +161,8 @@ class ConversationPage extends MultipleLinkPage {
 			'sidebarFactory' => $this->sidebarFactory,
 			'sortOrder' => $this->sortOrder,
 			'conversation' => $this->conversation,
-			'conversationID' => $this->conversationID
+			'conversationID' => $this->conversationID,
+			'participants' => $this->participantList->getObjects()
 		));
 	}
 	
