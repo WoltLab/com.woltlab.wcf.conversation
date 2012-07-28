@@ -313,6 +313,127 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
 			case 'assignLabel':
 				new WCF.Conversation.Label.Editor(this._editorHandler, elementID);
 			break;
+			
+			case 'leave':
+				new WCF.Conversation.Leave([ $('#' + elementID).data('conversationID') ]);
+			break;
+		}
+	}
+});
+
+/**
+ * Provides a dialog for leaving or restoring conversation.
+ * 
+ * @param	array<integer>		conversationIDs
+ */
+WCF.Conversation.Leave = Class.extend({
+	/**
+	 * list of conversation ids
+	 * @var	array<integer>
+	 */
+	_conversationIDs: [ ],
+	
+	/**
+	 * dialog overlay
+	 * @var	jQuery
+	 */
+	_dialog: null,
+	
+	/**
+	 * action proxy
+	 * @var	WCF.Action.Proxy
+	 */
+	_proxy: null,
+	
+	/**
+	 * Initializes the leave/restore dialog for conversations.
+	 * 
+	 * @param	array<integer>		conversationIDs
+	 */
+	init: function(conversationIDs) {
+		this._conversationIDs = conversationIDs;
+		this._dialog = null;
+		
+		this._proxy = new WCF.Action.Proxy({
+			success: $.proxy(this._success, this)
+		});
+		
+		this._loadDialog();
+	},
+	
+	/**
+	 * Loads the dialog overlay.
+	 */
+	_loadDialog: function()  {
+		this._proxy.setOption('data', {
+			actionName: 'getLeaveForm',
+			className: 'wcf\\data\\conversation\\ConversationAction',
+			parameters: {
+				conversationIDs: this._conversationIDs
+			}
+		});
+		this._proxy.sendRequest();
+	},
+	
+	/**
+	 * Handles successful AJAX requests.
+	 * 
+	 * @param	object		data
+	 * @param	string		textStatus
+	 * @param	jQuery		jqXHR
+	 */
+	_success: function(data, textStatus, jqXHR) {
+		switch (data.returnValues.actionName) {
+			case 'getLeaveForm':
+				this._showDialog(data);
+			break;
+			
+			case 'hideConversation':
+				window.location.reload();
+			break;
+		}
+	},
+	
+	/**
+	 * Displays the leave/restore conversation dialog overlay.
+	 * 
+	 * @param	object		data
+	 */
+	_showDialog: function(data) {
+		if (this._dialog === null) {
+			this._dialog = $('#leaveDialog');
+			if (!this._dialog.length) {
+				this._dialog = $('<div id="leaveDialog" />').hide().appendTo(document.body);
+			}
+		}
+		
+		// render dialog
+		this._dialog.html(data.returnValues.template);
+		this._dialog.wcfDialog({
+			title: WCF.Language.get('wcf.conversation.leave.title')
+		});
+		
+		this._dialog.wcfDialog('render');
+		
+		// bind event listener
+		this._dialog.find('#hideConversation').click($.proxy(this._click, this));
+	},
+	
+	/**
+	 * Handles conversation state changes.
+	 */
+	_click: function() {
+		var $input = this._dialog.find('input[type=radio]:checked');
+		if ($input.length === 1) {
+			this._proxy.setOption('data', {
+				actionName: 'hideConversation',
+				className: 'wcf\\data\\conversation\\ConversationAction',
+				parameters: {
+					conversationIDs: this._conversationIDs,
+					hideConversation: $input.val()
+				}
+			});
+			this._proxy.sendRequest();
 		}
 	}
 });
