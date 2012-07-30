@@ -296,13 +296,12 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 	 * Validates conversations for leave form.
 	 */
 	public function validateGetLeaveForm() {
-		$this->parameters['conversationIDs'] = (isset($this->parameters['conversationIDs'])) ? ArrayUtil::toIntegerArray($this->parameters['conversationIDs']) : array();
-		if (empty($this->parameters['conversationIDs'])) {
-			throw new UserInputException('conversationIDs');
+		if (empty($this->objectIDs)) {
+			throw new UserInputException('objectIDs');
 		}
 		
 		// validate participation
-		if (!Conversation::isParticipant($this->parameters['conversationIDs'])) {
+		if (!Conversation::isParticipant($this->objectIDs)) {
 			throw new PermissionDeniedException();
 		}
 	}
@@ -320,7 +319,7 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 				AND participantID = ?";
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute(array(
-			current($this->parameters['conversationIDs']),
+			current($this->objectIDs),
 			WCF::getUser()->userID
 		));
 		$row = $statement->fetchArray();
@@ -342,13 +341,12 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 			throw new UserInputException('hideConversation');
 		}
 		
-		$this->parameters['conversationIDs'] = (isset($this->parameters['conversationIDs'])) ? ArrayUtil::toIntegerArray($this->parameters['conversationIDs']) : array();
-		if (empty($this->parameters['conversationIDs'])) {
-			throw new UserInputException('conversationIDs');
+		if (empty($this->objectIDs)) {
+			throw new UserInputException('objectIDs');
 		}
 		
 		// validate participation
-		if (!Conversation::isParticipant($this->parameters['conversationIDs'])) {
+		if (!Conversation::isParticipant($this->objectIDs)) {
 			throw new PermissionDeniedException();
 		}
 	}
@@ -366,7 +364,7 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 		$statement = WCF::getDB()->prepareStatement($sql);
 		
 		WCF::getDB()->beginTransaction();
-		foreach ($this->parameters['conversationIDs'] as $conversationID) {
+		foreach ($this->objectIDs as $conversationID) {
 			$statement->execute(array(
 				$this->parameters['hideConversation'],
 				$conversationID,

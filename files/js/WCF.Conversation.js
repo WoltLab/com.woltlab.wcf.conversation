@@ -368,9 +368,7 @@ WCF.Conversation.Leave = Class.extend({
 		this._proxy.setOption('data', {
 			actionName: 'getLeaveForm',
 			className: 'wcf\\data\\conversation\\ConversationAction',
-			parameters: {
-				conversationIDs: this._conversationIDs
-			}
+			objectIDs: this._conversationIDs
 		});
 		this._proxy.sendRequest();
 	},
@@ -428,8 +426,8 @@ WCF.Conversation.Leave = Class.extend({
 			this._proxy.setOption('data', {
 				actionName: 'hideConversation',
 				className: 'wcf\\data\\conversation\\ConversationAction',
+				objectIDs: this._conversationIDs,
 				parameters: {
-					conversationIDs: this._conversationIDs,
 					hideConversation: $input.val()
 				}
 			});
