@@ -4,6 +4,14 @@
 	<title>{lang}wcf.conversation.add{/lang} - {PAGE_TITLE|language}</title>
 	
 	{include file='headInclude'}
+	
+	<script type="text/javascript">
+		//<![CDATA[
+		$(function() {
+			new WCF.Message.DefaultPreview();
+		});
+		//]]>
+	</script>
 </head>
 
 <body id="tpl{$templateName|ucfirst}">
@@ -21,7 +29,7 @@
 	<p class="error">{lang}wcf.global.form.error{/lang}</p>
 {/if}
 
-<form method="post" action="{link controller='ConversationAdd'}{/link}">
+<form id="messageContainer" method="post" action="{link controller='ConversationAdd'}{/link}">
 	<div class="container containerPadding marginTop shadow">
 		<fieldset>
 			<legend>{lang}wcf.conversation.information{/lang}</legend>
@@ -115,6 +123,7 @@
 	<div class="formSubmit">
 		<input type="submit" value="{lang}wcf.global.button.submit{/lang}" accesskey="s" />
 		<button name="draft" accesskey="d" value="1">{lang}wcf.conversation.button.saveAsDraft{/lang}</button>
+		<button id="previewButton" class="javascriptOnly" accesskey="p">{lang}wcf.global.button.preview{/lang}</button>
 	</div>
 </form>
 

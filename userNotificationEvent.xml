@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/userNotificationEvent.xsd">
+	<import>
+		<event>
+			<name>conversation</name>
+			<objecttype>com.woltlab.wcf.conversation.notification</objecttype>
+			<classname>wcf\system\user\notification\event\ConversationUserNotificationEvent</classname>
+		</event>
+		
+		<!-- @todo: <event>
+			<name>conversationMessage</name>
+			<objecttype>com.woltlab.wcf.conversation.notification</objecttype>
+			<classname>wcf\system\user\notification\event\ConversationMessageUserNotificationEvent</classname>
+		</event>-->
+	</import>
+</data>

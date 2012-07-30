@@ -4,6 +4,14 @@
 	<title>{lang}wcf.conversation.message.edit{/lang} - {$conversation->subject} - {PAGE_TITLE|language}</title>
 	
 	{include file='headInclude'}
+	
+	<script type="text/javascript">
+		//<![CDATA[
+		$(function() {
+			new WCF.Message.DefaultPreview();
+		});
+		//]]>
+	</script>
 </head>
 
 <body id="tpl{$templateName|ucfirst}">
@@ -21,7 +29,7 @@
 	<p class="error">{lang}wcf.global.form.error{/lang}</p>
 {/if}
 
-<form method="post" action="{link controller='ConversationMessageEdit' id=$messageID}{/link}">
+<form id="messageContainer" method="post" action="{link controller='ConversationMessageEdit' id=$messageID}{/link}">
 	<div class="container containerPadding marginTop shadow">
 		{if $isFirstMessage}
 			<fieldset>
@@ -36,6 +44,10 @@
 								<small class="innerError">
 									{if $errorType == 'empty'}
 										{lang}wcf.global.form.error.empty{/lang}
+									{elseif $errorType|is_array}
+										{foreach from=$errorType item='errorData'}
+											{lang}wcf.conversation.participants.error.{@$errorData.type}{/lang}
+										{/foreach}
 									{else}
 										{lang}wcf.conversation.participants.error.{@$errorType}{/lang}
 									{/if}
@@ -53,6 +65,10 @@
 								<small class="innerError">
 									{if $errorType == 'empty'}
 										{lang}wcf.global.form.error.empty{/lang}
+									{elseif $errorType|is_array}
+										{foreach from=$errorType item='errorData'}
+											{lang}wcf.conversation.participants.error.{@$errorData.type}{/lang}
+										{/foreach}
 									{else}
 										{lang}wcf.conversation.participants.error.{@$errorType}{/lang}
 									{/if}
@@ -111,6 +127,7 @@
 	<div class="formSubmit">
 		<input type="submit" value="{lang}wcf.global.button.submit{/lang}" accesskey="s" />
 		{if $isFirstMessage && $conversation->isDraft}<button name="draft" accesskey="d" value="1">{lang}wcf.conversation.button.saveAsDraft{/lang}</button>{/if}
+		<button id="previewButton" class="javascriptOnly" accesskey="p">{lang}wcf.global.button.preview{/lang}</button>
 	</div>
 </form>
 

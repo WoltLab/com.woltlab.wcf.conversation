@@ -3,10 +3,12 @@ namespace wcf\data\conversation\message;
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationEditor;
 use wcf\data\AbstractDatabaseObjectAction;
+use wcf\system\bbcode\MessageParser;
 use wcf\system\package\PackageDependencyHandler;
 use wcf\system\search\SearchIndexManager;
 use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\WCF;
+use wcf\util\StringUtil;
 
 /**
  * Executes message-related actions.
