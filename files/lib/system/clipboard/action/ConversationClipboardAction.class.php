@@ -96,7 +96,7 @@ class ConversationClipboardAction implements IClipboardAction {
 				$item->addParameter('objectIDs', array_keys($this->conversations));
 				$item->addParameter('actionName', 'hideConversation');
 				$item->addParameter('className', 'wcf\data\conversation\ConversationAction');
-				$item->setName('conversation.leavePermanetly');
+				$item->setName('conversation.leavePermanently');
 			break;
 			
 			case 'open':

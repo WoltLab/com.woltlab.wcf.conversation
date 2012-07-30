@@ -1,18 +1,17 @@
 <?php
 namespace wcf\data\conversation;
-use wcf\system\exception\UserInputException;
-
-use wcf\util\ArrayUtil;
-
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\data\conversation\message\ViewableConversationMessageList;
+use wcf\system\clipboard\ClipboardHandler;
 use wcf\system\exception\PermissionDeniedException;
+use wcf\system\exception\UserInputException;
 use wcf\system\exception\ValidateActionException;
 use wcf\system\package\PackageDependencyHandler;
 use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\WCF;
+use wcf\util\ArrayUtil;
 
 /**
  * Executes conversation-related actions.
@@ -253,6 +252,8 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 			$this->addConversationData($conversation, 'isClosed', 1);
 		}
 		
+		$this->unmarkItems();
+		
 		return $this->getConversationData();
 	}
 	
@@ -288,6 +289,8 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 			$conversation->update(array('isClosed' => 0));
 			$this->addConversationData($conversation, 'isClosed', 0);
 		}
+		
+		$this->unmarkItems();
 	
 		return $this->getConversationData();
 	}
@@ -373,6 +376,8 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 		}
 		WCF::getDB()->commitTransaction();
 		
+		$this->unmarkItems();
+		
 		return array(
 			'actionName' => 'hideConversation'
 		);
@@ -402,5 +407,18 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 		return array(
 			'conversationData' => $this->conversationData
 		);
+	}
+	
+	/**
+	 * Unmarks conversations.
+	 * 
+	 * @param	array<integer>		$conversationIDs
+	 */
+	protected function unmarkItems(array $conversationIDs = array()) {
+		if (empty($conversationIDs)) {
+			$conversationIDs = $this->objectIDs;
+		}
+		
+		ClipboardHandler::getInstance()->unmark($conversationIDs, ClipboardHandler::getInstance()->getObjectTypeID('com.woltlab.wcf.conversation.conversation'));
 	}
 }

@@ -220,6 +220,30 @@ WCF.Conversation.Clipboard = Class.extend({
 		if (type === 'com.woltlab.wcf.conversation.conversation' && actionName === 'conversation.assignLabel') {
 			new WCF.Conversation.Label.Editor(this._editorHandler, null, parameters.objectIDs);
 		}
+	},
+	
+	/**
+	 * Evaluates AJAX responses.
+	 * 
+	 * @param	object		event
+	 * @param	object		data
+	 * @param	string		type
+	 * @param	string		actionName
+	 * @param	object		parameters
+	 */
+	_evaluateResponse: function(event, data, type, actionName, parameters) {
+		if (type !== 'com.woltlab.wcf.conversation.conversation') {
+			// ignore unreleated events
+			return;
+		}
+		
+		switch (actionName) {
+			case 'conversation.leave':
+			case 'conversation.leavePermanently':
+			case 'conversation.restore':
+				window.location.reload();
+			break;
+		}
 	}
 });
 
@@ -751,7 +775,7 @@ WCF.Conversation.Label.Manager = Class.extend({
 		
 		// replace legends
 		var $legend = WCF.Language.get('wcf.conversation.label.management.editLabel').replace(/#labelName#/, $label.text());
-		$('#conversationLabelManagementForm').data('labelID', $label.data('labelID')).children('legend').text($legend);
+		$('#conversationLabelManagementForm').data('labelID', $label.data('labelID')).children('legend').html($legend);
 		
 		// update text input
 		$('#labelName').val($label.text()).trigger('keyup');
