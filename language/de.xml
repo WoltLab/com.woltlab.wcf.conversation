@@ -68,4 +68,9 @@
 		<item name="wcf.conversation.label.management.existingLabels"><![CDATA[Vorhandene Labels]]></item>
 		<item name="wcf.conversation.label.placeholder"><![CDATA[Label]]></item>
 	</category>
+	
+	<category name="wcf.user.notification">
+		<item name="wcf.user.notification.conversation.output"><![CDATA[Hat die Konversation &bdquo;<a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a>&ldquo; gestartet.]]></item>
+		<item name="wcf.user.notification.conversation.shortOutput"><![CDATA[Neue Konversation]]></item>		
+	</category>
 </language>

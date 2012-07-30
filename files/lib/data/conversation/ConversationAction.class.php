@@ -9,6 +9,8 @@ use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
 use wcf\system\exception\ValidateActionException;
 use wcf\system\package\PackageDependencyHandler;
+use wcf\system\user\notification\object\ConversationUserNotificationObject;
+use wcf\system\user\notification\UserNotificationHandler;
 use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\WCF;
 use wcf\util\ArrayUtil;
@@ -64,6 +66,10 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 			
 			// update conversation count
 			UserStorageHandler::getInstance()->reset(array($data['userID']), 'conversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
+			
+			// fire notification event
+			$notificationRecipients = array_merge((!empty($this->parameters['participants']) ? $this->parameters['participants'] : array()), (!empty($this->parameters['invisibleParticipants']) ? $this->parameters['invisibleParticipants'] : array()));
+			UserNotificationHandler::getInstance()->fireEvent('conversation', 'com.woltlab.wcf.conversation.notification', new ConversationUserNotificationObject($conversation), $notificationRecipients);
 		}
 		else {
 			// update conversation count

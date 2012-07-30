@@ -18,5 +18,11 @@
 			<definitionname>com.woltlab.wcf.clipboardItem</definitionname>
 			<listclassname>wcf\data\conversation\ConversationList</listclassname>
 		</type>
+		
+		<type>
+			<name>com.woltlab.wcf.conversation.notification</name>
+			<definitionname>com.woltlab.wcf.notification.objectType</definitionname>
+			<classname>wcf\system\user\notification\object\type\ConversationNotificationObjectType</classname>
+		</type>
 	</import>
 </data>
