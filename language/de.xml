@@ -11,12 +11,19 @@
 		<item name="wcf.conversation.button.add"><![CDATA[Konversation starten]]></item>
 		<item name="wcf.conversation.message.add"><![CDATA[Neue Antwort erstellen]]></item>
 		<item name="wcf.conversation.message.button.add"><![CDATA[Antworten]]></item>
-		
 		<item name="wcf.conversation.folders"><![CDATA[Ordner]]></item>
 		<item name="wcf.conversation.folder.draft"><![CDATA[Entwürfe]]></item>
 		<item name="wcf.conversation.folder.outbox"><![CDATA[Versendet]]></item>
 		<item name="wcf.conversation.folder.hidden"><![CDATA[Ausgeblendet]]></item>
 		<item name="wcf.conversation.quota"><![CDATA[Speicherplatz]]></item>
 		<item name="wcf.conversation.noConversations"><![CDATA[Es wurden keine Konversationen gefunden.]]></item>
+		<item name="wcf.conversation.information"><![CDATA[Informationen]]></item>
+		<item name="wcf.conversation.message"><![CDATA[Nachricht]]></item>
+		<item name="wcf.conversation.invisibleParticipants"><![CDATA[Unsichtbare Teilnehmer]]></item>
+		<item name="wcf.conversation.participants.description"><![CDATA[Mehrere Teilnehmer können mit Komma getrennt angegeben werden.]]></item>
+		<item name="wcf.conversation.button.saveAsDraft"><![CDATA[Entwurf speichern]]></item>
+		<item name="wcf.conversation.message.add.previousPosts"><![CDATA[{if $items == 1}Vorherige Nachricht{else}Vorherige Nachrichten ({#$items}){/if}]]></item>
+		
+		<item name="wcf.conversation.invisibleParticipants.description"><![CDATA[Unsichtbare Teilnehmer sind für andere Teilnehmer nicht sichtbar. Mehrere Teilnehmer können mit Komma getrennt angegeben werden.]]></item>
 	</category>
 </language>
