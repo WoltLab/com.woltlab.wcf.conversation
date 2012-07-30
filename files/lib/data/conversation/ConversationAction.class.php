@@ -249,7 +249,7 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 		foreach ($this->objects as $conversation) {
 			// TODO: implement a method 'close()' in order to utilize modification log
 			$conversation->update(array('isClosed' => 1));
-			$this->addConversationData($conversation, 'isClosed', 1);
+			$this->addConversationData($conversation->getDecoratedObject(), 'isClosed', 1);
 		}
 		
 		$this->unmarkItems();
@@ -287,7 +287,7 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 		foreach ($this->objects as $conversation) {
 			// TODO: implement a method 'open()' in order to utilize modification log
 			$conversation->update(array('isClosed' => 0));
-			$this->addConversationData($conversation, 'isClosed', 0);
+			$this->addConversationData($conversation->getDecoratedObject(), 'isClosed', 0);
 		}
 		
 		$this->unmarkItems();

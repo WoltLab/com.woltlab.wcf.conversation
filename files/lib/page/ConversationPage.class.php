@@ -1,9 +1,11 @@
 <?php
 namespace wcf\page;
+use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\conversation\ConversationAction;
 use wcf\data\conversation\ConversationParticipantList;
 use wcf\data\conversation\Conversation;
+use wcf\data\conversation\ViewableConversation;
 use wcf\system\breadcrumb\Breadcrumb;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\PermissionDeniedException;
@@ -60,6 +62,12 @@ class ConversationPage extends MultipleLinkPage {
 	public $conversation = null;
 	
 	/**
+	 * conversation label list
+	 * @var	wcf\data\conversation\label\ConversationLabelList
+	 */
+	public $labelList = null;
+	
+	/**
 	 * message id
 	 * @var integer
 	 */
@@ -106,6 +114,10 @@ class ConversationPage extends MultipleLinkPage {
 		if (!$this->conversation->canRead()) {
 			throw new PermissionDeniedException();
 		}
+		
+		// load labels
+		$this->labelList = ConversationLabel::getLabelsByUser();
+		$this->conversation = ViewableConversation::getViewableConversation($this->conversation, $this->labelList);
 		
 		// posts per page
 		if (WCF::getUser()->conversationMessagesPerPage) $this->itemsPerPage = WCF::getUser()->conversationMessagesPerPage;
@@ -158,6 +170,7 @@ class ConversationPage extends MultipleLinkPage {
 		
 		WCF::getTPL()->assign(array(
 			'attachmentList' => $this->objectList->getAttachmentList(),
+			'labelList' => $this->labelList,
 			'sidebarFactory' => $this->sidebarFactory,
 			'sortOrder' => $this->sortOrder,
 			'conversation' => $this->conversation,

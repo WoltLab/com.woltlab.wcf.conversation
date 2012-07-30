@@ -9,8 +9,6 @@ WCF.Conversation = { };
 
 /**
  * Core editor handler for conversations.
- * 
- * @param	object		availableLabels
  */
 WCF.Conversation.EditorHandler = Class.extend({
 	/**
@@ -34,7 +32,7 @@ WCF.Conversation.EditorHandler = Class.extend({
 	/**
 	 * Initializes the core editor handler for conversations.
 	 */
-	init: function() {
+	init: function(availableLabels) {
 		this._conversations = { };
 		
 		var self = this;
@@ -171,6 +169,82 @@ WCF.Conversation.EditorHandler = Class.extend({
 					for (var $i = 0, $length = data.length; $i < $length; $i++) {
 						var $label = $labels[data[$i]];
 						$('<li><a href="' + $label.url + '" class="badge label' + ($label.cssClassName ? " " + $label.cssClassName : "") + '">' + $label.label + '</a>&nbsp;</li>').appendTo($labelList);
+					}
+				}
+			break;
+		}
+	}
+});
+
+/**
+ * Conversation editor handler for conversation page.
+ * 
+ * @see	WCF.Conversation.EditorHandler
+ * @param	array<object>	availableLabels
+ */
+WCF.Conversation.EditorHandlerConversation = WCF.Conversation.EditorHandler.extend({
+	/**
+	 * list of available labels
+	 * @var	array<object>
+	 */
+	_availableLabels: null,
+	
+	/**
+	 * @see	WCF.Conversation.EditorHandler.init()
+	 * 
+	 * @param	array<object>	availableLabels
+	 */
+	init: function(availableLabels) {
+		this._availableLabels = availableLabels || [ ];
+		
+		this._super();
+	},
+	
+	/**
+	 * @see	WCF.Conversation.EditorHandler.getAvailableLabels()
+	 */
+	getAvailableLabels: function() {
+		return this._availableLabels;
+	},
+	
+	/**
+	 * @see	WCF.Conversation.EditorHandler.update()
+	 */
+	update: function(conversationID, key, data) {
+		if (!this._conversations[conversationID]) {
+			console.debug("[WCF.Conversation.EditorHandler] Unknown conversation id '" + conversationID + "'");
+			return;
+		}
+		var $conversation = this._conversations[conversationID];
+		
+		switch (key) {
+			case 'labelIDs':
+				var $container = $('#content > header h1');
+				if (!data.length) {
+					// remove all labels
+					$container.find('ul.labelList').remove();
+				}
+				else {
+					var $labelList = $container.find('ul.labelList');
+					if (!$labelList.length) {
+						$labelList = $('<ul class="labelList" />').appendTo($container);
+					}
+					
+					// remove existing labels
+					$labelList.empty();
+					
+					// add new labels
+					for (var $i = 0, $length = data.length; $i < $length; $i++) {
+						var $labelID = data[$i];
+						
+						for (var $j = 0, $innerLength = this.getAvailableLabels().length; $j < $innerLength; $j++) {
+							var $label = this.getAvailableLabels()[$j];
+							if ($label.labelID == $labelID) {
+								$('<li><span class="label badge' + ($label.cssClassName ? " " + $label.cssClassName : "") + '">' + $label.label + '</span>&nbsp;</li>').appendTo($labelList);
+								
+								break;
+							}
+						}
 					}
 				}
 			break;
@@ -338,8 +412,41 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
 				new WCF.Conversation.Label.Editor(this._editorHandler, elementID);
 			break;
 			
+			case 'close':
+			case 'open':
+				this._updateConversation(elementID, optionName, { isClosed: (optionName === 'close' ? 1 : 0) });
+			break;
+			
 			case 'leave':
 				new WCF.Conversation.Leave([ $('#' + elementID).data('conversationID') ]);
+			break;
+		}
+	},
+	
+	/**
+	 * Updates conversation properties.
+	 * 
+	 * @param	string		elementID
+	 * @param	string		optionName
+	 * @param	object		data
+	 */
+	_updateConversation: function(elementID, optionName, data) {
+		var $conversationID = this._elements[elementID].data('conversationID');
+		
+		switch (optionName) {
+			case 'close':
+			case 'open':
+				new WCF.Action.Proxy({
+					autoSend: true,
+					data: {
+						actionName: optionName,
+						className: 'wcf\\data\\conversation\\ConversationAction',
+						objectIDs: [ $conversationID ]
+					},
+					success: function() {
+						window.location.reload();
+					}
+				});
 			break;
 		}
 	}

@@ -1,9 +1,12 @@
 <?php
 namespace wcf\data\conversation;
+use wcf\data\conversation\label\ConversationLabelList;
+
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\DatabaseObjectDecorator;
 use wcf\data\user\User;
 use wcf\data\user\UserProfile;
+use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\WCF;
 
 /**
@@ -146,5 +149,39 @@ class ViewableConversation extends DatabaseObjectDecorator {
 	 */
 	public function getAssignedLabels() {
 		return $this->labels;
+	}
+	
+	/**
+	 * Converts a conversation into a viewable conversation.
+	 * 
+	 * @param	wcf\data\conversation\Conversation			$conversation
+	 * @param	wcf\data\conversation\label\ConversationLabelList	$labelList
+	 * @return	wcf\data\conversation\ViewableConversation
+	 */
+	public static function getViewableConversation(Conversation $conversation, ConversationLabelList $labelList = null) {
+		$conversation = new ViewableConversation($conversation);
+		
+		if ($labelList === null) {
+			$labelList = ConversationLabel::getLabelsByUser();
+		}
+		
+		$labels = $labelList->getObjects();
+		if (!empty($labels)) {
+			$conditions = new PreparedStatementConditionBuilder();
+			$conditions->add("conversationID = ?", array($conversation->conversationID));
+			$conditions->add("labelID IN (?)", array(array_keys($labels)));
+			
+			$sql = "SELECT	labelID
+				FROM	wcf".WCF_N."_conversation_label_to_object
+				".$conditions;
+			$statement = WCF::getDB()->prepareStatement($sql);
+			$statement->execute($conditions->getParameters());
+			$data = array();
+			while ($row = $statement->fetchArray()) {
+				$conversation->assignLabel($labels[$row['labelID']]);
+			}
+		}
+		
+		return $conversation;
 	}
 }
