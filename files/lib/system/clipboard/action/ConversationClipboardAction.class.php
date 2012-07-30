@@ -79,13 +79,24 @@ class ConversationClipboardAction implements IClipboardAction {
 			break;
 			
 			case 'leave':
-				$item->addParameter('objectIDs', array_keys($this->conversations));
+				$conversationIDs = $this->validateLeave();
+				if (empty($conversationIDs)) {
+					return null;
+				}
+				
+				$item->addInternalData('parameters', array('hideConversation' => 1));
+				$item->addParameter('objectIDs', $conversationIDs);
+				$item->addParameter('actionName', 'hideConversation');
+				$item->addParameter('className', 'wcf\data\conversation\ConversationAction');
 				$item->setName('conversation.leave');
 			break;
 			
 			case 'leavePermanently':
+				$item->addInternalData('parameters', array('hideConversation' => 2));
 				$item->addParameter('objectIDs', array_keys($this->conversations));
-				$item->setName('conversation.leavePermanetly');
+				$item->addParameter('actionName', 'hideConversation');
+				$item->addParameter('className', 'wcf\data\conversation\ConversationAction');
+				$item->setName('conversation.leavePermanently');
 			break;
 			
 			case 'open':
@@ -98,6 +109,19 @@ class ConversationClipboardAction implements IClipboardAction {
 				$item->addParameter('actionName', 'open');
 				$item->addParameter('className', 'wcf\data\conversation\ConversationAction');
 				$item->setName('conversation.open');
+			break;
+			
+			case 'restore':
+				$conversationIDs = $this->validateRestore();
+				if (empty($conversationIDs)) {
+					return null;
+				}
+				
+				$item->addInternalData('parameters', array('hideConversation' => 0));
+				$item->addParameter('objectIDs', array_keys($this->conversations));
+				$item->addParameter('actionName', 'hideConversation');
+				$item->addParameter('className', 'wcf\data\conversation\ConversationAction');
+				$item->setName('conversation.restore');
 			break;
 			
 			default:
@@ -173,6 +197,36 @@ class ConversationClipboardAction implements IClipboardAction {
 	}
 	
 	/**
+	 * Validates conversations available for leaving.
+	 *
+	 * @return	array<integer>
+	 */
+	public function validateLeave() {
+		$tmpIDs = array();
+		foreach ($this->conversations as $conversation) {
+			$tmpIDs[] = $conversation->conversationID;
+		}
+		
+		$conditions = new PreparedStatementConditionBuilder();
+		$conditions->add("conversationID IN (?)", array($tmpIDs));
+		$conditions->add("participantID = ?", array(WCF::getUser()->userID));
+		$conditions->add("hideConversation <> ?", array(1));
+		
+		$sql = "SELECT	conversationID
+			FROM	wcf".WCF_N."_conversation_to_user
+			".$conditions;
+		$statement = WCF::getDB()->prepareStatement($sql);
+		$statement->execute($conditions->getParameters());
+		
+		$conversationIDs = array();
+		while ($row = $statement->fetchArray()) {
+			$conversationIDs[] = $row['conversationID'];
+		}
+		
+		return $conversationIDs;
+	}
+	
+	/**
 	 * Validates if user may open the given conversations.
 	 *
 	 * @return	array<integer>
@@ -186,6 +240,36 @@ class ConversationClipboardAction implements IClipboardAction {
 			}
 		}
 	
+		return $conversationIDs;
+	}
+	
+	/**
+	 * Validates conversations available for restore.
+	 * 
+	 * @return	array<integer>
+	 */
+	public function validateRestore() {
+		$tmpIDs = array();
+		foreach ($this->conversations as $conversation) {
+			$tmpIDs[] = $conversation->conversationID;
+		}
+		
+		$conditions = new PreparedStatementConditionBuilder();
+		$conditions->add("conversationID IN (?)", array($tmpIDs));
+		$conditions->add("participantID = ?", array(WCF::getUser()->userID));
+		$conditions->add("hideConversation <> ?", array(0));
+		
+		$sql = "SELECT	conversationID
+			FROM	wcf".WCF_N."_conversation_to_user
+			".$conditions;
+		$statement = WCF::getDB()->prepareStatement($sql);
+		$statement->execute($conditions->getParameters());
+		
+		$conversationIDs = array();
+		while ($row = $statement->fetchArray()) {
+			$conversationIDs[] = $row['conversationID'];
+		}
+		
 		return $conversationIDs;
 	}
 	

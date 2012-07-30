@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/maelstrom/language.xsd" languagecode="de">
+	<category name="wcf.clipboard">
+		<item name="wcf.clipboard.label.conversation.marked"><![CDATA[{if $count == 1}Eine Konversation{else}{#$count} Konversationen{/if} markiert]]></item>
+	</category>
+	
+	<category name="wcf.clipboard.item">
+		<item name="wcf.clipboard.item.conversation.assignLabel"><![CDATA[Label zuweisen ({#$count})]]></item>
+		<item name="wcf.clipboard.item.conversation.close"><![CDATA[Schließen ({#$count})]]></item>
+		<item name="wcf.clipboard.item.conversation.leave"><![CDATA[Konversation ausblenden ({#$count})]]></item>
+		<item name="wcf.clipboard.item.conversation.leavePermanently"><![CDATA[Konversation verlassen ({#$count})]]></item>
+		<item name="wcf.clipboard.item.conversation.open"><![CDATA[Öffnen ({#$count})]]></item>
+		<item name="wcf.clipboard.item.conversation.restore"><![CDATA[Als aktiv markieren ({#$count})]]></item>
+	</category>
+	
 	<category name="wcf.conversation">
 		<item name="wcf.conversation.conversations"><![CDATA[Konversationen]]></item>
 		<item name="wcf.conversation.subject"><![CDATA[Betreff]]></item>
@@ -17,13 +30,42 @@
 		<item name="wcf.conversation.folder.hidden"><![CDATA[Ausgeblendet]]></item>
 		<item name="wcf.conversation.quota"><![CDATA[Speicherplatz]]></item>
 		<item name="wcf.conversation.noConversations"><![CDATA[Es wurden keine Konversationen gefunden.]]></item>
+		<item name="wcf.conversation.hideConversation"><![CDATA[Teilnahme verwalten]]></item>
+		<item name="wcf.conversation.hideConversation.leave"><![CDATA[Konversation ausblenden]]></item>
+		<item name="wcf.conversation.hideConversation.leave.description"><![CDATA[Die Konversation wird bis zu einer neuen Antwort nicht mehr als aktive Konversation gelistet.]]></item>
+		<item name="wcf.conversation.hideConversation.leavePermanently"><![CDATA[Konversation verlassen]]></item>
+		<item name="wcf.conversation.hideConversation.leavePermanently.description"><![CDATA[Die Konversation wird verlassen und Sie werden nicht länger als aktiver Teilnehmer gelistet.]]></item>
+		<item name="wcf.conversation.hideConversation.restore"><![CDATA[Konversation als &bdquo;aktiv&ldquo; markieren]]></item>
+		<item name="wcf.conversation.leave.title"><![CDATA[Teilnahme verwalten]]></item>
 		<item name="wcf.conversation.information"><![CDATA[Informationen]]></item>
 		<item name="wcf.conversation.message"><![CDATA[Nachricht]]></item>
 		<item name="wcf.conversation.invisibleParticipants"><![CDATA[Unsichtbare Teilnehmer]]></item>
 		<item name="wcf.conversation.participants.description"><![CDATA[Mehrere Teilnehmer können mit Komma getrennt angegeben werden.]]></item>
 		<item name="wcf.conversation.button.saveAsDraft"><![CDATA[Entwurf speichern]]></item>
 		<item name="wcf.conversation.message.add.previousPosts"><![CDATA[{if $items == 1}Vorherige Nachricht{else}Vorherige Nachrichten ({#$items}){/if}]]></item>
-		
 		<item name="wcf.conversation.invisibleParticipants.description"><![CDATA[Unsichtbare Teilnehmer sind für andere Teilnehmer nicht sichtbar. Mehrere Teilnehmer können mit Komma getrennt angegeben werden.]]></item>
+	</category>
+	
+	<category name="wcf.conversation.edit">
+		<item name="wcf.conversation.edit.assignLabel"><![CDATA[Label zuweisen]]></item>
+		<item name="wcf.conversation.edit.close"><![CDATA[Schließen]]></item>
+		<item name="wcf.conversation.edit.leave"><![CDATA[Teilnahme verwalten]]></item>
+		<item name="wcf.conversation.edit.open"><![CDATA[Öffnen]]></item>
+	</category>
+	
+	<category name="wcf.conversation.label">
+		<item name="wcf.conversation.label"><![CDATA[Filter nach Label]]></item>
+		<item name="wcf.conversation.label.cssClassName"><![CDATA[Aussehen]]></item>
+		<item name="wcf.conversation.label.disableFilter"><![CDATA[Keine Filterung]]></item>
+		<item name="wcf.conversation.label.filter"><![CDATA[Label auswählen]]></item>
+		<item name="wcf.conversation.label.labelName"><![CDATA[Bezeichnung]]></item>
+		<item name="wcf.conversation.label.management"><![CDATA[Label verwalten]]></item>
+		<item name="wcf.conversation.label.management.addLabel"><![CDATA[Label hinzufügen]]></item>
+		<item name="wcf.conversation.label.management.addLabel.success"><![CDATA[Label wurde hinzugefügt]]></item>
+		<item name="wcf.conversation.label.management.deleteLabel"><![CDATA[Label löschen]]></item>
+		<item name="wcf.conversation.label.management.edit.description"><![CDATA[Klicken Sie ein Label an, um dieses zu bearbeiten oder zu löschen.]]></item>
+		<item name="wcf.conversation.label.management.editLabel"><![CDATA[Label &bdquo;#labelName#&ldquo; bearbeiten]]></item>
+		<item name="wcf.conversation.label.management.existingLabels"><![CDATA[Vorhandene Labels]]></item>
+		<item name="wcf.conversation.label.placeholder"><![CDATA[Label]]></item>
 	</category>
 </language>

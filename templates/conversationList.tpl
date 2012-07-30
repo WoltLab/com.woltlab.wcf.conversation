@@ -9,6 +9,18 @@
 	<script type="text/javascript">
 		//<![CDATA[
 		$(function() {
+			WCF.Language.addObject({
+				'wcf.conversation.edit.assignLabel': '{lang}wcf.conversation.edit.assignLabel{/lang}',
+				'wcf.conversation.edit.close': '{lang}wcf.conversation.edit.close{/lang}',
+				'wcf.conversation.edit.leave': '{lang}wcf.conversation.edit.leave{/lang}',
+				'wcf.conversation.edit.open': '{lang}wcf.conversation.edit.open{/lang}',
+				'wcf.conversation.label.management': '{lang}wcf.conversation.label.management{/lang}',
+				'wcf.conversation.label.management.addLabel.success': '{lang}wcf.conversation.label.management.addLabel.success{/lang}',
+				'wcf.conversation.label.management.editLabel': '{lang}wcf.conversation.label.management.editLabel{/lang}',
+				'wcf.conversation.label.placeholder': '{lang}wcf.conversation.label.placeholder{/lang}',
+				'wcf.conversation.leave.title': '{lang}wcf.conversation.leave.title{/lang}'
+			});
+			
 			WCF.Clipboard.init('wcf\\page\\ConversationListPage', {@$hasMarkedItems}, { });
 			
 			var $editorHandler = new WCF.Conversation.EditorHandler();
