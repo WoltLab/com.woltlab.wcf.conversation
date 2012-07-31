@@ -152,9 +152,15 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 			WHERE	participantID = ?
 				AND conversationID = ?";
 		$statement = WCF::getDB()->prepareStatement($sql);
+		WCF::getDB()->beginTransaction();
 		foreach ($this->objects as $conversation) {
-			$statement->execute(array($this->parameters['visitTime'], WCF::getUser()->userID, $conversation->conversationID));
+			$statement->execute(array(
+				$this->parameters['visitTime'],
+				WCF::getUser()->userID,
+				$conversation->conversationID
+			));
 		}
+		WCF::getDB()->commitTransaction();
 		
 		// reset storage
 		UserStorageHandler::getInstance()->reset(array(WCF::getUser()->userID), 'unreadConversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
@@ -164,7 +170,31 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 	 * Validates the mark as read action.
 	 */
 	public function validateMarkAsRead() {
-		// @todo: implement me
+		// visitTime might not be in the future
+		if (isset($this->parameters['visitTime'])) {
+			$this->parameters['visitTime'] = intval($this->parameters['visitTime']);
+			if ($this->parameters['visitTime'] > TIME_NOW) {
+				$this->parameters['visitTime'] = TIME_NOW;
+			}
+		}
+		
+		if (empty($this->objects)) {
+			$this->readObjects();
+		}
+		
+		// check participation
+		$conversationIDs = array();
+		foreach ($this->objects as $conversation) {
+			$conversationIDs[] = $conversation->conversationID;
+		}
+		
+		if (empty($conversationIDs)) {
+			throw new UserInputException('objectIDs');
+		}
+		
+		if (!Conversation::isParticipant($conversationIDs)) {
+			throw new PermissionDeniedException();
+		}
 	}
 	
 	/**

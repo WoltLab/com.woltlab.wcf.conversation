@@ -153,7 +153,7 @@ class ConversationPage extends MultipleLinkPage {
 		
 		// update last visit time count
 		if ($this->conversation->isNew() && $this->objectList->getMaxPostTime() > $this->conversation->lastVisitTime) {
-			$conversationAction = new ConversationAction(array($this->conversation), 'markAsRead', array('visitTime' => $this->objectList->getMaxPostTime()));
+			$conversationAction = new ConversationAction(array($this->conversation->getDecoratedObject()), 'markAsRead', array('visitTime' => $this->objectList->getMaxPostTime()));
 			$conversationAction->executeAction();
 		}
 		
