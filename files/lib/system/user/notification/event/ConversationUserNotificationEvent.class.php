@@ -18,21 +18,14 @@ class ConversationUserNotificationEvent extends AbstractUserNotificationEvent {
 	/**
 	 * @see	wcf\system\user\notification\event\IUserNotificationEvent::getMessage()
 	 */
-	public function getMessage(IUserNotificationType $notificationType) {
-		return '';
-	}
-	
-	/**
-	 * @see	wcf\system\user\notification\event\IUserNotificationEvent::getShortOutput()
-	 */
-	public function getShortOutput() {
+	public function getTitle() {
 		return WCF::getLanguage()->get('wcf.user.notification.conversation.shortOutput');
 	}
 	
 	/**
-	 * @see	wcf\system\user\notification\event\IUserNotificationEvent::getOutput()
+	 * @see	wcf\system\user\notification\event\IUserNotificationEvent::getMessage()
 	 */
-	public function getOutput() {
+	public function getMessage() {
 		return WCF::getLanguage()->getDynamicVariable('wcf.user.notification.conversation.output', array(
 			'conversation' => $this->userNotificationObject,
 		));
@@ -45,24 +38,10 @@ class ConversationUserNotificationEvent extends AbstractUserNotificationEvent {
 		WCF::getTPL()->assign(array(
 			'author' => $this->author,
 			'buttons' => $this->getActions(),
-			'message' => $this->getOutput(),
+			'message' => $this->getMessage(),
 			'time' => $this->userNotificationObject->time
 		));
 		
 		return WCF::getTPL()->fetch('userNotificationDetails');
-	}
-	
-	/**
-	 * @see	wcf\system\user\notification\event\IUserNotificationEvent::getTitle()
-	 */
-	public function getTitle() {
-		return '';
-	}
-	
-	/**
-	 * @see	wcf\system\user\notification\event\IUserNotificationEvent::getDescription()
-	 */
-	public function getDescription() {
-		return '';
 	}
 }
