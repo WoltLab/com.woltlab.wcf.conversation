@@ -140,6 +140,12 @@ WCF.Conversation.EditorHandler = Class.extend({
 		var $conversation = this._conversations[conversationID];
 		
 		switch (key) {
+			case 'close':
+				$('<li><img src="' + WCF.Icon.get('wcf.icon.lock') + '" alt="" title="' + WCF.Language.get('wcf.conversation.closed') + '" class="jsIconLock jsTooltip icon16" /></li>').prependTo($conversation.find('.statusIcons'))
+				
+				this._attributes[conversationID].isClosed = 1;
+			break;
+			
 			case 'labelIDs':
 				var $labels = { };
 				$('#conversationLabelFilter > .dropdownMenu > li > a > span').each(function(index, span) {
@@ -171,6 +177,18 @@ WCF.Conversation.EditorHandler = Class.extend({
 						$('<li><a href="' + $label.url + '" class="badge label' + ($label.cssClassName ? " " + $label.cssClassName : "") + '">' + $label.label + '</a>&nbsp;</li>').appendTo($labelList);
 					}
 				}
+			break;
+			
+			case 'open':
+				$conversation.find('.statusIcons li').each(function(index, listItem) {
+					var $listItem = $(listItem);
+					if ($listItem.children('img.jsIconLock').length) {
+						$listItem.remove();
+						return false;
+					}
+				});
+				
+				this._attributes[conversationID].isClosed = 0;
 			break;
 		}
 	}
@@ -334,6 +352,12 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
 	_editorHandler: null,
 	
 	/**
+	 * execution environment
+	 * @var	string
+	 */
+	_environment: 'conversation',
+	
+	/**
 	 * @see	WCF.InlineEditor._setOptions()
 	 */
 	_setOptions: function() {
@@ -357,9 +381,11 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
 	 * Sets editor handler object.
 	 * 
 	 * @param	WCF.Conversation.EditorHandler	editorHandler
+	 * @param	string				environment
 	 */
-	setEditorHandler: function(editorHandler) {
+	setEditorHandler: function(editorHandler, environment) {
 		this._editorHandler = editorHandler;
+		this._environment = (environment == 'list') ? 'list' : 'conversation';
 	},
 	
 	/**
@@ -436,18 +462,49 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
 		switch (optionName) {
 			case 'close':
 			case 'open':
-				new WCF.Action.Proxy({
-					autoSend: true,
-					data: {
-						actionName: optionName,
-						className: 'wcf\\data\\conversation\\ConversationAction',
-						objectIDs: [ $conversationID ]
-					},
-					success: function() {
+				this._updateData.push({
+					elementID: elementID,
+					optionName: optionName,
+					data: data
+				});
+				
+				this._proxy.setOption('data', {
+					actionName: optionName,
+					className: 'wcf\\data\\conversation\\ConversationAction',
+					objectIDs: [ $conversationID ]
+				});
+				this._proxy.sendRequest();
+			break;
+		}
+	},
+	
+	/**
+	 * @see	WCF.InlineEditor._updateState()
+	 */
+	_updateState: function() {
+		for (var $i = 0, $length = this._updateData.length; $i < $length; $i++) {
+			var $data = this._updateData[$i];
+			var $conversationID = this._elements[$data.elementID].data('conversationID');
+			
+			switch ($data.optionName) {
+				case 'close':
+					if (this._environment === 'conversation') {
 						window.location.reload();
 					}
-				});
-			break;
+					else {
+						this._editorHandler.update($conversationID, 'close', $data.data);
+					}
+				break;
+				
+				case 'open':
+					if (this._environment === 'conversation') {
+						window.location.reload();
+					}
+					else {
+						this._editorHandler.update($conversationID, 'open', $data.data);
+					}
+				break;
+			}
 		}
 	}
 });

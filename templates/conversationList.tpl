@@ -20,12 +20,15 @@
 				'wcf.conversation.label.placeholder': '{lang}wcf.conversation.label.placeholder{/lang}',
 				'wcf.conversation.leave.title': '{lang}wcf.conversation.leave.title{/lang}'
 			});
+			WCF.Icon.addObject({
+				'wcf.icon.lock': '{icon size='S'}lock{/icon}'
+			});
 			
 			WCF.Clipboard.init('wcf\\page\\ConversationListPage', {@$hasMarkedItems}, { });
 			
 			var $editorHandler = new WCF.Conversation.EditorHandler();
 			var $inlineEditor = new WCF.Conversation.InlineEditor('.conversation');
-			$inlineEditor.setEditorHandler($editorHandler);
+			$inlineEditor.setEditorHandler($editorHandler, 'list');
 			
 			new WCF.Conversation.Clipboard($editorHandler);
 			new WCF.Conversation.Label.Manager('{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}');
