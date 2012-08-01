@@ -77,7 +77,7 @@
 							{foreach from=$labelList item=label}
 								<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}&labelID={@$label->labelID}{/link}"><span class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}" data-css-class-name="{if $label->cssClassName}{@$label->cssClassName}{/if}" data-label-id="{@$label->labelID}">{$label->label}</span></a></li>
 							{/foreach}
-							<li class="dropdownDivider"{if !$labelList|count} style="display: none;"{/if}>
+							<li class="dropdownDivider"{if !$labelList|count} style="display: none;"{/if}></li>
 							<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}">{lang}wcf.conversation.label.disableFilter{/lang}</a></li>
 						</ul>
 					</div>
@@ -187,7 +187,7 @@
 							<aside class="statusDisplay">
 								{smallpages pages=$conversation->getPages() controller='Conversation' object=$conversation link='pageNo=%d'}
 								<ul class="statusIcons">
-									{if $conversation->isClosed}<li><img src="{icon size='S'}lock{/icon}" alt="" title="{lang}wcf.conversation.closed{/lang}" class="jsIconLock jsTooltip icon16" /></li>{/if}
+									{if $conversation->isClosed}<li><img src="{icon size='S'}lock{/icon}" alt="" title="{lang}wcf.global.state.closed{/lang}" class="jsIconLock jsTooltip icon16" /></li>{/if}
 									{if $conversation->attachments}<li><img src="{icon size='S'}attachment{/icon}" alt="" title="{lang}wcf.conversation.attachments{/lang}" class="jsIconAttachment jsTooltip icon16" /></li>{/if}
 								</ul>
 							</aside>
