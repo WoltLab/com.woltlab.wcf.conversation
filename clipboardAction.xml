@@ -30,9 +30,16 @@
 				<page><![CDATA[wcf\page\ConversationListPage]]></page>
 			</pages>
 		</action>
-		<action name="close">
+		<action name="open">
 			<actionclassname><![CDATA[wcf\system\clipboard\action\ConversationClipboardAction]]></actionclassname>
 			<showorder>5</showorder>
+			<pages>
+				<page><![CDATA[wcf\page\ConversationListPage]]></page>
+			</pages>
+		</action>
+		<action name="close">
+			<actionclassname><![CDATA[wcf\system\clipboard\action\ConversationClipboardAction]]></actionclassname>
+			<showorder>6</showorder>
 			<pages>
 				<page><![CDATA[wcf\page\ConversationListPage]]></page>
 			</pages>
