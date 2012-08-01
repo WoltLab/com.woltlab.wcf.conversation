@@ -32,7 +32,7 @@
 
 <header class="boxHeadline marginTop">
 	<hgroup>
-		<h1><a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a>{if $conversation->isClosed} <img src="{icon size='S'}lock{/icon}" alt="" title="{lang}wcf.conversation.closed{/lang}" class="jsTooltip jsIconLock icon16" />{/if}
+		<h1><a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a>{if $conversation->isClosed} <img src="{icon size='S'}lock{/icon}" alt="" title="{lang}wcf.global.state.closed{/lang}" class="jsTooltip jsIconLock icon16" />{/if}
 		{hascontent}
 			<ul class="labelList">
 				{content}
