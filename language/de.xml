@@ -44,6 +44,7 @@
 		<item name="wcf.conversation.button.saveAsDraft"><![CDATA[Entwurf speichern]]></item>
 		<item name="wcf.conversation.message.add.previousPosts"><![CDATA[{if $items == 1}Vorherige Nachricht{else}Vorherige Nachrichten ({#$items}){/if}]]></item>
 		<item name="wcf.conversation.invisibleParticipants.description"><![CDATA[Unsichtbare Teilnehmer sind für andere Teilnehmer nicht sichtbar. Mehrere Teilnehmer können mit Komma getrennt angegeben werden.]]></item>
+		<item name="wcf.conversation.showAll"><![CDATA[Alle Konversationen anzeigen]]></item>
 	</category>
 	
 	<category name="wcf.conversation.edit">

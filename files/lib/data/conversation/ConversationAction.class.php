@@ -4,7 +4,9 @@ use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\data\conversation\message\ViewableConversationMessageList;
+use wcf\data\user\UserProfile;
 use wcf\system\clipboard\ClipboardHandler;
+use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
 use wcf\system\exception\ValidateActionException;
@@ -416,6 +418,55 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 		
 		return array(
 			'actionName' => 'hideConversation'
+		);
+	}
+	
+	/**
+	 * Does nothing.
+	 */
+	public function validateGetUnreadConversations() { }
+	
+	/**
+	 * Returns the last 5 unread conversations.
+	 * 
+	 * @return	array
+	 */
+	public function getUnreadConversations() {
+		$conditions = new PreparedStatementConditionBuilder();
+		$conditions->add('conversation.conversationID = conversation_to_user.conversationID');
+		$conditions->add('conversation_to_user.participantID = ?', array(WCF::getUser()->userID));
+		$conditions->add('conversation_to_user.hideConversation = 0');
+		$conditions->add('conversation_to_user.lastVisitTime < conversation.lastPostTime');
+		
+		$sql = "SELECT		conversation.conversationID, conversation.subject,
+					conversation.lastPostTime, conversation.lastPosterID,
+					conversation.lastPoster
+			FROM		wcf".WCF_N."_conversation_to_user conversation_to_user,
+					wcf".WCF_N."_conversation conversation
+					".$conditions."
+			ORDER BY	conversation.lastPostTime DESC";
+		$statement = WCF::getDB()->prepareStatement($sql, 5);
+		$statement->execute($conditions->getParameters());
+		$conversations = array();
+		$userIDs = array();
+		while ($row = $statement->fetchArray()) {
+			$conversations[] = $row;
+			$userIDs[] = $row['lastPosterID'];
+		}
+		
+		$userProfiles = array();
+		if (!empty($userIDs)) {
+			$userIDs = array_unique($userIDs);
+			$userProfiles = UserProfile::getUserProfiles($userIDs);
+		}
+		
+		WCF::getTPL()->assign(array(
+			'conversations' => $conversations,
+			'userProfiles' => $userProfiles
+		));
+		
+		return array(
+			'template' => WCF::getTPL()->fetch('conversationListUnread')
 		);
 	}
 	
