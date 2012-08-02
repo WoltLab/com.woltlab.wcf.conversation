@@ -15,7 +15,6 @@
 	
 	<category name="wcf.conversation">
 		<item name="wcf.conversation.conversations"><![CDATA[Konversationen]]></item>
-		<item name="wcf.conversation.subject"><![CDATA[Betreff]]></item>
 		<item name="wcf.conversation.replies"><![CDATA[Antworten]]></item>
 		<item name="wcf.conversation.participants"><![CDATA[Teilnehmer]]></item>
 		<item name="wcf.conversation.lastPostTime"><![CDATA[Letzte Antwort]]></item>
