@@ -14,7 +14,11 @@
 				'wcf.conversation.edit.close': '{lang}wcf.conversation.edit.close{/lang}',
 				'wcf.conversation.edit.leave': '{lang}wcf.conversation.edit.leave{/lang}',
 				'wcf.conversation.edit.open': '{lang}wcf.conversation.edit.open{/lang}',
-				'wcf.conversation.leave.title': '{lang}wcf.conversation.leave.title{/lang}'
+				'wcf.conversation.leave.title': '{lang}wcf.conversation.leave.title{/lang}',
+				'wcf.global.state.closed': '{lang}wcf.global.state.closed{/lang}'
+			});
+			WCF.Icon.addObject({
+				'wcf.icon.lock': '{icon size='S'}lock{/icon}'
 			});
 			
 			var $availableLabels = [ {implode from=$labelList item=label}{ cssClassName: '{if $label->cssClassName}{@$label->cssClassName}{/if}', labelID: {@$label->labelID}, label: '{$label->label}' }{/implode} ];

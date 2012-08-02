@@ -141,7 +141,7 @@ WCF.Conversation.EditorHandler = Class.extend({
 		
 		switch (key) {
 			case 'close':
-				$('<li><img src="' + WCF.Icon.get('wcf.icon.lock') + '" alt="" title="' + WCF.Language.get('wcf.conversation.closed') + '" class="jsIconLock jsTooltip icon16" /></li>').prependTo($conversation.find('.statusIcons'))
+				$('<li><img src="' + WCF.Icon.get('wcf.icon.lock') + '" alt="" title="' + WCF.Language.get('wcf.global.state.closed') + '" class="jsIconLock jsTooltip icon16" /></li>').prependTo($conversation.find('.statusIcons'))
 				
 				this._attributes[conversationID].isClosed = 1;
 			break;
@@ -236,6 +236,12 @@ WCF.Conversation.EditorHandlerConversation = WCF.Conversation.EditorHandler.exte
 		var $conversation = this._conversations[conversationID];
 		
 		switch (key) {
+			case 'close':
+				$('<img src="' + WCF.Icon.get('wcf.icon.lock') + '" alt="" title="' + WCF.Language.get('wcf.global.state.closed') + '" class="jsIconLock jsTooltip icon16" />').appendTo($('#content > header h1'));
+				
+				this._attributes[conversationID].isClosed = 1;
+			break;
+			
 			case 'labelIDs':
 				var $container = $('#content > header h1');
 				if (!data.length) {
@@ -265,6 +271,12 @@ WCF.Conversation.EditorHandlerConversation = WCF.Conversation.EditorHandler.exte
 						}
 					}
 				}
+			break;
+			
+			case 'open':
+				$('#content > header img.jsIconLock').remove();
+				
+				this._attributes[conversationID].isClosed = 0;
 			break;
 		}
 	}
@@ -488,21 +500,11 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
 			
 			switch ($data.optionName) {
 				case 'close':
-					if (this._environment === 'conversation') {
-						window.location.reload();
-					}
-					else {
-						this._editorHandler.update($conversationID, 'close', $data.data);
-					}
+					this._editorHandler.update($conversationID, 'close', $data.data);
 				break;
 				
 				case 'open':
-					if (this._environment === 'conversation') {
-						window.location.reload();
-					}
-					else {
-						this._editorHandler.update($conversationID, 'open', $data.data);
-					}
+					this._editorHandler.update($conversationID, 'open', $data.data);
 				break;
 			}
 		}
