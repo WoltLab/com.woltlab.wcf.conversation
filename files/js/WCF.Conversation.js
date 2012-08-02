@@ -347,6 +347,15 @@ WCF.Conversation.Clipboard = Class.extend({
 			case 'conversation.restore':
 				window.location.reload();
 			break;
+			
+			case 'conversation.close':
+			case 'conversation.open':
+				for (var $conversationID in data.returnValues.conversationData) {
+					var $data = data.returnValues.conversationData[$conversationID];
+					
+					this._editorHandler.update($conversationID, ($data.isClosed ? 'close' : 'open'), $data);
+				}
+			break;
 		}
 	}
 });
