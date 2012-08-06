@@ -9,6 +9,8 @@
 		//<![CDATA[
 		$(function() {
 			new WCF.Message.DefaultPreview();
+			new WCF.Search.User('#participants', null, false, [ ], true);
+			new WCF.Search.User('#invisibleParticipants', null, false, [ ], true);
 		});
 		//]]>
 	</script>
