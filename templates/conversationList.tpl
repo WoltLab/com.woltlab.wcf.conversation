@@ -93,8 +93,10 @@
 					
 					<div>
 						{* @todo: styling *}
-						<progress value="{@$__wcf->getConversationHandler()->getConversationCount()}" max="{@$__wcf->session->getPermission('user.conversation.maxConversations')}" title="{#$__wcf->getConversationHandler()->getConversationCount()/$__wcf->session->getPermission('user.conversation.maxConversations')*100}%">
-							<span>{#$__wcf->getConversationHandler()->getConversationCount()/$__wcf->session->getPermission('user.conversation.maxConversations')*100}%</span>
+						{assign var='conversationCount' value=$__wcf->getConversationHandler()->getConversationCount()}
+						{assign var='maxConversationCount' value=$__wcf->session->getPermission('user.conversation.maxConversations')}
+						<meter value="{@$conversationCount}" high="{@$maxConversationCount*0.9}" max="{@$maxConversationCount}" title="{#$conversationCount/$maxConversationCount*100}%">
+							<span>{#$conversationCount/$maxConversationCount*100}%</span>
 						</progress>
 					</div>
 				</fieldset>
