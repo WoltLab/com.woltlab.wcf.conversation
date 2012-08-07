@@ -175,7 +175,8 @@ class ConversationPage extends MultipleLinkPage {
 			'sortOrder' => $this->sortOrder,
 			'conversation' => $this->conversation,
 			'conversationID' => $this->conversationID,
-			'participants' => $this->participantList->getObjects()
+			'participants' => $this->participantList->getObjects(),
+			'defaultSmilies' => array() /* TODO: Since we do not use the message tabs, smilies are pointless to load -- what to do? */
 		));
 	}
 	
