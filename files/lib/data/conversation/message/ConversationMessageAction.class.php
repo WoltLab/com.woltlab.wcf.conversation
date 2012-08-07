@@ -1,5 +1,9 @@
 <?php
 namespace wcf\data\conversation\message;
+use wcf\system\user\notification\object\ConversationMessageUserNotificationObject;
+
+use wcf\system\user\notification\UserNotificationHandler;
+
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationAction;
 use wcf\data\conversation\ConversationEditor;
@@ -71,6 +75,9 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		if (empty($this->parameters['isFirstPost'])) {
 			// update last message
 			$conversationEditor->addMessage($message);
+			
+			// fire notification event
+			UserNotificationHandler::getInstance()->fireEvent('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', new ConversationMessageUserNotificationObject($message), $converation->getParticipantIDs());
 		}
 		
 		// reset storage

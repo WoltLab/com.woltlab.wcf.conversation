@@ -1,12 +1,12 @@
 <?php
 namespace wcf\system\user\notification\object\type;
-use wcf\data\conversation\ConversationList;
-use wcf\data\conversation\Conversation;
+use wcf\data\conversation\message\ConversationMessage;
+use wcf\data\conversation\message\ConversationMessageList;
 use wcf\data\object\type\AbstractObjectTypeProcessor;
-use wcf\system\user\notification\object\ConversationUserNotificationObject;
+use wcf\system\user\notification\object\ConversationMessageUserNotificationObject;
 
 /**
- * Represents a conversation notification object type.
+ * Represents a conversation message notification object type.
  *
  * @author	Marcel Werk
  * @copyright	2001-2012 WoltLab GmbH
@@ -15,37 +15,37 @@ use wcf\system\user\notification\object\ConversationUserNotificationObject;
  * @subpackage	system.user.notification.object.type
  * @category 	Community Framework
  */
-class ConversationNotificationObjectType extends AbstractObjectTypeProcessor implements IUserNotificationObjectType {
+class ConversationMessageNotificationObjectType extends AbstractObjectTypeProcessor implements IUserNotificationObjectType {
 	/**
 	 * @see wcf\system\user\notification\object\type\IUserNotificationObjectType::getObjectByID()
 	 */
 	public function getObjectByID($objectID) {
-		$object = new Conversation($objectID);
-		if (!$object->conversationID) {
+		$object = new ConversationMessage($objectID);
+		if (!$object->messageID) {
 			// create empty object for unknown request id
-			$object = new Conversation(null, array('conversationID' => $objectID));
+			$object = new ConversationMessage(null, array('messageID' => $objectID));
 		}
 		
-		return array($object->conversationID => new ConversationUserNotificationObject($object));
+		return array($object->messageID => new ConversationMessageUserNotificationObject($object));
 	}
 
 	/**
 	 * @see wcf\system\user\notification\object\type\IUserNotificationObjectType::getObjectsByIDs()
 	 */
 	public function getObjectsByIDs(array $objectIDs) {
-		$objectList = new ConversationList();
-		$objectList->getConditionBuilder()->add("conversation.conversationID IN (?)", array($objectIDs));
+		$objectList = new ConversationMessageList();
+		$objectList->getConditionBuilder()->add("conversation_message.messageID IN (?)", array($objectIDs));
 		$objectList->readObjects();
 		
 		$objects = array();
 		foreach ($objectList as $object) {
-			$objects[$object->conversationID] = new ConversationUserNotificationObject($object);
+			$objects[$object->messageID] = new ConversationMessageUserNotificationObject($object);
 		}
 		
 		foreach ($objectIDs as $objectID) {
 			// append empty objects for unknown ids
 			if (!isset($objects[$objectID])) {
-				$objects[$objectID] = new ConversationUserNotificationObject(new Conversation(null, array('conversationID' => $objectID)));
+				$objects[$objectID] = new ConversationMessageUserNotificationObject(new ConversationMessage(null, array('messageID' => $objectID)));
 			}
 		}
 		

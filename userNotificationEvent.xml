@@ -7,10 +7,10 @@
 			<classname>wcf\system\user\notification\event\ConversationUserNotificationEvent</classname>
 		</event>
 		
-		<!-- @todo: <event>
+		<event>
 			<name>conversationMessage</name>
-			<objecttype>com.woltlab.wcf.conversation.notification</objecttype>
+			<objecttype>com.woltlab.wcf.conversation.message.notification</objecttype>
 			<classname>wcf\system\user\notification\event\ConversationMessageUserNotificationEvent</classname>
-		</event>-->
+		</event>
 	</import>
 </data>
