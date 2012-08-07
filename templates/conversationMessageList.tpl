@@ -1,4 +1,5 @@
 {foreach from=$objects item=message}
+	{if !$conversation|isset && $container|isset}{assign var=conversation value=$container}{/if}
 	{assign var='objectID' value=$message->messageID}
 	{assign var='userProfile' value=$message->getUserProfile()}
 	

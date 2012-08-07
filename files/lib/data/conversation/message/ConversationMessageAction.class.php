@@ -1,10 +1,16 @@
 <?php
 namespace wcf\data\conversation\message;
 use wcf\data\conversation\Conversation;
+use wcf\data\conversation\ConversationAction;
 use wcf\data\conversation\ConversationEditor;
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\system\bbcode\MessageParser;
+use wcf\system\exception\PermissionDeniedException;
+use wcf\system\exception\UserInputException;
+use wcf\system\message\IMessageQuickReply;
+use wcf\system\message\QuickReplyManager;
 use wcf\system\package\PackageDependencyHandler;
+use wcf\system\request\LinkHandler;
 use wcf\system\search\SearchIndexManager;
 use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\WCF;
@@ -20,11 +26,17 @@ use wcf\util\StringUtil;
  * @subpackage	data.conversation.message
  * @category 	Community Framework
  */
-class ConversationMessageAction extends AbstractDatabaseObjectAction {
+class ConversationMessageAction extends AbstractDatabaseObjectAction implements IMessageQuickReply {
 	/**
 	 * @see wcf\data\AbstractDatabaseObjectAction::$className
 	 */
 	protected $className = 'wcf\data\conversation\message\ConversationMessageEditor';
+	
+	/**
+	 * conversation object
+	 * @var	wcf\data\conversation\Conversation
+	 */
+	public $conversation = null;
 	
 	/**
 	 * @see wcf\data\AbstractDatabaseObjectAction::create()
@@ -87,5 +99,62 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction {
 		parent::update();
 		
 		// @todo: update search index
+	}
+	
+	/**
+	 * @see	wcf\system\message\IMessageQuickReply::validateQuickReply()
+	 */
+	public function validateQuickReply() {
+		QuickReplyManager::getInstance()->validateParameters($this, $this->parameters, 'wcf\data\conversation\Conversation');
+	}
+	
+	/**
+	 * @see	wcf\system\message\IMessageQuickReply::quickReply()
+	 */
+	public function quickReply() {
+		return QuickReplyManager::getInstance()->createMessage(
+			$this,
+			$this->parameters,
+			'wcf\data\conversation\ConversationAction',
+			'wcf\data\conversation\message\ViewableConversationMessageList',
+			'conversationMessageList',
+			CONVERSATION_LIST_DEFAULT_SORT_ORDER
+		);
+	}
+	
+	/**
+	 * @see	wcf\system\message\IMessageQuickReply::validateContainer()
+	 */
+	public function validateContainer(Conversation $conversation) {
+		if (!$conversation->conversationID) {
+			throw new UserInputException('objectID');
+		}
+		else if ($conversation->isClosed || !Conversation::isParticipant(array($conversation->conversationID))) {
+			throw new PermissionDeniedException();
+		}
+	}
+	
+	/**
+	 * @see	wcf\system\message\IMessageQuickReply::getPageNo()
+	 */
+	public function getPageNo(Conversation $conversation) {
+		$sql = "SELECT	COUNT(*) AS count
+			FROM	wcf".WCF_N."_conversation_message
+			WHERE	conversationID = ?";
+		$statement = WCF::getDB()->prepareStatement($sql);
+		$statement->execute(array($conversation->conversationID));
+		$count = $statement->fetchArray();
+		
+		return array(intval(ceil($count['count'] / CONVERSATIONS_PER_PAGE)), $count['count']);
+	}
+	
+	/**
+	 * @see	wcf\system\message\IMessageQuickReply::getRedirectUrl()
+	 */
+	public function getRedirectUrl(Conversation $conversation, ConversationMessage $message) {
+		return LinkHandler::getInstance()->getLink('Conversation', array(
+			'object' => $conversation,
+			'messageID' => $message->messageID
+		)).'#message'.$message->messageID;
 	}
 }
