@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/maelstrom/language.xsd" languagecode="en">
+	<category name="wcf.clipboard">
+		<item name="wcf.clipboard.label.conversation.marked"><![CDATA[{if $count == 1}One Conversation{else}{#$count} Conversations{/if} Selected]]></item>
+	</category>
+	
+	<category name="wcf.clipboard.item">
+		<item name="wcf.clipboard.item.conversation.assignLabel"><![CDATA[Assign Label ({#$count})]]></item>
+		<item name="wcf.clipboard.item.conversation.close"><![CDATA[Close ({#$count})]]></item>
+		<item name="wcf.clipboard.item.conversation.leave"><![CDATA[Hide ({#$count})]]></item>
+		<item name="wcf.clipboard.item.conversation.leavePermanently"><![CDATA[Leave ({#$count})]]></item>
+		<item name="wcf.clipboard.item.conversation.open"><![CDATA[Open ({#$count})]]></item>
+		<item name="wcf.clipboard.item.conversation.restore"><![CDATA[Restore ({#$count})]]></item>
+	</category>
+	
+	<category name="wcf.conversation">
+		<item name="wcf.conversation.conversations"><![CDATA[Conversations]]></item>
+		<item name="wcf.conversation.subject"><![CDATA[Subject]]></item>
+		<item name="wcf.conversation.replies"><![CDATA[Replies]]></item>
+		<item name="wcf.conversation.participants"><![CDATA[Participants]]></item>
+		<item name="wcf.conversation.lastPostTime"><![CDATA[Last Reply]]></item>
+		<item name="wcf.conversation.message.new"><![CDATA[New]]></item>
+		<item name="wcf.conversation.add"><![CDATA[Create New Conversation]]></item>
+		<item name="wcf.conversation.button.add"><![CDATA[New Conversation]]></item>
+		<item name="wcf.conversation.message.add"><![CDATA[Reply to Conversation]]></item>
+		<item name="wcf.conversation.message.button.add"><![CDATA[Reply]]></item>
+		<item name="wcf.conversation.folders"><![CDATA[Folder]]></item>
+		<item name="wcf.conversation.folder.draft"><![CDATA[Drafts]]></item>
+		<item name="wcf.conversation.folder.outbox"><![CDATA[Sent Items]]></item>
+		<item name="wcf.conversation.folder.hidden"><![CDATA[Hidden]]></item>
+		<item name="wcf.conversation.quota"><![CDATA[Quota]]></item>
+		<item name="wcf.conversation.noConversations"><![CDATA[There are no conversations.]]></item>
+		<item name="wcf.conversation.hideConversation"><![CDATA[Change Participation]]></item>
+		<item name="wcf.conversation.hideConversation.leave"><![CDATA[Hide Cconversation]]></item>
+		<item name="wcf.conversation.hideConversation.leave.description"><![CDATA[The conversation will be hidden until one of the participants writes a new reply.]]></item>
+		<item name="wcf.conversation.hideConversation.leavePermanently"><![CDATA[Leave Conversation]]></item>
+		<item name="wcf.conversation.hideConversation.leavePermanently.description"><![CDATA[You will permanently leave the conversation.]]></item>
+		<item name="wcf.conversation.hideConversation.restore"><![CDATA[Restore Conversation]]></item>
+		<item name="wcf.conversation.leave.title"><![CDATA[Change Participation]]></item>
+		<item name="wcf.conversation.information"><![CDATA[Information]]></item>
+		<item name="wcf.conversation.message"><![CDATA[Message]]></item>
+		<item name="wcf.conversation.invisibleParticipants"><![CDATA[Invisible Participants]]></item>
+		<item name="wcf.conversation.participants.description"><![CDATA[Separate names with a comma.]]></item>
+		<item name="wcf.conversation.button.saveAsDraft"><![CDATA[Save as Draft]]></item>
+		<item name="wcf.conversation.message.add.previousPosts"><![CDATA[Previous Message{if $items != 1}s ({#$items}){/if}]]></item>
+		<item name="wcf.conversation.invisibleParticipants.description"><![CDATA[Invisible participants are not visible for any other participant. Separate names with a comma.]]></item>
+		<item name="wcf.conversation.showAll"><![CDATA[Show All Conversations]]></item>
+	</category>
+	
+	<category name="wcf.conversation.edit">
+		<item name="wcf.conversation.edit.assignLabel"><![CDATA[Assign Label]]></item>
+		<item name="wcf.conversation.edit.close"><![CDATA[Close]]></item>
+		<item name="wcf.conversation.edit.leave"><![CDATA[Change Participation]]></item>
+		<item name="wcf.conversation.edit.open"><![CDATA[Open]]></item>
+	</category>
+	
+	<category name="wcf.conversation.label">
+		<item name="wcf.conversation.label"><![CDATA[Filter by Label]]></item>
+		<item name="wcf.conversation.label.cssClassName"><![CDATA[Color]]></item>
+		<item name="wcf.conversation.label.disableFilter"><![CDATA[No Filter]]></item>
+		<item name="wcf.conversation.label.filter"><![CDATA[Select Label]]></item>
+		<item name="wcf.conversation.label.labelName"><![CDATA[Name]]></item>
+		<item name="wcf.conversation.label.management"><![CDATA[Edit Labels]]></item>
+		<item name="wcf.conversation.label.management.addLabel"><![CDATA[Add New Label]]></item>
+		<item name="wcf.conversation.label.management.addLabel.success"><![CDATA[Label was saved]]></item>
+		<item name="wcf.conversation.label.management.deleteLabel"><![CDATA[Delete Label]]></item>
+		<item name="wcf.conversation.label.management.edit.description"><![CDATA[Click on a label to edit or delete it.]]></item>
+		<item name="wcf.conversation.label.management.editLabel"><![CDATA[Edit Label &ldquo;#labelName#&rdquo;]]></item>
+		<item name="wcf.conversation.label.management.existingLabels"><![CDATA[Existing Labels]]></item>
+		<item name="wcf.conversation.label.placeholder"><![CDATA[Label]]></item>
+	</category>
+	
+	<category name="wcf.user.notification">
+		<item name="wcf.user.notification.conversation.output"><![CDATA[Started the conversation &ldquo;<a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a>&rdquo;.]]></item>
+		<item name="wcf.user.notification.conversation.shortOutput"><![CDATA[New conversation]]></item>		
+	</category>
+</language>
