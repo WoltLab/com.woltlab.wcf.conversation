@@ -61,7 +61,10 @@
 			<a href="{link controller='User' object=$participant}{/link}" class="framed">{@$participant->getAvatar()->getImageTag(24)}</a>
 			<hgroup>
 				<h1><a href="{link controller='User' object=$participant}{/link}"{if $participant->hideConversation == 2} style="text-decoration: line-through"{/if}>{$participant->username}</a></h1>
-				<h2><small>{@$participant->lastVisitTime|time}</small></h2>
+				<h2><dl class="inlineDataList">
+					<dt>{lang}wcf.conversation.lastVisitTime{/lang}</dt>
+					<dd>{if $participant->lastVisitTime}{@$participant->lastVisitTime|time}{else}-{/if}</dd>
+				</dl></h2>
 			</hgroup>
 		</li>
 	{/foreach}
