@@ -203,7 +203,7 @@
 							
 							{if $conversation->getParticipantSummary()|count}
 								<small>
-									{lang}wcf.conversation.participants{/lang}: {implode from=$conversation->getParticipantSummary() item=participant}<a href="{link controller='User' object=$participant}{/link}" class="userLink" data-user-id="{@$participant->userID}"{if $participant->hideConversation == 2} style="text-decoration: line-through"{/if}>{$participant->username}</a>{/implode}
+									{lang}wcf.conversation.participants{/lang}: {implode from=$conversation->getParticipantSummary() item=participant}<a href="{link controller='User' object=$participant}{/link}" class="userLink{if $participant->hideConversation == 2} conversationLeft{/if}" data-user-id="{@$participant->userID}">{$participant->username}</a>{/implode}
 									{if $conversation->getParticipantSummary()|count < $conversation->participants - 1}{lang}wcf.conversation.participants.other{/lang}{/if}
 								</small>
 							{/if}

@@ -54,22 +54,26 @@
 
 {include file='userNotice'}
 
-{* @todo: styling *}
-<ul>
-	{foreach from=$participants item=participant}
-		<li class="box24">
-			<a href="{link controller='User' object=$participant}{/link}" class="framed">{@$participant->getAvatar()->getImageTag(24)}</a>
-			<hgroup>
-				<h1><a href="{link controller='User' object=$participant}{/link}"{if $participant->hideConversation == 2} style="text-decoration: line-through"{/if}>{$participant->username}</a></h1>
-				<h2><dl class="inlineDataList">
-					<dt>{lang}wcf.conversation.lastVisitTime{/lang}</dt>
-					<dd>{if $participant->lastVisitTime}{@$participant->lastVisitTime|time}{else}-{/if}</dd>
-				</dl></h2>
-			</hgroup>
-		</li>
-	{/foreach}
-</ul>
+<div class="container containerPadding marginTop shadow">
+	<fieldset>
+		<legend>{lang}wcf.conversation.participants{/lang}</legend>
 
+		<ul class="conversationParticipantList">
+			{foreach from=$participants item=participant}
+				<li class="box24">
+					<a href="{link controller='User' object=$participant}{/link}" class="framed">{@$participant->getAvatar()->getImageTag(24)}</a>
+					<hgroup>
+						<h1><a href="{link controller='User' object=$participant}{/link}" class="userLink{if $participant->hideConversation == 2} conversationLeft{/if}" data-user-id="{@$participant->userID}">{$participant->username}</a></h1>
+						<h2><dl class="inlineDataList">
+							<dt>{lang}wcf.conversation.lastVisitTime{/lang}</dt>
+							<dd>{if $participant->lastVisitTime}{@$participant->lastVisitTime|time}{else}-{/if}</dd>
+						</dl></h2>
+					</hgroup>
+				</li>
+			{/foreach}
+		</ul>
+	</fieldset>
+</div>
 
 <div class="contentNavigation">
 	{pages print=true assign=pagesLinks controller='Conversation' object=$conversation link="pageNo=%d"}
