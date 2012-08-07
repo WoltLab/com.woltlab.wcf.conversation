@@ -146,7 +146,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		$statement->execute(array($conversation->conversationID));
 		$count = $statement->fetchArray();
 		
-		return array(intval(ceil($count['count'] / CONVERSATIONS_PER_PAGE)), $count['count']);
+		return array(intval(ceil($count['count'] / CONVERSATION_MESSAGES_PER_PAGE)), $count['count']);
 	}
 	
 	/**
