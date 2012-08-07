@@ -1144,3 +1144,30 @@ WCF.Conversation.UserPanel = Class.extend({
 		$('' + data.returnValues.template).prependTo($list);
 	}
 });
+
+/**
+ * Provides an AJAX-based quick reply for conversations.
+ */
+WCF.Conversation.QuickReply = WCF.Message.QuickReply.extend({
+	/**
+	 * @see	WCF.Message.QuickReply.init()
+	 */
+	init: function() {
+		this._super(true);
+	},
+	
+	/**
+	 * @see	WCF.Message.QuickReply._getClassName()
+	 */
+	_getClassName: function() {
+		return 'wcf\\data\\conversation\\message\\ConversationMessageAction';
+	},
+	
+	/**
+	 * @see	WCF.Message.QuickReply._getObjectID()
+	 * @returns
+	 */
+	_getObjectID: function() {
+		return this._container.data('conversationID');
+	}
+});
