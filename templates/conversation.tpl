@@ -74,7 +74,7 @@
 	<nav>
 		<ul class="conversation jsThreadInlineEditorContainer" data-conversation-id="{@$conversation->conversationID} data-label-ids="[ {implode from=$conversation->getAssignedLabels() item=label}{@$label->labelID}{/implode} ]" data-is-closed="{@$conversation->isClosed}" data-can-close-conversation="{if $conversation->userID == $__wcf->getUser()->userID}1{else}0{/if}"">
 			<li><a class="button jsThreadInlineEditor"><img src="{icon size='M'}edit{/icon}" alt="" class="icon24" /> <span>{lang}wcf.global.button.edit{/lang}</span></a></li>
-			{if !$conversation->isClosed}<li><a href="{link controller='ConversationMessageAdd' id=$conversationID}{/link}" title="{lang}wcf.conversation.message.add{/lang}" class="button buttonPrimary conversationReply"><img src="{icon size='M'}addColored{/icon}" alt="" class="icon24" /> <span>{lang}wcf.conversation.message.button.add{/lang}</span></a></li>{/if}
+			{if !$conversation->isClosed}<li><a href="{link controller='ConversationMessageAdd' id=$conversationID}{/link}" title="{lang}wcf.conversation.message.add{/lang}" class="button buttonPrimary jsQuickReply"><img src="{icon size='M'}addColored{/icon}" alt="" class="icon24" /> <span>{lang}wcf.conversation.message.button.add{/lang}</span></a></li>{/if}
 			{event name='largeButtonsTop'}
 		</ul>
 	</nav>
@@ -95,7 +95,7 @@
 		<nav>
 			<ul>
 				{content}
-					{if !$conversation->isClosed}<li><a href="{link controller='ConversationMessageAdd' id=$conversationID}{/link}" title="{lang}wcf.conversation.message.add{/lang}" class="button buttonPrimary wbbThreadReply"><img src="{icon size='M'}addColored{/icon}" alt="" class="icon24" /> <span>{lang}wcf.conversation.message.button.add{/lang}</span></a></li>{/if}
+					{if !$conversation->isClosed}<li><a href="{link controller='ConversationMessageAdd' id=$conversationID}{/link}" title="{lang}wcf.conversation.message.add{/lang}" class="button buttonPrimary jsQuickReply"><img src="{icon size='M'}addColored{/icon}" alt="" class="icon24" /> <span>{lang}wcf.conversation.message.button.add{/lang}</span></a></li>{/if}
 					{event name='largeButtonsBottom'}
 				{/content}
 			</ul>

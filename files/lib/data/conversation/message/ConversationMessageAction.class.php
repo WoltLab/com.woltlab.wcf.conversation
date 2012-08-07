@@ -4,6 +4,7 @@ use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationAction;
 use wcf\data\conversation\ConversationEditor;
 use wcf\data\AbstractDatabaseObjectAction;
+use wcf\data\DatabaseObject;
 use wcf\system\bbcode\MessageParser;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
@@ -125,7 +126,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	/**
 	 * @see	wcf\system\message\IMessageQuickReply::validateContainer()
 	 */
-	public function validateContainer(Conversation $conversation) {
+	public function validateContainer(DatabaseObject $conversation) {
 		if (!$conversation->conversationID) {
 			throw new UserInputException('objectID');
 		}
@@ -137,7 +138,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	/**
 	 * @see	wcf\system\message\IMessageQuickReply::getPageNo()
 	 */
-	public function getPageNo(Conversation $conversation) {
+	public function getPageNo(DatabaseObject $conversation) {
 		$sql = "SELECT	COUNT(*) AS count
 			FROM	wcf".WCF_N."_conversation_message
 			WHERE	conversationID = ?";
@@ -151,7 +152,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	/**
 	 * @see	wcf\system\message\IMessageQuickReply::getRedirectUrl()
 	 */
-	public function getRedirectUrl(Conversation $conversation, ConversationMessage $message) {
+	public function getRedirectUrl(DatabaseObject $conversation, DatabaseObject $message) {
 		return LinkHandler::getInstance()->getLink('Conversation', array(
 			'object' => $conversation,
 			'messageID' => $message->messageID
