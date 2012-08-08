@@ -1,5 +1,6 @@
 <?php
 namespace wcf\data\conversation\message;
+use wcf\data\conversation\Conversation;
 use wcf\data\DatabaseObject;
 use wcf\system\bbcode\MessageParser;
 use wcf\system\WCF;
@@ -25,6 +26,12 @@ class ConversationMessage extends DatabaseObject {
 	 * @see	wcf\data\DatabaseObject::$databaseIndexName
 	 */
 	protected static $databaseTableIndexName = 'messageID';
+	
+	/**
+	 * conversation object
+	 * @var wcf\data\conversation\Conversation
+	 */
+	protected $conversation = null;
 	
 	/**
 	 * Returns the formatted text of this message.
@@ -56,6 +63,19 @@ class ConversationMessage extends DatabaseObject {
 	}
 	
 	/**
+	 * Returns the conversation of this message.
+	 * 
+	 * @return wcf\data\conversation\Conversation
+	 */
+	public function getConversation() {
+		if ($this->conversation === null) {
+			$this->conversation = new Conversation($this->conversationID);
+		}
+		
+		return $this->conversation;
+	}
+	
+	/**
 	 * Returns true, if current user may edit this message.
 	 * 
 	 * @return	boolean
@@ -64,3 +84,4 @@ class ConversationMessage extends DatabaseObject {
 		return (WCF::getUser()->userID == $this->userID);
 	}
 }
+

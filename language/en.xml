@@ -45,6 +45,7 @@
 		<item name="wcf.conversation.message.add.previousPosts"><![CDATA[Previous Message{if $items != 1}s ({#$items}){/if}]]></item>
 		<item name="wcf.conversation.invisibleParticipants.description"><![CDATA[Invisible participants are not visible for any other participant. Separate names with a comma.]]></item>
 		<item name="wcf.conversation.showAll"><![CDATA[Show All Conversations]]></item>
+		<item name="wcf.conversation.lastVisitTime"><![CDATA[Last Visit]]></item>
 	</category>
 	
 	<category name="wcf.conversation.edit">
@@ -72,6 +73,8 @@
 	
 	<category name="wcf.user.notification">
 		<item name="wcf.user.notification.conversation.output"><![CDATA[Started the conversation &ldquo;<a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a>&rdquo;.]]></item>
-		<item name="wcf.user.notification.conversation.shortOutput"><![CDATA[New conversation]]></item>		
+		<item name="wcf.user.notification.conversation.shortOutput"><![CDATA[New Conversation]]></item>
+		<item name="wcf.user.notification.conversation.message.output"><![CDATA[Replied to the conversation &ldquo;<a href="{link controller='Conversation' object=$message->getConversation()}messageID={@$message->messageID}{/link}#message{@$message->messageID}">{$message->getTitle()}</a>&rdquo;.]]></item>
+		<item name="wcf.user.notification.conversation.message.shortOutput"><![CDATA[New Reply to Conversation]]></item>		
 	</category>
 </language>
