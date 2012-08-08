@@ -1,9 +1,5 @@
 <?php
 namespace wcf\data\conversation\message;
-use wcf\system\user\notification\object\ConversationMessageUserNotificationObject;
-
-use wcf\system\user\notification\UserNotificationHandler;
-
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationAction;
 use wcf\data\conversation\ConversationEditor;
@@ -13,10 +9,13 @@ use wcf\system\bbcode\MessageParser;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
 use wcf\system\message\IExtendedMessageQuickReplyAction;
+use wcf\system\message\IMessageInlineEditorAction;
 use wcf\system\message\QuickReplyManager;
 use wcf\system\package\PackageDependencyHandler;
 use wcf\system\request\LinkHandler;
 use wcf\system\search\SearchIndexManager;
+use wcf\system\user\notification\object\ConversationMessageUserNotificationObject;
+use wcf\system\user\notification\UserNotificationHandler;
 use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\WCF;
 use wcf\util\StringUtil;
@@ -31,7 +30,7 @@ use wcf\util\StringUtil;
  * @subpackage	data.conversation.message
  * @category 	Community Framework
  */
-class ConversationMessageAction extends AbstractDatabaseObjectAction implements IExtendedMessageQuickReplyAction {
+class ConversationMessageAction extends AbstractDatabaseObjectAction implements IExtendedMessageQuickReplyAction, IMessageInlineEditorAction {
 	/**
 	 * @see wcf\data\AbstractDatabaseObjectAction::$className
 	 */
@@ -189,6 +188,86 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		// redirect
 		return array(
 			'url' => $url
+		);
+	}
+	
+	/**
+	 * @see	wcf\system\message\IMessageInlineEditorAction::validateBeginEdit()
+	 */
+	public function validateBeginEdit() {
+		$this->parameters['containerID'] = (isset($this->parameters['containerID'])) ? intval($this->parameters['containerID']) : 0;
+		if (!$this->parameters['containerID']) {
+			throw new UserInputException('containerID');
+		}
+		else {
+			$this->conversation = new Conversation($this->parameters['containerID']);
+			if (!$this->conversation->conversationID) {
+				throw new UserInputException('containerID');
+			}
+			
+			if ($this->conversation->isClosed || !Conversation::isParticipant(array($this->conversation->conversationID))) {
+				throw new PermissionDeniedException();
+			}
+		}
+		
+		$this->parameters['objectID'] = (isset($this->parameters['objectID'])) ? intval($this->parameters['objectID']) : 0;
+		if (!$this->parameters['objectID']) {
+			throw new UserInputException('objectID');
+		}
+		else {
+			$this->message = new ConversationMessage($this->parameters['objectID']);
+			if (!$this->message->messageID) {
+				throw new UserInputException('objectID');
+			}
+			
+			if (!$this->message->canEdit()) {
+				throw new PermissionDeniedException();
+			}
+		}
+	}
+	
+	/**
+	 * @see	wcf\system\message\IMessageInlineEditorAction::beginEdit()
+	 */
+	public function beginEdit() {
+		WCF::getTPL()->assign(array(
+			'defaultSmilies' => array(), /* TODO: fix this */
+			'message' => $this->message,
+			'wysiwygSelector' => 'messageEditor'.$this->message->messageID
+		));
+		
+		return array(
+			'actionName' => 'beginEdit',
+			'template' => WCF::getTPL()->fetch('conversationMessageInlineEditor')
+		);
+	}
+	
+	/**
+	 * @see	wcf\system\message\IMessageInlineEditorAction::validateSave()
+	 */
+	public function validateSave() {
+		if (!isset($this->parameters['data']) || !isset($this->parameters['data']['message']) || empty($this->parameters['data']['message'])) {
+			throw new UserInputException('message');
+		}
+		
+		$this->validateBeginEdit();
+	}
+	
+	/**
+	 * @see	wcf\system\message\IMessageInlineEditorAction::save()
+	 */
+	public function save() {
+		$messageEditor = new ConversationMessageEditor($this->message);
+		$messageEditor->update(array(
+			'message' => $this->parameters['data']['message']
+		));
+		
+		// load new message
+		$this->message = new ConversationMessage($this->message->messageID);
+		
+		return array(
+			'actionName' => 'save',
+			'message' => $this->message->getFormattedMessage()
 		);
 	}
 	

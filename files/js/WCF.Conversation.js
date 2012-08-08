@@ -1184,6 +1184,13 @@ WCF.Conversation.Message = { };
  */
 WCF.Conversation.Message.InlineEditor = WCF.Message.InlineEditor.extend({
 	/**
+	 * @see	WCF.Message.InlineEditor.init()
+	 */
+	init: function(containerID) {
+		this._super(containerID, true);
+	},
+	
+	/**
 	 * @see	WCF.Message.InlineEditor._getClassName()
 	 */
 	_getClassName: function() {
