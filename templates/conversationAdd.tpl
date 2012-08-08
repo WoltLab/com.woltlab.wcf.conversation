@@ -14,6 +14,8 @@
 		});
 		//]]>
 	</script>
+	
+	{include file='imageViewer'}
 </head>
 
 <body id="tpl{$templateName|ucfirst}">
