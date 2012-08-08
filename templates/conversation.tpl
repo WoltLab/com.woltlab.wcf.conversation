@@ -27,6 +27,7 @@
 			$inlineEditor.setEditorHandler($editorHandler);
 			
 			{if !$conversation->isClosed}new WCF.Conversation.QuickReply();{/if}
+			new WCF.Conversation.Message.InlineEditor({@$conversation->conversationID});
 		});
 		//]]>
 	</script>
