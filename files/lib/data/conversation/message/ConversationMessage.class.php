@@ -2,6 +2,7 @@
 namespace wcf\data\conversation\message;
 use wcf\data\DatabaseObject;
 use wcf\system\bbcode\MessageParser;
+use wcf\system\WCF;
 use wcf\util\StringUtil;
 
 /**
@@ -52,5 +53,14 @@ class ConversationMessage extends DatabaseObject {
 		}
 		
 		return $message;
+	}
+	
+	/**
+	 * Returns true, if current user may edit this message.
+	 * 
+	 * @return	boolean
+	 */
+	public function canEdit() {
+		return (WCF::getUser()->userID == $this->userID);
 	}
 }

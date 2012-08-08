@@ -1171,3 +1171,22 @@ WCF.Conversation.QuickReply = WCF.Message.QuickReply.extend({
 		return this._container.data('conversationID');
 	}
 });
+
+/**
+ * Namespace for conversation messages.
+ */
+WCF.Conversation.Message = { };
+
+/**
+ * Provides an inline editor for conversation messages.
+ * 
+ * @see	WCF.Message.InlineEditor
+ */
+WCF.Conversation.Message.InlineEditor = WCF.Message.InlineEditor.extend({
+	/**
+	 * @see	WCF.Message.InlineEditor._getClassName()
+	 */
+	_getClassName: function() {
+		return 'wcf\\data\\conversation\\message\\ConversationMessageAction';
+	}
+});

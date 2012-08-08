@@ -8,7 +8,7 @@ use wcf\data\DatabaseObject;
 use wcf\system\bbcode\MessageParser;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
-use wcf\system\message\IMessageQuickReply;
+use wcf\system\message\IExtendedMessageQuickReplyAction;
 use wcf\system\message\QuickReplyManager;
 use wcf\system\package\PackageDependencyHandler;
 use wcf\system\request\LinkHandler;
@@ -27,7 +27,7 @@ use wcf\util\StringUtil;
  * @subpackage	data.conversation.message
  * @category 	Community Framework
  */
-class ConversationMessageAction extends AbstractDatabaseObjectAction implements IMessageQuickReply {
+class ConversationMessageAction extends AbstractDatabaseObjectAction implements IExtendedMessageQuickReplyAction {
 	/**
 	 * @see wcf\data\AbstractDatabaseObjectAction::$className
 	 */
@@ -38,6 +38,12 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 * @var	wcf\data\conversation\Conversation
 	 */
 	public $conversation = null;
+	
+	/**
+	 * conversation message object
+	 * @var	wcf\data\conversation\message\ConversationMessage
+	 */
+	public $message = null;
 	
 	/**
 	 * @see wcf\data\AbstractDatabaseObjectAction::create()
@@ -120,6 +126,62 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			'wcf\data\conversation\message\ViewableConversationMessageList',
 			'conversationMessageList',
 			CONVERSATION_LIST_DEFAULT_SORT_ORDER
+		);
+	}
+	
+	/**
+	 * @see	wcf\system\message\IExtendedMessageQuickReplyAction::validateJumpToExtended()
+	 */
+	public function validateJumpToExtended() {
+		if (!isset($this->parameters['message'])) {
+			throw new UserInputException('message');
+		}
+		
+		$this->parameters['objectID'] = (isset($this->parameters['objectID'])) ? intval($this->parameters['objectID']) : 0;
+		if (!$this->parameters['objectID']) {
+			throw new UserInputException('objectID');
+		}
+		else {
+			$this->conversation = new Conversation($this->parameters['objectID']);
+			if (!$this->conversation->conversationID) {
+				throw new UserInputException('objectID');
+			}
+			else if ($this->conversation->isClosed || !Conversation::isParticipant(array($this->conversation->conversationID))) {
+				throw new PermissionDeniedException();
+			}
+		}
+		
+		// editing existing message
+		if (isset($this->parameters['messageID'])) {
+			$this->message = new ConversationMessage(intval($this->parameters['messageID']));
+			if (!$this->message->messageID || ($this->message->conversationID != $this->conversation->conversationID)) {
+				throw new UserInputException('messageID');
+			}
+
+			if (!$this->message->canEdit()) {
+				throw new PermissionDeniedException();
+			}
+		}
+	}
+	
+	/**
+	 * @see	wcf\system\message\IExtendedMessageQuickReplyAction::jumpToExtended()
+	 */
+	public function jumpToExtended() {
+		// quick reply
+		if ($this->message === null) {
+			QuickReplyManager::getInstance()->setMessage('conversation', $this->conversation->conversationID, $this->parameters['message']);
+			$url = LinkHandler::getInstance()->getLink('ConversationMessageAdd', array('id' => $this->conversation->conversationID));
+		}
+		else {
+			// editing message
+			QuickReplyManager::getInstance()->setMessage('conversationMessage', $this->message->messageID, $this->parameters['message']);
+			$url = LinkHandler::getInstance()->getLink('ConversationMessageEdit', array('id' => $this->message->messageID));
+		}
+		
+		// redirect
+		return array(
+			'url' => $url
 		);
 	}
 	

@@ -6,6 +6,7 @@ use wcf\data\conversation\Conversation;
 use wcf\system\breadcrumb\Breadcrumb;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\PermissionDeniedException;
+use wcf\system\message\QuickReplyManager;
 use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
 use wcf\util\HeaderUtil;
@@ -80,6 +81,11 @@ class ConversationMessageAddForm extends MessageForm {
 	 */
 	public function readData() {
 		parent::readData();
+		
+		if (empty($_POST)) {
+			// check for quick reply message
+			$this->text = QuickReplyManager::getInstance()->getMessage('conversation', $this->conversation->conversationID);
+		}
 		
 		// add breadcrumbs
 		WCF::getBreadcrumbs()->add(new Breadcrumb(WCF::getLanguage()->get('wcf.conversation.conversations'), LinkHandler::getInstance()->getLink('ConversationList')));
