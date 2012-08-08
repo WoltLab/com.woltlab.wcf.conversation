@@ -41,6 +41,11 @@ class ConversationListPage extends SortablePage {
 	public $itemsPerPage = CONVERSATIONS_PER_PAGE;
 	
 	/**
+	 * @see wcf\page\AbstractPage::$loginRequired
+	 */
+	public $loginRequired = true;
+	
+	/**
 	 * @see wcf\page\AbstractPage::$neededModules
 	 */
 	public $neededModules = array('MODULE_CONVERSATION');
@@ -131,16 +136,5 @@ class ConversationListPage extends SortablePage {
 			'labelID' => $this->labelID,
 			'labelList' => $this->labelList
 		));
-	}
-	
-	/**
-	 * @see wcf\page\IPage::show()
-	 */
-	public function show() {
-		if (!WCF::getUser()->userID) {
-			throw new PermissionDeniedException();
-		}
-		
-		parent::show();
 	}
 }

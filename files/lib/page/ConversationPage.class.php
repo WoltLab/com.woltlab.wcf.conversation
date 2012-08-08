@@ -40,6 +40,11 @@ class ConversationPage extends MultipleLinkPage {
 	public $objectListClassName = 'wcf\data\conversation\message\ViewableConversationMessageList';
 	
 	/**
+	 * @see wcf\page\AbstractPage::$loginRequired
+	 */
+	public $loginRequired = true;
+	
+	/**
 	 * @see wcf\page\AbstractPage::$neededModules
 	 */
 	public $neededModules = array('MODULE_CONVERSATION');

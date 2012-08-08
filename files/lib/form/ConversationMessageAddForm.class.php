@@ -27,6 +27,11 @@ class ConversationMessageAddForm extends MessageForm {
 	public $attachmentObjectType = 'com.woltlab.wcf.conversation.message';
 	
 	/**
+	 * @see wcf\page\AbstractPage::$loginRequired
+	 */
+	public $loginRequired = true;
+	
+	/**
 	 * @see wcf\page\AbstractPage::$neededModules
 	 */
 	public $neededModules = array('MODULE_CONVERSATION');
@@ -138,16 +143,5 @@ class ConversationMessageAddForm extends MessageForm {
 			'messages' => $this->messageList->getObjects(),
 			'attachmentList' => $this->messageList->getAttachmentList()
 		));
-	}
-	
-	/**
-	 * @see wcf\page\IPage::show()
-	 */
-	public function show() {
-		if (!WCF::getUser()->userID) {
-			throw new PermissionDeniedException();
-		}
-		
-		parent::show();
 	}
 } 
