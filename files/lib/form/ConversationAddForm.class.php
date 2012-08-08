@@ -32,6 +32,11 @@ class ConversationAddForm extends MessageForm {
 	public $attachmentObjectType = 'com.woltlab.wcf.conversation.message';
 	
 	/**
+	 * @see wcf\page\AbstractPage::$loginRequired
+	 */
+	public $loginRequired = true;
+	
+	/**
 	 * @see wcf\page\AbstractPage::$neededModules
 	 */
 	public $neededModules = array('MODULE_CONVERSATION');
@@ -282,10 +287,6 @@ class ConversationAddForm extends MessageForm {
 	 * @see wcf\page\IPage::show()
 	 */
 	public function show() {
-		if (!WCF::getUser()->userID) {
-			throw new PermissionDeniedException();
-		}
-		
 		// check max pc permission
 		if (ConversationHandler::getInstance()->getConversationCount() >= WCF::getSession()->getPermission('user.conversation.maxConversations')) {
 			throw new NamedUserException(WCF::getLanguage()->get('wcf.conversation.error.mailboxIsFull'));
