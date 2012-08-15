@@ -75,7 +75,7 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 		}
 		else {
 			// update conversation count
-			UserStorageHandler::getInstance()->reset($converation->getParticipantIDs(), 'conversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
+			UserStorageHandler::getInstance()->reset($conversation->getParticipantIDs(), 'conversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
 		}
 		
 		// update participant summary
