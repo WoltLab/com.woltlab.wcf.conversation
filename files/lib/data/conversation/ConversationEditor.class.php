@@ -41,7 +41,7 @@ class ConversationEditor extends DatabaseObjectEditor {
 	 * Resets the participants of this conversation.
 	 */
 	public function resetParticipants() {
-		$sql = "DELETE FROM	wcf".WCF_N."_ocnversation_to_user
+		$sql = "DELETE FROM	wcf".WCF_N."_conversation_to_user
 			WHERE		conversationID = ?
 					AND participantID <> ?";
 		$statement = WCF::getDB()->prepareStatement($sql);
