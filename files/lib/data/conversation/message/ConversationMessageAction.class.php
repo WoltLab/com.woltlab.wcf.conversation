@@ -143,14 +143,14 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			throw new UserInputException('message');
 		}
 		
-		$this->parameters['objectID'] = (isset($this->parameters['objectID'])) ? intval($this->parameters['objectID']) : 0;
-		if (!$this->parameters['objectID']) {
-			throw new UserInputException('objectID');
+		$this->parameters['containerID'] = (isset($this->parameters['containerID'])) ? intval($this->parameters['containerID']) : 0;
+		if (!$this->parameters['containerID']) {
+			throw new UserInputException('containerID');
 		}
 		else {
-			$this->conversation = new Conversation($this->parameters['objectID']);
+			$this->conversation = new Conversation($this->parameters['containerID']);
 			if (!$this->conversation->conversationID) {
-				throw new UserInputException('objectID');
+				throw new UserInputException('containerID');
 			}
 			else if ($this->conversation->isClosed || !Conversation::isParticipant(array($this->conversation->conversationID))) {
 				throw new PermissionDeniedException();
