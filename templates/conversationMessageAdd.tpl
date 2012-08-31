@@ -9,6 +9,9 @@
 		//<![CDATA[
 		$(function() {
 			new WCF.Message.DefaultPreview();
+			
+			{include file='__messageQuoteManager' wysiwygSelector='text' supportPaste=true}
+			new WCF.Conversation.Message.QuoteHandler($quoteManager);
 		});
 		//]]>
 	</script>

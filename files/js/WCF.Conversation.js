@@ -1197,3 +1197,18 @@ WCF.Conversation.Message.InlineEditor = WCF.Message.InlineEditor.extend({
 		return 'wcf\\data\\conversation\\message\\ConversationMessageAction';
 	}
 });
+
+/**
+ * Provides the quote manager for conversation messages.
+ * 
+ * @param	WCF.Message.Quote.Manager	quoteManager
+ * @see		WCF.Message.Quote.Handler
+ */
+WCF.Conversation.Message.QuoteHandler = WCF.Message.Quote.Handler.extend({
+	/**
+	 * @see	WCF.Message.QuoteManager.init()
+	 */
+	init: function(quoteManager) {
+		this._super(quoteManager, 'wcf\\data\\conversation\\message\\ConversationMessageAction', 'com.woltlab.wcf.conversation.message', '.jsMessage', '.messageBody > div > div.messageText');
+	}
+});

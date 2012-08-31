@@ -29,5 +29,11 @@
 			<definitionname>com.woltlab.wcf.notification.objectType</definitionname>
 			<classname>wcf\system\user\notification\object\type\ConversationMessageNotificationObjectType</classname>
 		</type>
+		
+		<type>
+			<name>com.woltlab.wcf.conversation.message</name>
+			<definitionname>com.woltlab.wcf.message.quote</definitionname>
+			<classname>wcf\system\message\quote\ConversationMessageQuoteHandler</classname>
+		</type>
 	</import>
 </data>
