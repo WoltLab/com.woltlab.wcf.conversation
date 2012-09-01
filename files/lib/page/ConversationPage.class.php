@@ -9,6 +9,7 @@ use wcf\data\conversation\ViewableConversation;
 use wcf\system\breadcrumb\Breadcrumb;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\PermissionDeniedException;
+use wcf\system\message\quote\MessageQuoteManager;
 use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
 use wcf\util\HeaderUtil;
@@ -172,6 +173,8 @@ class ConversationPage extends MultipleLinkPage {
 	 */
 	public function assignVariables() {
 		parent::assignVariables();
+		
+		MessageQuoteManager::getInstance()->assignVariables();
 		
 		WCF::getTPL()->assign(array(
 			'attachmentList' => $this->objectList->getAttachmentList(),

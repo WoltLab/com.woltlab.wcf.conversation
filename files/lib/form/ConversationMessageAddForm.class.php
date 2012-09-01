@@ -6,6 +6,7 @@ use wcf\data\conversation\Conversation;
 use wcf\system\breadcrumb\Breadcrumb;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\PermissionDeniedException;
+use wcf\system\message\quote\MessageQuoteManager;
 use wcf\system\message\QuickReplyManager;
 use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
@@ -77,6 +78,16 @@ class ConversationMessageAddForm extends MessageForm {
 	}
 	
 	/**
+	 * @see	wcf\form\IForm::readFormParameters()
+	 */
+	public function readFormParameters() {
+		parent::readFormParameters();
+		
+		// quotes
+		MessageQuoteManager::getInstance()->readFormParameters();
+	}
+	
+	/**
 	 * @see wcf\form\MessageForm::validateSubject()
 	 */
 	protected function validateSubject() {}
@@ -90,6 +101,23 @@ class ConversationMessageAddForm extends MessageForm {
 		if (empty($_POST)) {
 			// check for quick reply message
 			$this->text = QuickReplyManager::getInstance()->getMessage('conversation', $this->conversation->conversationID);
+			if (empty($this->text)) {
+				// get all message ids from current conversation
+				$sql = "SELECT	messageID
+					FROM	wbb".WBB_N."_conversation_message
+					WHERE	conversationID = ?";
+				$statement = WCF::getDB()->prepareStatement($sql);
+				$statement->execute(array($this->conversation->conversationID));
+				$messageIDs = array();
+				while ($row = $statement->fetchArray()) {
+					$messageIDs[] = $row['messageID'];
+				}
+				
+				$renderedQuotes = MessageQuoteManager::getInstance()->getQuotesByObjectIDs('com.woltlab.wcf.conversation.message', $messageIDs);
+				if (!empty($renderedQuotes)) {
+					$this->text = implode("\n", $renderedQuotes);
+				}
+			}
 		}
 		
 		// add breadcrumbs
@@ -126,6 +154,9 @@ class ConversationMessageAddForm extends MessageForm {
 		
 		$this->objectAction = new ConversationMessageAction(array(), 'create', $messageData);
 		$resultValues = $this->objectAction->executeAction();
+		
+		MessageQuoteManager::getInstance()->saved();
+		
 		$this->saved();
 		
 		// forward
@@ -141,6 +172,8 @@ class ConversationMessageAddForm extends MessageForm {
 	 */
 	public function assignVariables() {
 		parent::assignVariables();
+		
+		MessageQuoteManager::getInstance()->assignVariables();
 		
 		WCF::getTPL()->assign(array(
 			'conversation' => $this->conversation,
