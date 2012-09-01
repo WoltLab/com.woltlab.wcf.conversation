@@ -83,7 +83,7 @@
 			{assign var='objectID' value=$message->messageID}
 			
 			<li class="marginTop shadow">
-				<article class="message messageReduced">
+				<article class="message messageReduced" data-object-id="{@$message->messageID}">
 					<div>
 						<section class="messageContent">
 							<div>
