@@ -5,6 +5,7 @@
 	
 	{include file='headInclude'}
 	
+	<script type="text/javascript" src="{@$__wcf->getPath()}js/WCF.Conversation.js"></script>
 	<script type="text/javascript">
 		//<![CDATA[
 		$(function() {

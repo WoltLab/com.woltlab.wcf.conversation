@@ -26,11 +26,11 @@
 			var $inlineEditor = new WCF.Conversation.InlineEditor('.conversation');
 			$inlineEditor.setEditorHandler($editorHandler);
 			
-			{if !$conversation->isClosed}new WCF.Conversation.QuickReply();{/if}
 			new WCF.Conversation.Message.InlineEditor({@$conversation->conversationID});
 			
 			{include file='__messageQuoteManager' wysiwygSelector='text' supportPaste=true}
 			new WCF.Conversation.Message.QuoteHandler($quoteManager);
+			{if !$conversation->isClosed}new WCF.Conversation.QuickReply($quoteManager);{/if}
 		});
 		//]]>
 	</script>

@@ -104,7 +104,7 @@ class ConversationMessageAddForm extends MessageForm {
 			if (empty($this->text)) {
 				// get all message ids from current conversation
 				$sql = "SELECT	messageID
-					FROM	wbb".WBB_N."_conversation_message
+					FROM	wcf".WCF_N."_conversation_message
 					WHERE	conversationID = ?";
 				$statement = WCF::getDB()->prepareStatement($sql);
 				$statement->execute(array($this->conversation->conversationID));

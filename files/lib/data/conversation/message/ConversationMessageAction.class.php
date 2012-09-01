@@ -5,9 +5,11 @@ use wcf\data\conversation\ConversationAction;
 use wcf\data\conversation\ConversationEditor;
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\DatabaseObject;
+use wcf\data\IMessageQuoteAction;
 use wcf\system\bbcode\MessageParser;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
+use wcf\system\message\quote\MessageQuoteManager;
 use wcf\system\message\IExtendedMessageQuickReplyAction;
 use wcf\system\message\IMessageInlineEditorAction;
 use wcf\system\message\QuickReplyManager;
@@ -30,7 +32,7 @@ use wcf\util\StringUtil;
  * @subpackage	data.conversation.message
  * @category 	Community Framework
  */
-class ConversationMessageAction extends AbstractDatabaseObjectAction implements IExtendedMessageQuickReplyAction, IMessageInlineEditorAction {
+class ConversationMessageAction extends AbstractDatabaseObjectAction implements IExtendedMessageQuickReplyAction, IMessageInlineEditorAction, IMessageQuoteAction {
 	/**
 	 * @see wcf\data\AbstractDatabaseObjectAction::$className
 	 */
@@ -82,7 +84,9 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			$conversationEditor->addMessage($message);
 			
 			// fire notification event
-			UserNotificationHandler::getInstance()->fireEvent('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', new ConversationMessageUserNotificationObject($message), $converation->getParticipantIDs());
+			if (!$converation->isDraft) {
+				UserNotificationHandler::getInstance()->fireEvent('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', new ConversationMessageUserNotificationObject($message), $converation->getParticipantIDs());
+			}
 		}
 		
 		// reset storage
@@ -95,6 +99,9 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		if (isset($this->parameters['attachmentHandler']) && $this->parameters['attachmentHandler'] !== null) {
 			$this->parameters['attachmentHandler']->updateObjectID($message->messageID);
 		}
+		
+		// clear quotes
+		MessageQuoteManager::getInstance()->removeMarkedQuotes();
 		
 		// return new message
 		return $message;
@@ -305,5 +312,39 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			'object' => $conversation,
 			'messageID' => $message->messageID
 		)).'#message'.$message->messageID;
+	}
+	
+	/**
+	 * @see	wcf\data\IMessageQuoteAction::validateSaveQuote()
+	 */
+	public function validateSaveQuote() {
+		$this->parameters['message'] = (isset($this->parameters['message'])) ? StringUtil::trim($this->parameters['message']) : '';
+		if (empty($this->parameters['message'])) {
+			throw new UserInputException('message');
+		}
+		
+		if (empty($this->objects)) {
+			$this->readObjects();
+			
+			if (empty($this->objects)) {
+				throw new UserInputException('objectIDs');
+			}
+		}
+		
+		$this->message = current($this->objects);
+		if (!Conversation::isParticipant(array($this->message->conversationID))) {
+			throw new PermissionDeniedException();
+		}
+	}
+	
+	/**
+	 * @see	wcf\data\IMessageQuoteAction::saveQuote()
+	 */
+	public function saveQuote() {
+		MessageQuoteManager::getInstance()->addQuote('com.woltlab.wcf.conversation.message', $this->message->messageID, $this->parameters['message']);
+		
+		return array(
+			'count' => MessageQuoteManager::getInstance()->countQuotes()
+		);
 	}
 }

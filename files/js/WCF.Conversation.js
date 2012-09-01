@@ -1152,8 +1152,8 @@ WCF.Conversation.QuickReply = WCF.Message.QuickReply.extend({
 	/**
 	 * @see	WCF.Message.QuickReply.init()
 	 */
-	init: function() {
-		this._super(true);
+	init: function(quoteManager) {
+		this._super(true, quoteManager);
 	},
 	
 	/**
