@@ -315,6 +315,39 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
+	 * @see	wcf\data\IMessageQuoteAction::validateSaveFullQUote()
+	 */
+	public function validateSaveFullQUote() {
+		if (empty($this->objects)) {
+			$this->readObjects();
+				
+			if (empty($this->objects)) {
+				throw new UserInputException('objectIDs');
+			}
+		}
+	
+		// validate permissions
+		$this->message = current($this->objects);
+		if (!Conversation::isParticipant(array($this->message->conversationID))) {
+			throw new PermissionDeniedException();
+		}
+	}
+	
+	/**
+	 * @see	wcf\data\IMessageQuoteAction::saveFullQuote()
+	 */
+	public function saveFullQuote() {
+		if (!MessageQuoteManager::getInstance()->addQuote('com.woltlab.wcf.conversation.message', $this->message->messageID, $this->message->getExcerpt(), $this->message->getMessage())) {
+			$quoteID = MessageQuoteManager::getInstance()->getQuoteID('com.woltlab.wcf.conversation.message', $this->message->messageID, $this->message->getExcerpt(), $this->message->getMessage());
+			MessageQuoteManager::getInstance()->removeQuote($quoteID);
+		}
+	
+		return array(
+			'count' => MessageQuoteManager::getInstance()->countQuotes()
+		);
+	}
+	
+	/**
 	 * @see	wcf\data\IMessageQuoteAction::validateSaveQuote()
 	 */
 	public function validateSaveQuote() {

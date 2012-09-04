@@ -47,6 +47,7 @@
 								<nav>
 									<ul class="smallButtons">
 										{if $message->canEdit()}<li><a href="{link controller='ConversationMessageEdit' id=$message->messageID}{/link}" title="{lang}wcf.conversation.message.edit{/lang}" class="button jsMessageEditButton"><img src="{icon size='S'}edit{/icon}" alt="" class="icon16" /> <span>{lang}wcf.global.button.edit{/lang}</span></a></li>{/if}
+										<li class="jsQuoteMessage" data-object-id="{@$message->messageID}" data-is-quoted="{if $__quoteFullQuote|isset && $message->messageID|in_array:$__quoteFullQuote}1{else}0{/if}"><a href="{link controller='ConversationMessageAdd' id=$conversation->conversationID quoteMessageID=$message->messageID}{/link}" title="{lang}wcf.message.quote.quoteMessage{/lang}" class="button jsTooltip{if $__quoteFullQuote|isset && $message->messageID|in_array:$__quoteFullQuote} active{/if}"><img src="{icon size='S'}comment{/icon}" alt="" class="icon16" /> <span class="invisible">{lang}wbb.message.quote.quoteMessage{/lang}</span></a></li>
 										<li class="toTopLink"><a href="{@$__wcf->getAnchor('top')}" title="{lang}wcf.global.scrollUp{/lang}" class="button jsTooltip"><img src="{icon size='S'}circleArrowUp{/icon}" alt="" class="icon16" /> <span class="invisible">{lang}wcf.global.scrollUp{/lang}</span></a></li>
 									</ul>
 								</nav>

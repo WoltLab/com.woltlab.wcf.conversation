@@ -1,5 +1,6 @@
 <?php
 namespace wcf\form;
+use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\data\conversation\message\ViewableConversationMessageList;
 use wcf\data\conversation\Conversation;
@@ -75,6 +76,9 @@ class ConversationMessageAddForm extends MessageForm {
 		if (!$this->conversation->canRead() || $this->conversation->isClosed) {
 			throw new PermissionDeniedException();
 		}
+		
+		// quotes
+		MessageQuoteManager::getInstance()->readParameters();
 	}
 	
 	/**
@@ -102,20 +106,34 @@ class ConversationMessageAddForm extends MessageForm {
 			// check for quick reply message
 			$this->text = QuickReplyManager::getInstance()->getMessage('conversation', $this->conversation->conversationID);
 			if (empty($this->text)) {
-				// get all message ids from current conversation
-				$sql = "SELECT	messageID
-					FROM	wcf".WCF_N."_conversation_message
-					WHERE	conversationID = ?";
-				$statement = WCF::getDB()->prepareStatement($sql);
-				$statement->execute(array($this->conversation->conversationID));
-				$messageIDs = array();
-				while ($row = $statement->fetchArray()) {
-					$messageIDs[] = $row['messageID'];
+				if (MessageQuoteManager::getInstance()->getQuoteMessageID()) {
+					$message = new ConversationMessage(MessageQuoteManager::getInstance()->getQuoteMessageID());
+					if (!$message->messageID) {
+						throw new IllegalLinkException();
+					}
+					
+					if ($message->conversationID == $this->conversation->conversationID) {
+						$message->setConversation($this->conversation);
+						$this->text = MessageQuoteManager::getInstance()->renderQuote($message, $message->message);
+					}
 				}
 				
-				$renderedQuotes = MessageQuoteManager::getInstance()->getQuotesByObjectIDs('com.woltlab.wcf.conversation.message', $messageIDs);
-				if (!empty($renderedQuotes)) {
-					$this->text = implode("\n", $renderedQuotes);
+				if (empty($this->text)) {
+					// get all message ids from current conversation
+					$sql = "SELECT	messageID
+						FROM	wcf".WCF_N."_conversation_message
+						WHERE	conversationID = ?";
+					$statement = WCF::getDB()->prepareStatement($sql);
+					$statement->execute(array($this->conversation->conversationID));
+					$messageIDs = array();
+					while ($row = $statement->fetchArray()) {
+						$messageIDs[] = $row['messageID'];
+					}
+					
+					$renderedQuotes = MessageQuoteManager::getInstance()->getQuotesByObjectIDs('com.woltlab.wcf.conversation.message', $messageIDs);
+					if (!empty($renderedQuotes)) {
+						$this->text = implode("\n", $renderedQuotes);
+					}
 				}
 			}
 		}
