@@ -43,8 +43,12 @@ class ConversationMessageQuoteHandler extends AbstractMessageQuoteHandler {
 			$conversationMessage->setConversation($conversations[$conversationMessage->conversationID]);
 			$message = new QuotedMessage($conversationMessage);
 			
-			foreach ($data[$conversationMessage->messageID] as $quoteID) {
-				$message->addQuote($quoteID, MessageQuoteManager::getInstance()->getQuote($quoteID));
+			foreach (array_keys($data[$conversationMessage->messageID]) as $quoteID) {
+				$message->addQuote(
+					$quoteID,
+					MessageQuoteManager::getInstance()->getQuote($quoteID, false),	// single quote or excerpt
+					MessageQuoteManager::getInstance()->getQuote($quoteID, true)	// same as above or full quote
+				);
 			}
 			
 			$quotedMessages[] = $message;
