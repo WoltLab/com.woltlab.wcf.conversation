@@ -46,7 +46,7 @@ class ConversationLocation implements IUserOnlineLocation {
 			return '';
 		}
 		
-		return WCF::getLanguage()->getDynamicVariable($languageVariable, array('conversation' => $this->conversation[$user->objectID]));
+		return WCF::getLanguage()->getDynamicVariable($languageVariable, array('conversation' => $this->conversations[$user->objectID]));
 	}
 	
 	/**

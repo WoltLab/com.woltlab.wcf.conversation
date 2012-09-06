@@ -25,6 +25,11 @@ use wcf\util\HeaderUtil;
  */
 class ConversationMessageAddForm extends MessageForm {
 	/**
+	 * @see wcf\page\AbstractPage::$enableTracking
+	 */
+	public $enableTracking = true;
+	
+	/**
 	 * @see wcf\form\MessageForm::$attachmentObjectType
 	 */
 	public $attachmentObjectType = 'com.woltlab.wcf.conversation.message';
@@ -200,5 +205,19 @@ class ConversationMessageAddForm extends MessageForm {
 			'messages' => $this->messageList->getObjects(),
 			'attachmentList' => $this->messageList->getAttachmentList()
 		));
+	}
+	
+	/**
+	 * @see wcf\page\ITrackablePage::getObjectType()
+	 */
+	public function getObjectType() {
+		return 'com.woltlab.wcf.conversation';
+	}
+	
+	/**
+	 * @see wcf\page\ITrackablePage::getObjectID()
+	 */
+	public function getObjectID() {
+		return $this->conversationID;
 	}
 } 

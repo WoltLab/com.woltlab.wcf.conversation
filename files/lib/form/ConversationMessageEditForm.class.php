@@ -223,4 +223,18 @@ class ConversationMessageEditForm extends ConversationAddForm {
 			'attachmentList' => $this->messageList->getAttachmentList()
 		));
 	}
+	
+	/**
+	 * @see wcf\page\ITrackablePage::getObjectType()
+	 */
+	public function getObjectType() {
+		return 'com.woltlab.wcf.conversation';
+	}
+	
+	/**
+	 * @see wcf\page\ITrackablePage::getObjectID()
+	 */
+	public function getObjectID() {
+		return $this->conversationID;
+	}
 }

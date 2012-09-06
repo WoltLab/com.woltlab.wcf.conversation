@@ -27,6 +27,11 @@ use wcf\util\StringUtil;
  */
 class ConversationAddForm extends MessageForm {
 	/**
+	 * @see wcf\page\AbstractPage::$enableTracking
+	 */
+	public $enableTracking = true;
+	
+	/**
 	 * @see wcf\form\MessageForm::$attachmentObjectType
 	 */
 	public $attachmentObjectType = 'com.woltlab.wcf.conversation.message';

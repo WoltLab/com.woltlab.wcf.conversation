@@ -21,6 +21,11 @@ use wcf\system\WCF;
  */
 class ConversationListPage extends SortablePage {
 	/**
+	 * @see wcf\page\AbstractPage::$enableTracking
+	 */
+	public $enableTracking = true;
+	
+	/**
 	 * @see wcf\page\SortablePage::$defaultSortField
 	 */
 	public $defaultSortField = CONVERSATION_LIST_DEFAULT_SORT_FIELD;

@@ -26,6 +26,11 @@ use wcf\util\HeaderUtil;
  */
 class ConversationPage extends MultipleLinkPage {
 	/**
+	 * @see wcf\page\AbstractPage::$enableTracking
+	 */
+	public $enableTracking = true;
+	
+	/**
 	 * @see wcf\page\MultipleLinkPage::$itemsPerPage
 	 */
 	public $itemsPerPage = CONVERSATION_MESSAGES_PER_PAGE;
@@ -253,6 +258,20 @@ class ConversationPage extends MultipleLinkPage {
 		else {
 			$this->goToLastPost();
 		}
+	}
+	
+	/**
+	 * @see wcf\page\ITrackablePage::getObjectType()
+	 */
+	public function getObjectType() {
+		return 'com.woltlab.wcf.conversation';
+	}
+	
+	/**
+	 * @see wcf\page\ITrackablePage::getObjectID()
+	 */
+	public function getObjectID() {
+		return $this->conversationID;
 	}
 	
 }
