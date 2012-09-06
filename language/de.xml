@@ -77,4 +77,12 @@
 		<item name="wcf.user.notification.conversation.message.output"><![CDATA[Hat auf die Konversation &bdquo;<a href="{link controller='Conversation' object=$message->getConversation()}messageID={@$message->messageID}{/link}#message{@$message->messageID}">{$message->getTitle()}</a>&ldquo; geantwortet.]]></item>
 		<item name="wcf.user.notification.conversation.message.shortOutput"><![CDATA[Neue Antwort auf Konversation]]></item>		
 	</category>
+	
+	<category name="wcf.user">
+		<item name="wcf.user.usersOnline.location.ConversationListPage"><![CDATA[Konversationen]]></item>
+		<item name="wcf.user.usersOnline.location.ConversationAddForm"><![CDATA[Konversation erstellen]]></item>
+		<item name="wcf.user.usersOnline.location.ConversationPage"><![CDATA[<a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">Konversation &bdquo;{$conversation->subject}&ldquo;</a>]]></item>
+		<item name="wcf.user.usersOnline.location.ConversationMessageAddForm"><![CDATA[Antworten auf <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">Konversation &bdquo;{$conversation->subject}&ldquo;</a>]]></item>
+		<item name="wcf.user.usersOnline.location.ConversationMessageEditForm"><![CDATA[Nachricht bearbeiten in <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">Konversation &bdquo;{$conversation->subject}&ldquo;</a>]]></item>
+	</category>
 </language>
