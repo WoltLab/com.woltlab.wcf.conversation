@@ -13,11 +13,11 @@ use wcf\system\user\notification\object\ConversationUserNotificationObject;
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	system.user.notification.object.type
- * @category 	Community Framework
+ * @category	Community Framework
  */
 class ConversationNotificationObjectType extends AbstractObjectTypeProcessor implements IUserNotificationObjectType {
 	/**
-	 * @see wcf\system\user\notification\object\type\IUserNotificationObjectType::getObjectByID()
+	 * @see	wcf\system\user\notification\object\type\IUserNotificationObjectType::getObjectByID()
 	 */
 	public function getObjectByID($objectID) {
 		$object = new Conversation($objectID);
@@ -30,7 +30,7 @@ class ConversationNotificationObjectType extends AbstractObjectTypeProcessor imp
 	}
 
 	/**
-	 * @see wcf\system\user\notification\object\type\IUserNotificationObjectType::getObjectsByIDs()
+	 * @see	wcf\system\user\notification\object\type\IUserNotificationObjectType::getObjectsByIDs()
 	 */
 	public function getObjectsByIDs(array $objectIDs) {
 		$objectList = new ConversationList();

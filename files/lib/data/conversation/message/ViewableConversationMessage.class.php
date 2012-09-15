@@ -6,20 +6,20 @@ use wcf\data\user\UserProfile;
 
 class ViewableConversationMessage extends DatabaseObjectDecorator {
 	/**
-	 * @see wcf\data\DatabaseObjectDecorator::$baseClass
+	 * @see	wcf\data\DatabaseObjectDecorator::$baseClass
 	 */
 	protected static $baseClass = 'wcf\data\conversation\message\ConversationMessage';
 	
 	/**
 	 * user profile object
-	 * @var wcf\data\user\UserProfile
+	 * @var	wcf\data\user\UserProfile
 	 */
 	protected $userProfile = null;
 	
 	/**
 	 * Returns the user profile object.
 	 * 
-	 * @return wcf\data\user\UserProfile
+	 * @return	wcf\data\user\UserProfile
 	 */
 	public function getUserProfile() {
 		if ($this->userProfile === null) {

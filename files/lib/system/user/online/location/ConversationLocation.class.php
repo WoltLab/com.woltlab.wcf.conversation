@@ -7,35 +7,35 @@ use wcf\system\WCF;
 /**
  * Implementation of IUserOnlineLocation for the conversation page location.
  *
- * @author 	Marcel Werk
+ * @author	Marcel Werk
  * @copyright	2001-2012 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	system.user.online.location
- * @category 	Community Framework
+ * @category	Community Framework
  */
 class ConversationLocation implements IUserOnlineLocation {
 	/**
 	 * conversation ids
-	 * @var array<integer>
+	 * @var	array<integer>
 	 */
 	protected $conversationIDs = array();
 	
 	/**
 	 * list of conversations
-	 * @var array<wcf\data\conversation\Conversation>
+	 * @var	array<wcf\data\conversation\Conversation>
 	 */
 	protected $conversations = null;
 	
 	/**
-	 * @see wcf\system\user\online\location\IUserOnlineLocation::cache()
+	 * @see	wcf\system\user\online\location\IUserOnlineLocation::cache()
 	 */
 	public function cache(UserOnline $user) {
 		if ($user->objectID) $this->conversationIDs[] = $user->objectID;
 	}
 	
 	/**
-	 * @see wcf\system\user\online\location\IUserOnlineLocation::get()
+	 * @see	wcf\system\user\online\location\IUserOnlineLocation::get()
 	 */
 	public function get(UserOnline $user, $languageVariable = '') {
 		if ($this->conversations === null) {

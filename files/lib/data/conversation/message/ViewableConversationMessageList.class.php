@@ -10,7 +10,7 @@ use wcf\data\attachment\GroupedAttachmentList;
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation.message
- * @category 	Community Framework
+ * @category	Community Framework
  */
 class ViewableConversationMessageList extends ConversationMessageList {
 	/**
@@ -20,25 +20,25 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	
 	/**
 	 * decorator class name
-	 * @var string
+	 * @var	string
 	 */
 	public $decoratorClassName = 'wcf\data\conversation\message\ViewableConversationMessage';
 	
 	/**
 	 * attachment object ids
-	 * @var array<integer>
+	 * @var	array<integer>
 	 */
 	public $attachmentObjectIDs = array();
 	
 	/**
 	 * attachment list
-	 * @var wcf\data\attachment\GroupedAttachmentList
+	 * @var	wcf\data\attachment\GroupedAttachmentList
 	 */
 	protected $attachmentList = null;
 	
 	/**
 	 * max post time
-	 * @var integer
+	 * @var	integer
 	 */
 	protected $maxPostTime = 0;
 	
@@ -89,18 +89,18 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	}
 	
 	/**
-	 * Returns the max post time
+	 * Returns the max post time.
 	 * 
-	 * @return integer
+	 * @return	integer
 	 */
 	public function getMaxPostTime() {
 		return $this->maxPostTime;
 	}
 	
 	/**
-	 * Returns the list of attachments
+	 * Returns the list of attachments.
 	 * 
-	 * @var wcf\data\attachment\GroupedAttachmentList
+	 * @return	wcf\data\attachment\GroupedAttachmentList
 	 */
 	public function getAttachmentList() {
 		return $this->attachmentList;

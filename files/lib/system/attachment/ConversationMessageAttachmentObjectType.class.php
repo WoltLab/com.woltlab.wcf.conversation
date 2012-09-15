@@ -12,11 +12,11 @@ use wcf\system\WCF;
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	system.attachment
- * @category 	Community Framework
+ * @category	Community Framework
  */
 class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectType {
 	/**
-	 * @see wcf\system\attachment\IAttachmentObjectType::canDownload()
+	 * @see	wcf\system\attachment\IAttachmentObjectType::canDownload()
 	 */
 	public function canDownload($objectID) {
 		if ($objectID) {
@@ -29,7 +29,7 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
 	}
 	
 	/**
-	 * @see wcf\system\attachment\IAttachmentObjectType::canUpload()
+	 * @see	wcf\system\attachment\IAttachmentObjectType::canUpload()
 	 */
 	public function canUpload($objectID, $parentObjectID = 0) {
 		if ($objectID) {
@@ -41,7 +41,7 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
 	}
 	
 	/**
-	 * @see wcf\system\attachment\IAttachmentObjectType::canDelete()
+	 * @see	wcf\system\attachment\IAttachmentObjectType::canDelete()
 	 */
 	public function canDelete($objectID) {
 		if ($objectID) {

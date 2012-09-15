@@ -13,7 +13,7 @@ use wcf\system\WCF;
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation
- * @category 	Community Framework
+ * @category	Community Framework
  */
 class UserConversationList extends ConversationList {
 	/**
@@ -36,7 +36,7 @@ class UserConversationList extends ConversationList {
 	
 	/**
 	 * decorator class name
-	 * @var string
+	 * @var	string
 	 */
 	public $decoratorClassName = 'wcf\data\conversation\ViewableConversation';
 	

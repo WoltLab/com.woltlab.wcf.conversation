@@ -6,12 +6,12 @@ use wcf\data\conversation\ConversationList;
 /**
  * IMessageQuoteHandler implementation for conversation messages.
  * 
- * @author 	Alexander Ebert
+ * @author	Alexander Ebert
  * @copyright	2001-2012 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	system.message.quote
- * @category 	Community Framework
+ * @category	Community Framework
  */
 class ConversationMessageQuoteHandler extends AbstractMessageQuoteHandler {
 	/**

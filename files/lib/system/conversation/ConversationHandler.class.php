@@ -9,13 +9,13 @@ use wcf\system\WCF;
 class ConversationHandler extends SingletonFactory {
 	/**
 	 * number of unread conversations
-	 * @var array<integer>
+	 * @var	array<integer>
 	 */
 	protected $unreadConversationCount = array();
 	
 	/**
 	 * number of conversations
-	 * @var array<integer>
+	 * @var	array<integer>
 	 */
 	protected $conversationCount = array();
 	
@@ -76,7 +76,7 @@ class ConversationHandler extends SingletonFactory {
 		
 		if (!isset($this->conversationCount[$userID])) {
 			$this->conversationCount[$userID] = 0;
-		
+			
 			// load storage data
 			UserStorageHandler::getInstance()->loadStorage(array($userID));
 				
