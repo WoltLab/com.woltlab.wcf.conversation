@@ -15,7 +15,6 @@ use wcf\system\user\notification\object\ConversationUserNotificationObject;
 use wcf\system\user\notification\UserNotificationHandler;
 use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\WCF;
-use wcf\util\ArrayUtil;
 
 /**
  * Executes conversation-related actions.

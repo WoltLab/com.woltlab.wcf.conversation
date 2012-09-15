@@ -6,7 +6,6 @@ use wcf\system\breadcrumb\Breadcrumb;
 use wcf\system\conversation\ConversationHandler;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\NamedUserException;
-use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
 use wcf\system\request\LinkHandler;
 use wcf\system\user\storage\UserStorageHandler;
