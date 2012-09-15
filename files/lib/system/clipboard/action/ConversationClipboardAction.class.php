@@ -1,12 +1,9 @@
 <?php
 namespace wcf\system\clipboard\action;
-use wcf\data\conversation\Conversation;
 use wcf\system\clipboard\ClipboardEditorItem;
 use wcf\system\clipboard\action\IClipboardAction;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
-use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\SystemException;
-use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
 
 /**

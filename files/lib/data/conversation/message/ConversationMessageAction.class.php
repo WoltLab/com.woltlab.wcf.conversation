@@ -1,12 +1,10 @@
 <?php
 namespace wcf\data\conversation\message;
 use wcf\data\conversation\Conversation;
-use wcf\data\conversation\ConversationAction;
 use wcf\data\conversation\ConversationEditor;
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\DatabaseObject;
 use wcf\data\IMessageQuoteAction;
-use wcf\system\bbcode\MessageParser;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
 use wcf\system\message\quote\MessageQuoteManager;

@@ -1,8 +1,7 @@
 <?php
 namespace wcf\data\conversation;
-use wcf\data\conversation\label\ConversationLabelList;
-
 use wcf\data\conversation\label\ConversationLabel;
+use wcf\data\conversation\label\ConversationLabelList;
 use wcf\data\DatabaseObjectDecorator;
 use wcf\data\user\User;
 use wcf\data\user\UserProfile;
