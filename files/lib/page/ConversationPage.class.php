@@ -16,27 +16,27 @@ use wcf\util\HeaderUtil;
 
 /**
  * Shows a conversation.
- *
+ * 
  * @author	Marcel Werk
  * @copyright	2009-2012 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	page
- * @category 	Community Framework
+ * @category	Community Framework
  */
 class ConversationPage extends MultipleLinkPage {
 	/**
-	 * @see wcf\page\AbstractPage::$enableTracking
+	 * @see	wcf\page\AbstractPage::$enableTracking
 	 */
 	public $enableTracking = true;
 	
 	/**
-	 * @see wcf\page\MultipleLinkPage::$itemsPerPage
+	 * @see	wcf\page\MultipleLinkPage::$itemsPerPage
 	 */
 	public $itemsPerPage = CONVERSATION_MESSAGES_PER_PAGE;
 	
 	/**
-	 * @see wcf\page\MultipleLinkPage::$sortOrder
+	 * @see	wcf\page\MultipleLinkPage::$sortOrder
 	 */
 	public $sortOrder = 'ASC';
 	
@@ -46,29 +46,29 @@ class ConversationPage extends MultipleLinkPage {
 	public $objectListClassName = 'wcf\data\conversation\message\ViewableConversationMessageList';
 	
 	/**
-	 * @see wcf\page\AbstractPage::$loginRequired
+	 * @see	wcf\page\AbstractPage::$loginRequired
 	 */
 	public $loginRequired = true;
 	
 	/**
-	 * @see wcf\page\AbstractPage::$neededModules
+	 * @see	wcf\page\AbstractPage::$neededModules
 	 */
 	public $neededModules = array('MODULE_CONVERSATION');
 	
 	/**
-	 * @see wcf\page\AbstractPage::$neededPermissions
+	 * @see	wcf\page\AbstractPage::$neededPermissions
 	 */
 	public $neededPermissions = array('user.conversation.canUseConversation');
 	
 	/**
 	 * conversation id
-	 * @var integer
+	 * @var	integer
 	 */
 	public $conversationID = 0;
 	
 	/**
 	 * conversation object
-	 * @var wcf\data\conversation\Conversation
+	 * @var	wcf\data\conversation\Conversation
 	 */
 	public $conversation = null;
 	
@@ -80,13 +80,13 @@ class ConversationPage extends MultipleLinkPage {
 	
 	/**
 	 * message id
-	 * @var integer
+	 * @var	integer
 	 */
 	public $messageID = 0;
 	
 	/**
 	 * conversation message object
-	 * @var wcf\data\conversation\message\ConversationMessage
+	 * @var	wcf\data\conversation\message\ConversationMessage
 	 */
 	public $message = null;
 	
@@ -103,7 +103,7 @@ class ConversationPage extends MultipleLinkPage {
 	public $participantList = null;
 	
 	/**
-	 * @see wcf\page\IPage::readParameters()
+	 * @see	wcf\page\IPage::readParameters()
 	 */
 	public function readParameters() {
 		parent::readParameters();
@@ -135,7 +135,7 @@ class ConversationPage extends MultipleLinkPage {
 	}
 	
 	/**
-	 * @see wcf\page\MultipleLinkPage::initObjectList()
+	 * @see	wcf\page\MultipleLinkPage::initObjectList()
 	 */
 	protected function initObjectList() {
 		parent::initObjectList();
@@ -149,7 +149,7 @@ class ConversationPage extends MultipleLinkPage {
 	}
 	
 	/**
-	 * @see wcf\page\IPage::readData()
+	 * @see	wcf\page\IPage::readData()
 	 */
 	public function readData() {
 		parent::readData();
@@ -181,7 +181,7 @@ class ConversationPage extends MultipleLinkPage {
 	}
 	
 	/**
-	 * @see wcf\page\IPage::assignVariables()
+	 * @see	wcf\page\IPage::assignVariables()
 	 */
 	public function assignVariables() {
 		parent::assignVariables();
@@ -261,14 +261,14 @@ class ConversationPage extends MultipleLinkPage {
 	}
 	
 	/**
-	 * @see wcf\page\ITrackablePage::getObjectType()
+	 * @see	wcf\page\ITrackablePage::getObjectType()
 	 */
 	public function getObjectType() {
 		return 'com.woltlab.wcf.conversation';
 	}
 	
 	/**
-	 * @see wcf\page\ITrackablePage::getObjectID()
+	 * @see	wcf\page\ITrackablePage::getObjectID()
 	 */
 	public function getObjectID() {
 		return $this->conversationID;

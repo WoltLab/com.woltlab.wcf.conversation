@@ -5,7 +5,7 @@ use wcf\system\WCF;
 
 class ConversationParticipantList extends UserProfileList {
 	/**
-	 * @see wcf\data\DatabaseObjectList::$sqlLimit
+	 * @see	wcf\data\DatabaseObjectList::$sqlLimit
 	 */
 	public $sqlLimit = 0;
 	
@@ -27,7 +27,7 @@ class ConversationParticipantList extends UserProfileList {
 	}
 	
 	/**
-	 * @see wcf\data\DatabaseObjectList::countObjects()
+	 * @see	wcf\data\DatabaseObjectList::countObjects()
 	 */
 	public function countObjects() {
 		$sql = "SELECT	COUNT(*) AS count

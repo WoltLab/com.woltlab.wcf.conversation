@@ -11,36 +11,35 @@ use wcf\system\WCF;
 
 /**
  * Represents a viewable conversation.
- *
+ * 
  * @author	Marcel Werk
  * @copyright	2009-2012 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation
- * @category 	Community Framework
+ * @category	Community Framework
  */
 class ViewableConversation extends DatabaseObjectDecorator {
 	/**
-	 * Summary of the participants
-	 * 
-	 * @var summary of the participants
+	 * participant summary
+	 * @var	string
 	 */
 	protected $__participantSummary = null;
 	
 	/**
 	 * user profile object
-	 * @var wcf\data\user\UserProfile
+	 * @var	wcf\data\user\UserProfile
 	 */
 	protected $userProfile = null;
 	
 	/**
 	 * last poster's profile
-	 * @var wcf\data\user\UserProfile
+	 * @var	wcf\data\user\UserProfile
 	 */
 	protected $lastPosterProfile = null;
 	
 	/**
-	 * @see wcf\data\DatabaseObjectDecorator::$baseClass
+	 * @see	wcf\data\DatabaseObjectDecorator::$baseClass
 	 */
 	protected static $baseClass = 'wcf\data\conversation\Conversation';
 	
@@ -53,7 +52,7 @@ class ViewableConversation extends DatabaseObjectDecorator {
 	/**
 	 * Returns the user profile object.
 	 * 
-	 * @return wcf\data\user\UserProfile
+	 * @return	wcf\data\user\UserProfile
 	 */
 	public function getUserProfile() {
 		if ($this->userProfile === null) {
@@ -66,7 +65,7 @@ class ViewableConversation extends DatabaseObjectDecorator {
 	/**
 	 * Returns the last poster's profile object.
 	 * 
-	 * @return wcf\data\user\UserProfile
+	 * @return	wcf\data\user\UserProfile
 	 */
 	public function getLastPosterProfile() {
 		if ($this->lastPosterProfile === null) {
@@ -94,7 +93,7 @@ class ViewableConversation extends DatabaseObjectDecorator {
 	/**
 	 * Gets the number of pages in this conversation.
 	 *
-	 * @return integer
+	 * @return	integer
 	 */
 	public function getPages() {
 		if (WCF::getUser()->conversationMessagesPerPage) {

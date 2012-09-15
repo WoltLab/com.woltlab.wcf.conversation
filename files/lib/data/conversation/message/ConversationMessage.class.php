@@ -10,13 +10,13 @@ use wcf\util\StringUtil;
 
 /**
  * Represents a conversation message.
- *
+ * 
  * @author	Marcel Werk
  * @copyright	2009-2012 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation.message
- * @category 	Community Framework
+ * @category	Community Framework
  */
 class ConversationMessage extends DatabaseObject implements IMessage {
 	/**
@@ -31,7 +31,7 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	
 	/**
 	 * conversation object
-	 * @var wcf\data\conversation\Conversation
+	 * @var	wcf\data\conversation\Conversation
 	 */
 	protected $conversation = null;
 	
@@ -65,7 +65,7 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	/**
 	 * Returns the conversation of this message.
 	 * 
-	 * @return wcf\data\conversation\Conversation
+	 * @return	wcf\data\conversation\Conversation
 	 */
 	public function getConversation() {
 		if ($this->conversation === null) {
@@ -151,4 +151,3 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 		return $this->getFormattedMessage();
 	}
 }
-

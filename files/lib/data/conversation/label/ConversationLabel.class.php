@@ -5,13 +5,13 @@ use wcf\system\WCF;
 
 /**
  * Represents a conversation label.
- *
+ * 
  * @author	Marcel Werk
  * @copyright	2009-2012 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation.label
- * @category 	Community Framework
+ * @category	Community Framework
  */
 class ConversationLabel extends DatabaseObject {
 	/**
@@ -29,17 +29,17 @@ class ConversationLabel extends DatabaseObject {
 	 * @var	array<string>
 	 */
 	public static $availableCssClassNames = array(
-			'yellow',
-			'orange',
-			'brown',
-			'red',
-			'pink',
-			'purple',
-			'blue',
-			'green',
-			'black',
-	
-			'none' /* not a real value */
+		'yellow',
+		'orange',
+		'brown',
+		'red',
+		'pink',
+		'purple',
+		'blue',
+		'green',
+		'black',
+		
+		'none' /* not a real value */
 	);
 	
 	/**

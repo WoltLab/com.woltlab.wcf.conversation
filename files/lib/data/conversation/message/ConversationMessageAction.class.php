@@ -30,11 +30,11 @@ use wcf\util\StringUtil;
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation.message
- * @category 	Community Framework
+ * @category	Community Framework
  */
 class ConversationMessageAction extends AbstractDatabaseObjectAction implements IExtendedMessageQuickReplyAction, IMessageInlineEditorAction, IMessageQuoteAction {
 	/**
-	 * @see wcf\data\AbstractDatabaseObjectAction::$className
+	 * @see	wcf\data\AbstractDatabaseObjectAction::$className
 	 */
 	protected $className = 'wcf\data\conversation\message\ConversationMessageEditor';
 	
@@ -51,7 +51,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	public $message = null;
 	
 	/**
-	 * @see wcf\data\AbstractDatabaseObjectAction::create()
+	 * @see	wcf\data\AbstractDatabaseObjectAction::create()
 	 */
 	public function create() {
 		// count attachments
@@ -78,7 +78,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		// get thread
 		$converation = (isset($this->parameters['converation']) ? $this->parameters['converation'] : new Conversation($message->conversationID));
 		$conversationEditor = new ConversationEditor($converation);
-
+		
 		if (empty($this->parameters['isFirstPost'])) {
 			// update last message
 			$conversationEditor->addMessage($message);
@@ -108,7 +108,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see wcf\data\AbstractDatabaseObjectAction::update()
+	 * @see	wcf\data\AbstractDatabaseObjectAction::update()
 	 */
 	public function update() {
 		// count attachments
@@ -170,7 +170,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			if (!$this->message->messageID || ($this->message->conversationID != $this->conversation->conversationID)) {
 				throw new UserInputException('messageID');
 			}
-
+			
 			if (!$this->message->canEdit()) {
 				throw new PermissionDeniedException();
 			}
@@ -325,7 +325,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 				throw new UserInputException('objectIDs');
 			}
 		}
-	
+		
 		// validate permissions
 		$this->message = current($this->objects);
 		if (!Conversation::isParticipant(array($this->message->conversationID))) {

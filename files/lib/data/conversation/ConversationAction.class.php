@@ -25,11 +25,11 @@ use wcf\util\ArrayUtil;
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation
- * @category 	Community Framework
+ * @category	Community Framework
  */
 class ConversationAction extends AbstractDatabaseObjectAction {
 	/**
-	 * @see wcf\data\AbstractDatabaseObjectAction::$className
+	 * @see	wcf\data\AbstractDatabaseObjectAction::$className
 	 */
 	protected $className = 'wcf\data\conversation\ConversationEditor';
 	
@@ -40,7 +40,7 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 	protected $conversationData = array();
 	
 	/**
-	 * @see wcf\data\AbstractDatabaseObjectAction::create()
+	 * @see	wcf\data\AbstractDatabaseObjectAction::create()
 	 */
 	public function create() {
 		// create conversation
