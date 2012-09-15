@@ -11,19 +11,19 @@ use wcf\system\search\SearchResultTextParser;
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation.message
- * @category 	Community Framework
+ * @category	Community Framework
  */
 class SearchResultConversationMessage extends ViewableConversationMessage {
 	/**
 	 * conversation object
-	 * @var wcf\data\conversation\Conversation
+	 * @var	wcf\data\conversation\Conversation
 	 */
 	public $conversation = null;
 	
 	/**
 	 * Returns the conversation object.
 	 * 
-	 * @return wcf\data\conversation\Conversation
+	 * @return	wcf\data\conversation\Conversation
 	 */
 	public function getConversation() {
 		if ($this->conversation === null) {
@@ -37,7 +37,7 @@ class SearchResultConversationMessage extends ViewableConversationMessage {
 	}
 	
 	/**
-	 * @see wcf\data\conversation\message\ConversationMessage::getFormattedMessage()
+	 * @see	wcf\data\conversation\message\ConversationMessage::getFormattedMessage()
 	 */
 	public function getFormattedMessage() {
 		return SearchResultTextParser::getInstance()->parse($this->getDecoratedObject()->getFormattedMessage());

@@ -9,11 +9,11 @@ namespace wcf\data\conversation\message;
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation.message
- * @category 	Community Framework
+ * @category	Community Framework
  */
 class SearchResultConversationMessageList extends ViewableConversationMessageList {
 	/**
-	 * @see wcf\data\conversation\message\ViewableConversationMessageList::$decoratorClassName
+	 * @see	wcf\data\conversation\message\ViewableConversationMessageList::$decoratorClassName
 	 */
 	public $decoratorClassName = 'wcf\data\conversation\message\SearchResultConversationMessage';
 	

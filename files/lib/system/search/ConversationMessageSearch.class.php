@@ -13,7 +13,7 @@ use wcf\system\WCF;
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	system.search
- * @category 	Community Framework
+ * @category	Community Framework
  */
 class ConversationMessageSearch extends AbstractSearchableObjectType {
 	/**

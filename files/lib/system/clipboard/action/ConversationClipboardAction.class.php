@@ -17,7 +17,7 @@ use wcf\system\WCF;
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	system.clipboard.action
- * @category 	Community Framework
+ * @category	Community Framework
  */
 class ConversationClipboardAction implements IClipboardAction {
 	/**
@@ -104,7 +104,7 @@ class ConversationClipboardAction implements IClipboardAction {
 				if (empty($conversationIDs)) {
 					return null;
 				}
-			
+				
 				$item->addParameter('objectIDs', $conversationIDs);
 				$item->addParameter('actionName', 'open');
 				$item->addParameter('className', 'wcf\data\conversation\ConversationAction');
@@ -233,13 +233,13 @@ class ConversationClipboardAction implements IClipboardAction {
 	 */
 	protected function validateOpen() {
 		$conversationIDs = array();
-	
+		
 		foreach ($this->conversations as $conversation) {
 			if ($conversation->isClosed && $conversation->userID == WCF::getUser()->userID) {
 				$conversationIDs[] = $conversation->conversationID;
 			}
 		}
-	
+		
 		return $conversationIDs;
 	}
 	

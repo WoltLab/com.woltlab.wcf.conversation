@@ -6,13 +6,13 @@ use wcf\system\WCF;
 
 /**
  * Extends the conversation object with functions to create, update and delete conversations.
- *
+ * 
  * @author	Marcel Werk
  * @copyright	2001-2012 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation
- * @category 	Community Framework
+ * @category	Community Framework
  */
 class ConversationEditor extends DatabaseObjectEditor {
 	/**

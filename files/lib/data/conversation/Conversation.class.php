@@ -11,13 +11,13 @@ use wcf\system\WCF;
 
 /**
  * Represents a conversation.
- *
+ * 
  * @author	Marcel Werk
  * @copyright	2009-2012 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation
- * @category 	Community Framework
+ * @category	Community Framework
  */
 class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRouteController {
 	/**
@@ -63,7 +63,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	}
 	
 	/**
-	 * @see wcf\system\breadcrumb\IBreadcrumbProvider::getBreadcrumb()
+	 * @see	wcf\system\breadcrumb\IBreadcrumbProvider::getBreadcrumb()
 	 */
 	public function getBreadcrumb() {
 		return new Breadcrumb($this->subject, LinkHandler::getInstance()->getLink('Conversation', array(
@@ -74,7 +74,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	/**
 	 * Returns true, if this conversation is new for the active user.
 	 *
-	 * @return boolean
+	 * @return	boolean
 	 */
 	public function isNew() {
 		if (!$this->isDraft && $this->lastPostTime > $this->lastVisitTime) {
@@ -124,7 +124,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	/**
 	 * Returns true, if the active user has the permission to read this conversation.
 	 * 
-	 * @return boolean
+	 * @return	boolean
 	 */
 	public function canRead() {
 		if (!WCF::getUser()->userID) return false;
