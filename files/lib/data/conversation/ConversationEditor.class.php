@@ -64,13 +64,17 @@ class ConversationEditor extends DatabaseObjectEditor {
 				$statement->execute(array($this->conversationID, $userID, 0));
 			}
 		}
-		if (!empty($this->parameters['invisibleParticipants'])) {
-			foreach ($this->parameters['invisibleParticipants'] as $userID) {
-				$statement->execute(array($conversation->conversationID, $userID, 1));
+		
+		if (!empty($invisibleParticipants)) {
+			foreach ($invisibleParticipants as $userID) {
+				$statement->execute(array($this->conversationID, $userID, 1));
 			}
 		}
 	}
 	
+	/**
+	 * Updates the participant summary of this conversation.
+	 */
 	public function updateParticipantSummary() {
 		$users = array();
 		$sql = "SELECT		conversation_to_user.participantID AS userID, conversation_to_user.hideConversation, user_table.username
