@@ -17,7 +17,7 @@
 		<requiredpackage minversion="2.0.0 Alpha 1">com.woltlab.wcf.message.sidebar</requiredpackage>
 		<requiredpackage minversion="1.0.0 Alpha 1">com.woltlab.wcf.search</requiredpackage>
 	</requiredpackages>
-
+	
 	<instructions type="install">
 		<instruction type="file">files.tar</instruction>
 		<instruction type="sql">install.sql</instruction>
@@ -30,5 +30,6 @@
 		<instruction type="clipboardAction">clipboardAction.xml</instruction>
 		<instruction type="coreObject">coreObject.xml</instruction>
 		<instruction type="userNotificationEvent">userNotificationEvent.xml</instruction>
+		<instruction type="userOption">userOption.xml</instruction>
 	</instructions>
 </package>

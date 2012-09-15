@@ -36,7 +36,6 @@
 			<classname>wcf\system\message\quote\ConversationMessageQuoteHandler</classname>
 		</type>
 		
-		
 		<!-- user online locations -->
 		<type>
 			<name>com.woltlab.wcf.conversation.ConversationListPage</name>
@@ -71,5 +70,6 @@
 			<controller>wcf\form\ConversationMessageEditForm</controller>
 			<languagevariable>wcf.user.usersOnline.location.ConversationMessageEditForm</languagevariable>
 		</type>
+		<!-- /user online locations -->
 	</import>
 </data>
