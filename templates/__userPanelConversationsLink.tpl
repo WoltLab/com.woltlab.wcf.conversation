@@ -3,7 +3,7 @@
 		{* dropdown menu with the x unread conversations *}
 		<li id="unreadConversations" class="dropdown">
 			<a class="dropdownToggle" data-toggle="unreadConversations">
-				<img src="{icon size='M'}commentInverse{/icon}" alt="" class="icon24" />
+				<img src="{icon}commentInverse{/icon}" alt="" class="icon24" />
 				<span class="invisible">{lang}wcf.conversation.conversations{/lang}</span>
 				<span class="badge badgeInverse">{#$__wcf->getConversationHandler()->getUnreadConversationCount()}</span>
 			</a>
@@ -24,7 +24,7 @@
 	{else}
 		{* static link to conversations *}
 		<li>
-			<a class="jsTooltip" href="{link controller='ConversationList'}{/link}" title="{lang}wcf.conversation.conversations{/lang}"><img src="{icon size='M'}commentInverse{/icon}" alt="" class="icon24" /> <span class="invisible">{lang}wcf.conversation.conversations{/lang}</span></a>
+			<a class="jsTooltip" href="{link controller='ConversationList'}{/link}" title="{lang}wcf.conversation.conversations{/lang}"><img src="{icon}commentInverse{/icon}" alt="" class="icon24" /> <span class="invisible">{lang}wcf.conversation.conversations{/lang}</span></a>
 		</li>
 	{/if}
 {/if}
