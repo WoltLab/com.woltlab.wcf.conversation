@@ -1,5 +1,5 @@
 <?php
-namespace wbb\system\moderation\queue;
+namespace wcf\system\moderation\queue;
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationList;
 use wcf\data\conversation\message\ConversationMessage;
