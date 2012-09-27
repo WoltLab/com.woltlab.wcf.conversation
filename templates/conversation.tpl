@@ -6,6 +6,7 @@
 	{include file='headInclude'}
 	
 	<script type="text/javascript" src="{@$__wcf->getPath()}js/WCF.Conversation.js"></script>
+	<script type="text/javascript" src="{@$__wcf->getPath()}js/WCF.Moderation.js"></script>
 	<script type="text/javascript">
 		//<![CDATA[
 		$(function() {
@@ -31,6 +32,8 @@
 			{include file='__messageQuoteManager' wysiwygSelector='text' supportPaste=true}
 			new WCF.Conversation.Message.QuoteHandler($quoteManager);
 			{if !$conversation->isClosed}new WCF.Conversation.QuickReply($quoteManager);{/if}
+			
+			new WCF.Moderation.Report.Content('com.woltlab.wcf.conversation.message', '.jsReportConversationMessage');
 		});
 		//]]>
 	</script>
@@ -60,26 +63,28 @@
 
 {include file='userNotice'}
 
-<div class="container containerPadding marginTop shadow">
-	<fieldset>
-		<legend>{lang}wcf.conversation.participants{/lang}</legend>
-
-		<ul class="conversationParticipantList">
-			{foreach from=$participants item=participant}
-				<li class="box24">
-					<a href="{link controller='User' object=$participant}{/link}" class="framed">{@$participant->getAvatar()->getImageTag(24)}</a>
-					<hgroup>
-						<h1><a href="{link controller='User' object=$participant}{/link}" class="userLink{if $participant->hideConversation == 2} conversationLeft{/if}" data-user-id="{@$participant->userID}">{$participant->username}</a></h1>
-						<h2><dl class="inlineDataList">
-							<dt>{lang}wcf.conversation.lastVisitTime{/lang}</dt>
-							<dd>{if $participant->lastVisitTime}{@$participant->lastVisitTime|time}{else}-{/if}</dd>
-						</dl></h2>
-					</hgroup>
-				</li>
-			{/foreach}
-		</ul>
-	</fieldset>
-</div>
+{if !$conversation->isDraft}
+	<div class="container containerPadding marginTop shadow">
+		<fieldset>
+			<legend>{lang}wcf.conversation.participants{/lang}</legend>
+	
+			<ul class="conversationParticipantList">
+				{foreach from=$participants item=participant}
+					<li class="box24">
+						<a href="{link controller='User' object=$participant}{/link}" class="framed">{@$participant->getAvatar()->getImageTag(24)}</a>
+						<hgroup>
+							<h1><a href="{link controller='User' object=$participant}{/link}" class="userLink{if $participant->hideConversation == 2} conversationLeft{/if}" data-user-id="{@$participant->userID}">{$participant->username}</a></h1>
+							<h2><dl class="inlineDataList">
+								<dt>{lang}wcf.conversation.lastVisitTime{/lang}</dt>
+								<dd>{if $participant->lastVisitTime}{@$participant->lastVisitTime|time}{else}-{/if}</dd>
+							</dl></h2>
+						</hgroup>
+					</li>
+				{/foreach}
+			</ul>
+		</fieldset>
+	</div>
+{/if}
 
 <div class="contentNavigation">
 	{pages print=true assign=pagesLinks controller='Conversation' object=$conversation link="pageNo=%d"}

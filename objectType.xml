@@ -36,6 +36,11 @@
 			<classname>wcf\system\message\quote\ConversationMessageQuoteHandler</classname>
 		</type>
 		
+		<type>
+			<name>com.woltlab.wcf.conversation.message</name>
+			<definitionname>com.woltlab.wcf.moderation.report</definitionname>
+			<classname>wcf\system\moderation\queue\report\ConversationMessageModerationQueueReportHandler</classname>
+		</type>
 		
 		<!-- user online locations -->
 		<type>
