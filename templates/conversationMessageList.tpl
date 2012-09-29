@@ -43,7 +43,7 @@
 								{/if*}
 							</div>
 							
-							<footer class="contentOptions clearfix">
+							<footer class="messageOptions clearfix">
 								<nav>
 									<ul class="smallButtons">
 										{if $message->canEdit()}<li><a href="{link controller='ConversationMessageEdit' id=$message->messageID}{/link}" title="{lang}wcf.conversation.message.edit{/lang}" class="button jsMessageEditButton"><img src="{icon}edit{/icon}" alt="" class="icon16" /> <span>{lang}wcf.global.button.edit{/lang}</span></a></li>{/if}

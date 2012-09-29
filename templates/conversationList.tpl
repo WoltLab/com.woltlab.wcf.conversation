@@ -43,66 +43,59 @@
 <body id="tpl{$templateName|ucfirst}">
 
 {capture assign='sidebar'}
-	<nav id="sidebarContent" class="sidebarContent">
-		<ul>
-			<li class="menuGroup">
-				<h1>{lang}wcf.conversation.folders{/lang}</h1>
-				<div class="menuGroupItems">
-					<ul>
-						<li{if $filter == ''} class="active"{/if}><a href="{link controller='ConversationList'}{/link}">{lang}wcf.conversation.conversations{/lang}</a></li>
-						<li{if $filter == 'draft'} class="active"{/if}><a href="{link controller='ConversationList'}filter=draft{/link}">{lang}wcf.conversation.folder.draft{/lang}</a></li>
-						<li{if $filter == 'outbox'} class="active"{/if}><a href="{link controller='ConversationList'}filter=outbox{/link}">{lang}wcf.conversation.folder.outbox{/lang}</a></li>
-						<li{if $filter == 'hidden'} class="active"{/if}><a href="{link controller='ConversationList'}filter=hidden{/link}">{lang}wcf.conversation.folder.hidden{/lang}</a></li>
-					</ul>
-				</div>
-			</li>
+	<fieldset>
+		<legend>{lang}wcf.conversation.folders{/lang}</legend>
+		
+		<nav>
+			<ul>
+				<li{if $filter == ''} class="active"{/if}><a href="{link controller='ConversationList'}{/link}">{lang}wcf.conversation.conversations{/lang}</a></li>
+				<li{if $filter == 'draft'} class="active"{/if}><a href="{link controller='ConversationList'}filter=draft{/link}">{lang}wcf.conversation.folder.draft{/lang}</a></li>
+				<li{if $filter == 'outbox'} class="active"{/if}><a href="{link controller='ConversationList'}filter=outbox{/link}">{lang}wcf.conversation.folder.outbox{/lang}</a></li>
+				<li{if $filter == 'hidden'} class="active"{/if}><a href="{link controller='ConversationList'}filter=hidden{/link}">{lang}wcf.conversation.folder.hidden{/lang}</a></li>
+			</ul>
+		</nav>
+	</fieldset>
+	
+	<fieldset>
+		<legend>{lang}wcf.conversation.label{/lang}</legend>
+		
+		<div id="conversationLabelFilter" class="dropdown">
+			<div class="dropdownToggle" data-toggle="conversationLabelFilter">
+				{if $labelID}
+					{foreach from=$labelList item=label}
+						{if $label->labelID == $labelID}
+							<span class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}">{$label->label}</span>
+						{/if}
+					{/foreach}
+				{else}
+					<span class="badge">{lang}wcf.conversation.label.filter{/lang}</span>
+				{/if}
+			</div>
 			
-			<li class="sidebarContainer">
-				<fieldset>
-					<legend>{lang}wcf.conversation.label{/lang}</legend>
-					
-					<div id="conversationLabelFilter" class="dropdown">
-						<div class="dropdownToggle" data-toggle="conversationLabelFilter">
-							{if $labelID}
-								{foreach from=$labelList item=label}
-									{if $label->labelID == $labelID}
-										<span class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}">{$label->label}</span>
-									{/if}
-								{/foreach}
-							{else}
-								<span class="badge">{lang}wcf.conversation.label.filter{/lang}</span>
-							{/if}
-						</div>
-						
-						<ul class="dropdownMenu">
-							{foreach from=$labelList item=label}
-								<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}&labelID={@$label->labelID}{/link}"><span class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}" data-css-class-name="{if $label->cssClassName}{@$label->cssClassName}{/if}" data-label-id="{@$label->labelID}">{$label->label}</span></a></li>
-							{/foreach}
-							<li class="dropdownDivider"{if !$labelList|count} style="display: none;"{/if}></li>
-							<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}">{lang}wcf.conversation.label.disableFilter{/lang}</a></li>
-						</ul>
-					</div>
-					
-					<button id="manageLabel">{lang}wcf.conversation.label.management{/lang}</button>
-				</fieldset>
-			</li>
-			
-			<li class="sidebarContainer">
-				<fieldset>
-					<legend>{lang}wcf.conversation.quota{/lang}</legend>
-					
-					<div>
-						{* @todo: styling *}
-						{assign var='conversationCount' value=$__wcf->getConversationHandler()->getConversationCount()}
-						{assign var='maxConversationCount' value=$__wcf->session->getPermission('user.conversation.maxConversations')}
-						<meter value="{@$conversationCount}" high="{@$maxConversationCount*0.9}" max="{@$maxConversationCount}" title="{#$conversationCount/$maxConversationCount*100}%">
-							<span>{#$conversationCount/$maxConversationCount*100}%</span>
-						</progress>
-					</div>
-				</fieldset>
-			</li>
-		</ul>
-	</nav>	
+			<ul class="dropdownMenu">
+				{foreach from=$labelList item=label}
+					<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}&labelID={@$label->labelID}{/link}"><span class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}" data-css-class-name="{if $label->cssClassName}{@$label->cssClassName}{/if}" data-label-id="{@$label->labelID}">{$label->label}</span></a></li>
+				{/foreach}
+				<li class="dropdownDivider"{if !$labelList|count} style="display: none;"{/if}></li>
+				<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}">{lang}wcf.conversation.label.disableFilter{/lang}</a></li>
+			</ul>
+		</div>
+		
+		<button id="manageLabel">{lang}wcf.conversation.label.management{/lang}</button>
+	</fieldset>
+	
+	<fieldset>
+		<legend>{lang}wcf.conversation.quota{/lang}</legend>
+		
+		<div>
+			{* @todo: styling *}
+			{assign var='conversationCount' value=$__wcf->getConversationHandler()->getConversationCount()}
+			{assign var='maxConversationCount' value=$__wcf->session->getPermission('user.conversation.maxConversations')}
+			<meter value="{@$conversationCount}" high="{@$maxConversationCount*0.9}" max="{@$maxConversationCount}" title="{#$conversationCount/$maxConversationCount*100}%">
+				<span>{#$conversationCount/$maxConversationCount*100}%</span>
+			</progress>
+		</div>
+	</fieldset>
 {/capture}
 
 {include file='header' sidebarOrientation='left'}
