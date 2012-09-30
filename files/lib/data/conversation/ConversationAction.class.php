@@ -431,37 +431,13 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 	 * @return	array
 	 */
 	public function getUnreadConversations() {
-		$conditions = new PreparedStatementConditionBuilder();
-		$conditions->add('conversation.conversationID = conversation_to_user.conversationID');
-		$conditions->add('conversation_to_user.participantID = ?', array(WCF::getUser()->userID));
-		$conditions->add('conversation_to_user.hideConversation = 0');
-		$conditions->add('conversation_to_user.lastVisitTime < conversation.lastPostTime');
-		
-		$sql = "SELECT		conversation.conversationID, conversation.subject,
-					conversation.lastPostTime, conversation.lastPosterID,
-					conversation.lastPoster
-			FROM		wcf".WCF_N."_conversation_to_user conversation_to_user,
-					wcf".WCF_N."_conversation conversation
-					".$conditions."
-			ORDER BY	conversation.lastPostTime DESC";
-		$statement = WCF::getDB()->prepareStatement($sql, 5);
-		$statement->execute($conditions->getParameters());
-		$conversations = array();
-		$userIDs = array();
-		while ($row = $statement->fetchArray()) {
-			$conversations[] = $row;
-			$userIDs[] = $row['lastPosterID'];
-		}
-		
-		$userProfiles = array();
-		if (!empty($userIDs)) {
-			$userIDs = array_unique($userIDs);
-			$userProfiles = UserProfile::getUserProfiles($userIDs);
-		}
+		$conversationList = new UserConversationList(WCF::getUser()->userID);
+		$conversationList->getConditionBuilder()->add('conversation_to_user.lastVisitTime < conversation.lastPostTime');
+		$conversationList->sqlLimit = 5;
+		$conversationList->readObjects();
 		
 		WCF::getTPL()->assign(array(
-			'conversations' => $conversations,
-			'userProfiles' => $userProfiles
+			'conversations' => $conversationList->getObjects()
 		));
 		
 		return array(
