@@ -74,7 +74,7 @@
 						<a href="{link controller='User' object=$participant}{/link}" class="framed">{@$participant->getAvatar()->getImageTag(24)}</a>
 						<hgroup>
 							<h1><a href="{link controller='User' object=$participant}{/link}" class="userLink{if $participant->hideConversation == 2} conversationLeft{/if}" data-user-id="{@$participant->userID}">{$participant->username}</a></h1>
-							<h2><dl class="inlineDataList">
+							<h2><dl class="plain inlineDataList">
 								<dt>{lang}wcf.conversation.lastVisitTime{/lang}</dt>
 								<dd>{if $participant->lastVisitTime}{@$participant->lastVisitTime|time}{else}-{/if}</dd>
 							</dl></h2>

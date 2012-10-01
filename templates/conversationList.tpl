@@ -126,7 +126,7 @@
 {if !$items}
 	<p class="info">{lang}wcf.conversation.noConversations{/lang}</p>
 {else}
-	<div class="marginTop tabularBox tabularBoxTitle shadow wbbThreadList jsClipboardContainer" data-type="com.woltlab.wcf.conversation.conversation"> {*todo: use generic css class*}
+	<div class="marginTop tabularBox tabularBoxTitle shadow messageGroupList jsClipboardContainer" data-type="com.woltlab.wcf.conversation.conversation"> {*todo: use generic css class*}
 		<hgroup>
 			<h1>{lang}wcf.conversation.conversations{/lang} <span class="badge badgeInverse">{#$items}</span></h1>
 		</hgroup>
@@ -144,7 +144,7 @@
 			
 			<tbody>
 				{foreach from=$objects item=conversation}
-					<tr class="wbbThread conversation{if $conversation->isNew()} new{/if}" data-conversation-id="{@$conversation->conversationID}" data-label-ids="[ {implode from=$conversation->getAssignedLabels() item=label}{@$label->labelID}{/implode} ]" data-is-closed="{@$conversation->isClosed}" data-can-close-conversation="{if $conversation->userID == $__wcf->getUser()->userID}1{else}0{/if}">
+					<tr class="conversation{if $conversation->isNew()} new{/if}" data-conversation-id="{@$conversation->conversationID}" data-label-ids="[ {implode from=$conversation->getAssignedLabels() item=label}{@$label->labelID}{/implode} ]" data-is-closed="{@$conversation->isClosed}" data-can-close-conversation="{if $conversation->userID == $__wcf->getUser()->userID}1{else}0{/if}">
 						<td class="columnMark">
 							<label><input type="checkbox" class="jsClipboardItem" data-object-id="{@$conversation->conversationID}" /></label>
 						</td>
@@ -161,7 +161,7 @@
 								</div>
 							{/if}
 						</td>
-						<td class="columnText columnTopic">
+						<td class="columnText columnSubject">
 							<h1>
 								{hascontent}
 									<ul class="labelList">
@@ -177,7 +177,7 @@
 									<a href="{link controller='Conversation' object=$conversation}action=firstNew{/link}" class="jsTooltip" title="{lang}wcf.conversation.gotoFirstNewPost{/lang}"><img src="{icon}circleArrowDown{/icon}" alt="" class="wbbFirstNewPost icon16" /></a>
 								{/if}
 								
-								<a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>
+								<a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink messageGroupLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>
 							</h1>
 							
 							<aside class="statusDisplay">
@@ -205,7 +205,7 @@
 						<td class="columnDigits columnParticipants"><p>{#$conversation->participants}</p></td>
 						<td class="columnText columnLastPost">
 							{if $conversation->replies != 0}
-								<div class="box24 wbbLastPost">
+								<div class="box24">
 									<a href="{link controller='Conversation' object=$conversation}action=lastPost{/link}" class="framed jsTooltip" title="{lang}wcf.conversation.gotoLastPost{/lang}">{@$conversation->getLastPosterProfile()->getAvatar()->getImageTag(24)}</a>
 									
 									<hgroup>
