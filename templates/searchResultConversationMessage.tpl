@@ -24,7 +24,7 @@
 						{@$item[message]->getFormattedMessage()}
 					</div>
 					
-					<footer class="contentOptions clearfix">
+					<footer class="messageOptions clearfix">
 						<nav class="breadcrumbs marginTop">
 							<ul>
 								<li><a href="{link controller='Conversation' object=$item[message]->getConversation()}highlight={$query|urlencode}{/link}" title="{$item[message]->subject}"><span>{$item[message]->subject}</span></a> <span class="pointer"><span>&raquo;</span></span></li>
