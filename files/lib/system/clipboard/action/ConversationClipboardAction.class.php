@@ -130,6 +130,13 @@ class ConversationClipboardAction implements IClipboardAction {
 	}
 	
 	/**
+	 * @see	wcf\system\clipboard\action\IClipboardAction::getClassName()
+	 */
+	public function getClassName() {
+		return 'wcf\data\conversation\ConversationAction';
+	}
+	
+	/**
 	 * Returns a list of conversations with user participation.
 	 * 
 	 * @param	array<wcf\data\conversation\Conversation>
