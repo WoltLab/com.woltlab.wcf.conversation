@@ -434,6 +434,7 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 		$conversationList = new UserConversationList(WCF::getUser()->userID);
 		$conversationList->getConditionBuilder()->add('conversation_to_user.lastVisitTime < conversation.lastPostTime');
 		$conversationList->sqlLimit = 5;
+		$conversationList->sqlOrderBy = 'conversation.lastPostTime DESC';
 		$conversationList->readObjects();
 		
 		WCF::getTPL()->assign(array(
