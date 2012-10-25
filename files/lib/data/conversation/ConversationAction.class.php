@@ -447,6 +447,18 @@ class ConversationAction extends AbstractDatabaseObjectAction {
 	}
 	
 	/**
+	 * Does nothing.
+	 */
+	public function validateUnmarkAll() { }
+	
+	/**
+	 * Unmarks all conversations.
+	 */
+	public function unmarkAll() {
+		ClipboardHandler::getInstance()->removeItems(ClipboardHandler::getInstance()->getObjectTypeID('com.woltlab.wcf.conversation.conversation'));
+	}
+	
+	/**
 	 * Adds conversation modification data.
 	 * 
 	 * @param	wcf\data\conversation\Conversation	$conversation
