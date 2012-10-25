@@ -141,7 +141,7 @@
 	</header>
 	
 	<div>
-		<ul class="wbbThreadPostList">
+		<ul class="messageList">
 			{assign var='startIndex' value=$items}
 			{foreach from=$messages item=message}
 				{assign var='objectID' value=$message->messageID}

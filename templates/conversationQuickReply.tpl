@@ -1,5 +1,5 @@
-<li id="messageQuickReply" class="marginTop shadow javascriptOnly{if $conversation->userID == $__wcf->getUser()->userID} wbbThreadStarter{/if}" style="display: none;" data-conversation-id="{@$conversation->conversationID}" data-last-post-time="{@$conversation->lastPostTime}" data-page-no="{@$pageNo}">
-	<article class="wbbPost message messageSidebarOrientationLeft dividers">
+<li id="messageQuickReply" class="marginTop shadow javascriptOnly{if $conversation->userID == $__wcf->getUser()->userID} messageGroupStarter{/if}" style="display: none;" data-conversation-id="{@$conversation->conversationID}" data-last-post-time="{@$conversation->lastPostTime}" data-page-no="{@$pageNo}">
+	<article class="message messageSidebarOrientationLeft dividers">
 		<div>
 			{include file='messageSidebar'}
 			
@@ -14,8 +14,8 @@
 					</div>
 					
 					<div class="formSubmit">
-						<button class="buttonPrimary" data-type="save">{lang}wbb.post.button.add{/lang}</button>
-						<button data-type="extended">{lang}wbb.post.button.add.extended{/lang}</button>
+						<button class="buttonPrimary" data-type="save">{lang}wcf.global.button.submit{/lang}</button>
+						<button data-type="extended">{lang}wcf.message.button.extendedEdit{/lang}</button>
 						<button data-type="cancel">{lang}wcf.global.button.cancel{/lang}</button>
 					</div>
 				</div>

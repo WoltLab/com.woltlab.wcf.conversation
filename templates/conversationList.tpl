@@ -174,7 +174,7 @@
 								{/hascontent}
 								
 								{if $conversation->isNew()}
-									<a href="{link controller='Conversation' object=$conversation}action=firstNew{/link}" class="jsTooltip" title="{lang}wcf.conversation.gotoFirstNewPost{/lang}"><img src="{icon}circleArrowDown{/icon}" alt="" class="wbbFirstNewPost icon16" /></a>
+									<a href="{link controller='Conversation' object=$conversation}action=firstNew{/link}" class="jsTooltip" title="{lang}wcf.conversation.gotoFirstNewPost{/lang}"><img src="{icon}circleArrowDown{/icon}" alt="" class="firstNewPost icon16" /></a>
 								{/if}
 								
 								<a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink messageGroupLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>
