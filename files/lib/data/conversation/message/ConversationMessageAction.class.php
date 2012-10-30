@@ -4,12 +4,12 @@ use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationEditor;
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\DatabaseObject;
+use wcf\data\IExtendedMessageQuickReplyAction;
+use wcf\data\IMessageInlineEditorAction;
 use wcf\data\IMessageQuoteAction;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
 use wcf\system\message\quote\MessageQuoteManager;
-use wcf\system\message\IExtendedMessageQuickReplyAction;
-use wcf\system\message\IMessageInlineEditorAction;
 use wcf\system\message\QuickReplyManager;
 use wcf\system\package\PackageDependencyHandler;
 use wcf\system\request\LinkHandler;
@@ -120,14 +120,14 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\system\message\IMessageQuickReply::validateQuickReply()
+	 * @see	wcf\data\IMessageQuickReply::validateQuickReply()
 	 */
 	public function validateQuickReply() {
 		QuickReplyManager::getInstance()->validateParameters($this, $this->parameters, 'wcf\data\conversation\Conversation');
 	}
 	
 	/**
-	 * @see	wcf\system\message\IMessageQuickReply::quickReply()
+	 * @see	wcf\data\IMessageQuickReply::quickReply()
 	 */
 	public function quickReply() {
 		return QuickReplyManager::getInstance()->createMessage(
@@ -141,7 +141,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\system\message\IExtendedMessageQuickReplyAction::validateJumpToExtended()
+	 * @see	wcf\data\IExtendedMessageQuickReplyAction::validateJumpToExtended()
 	 */
 	public function validateJumpToExtended() {
 		if (!isset($this->parameters['message'])) {
@@ -176,7 +176,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\system\message\IExtendedMessageQuickReplyAction::jumpToExtended()
+	 * @see	wcf\data\IExtendedMessageQuickReplyAction::jumpToExtended()
 	 */
 	public function jumpToExtended() {
 		// quick reply
@@ -197,7 +197,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\system\message\IMessageInlineEditorAction::validateBeginEdit()
+	 * @see	wcf\data\IMessageInlineEditorAction::validateBeginEdit()
 	 */
 	public function validateBeginEdit() {
 		$this->parameters['containerID'] = (isset($this->parameters['containerID'])) ? intval($this->parameters['containerID']) : 0;
@@ -232,7 +232,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\system\message\IMessageInlineEditorAction::beginEdit()
+	 * @see	wcf\data\IMessageInlineEditorAction::beginEdit()
 	 */
 	public function beginEdit() {
 		WCF::getTPL()->assign(array(
@@ -248,7 +248,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\system\message\IMessageInlineEditorAction::validateSave()
+	 * @see	wcf\data\IMessageInlineEditorAction::validateSave()
 	 */
 	public function validateSave() {
 		if (!isset($this->parameters['data']) || !isset($this->parameters['data']['message']) || empty($this->parameters['data']['message'])) {
@@ -259,7 +259,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\system\message\IMessageInlineEditorAction::save()
+	 * @see	wcf\data\IMessageInlineEditorAction::save()
 	 */
 	public function save() {
 		$messageEditor = new ConversationMessageEditor($this->message);
@@ -277,7 +277,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\system\message\IMessageQuickReply::validateContainer()
+	 * @see	wcf\data\IMessageQuickReply::validateContainer()
 	 */
 	public function validateContainer(DatabaseObject $conversation) {
 		if (!$conversation->conversationID) {
@@ -289,7 +289,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\system\message\IMessageQuickReply::getPageNo()
+	 * @see	wcf\data\IMessageQuickReply::getPageNo()
 	 */
 	public function getPageNo(DatabaseObject $conversation) {
 		$sql = "SELECT	COUNT(*) AS count
@@ -303,7 +303,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\system\message\IMessageQuickReply::getRedirectUrl()
+	 * @see	wcf\data\IMessageQuickReply::getRedirectUrl()
 	 */
 	public function getRedirectUrl(DatabaseObject $conversation, DatabaseObject $message) {
 		return LinkHandler::getInstance()->getLink('Conversation', array(
