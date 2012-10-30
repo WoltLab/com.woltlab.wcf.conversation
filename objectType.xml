@@ -76,5 +76,6 @@
 			<controller>wcf\form\ConversationMessageEditForm</controller>
 			<languagevariable>wcf.user.usersOnline.location.ConversationMessageEditForm</languagevariable>
 		</type>
+		<!-- /user online locations -->
 	</import>
 </data>
