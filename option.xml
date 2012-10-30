@@ -7,7 +7,7 @@
 				<options>module_conversation</options>
 			</category>
 		</categories>
-
+		
 		<options>
 			<option name="module_conversation">
 				<categoryname>module.content</categoryname>
@@ -30,8 +30,8 @@
 				<categoryname>message.conversation</categoryname>
 				<optiontype>select</optiontype>
 				<defaultvalue>lastPostTime</defaultvalue>
-				<selectoptions><![CDATA[subject:wcf.pm.subject
-lastPostTime:wcf.pm.date]]></selectoptions>
+				<selectoptions><![CDATA[subject:wcf.conversation.subject
+lastPostTime:wcf.conversation.lastPostTime]]></selectoptions>
 			</option>
 			<option name="conversation_list_default_sort_order">
 				<categoryname>message.conversation</categoryname>
