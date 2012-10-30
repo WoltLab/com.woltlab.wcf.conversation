@@ -1,6 +1,7 @@
 <?php
 namespace wcf\data\conversation;
 use wcf\data\AbstractDatabaseObjectAction;
+use wcf\data\IClipboardAction;
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\data\conversation\message\ViewableConversationMessageList;
@@ -26,7 +27,7 @@ use wcf\system\WCF;
  * @subpackage	data.conversation
  * @category	Community Framework
  */
-class ConversationAction extends AbstractDatabaseObjectAction {
+class ConversationAction extends AbstractDatabaseObjectAction implements IClipboardAction {
 	/**
 	 * @see	wcf\data\AbstractDatabaseObjectAction::$className
 	 */
