@@ -1,7 +1,7 @@
 <li id="messageQuickReply" class="marginTop shadow javascriptOnly{if $conversation->userID == $__wcf->getUser()->userID} messageGroupStarter{/if}" style="display: none;" data-conversation-id="{@$conversation->conversationID}" data-last-post-time="{@$conversation->lastPostTime}" data-page-no="{@$pageNo}">
 	<article class="message messageSidebarOrientationLeft dividers">
 		<div>
-			{include file='messageSidebar'}
+			{include file='messageSidebar' userProfile=$__wcf->getUserProfileHandler()}
 			
 			<section class="messageContent messageQuickReplyContent">
 				<div>
