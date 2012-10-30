@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/maelstrom/language.xsd" languagecode="en">
+	<category name="wcf.acp.option">
+		<item name="wcf.acp.option.category.message.conversation"><![CDATA[Conversations]]></item>
+		<item name="wcf.acp.option.conversation_list_default_sort_field"><![CDATA[Sort by]]></item>
+		<item name="wcf.acp.option.conversation_list_default_sort_order"><![CDATA[Order]]></item>
+		<item name="wcf.acp.option.conversation_messages_per_page"><![CDATA[Messages per page]]></item>
+		<item name="wcf.acp.option.conversations_per_page"><![CDATA[Conversations per page]]></item>
+		<item name="wcf.acp.option.module_conversation"><![CDATA[Conversations]]></item>
+	</category>
+	
 	<category name="wcf.clipboard">
 		<item name="wcf.clipboard.label.conversation.marked"><![CDATA[{if $count == 1}One Conversation{else}{#$count} Conversations{/if} Selected]]></item>
 	</category>
@@ -14,38 +23,38 @@
 	</category>
 	
 	<category name="wcf.conversation">
-		<item name="wcf.conversation.conversations"><![CDATA[Conversations]]></item>
-		<item name="wcf.conversation.subject"><![CDATA[Subject]]></item>
-		<item name="wcf.conversation.replies"><![CDATA[Replies]]></item>
-		<item name="wcf.conversation.participants"><![CDATA[Participants]]></item>
-		<item name="wcf.conversation.lastPostTime"><![CDATA[Last Reply]]></item>
-		<item name="wcf.conversation.message.new"><![CDATA[New]]></item>
 		<item name="wcf.conversation.add"><![CDATA[Create New Conversation]]></item>
 		<item name="wcf.conversation.button.add"><![CDATA[New Conversation]]></item>
-		<item name="wcf.conversation.message.add"><![CDATA[Reply to Conversation]]></item>
-		<item name="wcf.conversation.message.button.add"><![CDATA[Reply]]></item>
+		<item name="wcf.conversation.button.saveAsDraft"><![CDATA[Save as Draft]]></item>
+		<item name="wcf.conversation.conversations"><![CDATA[Conversations]]></item>
 		<item name="wcf.conversation.folders"><![CDATA[Folder]]></item>
 		<item name="wcf.conversation.folder.draft"><![CDATA[Drafts]]></item>
 		<item name="wcf.conversation.folder.outbox"><![CDATA[Sent Items]]></item>
 		<item name="wcf.conversation.folder.hidden"><![CDATA[Hidden]]></item>
-		<item name="wcf.conversation.quota"><![CDATA[Quota]]></item>
-		<item name="wcf.conversation.noConversations"><![CDATA[There are no conversations.]]></item>
 		<item name="wcf.conversation.hideConversation"><![CDATA[Change Participation]]></item>
 		<item name="wcf.conversation.hideConversation.leave"><![CDATA[Hide Cconversation]]></item>
 		<item name="wcf.conversation.hideConversation.leave.description"><![CDATA[The conversation will be hidden until one of the participants writes a new reply.]]></item>
 		<item name="wcf.conversation.hideConversation.leavePermanently"><![CDATA[Leave Conversation]]></item>
 		<item name="wcf.conversation.hideConversation.leavePermanently.description"><![CDATA[You will permanently leave the conversation.]]></item>
 		<item name="wcf.conversation.hideConversation.restore"><![CDATA[Restore Conversation]]></item>
-		<item name="wcf.conversation.leave.title"><![CDATA[Change Participation]]></item>
 		<item name="wcf.conversation.information"><![CDATA[Information]]></item>
-		<item name="wcf.conversation.message"><![CDATA[Message]]></item>
 		<item name="wcf.conversation.invisibleParticipants"><![CDATA[Invisible Participants]]></item>
-		<item name="wcf.conversation.participants.description"><![CDATA[Separate names with a comma.]]></item>
-		<item name="wcf.conversation.button.saveAsDraft"><![CDATA[Save as Draft]]></item>
-		<item name="wcf.conversation.message.add.previousPosts"><![CDATA[Previous Message{if $items != 1}s ({#$items}){/if}]]></item>
 		<item name="wcf.conversation.invisibleParticipants.description"><![CDATA[Invisible participants are not visible for any other participant. Separate names with a comma.]]></item>
-		<item name="wcf.conversation.showAll"><![CDATA[Show All Conversations]]></item>
+		<item name="wcf.conversation.lastPostTime"><![CDATA[Last Reply]]></item>
 		<item name="wcf.conversation.lastVisitTime"><![CDATA[Last Visit]]></item>
+		<item name="wcf.conversation.leave.title"><![CDATA[Change Participation]]></item>
+		<item name="wcf.conversation.message"><![CDATA[Message]]></item>
+		<item name="wcf.conversation.message.add"><![CDATA[Reply to Conversation]]></item>
+		<item name="wcf.conversation.message.add.previousPosts"><![CDATA[Previous Message{if $items != 1}s ({#$items}){/if}]]></item>
+		<item name="wcf.conversation.message.button.add"><![CDATA[Reply]]></item>
+		<item name="wcf.conversation.message.new"><![CDATA[New]]></item>
+		<item name="wcf.conversation.noConversations"><![CDATA[There are no conversations.]]></item>
+		<item name="wcf.conversation.participants"><![CDATA[Participants]]></item>
+		<item name="wcf.conversation.participants.description"><![CDATA[Separate names with a comma.]]></item>
+		<item name="wcf.conversation.quota"><![CDATA[Quota]]></item>
+		<item name="wcf.conversation.replies"><![CDATA[Replies]]></item>
+		<item name="wcf.conversation.subject"><![CDATA[Subject]]></item>
+		<item name="wcf.conversation.showAll"><![CDATA[Show All Conversations]]></item>
 	</category>
 	
 	<category name="wcf.conversation.edit">
@@ -72,9 +81,22 @@
 	</category>
 	
 	<category name="wcf.user.notification">
-		<item name="wcf.user.notification.conversation.output"><![CDATA[Started the conversation &ldquo;<a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a>&rdquo;.]]></item>
-		<item name="wcf.user.notification.conversation.shortOutput"><![CDATA[New Conversation]]></item>
 		<item name="wcf.user.notification.conversation.message.output"><![CDATA[Replied to the conversation &ldquo;<a href="{link controller='Conversation' object=$message->getConversation()}messageID={@$message->messageID}{/link}#message{@$message->messageID}">{$message->getTitle()}</a>&rdquo;.]]></item>
 		<item name="wcf.user.notification.conversation.message.shortOutput"><![CDATA[New Reply to Conversation]]></item>		
+		<item name="wcf.user.notification.conversation.output"><![CDATA[Started the conversation &ldquo;<a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a>&rdquo;.]]></item>
+		<item name="wcf.user.notification.conversation.shortOutput"><![CDATA[New Conversation]]></item>
+	</category>
+	
+	<category name="wcf.user.option">
+		<item name="wcf.user.option.conversationMessagesPerPage"><![CDATA[Messages per page]]></item>
+		<item name="wcf.user.option.conversationsPerPage"><![CDATA[Conversations per page]]></item>
+	</category>
+	
+	<category name="wcf.user">
+		<item name="wcf.user.usersOnline.location.ConversationAddForm"><![CDATA[Starting conversation]]></item>
+		<item name="wcf.user.usersOnline.location.ConversationListPage"><![CDATA[Conversations]]></item>
+		<item name="wcf.user.usersOnline.location.ConversationMessageAddForm"><![CDATA[Replying to <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">Conversation &bdquo;{$conversation->subject}&ldquo;</a>]]></item>
+		<item name="wcf.user.usersOnline.location.ConversationMessageEditForm"><![CDATA[Editing message in <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">Conversation &bdquo;{$conversation->subject}&ldquo;</a>]]></item>
+		<item name="wcf.user.usersOnline.location.ConversationPage"><![CDATA[<a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">Conversation &bdquo;{$conversation->subject}&ldquo;</a>]]></item>
 	</category>
 </language>
