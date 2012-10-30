@@ -33,7 +33,7 @@ class ConversationClipboardAction implements IClipboardAction {
 	/**
 	 * @see	wcf\system\clipboard\action\IClipboardAction::execute()
 	 */
-	public function execute(array $objects, $actionName, $typeData = array()) {
+	public function execute(array $objects, $actionName, array $typeData = array()) {
 		if ($this->conversations === null) {
 			// validate conversations
 			$this->validateParticipation($objects);
@@ -127,6 +127,13 @@ class ConversationClipboardAction implements IClipboardAction {
 		}
 		
 		return $item;
+	}
+	
+	/**
+	 * @see	wcf\system\clipboard\action\IClipboardAction::getClassName()
+	 */
+	public function getClassName() {
+		return 'wcf\data\conversation\ConversationAction';
 	}
 	
 	/**

@@ -341,7 +341,8 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		}
 	
 		return array(
-			'count' => MessageQuoteManager::getInstance()->countQuotes()
+			'count' => MessageQuoteManager::getInstance()->countQuotes(),
+			'fullQuoteMessageIDs' => MessageQuoteManager::getInstance()->getFullQuoteObjectIDs(array('com.woltlab.wcf.conversation.message'))
 		);
 	}
 	
@@ -375,7 +376,8 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		MessageQuoteManager::getInstance()->addQuote('com.woltlab.wcf.conversation.message', $this->message->messageID, $this->parameters['message']);
 		
 		return array(
-			'count' => MessageQuoteManager::getInstance()->countQuotes()
+			'count' => MessageQuoteManager::getInstance()->countQuotes(),
+			'fullQuoteMessageIDs' => MessageQuoteManager::getInstance()->getFullQuoteObjectIDs(array('com.woltlab.wcf.conversation.message'))
 		);
 	}
 }

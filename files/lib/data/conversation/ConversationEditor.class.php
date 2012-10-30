@@ -59,6 +59,8 @@ class ConversationEditor extends DatabaseObjectEditor {
 					(conversationID, participantID, isInvisible)
 			VALUES		(?, ?, ?)";
 		$statement = WCF::getDB()->prepareStatement($sql);
+		
+		WCF::getDB()->beginTransaction();
 		if (!empty($participants)) {
 			foreach ($participants as $userID) {
 				$statement->execute(array($this->conversationID, $userID, 0));
@@ -70,6 +72,7 @@ class ConversationEditor extends DatabaseObjectEditor {
 				$statement->execute(array($this->conversationID, $userID, 1));
 			}
 		}
+		WCF::getDB()->commitTransaction();
 	}
 	
 	/**

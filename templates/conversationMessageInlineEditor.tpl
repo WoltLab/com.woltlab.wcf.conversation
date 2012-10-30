@@ -3,7 +3,7 @@
 	
 	<div class="formSubmit">
 		<button class="buttonPrimary" data-type="save">{lang}wcf.global.button.submit{/lang}</button>
-		<button data-type="extended">{lang}wbb.post.edit.button.extended{/lang}</button>
+		<button data-type="extended">{lang}wcf.message.button.extendedEdit{/lang}</button>
 		<button data-type="cancel">{lang}wcf.global.button.cancel{/lang}</button>
 	</div>
 	

@@ -77,7 +77,7 @@
 </header>
 
 <div>
-	<ul class="wbbThreadPostList">
+	<ul class="messageList">
 		{assign var='startIndex' value=$items}
 		{foreach from=$messages item=message}
 			{assign var='objectID' value=$message->messageID}
@@ -111,10 +111,10 @@
 										{include file='attachments'}
 									</div>
 									
-									<footer class="contentOptions clearfix">
+									<footer class="messageOptions clearfix">
 										<nav>
 											<ul class="smallButtons">
-												<li class="toTopLink"><a href="{@$__wcf->getAnchor('top')}" title="{lang}wcf.global.scrollUp{/lang}" class="button jsTooltip"><img src="{icon size='S'}circleArrowUp{/icon}" alt="" class="icon16" /> <span class="invisible">{lang}wcf.global.scrollUp{/lang}</span></a></li>
+												<li class="toTopLink"><a href="{@$__wcf->getAnchor('top')}" title="{lang}wcf.global.scrollUp{/lang}" class="button jsTooltip"><img src="{icon}circleArrowUp{/icon}" alt="" class="icon16" /> <span class="invisible">{lang}wcf.global.scrollUp{/lang}</span></a></li>
 											</ul>
 										</nav>
 									</footer>

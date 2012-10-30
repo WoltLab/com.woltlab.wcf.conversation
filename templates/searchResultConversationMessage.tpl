@@ -24,7 +24,7 @@
 						{@$item[message]->getFormattedMessage()}
 					</div>
 					
-					<footer class="contentOptions clearfix">
+					<footer class="messageOptions clearfix">
 						<nav class="breadcrumbs marginTop">
 							<ul>
 								<li><a href="{link controller='Conversation' object=$item[message]->getConversation()}highlight={$query|urlencode}{/link}" title="{$item[message]->subject}"><span>{$item[message]->subject}</span></a> <span class="pointer"><span>&raquo;</span></span></li>
@@ -33,7 +33,7 @@
 						
 						<nav>
 							<ul class="smallButtons">
-								<li class="toTopLink"><a href="{@$__wcf->getAnchor('top')}" title="{lang}wcf.global.scrollUp{/lang}" class="button jsTooltip"><img src="{icon size='S'}circleArrowUp{/icon}" alt="" /> <span class="invisible">{lang}wcf.global.scrollUp{/lang}</span></a></li>
+								<li class="toTopLink"><a href="{@$__wcf->getAnchor('top')}" title="{lang}wcf.global.scrollUp{/lang}" class="button jsTooltip"><img src="{icon}circleArrowUp{/icon}" alt="" /> <span class="invisible">{lang}wcf.global.scrollUp{/lang}</span></a></li>
 							</ul>
 						</nav>
 					</footer>
