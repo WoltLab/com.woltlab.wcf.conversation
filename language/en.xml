@@ -29,7 +29,7 @@
 		<item name="wcf.conversation.conversations"><![CDATA[Conversations]]></item>
 		<item name="wcf.conversation.folders"><![CDATA[Folder]]></item>
 		<item name="wcf.conversation.folder.draft"><![CDATA[Drafts]]></item>
-		<item name="wcf.conversation.folder.outbox"><![CDATA[Sent Items]]></item>
+		<item name="wcf.conversation.folder.outbox"><![CDATA[Started]]></item>
 		<item name="wcf.conversation.folder.hidden"><![CDATA[Hidden]]></item>
 		<item name="wcf.conversation.hideConversation"><![CDATA[Change Participation]]></item>
 		<item name="wcf.conversation.hideConversation.leave"><![CDATA[Hide Cconversation]]></item>

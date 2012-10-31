@@ -30,7 +30,7 @@
 		<item name="wcf.conversation.folders"><![CDATA[Ordner]]></item>
 		<item name="wcf.conversation.folder.draft"><![CDATA[Entwürfe]]></item>
 		<item name="wcf.conversation.folder.hidden"><![CDATA[Ausgeblendet]]></item>
-		<item name="wcf.conversation.folder.outbox"><![CDATA[Versendet]]></item>
+		<item name="wcf.conversation.folder.outbox"><![CDATA[Gestartet]]></item>
 		<item name="wcf.conversation.hideConversation"><![CDATA[Teilnahme verwalten]]></item>
 		<item name="wcf.conversation.hideConversation.leave"><![CDATA[Konversation ausblenden]]></item>
 		<item name="wcf.conversation.hideConversation.leave.description"><![CDATA[Die Konversation wird bis zu einer neuen Antwort nicht mehr als aktive Konversation gelistet.]]></item>
