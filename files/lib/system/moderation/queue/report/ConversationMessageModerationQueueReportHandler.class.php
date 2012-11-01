@@ -1,13 +1,14 @@
 <?php
-namespace wcf\system\moderation\queue;
+namespace wcf\system\moderation\queue\report;
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationList;
 use wcf\data\conversation\message\ConversationMessage;
+use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\data\conversation\message\ConversationMessageList;
 use wcf\data\conversation\message\ViewableConversationMessage;
 use wcf\data\moderation\queue\ModerationQueue;
+use wcf\data\moderation\queue\ViewableModerationQueue;
 use wcf\system\exception\SystemException;
-use wcf\system\moderation\queue\report\IModerationQueueReportHandler;
 use wcf\system\moderation\queue\ModerationQueueManager;
 use wcf\system\WCF;
 
@@ -71,7 +72,6 @@ class ConversationMessageModerationQueueReportHandler implements IModerationQueu
 	 * @see	wcf\system\moderation\queue\report\IModerationQueueReportHandler::getReportedContent()
 	 */
 	public function getReportedContent(ViewableModerationQueue $queue) {
-		throw new SystemException("getReportedContent()");
 		WCF::getTPL()->assign(array(
 			'message' => new ViewableConversationMessage($queue->getAffectedObject())
 		));
@@ -160,6 +160,9 @@ class ConversationMessageModerationQueueReportHandler implements IModerationQueu
 	 * @see	wcf\system\moderation\queue\IModerationQueueHandler::removeContent()
 	 */
 	public function removeContent(ModerationQueue $queue, $message) {
-		throw new SystemException("Conversation message cannot be deleted");
+		if ($this->isValid($queue->objectID)) {
+			$messageAction = new ConversationMessageAction(array($this->getMessage($queue->objectID)), 'delete');
+			$messageAction->executeAction();
+		}
 	}
 }

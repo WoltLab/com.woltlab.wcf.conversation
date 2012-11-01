@@ -120,6 +120,47 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
+	 * @see	wcf\data\AbstractDatabaseObjectAction::delete()
+	 */
+	public function delete() {
+		$count = parent::delete();
+		
+		if ($count) {
+			$conversationID = current($this->objects);
+			$conversationEditor = new ConversationEditor(new Conversation($conversationID));
+			
+			// reset user storage
+			UserStorageHandler::getInstance()->reset($conversationEditor->getParticipantIDs(), 'unreadConversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
+			
+			// check if last message was deleted
+			if (($conversationEditor->replies - $count) == -1) {
+				// remove conversation
+				$conversationEditor->delete();
+			}
+			else {
+				// check if first message was deleted
+				$sql = "SELECT		messageID
+					FROM		wcf".WCF_N."_conversation_message
+					WHERE		conversationID = ?
+					ORDER BY	time DESC";
+				$statement = WCF::getDB()->prepareStatement($sql);
+				$statement->execute(array($conversationEditor->conversationID));
+				$row = $statement->fetchArray();
+				
+				$data = array('replies' => ($conversationEditor->replies - $count));
+				if ($conversationEditor->firstMessageID != $row['messageID']) {
+					$data['firstMessageID'] = $row['messageID'];
+				}
+				
+				// update conversation data
+				$conversationEditor->update($data);
+			}
+		}
+		
+		return $count;
+	}
+	
+	/**
 	 * @see	wcf\data\IMessageQuickReply::validateQuickReply()
 	 */
 	public function validateQuickReply() {
