@@ -54,7 +54,6 @@
 		<item name="wcf.conversation.quota"><![CDATA[Speicherplatz]]></item>
 		<item name="wcf.conversation.replies"><![CDATA[Antworten]]></item>
 		<item name="wcf.conversation.showAll"><![CDATA[Alle Konversationen anzeigen]]></item>
-		<item name="wcf.conversation.subject"><![CDATA[Betreff]]></item>
 	</category>
 	
 	<category name="wcf.conversation.edit">

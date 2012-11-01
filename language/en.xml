@@ -53,7 +53,6 @@
 		<item name="wcf.conversation.participants.description"><![CDATA[Separate names with a comma.]]></item>
 		<item name="wcf.conversation.quota"><![CDATA[Quota]]></item>
 		<item name="wcf.conversation.replies"><![CDATA[Replies]]></item>
-		<item name="wcf.conversation.subject"><![CDATA[Subject]]></item>
 		<item name="wcf.conversation.showAll"><![CDATA[Show All Conversations]]></item>
 	</category>
 	

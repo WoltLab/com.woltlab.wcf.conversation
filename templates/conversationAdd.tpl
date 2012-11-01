@@ -81,7 +81,7 @@
 			</dl>
 			
 			<dl{if $errorField == 'subject'} class="formError"{/if}>
-				<dt><label for="subject">{lang}wcf.conversation.subject{/lang}</label></dt>
+				<dt><label for="subject">{lang}wcf.global.subject{/lang}</label></dt>
 				<dd>
 					<input type="text" id="subject" name="subject" value="{$subject}" required="true" class="long" />
 					{if $errorField == 'subject'}
