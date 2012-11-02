@@ -169,7 +169,7 @@ class ConversationMessageEditForm extends ConversationAddForm {
 	public function readData() {
 		MessageForm::readData();
 		
-		if (!count($_POST)) {
+		if (empty($_POST)) {
 			$this->text = $this->message->message;
 			
 			if ($this->isFirstMessage) {

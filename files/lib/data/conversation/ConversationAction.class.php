@@ -145,7 +145,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			$this->parameters['visitTime'] = TIME_NOW;
 		}
 		
-		if (!count($this->objects)) {
+		if (empty($this->objects)) {
 			$this->readObjects();
 		}
 		
@@ -230,7 +230,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 */
 	public function validateGetMessagePreview() {
 		// read data
-		if (!count($this->objects)) {
+		if (empty($this->objects)) {
 			$this->readObjects();
 		}
 		// @todo: implement me
