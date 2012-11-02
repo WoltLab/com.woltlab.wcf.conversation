@@ -130,7 +130,7 @@ class ConversationAddForm extends MessageForm {
 		$intersection = array_intersect($this->participantIDs, $this->invisibleParticipantIDs);
 		if (!empty($intersection)) $this->invisibleParticipantIDs = array_diff($this->invisibleParticipantIDs, $intersection);
 		
-		if (!count($this->participantIDs) && !count($this->invisibleParticipantIDs) && !$this->draft) {
+		if (empty($this->participantIDs) && empty($this->invisibleParticipantIDs) && !$this->draft) {
 			throw new UserInputException('participants');
 		}
 		
@@ -187,7 +187,7 @@ class ConversationAddForm extends MessageForm {
 			}
 		}
 		
-		if (count($error)) {
+		if (!empty($error)) {
 			throw new UserInputException($field, $error);
 		}
 		
