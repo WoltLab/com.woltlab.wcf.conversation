@@ -18,12 +18,12 @@ use wcf\system\WCF;
 class ConversationMessageSearch extends AbstractSearchableObjectType {
 	/**
 	 * message data cache
-	 * @var array
+	 * @var	array
 	 */
 	public $messageCache = array();
 	
 	/**
-	 * @see wcf\system\search\ISearchableObjectType::cacheMessageData()
+	 * @see	wcf\system\search\ISearchableObjectType::cacheMessageData()
 	 */
 	public function cacheMessageData(array $objectIDs, array $additionalData = null) {
 		$messageList = new SearchResultConversationMessageList();
@@ -35,7 +35,7 @@ class ConversationMessageSearch extends AbstractSearchableObjectType {
 	}
 	
 	/**
-	 * @see wcf\system\search\ISearchableObjectType::cacheMessageData()
+	 * @see	wcf\system\search\ISearchableObjectType::cacheMessageData()
 	 */
 	public function getMessageData($objectID) {
 		if (isset($this->messageCache[$objectID])) return $this->messageCache[$objectID];
@@ -43,14 +43,14 @@ class ConversationMessageSearch extends AbstractSearchableObjectType {
 	}
 	
 	/**
-	 * @see wcf\system\search\ISearchableObjectType::getResultTemplateName()
+	 * @see	wcf\system\search\ISearchableObjectType::getResultTemplateName()
 	 */
 	public function getResultTemplateName() {
 		return 'searchResultConversationMessage';
 	}
 	
 	/**
-	 * @see wcf\system\search\ISearchableObjectType::getJoins()
+	 * @see	wcf\system\search\ISearchableObjectType::getJoins()
 	 */
 	public function getJoins() {
 		return "JOIN wcf".WCF_N."_conversation_to_user conversation_to_user ON (conversation_to_user.participantID = ".WCF::getUser()->userID." AND conversation_to_user.conversationID = ".$this->getTableName().".conversationID)
@@ -58,28 +58,28 @@ class ConversationMessageSearch extends AbstractSearchableObjectType {
 	}
 	
 	/**
-	 * @see wcf\system\search\ISearchableObjectType::getTableName()
+	 * @see	wcf\system\search\ISearchableObjectType::getTableName()
 	 */
 	public function getTableName() {
 		return 'wcf'.WCF_N.'_conversation_message';
 	}
 	
 	/**
-	 * @see wcf\system\search\ISearchableObjectType::getIDFieldName()
+	 * @see	wcf\system\search\ISearchableObjectType::getIDFieldName()
 	 */
 	public function getIDFieldName() {
 		return $this->getTableName().'.messageID';
 	}
 	
 	/**
-	 * @see wcf\system\search\ISearchableObjectType::getSubjectFieldName()
+	 * @see	wcf\system\search\ISearchableObjectType::getSubjectFieldName()
 	 */
 	public function getSubjectFieldName() {
 		return 'conversation.subject';
 	}
 	
 	/**
-	 * @see wcf\system\search\ISearchableObjectType::getConditions()
+	 * @see	wcf\system\search\ISearchableObjectType::getConditions()
 	 */
 	public function getConditions(IForm $form = null) {
 		$conditionBuilder = new PreparedStatementConditionBuilder();

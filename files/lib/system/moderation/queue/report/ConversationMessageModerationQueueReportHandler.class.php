@@ -15,12 +15,12 @@ use wcf\system\WCF;
 /**
  * An implementation of IModerationQueueReportHandler for conversation messages.
  * 
- * @author 	Alexander Ebert
+ * @author	Alexander Ebert
  * @copyright	2001-2012 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	system.moderation.queue
- * @category 	Community Framework
+ * @category	Community Framework
  */
 class ConversationMessageModerationQueueReportHandler implements IModerationQueueReportHandler {
 	/**
