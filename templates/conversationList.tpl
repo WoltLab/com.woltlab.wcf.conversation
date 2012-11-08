@@ -5,6 +5,7 @@
 	
 	{include file='headInclude'}
 	
+	<link rel="alternate" type="application/rss+xml" title="{lang}wcf.global.button.rss{/lang}" href="{link controller='ConversationFeed' appendSession=false}at={@$__wcf->getUser()->userID}-{@$__wcf->getUser()->accessToken}{/link}" />
 	<script type="text/javascript" src="{@$__wcf->getPath()}js/WCF.Conversation.js"></script>
 	<script type="text/javascript">
 		//<![CDATA[
@@ -96,6 +97,10 @@
 			</progress>
 		</div>
 	</fieldset>
+{/capture}
+
+{capture assign='headerNavigation'}
+	<li><a href="{link controller='ConversationFeed' appendSession=false}at={@$__wcf->getUser()->userID}-{@$__wcf->getUser()->accessToken}{/link}" title="{lang}wcf.global.button.rss{/lang}" class="jsTooltip"><img src="{icon}rssColored{/icon}" class="icon16" alt="" /> <span class="invisible">{lang}wcf.global.button.rss{/lang}</span></a></li>
 {/capture}
 
 {include file='header' sidebarOrientation='left'}
