@@ -21,5 +21,5 @@
 </fieldset>
 
 <div class="formSubmit">
-	<button id="hideConversation">{lang}wcf.global.form.submit{/lang}</button>
+	<button id="hideConversation" class="buttonPrimary">{lang}wcf.global.button.submit{/lang}</button>
 </div>
