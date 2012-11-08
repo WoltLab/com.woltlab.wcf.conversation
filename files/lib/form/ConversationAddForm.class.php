@@ -85,6 +85,11 @@ class ConversationAddForm extends MessageForm {
 	public function readParameters() {
 		parent::readParameters();
 		
+		// check max pc permission
+		if (ConversationHandler::getInstance()->getConversationCount() >= WCF::getSession()->getPermission('user.conversation.maxConversations')) {
+			throw new NamedUserException(WCF::getLanguage()->get('wcf.conversation.error.mailboxIsFull'));
+		}
+		
 		if (isset($_REQUEST['userID'])) {
 			$userID = intval($_REQUEST['userID']);
 			$user = UserProfile::getUserProfile($userID);
@@ -206,17 +211,5 @@ class ConversationAddForm extends MessageForm {
 			'participants' => $this->participants,
 			'invisibleParticipants' => $this->invisibleParticipants
 		));
-	}
-	
-	/**
-	 * @see	wcf\page\IPage::show()
-	 */
-	public function show() {
-		// check max pc permission
-		if (ConversationHandler::getInstance()->getConversationCount() >= WCF::getSession()->getPermission('user.conversation.maxConversations')) {
-			throw new NamedUserException(WCF::getLanguage()->get('wcf.conversation.error.mailboxIsFull'));
-		}
-		
-		parent::show();
 	}
 }

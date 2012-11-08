@@ -17,7 +17,8 @@
 				'wcf.conversation.edit.leave': '{lang}wcf.conversation.edit.leave{/lang}',
 				'wcf.conversation.edit.open': '{lang}wcf.conversation.edit.open{/lang}',
 				'wcf.conversation.leave.title': '{lang}wcf.conversation.leave.title{/lang}',
-				'wcf.global.state.closed': '{lang}wcf.global.state.closed{/lang}'
+				'wcf.global.state.closed': '{lang}wcf.global.state.closed{/lang}',
+				'wcf.moderation.report.reportContent': '{lang}wcf.moderation.report.reportContent{/lang}'
 			});
 			WCF.Icon.addObject({
 				'wcf.icon.lock': '{icon}lock{/icon}'

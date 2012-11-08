@@ -48,12 +48,16 @@
 		<item name="wcf.conversation.message.add.previousPosts"><![CDATA[{if $items == 1}Vorherige Nachricht{else}Vorherige Nachrichten ({#$items}){/if}]]></item>
 		<item name="wcf.conversation.message.button.add"><![CDATA[Antworten]]></item>
 		<item name="wcf.conversation.message.new"><![CDATA[Neu]]></item>
+		<item name="wcf.conversation.message.edit"><![CDATA[Nachricht bearbeiten]]></item>
 		<item name="wcf.conversation.noConversations"><![CDATA[Es wurden keine Konversationen gefunden.]]></item>
 		<item name="wcf.conversation.participants"><![CDATA[Teilnehmer]]></item>
 		<item name="wcf.conversation.participants.description"><![CDATA[Mehrere Teilnehmer können mit Komma getrennt angegeben werden.]]></item>
 		<item name="wcf.conversation.quota"><![CDATA[Speicherplatz]]></item>
 		<item name="wcf.conversation.replies"><![CDATA[Antworten]]></item>
 		<item name="wcf.conversation.showAll"><![CDATA[Alle Konversationen anzeigen]]></item>
+		<item name="wcf.conversation.ownPosts"><![CDATA[Diese Konversation enthält Nachrichten von Ihnen.]]></item>
+		<item name="wbb.conversation.gotoFirstNewPost"><![CDATA[Zur ersten neuen Nachricht springen]]></item>
+		<item name="wbb.conversation.gotoLastPost"><![CDATA[Zur letzten Nachricht springen]]></item>
 	</category>
 	
 	<category name="wcf.conversation.edit">

@@ -8,6 +8,9 @@
 	<script type="text/javascript">
 		//<![CDATA[
 		$(function() {
+			WCF.Language.addObject({
+				'wcf.global.preview': '{lang}wcf.global.preview{/lang}'
+			});
 			new WCF.Message.DefaultPreview();
 		});
 		//]]>
