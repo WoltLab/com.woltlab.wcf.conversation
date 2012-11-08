@@ -17,6 +17,7 @@
 				'wcf.conversation.edit.open': '{lang}wcf.conversation.edit.open{/lang}',
 				'wcf.conversation.label.management': '{lang}wcf.conversation.label.management{/lang}',
 				'wcf.conversation.label.management.addLabel.success': '{lang}wcf.conversation.label.management.addLabel.success{/lang}',
+				'wcf.conversation.label.management.deleteLabel.confirmMessage': '{lang}wcf.conversation.label.management.deleteLabel.confirmMessage{/lang}',
 				'wcf.conversation.label.management.editLabel': '{lang}wcf.conversation.label.management.editLabel{/lang}',
 				'wcf.conversation.label.placeholder': '{lang}wcf.conversation.label.placeholder{/lang}',
 				'wcf.conversation.leave.title': '{lang}wcf.conversation.leave.title{/lang}',

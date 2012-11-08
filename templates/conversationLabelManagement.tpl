@@ -36,8 +36,8 @@
 	</dl>
 	
 	<div class="formSubmit">
-		<button id="addLabel">{lang}wcf.global.button.save{/lang}</button>
-		<button id="editLabel" style="display: none;">{lang}wcf.global.button.save{/lang}</button>
+		<button id="addLabel" class="buttonPrimary">{lang}wcf.global.button.save{/lang}</button>
+		<button id="editLabel" style="display: none;" class="buttonPrimary">{lang}wcf.global.button.save{/lang}</button>
 		<button id="deleteLabel" style="display: none;">{lang}wcf.conversation.label.management.deleteLabel{/lang}</button>
 	</div>
 </fieldset>

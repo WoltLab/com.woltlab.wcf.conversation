@@ -1138,6 +1138,7 @@ WCF.Conversation.Label.Manager = Class.extend({
 			$('#addLabel, #editLabel').enable();
 		}
 		else {
+			$('#addLabel, #editLabel').disable();
 			$value = WCF.Language.get('wcf.conversation.label.placeholder');
 		}
 		
