@@ -1,5 +1,6 @@
 <?php
 namespace wcf\form;
+use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationAction;
 use wcf\data\user\UserProfile;
 use wcf\system\breadcrumb\Breadcrumb;
@@ -8,9 +9,7 @@ use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\NamedUserException;
 use wcf\system\exception\UserInputException;
 use wcf\system\request\LinkHandler;
-use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\WCF;
-use wcf\util\ArrayUtil;
 use wcf\util\HeaderUtil;
 use wcf\util\StringUtil;
 
@@ -92,9 +91,10 @@ class ConversationAddForm extends MessageForm {
 			if ($user === null || $user->userID == WCF::getUser()->userID) {
 				throw new IllegalLinkException();
 			}
+			
 			// validate user
 			try {
-				$this->validateParticipant($user);
+				Conversation::validateParticipant($user);
 			}
 			catch (UserInputException $e) {
 				throw new NamedUserException(WCF::getLanguage()->getDynamicVariable('wcf.conversation.participants.error.'.$e->getType(), array('errorData' => array('username' => $user->username))));
@@ -123,8 +123,8 @@ class ConversationAddForm extends MessageForm {
 			throw new UserInputException('participants');
 		}
 		
-		$this->participantIDs = $this->validateParticipants($this->participants);
-		$this->invisibleParticipantIDs = $this->validateParticipants($this->invisibleParticipants, 'invisibleParticipants');
+		$this->participantIDs = Conversation::validateParticipants($this->participants);
+		$this->invisibleParticipantIDs = Conversation::validateParticipants($this->invisibleParticipants, 'invisibleParticipants');
 		
 		// remove duplicates
 		$intersection = array_intersect($this->participantIDs, $this->invisibleParticipantIDs);
@@ -140,85 +140,6 @@ class ConversationAddForm extends MessageForm {
 		}
 		
 		parent::validate();
-	}
-	
-	/**
-	 * Validates the participants.
-	 * 
-	 * @param	string		$participants
-	 * @param	string		$field
-	 * @return	array		$result
-	 */
-	protected function validateParticipants($participants, $field = 'participants') {
-		$result = array();
-		$error = array();
-		
-		// loop through participants and check their settings
-		$participantList = UserProfile::getUserProfilesByUsername(ArrayUtil::trim(explode(',', $participants)));
-		
-		// load user storage at once to avoid multiple queries
-		$userIDs = array();
-		foreach ($participantList as $user) {
-			if ($user) {
-				$userIDs[] = $user->userID;
-			}
-		}
-		UserStorageHandler::getInstance()->loadStorage($userIDs);
-		
-		foreach ($participantList as $participant => $user) {
-			try {
-				if ($user === null) {
-					throw new UserInputException('participant', 'notFound');
-				}
-				
-				// ignore author as recipient and double recipients
-				if ($user->userID == WCF::getUser()->userID || in_array($user->userID, $result)) {
-					continue;
-				}
-				
-				// validate user
-				$this->validateParticipant($user);
-				
-				// no error
-				$result[] = $user->userID;
-			}
-			catch (UserInputException $e) {
-				$error[] = array('type' => $e->getType(), 'username' => $participant);
-			}
-		}
-		
-		if (!empty($error)) {
-			throw new UserInputException($field, $error);
-		}
-		
-		return $result;
-	}
-	
-	/**
-	 * Validates the given participant.
-	 * 
-	 * @param	wcf\data\user\UserProfile	$user
-	 */
-	protected function validateParticipant(UserProfile $user) {
-		// check participant's settings and permissions
-		if (!$user->getPermission('user.conversation.canUseConversation')) {
-			throw new UserInputException('participant', 'canNotUseConversation');
-		}
-				
-		// check privacy setting
-		if ($user->canSendConversation == 2 || ($user->canSendConversation == 1 && WCF::getProfileHandler()->isFollowing($user->userID))) {
-			throw new UserInputException('participant', 'doesNotAcceptConversation');
-		}
-		
-		// active user is ignored by participant
-		if ($user->isIgnoredUser(WCF::getUser()->userID)) {
-			throw new UserInputException('participant', 'ignoresYou');
-		}
-		
-		// check participant's mailbox quota
-		if (ConversationHandler::getInstance()->getConversationCount($user->userID) >= $user->getPermission('user.conversation.maxConversations')) {
-			throw new UserInputException('participant', 'mailboxIsFull');
-		}
 	}
 	
 	/**

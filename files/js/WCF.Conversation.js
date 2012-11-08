@@ -52,6 +52,7 @@ WCF.Conversation.EditorHandler = Class.extend({
 				
 				// set permissions
 				self._permissions[$conversationID] = {
+					canAddParticipants: ($conversation.data('canAddParticipants') ? true : false),
 					canCloseConversation: ($conversation.data('canCloseConversation') ? true : false)
 				};
 			}
@@ -393,6 +394,9 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
 			// divider
 			{ optionName: 'divider' },
 			
+			// add participants
+			{ label: WCF.Language.get('wcf.conversation.edit.addParticipants'), optionName: 'addParticipants' },
+			
 			// leave conversation
 			{ label: WCF.Language.get('wcf.conversation.edit.leave'), optionName: 'leave' }
 		];
@@ -423,6 +427,10 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
 		var $conversationID = $('#' + elementID).data('conversationID');
 		
 		switch (optionName) {
+			case 'addParticipants':
+				return (this._editorHandler.getPermission($conversationID, 'canAddParticipants'));
+			break;
+			
 			case 'assignLabel':
 				return (this._editorHandler.countAvailableLabels()) ? true : false;
 			break;
@@ -455,6 +463,10 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
 		}
 		
 		switch (optionName) {
+			case 'addParticipants':
+				new WCF.Conversation.AddParticipants($('#' + elementID).data('conversationID'));
+			break;
+			
 			case 'assignLabel':
 				new WCF.Conversation.Label.Editor(this._editorHandler, elementID);
 			break;
@@ -632,6 +644,115 @@ WCF.Conversation.Leave = Class.extend({
 			});
 			this._proxy.sendRequest();
 		}
+	}
+});
+
+/**
+ * Provides methods to add new participants.
+ * 
+ * @param	integer		conversationID
+ */
+WCF.Conversation.AddParticipants = Class.extend({
+	/**
+	 * conversation id
+	 * @var	integer
+	 */
+	_conversationID: 0,
+	
+	/**
+	 * dialog overlay
+	 * @var	jQuery
+	 */
+	_dialog: null,
+	
+	/**
+	 * action proxy
+	 * @var	WCF.Action.Proxy
+	 */
+	_proxy: null,
+	
+	/**
+	 * Initializes the WCF.Conversation.AddParticipants class
+	 * 
+	 * @param	integer		conversationID
+	 */
+	init: function(conversationID) {
+		this._conversationID = conversationID;
+		
+		this._dialog = $('#conversationAddParticipants');
+		if (!this._dialog.length) {
+			this._dialog = $('<div id="conversationAddParticipants" />').hide().appendTo(document.body);
+		}
+		
+		this._proxy = new WCF.Action.Proxy({
+			autoSend: true,
+			data: {
+				actionName: 'getAddParticipantsForm',
+				className: 'wcf\\data\\conversation\\ConversationAction',
+				objectIDs: [ this._conversationID ]
+			},
+			success: $.proxy(this._success, this)
+		});
+	},
+	
+	/**
+	 * Handles successful AJAX requests.
+	 * 
+	 * @param	object		data
+	 * @param	string		textStatus
+	 * @param	jQuery		jqXHR
+	 */
+	_success: function(data, textStatus, jqXHR) {
+		switch (data.returnValues.actionName) {
+			case 'addParticipants':
+				if (data.returnValues.count) {
+					var $notification = new WCF.System.Notification(data.returnValues.successMessage);
+					$notification.show();
+				}
+				
+				this._dialog.wcfDialog('close');
+			break;
+			
+			case 'getAddParticipantsForm':
+				this._renderForm(data);
+			break;
+		}
+	},
+	
+	/**
+	 * Renders the 'add participants' form.
+	 * 
+	 * @param	object		data
+	 */
+	_renderForm: function(data) {
+		this._dialog.html(data.returnValues.template);
+		this._dialog.find('#addParticipants').click($.proxy(this._submit, this));
+		
+		new WCF.Search.User('#participantsInput', null, false, data.returnValues.excludeSearchValues, true);
+		
+		this._dialog.wcfDialog({
+			title: WCF.Language.get('wcf.conversation.edit.addParticipants')
+		});
+	},
+	
+	/**
+	 * Submits the form to add new participants.
+	 */
+	_submit: function() {
+		var $participants = $.trim($('#participantsInput').val());
+		if ($participants == '') {
+			this._dialog.wcfDialog('close');
+		}
+		
+		this._proxy.setOption('data', {
+			actionName: 'addParticipants',
+			className: 'wcf\\data\\conversation\\ConversationAction',
+			objectIDs: [ this._conversationID ],
+			parameters: {
+				participants: $participants
+			}
+		});
+		this._proxy.sendRequest();
 	}
 });
 

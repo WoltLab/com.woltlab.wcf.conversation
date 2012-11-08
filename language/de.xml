@@ -57,6 +57,8 @@
 	</category>
 	
 	<category name="wcf.conversation.edit">
+		<item name="wcf.conversation.edit.addParticipants"><![CDATA[Teilnehmer hinzufügen]]></item>
+		<item name="wcf.conversation.edit.addParticipants.success"><![CDATA[{if $count == 1}Ein{else}{#$count}{/if} Teilnehmer erfolgreich hinzugefügt]]></item>
 		<item name="wcf.conversation.edit.assignLabel"><![CDATA[Label zuweisen]]></item>
 		<item name="wcf.conversation.edit.close"><![CDATA[Schließen]]></item>
 		<item name="wcf.conversation.edit.leave"><![CDATA[Teilnahme verwalten]]></item>

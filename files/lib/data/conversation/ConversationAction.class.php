@@ -34,6 +34,12 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	protected $className = 'wcf\data\conversation\ConversationEditor';
 	
 	/**
+	 * conversation object
+	 * @var	wcf\data\conversation\Conversation
+	 */
+	protected $conversation = null;
+	
+	/**
 	 * list of conversation data modifications
 	 * @var	array<array>
 	 */
@@ -131,7 +137,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 					$conversation->updateParticipants(array($conversation->userID));
 					
 					// update conversation count
-					UserStorageHandler::getInstance()->reset($converation->getParticipantIDs(), 'conversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
+					UserStorageHandler::getInstance()->reset($conversation->getParticipantIDs(), 'conversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
 				}
 			}
 		}
@@ -457,6 +463,68 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 */
 	public function unmarkAll() {
 		ClipboardHandler::getInstance()->removeItems(ClipboardHandler::getInstance()->getObjectTypeID('com.woltlab.wcf.conversation.conversation'));
+	}
+	
+	/**
+	 * Validates parameters to display the 'add participants' form.
+	 */
+	public function validateGetAddParticipantsForm() {
+		$this->conversation = $this->getSingleObject();
+		if (!Conversation::isParticipant(array($this->conversation->conversationID)) || !$this->conversation->canAddParticipants()) {
+			throw new PermissionDeniedException();
+		}
+	}
+	
+	/**
+	 * Shows the 'add participants' form.
+	 * 
+	 * @return	array
+	 */
+	public function getAddParticipantsForm() {
+		return array(
+			'actionName' => 'getAddParticipantsForm',
+			'excludeSearchValues' => $this->conversation->getParticipantNames(),
+			'template' => WCF::getTPL()->fetch('conversationAddParticipants')
+		);
+	}
+	
+	/**
+	 * Validates parameters to add new participants.
+	 */
+	public function validateAddParticipants() {
+		$this->validateGetAddParticipantsForm();
+		
+		// validate participants
+		$this->readString('participants');
+	}
+	
+	/**
+	 * Adds new participants.
+	 * 
+	 * @return	array
+	 */
+	public function addParticipants() {
+		$count = 0;
+		$successMessage = '';
+		
+		$participantIDs = Conversation::validateParticipants($this->parameters['participants'], 'participants', true);
+		if (!empty($participantIDs)) {
+			// check for already added participants
+			$participantIDs = array_diff($participantIDs, $this->conversation->getParticipantIDs());
+			if (!empty($participantIDs)) {
+				$conversationAction = new ConversationAction(array($this->conversation), 'update', array('participants' => $participantIDs));
+				$conversationAction->executeAction();
+				
+				$count = count($participantIDs);
+				$successMessage = WCF::getLanguage()->getDynamicVariable('wcf.conversation.edit.addParticipants.success', array('count' => $count));
+			}
+		}
+		
+		return array(
+			'actionName' => 'addParticipants',
+			'count' => $count,
+			'successMessage' => $successMessage
+		);
 	}
 	
 	/**

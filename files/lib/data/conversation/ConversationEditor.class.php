@@ -51,24 +51,24 @@ class ConversationEditor extends DatabaseObjectEditor {
 	/**
 	 * Updates the participants of this conversation.
 	 * 
-	 * @param	array<integer>	$participants
-	 * @param	array<integer>	$invisibleParticipants
+	 * @param	array<integer>	$participantIDs
+	 * @param	array<integer>	$invisibleParticipantIDs
 	 */
-	public function updateParticipants(array $participants, array $invisibleParticipants = array()) {
+	public function updateParticipants(array $participantIDs, array $invisibleParticipantIDs = array()) {
 		$sql = "INSERT INTO	wcf".WCF_N."_conversation_to_user
 					(conversationID, participantID, isInvisible)
 			VALUES		(?, ?, ?)";
 		$statement = WCF::getDB()->prepareStatement($sql);
 		
 		WCF::getDB()->beginTransaction();
-		if (!empty($participants)) {
-			foreach ($participants as $userID) {
+		if (!empty($participantIDs)) {
+			foreach ($participantIDs as $userID) {
 				$statement->execute(array($this->conversationID, $userID, 0));
 			}
 		}
 		
-		if (!empty($invisibleParticipants)) {
-			foreach ($invisibleParticipants as $userID) {
+		if (!empty($invisibleParticipantIDs)) {
+			foreach ($invisibleParticipantIDs as $userID) {
 				$statement->execute(array($this->conversationID, $userID, 1));
 			}
 		}

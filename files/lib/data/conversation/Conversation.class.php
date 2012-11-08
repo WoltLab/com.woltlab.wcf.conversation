@@ -1,13 +1,18 @@
 <?php
 namespace wcf\data\conversation;
 use wcf\data\conversation\message\ConversationMessage;
+use wcf\data\user\UserProfile;
 use wcf\data\DatabaseObject;
 use wcf\system\breadcrumb\Breadcrumb;
 use wcf\system\breadcrumb\IBreadcrumbProvider;
+use wcf\system\conversation\ConversationHandler;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
+use wcf\system\exception\UserInputException;
 use wcf\system\request\IRouteController;
 use wcf\system\request\LinkHandler;
+use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\WCF;
+use wcf\util\ArrayUtil;
 
 /**
  * Represents a conversation.
@@ -137,6 +142,15 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	}
 	
 	/**
+	 * Returns true, if users can add new participants to this conversation.
+	 * 
+	 * @return	boolean
+	 */
+	public function canAddParticipants() {
+		return ($this->participantCanInvite ? true : false);
+	}
+	
+	/**
 	 * Gets a list of all participants.
 	 * 
 	 * @return	array<integer>
@@ -153,6 +167,27 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 		}
 		
 		return $participantIDs;
+	}
+	
+	/**
+	 * Returns a list of participants usernames.
+	 * 
+	 * @return	array<string>
+	 */
+	public function getParticipantNames() {
+		$participants = array();
+		$sql = "SELECT		user_table.username
+			FROM		wcf".WCF_N."_conversation_to_user conversation_to_user
+			LEFT JOIN	wcf".WCF_N."_user user_table
+			ON		(user_table.userID = conversation_to_user.participantID)
+			WHERE		conversationID = ?";
+		$statement = WCF::getDB()->prepareStatement($sql);
+		$statement->execute(array($this->conversationID));
+		while ($row = $statement->fetchArray()) {
+			$participants[] = $row['username'];
+		}
+		
+		return $participants;
 	}
 	
 	/**
@@ -203,5 +238,93 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 		}
 		
 		return true;
+	}
+	
+	/**
+	 * Validates the participants.
+	 *
+	 * @param	string		$participants
+	 * @param	string		$field
+	 * @return	array		$result
+	 */
+	public static function validateParticipants($participants, $field = 'participants', $skipErroneousParticipants = false) {
+		$result = array();
+		$error = array();
+		
+		// loop through participants and check their settings
+		$participantList = UserProfile::getUserProfilesByUsername(ArrayUtil::trim(explode(',', $participants)));
+		
+		// load user storage at once to avoid multiple queries
+		$userIDs = array();
+		foreach ($participantList as $user) {
+			if ($user) {
+				$userIDs[] = $user->userID;
+			}
+		}
+		UserStorageHandler::getInstance()->loadStorage($userIDs);
+		
+		foreach ($participantList as $participant => $user) {
+			try {
+				if ($user === null) {
+					if ($skipErroneousParticipants) {
+						continue;
+					}
+					
+					throw new UserInputException($field, 'notFound');
+				}
+				
+				// ignore author as recipient and double recipients
+				if ($user->userID == WCF::getUser()->userID || in_array($user->userID, $result)) {
+					continue;
+				}
+				
+				// validate user
+				self::validateParticipant($user, $field);
+				
+				// no error
+				$result[] = $user->userID;
+			}
+			catch (UserInputException $e) {
+				if ($skipErroneousParticipants) {
+					continue;
+				}
+				
+				$error[] = array('type' => $e->getType(), 'username' => $participant);
+			}
+		}
+		
+		if (!empty($error)) {
+			throw new UserInputException($field, $error);
+		}
+		
+		return $result;
+	}
+	
+	/**
+	 * Validates the given participant.
+	 *
+	 * @param	wcf\data\user\UserProfile	$user
+	 * @param	string				$field
+	 */
+	public static function validateParticipant(UserProfile $user, $field = 'participants') {
+		// check participant's settings and permissions
+		if (!$user->getPermission('user.conversation.canUseConversation')) {
+			throw new UserInputException($field, 'canNotUseConversation');
+		}
+	
+		// check privacy setting
+		if ($user->canSendConversation == 2 || ($user->canSendConversation == 1 && WCF::getProfileHandler()->isFollowing($user->userID))) {
+			throw new UserInputException($field, 'doesNotAcceptConversation');
+		}
+	
+		// active user is ignored by participant
+		if ($user->isIgnoredUser(WCF::getUser()->userID)) {
+			throw new UserInputException($field, 'ignoresYou');
+		}
+	
+		// check participant's mailbox quota
+		if (ConversationHandler::getInstance()->getConversationCount($user->userID) >= $user->getPermission('user.conversation.maxConversations')) {
+			throw new UserInputException($field, 'mailboxIsFull');
+		}
 	}
 }
