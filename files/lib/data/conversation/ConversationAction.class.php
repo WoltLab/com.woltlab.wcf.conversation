@@ -116,6 +116,9 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 * @see	wcf\data\AbstractDatabaseObjectAction::update()
 	 */
 	public function update() {
+		if (!isset($this->parameters['participants'])) $this->parameters['participants'] = array();
+		if (!isset($this->parameters['invisibleParticipants'])) $this->parameters['invisibleParticipants'] = array();
+		
 		// count participants
 		if (!empty($this->parameters['participants'])) {
 			$this->parameters['data']['participants'] = count($this->parameters['participants']);
@@ -126,8 +129,21 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		foreach ($this->objects as $conversation) {
 			// partipants
 			if (!empty($this->parameters['participants']) || !empty($this->parameters['invisibleParticipants'])) {
+				// get current participants
+				$participantIDs = $conversation->getParticipantIDs();
+				
 				$conversation->updateParticipants((!empty($this->parameters['participants']) ? $this->parameters['participants'] : array()), (!empty($this->parameters['invisibleParticipants']) ? $this->parameters['invisibleParticipants'] : array()));
 				$conversation->updateParticipantSummary();
+				
+				// check if new participants have been added
+				$participantIDs = array_diff($participantIDs, $this->parameters['participants'], $this->parameters['invisibleParticipants']);
+				if (!empty($participantIDs)) {
+					// update conversation count
+					UserStorageHandler::getInstance()->reset($participantIDs, 'conversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
+					
+					// fire notification event
+					UserNotificationHandler::getInstance()->fireEvent('conversation', 'com.woltlab.wcf.conversation.notification', new ConversationUserNotificationObject($conversation), $participantIDs);
+				}
 			}
 			
 			// draft status
