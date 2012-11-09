@@ -2,7 +2,7 @@
 	{if $__wcf->getConversationHandler()->getUnreadConversationCount()}
 		{* dropdown menu with the x unread conversations *}
 		<li id="unreadConversations" class="dropdown">
-			<a class="dropdownToggle" data-toggle="unreadConversations">
+			<a class="dropdownToggle jsTooltip" title="{lang}wcf.conversation.conversations{/lang}" data-toggle="unreadConversations">
 				<img src="{icon}commentInverse{/icon}" alt="" class="icon24" />
 				<span class="invisible">{lang}wcf.conversation.conversations{/lang}</span>
 				<span class="badge badgeInverse">{#$__wcf->getConversationHandler()->getUnreadConversationCount()}</span>
