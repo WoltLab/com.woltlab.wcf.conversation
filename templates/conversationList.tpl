@@ -85,16 +85,16 @@
 		<button id="manageLabel">{lang}wcf.conversation.label.management{/lang}</button>
 	</fieldset>
 	
-	<fieldset>
+	<fieldset class="conversationQuota">
 		<legend>{lang}wcf.conversation.quota{/lang}</legend>
 		
 		<div>
-			{* @todo: styling *}
 			{assign var='conversationCount' value=$__wcf->getConversationHandler()->getConversationCount()}
 			{assign var='maxConversationCount' value=$__wcf->session->getPermission('user.conversation.maxConversations')}
-			<meter value="{@$conversationCount}" high="{@$maxConversationCount*0.9}" max="{@$maxConversationCount}" title="{#$conversationCount/$maxConversationCount*100}%">
-				<span>{#$conversationCount/$maxConversationCount*100}%</span>
-			</progress>
+			<p class="conversationUsageBar{if $conversationCount/$maxConversationCount > 0.9} yellow{elseif $conversationCount/$maxConversationCount >= 1.0} red{/if}">
+				<span style="width: {if $conversationCount/$maxConversationCount < 1.0}{@$conversationCount/$maxConversationCount*100|round:0}{else}100{/if}%">{#$conversationCount/$maxConversationCount*100}%</span>
+			</p>
+			<p><small>{lang}wcf.conversation.quota.description{/lang}</small></p>
 		</div>
 	</fieldset>
 {/capture}

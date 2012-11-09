@@ -52,7 +52,9 @@
 		<item name="wcf.conversation.noConversations"><![CDATA[Es wurden keine Konversationen gefunden.]]></item>
 		<item name="wcf.conversation.participants"><![CDATA[Teilnehmer]]></item>
 		<item name="wcf.conversation.participants.description"><![CDATA[Mehrere Teilnehmer können mit Komma getrennt angegeben werden.]]></item>
+		<item name="wcf.conversation.participants.error.mailboxIsFull"><![CDATA[{$errorData[username]} hat das zulässige Limit für Konversationen bereits erreicht und kann an keinen neuen Konversation teilnehmen.]]></item>
 		<item name="wcf.conversation.quota"><![CDATA[Speicherplatz]]></item>
+		<item name="wcf.conversation.quota.description"><![CDATA[{#$conversationCount/$maxConversationCount*100}% belegt ({#$conversationCount} von {#$maxConversationCount})]]></item>
 		<item name="wcf.conversation.replies"><![CDATA[Antworten]]></item>
 		<item name="wcf.conversation.showAll"><![CDATA[Alle Konversationen anzeigen]]></item>
 		<item name="wcf.conversation.ownPosts"><![CDATA[Diese Konversation enthält Nachrichten von Ihnen.]]></item>
