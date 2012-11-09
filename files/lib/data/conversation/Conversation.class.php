@@ -142,12 +142,16 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	}
 	
 	/**
-	 * Returns true, if users can add new participants to this conversation.
+	 * Returns true, if current user can add new participants to this conversation.
 	 * 
 	 * @return	boolean
 	 */
 	public function canAddParticipants() {
-		return ($this->participantCanInvite ? true : false);
+		if (WCF::getUser()->userID == $this->userID || $this->participantCanInvite) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 	/**
