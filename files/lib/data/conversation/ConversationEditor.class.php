@@ -98,4 +98,21 @@ class ConversationEditor extends DatabaseObjectEditor {
 			'participantSummary' => serialize($users)
 		));
 	}
+	
+	/**
+	 * Updates the participant summary of the given conversations.
+	 * 
+	 * @param	array<integer>		$conversationIDs
+	 */
+	public static function updateParticipantSummaries(array $conversationIDs) {
+		$conversationList = new ConversationList();
+		$conversationList->sqlLimit = 0;
+		$conversationList->getConditionBuilder()->add('conversation.conversationID IN (?)', array($conversationIDs));
+		$conversationList->readObjects();
+		
+		foreach ($conversationList as $conversation) {
+			$editor = new ConversationEditor($conversation);
+			$editor->updateParticipantSummary();
+		}
+	}
 }
