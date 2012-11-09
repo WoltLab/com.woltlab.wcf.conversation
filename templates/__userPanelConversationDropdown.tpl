@@ -11,6 +11,8 @@
 				<li><span>{lang}wcf.global.loading{/lang}</span></li>
 				<li class="dropdownDivider"></li>
 				<li><a href="{link controller='ConversationList'}{/link}">{lang}wcf.conversation.showAll{/lang}</a></li>
+				<li class="dropdownDivider"></li>
+				<li><a href="{link controller='ConversationAdd'}{/link}">{lang}wcf.conversation.add{/lang}</a></li>
 			</ul>
 			<script type="text/javascript" src="{@$__wcf->getPath()}js/WCF.Conversation.js"></script>
 			<script type="text/javascript">

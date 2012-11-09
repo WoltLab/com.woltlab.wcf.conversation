@@ -18,7 +18,7 @@
 	<legend>{lang}wcf.conversation.label.management.addLabel{/lang}</legend>
 	
 	<dl>
-		<dt>{lang}wcf.conversation.label.labelName{/lang}</dt>
+		<dt><label for="labelName">{lang}wcf.conversation.label.labelName{/lang}</label></dt>
 		<dd><input type="text" id="labelName" class="long" /></dd>
 	</dl>
 	<dl>
