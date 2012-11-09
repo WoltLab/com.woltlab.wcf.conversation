@@ -83,6 +83,12 @@
 				</dd>
 			</dl>
 			
+			<dl>
+				<dd>
+					<label><input type="checkbox" name="participantCanInvite" id="participantCanInvite" value="1"{if $participantCanInvite} checked="checked"{/if} /> {lang}wcf.conversation.participantCanInvite{/lang}</label>
+				</dd>
+			</dl>
+			
 			<dl{if $errorField == 'subject'} class="formError"{/if}>
 				<dt><label for="subject">{lang}wcf.global.subject{/lang}</label></dt>
 				<dd>

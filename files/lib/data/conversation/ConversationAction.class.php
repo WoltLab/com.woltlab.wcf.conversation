@@ -525,7 +525,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 */
 	public function addParticipants() {
 		try {
-			$participantIDs = Conversation::validateParticipants($this->parameters['participants'], 'participants', true);
+			$participantIDs = Conversation::validateParticipants($this->parameters['participants']);
 		}
 		catch (UserInputException $e) {
 			$errorMessage = '';

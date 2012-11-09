@@ -133,7 +133,8 @@ class ConversationMessageEditForm extends ConversationAddForm {
 		if ($this->isFirstMessage) {
 			$data = array(
 				'subject' => $this->subject,
-				'isDraft' => ($this->draft ? 1 : 0)
+				'isDraft' => ($this->draft ? 1 : 0),
+				'participantCanInvite' => $this->participantCanInvite
 			);
 			if ($this->draft) {
 				$data['draftData'] = serialize(array(
@@ -173,6 +174,7 @@ class ConversationMessageEditForm extends ConversationAddForm {
 			$this->text = $this->message->message;
 			
 			if ($this->isFirstMessage) {
+				$this->participantCanInvite = $this->conversation->participantCanInvite;
 				$this->subject = $this->conversation->subject;
 				
 				if ($this->conversation->isDraft && $this->conversation->draftData) {

@@ -68,6 +68,12 @@ class ConversationAddForm extends MessageForm {
 	public $draft = 0;
 	
 	/**
+	 * true, if participants can add new participants
+	 * @var	integer
+	 */
+	public $participantCanInvite = 0;
+	
+	/**
 	 * participants (user ids)
 	 * @var	array<integer>
 	 */
@@ -116,6 +122,7 @@ class ConversationAddForm extends MessageForm {
 		parent::readFormParameters();
 		
 		if (isset($_POST['draft'])) $this->draft = (bool) $_POST['draft'];
+		if (isset($_POST['participantCanInvite'])) $this->participantCanInvite = (bool) $_POST['participantCanInvite'];
 		if (isset($_POST['participants'])) $this->participants = StringUtil::trim($_POST['participants']);
 		if (isset($_POST['invisibleParticipants'])) $this->invisibleParticipants = StringUtil::trim($_POST['invisibleParticipants']);
 	}
@@ -159,7 +166,8 @@ class ConversationAddForm extends MessageForm {
 			'time' => TIME_NOW,
 			'userID' => WCF::getUser()->userID,
 			'username' => WCF::getUser()->username,
-			'isDraft' => ($this->draft ? 1 : 0)
+			'isDraft' => ($this->draft ? 1 : 0),
+			'participantCanInvite' => $this->participantCanInvite
 		);
 		if ($this->draft) {
 			$data['draftData'] = serialize(array(
@@ -208,6 +216,7 @@ class ConversationAddForm extends MessageForm {
 		parent::assignVariables();
 		
 		WCF::getTPL()->assign(array(
+			'participantCanInvite' => $this->participantCanInvite,
 			'participants' => $this->participants,
 			'invisibleParticipants' => $this->invisibleParticipants
 		));

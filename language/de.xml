@@ -50,6 +50,7 @@
 		<item name="wcf.conversation.message.new"><![CDATA[Neu]]></item>
 		<item name="wcf.conversation.message.edit"><![CDATA[Nachricht bearbeiten]]></item>
 		<item name="wcf.conversation.noConversations"><![CDATA[Es wurden keine Konversationen gefunden.]]></item>
+		<item name="wcf.conversation.participantCanInvite"><![CDATA[Teilnehmer können weitere Teilnehmer hinzufügen]]></item>
 		<item name="wcf.conversation.participants"><![CDATA[Teilnehmer]]></item>
 		<item name="wcf.conversation.participants.description"><![CDATA[Mehrere Teilnehmer können mit Komma getrennt angegeben werden.]]></item>
 		<item name="wcf.conversation.participants.error.mailboxIsFull"><![CDATA[{$errorData[username]} hat das zulässige Limit für Konversationen bereits erreicht und kann an keinen neuen Konversation teilnehmen.]]></item>
