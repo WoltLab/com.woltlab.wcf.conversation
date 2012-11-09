@@ -35,7 +35,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	
 	/**
 	 * conversation object
-	 * @var	wcf\data\conversation\Conversation
+	 * @var	wcf\data\conversation\ConversationEditor
 	 */
 	protected $conversation = null;
 	
@@ -142,7 +142,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 					UserStorageHandler::getInstance()->reset($participantIDs, 'conversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
 					
 					// fire notification event
-					UserNotificationHandler::getInstance()->fireEvent('conversation', 'com.woltlab.wcf.conversation.notification', new ConversationUserNotificationObject($conversation), $participantIDs);
+					UserNotificationHandler::getInstance()->fireEvent('conversation', 'com.woltlab.wcf.conversation.notification', new ConversationUserNotificationObject($conversation->getDecoratedObject()), $participantIDs);
 				}
 			}
 			
@@ -436,7 +436,11 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		}
 		WCF::getDB()->commitTransaction();
 		
+		// unmark items
 		$this->unmarkItems();
+		
+		// update participant summary
+		ConversationEditor::updateParticipantSummaries($this->objectIDs);
 		
 		return array(
 			'actionName' => 'hideConversation'
@@ -548,6 +552,9 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 				$successMessage = WCF::getLanguage()->getDynamicVariable('wcf.conversation.edit.addParticipants.success', array('count' => $count));
 			}
 		}
+		
+		// update participant summary
+		$this->conversation->updateParticipantSummary();
 		
 		return array(
 			'actionName' => 'addParticipants',
