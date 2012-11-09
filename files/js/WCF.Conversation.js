@@ -705,6 +705,12 @@ WCF.Conversation.AddParticipants = Class.extend({
 	_success: function(data, textStatus, jqXHR) {
 		switch (data.returnValues.actionName) {
 			case 'addParticipants':
+				if (data.returnValues.errorMessage) {
+					this._dialog.find('dl.jsAddParticipants').addClass('formError');
+					$('<span class="formError">' + data.returnValues.errorMessage + '</span>').appendTo(this._dialog.find('dl.jsAddParticipants > dd'));
+					return;
+				}
+				
 				if (data.returnValues.count) {
 					var $notification = new WCF.System.Notification(data.returnValues.successMessage);
 					$notification.show();
@@ -726,9 +732,19 @@ WCF.Conversation.AddParticipants = Class.extend({
 	 */
 	_renderForm: function(data) {
 		this._dialog.html(data.returnValues.template);
-		this._dialog.find('#addParticipants').click($.proxy(this._submit, this));
+		var $submitButton = this._dialog.find('#addParticipants').disable().click($.proxy(this._submit, this));
 		
 		new WCF.Search.User('#participantsInput', null, false, data.returnValues.excludeSearchValues, true);
+		
+		var $participantsInput = $('#participantsInput');
+		$participantsInput.keyup(function() {
+			if ($.trim($participantsInput.val()) === '') {
+				$submitButton.disable();
+			}
+			else {
+				$submitButton.enable();
+			}
+		});
 		
 		this._dialog.wcfDialog({
 			title: WCF.Language.get('wcf.conversation.edit.addParticipants')

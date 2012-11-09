@@ -251,7 +251,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	 * @param	string		$field
 	 * @return	array		$result
 	 */
-	public static function validateParticipants($participants, $field = 'participants', $skipErroneousParticipants = false) {
+	public static function validateParticipants($participants, $field = 'participants') {
 		$result = array();
 		$error = array();
 		
@@ -270,16 +270,15 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 		foreach ($participantList as $participant => $user) {
 			try {
 				if ($user === null) {
-					if ($skipErroneousParticipants) {
-						continue;
-					}
-					
 					throw new UserInputException($field, 'notFound');
 				}
 				
-				// ignore author as recipient and double recipients
-				if ($user->userID == WCF::getUser()->userID || in_array($user->userID, $result)) {
-					continue;
+				// user is author
+				if ($user->userID == WCF::getUser()->userID) {
+					throw new UserInputException($field, 'isAuthor');
+				}
+				else if (in_array($user->userID, $result)) {
+					throw new UserInputException($field, 'duplicate');
 				}
 				
 				// validate user
@@ -289,10 +288,6 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 				$result[] = $user->userID;
 			}
 			catch (UserInputException $e) {
-				if ($skipErroneousParticipants) {
-					continue;
-				}
-				
 				$error[] = array('type' => $e->getType(), 'username' => $participant);
 			}
 		}

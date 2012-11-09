@@ -520,10 +520,23 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 * @return	array
 	 */
 	public function addParticipants() {
+		try {
+			$participantIDs = Conversation::validateParticipants($this->parameters['participants'], 'participants', true);
+		}
+		catch (UserInputException $e) {
+			$errorMessage = '';
+			foreach ($e->getType() as $type) {
+				$errorMessage .= WCF::getLanguage()->get('wcf.conversation.participants.error.'.$type);
+			}
+			
+			return array(
+				'actionName' => 'addParticipants',
+				'errorMessage' => $errorMessage
+			);
+		}
+		
 		$count = 0;
 		$successMessage = '';
-		
-		$participantIDs = Conversation::validateParticipants($this->parameters['participants'], 'participants', true);
 		if (!empty($participantIDs)) {
 			// check for already added participants
 			$participantIDs = array_diff($participantIDs, $this->conversation->getParticipantIDs());
