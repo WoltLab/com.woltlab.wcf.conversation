@@ -477,7 +477,7 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
 			break;
 			
 			case 'leave':
-				new WCF.Conversation.Leave([ $('#' + elementID).data('conversationID') ]);
+				new WCF.Conversation.Leave([ $('#' + elementID).data('conversationID') ], this._environment);
 			break;
 		}
 	},
@@ -551,6 +551,12 @@ WCF.Conversation.Leave = Class.extend({
 	_dialog: null,
 	
 	/**
+	 * environment name
+	 * @var	string
+	 */
+	_environment: '',
+	
+	/**
 	 * action proxy
 	 * @var	WCF.Action.Proxy
 	 */
@@ -560,10 +566,12 @@ WCF.Conversation.Leave = Class.extend({
 	 * Initializes the leave/restore dialog for conversations.
 	 * 
 	 * @param	array<integer>		conversationIDs
+	 * @param	string			environment
 	 */
-	init: function(conversationIDs) {
+	init: function(conversationIDs, environment) {
 		this._conversationIDs = conversationIDs;
 		this._dialog = null;
+		this._environment = environment;
 		
 		this._proxy = new WCF.Action.Proxy({
 			success: $.proxy(this._success, this)
@@ -598,7 +606,12 @@ WCF.Conversation.Leave = Class.extend({
 			break;
 			
 			case 'hideConversation':
-				window.location.reload();
+				if (this._environment === 'conversation') {
+					window.location = data.returnValues.redirectURL;
+				}
+				else {
+					window.location.reload();
+				}
 			break;
 		}
 	},
