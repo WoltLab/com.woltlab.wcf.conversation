@@ -1324,6 +1324,65 @@ WCF.Conversation.QuickReply = WCF.Message.QuickReply.extend({
 });
 
 /**
+ * Marks one conversation as read.
+ */
+WCF.Conversation.MarkAsRead = Class.extend({
+	/**
+	 * action proxy
+	 * @var	WCF.Action.Proxy
+	 */
+	_proxy: null,
+	
+	/**
+	 * Initializes the mark as read for conversations.
+	 */
+	init: function() {
+		this._proxy = new WCF.Action.Proxy({
+			success: $.proxy(this._success, this)
+		});
+		
+		$('.conversationList .new .columnAvatar').live('dblclick', $.proxy(this._dblclick, this));
+	},
+	
+	/**
+	 * Handles double clicks on avatar.
+	 * 
+	 * @param	object		event
+	 */
+	_dblclick: function(event) {
+		this._proxy.setOption('data', {
+			actionName: 'markAsRead',
+			className: 'wcf\\data\\conversation\\ConversationAction',
+			objectIDs: [ $(event.currentTarget).parents('tr:eq(0)').data('conversationID') ]
+		});
+		this._proxy.sendRequest();
+	},
+	
+	/**
+	 * Handles successful AJAX requests.
+	 * 
+	 * @param	object		data
+	 * @param	string		textStatus
+	 * @param	jQuery		jqXHR
+	 */
+	_success: function(data, textStatus, jqXHR) {
+		$('.conversationList .new').each(function(index, element) {
+			var $element = $(element);
+			if (WCF.inArray($element.data('conversationID'), data.objectIDs)) {
+				// remove new class
+				$element.removeClass('new');
+				
+				// hide arrows
+				$element.find('.firstNewPost').parent().remove();
+				
+				// remove event
+				$element.find('.columnAvatar').off('dblclick');
+			}
+		});
+	}
+});
+
+/**
  * Namespace for conversation messages.
  */
 WCF.Conversation.Message = { };

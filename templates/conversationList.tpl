@@ -36,8 +36,8 @@
 			
 			new WCF.Conversation.Clipboard($editorHandler);
 			new WCF.Conversation.Label.Manager('{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}');
-
 			new WCF.Conversation.Preview();
+			new WCF.Conversation.MarkAsRead();
 		});
 		//]]>
 	</script>
@@ -133,7 +133,7 @@
 {if !$items}
 	<p class="info">{lang}wcf.conversation.noConversations{/lang}</p>
 {else}
-	<div class="marginTop tabularBox tabularBoxTitle shadow messageGroupList jsClipboardContainer" data-type="com.woltlab.wcf.conversation.conversation"> {*todo: use generic css class*}
+	<div class="marginTop tabularBox tabularBoxTitle shadow messageGroupList conversationList jsClipboardContainer" data-type="com.woltlab.wcf.conversation.conversation"> {*todo: use generic css class*}
 		<hgroup>
 			<h1>{lang}wcf.conversation.conversations{/lang} <span class="badge badgeInverse">{#$items}</span></h1>
 		</hgroup>
