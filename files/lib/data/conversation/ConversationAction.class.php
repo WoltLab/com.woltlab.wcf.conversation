@@ -12,6 +12,7 @@ use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
 use wcf\system\exception\ValidateActionException;
 use wcf\system\package\PackageDependencyHandler;
+use wcf\system\request\LinkHandler;
 use wcf\system\user\notification\object\ConversationUserNotificationObject;
 use wcf\system\user\notification\UserNotificationHandler;
 use wcf\system\user\storage\UserStorageHandler;
@@ -443,7 +444,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		ConversationEditor::updateParticipantSummaries($this->objectIDs);
 		
 		return array(
-			'actionName' => 'hideConversation'
+			'actionName' => 'hideConversation',
+			'redirectURL' => LinkHandler::getInstance()->getLink('ConversationList')
 		);
 	}
 	
