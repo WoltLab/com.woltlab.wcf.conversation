@@ -59,8 +59,8 @@
 		<item name="wcf.conversation.replies"><![CDATA[Antworten]]></item>
 		<item name="wcf.conversation.showAll"><![CDATA[Alle Konversationen anzeigen]]></item>
 		<item name="wcf.conversation.ownPosts"><![CDATA[Diese Konversation enthält Nachrichten von Ihnen.]]></item>
-		<item name="wbb.conversation.gotoFirstNewPost"><![CDATA[Zur ersten neuen Nachricht springen]]></item>
-		<item name="wbb.conversation.gotoLastPost"><![CDATA[Zur letzten Nachricht springen]]></item>
+		<item name="wcf.conversation.gotoFirstNewPost"><![CDATA[Zur ersten neuen Nachricht springen]]></item>
+		<item name="wcf.conversation.gotoLastPost"><![CDATA[Zur letzten Nachricht springen]]></item>
 	</category>
 	
 	<category name="wcf.conversation.edit">
