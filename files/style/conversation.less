@@ -39,3 +39,34 @@
 .conversationLeft {
 	text-decoration: line-through;
 }
+
+.sidebar fieldset.conversationQuota {
+	> div {
+		text-align: center;
+		width: 180px;
+	}
+}
+
+.conversationUsageBar {
+	background-color: @wcfContentBackgroundColor;
+	border: 1px solid @wcfContainerBorderColor;
+	padding: 1px;
+	
+	
+	> span {
+		color: transparent;
+		display: block;
+		font-size: @wcfSmallFontSize;
+		
+		.linearGradient(rgba(0, 153, 0, 1), rgba(0, 153, 0, 1), rgba(0, 102, 0, 1));
+	}
+	
+	&.yellow > span {
+		.linearGradient(rgba(255, 215, 0, 1), rgba(255, 215, 0, 1), rgba(218, 165, 32, 1));
+		
+	}
+	
+	&.red > span {
+		.linearGradient(rgba(153, 0, 0, 1), rgba(153, 0, 0, 1), rgba(102, 0, 0, 1));
+	}
+}
