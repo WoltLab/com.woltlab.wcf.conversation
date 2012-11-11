@@ -156,7 +156,7 @@ class ConversationClipboardAction implements IClipboardAction {
 		if (!empty($conversationIDs)) {
 			$conditions = new PreparedStatementConditionBuilder();
 			$conditions->add("conversationID IN (?)", array($conversationIDs));
-			$conditions->add("userID = ?", array(WCF::getUser()->userID));
+			$conditions->add("participantID = ?", array(WCF::getUser()->userID));
 			
 			$sql = "SELECT	conversationID
 				FROM	wcf".WCF_N."_conversation_to_user
