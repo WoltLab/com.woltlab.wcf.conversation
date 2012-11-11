@@ -1,4 +1,4 @@
-<article class="message messageReduced marginTop shadow">
+<article class="message messageReduced marginTop">
 	<div>
 		<section class="messageContent">
 			<div>

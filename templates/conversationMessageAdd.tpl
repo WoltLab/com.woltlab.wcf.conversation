@@ -39,7 +39,7 @@
 {/if}
 
 <form id="messageContainer" method="post" action="{link controller='ConversationMessageAdd' id=$conversationID}{/link}">
-	<div class="container containerPadding marginTop shadow">
+	<div class="container containerPadding marginTop">
 		<fieldset>
 			<legend>{lang}wcf.conversation.message{/lang}</legend>
 			
@@ -85,7 +85,7 @@
 		{foreach from=$messages item=message}
 			{assign var='objectID' value=$message->messageID}
 			
-			<li class="marginTop shadow">
+			<li class="marginTop">
 				<article class="message messageReduced" data-object-id="{@$message->messageID}">
 					<div>
 						<section class="messageContent">

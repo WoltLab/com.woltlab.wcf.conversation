@@ -3,7 +3,7 @@
 	{assign var='objectID' value=$message->messageID}
 	{assign var='userProfile' value=$message->getUserProfile()}
 	
-	<li id="message{@$message->messageID}" class="marginTop shadow{if $conversation->userID == $message->userID} messageGroupStarter{/if}">
+	<li id="message{@$message->messageID}" class="marginTop{if $conversation->userID == $message->userID} messageGroupStarter{/if}">
 		<article class="message messageSidebarOrientationLeft dividers jsMessage" data-can-edit="{if $message->canEdit()}1{else}0{/if}" data-object-id="{@$message->messageID}">
 			<div>
 				{include file='messageSidebar'}

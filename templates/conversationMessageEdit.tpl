@@ -35,7 +35,7 @@
 {/if}
 
 <form id="messageContainer" method="post" action="{link controller='ConversationMessageEdit' id=$messageID}{/link}">
-	<div class="container containerPadding marginTop shadow">
+	<div class="container containerPadding marginTop">
 		{if $isFirstMessage}
 			<fieldset>
 				<legend>{lang}wcf.conversation.information{/lang}</legend>
@@ -155,7 +155,7 @@
 			{foreach from=$messages item=message}
 				{assign var='objectID' value=$message->messageID}
 				
-				<li class="marginTop shadow">
+				<li class="marginTop">
 					<article class="message messageReduced">
 						<div>
 							<section class="messageContent">

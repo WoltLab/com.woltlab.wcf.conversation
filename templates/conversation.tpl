@@ -67,7 +67,7 @@
 {include file='userNotice'}
 
 {if !$conversation->isDraft}
-	<div class="container containerPadding marginTop shadow">
+	<div class="container containerPadding marginTop">
 		<fieldset>
 			<legend>{lang}wcf.conversation.participants{/lang}</legend>
 	
