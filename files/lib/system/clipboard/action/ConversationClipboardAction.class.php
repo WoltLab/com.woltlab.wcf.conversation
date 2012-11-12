@@ -165,7 +165,7 @@ class ConversationClipboardAction implements IClipboardAction {
 			$statement->execute($conditions->getParameters());
 			while ($row = $statement->fetchArray()) {
 				$index = array_search($row['conversationID'], $conversationIDs);
-				unset($index);
+				unset($conversationIDs[$index]);
 			}
 			
 			// remove unaccessible conversations
