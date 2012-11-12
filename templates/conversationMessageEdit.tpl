@@ -40,6 +40,26 @@
 			<fieldset>
 				<legend>{lang}wcf.conversation.information{/lang}</legend>
 				
+				<dl{if $errorField == 'subject'} class="formError"{/if}>
+					<dt><label for="subject">{lang}wcf.global.subject{/lang}</label></dt>
+					<dd>
+						<input type="text" id="subject" name="subject" value="{$subject}" required="true" class="long" />
+						{if $errorField == 'subject'}
+							<small class="innerError">
+								{if $errorType == 'empty'}
+									{lang}wcf.global.form.error.empty{/lang}
+								{else}
+									{lang}wcf.conversation.subject.error.{@$errorType}{/lang}
+								{/if}
+							</small>
+						{/if}
+					</dd>
+				</dl>
+			</fieldset>
+			
+			<fieldset>
+				<legend>{lang}wcf.conversation.participants{/lang}</legend>
+				
 				{if $conversation->isDraft}
 					<dl{if $errorField == 'participants'} class="formError"{/if}>
 						<dt><label for="participants">{lang}wcf.conversation.participants{/lang}</label></dt>
@@ -87,22 +107,6 @@
 				<dl>
 					<dd>
 						<label><input type="checkbox" name="participantCanInvite" id="participantCanInvite" value="1"{if $participantCanInvite} checked="checked"{/if} /> {lang}wcf.conversation.participantCanInvite{/lang}</label>
-					</dd>
-				</dl>
-				
-				<dl{if $errorField == 'subject'} class="formError"{/if}>
-					<dt><label for="subject">{lang}wcf.global.subject{/lang}</label></dt>
-					<dd>
-						<input type="text" id="subject" name="subject" value="{$subject}" required="true" class="long" />
-						{if $errorField == 'subject'}
-							<small class="innerError">
-								{if $errorType == 'empty'}
-									{lang}wcf.global.form.error.empty{/lang}
-								{else}
-									{lang}wcf.conversation.subject.error.{@$errorType}{/lang}
-								{/if}
-							</small>
-						{/if}
 					</dd>
 				</dl>
 			</fieldset>

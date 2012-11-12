@@ -74,24 +74,24 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		$message = parent::create();
 		
 		// get thread
-		$converation = (isset($this->parameters['converation']) ? $this->parameters['converation'] : new Conversation($message->conversationID));
-		$conversationEditor = new ConversationEditor($converation);
+		$conversation = (isset($this->parameters['converation']) ? $this->parameters['converation'] : new Conversation($message->conversationID));
+		$conversationEditor = new ConversationEditor($conversation);
 		
 		if (empty($this->parameters['isFirstPost'])) {
 			// update last message
 			$conversationEditor->addMessage($message);
 			
 			// fire notification event
-			if (!$converation->isDraft) {
-				UserNotificationHandler::getInstance()->fireEvent('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', new ConversationMessageUserNotificationObject($message), $converation->getParticipantIDs());
+			if (!$conversation->isDraft) {
+				UserNotificationHandler::getInstance()->fireEvent('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', new ConversationMessageUserNotificationObject($message), $conversation->getParticipantIDs());
 			}
 		}
 		
 		// reset storage
-		UserStorageHandler::getInstance()->reset($converation->getParticipantIDs(), 'unreadConversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
+		UserStorageHandler::getInstance()->reset($conversation->getParticipantIDs(), 'unreadConversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
 		
 		// update search index
-		SearchIndexManager::getInstance()->add('com.woltlab.wcf.conversation.message', $message->messageID, $message->message, (!empty($this->parameters['isFirstPost']) ? $converation->subject : ''), $message->time, $message->userID, $message->username);
+		SearchIndexManager::getInstance()->add('com.woltlab.wcf.conversation.message', $message->messageID, $message->message, (!empty($this->parameters['isFirstPost']) ? $conversation->subject : ''), $message->time, $message->userID, $message->username);
 		
 		// update attachments
 		if (isset($this->parameters['attachmentHandler']) && $this->parameters['attachmentHandler'] !== null) {
