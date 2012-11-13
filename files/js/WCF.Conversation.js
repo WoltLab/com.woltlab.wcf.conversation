@@ -1341,7 +1341,7 @@ WCF.Conversation.MarkAsRead = Class.extend({
 			success: $.proxy(this._success, this)
 		});
 		
-		$('.conversationList .new .columnAvatar').on('dblclick', $.proxy(this._dblclick, this));
+		$(document).on('dblclick', '.conversationList .new .columnAvatar', $.proxy(this._dblclick, this));
 	},
 	
 	/**
