@@ -1,5 +1,5 @@
 <fieldset>
-	<legend>{lang}wcf.conversation.label.assignment{/lang}</legend>
+	<legend>{lang}wcf.conversation.label.assignLabels{/lang}</legend>
 	
 	<ul>
 		{foreach from=$labelList item=label}
@@ -12,5 +12,5 @@
 </fieldset>
 
 <div class="formSubmit">
-	<button id="assignLabels">{lang}wcf.global.button.save{/lang}</button>
+	<button class="buttonPrimary" id="assignLabels">{lang}wcf.global.button.save{/lang}</button>
 </div>

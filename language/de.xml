@@ -87,6 +87,7 @@
 		<item name="wcf.conversation.label.management.editLabel"><![CDATA[Label &bdquo;#labelName#&ldquo; bearbeiten]]></item>
 		<item name="wcf.conversation.label.management.existingLabels"><![CDATA[Vorhandene Labels]]></item>
 		<item name="wcf.conversation.label.placeholder"><![CDATA[Label]]></item>
+		<item name="wcf.conversation.label.assignLabels"><![CDATA[Label zuweisen]]></item>
 	</category>
 	
 	<category name="wcf.user.notification">

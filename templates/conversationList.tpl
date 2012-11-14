@@ -22,7 +22,8 @@
 				'wcf.conversation.label.management.editLabel': '{lang}wcf.conversation.label.management.editLabel{/lang}',
 				'wcf.conversation.label.placeholder': '{lang}wcf.conversation.label.placeholder{/lang}',
 				'wcf.conversation.leave.title': '{lang}wcf.conversation.leave.title{/lang}',
-				'wcf.global.state.closed': '{lang}wcf.global.state.closed{/lang}'
+				'wcf.global.state.closed': '{lang}wcf.global.state.closed{/lang}',
+				'wcf.conversation.label.assignLabels': '{lang}wcf.conversation.label.assignLabels{/lang}'
 			});
 			WCF.Icon.addObject({
 				'wcf.icon.lock': '{icon}lock{/icon}'
