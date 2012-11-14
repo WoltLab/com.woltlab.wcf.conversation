@@ -159,14 +159,14 @@ WCF.Conversation.EditorHandler = Class.extend({
 					};
 				});
 				
-				var $labelList = $conversation.find('.columnTopic > h1 > .labelList');
+				var $labelList = $conversation.find('.columnSubject > .labelList');
 				if (!data.length) {
 					if ($labelList.length) $labelList.remove();
 				}
 				else {
 					// create label list if missing
 					if (!$labelList.length) {
-						$labelList = $('<ul class="labelList" />').prependTo($conversation.find('.columnTopic > h1'));
+						$labelList = $('<ul class="labelList" />').prependTo($conversation.find('.columnSubject'));
 					}
 					
 					// remove all existing labels
@@ -244,7 +244,7 @@ WCF.Conversation.EditorHandlerConversation = WCF.Conversation.EditorHandler.exte
 			break;
 			
 			case 'labelIDs':
-				var $container = $('#content > header h1');
+				var $container = $('.conversationHeadline');
 				if (!data.length) {
 					// remove all labels
 					$container.find('ul.labelList').remove();

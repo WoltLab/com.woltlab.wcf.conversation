@@ -48,20 +48,20 @@
 
 {include file='header'}
 
-<header class="boxHeadline marginTop">
+<header class="boxHeadline marginTop conversationHeadline">
 	<hgroup>
-		<h1><a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a>{if $conversation->isClosed} <img src="{icon}lock{/icon}" alt="" title="{lang}wcf.global.state.closed{/lang}" class="jsTooltip jsIconLock icon16" />{/if}
-		{hascontent}
-			<ul class="labelList">
-				{content}
-					{foreach from=$conversation->getAssignedLabels() item=label}
-						<li><span class="label badge{if $label->cssClassName} {$label->cssClassName}{/if}">{lang}{$label->label}{/lang}</span></li>
-					{/foreach}
-				{/content}
-			</ul>
-		{/hascontent}
-		</h1>
+		<h1><a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a>{if $conversation->isClosed} <img src="{icon}lock{/icon}" alt="" title="{lang}wcf.global.state.closed{/lang}" class="jsTooltip jsIconLock icon16" />{/if}</h1>
 	</hgroup>
+	
+	{hascontent}
+		<ul class="labelList">
+			{content}
+				{foreach from=$conversation->getAssignedLabels() item=label}
+					<li><span class="label badge{if $label->cssClassName} {$label->cssClassName}{/if}">{lang}{$label->label}{/lang}</span></li>
+				{/foreach}
+			{/content}
+		</ul>
+	{/hascontent}
 </header>
 
 {include file='userNotice'}

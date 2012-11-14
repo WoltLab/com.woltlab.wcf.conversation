@@ -169,17 +169,17 @@
 							{/if}
 						</td>
 						<td class="columnText columnSubject">
-							<h1>
-								{hascontent}
-									<ul class="labelList">
-										{content}
-											{foreach from=$conversation->getAssignedLabels() item=label}
-												<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}&labelID={@$label->labelID}{/link}" class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}">{$label->label}</a></li>
-											{/foreach}
-										{/content}
-									</ul>
-								{/hascontent}
+							{hascontent}
+								<ul class="labelList">
+									{content}
+										{foreach from=$conversation->getAssignedLabels() item=label}
+											<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}&labelID={@$label->labelID}{/link}" class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}">{$label->label}</a></li>
+										{/foreach}
+									{/content}
+								</ul>
+							{/hascontent}
 								
+							<h1>
 								{if $conversation->isNew()}
 									<a href="{link controller='Conversation' object=$conversation}action=firstNew{/link}" class="jsTooltip" title="{lang}wcf.conversation.gotoFirstNewPost{/lang}"><img src="{icon}circleArrowDown{/icon}" alt="" class="firstNewPost icon16" /></a>
 								{/if}
@@ -234,8 +234,6 @@
 <div class="contentNavigation">
 	{@$pagesLinks}
 	
-	<div class="jsClipboardEditor" data-types="[ 'com.woltlab.wcf.conversation.conversation' ]"></div>
-	
 	{hascontent}
 		<nav>
 			<ul>
@@ -246,6 +244,8 @@
 			</ul>
 		</nav>
 	{/hascontent}
+	
+	<nav class="jsClipboardEditor" data-types="[ 'com.woltlab.wcf.conversation.conversation' ]"></nav>
 </div>
 
 {include file='footer'}
