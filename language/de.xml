@@ -100,6 +100,7 @@
 	<category name="wcf.user.option">
 		<item name="wcf.user.option.conversationMessagesPerPage"><![CDATA[Nachrichten pro Seite]]></item>
 		<item name="wcf.user.option.conversationsPerPage"><![CDATA[Konversationen pro Seite]]></item>
+		<item name="wcf.user.option.canSendConversation"><![CDATA[Kann Konversationen schreiben]]></item>
 	</category>
 	
 	<category name="wcf.user">
