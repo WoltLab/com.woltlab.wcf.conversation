@@ -10,7 +10,7 @@
 		
 		<options>
 			<option name="module_conversation">
-				<categoryname>module.content</categoryname>
+				<categoryname>module.community</categoryname>
 				<optiontype>boolean</optiontype>
 				<defaultvalue>1</defaultvalue>
 			</option>
