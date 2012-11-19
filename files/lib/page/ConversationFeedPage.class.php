@@ -1,19 +1,17 @@
 <?php
 namespace wcf\page;
 use wcf\data\conversation\FeedConversationList;
-use wcf\system\exception\IllegalLinkException;
-use wcf\system\exception\PermissionDeniedException;
 use wcf\system\WCF;
 
 /**
  * Shows most recent conversations.
  * 
- * @author 	Alexander Ebert
+ * @author	Alexander Ebert
  * @copyright	2001-2012 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	page
- * @category 	Community Framework
+ * @category	Community Framework
  */
 class ConversationFeedPage extends AbstractFeedPage {
 	/**

@@ -218,7 +218,9 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 	}
 	
 	/**
-	 * Assigns labels for a conversation.
+	 * Assigns labels to a conversation.
+	 * 
+	 * @return	array
 	 */
 	public function assignLabel() {
 		// remove previous labels (if any)

@@ -71,7 +71,7 @@
 	<div class="container containerPadding marginTop">
 		<fieldset>
 			<legend>{lang}wcf.conversation.participants{/lang}</legend>
-	
+			
 			<ul class="conversationParticipantList">
 				{foreach from=$participants item=participant}
 					<li class="box24">

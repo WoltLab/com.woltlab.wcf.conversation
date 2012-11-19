@@ -6,7 +6,7 @@ use wcf\system\WCF;
 
 /**
  * Implementation of IUserOnlineLocation for the conversation page location.
- *
+ * 
  * @author	Marcel Werk
  * @copyright	2001-2012 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>

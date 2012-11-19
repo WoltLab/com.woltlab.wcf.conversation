@@ -3,7 +3,7 @@ namespace wcf\data\conversation\message;
 use wcf\data\attachment\GroupedAttachmentList;
 
 /**
- * Represents a list of conversation messages.
+ * Represents a list of viewable conversation messages.
  * 
  * @author	Marcel Werk
  * @copyright	2001-2012 WoltLab GmbH
@@ -64,7 +64,6 @@ class ViewableConversationMessageList extends ConversationMessageList {
 		if ($this->objectIDs === null) $this->readObjectIDs();
 		parent::readObjects();
 		
-		$messageIDs = array();
 		foreach ($this->objects as &$message) {
 			if ($message->time > $this->maxPostTime) $this->maxPostTime = $message->time;
 			$message = new $this->decoratorClassName($message);

@@ -380,7 +380,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			$quoteID = MessageQuoteManager::getInstance()->getQuoteID('com.woltlab.wcf.conversation.message', $this->message->messageID, $this->message->getExcerpt(), $this->message->getMessage());
 			MessageQuoteManager::getInstance()->removeQuote($quoteID);
 		}
-	
+		
 		return array(
 			'count' => MessageQuoteManager::getInstance()->countQuotes(),
 			'fullQuoteMessageIDs' => MessageQuoteManager::getInstance()->getFullQuoteObjectIDs(array('com.woltlab.wcf.conversation.message'))

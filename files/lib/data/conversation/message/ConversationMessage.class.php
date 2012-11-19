@@ -45,7 +45,7 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	
 	/**
 	 * Returns an excerpt of this message.
-	 *
+	 * 
 	 * @param	string		$maxLength
 	 * @return	string
 	 */

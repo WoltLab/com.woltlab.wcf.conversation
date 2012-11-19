@@ -3,6 +3,16 @@ namespace wcf\data\conversation;
 use wcf\data\user\UserProfileList;
 use wcf\system\WCF;
 
+/**
+ * Represents a list of conversation participants.
+ * 
+ * @author	Marcel Werk
+ * @copyright	2001-2012 WoltLab GmbH
+ * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
+ * @package	com.woltlab.wcf.conversation
+ * @subpackage	data.conversation
+ * @category	Community Framework
+ */
 class ConversationParticipantList extends UserProfileList {
 	/**
 	 * @see	wcf\data\DatabaseObjectList::$sqlLimit
@@ -41,7 +51,7 @@ class ConversationParticipantList extends UserProfileList {
 	}
 	
 	/**
-	 * Reads the object ids from database.
+	 * @see	wcf\data\DatabaseObjectList::readObjectIDs()
 	 */
 	public function readObjectIDs() {
 		$this->objectIDs = array();
