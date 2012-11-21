@@ -3,6 +3,16 @@ namespace wcf\data\conversation;
 use wcf\data\user\UserProfileList;
 use wcf\system\WCF;
 
+/**
+ * Represents a list of conversation participants.
+ * 
+ * @author	Marcel Werk
+ * @copyright	2001-2012 WoltLab GmbH
+ * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
+ * @package	com.woltlab.wcf.conversation
+ * @subpackage	data.conversation
+ * @category	Community Framework
+ */
 class ConversationParticipantList extends UserProfileList {
 	/**
 	 * @see	wcf\data\DatabaseObjectList::$sqlLimit
@@ -14,11 +24,16 @@ class ConversationParticipantList extends UserProfileList {
 	 * 
 	 * @param	integer		$conversationID
 	 */
-	public function __construct($conversationID) {
+	public function __construct($conversationID, $userID = 0) {
 		parent::__construct();
 		
 		$this->getConditionBuilder()->add('conversation_to_user.conversationID = ?', array($conversationID));
-		$this->getConditionBuilder()->add('conversation_to_user.isInvisible = 0');
+		if ($userID) {
+			$this->getConditionBuilder()->add('conversation_to_user.isInvisible = 0 OR conversation_to_user.participantID = ?', array($userID));
+		}
+		else {
+			$this->getConditionBuilder()->add('conversation_to_user.isInvisible = 0');	
+		}
 		$this->sqlConditionJoins .= " LEFT JOIN wcf".WCF_N."_user user_table ON (user_table.userID = conversation_to_user.participantID)";
 		
 		if (!empty($this->sqlSelects)) $this->sqlSelects .= ',';
