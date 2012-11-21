@@ -73,7 +73,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		// create message
 		$message = parent::create();
 		
-		// get thread
+		// get conversation
 		$conversation = (isset($this->parameters['converation']) ? $this->parameters['converation'] : new Conversation($message->conversationID));
 		$conversationEditor = new ConversationEditor($conversation);
 		
@@ -85,6 +85,14 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			if (!$conversation->isDraft) {
 				UserNotificationHandler::getInstance()->fireEvent('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', new ConversationMessageUserNotificationObject($message), $conversation->getParticipantIDs());
 			}
+			
+			// make invisible participant visible
+			$sql = "UPDATE	wcf".WCF_N."_conversation_to_user
+				SET	isInvisible = 0
+				WHERE	participantID = ?
+					AND conversationID = ?";
+			$statement = WCF::getDB()->prepareStatement($sql);
+			$statement->execute(array($message->userID, $conversation->conversationID));
 		}
 		
 		// reset storage
@@ -116,7 +124,11 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		
 		parent::update();
 		
-		// @todo: update search index
+		// update search index
+		foreach ($this->objects as $message) {
+			$conversation = $message->getConversation();
+			SearchIndexManager::getInstance()->update('com.woltlab.wcf.conversation.message', $message->messageID, $message->message, ($conversation->firstMessageID == $message->messageID ? $conversation->subject : ''), $message->time, $message->userID, $message->username);
+		}
 	}
 	
 	/**
