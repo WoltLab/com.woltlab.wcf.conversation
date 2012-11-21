@@ -52,6 +52,7 @@
 		<item name="wcf.conversation.participants"><![CDATA[Participants]]></item>
 		<item name="wcf.conversation.participants.description"><![CDATA[Separate names with a comma.]]></item>
 		<item name="wcf.conversation.quota"><![CDATA[Quota]]></item>
+		<item name="wcf.conversation.quota.description"><![CDATA[{#$conversationCount/$maxConversationCount*100}% full ({#$conversationCount} of {#$maxConversationCount})]]></item>
 		<item name="wcf.conversation.replies"><![CDATA[Replies]]></item>
 		<item name="wcf.conversation.showAll"><![CDATA[Show All Conversations]]></item>
 	</category>
