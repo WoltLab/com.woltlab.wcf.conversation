@@ -10,7 +10,6 @@ use wcf\system\clipboard\ClipboardHandler;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
-use wcf\system\exception\ValidateActionException;
 use wcf\system\package\PackageDependencyHandler;
 use wcf\system\request\LinkHandler;
 use wcf\system\user\notification\object\ConversationUserNotificationObject;
@@ -287,10 +286,10 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		// read objects
 		if (empty($this->objects)) {
 			$this->readObjects();
-		}
-		
-		if (empty($this->objects)) {
-			throw new ValidateActionException('Invalid object id');
+			
+			if (empty($this->objects)) {
+				throw new UserInputException('objectIDs');
+			}
 		}
 		
 		// validate ownership
@@ -325,12 +324,12 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		// read objects
 		if (empty($this->objects)) {
 			$this->readObjects();
+			
+			if (empty($this->objects)) {
+				throw new UserInputException('objectIDs');
+			}
 		}
-	
-		if (empty($this->objects)) {
-			throw new ValidateActionException('Invalid object id');
-		}
-	
+		
 		// validate ownership
 		foreach ($this->objects as $conversation) {
 			if (!$conversation->isClosed || ($conversation->userID != WCF::getUser()->userID)) {
