@@ -342,6 +342,11 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
+	 * @see	wcf\data\IMessageQuickReplyAction::validateMessage()
+	 */
+	public function validateMessage(DatabaseObject $container, $message) { }
+	
+	/**
 	 * @see	wcf\data\IMessageQuickReply::getPageNo()
 	 */
 	public function getPageNo(DatabaseObject $conversation) {
