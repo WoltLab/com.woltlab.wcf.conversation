@@ -23,11 +23,13 @@
 			<name>com.woltlab.wcf.conversation.notification</name>
 			<definitionname>com.woltlab.wcf.notification.objectType</definitionname>
 			<classname>wcf\system\user\notification\object\type\ConversationNotificationObjectType</classname>
+			<category>com.woltlab.wcf.conversation</category>
 		</type>
 		<type>
 			<name>com.woltlab.wcf.conversation.message.notification</name>
 			<definitionname>com.woltlab.wcf.notification.objectType</definitionname>
 			<classname>wcf\system\user\notification\object\type\ConversationMessageNotificationObjectType</classname>
+			<category>com.woltlab.wcf.conversation</category>
 		</type>
 		
 		<type>
