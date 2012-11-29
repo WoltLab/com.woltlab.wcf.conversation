@@ -47,6 +47,10 @@
 
 <body id="tpl{$templateName|ucfirst}">
 
+{capture assign='headerNavigation'}
+	<li><a href="{link controller='ConversationLog' id=$conversation->conversationID}{/link}" title="{lang}wcf.conversation.log{/lang}" class="jsTooltip"><img src="{icon}checkColored{/icon}" class="icon16" alt="" /> <span class="invisible">{lang}wcf.conversation.log{/lang}</span></a></li>
+{/capture}
+
 {include file='header'}
 
 <header class="boxHeadline marginTop conversationHeadline">
