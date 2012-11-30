@@ -15,6 +15,18 @@ use wcf\system\database\util\PreparedStatementConditionBuilder;
  */
 class ConversationModificationLogHandler extends ModificationLogHandler {
 	/**
+	 * Adds a log entry for newly added conversation participants.
+	 * 
+	 * @param	wcf\data\conversation\Conversation	$conversation
+	 * @param	array<integer>				$participantIDs
+	 */
+	public function addParticipants(Conversation $conversation, array $participantIDs) {
+		$this->add($conversation, 'addParticipants', array(
+			'participantIDs' => $participantIDs
+		));
+	}
+	
+	/**
 	 * Adds a log entry for conversation close.
 	 * 
 	 * @param	wcf\data\conversation\Conversation	$conversation

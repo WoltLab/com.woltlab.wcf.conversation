@@ -1,7 +1,5 @@
 <?php
 namespace wcf\data\conversation;
-use wcf\system\log\modification\ConversationModificationLogHandler;
-
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\IClipboardAction;
 use wcf\data\conversation\label\ConversationLabel;
@@ -12,6 +10,7 @@ use wcf\system\clipboard\ClipboardHandler;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
+use wcf\system\log\modification\ConversationModificationLogHandler;
 use wcf\system\package\PackageDependencyHandler;
 use wcf\system\request\LinkHandler;
 use wcf\system\user\notification\object\ConversationUserNotificationObject;
@@ -553,6 +552,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 				
 				$count = count($participantIDs);
 				$successMessage = WCF::getLanguage()->getDynamicVariable('wcf.conversation.edit.addParticipants.success', array('count' => $count));
+				
+				ConversationModificationLogHandler::getInstance()->addParticipants($this->conversation->getDecoratedObject(), $participantIDs);
 			}
 		}
 		
