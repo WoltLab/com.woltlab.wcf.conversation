@@ -8,9 +8,9 @@
 			<templatecode><![CDATA[{include file='__userPanelConversationDropdown'}]]></templatecode>
 		</templatelistener>
 		
-		<templatelistener name="userInformation">
+		<templatelistener name="userInformationButtons">
 			<environment>user</environment>
-			<templatename>userInformation</templatename>
+			<templatename>userInformationButtons</templatename>
 			<eventname>buttons</eventname>
 			<templatecode><![CDATA[{include file='__userInformationStartConversation'}]]></templatecode>
 		</templatelistener>
