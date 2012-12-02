@@ -10,6 +10,7 @@ use wcf\system\clipboard\ClipboardHandler;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
+use wcf\system\log\modification\ConversationModificationLogHandler;
 use wcf\system\package\PackageDependencyHandler;
 use wcf\system\request\LinkHandler;
 use wcf\system\user\notification\object\ConversationUserNotificationObject;
@@ -251,11 +252,10 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 * Validates the get message preview action.
 	 */
 	public function validateGetMessagePreview() {
-		// read data
-		if (empty($this->objects)) {
-			$this->readObjects();
+		$this->conversation = $this->getSingleObject();
+		if (!Conversation::isParticipant(array($this->conversation->conversationID))) {
+			throw new PermissionDeniedException();
 		}
-		// @todo: implement me
 	}
 	
 	/**
@@ -265,9 +265,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 */
 	public function getMessagePreview() {
 		$messageList = new ViewableConversationMessageList();
-		$conversation = reset($this->objects);
 		
-		$messageList->getConditionBuilder()->add("conversation_message.messageID = ?", array($conversation->firstMessageID));
+		$messageList->getConditionBuilder()->add("conversation_message.messageID = ?", array($this->conversation->firstMessageID));
 		$messageList->readObjects();
 		$messages = $messageList->getObjects();
 		
@@ -307,9 +306,10 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 */
 	public function close() {
 		foreach ($this->objects as $conversation) {
-			// TODO: implement a method 'close()' in order to utilize modification log
 			$conversation->update(array('isClosed' => 1));
 			$this->addConversationData($conversation->getDecoratedObject(), 'isClosed', 1);
+			
+			ConversationModificationLogHandler::getInstance()->close($conversation->getDecoratedObject());
 		}
 		
 		$this->unmarkItems();
@@ -345,9 +345,10 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 */
 	public function open() {
 		foreach ($this->objects as $conversation) {
-			// TODO: implement a method 'open()' in order to utilize modification log
 			$conversation->update(array('isClosed' => 0));
 			$this->addConversationData($conversation->getDecoratedObject(), 'isClosed', 0);
+			
+			ConversationModificationLogHandler::getInstance()->close($conversation->getDecoratedObject());
 		}
 		
 		$this->unmarkItems();
@@ -551,6 +552,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 				
 				$count = count($participantIDs);
 				$successMessage = WCF::getLanguage()->getDynamicVariable('wcf.conversation.edit.addParticipants.success', array('count' => $count));
+				
+				ConversationModificationLogHandler::getInstance()->addParticipants($this->conversation->getDecoratedObject(), $participantIDs);
 			}
 		}
 		

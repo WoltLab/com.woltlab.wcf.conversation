@@ -44,6 +44,13 @@
 			<classname>wcf\system\moderation\queue\report\ConversationMessageModerationQueueReportHandler</classname>
 		</type>
 		
+		<!-- Modification Log -->
+		<type>
+			<name>com.woltlab.wcf.conversation.conversation</name>
+			<definitionname>com.woltlab.wcf.modifiableContent</definitionname>
+		</type>
+		<!-- /Modification Log -->
+		
 		<!-- user online locations -->
 		<type>
 			<name>com.woltlab.wcf.conversation.ConversationListPage</name>
