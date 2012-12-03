@@ -75,15 +75,15 @@
 		<item name="wcf.conversation.label.management.addLabel.success"><![CDATA[Label was saved]]></item>
 		<item name="wcf.conversation.label.management.deleteLabel"><![CDATA[Delete Label]]></item>
 		<item name="wcf.conversation.label.management.edit.description"><![CDATA[Click on a label to edit or delete it.]]></item>
-		<item name="wcf.conversation.label.management.editLabel"><![CDATA[Edit Label &ldquo;#labelName#&rdquo;]]></item>
+		<item name="wcf.conversation.label.management.editLabel"><![CDATA[Edit Label “#labelName#”]]></item>
 		<item name="wcf.conversation.label.management.existingLabels"><![CDATA[Existing Labels]]></item>
 		<item name="wcf.conversation.label.placeholder"><![CDATA[Label]]></item>
 	</category>
 	
 	<category name="wcf.user.notification">
-		<item name="wcf.user.notification.conversation.message.output"><![CDATA[Replied to the conversation &ldquo;<a href="{link controller='Conversation' object=$message->getConversation()}messageID={@$message->messageID}{/link}#message{@$message->messageID}">{$message->getTitle()}</a>&rdquo;.]]></item>
+		<item name="wcf.user.notification.conversation.message.output"><![CDATA[Replied to the conversation “<a href="{link controller='Conversation' object=$message->getConversation()}messageID={@$message->messageID}{/link}#message{@$message->messageID}">{$message->getTitle()}</a>”.]]></item>
 		<item name="wcf.user.notification.conversation.message.shortOutput"><![CDATA[New Reply to Conversation]]></item>		
-		<item name="wcf.user.notification.conversation.output"><![CDATA[Started the conversation &ldquo;<a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a>&rdquo;.]]></item>
+		<item name="wcf.user.notification.conversation.output"><![CDATA[Started the conversation “<a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a>”.]]></item>
 		<item name="wcf.user.notification.conversation.shortOutput"><![CDATA[New Conversation]]></item>
 	</category>
 	
@@ -95,8 +95,8 @@
 	<category name="wcf.user">
 		<item name="wcf.user.usersOnline.location.ConversationAddForm"><![CDATA[Starting conversation]]></item>
 		<item name="wcf.user.usersOnline.location.ConversationListPage"><![CDATA[Conversations]]></item>
-		<item name="wcf.user.usersOnline.location.ConversationMessageAddForm"><![CDATA[Replying to <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">Conversation „{$conversation->subject}&ldquo;</a>]]></item>
-		<item name="wcf.user.usersOnline.location.ConversationMessageEditForm"><![CDATA[Editing message in <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">Conversation „{$conversation->subject}&ldquo;</a>]]></item>
-		<item name="wcf.user.usersOnline.location.ConversationPage"><![CDATA[<a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">Conversation „{$conversation->subject}&ldquo;</a>]]></item>
+		<item name="wcf.user.usersOnline.location.ConversationMessageAddForm"><![CDATA[Replying to <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">Conversation „{$conversation->subject}“</a>]]></item>
+		<item name="wcf.user.usersOnline.location.ConversationMessageEditForm"><![CDATA[Editing message in <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">Conversation „{$conversation->subject}“</a>]]></item>
+		<item name="wcf.user.usersOnline.location.ConversationPage"><![CDATA[<a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">Conversation „{$conversation->subject}“</a>]]></item>
 	</category>
 </language>
