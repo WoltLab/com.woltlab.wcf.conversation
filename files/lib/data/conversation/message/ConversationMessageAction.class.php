@@ -2,6 +2,7 @@
 namespace wcf\data\conversation\message;
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationEditor;
+use wcf\data\package\PackageCache;
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\DatabaseObject;
 use wcf\data\IExtendedMessageQuickReplyAction;
@@ -11,7 +12,6 @@ use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
 use wcf\system\message\quote\MessageQuoteManager;
 use wcf\system\message\QuickReplyManager;
-use wcf\system\package\PackageDependencyHandler;
 use wcf\system\request\LinkHandler;
 use wcf\system\search\SearchIndexManager;
 use wcf\system\user\notification\object\ConversationMessageUserNotificationObject;
@@ -96,7 +96,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		}
 		
 		// reset storage
-		UserStorageHandler::getInstance()->reset($conversation->getParticipantIDs(), 'unreadConversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
+		UserStorageHandler::getInstance()->reset($conversation->getParticipantIDs(), 'unreadConversationCount');
 		
 		// update search index
 		SearchIndexManager::getInstance()->add('com.woltlab.wcf.conversation.message', $message->messageID, $message->message, (!empty($this->parameters['isFirstPost']) ? $conversation->subject : ''), $message->time, $message->userID, $message->username);
@@ -142,7 +142,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			$conversationEditor = new ConversationEditor(new Conversation($conversationID));
 			
 			// reset user storage
-			UserStorageHandler::getInstance()->reset($conversationEditor->getParticipantIDs(), 'unreadConversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
+			UserStorageHandler::getInstance()->reset($conversationEditor->getParticipantIDs(), 'unreadConversationCount');
 			
 			// check if last message was deleted
 			if (($conversationEditor->replies - $count) == -1) {

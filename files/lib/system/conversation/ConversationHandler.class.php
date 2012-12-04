@@ -1,7 +1,6 @@
 <?php
 namespace wcf\system\conversation;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
-use wcf\system\package\PackageDependencyHandler;
 use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\SingletonFactory;
 use wcf\system\WCF;
@@ -55,7 +54,7 @@ class ConversationHandler extends SingletonFactory {
 				$this->unreadConversationCount[$userID] = $row['count'];
 				
 				// update storage data
-				UserStorageHandler::getInstance()->update($userID, 'unreadConversationCount', serialize($this->unreadConversationCount[$userID]), PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
+				UserStorageHandler::getInstance()->update($userID, 'unreadConversationCount', serialize($this->unreadConversationCount[$userID]));
 			}
 			else {
 				$this->unreadConversationCount[$userID] = unserialize($data[$userID]);
@@ -105,7 +104,7 @@ class ConversationHandler extends SingletonFactory {
 				$this->conversationCount[$userID] = $row['count'];
 				
 				// update storage data
-				UserStorageHandler::getInstance()->update($userID, 'conversationCount', serialize($this->conversationCount[$userID]), PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
+				UserStorageHandler::getInstance()->update($userID, 'conversationCount', serialize($this->conversationCount[$userID]));
 			}
 			else {
 				$this->conversationCount[$userID] = unserialize($data[$userID]);

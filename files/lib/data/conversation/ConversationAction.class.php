@@ -5,13 +5,13 @@ use wcf\data\IClipboardAction;
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\data\conversation\message\ViewableConversationMessageList;
+use wcf\data\package\PackageCache;
 use wcf\data\user\UserProfile;
 use wcf\system\clipboard\ClipboardHandler;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
 use wcf\system\log\modification\ConversationModificationLogHandler;
-use wcf\system\package\PackageDependencyHandler;
 use wcf\system\request\LinkHandler;
 use wcf\system\user\notification\object\ConversationUserNotificationObject;
 use wcf\system\user\notification\UserNotificationHandler;
@@ -74,7 +74,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			$conversationEditor->updateParticipants(array($data['userID']));
 			
 			// update conversation count
-			UserStorageHandler::getInstance()->reset($conversation->getParticipantIDs(), 'conversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
+			UserStorageHandler::getInstance()->reset($conversation->getParticipantIDs(), 'conversationCount');
 		
 			// fire notification event
 			$notificationRecipients = array_merge((!empty($this->parameters['participants']) ? $this->parameters['participants'] : array()), (!empty($this->parameters['invisibleParticipants']) ? $this->parameters['invisibleParticipants'] : array()));
@@ -82,7 +82,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		}
 		else {
 			// update conversation count
-			UserStorageHandler::getInstance()->reset(array($data['userID']), 'conversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
+			UserStorageHandler::getInstance()->reset(array($data['userID']), 'conversationCount');
 		}
 		
 		// update participant summary
@@ -140,7 +140,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 				$participantIDs = array_diff($participantIDs, $this->parameters['participants'], $this->parameters['invisibleParticipants']);
 				if (!empty($participantIDs)) {
 					// update conversation count
-					UserStorageHandler::getInstance()->reset($participantIDs, 'conversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
+					UserStorageHandler::getInstance()->reset($participantIDs, 'conversationCount');
 					
 					// fire notification event
 					UserNotificationHandler::getInstance()->fireEvent('conversation', 'com.woltlab.wcf.conversation.notification', new ConversationUserNotificationObject($conversation->getDecoratedObject()), $participantIDs);
@@ -154,7 +154,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 					$conversation->updateParticipants(array($conversation->userID));
 					
 					// update conversation count
-					UserStorageHandler::getInstance()->reset($conversation->getParticipantIDs(), 'conversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
+					UserStorageHandler::getInstance()->reset($conversation->getParticipantIDs(), 'conversationCount');
 				}
 			}
 		}
@@ -188,7 +188,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		WCF::getDB()->commitTransaction();
 		
 		// reset storage
-		UserStorageHandler::getInstance()->reset(array(WCF::getUser()->userID), 'unreadConversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
+		UserStorageHandler::getInstance()->reset(array(WCF::getUser()->userID), 'unreadConversationCount');
 	}
 	
 	/**
