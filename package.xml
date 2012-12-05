@@ -19,6 +19,7 @@
 		<requiredpackage minversion="2.0.0 Alpha 1">com.woltlab.wcf.message.sidebar</requiredpackage>
 		<requiredpackage minversion="1.0.0 Alpha 1">com.woltlab.wcf.search</requiredpackage>
 		<requiredpackage minversion="1.0.0 Alpha 1">com.woltlab.wcf.moderation</requiredpackage>
+		<requiredpackage minversion="1.0.0 Alpha 1">com.woltlab.wcf.user</requiredpackage>
 	</requiredpackages>
 	
 	<instructions type="install">
