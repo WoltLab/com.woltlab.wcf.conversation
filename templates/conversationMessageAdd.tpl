@@ -9,11 +9,6 @@
 	<script type="text/javascript">
 		//<![CDATA[
 		$(function() {
-			WCF.Language.addObject({
-				'wcf.global.preview': '{lang}wcf.global.preview{/lang}'
-			});
-			new WCF.Message.DefaultPreview();
-			
 			{include file='__messageQuoteManager' wysiwygSelector='text' supportPaste=true}
 			new WCF.Conversation.Message.QuoteHandler($quoteManager);
 		});
@@ -69,7 +64,7 @@
 	
 	<div class="formSubmit">
 		<input type="submit" value="{lang}wcf.global.button.submit{/lang}" accesskey="s" />
-		<button id="previewButton" class="javascriptOnly" accesskey="p">{lang}wcf.global.button.preview{/lang}</button>
+		{include file='messageFormPreviewButton'}
 	</div>
 </form>
 
