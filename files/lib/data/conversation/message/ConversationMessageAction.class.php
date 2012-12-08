@@ -371,9 +371,9 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\data\IMessageQuoteAction::validateSaveFullQUote()
+	 * @see	wcf\data\IMessageQuoteAction::validateSaveFullQuote()
 	 */
-	public function validateSaveFullQUote() {
+	public function validateSaveFullQuote() {
 		if (empty($this->objects)) {
 			$this->readObjects();
 				
