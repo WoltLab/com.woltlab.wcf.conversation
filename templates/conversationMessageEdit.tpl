@@ -5,17 +5,6 @@
 	
 	{include file='headInclude'}
 	
-	<script type="text/javascript">
-		//<![CDATA[
-		$(function() {
-			WCF.Language.addObject({
-				'wcf.global.preview': '{lang}wcf.global.preview{/lang}'
-			});
-			new WCF.Message.DefaultPreview();
-		});
-		//]]>
-	</script>
-	
 	{include file='imageViewer'}
 </head>
 
@@ -142,7 +131,7 @@
 	<div class="formSubmit">
 		<input type="submit" value="{lang}wcf.global.button.submit{/lang}" accesskey="s" />
 		{if $isFirstMessage && $conversation->isDraft}<button name="draft" accesskey="d" value="1">{lang}wcf.conversation.button.saveAsDraft{/lang}</button>{/if}
-		<button id="previewButton" class="javascriptOnly" accesskey="p">{lang}wcf.global.button.preview{/lang}</button>
+		{include file='messageFormPreviewButton'}
 	</div>
 </form>
 
