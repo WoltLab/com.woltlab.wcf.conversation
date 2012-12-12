@@ -14,5 +14,12 @@
 			<eventname>buttons</eventname>
 			<templatecode><![CDATA[{include file='__userInformationStartConversation'}]]></templatecode>
 		</templatelistener>
+		
+		<templatelistener name="userButtons">
+			<environment>user</environment>
+			<templatename>user</templatename>
+			<eventname>buttons</eventname>
+			<templatecode><![CDATA[{include file='__userStartConversation'}]]></templatecode>
+		</templatelistener>
 	</import>
 </data>
