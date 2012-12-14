@@ -5,7 +5,7 @@
 			<option name="canSendConversation">
 				<categoryname>settings.privacy.messaging</categoryname>
 				<optiontype>select</optiontype>
-				<visible>1</visible>
+				<editable>3</editable>
 				<selectoptions><![CDATA[0:wcf.user.access.registered
 1:wcf.user.access.following
 2:wcf.user.access.nobody]]></selectoptions>
@@ -15,7 +15,7 @@
 			<option name="conversationsPerPage">
 				<categoryname>settings.general.interface</categoryname>
 				<optiontype>select</optiontype>
-				<visible>1</visible>
+				<editable>3</editable>
 				<defaultvalue>0</defaultvalue>
 				<selectoptions><![CDATA[0:wcf.global.defaultValue
 5
@@ -28,7 +28,7 @@
 			<option name="conversationMessagesPerPage">
 				<categoryname>settings.general.interface</categoryname>
 				<optiontype>select</optiontype>
-				<visible>1</visible>
+				<editable>3</editable>
 				<defaultvalue>0</defaultvalue>
 				<selectoptions><![CDATA[0:wcf.global.defaultValue
 5
