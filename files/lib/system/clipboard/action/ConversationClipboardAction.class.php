@@ -16,7 +16,7 @@ use wcf\system\WCF;
  * @subpackage	system.clipboard.action
  * @category	Community Framework
  */
-class ConversationClipboardAction implements IClipboardAction {
+class ConversationClipboardAction extends AbstractClipboardAction {
 	/**
 	 * list of conversations
 	 * @var	array<wcf\data\conversation\Conversation>
