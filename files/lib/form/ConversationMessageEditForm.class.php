@@ -201,7 +201,7 @@ class ConversationMessageEditForm extends ConversationAddForm {
 		
 		// get message list
 		$this->messageList = new ViewableConversationMessageList();
-		$this->messageList->sqlLimit = 10; // @todo add setting? REPLY_SHOW_POSTS_MAX;
+		$this->messageList->sqlLimit = CONVERSATION_REPLY_SHOW_MESSAGES_MAX;
 		$this->messageList->sqlOrderBy = 'conversation_message.time DESC';
 		$this->messageList->getConditionBuilder()->add('conversation_message.conversationID = ?', array($this->message->conversationID));
 		$this->messageList->getConditionBuilder()->add("conversation_message.messageID <> ?", array($this->message->messageID));

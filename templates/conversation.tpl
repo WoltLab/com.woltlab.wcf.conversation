@@ -47,6 +47,10 @@
 
 <body id="tpl{$templateName|ucfirst}">
 
+{capture assign='headerNavigation'}
+	<li><a href="{link controller='ConversationLog' id=$conversation->conversationID}{/link}" title="{lang}wcf.conversation.log{/lang}" class="jsTooltip"><img src="{icon}checkColored{/icon}" class="icon16" alt="" /> <span class="invisible">{lang}wcf.conversation.log{/lang}</span></a></li>
+{/capture}
+
 {include file='header'}
 
 <header class="boxHeadline marginTop conversationHeadline">
@@ -77,7 +81,9 @@
 					<li class="box24">
 						<a href="{link controller='User' object=$participant}{/link}" class="framed">{@$participant->getAvatar()->getImageTag(24)}</a>
 						<hgroup>
-							<h1><a href="{link controller='User' object=$participant}{/link}" class="userLink{if $participant->hideConversation == 2} conversationLeft{/if}" data-user-id="{@$participant->userID}">{$participant->username}</a></h1>
+							<h1><a href="{link controller='User' object=$participant}{/link}" class="userLink{if $participant->hideConversation == 2} conversationLeft{/if}" data-user-id="{@$participant->userID}">{$participant->username}</a>
+							{if $participant->isInvisible}<small>({lang}wcf.conversation.invisible{/lang})</small>{/if}
+							</h1>
 							<h2><dl class="plain inlineDataList">
 								<dt>{lang}wcf.conversation.lastVisitTime{/lang}</dt>
 								<dd>{if $participant->lastVisitTime}{@$participant->lastVisitTime|time}{else}-{/if}</dd>

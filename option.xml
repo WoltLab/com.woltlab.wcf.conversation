@@ -26,6 +26,12 @@
 				<defaultvalue><![CDATA[20]]></defaultvalue>
 			</option>
 			
+			<option name="conversation_reply_show_messages_max">
+				<categoryname>message.conversation</categoryname>
+				<optiontype>integer</optiontype>
+				<defaultvalue>10</defaultvalue>
+			</option>
+			
 			<option name="conversation_list_default_sort_field">
 				<categoryname>message.conversation</categoryname>
 				<optiontype>select</optiontype>

@@ -36,8 +36,9 @@
 		<item name="wcf.conversation.hideConversation.leave.description"><![CDATA[Die Konversation wird bis zu einer neuen Antwort nicht mehr als aktive Konversation gelistet.]]></item>
 		<item name="wcf.conversation.hideConversation.leavePermanently"><![CDATA[Konversation verlassen]]></item>
 		<item name="wcf.conversation.hideConversation.leavePermanently.description"><![CDATA[Die Konversation wird verlassen und Sie werden nicht länger als aktiver Teilnehmer gelistet.]]></item>
-		<item name="wcf.conversation.hideConversation.restore"><![CDATA[Konversation als &bdquo;aktiv&ldquo; markieren]]></item>
+		<item name="wcf.conversation.hideConversation.restore"><![CDATA[Konversation als „aktiv“ markieren]]></item>
 		<item name="wcf.conversation.information"><![CDATA[Informationen]]></item>
+		<item name="wcf.conversation.invisible"><![CDATA[unsichtbar]]></item>
 		<item name="wcf.conversation.invisibleParticipants"><![CDATA[Unsichtbare Teilnehmer]]></item>
 		<item name="wcf.conversation.invisibleParticipants.description"><![CDATA[Unsichtbare Teilnehmer sind für andere Teilnehmer nicht sichtbar. Mehrere Teilnehmer können mit Komma getrennt angegeben werden.]]></item>
 		<item name="wcf.conversation.lastPostTime"><![CDATA[Letzte Antwort]]></item>
@@ -82,19 +83,22 @@
 		<item name="wcf.conversation.label.management.addLabel"><![CDATA[Label hinzufügen]]></item>
 		<item name="wcf.conversation.label.management.addLabel.success"><![CDATA[Label wurde hinzugefügt]]></item>
 		<item name="wcf.conversation.label.management.deleteLabel"><![CDATA[Label löschen]]></item>
-		<item name="wcf.conversation.label.management.deleteLabel.confirmMessage"><![CDATA[Wollen Sie das Label &bdquo;#labelName#&ldquo; wirklich löschen?]]></item>
+		<item name="wcf.conversation.label.management.deleteLabel.confirmMessage"><![CDATA[Wollen Sie das Label „#labelName#“ wirklich löschen?]]></item>
 		<item name="wcf.conversation.label.management.edit.description"><![CDATA[Klicken Sie ein Label an, um dieses zu bearbeiten oder zu löschen.]]></item>
-		<item name="wcf.conversation.label.management.editLabel"><![CDATA[Label &bdquo;#labelName#&ldquo; bearbeiten]]></item>
+		<item name="wcf.conversation.label.management.editLabel"><![CDATA[Label „#labelName#“ bearbeiten]]></item>
 		<item name="wcf.conversation.label.management.existingLabels"><![CDATA[Vorhandene Labels]]></item>
 		<item name="wcf.conversation.label.placeholder"><![CDATA[Label]]></item>
 		<item name="wcf.conversation.label.assignLabels"><![CDATA[Label zuweisen]]></item>
 	</category>
 	
 	<category name="wcf.user.notification">
-		<item name="wcf.user.notification.conversation.message.output"><![CDATA[Hat auf die Konversation &bdquo;<a href="{link controller='Conversation' object=$message->getConversation()}messageID={@$message->messageID}{/link}#message{@$message->messageID}">{$message->getTitle()}</a>&ldquo; geantwortet.]]></item>
+		<item name="wcf.user.notification.conversation.message.output"><![CDATA[Hat auf die Konversation „<a href="{link controller='Conversation' object=$message->getConversation()}messageID={@$message->messageID}{/link}#message{@$message->messageID}">{$message->getTitle()}</a>“ geantwortet.]]></item>
 		<item name="wcf.user.notification.conversation.message.shortOutput"><![CDATA[Neue Antwort auf Konversation]]></item>		
-		<item name="wcf.user.notification.conversation.output"><![CDATA[Hat die Konversation &bdquo;<a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a>&ldquo; gestartet.]]></item>
+		<item name="wcf.user.notification.conversation.output"><![CDATA[Hat die Konversation „<a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a>“ gestartet.]]></item>
 		<item name="wcf.user.notification.conversation.shortOutput"><![CDATA[Neue Konversation]]></item>
+		<item name="wcf.user.notification.com.woltlab.wcf.conversation"><![CDATA[Konversationen]]></item>
+		<item name="wcf.user.notification.com.woltlab.wcf.conversation.conversation"><![CDATA[Neue Konversation]]></item>
+		<item name="wcf.user.notification.com.woltlab.wcf.conversation.conversationMessage"><![CDATA[Antwort auf bestehende Konversation]]></item>
 	</category>
 	
 	<category name="wcf.user.option">
@@ -106,8 +110,8 @@
 	<category name="wcf.user">
 		<item name="wcf.user.usersOnline.location.ConversationAddForm"><![CDATA[Konversation erstellen]]></item>
 		<item name="wcf.user.usersOnline.location.ConversationListPage"><![CDATA[Konversationen]]></item>
-		<item name="wcf.user.usersOnline.location.ConversationMessageAddForm"><![CDATA[Antworten auf <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">Konversation &bdquo;{$conversation->subject}&ldquo;</a>]]></item>
-		<item name="wcf.user.usersOnline.location.ConversationMessageEditForm"><![CDATA[Nachricht bearbeiten in <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">Konversation &bdquo;{$conversation->subject}&ldquo;</a>]]></item>
-		<item name="wcf.user.usersOnline.location.ConversationPage"><![CDATA[<a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">Konversation &bdquo;{$conversation->subject}&ldquo;</a>]]></item>
+		<item name="wcf.user.usersOnline.location.ConversationMessageAddForm"><![CDATA[Antworten auf <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">Konversation „{$conversation->subject}“</a>]]></item>
+		<item name="wcf.user.usersOnline.location.ConversationMessageEditForm"><![CDATA[Nachricht bearbeiten in <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">Konversation „{$conversation->subject}“</a>]]></item>
+		<item name="wcf.user.usersOnline.location.ConversationPage"><![CDATA[<a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">Konversation „{$conversation->subject}“</a>]]></item>
 	</category>
 </language>

@@ -1251,52 +1251,50 @@ WCF.Conversation.Preview = WCF.Popover.extend({
 
 /**
  * Loads conversations for user panel.
+ * 
+ * @see	WCF.UserPanel
  */
-WCF.Conversation.UserPanel = Class.extend({
+WCF.Conversation.UserPanel = WCF.UserPanel.extend({
 	/**
-	 * loading state
-	 * @var	boolean
+	 * link to conversation add
+	 * @var	string
 	 */
-	_didLoad: false,
+	_addLink: '',
 	
 	/**
-	 * Initializes the conversation loader.
+	 * link to show all conversations
+	 * @var	string
 	 */
-	init: function() {
-		$('#unreadConversations > .dropdownToggle').click($.proxy(this._click, this));
+	_showAllLink: '',
+	
+	/**
+	 * @see	WCF.UserPanel.init()
+	 */
+	init: function(showAllLink, addLink) {
+		this._addLink = addLink;
+		this._showAllLink = showAllLink;
+		
+		this._super('unreadConversations');
 	},
 	
 	/**
-	 * Handles clicks on the dropdown toggle.
+	 * @see	WCF.UserPanel._addDefaultItems()
 	 */
-	_click: function() {
-		if (this._didLoad) {
-			return;
-		}
-		
-		new WCF.Action.Proxy({
-			autoSend: true,
-			data: {
-				actionName: 'getUnreadConversations',
-				className: 'wcf\\data\\conversation\\ConversationAction'
-			},
-			success: $.proxy(this._success, this)
-		});
-		
-		this._didLoad = true;
+	_addDefaultItems: function(dropdownMenu) {
+		this._addDivider(dropdownMenu);
+		$('<li><a href="' + this._showAllLink + '">' + WCF.Language.get('wcf.conversation.showAll') + '</a></li>').appendTo(dropdownMenu);
+		this._addDivider(dropdownMenu);
+		$('<li><a href="' + this._addLink + '">' + WCF.Language.get('wcf.conversation.add') + '</a></li>').appendTo(dropdownMenu);
 	},
 	
 	/**
-	 * Handles successful AJAX requests.
-	 * 
-	 * @param	object		data
-	 * @param	string		textStatus
-	 * @param	jQuery		jqXHR
+	 * @see	WCF.UserPanel._getParameters()
 	 */
-	_success: function(data, textStatus, jqXHR) {
-		var $list = $('#unreadConversations > .dropdownMenu');
-		$list.children('li:eq(0)').remove();
-		$('' + data.returnValues.template).prependTo($list);
+	_getParameters: function() {
+		return {
+			actionName: 'getUnreadConversations',
+			className: 'wcf\\data\\conversation\\ConversationAction'
+		};
 	}
 });
 

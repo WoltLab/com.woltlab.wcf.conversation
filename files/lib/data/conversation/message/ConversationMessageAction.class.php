@@ -2,6 +2,7 @@
 namespace wcf\data\conversation\message;
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationEditor;
+use wcf\data\package\PackageCache;
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\DatabaseObject;
 use wcf\data\IExtendedMessageQuickReplyAction;
@@ -11,7 +12,6 @@ use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
 use wcf\system\message\quote\MessageQuoteManager;
 use wcf\system\message\QuickReplyManager;
-use wcf\system\package\PackageDependencyHandler;
 use wcf\system\request\LinkHandler;
 use wcf\system\search\SearchIndexManager;
 use wcf\system\user\notification\object\ConversationMessageUserNotificationObject;
@@ -73,7 +73,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		// create message
 		$message = parent::create();
 		
-		// get thread
+		// get conversation
 		$conversation = (isset($this->parameters['converation']) ? $this->parameters['converation'] : new Conversation($message->conversationID));
 		$conversationEditor = new ConversationEditor($conversation);
 		
@@ -85,10 +85,18 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			if (!$conversation->isDraft) {
 				UserNotificationHandler::getInstance()->fireEvent('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', new ConversationMessageUserNotificationObject($message), $conversation->getParticipantIDs());
 			}
+			
+			// make invisible participant visible
+			$sql = "UPDATE	wcf".WCF_N."_conversation_to_user
+				SET	isInvisible = 0
+				WHERE	participantID = ?
+					AND conversationID = ?";
+			$statement = WCF::getDB()->prepareStatement($sql);
+			$statement->execute(array($message->userID, $conversation->conversationID));
 		}
 		
 		// reset storage
-		UserStorageHandler::getInstance()->reset($conversation->getParticipantIDs(), 'unreadConversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
+		UserStorageHandler::getInstance()->reset($conversation->getParticipantIDs(), 'unreadConversationCount');
 		
 		// update search index
 		SearchIndexManager::getInstance()->add('com.woltlab.wcf.conversation.message', $message->messageID, $message->message, (!empty($this->parameters['isFirstPost']) ? $conversation->subject : ''), $message->time, $message->userID, $message->username);
@@ -116,7 +124,11 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		
 		parent::update();
 		
-		// @todo: update search index
+		// update search index
+		foreach ($this->objects as $message) {
+			$conversation = $message->getConversation();
+			SearchIndexManager::getInstance()->update('com.woltlab.wcf.conversation.message', $message->messageID, $message->message, ($conversation->firstMessageID == $message->messageID ? $conversation->subject : ''), $message->time, $message->userID, $message->username);
+		}
 	}
 	
 	/**
@@ -130,7 +142,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			$conversationEditor = new ConversationEditor(new Conversation($conversationID));
 			
 			// reset user storage
-			UserStorageHandler::getInstance()->reset($conversationEditor->getParticipantIDs(), 'unreadConversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
+			UserStorageHandler::getInstance()->reset($conversationEditor->getParticipantIDs(), 'unreadConversationCount');
 			
 			// check if last message was deleted
 			if (($conversationEditor->replies - $count) == -1) {
@@ -330,6 +342,11 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
+	 * @see	wcf\data\IMessageQuickReplyAction::validateMessage()
+	 */
+	public function validateMessage(DatabaseObject $container, $message) { }
+	
+	/**
 	 * @see	wcf\data\IMessageQuickReply::getPageNo()
 	 */
 	public function getPageNo(DatabaseObject $conversation) {
@@ -354,9 +371,9 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\data\IMessageQuoteAction::validateSaveFullQUote()
+	 * @see	wcf\data\IMessageQuoteAction::validateSaveFullQuote()
 	 */
-	public function validateSaveFullQUote() {
+	public function validateSaveFullQuote() {
 		if (empty($this->objects)) {
 			$this->readObjects();
 				

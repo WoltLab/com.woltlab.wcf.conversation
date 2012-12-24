@@ -29,18 +29,4 @@ class ConversationMessageUserNotificationEvent extends AbstractUserNotificationE
 			'message' => $this->userNotificationObject,
 		));
 	}
-	
-	/**
-	 * @see	wcf\system\user\notification\event\IUserNotificationEvent::getRenderedOutput()
-	 */
-	public function getRenderedOutput() {
-		WCF::getTPL()->assign(array(
-			'author' => $this->author,
-			'buttons' => $this->getActions(),
-			'message' => $this->getMessage(),
-			'time' => $this->userNotificationObject->time
-		));
-		
-		return WCF::getTPL()->fetch('userNotificationDetails');
-	}
 }

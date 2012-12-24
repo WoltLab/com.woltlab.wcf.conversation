@@ -169,7 +169,7 @@ class ConversationPage extends MultipleLinkPage {
 		}
 		
 		// get participants
-		$this->participantList = new ConversationParticipantList($this->conversationID);
+		$this->participantList = new ConversationParticipantList($this->conversationID, WCF::getUser()->userID);
 		$this->participantList->readObjects();
 		
 		// init quote objects
@@ -273,5 +273,4 @@ class ConversationPage extends MultipleLinkPage {
 	public function getObjectID() {
 		return $this->conversationID;
 	}
-	
 }

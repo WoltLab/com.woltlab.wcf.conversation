@@ -9,11 +9,6 @@
 	<script type="text/javascript">
 		//<![CDATA[
 		$(function() {
-			WCF.Language.addObject({
-				'wcf.global.preview': '{lang}wcf.global.preview{/lang}'
-			});
-			new WCF.Message.DefaultPreview();
-			
 			{include file='__messageQuoteManager' wysiwygSelector='text' supportPaste=true}
 			new WCF.Conversation.Message.QuoteHandler($quoteManager);
 		});
@@ -69,7 +64,7 @@
 	
 	<div class="formSubmit">
 		<input type="submit" value="{lang}wcf.global.button.submit{/lang}" accesskey="s" />
-		<button id="previewButton" class="javascriptOnly" accesskey="p">{lang}wcf.global.button.preview{/lang}</button>
+		{include file='messageFormPreviewButton'}
 	</div>
 </form>
 
@@ -116,9 +111,7 @@
 									
 									<footer class="messageOptions clearfix">
 										<nav>
-											<ul class="smallButtons">
-												<li class="toTopLink"><a href="{@$__wcf->getAnchor('top')}" title="{lang}wcf.global.scrollUp{/lang}" class="button jsTooltip"><img src="{icon}circleArrowUp{/icon}" alt="" class="icon16" /> <span class="invisible">{lang}wcf.global.scrollUp{/lang}</span></a></li>
-											</ul>
+											<ul class="smallButtons buttonGroup"><li class="toTopLink"><a href="{@$__wcf->getAnchor('top')}" title="{lang}wcf.global.scrollUp{/lang}" class="button jsTooltip"><img src="{icon}circleArrowUp{/icon}" alt="" class="icon16" /> <span class="invisible">{lang}wcf.global.scrollUp{/lang}</span></a></li></ul>
 										</nav>
 									</footer>
 								</div>

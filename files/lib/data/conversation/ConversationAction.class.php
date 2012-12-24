@@ -8,8 +8,7 @@ use wcf\data\conversation\message\ViewableConversationMessageList;
 use wcf\system\clipboard\ClipboardHandler;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
-use wcf\system\exception\ValidateActionException;
-use wcf\system\package\PackageDependencyHandler;
+use wcf\system\log\modification\ConversationModificationLogHandler;
 use wcf\system\request\LinkHandler;
 use wcf\system\user\notification\object\ConversationUserNotificationObject;
 use wcf\system\user\notification\UserNotificationHandler;
@@ -72,7 +71,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			$conversationEditor->updateParticipants(array($data['userID']));
 			
 			// update conversation count
-			UserStorageHandler::getInstance()->reset($conversation->getParticipantIDs(), 'conversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
+			UserStorageHandler::getInstance()->reset($conversation->getParticipantIDs(), 'conversationCount');
 			
 			// fire notification event
 			$notificationRecipients = array_merge((!empty($this->parameters['participants']) ? $this->parameters['participants'] : array()), (!empty($this->parameters['invisibleParticipants']) ? $this->parameters['invisibleParticipants'] : array()));
@@ -80,7 +79,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		}
 		else {
 			// update conversation count
-			UserStorageHandler::getInstance()->reset(array($data['userID']), 'conversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
+			UserStorageHandler::getInstance()->reset(array($data['userID']), 'conversationCount');
 		}
 		
 		// update participant summary
@@ -138,7 +137,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 				$participantIDs = array_diff($participantIDs, $this->parameters['participants'], $this->parameters['invisibleParticipants']);
 				if (!empty($participantIDs)) {
 					// update conversation count
-					UserStorageHandler::getInstance()->reset($participantIDs, 'conversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
+					UserStorageHandler::getInstance()->reset($participantIDs, 'conversationCount');
 					
 					// fire notification event
 					UserNotificationHandler::getInstance()->fireEvent('conversation', 'com.woltlab.wcf.conversation.notification', new ConversationUserNotificationObject($conversation->getDecoratedObject()), $participantIDs);
@@ -152,7 +151,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 					$conversation->updateParticipants(array($conversation->userID));
 					
 					// update conversation count
-					UserStorageHandler::getInstance()->reset($conversation->getParticipantIDs(), 'conversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
+					UserStorageHandler::getInstance()->reset($conversation->getParticipantIDs(), 'conversationCount');
 				}
 			}
 		}
@@ -186,7 +185,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		WCF::getDB()->commitTransaction();
 		
 		// reset storage
-		UserStorageHandler::getInstance()->reset(array(WCF::getUser()->userID), 'unreadConversationCount', PackageDependencyHandler::getInstance()->getPackageID('com.woltlab.wcf.conversation'));
+		UserStorageHandler::getInstance()->reset(array(WCF::getUser()->userID), 'unreadConversationCount');
 	}
 	
 	/**
@@ -250,11 +249,10 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 * Validates the get message preview action.
 	 */
 	public function validateGetMessagePreview() {
-		// read data
-		if (empty($this->objects)) {
-			$this->readObjects();
+		$this->conversation = $this->getSingleObject();
+		if (!Conversation::isParticipant(array($this->conversation->conversationID))) {
+			throw new PermissionDeniedException();
 		}
-		// @todo: implement me
 	}
 	
 	/**
@@ -264,9 +262,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 */
 	public function getMessagePreview() {
 		$messageList = new ViewableConversationMessageList();
-		$conversation = reset($this->objects);
 		
-		$messageList->getConditionBuilder()->add("conversation_message.messageID = ?", array($conversation->firstMessageID));
+		$messageList->getConditionBuilder()->add("conversation_message.messageID = ?", array($this->conversation->firstMessageID));
 		$messageList->readObjects();
 		$messages = $messageList->getObjects();
 		
@@ -285,10 +282,10 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		// read objects
 		if (empty($this->objects)) {
 			$this->readObjects();
-		}
-		
-		if (empty($this->objects)) {
-			throw new ValidateActionException('Invalid object id');
+			
+			if (empty($this->objects)) {
+				throw new UserInputException('objectIDs');
+			}
 		}
 		
 		// validate ownership
@@ -306,9 +303,10 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 */
 	public function close() {
 		foreach ($this->objects as $conversation) {
-			// TODO: implement a method 'close()' in order to utilize modification log
 			$conversation->update(array('isClosed' => 1));
 			$this->addConversationData($conversation->getDecoratedObject(), 'isClosed', 1);
+			
+			ConversationModificationLogHandler::getInstance()->close($conversation->getDecoratedObject());
 		}
 		
 		$this->unmarkItems();
@@ -323,10 +321,10 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		// read objects
 		if (empty($this->objects)) {
 			$this->readObjects();
-		}
-		
-		if (empty($this->objects)) {
-			throw new ValidateActionException('Invalid object id');
+			
+			if (empty($this->objects)) {
+				throw new UserInputException('objectIDs');
+			}
 		}
 		
 		// validate ownership
@@ -344,9 +342,10 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 */
 	public function open() {
 		foreach ($this->objects as $conversation) {
-			// TODO: implement a method 'open()' in order to utilize modification log
 			$conversation->update(array('isClosed' => 0));
 			$this->addConversationData($conversation->getDecoratedObject(), 'isClosed', 0);
+			
+			ConversationModificationLogHandler::getInstance()->close($conversation->getDecoratedObject());
 		}
 		
 		$this->unmarkItems();
@@ -550,6 +549,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 				
 				$count = count($participantIDs);
 				$successMessage = WCF::getLanguage()->getDynamicVariable('wcf.conversation.edit.addParticipants.success', array('count' => $count));
+				
+				ConversationModificationLogHandler::getInstance()->addParticipants($this->conversation->getDecoratedObject(), $participantIDs);
 			}
 		}
 		

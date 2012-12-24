@@ -94,7 +94,7 @@
 		<div>
 			{assign var='conversationCount' value=$__wcf->getConversationHandler()->getConversationCount()}
 			{assign var='maxConversationCount' value=$__wcf->session->getPermission('user.conversation.maxConversations')}
-			<p class="conversationUsageBar{if $conversationCount/$maxConversationCount > 0.9} yellow{elseif $conversationCount/$maxConversationCount >= 1.0} red{/if}">
+			<p class="conversationUsageBar{if $conversationCount/$maxConversationCount >= 1.0} red{elseif $conversationCount/$maxConversationCount > 0.9} yellow{/if}">
 				<span style="width: {if $conversationCount/$maxConversationCount < 1.0}{@$conversationCount/$maxConversationCount*100|round:0}{else}100{/if}%">{#$conversationCount/$maxConversationCount*100}%</span>
 			</p>
 			<p><small>{lang}wcf.conversation.quota.description{/lang}</small></p>
