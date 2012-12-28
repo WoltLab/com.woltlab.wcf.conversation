@@ -35,8 +35,7 @@ class UserConversationList extends ConversationList {
 	public $labelList = null;
 	
 	/**
-	 * decorator class name
-	 * @var	string
+	 * @see	wcf\data\DatabaseObjectList::$decoratorClassName
 	 */
 	public $decoratorClassName = 'wcf\data\conversation\ViewableConversation';
 	
@@ -142,21 +141,21 @@ class UserConversationList extends ConversationList {
 	 * @see	wcf\data\DatabaseObjectList::readObjects()
 	 */
 	public function readObjects() {
-		if ($this->objectIDs === null) $this->readObjectIDs();
+		if ($this->objectIDs === null) {
+			$this->readObjectIDs();
+		}
+		
 		parent::readObjects();
 		
 		$labels = $this->loadLabelAssignments();
 		
-		foreach ($this->objects as $conversationID => &$conversation) {
-			$conversation = new $this->decoratorClassName($conversation);
-			
+		foreach ($this->objects as $conversationID => $conversation) {
 			if (isset($labels[$conversationID])) {
 				foreach ($labels[$conversationID] as $label) {
 					$conversation->assignLabel($label);
 				}
 			}
 		}
-		unset($conversation);
 	}
 	
 	/**
