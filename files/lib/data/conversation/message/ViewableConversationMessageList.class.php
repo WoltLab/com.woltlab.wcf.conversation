@@ -19,8 +19,7 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	public $sqlOrderBy = 'conversation_message.time';
 	
 	/**
-	 * decorator class name
-	 * @var	string
+	 * @see	wcf\data\DatabaseObjectList::$decoratorClassName
 	 */
 	public $decoratorClassName = 'wcf\data\conversation\message\ViewableConversationMessage';
 	
@@ -61,13 +60,16 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	 * @see	wcf\data\DatabaseObjectList::readObjects()
 	 */
 	public function readObjects() {
-		if ($this->objectIDs === null) $this->readObjectIDs();
+		if ($this->objectIDs === null) {
+			$this->readObjectIDs();
+		}
+		
 		parent::readObjects();
 		
-		$messageIDs = array();
 		foreach ($this->objects as &$message) {
-			if ($message->time > $this->maxPostTime) $this->maxPostTime = $message->time;
-			$message = new $this->decoratorClassName($message);
+			if ($message->time > $this->maxPostTime) {
+				$this->maxPostTime = $message->time;
+			}
 			
 			if ($message->attachments) {
 				$this->attachmentObjectIDs[] = $message->messageID;
