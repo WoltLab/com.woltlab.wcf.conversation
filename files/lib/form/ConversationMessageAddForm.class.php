@@ -220,4 +220,4 @@ class ConversationMessageAddForm extends MessageForm {
 	public function getObjectID() {
 		return $this->conversationID;
 	}
-} 
+}

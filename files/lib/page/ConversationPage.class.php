@@ -273,5 +273,4 @@ class ConversationPage extends MultipleLinkPage {
 	public function getObjectID() {
 		return $this->conversationID;
 	}
-	
 }

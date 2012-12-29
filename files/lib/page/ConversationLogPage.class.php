@@ -98,4 +98,3 @@ class ConversationLogPage extends SortablePage {
 		));
 	}
 }
- 

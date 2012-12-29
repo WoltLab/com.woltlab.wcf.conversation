@@ -14,8 +14,7 @@ use wcf\system\WCF;
  */
 class FeedConversationList extends ConversationList {
 	/**
-	 * decorator class name
-	 * @var	string
+	 * @see	wcf\data\DatabaseObjectList::$decoratorClassName
 	 */
 	public $decoratorClassName = 'wcf\data\conversation\FeedConversation';
 	
@@ -45,12 +44,10 @@ class FeedConversationList extends ConversationList {
 	 * @see	wcf\data\DatabaseObjectList::readObjects()
 	 */
 	public function readObjects() {
-		if ($this->objectIDs === null) $this->readObjectIDs();
-		parent::readObjects();
-		
-		foreach ($this->objects as &$conversation) {
-			$conversation = new $this->decoratorClassName($conversation);
+		if ($this->objectIDs === null) {
+			$this->readObjectIDs();
 		}
-		unset($conversation);
+		
+		parent::readObjects();
 	}
 }
