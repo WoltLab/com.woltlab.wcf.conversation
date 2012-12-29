@@ -6,7 +6,6 @@
 			<section class="messageContent messageQuickReplyContent">
 				<div>
 					<header class="messageHeader">
-						<span class="pointer"><span></span></span>
 					</header>
 					
 					<div class="messageBody">

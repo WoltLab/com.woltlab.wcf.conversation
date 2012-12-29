@@ -3,16 +3,17 @@
 		<section class="messageContent">
 			<div>
 				<header class="messageHeader">
-					<div class="messageCredits box32">
+					<div class="box32">
 						<a href="{link controller='User' object=$message->getUserProfile()->getDecoratedObject()}{/link}" class="framed">{@$message->getUserProfile()->getAvatar()->getImageTag(32)}</a>
-						<div>
-							<p><a href="{link controller='User' object=$message->getUserProfile()->getDecoratedObject()}{/link}">{$message->getUsername()}</a><p>
-							
-							{@$message->getTime()|time}
-						</div>
+						
+						<hgroup class="messageHeadline">
+							<h1><a href="{@$message->getLink()}">{$message->getTitle()}</a></h1>
+							<h2>
+								<span class="username"><a href="{link controller='User' object=$message->getUserProfile()->getDecoratedObject()}{/link}">{$message->getUsername()}</a></span>
+								{@$message->getTime()|time}
+							</h2>
+						</hgroup>
 					</div>
-					
-					<h1 class="messageTitle"><a href="{@$message->getLink()}">{$message->getTitle()}</a></h1>
 				</header>
 				
 				<div class="messageBody">

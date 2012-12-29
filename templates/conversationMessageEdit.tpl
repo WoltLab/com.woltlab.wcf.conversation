@@ -156,15 +156,15 @@
 									<header class="messageHeader">
 										<p class="messageCounter"><a href="{link controller='Conversation' object=$conversation}messageID={@$message->messageID}{/link}#message{@$message->messageID}" title="{lang}wcf.conversation.message.permalink{/lang}" class="button jsTooltip">{#$startIndex}</a></p>
 										
-										<div class="messageCredits box32">
-											{if $message->getUserProfile()->getAvatar()}
-												<a href="{link controller='User' object=$message->getUserProfile()}{/link}" class="framed">{@$message->getUserProfile()->getAvatar()->getImageTag(32)}</a>
-											{/if}
-											<div>
-												<p><a href="{link controller='User' object=$message->getUserProfile()}{/link}" class="userLink" data-user-id="{@$message->userID}">{$message->username}</a><p>
-												
-												{@$message->time|time}
-											</div>
+										<div class="box32">
+											<a href="{link controller='User' object=$message->getUserProfile()}{/link}" class="framed">{@$message->getUserProfile()->getAvatar()->getImageTag(32)}</a>
+											
+											<hgroup class="messageHeadline">
+												<h2>
+													<span class="username"><a href="{link controller='User' object=$message->getUserProfile()}{/link}" class="userLink" data-user-id="{@$message->userID}">{$message->username}</a></span>
+													{@$message->time|time}
+												</h2>
+											</hgroup>
 										</div>
 									</header>
 									
@@ -173,11 +173,11 @@
 											<div class="messageText">
 												{@$message->getFormattedMessage()}
 											</div>
-											
-											{include file='attachments'}
 										</div>
 										
-										<footer class="messageOptions clearfix">
+										{include file='attachments'}
+										
+										<footer class="messageOptions">
 											<nav>
 												<ul class="smallButtons buttonGroup"><li class="toTopLink"><a href="{@$__wcf->getAnchor('top')}" title="{lang}wcf.global.scrollUp{/lang}" class="button jsTooltip"><img src="{icon}circleArrowUp{/icon}" alt="" class="icon16" /> <span class="invisible">{lang}wcf.global.scrollUp{/lang}</span></a></li></ul>
 											</nav>

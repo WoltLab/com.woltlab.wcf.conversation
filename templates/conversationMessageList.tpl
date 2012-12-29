@@ -15,11 +15,11 @@
 								<a href="{link controller='Conversation' object=$conversation}messageID={@$message->messageID}{/link}#message{@$message->messageID}" title="{lang}wcf.conversation.message.permalink{/lang}" class="button jsTooltip">{#$startIndex}</a>
 							</p>
 							
+							<hgroup class="messageHeadline">
+								<h2>{@$message->time|time}</h2>
+							</hgroup>
+							
 							{if $conversation->isNewMessage($message->getDecoratedObject())}<p class="newMessageBadge">{lang}wcf.conversation.message.new{/lang}</p>{/if}
-							
-							{@$message->time|time}
-							
-							<span class="pointer"><span></span></span>
 						</header>
 						
 						<div class="messageBody">
@@ -27,9 +27,9 @@
 								<div class="messageText">
 									{@$message->getFormattedMessage()}
 								</div>
-								
-								{include file='attachments'}
 							</div>
+							
+							{include file='attachments'}
 							
 							{if $message->getUserProfile()->signatureCache}
 								<div class="messageSignature">
@@ -39,7 +39,7 @@
 							
 							<div class="messageFooter"></div>
 							
-							<footer class="messageOptions clearfix">
+							<footer class="messageOptions">
 								<nav>
 									<ul class="smallButtons buttonGroup">{*
 										*}{if $message->canEdit()}<li><a href="{link controller='ConversationMessageEdit' id=$message->messageID}{/link}" title="{lang}wcf.conversation.message.edit{/lang}" class="button jsMessageEditButton"><img src="{icon}edit{/icon}" alt="" class="icon16" /> <span>{lang}wcf.global.button.edit{/lang}</span></a></li>{/if}{*
