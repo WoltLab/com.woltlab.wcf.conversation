@@ -53,7 +53,7 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 		MessageParser::getInstance()->setOutputType('text/plain');
 		$message = MessageParser::getInstance()->parse($this->message, $this->enableSmilies, $this->enableHtml, $this->enableBBCodes);
 		if (StringUtil::length($message) > $maxLength) {
-			$message = StringUtil::encodeHTML(StringUtil::substring($message, 0, $maxLength)).'&hellip;';
+			$message = StringUtil::encodeHTML(StringUtil::substring($message, 0, $maxLength)).StringUtil::HELLIP;
 		}
 		else {
 			$message = StringUtil::encodeHTML($message);
