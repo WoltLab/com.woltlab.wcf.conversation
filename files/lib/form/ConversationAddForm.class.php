@@ -15,7 +15,7 @@ use wcf\util\StringUtil;
 
 /**
  * Shows the conversation form.
- *
+ * 
  * @author	Marcel Werk
  * @copyright	2009-2012 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>

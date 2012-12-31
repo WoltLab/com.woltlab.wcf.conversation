@@ -3,7 +3,7 @@ namespace wcf\data\conversation\message;
 use wcf\data\attachment\GroupedAttachmentList;
 
 /**
- * Represents a list of conversation messages.
+ * Represents a list of viewable conversation messages.
  * 
  * @author	Marcel Werk
  * @copyright	2001-2012 WoltLab GmbH

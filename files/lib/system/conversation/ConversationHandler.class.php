@@ -5,6 +5,16 @@ use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\SingletonFactory;
 use wcf\system\WCF;
 
+/**
+ * Handles the number of conversations and unread conversations of the active user.
+ * 
+ * @author	Marcel Werk
+ * @copyright	2001-2012 WoltLab GmbH
+ * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
+ * @package	com.woltlab.wcf.conversation
+ * @subpackage	system.conversation
+ * @category	Community Framework
+ */
 class ConversationHandler extends SingletonFactory {
 	/**
 	 * number of unread conversations
@@ -29,7 +39,7 @@ class ConversationHandler extends SingletonFactory {
 		
 		if (!isset($this->unreadConversationCount[$userID])) {
 			$this->unreadConversationCount[$userID] = 0;
-		
+			
 			// load storage data
 			UserStorageHandler::getInstance()->loadStorage(array($userID));
 				

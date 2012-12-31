@@ -4,6 +4,16 @@ use wcf\data\DatabaseObjectDecorator;
 use wcf\data\user\User;
 use wcf\data\user\UserProfile;
 
+/**
+ * Represents a viewable conversation message.
+ * 
+ * @author	Marcel Werk
+ * @copyright	2001-2012 WoltLab GmbH
+ * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
+ * @package	com.woltlab.wcf.conversation
+ * @subpackage	data.conversation.message
+ * @category	Community Framework
+ */
 class ViewableConversationMessage extends DatabaseObjectDecorator {
 	/**
 	 * @see	wcf\data\DatabaseObjectDecorator::$baseClass

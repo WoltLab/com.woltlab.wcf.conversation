@@ -2,7 +2,6 @@
 namespace wcf\data\conversation\message;
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationEditor;
-use wcf\data\package\PackageCache;
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\DatabaseObject;
 use wcf\data\IExtendedMessageQuickReplyAction;
@@ -397,7 +396,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			$quoteID = MessageQuoteManager::getInstance()->getQuoteID('com.woltlab.wcf.conversation.message', $this->message->messageID, $this->message->getExcerpt(), $this->message->getMessage());
 			MessageQuoteManager::getInstance()->removeQuote($quoteID);
 		}
-	
+		
 		return array(
 			'count' => MessageQuoteManager::getInstance()->countQuotes(),
 			'fullQuoteMessageIDs' => MessageQuoteManager::getInstance()->getFullQuoteObjectIDs(array('com.woltlab.wcf.conversation.message'))
