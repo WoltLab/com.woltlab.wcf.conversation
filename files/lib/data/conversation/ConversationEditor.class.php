@@ -22,7 +22,7 @@ class ConversationEditor extends DatabaseObjectEditor {
 	
 	/**
 	 * Adds a new message to this conversation.
-	 *
+	 * 
 	 * @param	wcf\data\conversation\message\ConversationMessage	$message
 	 */
 	public function addMessage(ConversationMessage $message) {

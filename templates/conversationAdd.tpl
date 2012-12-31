@@ -36,7 +36,7 @@
 	<div class="container containerPadding marginTop">
 		<fieldset>
 			<legend>{lang}wcf.conversation.information{/lang}</legend>
-		
+			
 			<dl{if $errorField == 'subject'} class="formError"{/if}>
 				<dt><label for="subject">{lang}wcf.global.subject{/lang}</label></dt>
 				<dd>

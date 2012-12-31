@@ -5,10 +5,7 @@ use wcf\data\IClipboardAction;
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\data\conversation\message\ViewableConversationMessageList;
-use wcf\data\package\PackageCache;
-use wcf\data\user\UserProfile;
 use wcf\system\clipboard\ClipboardHandler;
-use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
 use wcf\system\log\modification\ConversationModificationLogHandler;
@@ -75,7 +72,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			
 			// update conversation count
 			UserStorageHandler::getInstance()->reset($conversation->getParticipantIDs(), 'conversationCount');
-		
+			
 			// fire notification event
 			$notificationRecipients = array_merge((!empty($this->parameters['participants']) ? $this->parameters['participants'] : array()), (!empty($this->parameters['invisibleParticipants']) ? $this->parameters['invisibleParticipants'] : array()));
 			UserNotificationHandler::getInstance()->fireEvent('conversation', 'com.woltlab.wcf.conversation.notification', new ConversationUserNotificationObject($conversation), $notificationRecipients);
@@ -261,7 +258,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	/**
 	 * Gets a preview of a message in a specific conversation.
 	 * 
-	 * @return array
+	 * @return	array
 	 */
 	public function getMessagePreview() {
 		$messageList = new ViewableConversationMessageList();
@@ -352,7 +349,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		}
 		
 		$this->unmarkItems();
-	
+		
 		return $this->getConversationData();
 	}
 	
@@ -583,8 +580,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	}
 	
 	/**
-	 * Returns thread data.
-	 *
+	 * Returns conversation data.
+	 * 
 	 * @return	array<array>
 	 */
 	protected function getConversationData() {

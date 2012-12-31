@@ -96,6 +96,8 @@ class UserConversationList extends ConversationList {
 	}
 	
 	/**
+	 * Sets the label list of the user the conversations belong to.
+	 * 
 	 * @param	wcf\data\conversation\label\ConversationLabelList	$labelList
 	 */
 	public function setLabelList(ConversationLabelList $labelList) {

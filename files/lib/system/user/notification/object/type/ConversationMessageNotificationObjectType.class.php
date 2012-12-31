@@ -7,7 +7,7 @@ use wcf\system\user\notification\object\ConversationMessageUserNotificationObjec
 
 /**
  * Represents a conversation message notification object type.
- *
+ * 
  * @author	Marcel Werk
  * @copyright	2001-2012 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
@@ -28,7 +28,7 @@ class ConversationMessageNotificationObjectType extends AbstractObjectTypeProces
 		
 		return array($object->messageID => new ConversationMessageUserNotificationObject($object));
 	}
-
+	
 	/**
 	 * @see	wcf\system\user\notification\object\type\IUserNotificationObjectType::getObjectsByIDs()
 	 */

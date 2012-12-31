@@ -1,7 +1,6 @@
 <?php
 namespace wcf\system\log\modification;
 use wcf\data\conversation\Conversation;
-use wcf\system\database\util\PreparedStatementConditionBuilder;
 
 /**
  * Handles conversation modification logs.

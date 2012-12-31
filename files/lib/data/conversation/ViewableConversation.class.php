@@ -88,10 +88,10 @@ class ViewableConversation extends DatabaseObjectDecorator {
 		
 		return $this->lastPosterProfile;
 	}
-
+	
 	/**
 	 * Gets the number of pages in this conversation.
-	 *
+	 * 
 	 * @return	integer
 	 */
 	public function getPages() {

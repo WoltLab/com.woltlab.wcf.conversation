@@ -8,7 +8,6 @@ use wcf\data\conversation\message\ConversationMessageList;
 use wcf\data\conversation\message\ViewableConversationMessage;
 use wcf\data\moderation\queue\ModerationQueue;
 use wcf\data\moderation\queue\ViewableModerationQueue;
-use wcf\system\exception\SystemException;
 use wcf\system\moderation\queue\ModerationQueueManager;
 use wcf\system\WCF;
 
@@ -42,7 +41,7 @@ class ConversationMessageModerationQueueReportHandler implements IModerationQueu
 				
 			$assignments[$queue->queueID] = $assignUser;
 		}
-	
+		
 		ModerationQueueManager::getInstance()->setAssignment($assignments);
 	}
 	
@@ -75,7 +74,7 @@ class ConversationMessageModerationQueueReportHandler implements IModerationQueu
 		WCF::getTPL()->assign(array(
 			'message' => new ViewableConversationMessage($queue->getAffectedObject())
 		));
-	
+		
 		return WCF::getTPL()->fetch('moderationConversationMessage');
 	}
 	
@@ -86,7 +85,7 @@ class ConversationMessageModerationQueueReportHandler implements IModerationQueu
 		if ($this->isValid($objectID)) {
 			return $this->getMessage($objectID);
 		}
-	
+		
 		return null;
 	}
 	

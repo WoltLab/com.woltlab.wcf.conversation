@@ -107,6 +107,11 @@ WCF.Conversation.EditorHandler = Class.extend({
 		return (this.getAvailableLabels()).length;
 	},
 	
+	/**
+	 * Returns a list with the data of the available labels.
+	 * 
+	 * @return	array<object>
+	 */
 	getAvailableLabels: function() {
 		var $labels = [ ];
 		
@@ -234,7 +239,6 @@ WCF.Conversation.EditorHandlerConversation = WCF.Conversation.EditorHandler.exte
 			console.debug("[WCF.Conversation.EditorHandler] Unknown conversation id '" + conversationID + "'");
 			return;
 		}
-		var $conversation = this._conversations[conversationID];
 		
 		switch (key) {
 			case 'close':

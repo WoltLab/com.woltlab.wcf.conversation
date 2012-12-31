@@ -56,7 +56,7 @@ class ConversationParticipantList extends UserProfileList {
 	}
 	
 	/**
-	 * Reads the object ids from database.
+	 * @see	wcf\data\DatabaseObjectList::readObjectIDs()
 	 */
 	public function readObjectIDs() {
 		$this->objectIDs = array();
