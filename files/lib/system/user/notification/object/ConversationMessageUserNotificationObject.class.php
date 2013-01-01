@@ -20,13 +20,6 @@ class ConversationMessageUserNotificationObject extends DatabaseObjectDecorator 
 	protected static $baseClass = 'wcf\data\conversation\message\ConversationMessage';
 	
 	/**
-	 * @see	wcf\system\user\notification\object\IUserNotificationObject::getObjectID()
-	 */
-	public function getObjectID() {
-		return $this->messageID;
-	}
-	
-	/**
 	 * @see	wcf\system\user\notification\object\IUserNotificationObject::getTitle()
 	 */
 	public function getTitle() {
