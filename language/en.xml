@@ -47,7 +47,6 @@
 		<item name="wcf.conversation.message.add"><![CDATA[Reply to Conversation]]></item>
 		<item name="wcf.conversation.message.add.previousPosts"><![CDATA[Previous Message{if $items != 1}s ({#$items}){/if}]]></item>
 		<item name="wcf.conversation.message.button.add"><![CDATA[Reply]]></item>
-		<item name="wcf.conversation.message.new"><![CDATA[New]]></item>
 		<item name="wcf.conversation.noConversations"><![CDATA[There are no conversations.]]></item>
 		<item name="wcf.conversation.participants"><![CDATA[Participants]]></item>
 		<item name="wcf.conversation.participants.description"><![CDATA[Separate names with a comma.]]></item>

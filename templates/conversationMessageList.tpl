@@ -19,7 +19,9 @@
 								<h2>{@$message->time|time}</h2>
 							</hgroup>
 							
-							{if $conversation->isNewMessage($message->getDecoratedObject())}<p class="newMessageBadge">{lang}wcf.conversation.message.new{/lang}</p>{/if}
+							{if $conversation->isNewMessage($message->getDecoratedObject())}
+								<p class="newMessageBadge">{lang}wcf.message.new{/lang}</p>
+							{/if}
 						</header>
 						
 						<div class="messageBody">
