@@ -9,7 +9,7 @@ use wcf\system\WCF;
  * Prepares clipboard editor items for conversations.
  * 
  * @author	Alexander Ebert
- * @copyright	2001-2012 WoltLab GmbH
+ * @copyright	2001-2013 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	system.clipboard.action
@@ -32,7 +32,7 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 	/**
 	 * @see	wcf\system\clipboard\action\IClipboardAction::execute()
 	 */
-	public function execute(array $objects, $actionName, array $typeData = array()) {
+	public function execute(array $objects, $actionName) {
 		if ($this->conversations === null) {
 			// validate conversations
 			$this->validateParticipation($objects);
@@ -201,7 +201,7 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 	
 	/**
 	 * Validates conversations available for leaving.
-	 *
+	 * 
 	 * @return	array<integer>
 	 */
 	public function validateLeave() {
@@ -231,7 +231,7 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 	
 	/**
 	 * Validates if user may open the given conversations.
-	 *
+	 * 
 	 * @return	array<integer>
 	 */
 	protected function validateOpen() {
