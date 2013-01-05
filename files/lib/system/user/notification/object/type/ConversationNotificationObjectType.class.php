@@ -1,7 +1,7 @@
 <?php
 namespace wcf\system\user\notification\object\type;
-use wcf\data\conversation\ConversationList;
 use wcf\data\conversation\Conversation;
+use wcf\data\conversation\ConversationList;
 use wcf\data\object\type\AbstractObjectTypeProcessor;
 use wcf\system\user\notification\object\ConversationUserNotificationObject;
 
@@ -9,7 +9,7 @@ use wcf\system\user\notification\object\ConversationUserNotificationObject;
  * Represents a conversation notification object type.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2012 WoltLab GmbH
+ * @copyright	2001-2013 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	system.user.notification.object.type

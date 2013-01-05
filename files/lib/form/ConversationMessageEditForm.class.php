@@ -1,10 +1,10 @@
 <?php
 namespace wcf\form;
-use wcf\data\conversation\Conversation;
-use wcf\data\conversation\ConversationAction;
+use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\data\conversation\message\ViewableConversationMessageList;
-use wcf\data\conversation\message\ConversationMessage;
+use wcf\data\conversation\Conversation;
+use wcf\data\conversation\ConversationAction;
 use wcf\data\user\UserProfile;
 use wcf\system\breadcrumb\Breadcrumb;
 use wcf\system\exception\IllegalLinkException;
@@ -17,7 +17,7 @@ use wcf\util\HeaderUtil;
  * Shows the conversation message edit form.
  * 
  * @author	Marcel Werk
- * @copyright	2009-2012 WoltLab GmbH
+ * @copyright	2009-2013 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	form

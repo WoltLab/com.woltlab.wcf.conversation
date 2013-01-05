@@ -2,9 +2,9 @@
 namespace wcf\data\conversation;
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\label\ConversationLabelList;
-use wcf\data\DatabaseObjectDecorator;
 use wcf\data\user\User;
 use wcf\data\user\UserProfile;
+use wcf\data\DatabaseObjectDecorator;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\WCF;
 
@@ -12,7 +12,7 @@ use wcf\system\WCF;
  * Represents a viewable conversation.
  * 
  * @author	Marcel Werk
- * @copyright	2009-2012 WoltLab GmbH
+ * @copyright	2009-2013 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation

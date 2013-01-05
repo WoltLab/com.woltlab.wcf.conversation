@@ -1,11 +1,11 @@
 <?php
 namespace wcf\system\moderation\queue\report;
-use wcf\data\conversation\Conversation;
-use wcf\data\conversation\ConversationList;
 use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\data\conversation\message\ConversationMessageList;
 use wcf\data\conversation\message\ViewableConversationMessage;
+use wcf\data\conversation\Conversation;
+use wcf\data\conversation\ConversationList;
 use wcf\data\moderation\queue\ModerationQueue;
 use wcf\data\moderation\queue\ViewableModerationQueue;
 use wcf\system\moderation\queue\ModerationQueueManager;
@@ -15,7 +15,7 @@ use wcf\system\WCF;
  * An implementation of IModerationQueueReportHandler for conversation messages.
  * 
  * @author	Alexander Ebert
- * @copyright	2001-2012 WoltLab GmbH
+ * @copyright	2001-2013 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	system.moderation.queue

@@ -2,9 +2,9 @@
 namespace wcf\page;
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\message\ConversationMessage;
+use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationAction;
 use wcf\data\conversation\ConversationParticipantList;
-use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ViewableConversation;
 use wcf\system\breadcrumb\Breadcrumb;
 use wcf\system\exception\IllegalLinkException;
@@ -18,7 +18,7 @@ use wcf\util\HeaderUtil;
  * Shows a conversation.
  * 
  * @author	Marcel Werk
- * @copyright	2009-2012 WoltLab GmbH
+ * @copyright	2009-2013 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	page
