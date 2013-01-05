@@ -1,9 +1,9 @@
 <?php
 namespace wcf\data\conversation;
-use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\data\conversation\message\ViewableConversationMessageList;
+use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\IClipboardAction;
 use wcf\system\clipboard\ClipboardHandler;
 use wcf\system\exception\PermissionDeniedException;
