@@ -178,6 +178,14 @@ class ConversationPage extends MultipleLinkPage {
 			$messageIDs[] = $message->messageID;
 		}
 		MessageQuoteManager::getInstance()->initObjects('com.woltlab.wcf.conversation.message', $messageIDs);
+		
+		// set attachment permissions
+		if ($this->objectList->getAttachmentList() !== null) {
+			$this->objectList->getAttachmentList()->setPermissions(array(
+				'canDownload' => true,
+				'canViewPreview' => true		
+			));
+		}
 	}
 	
 	/**

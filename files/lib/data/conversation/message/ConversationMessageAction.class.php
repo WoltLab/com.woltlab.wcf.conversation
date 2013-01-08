@@ -321,6 +321,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		
 		// load new message
 		$this->message = new ConversationMessage($this->message->messageID);
+		$this->message->getAttachments();
 		
 		return array(
 			'actionName' => 'save',

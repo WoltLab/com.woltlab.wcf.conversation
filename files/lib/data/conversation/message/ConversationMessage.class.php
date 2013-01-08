@@ -1,8 +1,10 @@
 <?php
 namespace wcf\data\conversation\message;
+use wcf\data\attachment\GroupedAttachmentList;
 use wcf\data\conversation\Conversation;
 use wcf\data\DatabaseObject;
 use wcf\data\IMessage;
+use wcf\system\bbcode\AttachmentBBCode;
 use wcf\system\bbcode\MessageParser;
 use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
@@ -39,8 +41,36 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	 * @see	wcf\data\IMessage::getFormattedMessage()
 	 */
 	public function getFormattedMessage() {
+		// assign embedded attachments
+		AttachmentBBCode::setObjectID($this->messageID);
+		
+		// parse and return message
 		MessageParser::getInstance()->setOutputType('text/html');
 		return MessageParser::getInstance()->parse($this->message, $this->enableSmilies, $this->enableHtml, $this->enableBBCodes);
+	}
+	
+	/**
+	 * Gets and assigns embedded attachments.
+	 *
+	 * @return	wcf\data\attachment\GroupedAttachmentList
+	 */
+	public function getAttachments() {
+		if (MODULE_ATTACHMENT == 1 && $this->attachments) {
+			$attachmentList = new GroupedAttachmentList('com.woltlab.wcf.conversation.message');
+			$attachmentList->getConditionBuilder()->add('attachment.objectID IN (?)', array($this->messageID));
+			$attachmentList->readObjects();
+			$attachmentList->setPermissions(array(
+				'canDownload' => WCF::getSession()->getPermission('user.blog.canDownloadAttachment'),
+				'canViewPreview' => WCF::getSession()->getPermission('user.blog.canViewAttachmentPreview')
+			));
+				
+			// set embedded attachments
+			AttachmentBBCode::setAttachmentList($attachmentList);
+				
+			return $attachmentList;
+		}
+	
+		return null;
 	}
 	
 	/**

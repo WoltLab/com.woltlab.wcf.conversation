@@ -1,6 +1,7 @@
 <?php
 namespace wcf\data\conversation\message;
 use wcf\data\attachment\GroupedAttachmentList;
+use wcf\system\bbcode\AttachmentBBCode;
 
 /**
  * Represents a list of viewable conversation messages.
@@ -87,6 +88,9 @@ class ViewableConversationMessageList extends ConversationMessageList {
 			$this->attachmentList = new GroupedAttachmentList('com.woltlab.wcf.conversation.message');
 			$this->attachmentList->getConditionBuilder()->add('attachment.objectID IN (?)', array($this->attachmentObjectIDs));
 			$this->attachmentList->readObjects();
+			
+			// set embedded attachments
+			AttachmentBBCode::setAttachmentList($this->attachmentList);
 		}
 	}
 	

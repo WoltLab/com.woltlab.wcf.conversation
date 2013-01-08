@@ -61,7 +61,7 @@
 			<option name="user.conversation.maxAttachmentSize">
 				<categoryname>user.conversation</categoryname>
 				<optiontype>integer</optiontype>
-				<defaultvalue>150000</defaultvalue>
+				<defaultvalue>1000000</defaultvalue>
 				<options>module_attachment</options>
 			</option>
 			<option name="user.conversation.allowedAttachmentExtensions">
