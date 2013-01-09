@@ -1,6 +1,5 @@
 <?php
 namespace wcf\system\clipboard\action;
-use wcf\system\clipboard\ClipboardEditorItem;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\exception\SystemException;
 use wcf\system\WCF;
@@ -17,17 +16,20 @@ use wcf\system\WCF;
  */
 class ConversationClipboardAction extends AbstractClipboardAction {
 	/**
+	 * @see	wcf\system\clipboard\action\AbstractClipboardAction::$actionClassActions
+	 */
+	protected $actionClassActions = array('close', 'open');
+	
+	/**
 	 * list of conversations
 	 * @var	array<wcf\data\conversation\Conversation>
 	 */
 	public $conversations = null;
 	
 	/**
-	 * @see	wcf\system\clipboard\action\IClipboardAction::getTypeName()
+	 * @see	wcf\system\clipboard\action\AbstractClipboardAction::$supportedActions
 	 */
-	public function getTypeName() {
-		return 'com.woltlab.wcf.conversation.conversation';
-	}
+	protected $supportedActions = array('assignLabel', 'close', 'leave', 'leavePermanently', 'open', 'restore');
 	
 	/**
 	 * @see	wcf\system\clipboard\action\IClipboardAction::execute()
@@ -43,7 +45,11 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 			return null;
 		}
 		
-		$item = new ClipboardEditorItem();
+		$item = parent::execute($objects, $actionName);
+		
+		if ($item === null) {
+			return null;
+		}
 		
 		switch ($actionName) {
 			case 'assignLabel':
@@ -59,69 +65,25 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 				}
 				
 				$item->addParameter('objectIDs', array_keys($this->conversations));
-				$item->setName('conversation.assignLabel');
-			break;
-			
-			case 'close':
-				$conversationIDs = $this->validateClose();
-				if (empty($conversationIDs)) {
-					return null;
-				}
-				
-				$item->addParameter('objectIDs', $conversationIDs);
-				$item->addParameter('actionName', 'close');
-				$item->addParameter('className', 'wcf\data\conversation\ConversationAction');
-				$item->setName('conversation.close');
 			break;
 			
 			case 'leave':
-				$conversationIDs = $this->validateLeave();
-				if (empty($conversationIDs)) {
-					return null;
-				}
-				
 				$item->addInternalData('parameters', array('hideConversation' => 1));
-				$item->addParameter('objectIDs', $conversationIDs);
 				$item->addParameter('actionName', 'hideConversation');
-				$item->addParameter('className', 'wcf\data\conversation\ConversationAction');
-				$item->setName('conversation.leave');
+				$item->addParameter('className', $this->getClassName());
 			break;
 			
 			case 'leavePermanently':
-				$item->addInternalData('parameters', array('hideConversation' => 2));
 				$item->addParameter('objectIDs', array_keys($this->conversations));
+				$item->addInternalData('parameters', array('hideConversation' => 2));
 				$item->addParameter('actionName', 'hideConversation');
-				$item->addParameter('className', 'wcf\data\conversation\ConversationAction');
-				$item->setName('conversation.leavePermanently');
-			break;
-			
-			case 'open':
-				$conversationIDs = $this->validateOpen();
-				if (empty($conversationIDs)) {
-					return null;
-				}
-				
-				$item->addParameter('objectIDs', $conversationIDs);
-				$item->addParameter('actionName', 'open');
-				$item->addParameter('className', 'wcf\data\conversation\ConversationAction');
-				$item->setName('conversation.open');
+				$item->addParameter('className', $this->getClassName());
 			break;
 			
 			case 'restore':
-				$conversationIDs = $this->validateRestore();
-				if (empty($conversationIDs)) {
-					return null;
-				}
-				
 				$item->addInternalData('parameters', array('hideConversation' => 0));
-				$item->addParameter('objectIDs', array_keys($this->conversations));
 				$item->addParameter('actionName', 'hideConversation');
-				$item->addParameter('className', 'wcf\data\conversation\ConversationAction');
-				$item->setName('conversation.restore');
-			break;
-			
-			default:
-				throw new SystemException("Unknown action '".$actionName."'");
+				$item->addParameter('className', $this->getClassName());
 			break;
 		}
 		
@@ -133,6 +95,13 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 	 */
 	public function getClassName() {
 		return 'wcf\data\conversation\ConversationAction';
+	}
+	
+	/**
+	 * @see	wcf\system\clipboard\action\IClipboardAction::getTypeName()
+	 */
+	public function getTypeName() {
+		return 'com.woltlab.wcf.conversation.conversation';
 	}
 	
 	/**
@@ -280,6 +249,6 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 	 * @see	wcf\system\clipboard\action\IClipboardAction::getEditorLabel()
 	 */
 	public function getEditorLabel(array $objects) {
-		return WCF::getLanguage()->getDynamicVariable('wcf.clipboard.label.conversation.marked', array('count' => count($objects)));
+		return WCF::getLanguage()->getDynamicVariable('wcf.clipboard.label.com.woltlab.wcf.conversation.conversation.marked', array('count' => count($objects)));
 	}
 }

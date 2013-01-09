@@ -10,16 +10,13 @@
 	</category>
 	
 	<category name="wcf.clipboard">
-		<item name="wcf.clipboard.label.conversation.marked"><![CDATA[{if $count == 1}One Conversation{else}{#$count} Conversations{/if} Selected]]></item>
-	</category>
-	
-	<category name="wcf.clipboard.item">
-		<item name="wcf.clipboard.item.conversation.assignLabel"><![CDATA[Assign Label ({#$count})]]></item>
-		<item name="wcf.clipboard.item.conversation.close"><![CDATA[Close ({#$count})]]></item>
-		<item name="wcf.clipboard.item.conversation.leave"><![CDATA[Hide ({#$count})]]></item>
-		<item name="wcf.clipboard.item.conversation.leavePermanently"><![CDATA[Leave ({#$count})]]></item>
-		<item name="wcf.clipboard.item.conversation.open"><![CDATA[Open ({#$count})]]></item>
-		<item name="wcf.clipboard.item.conversation.restore"><![CDATA[Restore ({#$count})]]></item>
+		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.assignLabel"><![CDATA[Assign Label ({#$count})]]></item>
+		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.close"><![CDATA[Close ({#$count})]]></item>
+		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.leave"><![CDATA[Hide ({#$count})]]></item>
+		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.leavePermanently"><![CDATA[Leave ({#$count})]]></item>
+		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.open"><![CDATA[Open ({#$count})]]></item>
+		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.restore"><![CDATA[Restore ({#$count})]]></item>
+		<item name="wcf.clipboard.label.com.woltlab.wcf.conversation.conversation.marked"><![CDATA[{if $count == 1}One Conversation{else}{#$count} Conversations{/if} Selected]]></item>
 	</category>
 	
 	<category name="wcf.conversation">

@@ -326,7 +326,7 @@ WCF.Conversation.Clipboard = Class.extend({
 	 * @param	object		parameters
 	 */
 	_execute: function(event, type, actionName, parameters) {
-		if (type === 'com.woltlab.wcf.conversation.conversation' && actionName === 'conversation.assignLabel') {
+		if (type === 'com.woltlab.wcf.conversation.conversation' && actionName === 'com.woltlab.wcf.conversation.conversation.assignLabel') {
 			new WCF.Conversation.Label.Editor(this._editorHandler, null, parameters.objectIDs);
 		}
 	},
@@ -347,14 +347,14 @@ WCF.Conversation.Clipboard = Class.extend({
 		}
 		
 		switch (actionName) {
-			case 'conversation.leave':
-			case 'conversation.leavePermanently':
-			case 'conversation.restore':
+			case 'com.woltlab.wcf.conversation.conversation.leave':
+			case 'com.woltlab.wcf.conversation.conversation.leavePermanently':
+			case 'com.woltlab.wcf.conversation.conversation.restore':
 				window.location.reload();
 			break;
 			
-			case 'conversation.close':
-			case 'conversation.open':
+			case 'com.woltlab.wcf.conversation.conversation.close':
+			case 'com.woltlab.wcf.conversation.conversation.open':
 				for (var $conversationID in data.returnValues.conversationData) {
 					var $data = data.returnValues.conversationData[$conversationID];
 					
