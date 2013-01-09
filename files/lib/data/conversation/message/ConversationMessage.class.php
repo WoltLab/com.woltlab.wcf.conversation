@@ -60,8 +60,8 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 			$attachmentList->getConditionBuilder()->add('attachment.objectID IN (?)', array($this->messageID));
 			$attachmentList->readObjects();
 			$attachmentList->setPermissions(array(
-				'canDownload' => WCF::getSession()->getPermission('user.blog.canDownloadAttachment'),
-				'canViewPreview' => WCF::getSession()->getPermission('user.blog.canViewAttachmentPreview')
+				'canDownload' => true,
+				'canViewPreview' => true
 			));
 				
 			// set embedded attachments
