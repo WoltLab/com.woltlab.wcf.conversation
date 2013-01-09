@@ -137,8 +137,8 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		$count = parent::delete();
 		
 		if ($count) {
-			$conversationID = current($this->objects);
-			$conversationEditor = new ConversationEditor(new Conversation($conversationID));
+			$message = reset($this->objects);
+			$conversationEditor = new ConversationEditor(new Conversation($message->conversationID));
 			
 			// reset user storage
 			UserStorageHandler::getInstance()->reset($conversationEditor->getParticipantIDs(), 'unreadConversationCount');
