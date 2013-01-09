@@ -1,7 +1,6 @@
 <?php
 namespace wcf\system\clipboard\action;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
-use wcf\system\exception\SystemException;
 use wcf\system\WCF;
 
 /**
@@ -243,12 +242,5 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 		}
 		
 		return $conversationIDs;
-	}
-	
-	/**
-	 * @see	wcf\system\clipboard\action\IClipboardAction::getEditorLabel()
-	 */
-	public function getEditorLabel(array $objects) {
-		return WCF::getLanguage()->getDynamicVariable('wcf.clipboard.label.com.woltlab.wcf.conversation.conversation.marked', array('count' => count($objects)));
 	}
 }
