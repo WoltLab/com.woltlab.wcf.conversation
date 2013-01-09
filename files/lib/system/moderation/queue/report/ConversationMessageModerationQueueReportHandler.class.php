@@ -128,10 +128,16 @@ class ConversationMessageModerationQueueReportHandler implements IModerationQueu
 		
 		// fetch messages
 		$messageList = new ConversationMessageList();
-		$messageList->getConditionBuilder()->add("conversation_message.messageID IN (?)", array($objectIDs));
-		$messageList->sqlLimit = 0;
+		$messageList->setObjectIDs($objectIDs);
 		$messageList->readObjects();
 		$messages = $messageList->getObjects();
+		
+		// set orphaned queues
+		foreach ($queues as $queue) {
+			if (!isset($messages[$queue->objectID])) {
+				$queue->setIsOrphaned();
+			}
+		}
 		
 		// fetch conversations
 		$conversationIDs = array();
@@ -139,18 +145,19 @@ class ConversationMessageModerationQueueReportHandler implements IModerationQueu
 			$conversationIDs[] = $message->conversationID;
 		}
 		
-		$conversationList = new ConversationList();
-		$conversationList->getConditionBuilder()->add("conversation.conversationID IN (?)", array($conversationIDs));
-		$conversationList->sqlLimit = 0;
-		$conversationList->readObjects();
-		$conversations = $conversationList->getObjects();
-		
-		foreach ($queues as $object) {
-			if (isset($messages[$object->objectID])) {
-				$message = $messages[$object->objectID];
-				$message->setConversation($conversations[$message->conversationID]);
-				
-				$object->setAffectedObject($message);
+		if (!empty($conversationIDs)) {
+			$conversationList = new ConversationList();
+			$conversationList->setObjectIDs($conversationIDs);
+			$conversationList->readObjects();
+			$conversations = $conversationList->getObjects();
+			
+			foreach ($queues as $object) {
+				if (isset($messages[$object->objectID])) {
+					$message = $messages[$object->objectID];
+					$message->setConversation($conversations[$message->conversationID]);
+					
+					$object->setAffectedObject($message);
+				}
 			}
 		}
 	}
