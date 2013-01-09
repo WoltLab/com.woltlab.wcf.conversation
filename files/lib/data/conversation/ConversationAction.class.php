@@ -436,7 +436,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		
 		// reset user's conversation counters if user leaves conversation
 		// permanently
-		if ($this->parameters['hideConversation'] == 2) {
+		if ($this->parameters['hideConversation'] == Conversation::STATE_LEFT) {
 			UserStorageHandler::getInstance()->reset(array(WCF::getUser()->userID), 'conversationCount');
 			UserStorageHandler::getInstance()->reset(array(WCF::getUser()->userID), 'unreadConversationCount');
 		}
