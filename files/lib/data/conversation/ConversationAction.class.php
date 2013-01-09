@@ -434,6 +434,11 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		}
 		WCF::getDB()->commitTransaction();
 		
+		// reset user's conversationCount if user leaves conversation permanently
+		if ($this->parameters['hideConversation'] == 2) {
+			UserStorageHandler::getInstance()->reset(array(WCF::getUser()->userID), 'conversationCount');
+		}
+		
 		// unmark items
 		$this->unmarkItems();
 		
