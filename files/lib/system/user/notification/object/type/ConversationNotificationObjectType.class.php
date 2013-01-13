@@ -1,9 +1,5 @@
 <?php
 namespace wcf\system\user\notification\object\type;
-use wcf\data\conversation\Conversation;
-use wcf\data\conversation\ConversationList;
-use wcf\data\object\type\AbstractObjectTypeProcessor;
-use wcf\system\user\notification\object\ConversationUserNotificationObject;
 
 /**
  * Represents a conversation notification object type.
@@ -15,40 +11,19 @@ use wcf\system\user\notification\object\ConversationUserNotificationObject;
  * @subpackage	system.user.notification.object.type
  * @category	Community Framework
  */
-class ConversationNotificationObjectType extends AbstractObjectTypeProcessor implements IUserNotificationObjectType {
+class ConversationNotificationObjectType extends AbstractUserNotificationObjectType {
 	/**
-	 * @see	wcf\system\user\notification\object\type\IUserNotificationObjectType::getObjectByID()
+	 * @see wcf\system\user\notification\object\type\AbstractUserNotificationObjectType::$decoratorClassName
 	 */
-	public function getObjectByID($objectID) {
-		$object = new Conversation($objectID);
-		if (!$object->conversationID) {
-			// create empty object for unknown request id
-			$object = new Conversation(null, array('conversationID' => $objectID));
-		}
-		
-		return array($object->conversationID => new ConversationUserNotificationObject($object));
-	}
+	protected static $decoratorClassName = 'wcf\system\user\notification\object\ConversationUserNotificationObject';
 	
 	/**
-	 * @see	wcf\system\user\notification\object\type\IUserNotificationObjectType::getObjectsByIDs()
+	 * @see wcf\system\user\notification\object\type\AbstractUserNotificationObjectType::$objectClassName
 	 */
-	public function getObjectsByIDs(array $objectIDs) {
-		$objectList = new ConversationList();
-		$objectList->getConditionBuilder()->add("conversation.conversationID IN (?)", array($objectIDs));
-		$objectList->readObjects();
-		
-		$objects = array();
-		foreach ($objectList as $object) {
-			$objects[$object->conversationID] = new ConversationUserNotificationObject($object);
-		}
-		
-		foreach ($objectIDs as $objectID) {
-			// append empty objects for unknown ids
-			if (!isset($objects[$objectID])) {
-				$objects[$objectID] = new ConversationUserNotificationObject(new Conversation(null, array('conversationID' => $objectID)));
-			}
-		}
-		
-		return $objects;
-	}
+	protected static $objectClassName = 'wcf\data\conversation\Conversation';
+	
+	/**
+	 * @see wcf\system\user\notification\object\type\AbstractUserNotificationObjectType::$objectListClassName
+	 */
+	protected static $objectListClassName = 'wcf\data\conversation\ConversationList';
 }
