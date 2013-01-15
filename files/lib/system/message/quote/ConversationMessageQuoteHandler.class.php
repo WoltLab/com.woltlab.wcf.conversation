@@ -21,7 +21,6 @@ class ConversationMessageQuoteHandler extends AbstractMessageQuoteHandler {
 		// read messages
 		$messageList = new ConversationMessageList();
 		$messageList->getConditionBuilder()->add("conversation_message.messageID IN (?)", array(array_keys($data)));
-		$messageList->sqlLimit = 0;
 		$messageList->readObjects();
 		$messages = $messageList->getObjects();
 		
@@ -33,7 +32,6 @@ class ConversationMessageQuoteHandler extends AbstractMessageQuoteHandler {
 		
 		$conversationList = new ConversationList();
 		$conversationList->getConditionBuilder()->add("conversation.conversationID IN (?)", array($conversationIDs));
-		$conversationList->sqlLimit = 0;
 		$conversationList->readObjects();
 		$conversations = $conversationList->getObjects();
 		

@@ -106,7 +106,6 @@ class ConversationEditor extends DatabaseObjectEditor {
 	 */
 	public static function updateParticipantSummaries(array $conversationIDs) {
 		$conversationList = new ConversationList();
-		$conversationList->sqlLimit = 0;
 		$conversationList->getConditionBuilder()->add('conversation.conversationID IN (?)', array($conversationIDs));
 		$conversationList->readObjects();
 		

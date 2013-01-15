@@ -53,7 +53,6 @@ class ConversationLabel extends DatabaseObject {
 		
 		$labelList = new ConversationLabelList();
 		$labelList->getConditionBuilder()->add("conversation_label.userID = ?", array($userID));
-		$labelList->sqlLimit = 0;
 		$labelList->readObjects();
 		
 		return $labelList;
