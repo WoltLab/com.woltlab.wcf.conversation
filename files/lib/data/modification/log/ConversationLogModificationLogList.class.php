@@ -1,5 +1,6 @@
 <?php
 namespace wcf\data\modification\log;
+use wcf\data\conversation\Conversation;
 use wcf\system\log\modification\ConversationModificationLogHandler;
 use wcf\system\WCF;
 
@@ -85,7 +86,7 @@ class ConversationLogModificationLogList extends ModificationLogList {
 		foreach ($this->objects as $object) {
 			$objectID = $object->{$this->getDatabaseTableIndexName()};
 			$objects[$objectID] = $object;
-				
+			
 			$this->indexToObject[] = $objectID;
 		}
 		$this->objectIDs = $this->indexToObject;
@@ -93,7 +94,6 @@ class ConversationLogModificationLogList extends ModificationLogList {
 		
 		foreach ($this->objects as &$object) {
 			$object = new ViewableConversationModificationLog($object);
-			
 		}
 		unset($object);
 	}

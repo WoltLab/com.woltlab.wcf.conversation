@@ -54,13 +54,6 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	const STATE_LEFT/*4DEAD*/ = 2;
 	
 	/**
-	 * @see	wcf\system\request\IRouteController::getID()
-	 */
-	public function getID() {
-		return $this->conversationID;
-	}
-	
-	/**
 	 * @see	wcf\system\request\IRouteController::getTitle()
 	 */
 	public function getTitle() {
