@@ -133,7 +133,7 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	}
 	
 	/**
-	 * @see	wcf\data\ILinkableDatabaseObject::getLink()
+	 * @see	wcf\data\ILinkableObject::getLink()
 	 */
 	public function getLink() {
 		return LinkHandler::getInstance()->getLink('Conversation', array(
@@ -150,7 +150,7 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	}
 	
 	/**
-	 * @see	wcf\data\ITitledDatabaseObject::getTitle()
+	 * @see	wcf\data\ITitledObject::getTitle()
 	 */
 	public function getTitle() {
 		if ($this->messageID == $this->getConversation()->firstMessageID) {

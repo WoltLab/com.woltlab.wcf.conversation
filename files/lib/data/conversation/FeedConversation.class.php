@@ -21,14 +21,14 @@ class FeedConversation extends DatabaseObjectDecorator implements IFeedEntry {
 	protected static $baseClass = 'wcf\data\conversation\Conversation';
 	
 	/**
-	 * @see	wcf\data\ILinkableDatabaseObject::getLink()
+	 * @see	wcf\data\ILinkableObject::getLink()
 	 */
 	public function getLink() {
 		return LinkHandler::getInstance()->getLink('Conversation', array('id' => $this->getDecoratedObject()->conversationID));
 	}
 	
 	/**
-	 * @see	wcf\data\ITitledDatabaseObject::getTitle()
+	 * @see	wcf\data\ITitledObject::getTitle()
 	 */
 	public function getTitle() {
 		return $this->getDecoratedObject()->getTitle();
