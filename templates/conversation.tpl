@@ -22,9 +22,6 @@
 				'wcf.global.form.add.success': '{lang}wcf.global.form.add.success{/lang}',
 				'wcf.conversation.label.assignLabels': '{lang}wcf.conversation.label.assignLabels{/lang}'
 			});
-			WCF.Icon.addObject({
-				'wcf.icon.lock': '{icon}lock{/icon}'
-			});
 			
 			var $availableLabels = [ {implode from=$labelList item=label}{ cssClassName: '{if $label->cssClassName}{@$label->cssClassName}{/if}', labelID: {@$label->labelID}, label: '{$label->label}' }{/implode} ];
 			var $editorHandler = new WCF.Conversation.EditorHandlerConversation($availableLabels);
@@ -48,14 +45,14 @@
 <body id="tpl{$templateName|ucfirst}">
 
 {capture assign='headerNavigation'}
-	<li><a href="{link controller='ConversationLog' id=$conversation->conversationID}{/link}" title="{lang}wcf.conversation.log{/lang}" class="jsTooltip"><img src="{icon}checkColored{/icon}" class="icon16" alt="" /> <span class="invisible">{lang}wcf.conversation.log{/lang}</span></a></li>
+	<li><a href="{link controller='ConversationLog' id=$conversation->conversationID}{/link}" title="{lang}wcf.conversation.log{/lang}" class="jsTooltip"><span class="icon icon16 icon-tasks"></span> <span class="invisible">{lang}wcf.conversation.log{/lang}</span></a></li>
 {/capture}
 
 {include file='header'}
 
 <header class="boxHeadline marginTop conversationHeadline">
 	<hgroup>
-		<h1><a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a>{if $conversation->isClosed} <img src="{icon}lock{/icon}" alt="" title="{lang}wcf.global.state.closed{/lang}" class="jsTooltip jsIconLock icon16" />{/if}</h1>
+		<h1><a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a>{if $conversation->isClosed} <span class="icon icon16 icon-lock jsTooltip jsIconLock" title="{lang}wcf.global.state.closed{/lang}"></span>{/if}</h1>
 	</hgroup>
 	
 	{hascontent}
@@ -101,8 +98,8 @@
 	
 	<nav>
 		<ul class="conversation jsThreadInlineEditorContainer" data-conversation-id="{@$conversation->conversationID}" data-label-ids="[ {implode from=$conversation->getAssignedLabels() item=label}{@$label->labelID}{/implode} ]" data-is-closed="{@$conversation->isClosed}" data-can-close-conversation="{if $conversation->userID == $__wcf->getUser()->userID}1{else}0{/if}" data-can-add-participants="{if $conversation->canAddParticipants()}1{else}0{/if}">
-			<li><a class="button jsThreadInlineEditor"><img src="{icon}edit{/icon}" alt="" class="icon24" /> <span>{lang}wcf.global.button.edit{/lang}</span></a></li>
-			{if !$conversation->isClosed}<li><a href="{link controller='ConversationMessageAdd' id=$conversationID}{/link}" title="{lang}wcf.conversation.message.add{/lang}" class="button buttonPrimary jsQuickReply"><img src="{icon}addColored{/icon}" alt="" class="icon24" /> <span>{lang}wcf.conversation.message.button.add{/lang}</span></a></li>{/if}
+			<li><a class="button jsThreadInlineEditor"><span class="icon icon16 icon-pencil"></span> <span>{lang}wcf.global.button.edit{/lang}</span></a></li>
+			{if !$conversation->isClosed}<li><a href="{link controller='ConversationMessageAdd' id=$conversationID}{/link}" title="{lang}wcf.conversation.message.add{/lang}" class="button buttonPrimary jsQuickReply"><span class="icon icon16 icon-plus"></span> <span>{lang}wcf.conversation.message.button.add{/lang}</span></a></li>{/if}
 			{event name='largeButtonsTop'}
 		</ul>
 	</nav>
@@ -123,7 +120,7 @@
 		<nav>
 			<ul>
 				{content}
-					{if !$conversation->isClosed}<li><a href="{link controller='ConversationMessageAdd' id=$conversationID}{/link}" title="{lang}wcf.conversation.message.add{/lang}" class="button buttonPrimary jsQuickReply"><img src="{icon}addColored{/icon}" alt="" class="icon24" /> <span>{lang}wcf.conversation.message.button.add{/lang}</span></a></li>{/if}
+					{if !$conversation->isClosed}<li><a href="{link controller='ConversationMessageAdd' id=$conversationID}{/link}" title="{lang}wcf.conversation.message.add{/lang}" class="button buttonPrimary jsQuickReply"><span class="icon icon16 icon-plus"></span> <span>{lang}wcf.conversation.message.button.add{/lang}</span></a></li>{/if}
 					{event name='largeButtonsBottom'}
 				{/content}
 			</ul>

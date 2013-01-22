@@ -147,7 +147,7 @@ WCF.Conversation.EditorHandler = Class.extend({
 		
 		switch (key) {
 			case 'close':
-				$('<li><img src="' + WCF.Icon.get('wcf.icon.lock') + '" alt="" title="' + WCF.Language.get('wcf.global.state.closed') + '" class="jsIconLock jsTooltip icon16" /></li>').prependTo($conversation.find('.statusIcons'))
+				$('<li><span class="icon icon16 icon-lock jsTooltip jsIconLock" title="' + WCF.Language.get('wcf.global.state.closed') + '" /></li>').prependTo($conversation.find('.statusIcons'))
 				
 				this._attributes[conversationID].isClosed = 1;
 			break;
@@ -242,7 +242,7 @@ WCF.Conversation.EditorHandlerConversation = WCF.Conversation.EditorHandler.exte
 		
 		switch (key) {
 			case 'close':
-				$('<img src="' + WCF.Icon.get('wcf.icon.lock') + '" alt="" title="' + WCF.Language.get('wcf.global.state.closed') + '" class="jsIconLock jsTooltip icon16" />').appendTo($('#content > header h1'));
+				$('<span class="icon icon16 icon-lock jsTooltip jsIconLock" title="' + WCF.Language.get('wcf.global.state.closed') + '" />').appendTo($('#content > header h1'));
 				
 				this._attributes[conversationID].isClosed = 1;
 			break;

@@ -31,10 +31,10 @@
 		<table class="table">
 			<thead>
 				<tr>
-					<th class="columnID{if $sortField == 'logID'} active{/if}"><a href="{link controller='ConversationLog' id=$conversation->conversationID}pageNo={@$pageNo}&sortField=logID&sortOrder={if $sortField == 'logID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.global.objectID{/lang}{if $sortField == 'logID'} <img src="{icon}sort{@$sortOrder}{/icon}" alt="" />{/if}</a></th>
+					<th class="columnID{if $sortField == 'logID'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationLog' id=$conversation->conversationID}pageNo={@$pageNo}&sortField=logID&sortOrder={if $sortField == 'logID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.global.objectID{/lang}</a></th>
 					<th class="columnText">{lang}wcf.conversation.log.action{/lang}</th>
-					<th class="columnID{if $sortField == 'username'} active{/if}"><a href="{link controller='ConversationLog' id=$conversation->conversationID}pageNo={@$pageNo}&sortField=username&sortOrder={if $sortField == 'username' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.user.username{/lang}{if $sortField == 'username'} <img src="{icon}sort{@$sortOrder}{/icon}" alt="" />{/if}</a></th>
-					<th class="columnID{if $sortField == 'time'} active{/if}"><a href="{link controller='ConversationLog' id=$conversation->conversationID}pageNo={@$pageNo}&sortField=time&sortOrder={if $sortField == 'time' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.conversation.log.time{/lang}{if $sortField == 'time'} <img src="{icon}sort{@$sortOrder}{/icon}" alt="" />{/if}</a></th>
+					<th class="columnID{if $sortField == 'username'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationLog' id=$conversation->conversationID}pageNo={@$pageNo}&sortField=username&sortOrder={if $sortField == 'username' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.user.username{/lang}</a></th>
+					<th class="columnID{if $sortField == 'time'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationLog' id=$conversation->conversationID}pageNo={@$pageNo}&sortField=time&sortOrder={if $sortField == 'time' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.conversation.log.time{/lang}</a></th>
 				</tr>
 			</thead>
 			<tbody>

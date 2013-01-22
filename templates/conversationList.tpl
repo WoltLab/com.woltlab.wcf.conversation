@@ -25,9 +25,6 @@
 				'wcf.global.state.closed': '{lang}wcf.global.state.closed{/lang}',
 				'wcf.conversation.label.assignLabels': '{lang}wcf.conversation.label.assignLabels{/lang}'
 			});
-			WCF.Icon.addObject({
-				'wcf.icon.lock': '{icon}lock{/icon}'
-			});
 			
 			WCF.Clipboard.init('wcf\\page\\ConversationListPage', {@$hasMarkedItems}, { });
 			
@@ -103,7 +100,7 @@
 {/capture}
 
 {capture assign='headerNavigation'}
-	<li><a href="{link controller='ConversationFeed' appendSession=false}at={@$__wcf->getUser()->userID}-{@$__wcf->getUser()->accessToken}{/link}" title="{lang}wcf.global.button.rss{/lang}" class="jsTooltip"><img src="{icon}rssColored{/icon}" class="icon16" alt="" /> <span class="invisible">{lang}wcf.global.button.rss{/lang}</span></a></li>
+	<li><a href="{link controller='ConversationFeed' appendSession=false}at={@$__wcf->getUser()->userID}-{@$__wcf->getUser()->accessToken}{/link}" title="{lang}wcf.global.button.rss{/lang}" class="jsTooltip"><span class="icon icon16 icon-rss"></span> <span class="invisible">{lang}wcf.global.button.rss{/lang}</span></a></li>
 {/capture}
 
 {include file='header' sidebarOrientation='left'}
@@ -123,7 +120,7 @@
 		<nav>
 			<ul>
 				{content}
-					<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button"><img src="{icon}asterisk{/icon}" alt="" class="icon24" /> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>
+					<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button"><span class="icon icon16 icon-asterisk"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>
 					{event name='largeButtonsTop'}
 				{/content}
 			</ul>
@@ -143,10 +140,10 @@
 			<thead>
 				<tr>
 					<th class="columnMark"><label><input type="checkbox" class="jsClipboardMarkAll" /></label></th>
-					<th colspan="2" class="columnTitle columnSubject{if $sortField == 'subject'} active{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=subject&sortOrder={if $sortField == 'subject' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.global.subject{/lang}{if $sortField == 'subject'} <img src="{icon}sort{@$sortOrder}{/icon}" alt="" />{/if}</a></th>
-					<th class="columnDigits columnReplies{if $sortField == 'replies'} active{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=replies&sortOrder={if $sortField == 'replies' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.conversation.replies{/lang}{if $sortField == 'replies'} <img src="{icon}sort{@$sortOrder}{/icon}" alt="" />{/if}</a></th>
-					<th class="columnDigits columnParticipants{if $sortField == 'participants'} active{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=participants&sortOrder={if $sortField == 'participants' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.conversation.participants{/lang}{if $sortField == 'participants'} <img src="{icon}sort{@$sortOrder}{/icon}" alt="" />{/if}</a></th>
-					<th class="columnText columnLastPost{if $sortField == 'lastPostTime'} active{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=lastPostTime&sortOrder={if $sortField == 'lastPostTime' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.conversation.lastPostTime{/lang}{if $sortField == 'lastPostTime'} <img src="{icon}sort{@$sortOrder}{/icon}" alt="" />{/if}</a></th>
+					<th colspan="2" class="columnTitle columnSubject{if $sortField == 'subject'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=subject&sortOrder={if $sortField == 'subject' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.global.subject{/lang}</a></th>
+					<th class="columnDigits columnReplies{if $sortField == 'replies'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=replies&sortOrder={if $sortField == 'replies' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.conversation.replies{/lang}</a></th>
+					<th class="columnDigits columnParticipants{if $sortField == 'participants'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=participants&sortOrder={if $sortField == 'participants' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.conversation.participants{/lang}</a></th>
+					<th class="columnText columnLastPost{if $sortField == 'lastPostTime'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=lastPostTime&sortOrder={if $sortField == 'lastPostTime' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.conversation.lastPostTime{/lang}</a></th>
 				</tr>
 			</thead>
 			
@@ -182,7 +179,7 @@
 								
 							<h1>
 								{if $conversation->isNew()}
-									<a href="{link controller='Conversation' object=$conversation}action=firstNew{/link}" class="jsTooltip" title="{lang}wcf.conversation.gotoFirstNewPost{/lang}"><img src="{icon}circleArrowDown{/icon}" alt="" class="firstNewPost icon16" /></a>
+									<a href="{link controller='Conversation' object=$conversation}action=firstNew{/link}" class="jsTooltip" title="{lang}wcf.conversation.gotoFirstNewPost{/lang}"><span class="icon icon16 icon-arrow-down firstNewPost"></span></a>
 								{/if}
 								
 								<a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink messageGroupLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>
@@ -191,8 +188,8 @@
 							<aside class="statusDisplay">
 								{smallpages pages=$conversation->getPages() controller='Conversation' object=$conversation link='pageNo=%d'}
 								<ul class="statusIcons">
-									{if $conversation->isClosed}<li><img src="{icon}lock{/icon}" alt="" title="{lang}wcf.global.state.closed{/lang}" class="jsIconLock jsTooltip icon16" /></li>{/if}
-									{if $conversation->attachments}<li><img src="{icon}attachment{/icon}" alt="" title="{lang}wcf.conversation.attachments{/lang}" class="jsIconAttachment jsTooltip icon16" /></li>{/if}
+									{if $conversation->isClosed}<li><span class="icon icon16 icon-lock jsIconLock jsTooltip" itle="{lang}wcf.global.state.closed{/lang}"></span></li>{/if}
+									{if $conversation->attachments}<li><span class="icon icon16 icon-paper-clip jsIconAttachment jsTooltip" itle="{lang}wcf.conversation.attachments{/lang}"></span></li>{/if}
 								</ul>
 							</aside>
 							
@@ -239,7 +236,7 @@
 		<nav>
 			<ul>
 				{content}
-					<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button"><img src="{icon}asterisk{/icon}" alt="" class="icon24" /> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>
+					<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button"><span class="icon icon16 icon-asterisk"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>
 					{event name='largeButtonsBottom'}
 				{/content}
 			</ul>
