@@ -130,7 +130,7 @@
 		
 		{event name='fieldsets'}
 		
-		{include file='messageFormTabs'}
+		{include file='messageFormTabs' wysiwygContainerID='text'}
 	</div>
 	
 	<div class="formSubmit">
