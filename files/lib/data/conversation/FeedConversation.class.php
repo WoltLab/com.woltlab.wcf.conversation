@@ -59,21 +59,21 @@ class FeedConversation extends DatabaseObjectDecorator implements IFeedEntry {
 	 * @see	wcf\data\IMessage::getUserID()
 	 */
 	public function getUserID() {
-		return $this->getDecoratedObject()->userID;
+		return $this->getDecoratedObject()->lastPosterID;
 	}
 	
 	/**
 	 * @see	wcf\data\IMessage::getUsername()
 	 */
 	public function getUsername() {
-		return $this->getDecoratedObject()->username;
+		return $this->getDecoratedObject()->lastPoster;
 	}
 	
 	/**
 	 * @see	wcf\data\IMessage::getTime()
 	 */
 	public function getTime() {
-		return $this->getDecoratedObject()->time;
+		return $this->getDecoratedObject()->lastPostTime;
 	}
 	
 	/**
@@ -81,5 +81,19 @@ class FeedConversation extends DatabaseObjectDecorator implements IFeedEntry {
 	 */
 	public function __toString() {
 		return $this->getDecoratedObject()->__toString();
+	}
+	
+	/**
+	 * @see	wcf\data\IFeedEntry::getComments()
+	 */
+	public function getComments() {
+		return $this->replies;
+	}
+	
+	/**
+	 * @see	wcf\data\IFeedEntry::getCategories()
+	 */
+	public function getCategories() {
+		return array();
 	}
 }
