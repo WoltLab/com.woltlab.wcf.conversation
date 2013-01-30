@@ -106,6 +106,9 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		}
 		
 		// clear quotes
+		if (isset($this->parameters['removeQuoteIDs']) && !empty($this->parameters['removeQuoteIDs'])) {
+			MessageQuoteManager::getInstance()->markQuotesForRemoval($this->parameters['removeQuoteIDs']);
+		}
 		MessageQuoteManager::getInstance()->removeMarkedQuotes();
 		
 		// return new message
