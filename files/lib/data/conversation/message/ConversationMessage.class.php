@@ -138,7 +138,7 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	public function getLink() {
 		return LinkHandler::getInstance()->getLink('Conversation', array(
 			'object' => $this->getConversation(),
-			'messageID' => $this->messageID,
+			'messageID' => $this->messageID
 		), '#message'.$this->messageID);
 	}
 	

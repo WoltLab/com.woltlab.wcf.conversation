@@ -87,6 +87,11 @@
 		<item name="wcf.conversation.label.assignLabels"><![CDATA[Label zuweisen]]></item>
 	</category>
 	
+	<category name="wcf.search">
+		<item name="wcf.search.type.com.woltlab.wcf.conversation.message"><![CDATA[Konversationen]]></item>
+		<item name="wcf.search.object.com.woltlab.wcf.conversation.message"><![CDATA[Konversation]]></item>
+	</category>
+	
 	<category name="wcf.user.notification">
 		<item name="wcf.user.notification.conversation.message.output"><![CDATA[Hat auf die Konversation „<a href="{link controller='Conversation' object=$message->getConversation()}messageID={@$message->messageID}{/link}#message{@$message->messageID}">{$message->getTitle()}</a>“ geantwortet.]]></item>
 		<item name="wcf.user.notification.conversation.message.shortOutput"><![CDATA[Neue Antwort auf Konversation]]></item>		

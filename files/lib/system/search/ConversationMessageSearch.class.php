@@ -23,30 +23,23 @@ class ConversationMessageSearch extends AbstractSearchableObjectType {
 	public $messageCache = array();
 	
 	/**
-	 * @see	wcf\system\search\ISearchableObjectType::cacheMessageData()
+	 * @see	wcf\system\search\ISearchableObjectType::cacheObjects()
 	 */
-	public function cacheMessageData(array $objectIDs, array $additionalData = null) {
+	public function cacheObjects(array $objectIDs, array $additionalData = null) {
 		$messageList = new SearchResultConversationMessageList();
 		$messageList->getConditionBuilder()->add('conversation_message.messageID IN (?)', array($objectIDs));
 		$messageList->readObjects();
 		foreach ($messageList->getObjects() as $message) {
-			$this->messageCache[$message->messageID] = array('type' => 'com.woltlab.wcf.conversation.message', 'message' => $message);
+			$this->messageCache[$message->messageID] = $message;
 		}
 	}
 	
 	/**
-	 * @see	wcf\system\search\ISearchableObjectType::cacheMessageData()
+	 * @see	wcf\system\search\ISearchableObjectType::getObject()
 	 */
-	public function getMessageData($objectID) {
+	public function getObject($objectID) {
 		if (isset($this->messageCache[$objectID])) return $this->messageCache[$objectID];
 		return null;
-	}
-	
-	/**
-	 * @see	wcf\system\search\ISearchableObjectType::getResultTemplateName()
-	 */
-	public function getResultTemplateName() {
-		return 'searchResultConversationMessage';
 	}
 	
 	/**
