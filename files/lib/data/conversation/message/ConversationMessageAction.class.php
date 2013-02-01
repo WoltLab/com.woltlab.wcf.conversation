@@ -82,7 +82,10 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			
 			// fire notification event
 			if (!$conversation->isDraft) {
-				UserNotificationHandler::getInstance()->fireEvent('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', new ConversationMessageUserNotificationObject($message), $conversation->getParticipantIDs());
+				$notificationRecipients = array_diff($conversation->getParticipantIDs(), array($message->userID)); // don't notify message author
+				if (!empty($notificationRecipients)) {
+					UserNotificationHandler::getInstance()->fireEvent('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', new ConversationMessageUserNotificationObject($message), $notificationRecipients);
+				}
 			}
 			
 			// make invisible participant visible
