@@ -90,7 +90,7 @@ class UserConversationList extends ConversationList {
 		
 		if (!empty($this->sqlSelects)) $this->sqlSelects .= ',';
 		$this->sqlSelects .= "lastposter_avatar.avatarID AS lastPosterAvatarID, lastposter_avatar.avatarName AS lastPosterAvatarName, lastposter_avatar.avatarExtension AS lastPosterAvatarExtension, lastposter_avatar.width AS lastPosterAvatarWidth, lastposter_avatar.height AS lastPosterAvatarHeight,";
-		$this->sqlSelects .= "lastposter.email AS lastPosterEmail, lastposter.disableAvatar AS lastPosterDisableAvatar";
+		$this->sqlSelects .= "lastposter.email AS lastPosterEmail, lastposter.disableAvatar AS lastPosterDisableAvatar, lastposter.enableGravatar AS lastPosterEnableGravatar";
 		$this->sqlJoins .= " LEFT JOIN wcf".WCF_N."_user lastposter ON (lastposter.userID = conversation.lastPosterID)";
 		$this->sqlJoins .= " LEFT JOIN wcf".WCF_N."_user_avatar lastposter_avatar ON (lastposter_avatar.avatarID = lastposter.avatarID)";
 	}

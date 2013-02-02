@@ -81,7 +81,8 @@ class ViewableConversation extends DatabaseObjectDecorator {
 					'width' => $this->lastPosterAvatarWidth,
 					'height' => $this->lastPosterAvatarHeight,
 					'email' => $this->lastPosterEmail,
-					'disableAvatar' => $this->lastPosterDisableAvatar
+					'disableAvatar' => $this->lastPosterDisableAvatar,
+					'enableGravatar' => $this->lastPosterEnableGravatar
 				)));
 			}
 		}
