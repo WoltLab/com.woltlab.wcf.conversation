@@ -49,7 +49,7 @@ class SearchResultConversationMessage extends ViewableConversationMessage implem
 	 * @see wcf\data\search\ISearchResultObject::getSubject()
 	 */
 	public function getSubject() {
-		 return $this->subject;
+		return $this->subject;
 	}
 	
 	/**
