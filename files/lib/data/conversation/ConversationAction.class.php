@@ -134,13 +134,13 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 				$conversation->updateParticipantSummary();
 				
 				// check if new participants have been added
-				$participantIDs = array_diff($participantIDs, $this->parameters['participants'], $this->parameters['invisibleParticipants']);
-				if (!empty($participantIDs)) {
+				$newParticipantIDs = array_diff(array_merge($this->parameters['participants'], $this->parameters['invisibleParticipants']), $participantIDs);
+				if (!empty($newParticipantIDs)) {
 					// update conversation count
-					UserStorageHandler::getInstance()->reset($participantIDs, 'conversationCount');
+					UserStorageHandler::getInstance()->reset($newParticipantIDs, 'conversationCount');
 					
 					// fire notification event
-					UserNotificationHandler::getInstance()->fireEvent('conversation', 'com.woltlab.wcf.conversation.notification', new ConversationUserNotificationObject($conversation->getDecoratedObject()), $participantIDs);
+					UserNotificationHandler::getInstance()->fireEvent('conversation', 'com.woltlab.wcf.conversation.notification', new ConversationUserNotificationObject($conversation->getDecoratedObject()), $newParticipantIDs);
 				}
 			}
 			
