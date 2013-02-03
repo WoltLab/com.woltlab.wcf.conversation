@@ -32,7 +32,7 @@
 				<dl{if $errorField == 'subject'} class="formError"{/if}>
 					<dt><label for="subject">{lang}wcf.global.subject{/lang}</label></dt>
 					<dd>
-						<input type="text" id="subject" name="subject" value="{$subject}" required="true" class="long" />
+						<input type="text" id="subject" name="subject" value="{$subject}" required="true" maxlength="255" class="long" />
 						{if $errorField == 'subject'}
 							<small class="innerError">
 								{if $errorType == 'empty'}
@@ -125,7 +125,7 @@
 		
 		{event name='fieldsets'}
 		
-		{include file='messageFormTabs'}
+		{include file='messageFormTabs' wysiwygContainerID='text'}
 	</div>
 	
 	<div class="formSubmit">
