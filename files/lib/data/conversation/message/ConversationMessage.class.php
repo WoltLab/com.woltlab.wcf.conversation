@@ -80,16 +80,10 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	 * @return	string
 	 */
 	public function getExcerpt($maxLength = 255) {
-		MessageParser::getInstance()->setOutputType('text/plain');
+		MessageParser::getInstance()->setOutputType('text/simplified-html');
 		$message = MessageParser::getInstance()->parse($this->message, $this->enableSmilies, $this->enableHtml, $this->enableBBCodes);
-		if (StringUtil::length($message) > $maxLength) {
-			$message = StringUtil::encodeHTML(StringUtil::substring($message, 0, $maxLength)).StringUtil::HELLIP;
-		}
-		else {
-			$message = StringUtil::encodeHTML($message);
-		}
 		
-		return $message;
+		return StringUtil::truncateHTML($message, $maxLength);
 	}
 	
 	/**
