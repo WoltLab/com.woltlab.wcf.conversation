@@ -58,6 +58,7 @@
 		<item name="wcf.conversation.ownPosts"><![CDATA[Diese Konversation enthält Nachrichten von Ihnen.]]></item>
 		<item name="wcf.conversation.gotoFirstNewPost"><![CDATA[Zur ersten neuen Nachricht springen]]></item>
 		<item name="wcf.conversation.gotoLastPost"><![CDATA[Zur letzten Nachricht springen]]></item>
+		<item name="wcf.conversation.searchConversations"><![CDATA[Konversationen durchsuchen]]></item>
 	</category>
 	
 	<category name="wcf.conversation.edit">

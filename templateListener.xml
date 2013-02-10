@@ -21,5 +21,12 @@
 			<eventname>buttons</eventname>
 			<templatecode><![CDATA[{include file='__userStartConversation'}]]></templatecode>
 		</templatelistener>
+		
+		<templatelistener name="searchAreaConversationSettings">
+			<environment>user</environment>
+			<templatename>searchArea</templatename>
+			<eventname>settings</eventname>
+			<templatecode><![CDATA[{include file='__searchAreaConversationSettings'}]]></templatecode>
+		</templatelistener>
 	</import>
 </data>
