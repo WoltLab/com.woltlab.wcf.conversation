@@ -6,6 +6,14 @@
 	{include file='headInclude'}
 	
 	{include file='imageViewer'}
+	
+	<script type="text/javascript">
+		//<![CDATA[
+		$(function() {
+			WCF.Message.Submit.registerButton('text', $('#messageContainer > .formSubmit > input[type=submit]'));
+		});
+		//]]>
+	</script>
 </head>
 
 <body id="tpl{$templateName|ucfirst}">
