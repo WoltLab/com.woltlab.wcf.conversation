@@ -10,6 +10,8 @@
 		$(function() {
 			new WCF.Search.User('#participants', null, false, [ ], true);
 			new WCF.Search.User('#invisibleParticipants', null, false, [ ], true);
+			
+			WCF.Message.Submit.registerButton('text', $('#messageContainer > .formSubmit > input[type=submit]'));
 		});
 		//]]>
 	</script>

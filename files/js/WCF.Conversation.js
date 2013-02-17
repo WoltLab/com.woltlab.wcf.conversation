@@ -1421,6 +1421,6 @@ WCF.Conversation.Message.QuoteHandler = WCF.Message.Quote.Handler.extend({
 	 * @see	WCF.Message.QuoteManager.init()
 	 */
 	init: function(quoteManager) {
-		this._super(quoteManager, 'wcf\\data\\conversation\\message\\ConversationMessageAction', 'com.woltlab.wcf.conversation.message', '.message', '.messageBody > div > div.messageText');
+		this._super(quoteManager, 'wcf\\data\\conversation\\message\\ConversationMessageAction', 'com.woltlab.wcf.conversation.message', '.message', '.messageBody', '.messageBody > div > div.messageText');
 	}
 });
