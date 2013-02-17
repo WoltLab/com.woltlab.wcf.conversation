@@ -48,8 +48,9 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	public function __construct() {
 		parent::__construct();
 		
-		$this->sqlSelects .= "user_table.*";
+		$this->sqlSelects .= "user_option_value.*, user_table.*";
 		$this->sqlJoins .= " LEFT JOIN wcf".WCF_N."_user user_table ON (user_table.userID = conversation_message.userID)";
+		$this->sqlJoins .= " LEFT JOIN wcf".WCF_N."_user_option_value user_option_value ON (user_option_value.userID = user_table.userID)";
 		
 		// get avatars
 		if (!empty($this->sqlSelects)) $this->sqlSelects .= ',';
