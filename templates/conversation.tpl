@@ -73,19 +73,21 @@
 		<fieldset>
 			<legend>{lang}wcf.conversation.participants{/lang}</legend>
 			
-			<ul class="conversationParticipantList">
+			<ul class="containerBoxList tripleColumned conversationParticipantList">
 				{foreach from=$participants item=participant}
-					<li class="box24">
-						<a href="{link controller='User' object=$participant}{/link}" class="framed">{@$participant->getAvatar()->getImageTag(24)}</a>
-						<hgroup>
-							<h1><a href="{link controller='User' object=$participant}{/link}" class="userLink{if $participant->hideConversation == 2} conversationLeft{/if}" data-user-id="{@$participant->userID}">{$participant->username}</a>
-							{if $participant->isInvisible}<small>({lang}wcf.conversation.invisible{/lang})</small>{/if}
-							</h1>
-							<h2><dl class="plain inlineDataList">
-								<dt>{lang}wcf.conversation.lastVisitTime{/lang}</dt>
-								<dd>{if $participant->lastVisitTime}{@$participant->lastVisitTime|time}{else}-{/if}</dd>
-							</dl></h2>
-						</hgroup>
+					<li>
+						<div class="box24">
+							<a href="{link controller='User' object=$participant}{/link}" class="framed">{@$participant->getAvatar()->getImageTag(24)}</a>
+							<hgroup>
+								<h1><a href="{link controller='User' object=$participant}{/link}" class="userLink{if $participant->hideConversation == 2} conversationLeft{/if}" data-user-id="{@$participant->userID}">{$participant->username}</a>
+								{if $participant->isInvisible}<small>({lang}wcf.conversation.invisible{/lang})</small>{/if}
+								</h1>
+								<h2><dl class="plain inlineDataList">
+									<dt>{lang}wcf.conversation.lastVisitTime{/lang}</dt>
+									<dd>{if $participant->lastVisitTime}{@$participant->lastVisitTime|time}{else}-{/if}</dd>
+								</dl></h2>
+							</hgroup>
+						</div>
 					</li>
 				{/foreach}
 			</ul>
