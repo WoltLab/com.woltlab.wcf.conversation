@@ -5,8 +5,6 @@
 	
 	{include file='headInclude'}
 	
-	{include file='imageViewer'}
-	
 	<script type="text/javascript">
 		//<![CDATA[
 		$(function() {
