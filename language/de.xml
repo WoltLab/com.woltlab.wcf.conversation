@@ -88,6 +88,17 @@
 		<item name="wcf.conversation.label.assignLabels"><![CDATA[Label zuweisen]]></item>
 	</category>
 	
+	<category name="wcf.conversation.log">
+		<item name="wcf.conversation.log"><![CDATA[Änderungsprotokoll]]></item>
+		<item name="wcf.conversation.log.noEntries"><![CDATA[Es wurden keine Änderungen für diese Konversation protokolliert.]]></item>
+		<item name="wcf.conversation.log.title"><![CDATA[Protokollierte Änderungen]]></item>
+		<item name="wcf.conversation.log.action"><![CDATA[Aktion]]></item>
+		<item name="wcf.conversation.log.time"><![CDATA[Datum]]></item>
+		<item name="wcf.conversation.log.conversation.open"><![CDATA[Konversation geöffnet]]></item>
+		<item name="wcf.conversation.log.conversation.close"><![CDATA[Konversation geschlossen]]></item>
+		<item name="wcf.conversation.log.conversation.addParticipants"><![CDATA[Neue Teilnehmer wurden hinzugefügt: {implode from=$additionalData[participants] item=participant}<a href="{link controller='User' id=$participant[userID] title=$participant[username]}{/link}">{$participant[username]}</a>{/implode}]]></item>
+	</category>
+	
 	<category name="wcf.search">
 		<item name="wcf.search.type.com.woltlab.wcf.conversation.message"><![CDATA[Konversationen]]></item>
 		<item name="wcf.search.object.com.woltlab.wcf.conversation.message"><![CDATA[Konversation]]></item>

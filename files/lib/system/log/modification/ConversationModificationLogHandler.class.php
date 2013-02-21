@@ -1,6 +1,7 @@
 <?php
 namespace wcf\system\log\modification;
 use wcf\data\conversation\Conversation;
+use wcf\data\user\UserList;
 
 /**
  * Handles conversation modification logs.
@@ -20,8 +21,19 @@ class ConversationModificationLogHandler extends ModificationLogHandler {
 	 * @param	array<integer>				$participantIDs
 	 */
 	public function addParticipants(Conversation $conversation, array $participantIDs) {
+		$participants = array();
+		$userList = new UserList();
+		$userList->setObjectIDs($participantIDs);
+		$userList->readObjects();
+		foreach ($userList as $user) {
+			$participants[] = array(
+				'userID' => $user->userID,
+				'username' => $user->username
+			);
+		}
+		
 		$this->add($conversation, 'addParticipants', array(
-			'participantIDs' => $participantIDs
+			'participants' => $participants
 		));
 	}
 	
