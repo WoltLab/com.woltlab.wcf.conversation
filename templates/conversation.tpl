@@ -107,7 +107,6 @@
 
 <div class="marginTop">
 	<ul class="messageList">
-		{if $sortOrder == 'DESC'}{assign var='startIndex' value=$items-$startIndex+1}{/if}
 		{include file='conversationMessageList'}
 		{if !$conversation->isClosed}{include file='conversationQuickReply'}{/if}
 	</ul>

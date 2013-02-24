@@ -76,7 +76,6 @@
 
 <div>
 	<ul class="messageList">
-		{assign var='startIndex' value=$items}
 		{foreach from=$messages item=message}
 			{assign var='objectID' value=$message->messageID}
 			
@@ -118,8 +117,6 @@
 					</div>
 				</article>
 			</li>
-			
-			{assign var='startIndex' value=$startIndex-1}
 		{/foreach}
 	</ul>
 </div>

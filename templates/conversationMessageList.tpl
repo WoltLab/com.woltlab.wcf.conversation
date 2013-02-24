@@ -53,10 +53,4 @@
 			</div>
 		</article>
 	</li>
-	
-	{if $sortOrder == 'DESC'}
-		{assign var='startIndex' value=$startIndex-1}
-	{else}
-		{assign var='startIndex' value=$startIndex+1}
-	{/if}
 {/foreach}
