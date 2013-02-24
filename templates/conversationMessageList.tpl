@@ -11,12 +11,8 @@
 				<section class="messageContent">
 					<div>
 						<header class="messageHeader">
-							<p class="messageCounter">
-								<a href="{link controller='Conversation' object=$conversation}messageID={@$message->messageID}{/link}#message{@$message->messageID}" title="{lang}wcf.conversation.message.permalink{/lang}" class="button jsTooltip">{#$startIndex}</a>
-							</p>
-							
 							<hgroup class="messageHeadline">
-								<h2>{@$message->time|time}</h2>
+								<h2><a href="{link controller='Conversation' object=$conversation}messageID={@$message->messageID}{/link}#message{@$message->messageID}" class="permalink">{@$message->time|time}</a></h2>
 							</hgroup>
 							
 							{if $conversation->isNewMessage($message->getDecoratedObject())}
