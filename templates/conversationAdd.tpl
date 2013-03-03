@@ -45,6 +45,8 @@
 						<small class="innerError">
 							{if $errorType == 'empty'}
 								{lang}wcf.global.form.error.empty{/lang}
+							{elseif $errorType == 'censoredWordsFound'}
+								{lang}wcf.message.error.censoredWordsFound{/lang}
 							{else}
 								{lang}wcf.conversation.subject.error.{@$errorType}{/lang}
 							{/if}
@@ -119,6 +121,8 @@
 								{lang}wcf.global.form.error.empty{/lang}
 							{elseif $errorType == 'tooLong'}
 								{lang}wcf.message.error.tooLong{/lang}
+							{elseif $errorType == 'censoredWordsFound'}
+								{lang}wcf.message.error.censoredWordsFound{/lang}
 							{else}
 								{lang}wcf.conversation.message.error.{@$errorType}{/lang}
 							{/if}

@@ -9,6 +9,7 @@ use wcf\data\IMessageInlineEditorAction;
 use wcf\data\IMessageQuoteAction;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
+use wcf\system\message\censorship\Censorship;
 use wcf\system\message\quote\MessageQuoteManager;
 use wcf\system\message\QuickReplyManager;
 use wcf\system\request\LinkHandler;
@@ -350,7 +351,15 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	/**
 	 * @see	wcf\data\IMessageQuickReplyAction::validateMessage()
 	 */
-	public function validateMessage(DatabaseObject $container, $message) { }
+	public function validateMessage(DatabaseObject $container, $message) {
+		// search for censored words
+		if (ENABLE_CENSORSHIP) {
+			$result = Censorship::getInstance()->test($message);
+			if ($result) {
+				throw new UserInputException('message', 'wcf.message.error.censoredWordsFound', array('censoredWords' => $result));
+			}
+		}
+	}
 	
 	/**
 	 * @see	wcf\data\IMessageQuickReply::getPageNo()
