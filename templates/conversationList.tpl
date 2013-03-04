@@ -57,7 +57,7 @@
 		</nav>
 	</fieldset>
 	
-	<fieldset>
+	<fieldset class="jsOnly">
 		<legend>{lang}wcf.conversation.label{/lang}</legend>
 		
 		<div id="conversationLabelFilter" class="dropdown">
@@ -139,7 +139,7 @@
 		<table class="table">
 			<thead>
 				<tr>
-					<th class="columnMark"><label><input type="checkbox" class="jsClipboardMarkAll" /></label></th>
+					<th class="columnMark jsOnly"><label><input type="checkbox" class="jsClipboardMarkAll" /></label></th>
 					<th colspan="2" class="columnTitle columnSubject{if $sortField == 'subject'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=subject&sortOrder={if $sortField == 'subject' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.global.subject{/lang}</a></th>
 					<th class="columnDigits columnReplies{if $sortField == 'replies'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=replies&sortOrder={if $sortField == 'replies' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.conversation.replies{/lang}</a></th>
 					<th class="columnDigits columnParticipants{if $sortField == 'participants'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=participants&sortOrder={if $sortField == 'participants' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.conversation.participants{/lang}</a></th>
@@ -150,7 +150,7 @@
 			<tbody>
 				{foreach from=$objects item=conversation}
 					<tr class="conversation jsClipboardObject{if $conversation->isNew()} new{/if}" data-conversation-id="{@$conversation->conversationID}" data-label-ids="[ {implode from=$conversation->getAssignedLabels() item=label}{@$label->labelID}{/implode} ]" data-is-closed="{@$conversation->isClosed}" data-can-close-conversation="{if $conversation->userID == $__wcf->getUser()->userID}1{else}0{/if}" data-can-add-participants="{if $conversation->canAddParticipants()}1{else}0{/if}">
-						<td class="columnMark">
+						<td class="columnMark jsOnly">
 							<label><input type="checkbox" class="jsClipboardItem" data-object-id="{@$conversation->conversationID}" /></label>
 						</td>
 						<td class="columnIcon columnAvatar">
@@ -196,7 +196,7 @@
 							<small>
 								<a href="{link controller='User' object=$conversation->getUserProfile()->getDecoratedObject()}{/link}" class="userLink" data-user-id="{@$conversation->userID}">{$conversation->username}</a>
 								- {@$conversation->time|time}
-								- <a class="jsThreadInlineEditor">{lang}wcf.global.button.edit{/lang}</a>
+								<span class="jsOnly">- <a class="jsThreadInlineEditor">{lang}wcf.global.button.edit{/lang}</a></span>
 							</small>
 							
 							{if $conversation->getParticipantSummary()|count}

@@ -98,7 +98,7 @@
 	
 	<nav>
 		<ul class="conversation jsThreadInlineEditorContainer" data-conversation-id="{@$conversation->conversationID}" data-label-ids="[ {implode from=$conversation->getAssignedLabels() item=label}{@$label->labelID}{/implode} ]" data-is-closed="{@$conversation->isClosed}" data-can-close-conversation="{if $conversation->userID == $__wcf->getUser()->userID}1{else}0{/if}" data-can-add-participants="{if $conversation->canAddParticipants()}1{else}0{/if}">
-			<li><a class="button jsThreadInlineEditor"><span class="icon icon16 icon-pencil"></span> <span>{lang}wcf.global.button.edit{/lang}</span></a></li>
+			<li class="jsOnly"><a class="button jsThreadInlineEditor"><span class="icon icon16 icon-pencil"></span> <span>{lang}wcf.global.button.edit{/lang}</span></a></li>
 			{if !$conversation->isClosed}<li><a href="{link controller='ConversationMessageAdd' id=$conversationID}{/link}" title="{lang}wcf.conversation.message.add{/lang}" class="button buttonPrimary jsQuickReply"><span class="icon icon16 icon-plus"></span> <span>{lang}wcf.conversation.message.button.add{/lang}</span></a></li>{/if}
 			{event name='largeButtonsTop'}
 		</ul>
