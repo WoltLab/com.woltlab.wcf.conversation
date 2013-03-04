@@ -356,7 +356,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		if (ENABLE_CENSORSHIP) {
 			$result = Censorship::getInstance()->test($message);
 			if ($result) {
-				throw new UserInputException('message', 'wcf.message.error.censoredWordsFound', array('censoredWords' => $result));
+				throw new UserInputException('message', WCF::getLanguage()->getDynamicVariable('wcf.message.error.censoredWordsFound', array('censoredWords' => $result)));
 			}
 		}
 	}
