@@ -536,7 +536,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		catch (UserInputException $e) {
 			$errorMessage = '';
 			foreach ($e->getType() as $type) {
-				$errorMessage .= WCF::getLanguage()->get('wcf.conversation.participants.error.'.$type);
+				if (!empty($errorMessage)) $errorMessage .= ' ';
+				$errorMessage .= WCF::getLanguage()->getDynamicVariable('wcf.conversation.participants.error.'.$type['type'], array('username' => $type['username']));
 			}
 			
 			return array(
@@ -551,18 +552,30 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			// check for already added participants
 			$participantIDs = array_diff($participantIDs, $this->conversation->getParticipantIDs());
 			if (!empty($participantIDs)) {
-				$conversationAction = new ConversationAction(array($this->conversation), 'update', array('participants' => $participantIDs));
+				$data = array();
+				if ($this->conversation->isDraft) {
+					$draftData = unserialize($this->conversation->draftData);
+					$draftData['participants'] = array_merge($draftData['participants'], $participantIDs);
+					$data = array('data' => array('draftData' => serialize($draftData)));
+				}
+				else {
+					$data = array('participants' => $participantIDs);
+				}
+				
+				$conversationAction = new ConversationAction(array($this->conversation), 'update', $data);
 				$conversationAction->executeAction();
 				
 				$count = count($participantIDs);
 				$successMessage = WCF::getLanguage()->getDynamicVariable('wcf.conversation.edit.addParticipants.success', array('count' => $count));
 				
 				ConversationModificationLogHandler::getInstance()->addParticipants($this->conversation->getDecoratedObject(), $participantIDs);
+				
+				if (!$this->conversation->isDraft) {
+					// update participant summary
+					$this->conversation->updateParticipantSummary();
+				}
 			}
 		}
-		
-		// update participant summary
-		$this->conversation->updateParticipantSummary();
 		
 		return array(
 			'actionName' => 'addParticipants',

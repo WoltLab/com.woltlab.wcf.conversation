@@ -724,7 +724,7 @@ WCF.Conversation.AddParticipants = Class.extend({
 			case 'addParticipants':
 				if (data.returnValues.errorMessage) {
 					this._dialog.find('dl.jsAddParticipants').addClass('formError');
-					$('<span class="formError">' + data.returnValues.errorMessage + '</span>').appendTo(this._dialog.find('dl.jsAddParticipants > dd'));
+					$('<small class="innerError">' + data.returnValues.errorMessage + '</small>').appendTo(this._dialog.find('dl.jsAddParticipants > dd'));
 					return;
 				}
 				
@@ -733,6 +733,7 @@ WCF.Conversation.AddParticipants = Class.extend({
 					$notification.show();
 				}
 				
+				this._dialog.find('dl.jsAddParticipants').removeClass('formError').find('small.innerError').remove();
 				this._dialog.wcfDialog('close');
 			break;
 			

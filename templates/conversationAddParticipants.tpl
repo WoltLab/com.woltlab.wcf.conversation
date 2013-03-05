@@ -1,7 +1,7 @@
 <fieldset>
 	<legend>{lang}wcf.conversation.edit.addParticipants{/lang}</legend>
 	
-	<dl>
+	<dl class="jsAddParticipants">
 		<dt><label for="participantsInput">{lang}wcf.conversation.participants{/lang}</label></dt>
 		<dd>
 			<textarea id="participantsInput" name="participants" class="long" cols="40" rows="2"></textarea>
