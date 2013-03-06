@@ -35,6 +35,7 @@
 			{if !$conversation->isClosed}new WCF.Conversation.QuickReply($quoteManager);{/if}
 			
 			new WCF.Moderation.Report.Content('com.woltlab.wcf.conversation.message', '.jsReportConversationMessage');
+			new WCF.Conversation.RemoveParticipant({@$conversation->conversationID});
 		});
 		//]]>
 	</script>
@@ -73,12 +74,16 @@
 			
 			<ul class="containerBoxList tripleColumned conversationParticipantList">
 				{foreach from=$participants item=participant}
-					<li>
+					<li class="jsParticipant">
 						<div class="box24">
 							<a href="{link controller='User' object=$participant}{/link}" class="framed">{@$participant->getAvatar()->getImageTag(24)}</a>
 							<hgroup>
-								<h1><a href="{link controller='User' object=$participant}{/link}" class="userLink{if $participant->hideConversation == 2} conversationLeft{/if}" data-user-id="{@$participant->userID}">{$participant->username}</a>
-								{if $participant->isInvisible}<small>({lang}wcf.conversation.invisible{/lang})</small>{/if}
+								<h1>
+									<a href="{link controller='User' object=$participant}{/link}" class="userLink{if $participant->hideConversation == 2} conversationLeft{/if}" data-user-id="{@$participant->userID}">{$participant->username}</a>
+									{if $participant->isInvisible}<small>({lang}wcf.conversation.invisible{/lang})</small>{/if}
+									{if ($conversation->userID == $__wcf->getUser()->userID) && ($participant->userID != $__wcf->getUser()->userID)}
+										<a class="jsDeleteButton jsTooltip" title="{lang}wcf.conversation.participants.removeParticipant{/lang}" data-confirm-message="{lang}wcf.conversation.participants.removeParticipant.confirmMessage{/lang}" data-object-id="{@$participant->userID}"><span class="icon icon16 icon-remove"></span></a>
+									{/if}
 								</h1>
 								<h2><dl class="plain inlineDataList">
 									<dt>{lang}wcf.conversation.lastVisitTime{/lang}</dt>

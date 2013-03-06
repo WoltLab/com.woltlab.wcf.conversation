@@ -51,6 +51,8 @@
 		<item name="wcf.conversation.participants"><![CDATA[Teilnehmer]]></item>
 		<item name="wcf.conversation.participants.description"><![CDATA[Mehrere Teilnehmer können mit Komma getrennt angegeben werden.]]></item>
 		<item name="wcf.conversation.participants.error.mailboxIsFull"><![CDATA[{$errorData[username]} hat das zulässige Limit für Konversationen bereits erreicht und kann an keinen neuen Konversation teilnehmen.]]></item>
+		<item name="wcf.conversation.participants.removeParticipant"><![CDATA[Teilnehmer entfernen]]></item>
+		<item name="wcf.conversation.participants.removeParticipant.confirmMessage"><![CDATA[Möchten Sie „{$participant->username}“ wirklich aus dieser Konversation entfernen?]]></item>
 		<item name="wcf.conversation.quota"><![CDATA[Speicherplatz]]></item>
 		<item name="wcf.conversation.quota.description"><![CDATA[{#$conversationCount/$maxConversationCount*100}% belegt ({#$conversationCount} von {#$maxConversationCount})]]></item>
 		<item name="wcf.conversation.replies"><![CDATA[Antworten]]></item>
@@ -96,7 +98,8 @@
 		<item name="wcf.conversation.log.time"><![CDATA[Datum]]></item>
 		<item name="wcf.conversation.log.conversation.open"><![CDATA[Konversation geöffnet]]></item>
 		<item name="wcf.conversation.log.conversation.close"><![CDATA[Konversation geschlossen]]></item>
-		<item name="wcf.conversation.log.conversation.addParticipants"><![CDATA[Neue Teilnehmer wurden hinzugefügt: {implode from=$additionalData[participants] item=participant}<a href="{link controller='User' id=$participant[userID] title=$participant[username]}{/link}">{$participant[username]}</a>{/implode}]]></item>
+		<item name="wcf.conversation.log.conversation.addParticipants"><![CDATA[Neue Teilnehmer wurden hinzugefügt: {implode from=$additionalData[participants] item=participant}<a href="{link controller='User' id=$participant[userID] title=$participant[username]}{/link}" class="userLink" data-user-id="{@$participant[userID]}">{$participant[username]}</a>{/implode}]]></item>
+		<item name="wcf.conversation.log.conversation.removeParticipant"><![CDATA[Ein Teilnehmer wurde entfernt: <a href="{link controller='User' id=$additionalData[userID] title=$additionalData[username]}{/link}" class="userLink" data-user-id="{@$additionalData[userID]}">{$additionalData[username]}</a>]]></item>
 	</category>
 	
 	<category name="wcf.search">

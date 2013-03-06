@@ -2,7 +2,7 @@
  * Namespace for conversations.
  * 
  * @author	Alexander Ebert
- * @copyright	2001-2011 WoltLab GmbH
+ * @copyright	2001-2013 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  */
 WCF.Conversation = { };
@@ -787,6 +787,50 @@ WCF.Conversation.AddParticipants = Class.extend({
 			}
 		});
 		this._proxy.sendRequest();
+	}
+});
+
+/**
+ * Provides methods to remove participants from conversations.
+ * 
+ * @see	WCF.Action.Delete
+ */
+WCF.Conversation.RemoveParticipant = WCF.Action.Delete.extend({
+	/**
+	 * conversation id
+	 * @var	integer
+	 */
+	_conversationID: 0,
+	
+	/**
+	 * @see	WCF.Action.Delete.init()
+	 */
+	init: function(conversationID) {
+		this._conversationID = conversationID;
+		this._super('wcf\\data\\conversation\\ConversationAction', '.jsParticipant');
+	},
+	
+	/**
+	 * @see	WCF.Action.Delete._sendRequest()
+	 */
+	_sendRequest: function(object) {
+		this.proxy.setOption('data', {
+			actionName: 'removeParticipant',
+			className: this._className,
+			objectIDs: [ this._conversationID ],
+			parameters: {
+				userID: $(object).data('objectID')
+			}
+		});
+		
+		this.proxy.sendRequest();
+	},
+	
+	/**
+	 * @see	WCF.Action.Delete._success()
+	 */
+	_success: function(data, textStatus, jqXHR) {
+		this.triggerEffect([ data.returnValues.userID ]);
 	}
 });
 

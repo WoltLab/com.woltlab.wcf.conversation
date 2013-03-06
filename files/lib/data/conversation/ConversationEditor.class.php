@@ -100,6 +100,22 @@ class ConversationEditor extends DatabaseObjectEditor {
 	}
 	
 	/**
+	 * Removes a participant from this conversation.
+	 * 
+	 * @param	integer		$userID
+	 */
+	public function removeParticipant($userID) {
+		$sql = "DELETE FROM	wcf".WCF_N."_conversation_to_user
+			WHERE		conversationID = ?
+					AND participantID = ?";
+		$statement = WCF::getDB()->prepareStatement($sql);
+		$statement->execute(array(
+			$this->conversationID,
+			$userID
+		));
+	}
+	
+	/**
 	 * Updates the participant summary of the given conversations.
 	 * 
 	 * @param	array<integer>		$conversationIDs

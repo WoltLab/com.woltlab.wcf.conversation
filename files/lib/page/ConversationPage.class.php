@@ -1,5 +1,7 @@
 <?php
 namespace wcf\page;
+use wcf\data\modification\log\ConversationLogModificationLogList;
+
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\conversation\Conversation;
@@ -67,8 +69,8 @@ class ConversationPage extends MultipleLinkPage {
 	public $conversationID = 0;
 	
 	/**
-	 * conversation object
-	 * @var	wcf\data\conversation\Conversation
+	 * viewable conversation object
+	 * @var	wcf\data\conversation\ViewableConversation
 	 */
 	public $conversation = null;
 	
@@ -89,6 +91,12 @@ class ConversationPage extends MultipleLinkPage {
 	 * @var	wcf\data\conversation\message\ConversationMessage
 	 */
 	public $message = null;
+	
+	/**
+	 * modification log list object
+	 * @var	wcf\data\wcf\data\modification\log\ConversationLogModificationLogList
+	 */
+	public $modificationLogList = null;
 	
 	/**
 	 * sidebar factory object
@@ -186,6 +194,26 @@ class ConversationPage extends MultipleLinkPage {
 				'canViewPreview' => true		
 			));
 		}
+		
+		// get timeframe for modifications
+		$this->objectList->rewind();
+		$startTime = $this->objectList->current()->time;
+		
+		$count = count($this->objectList);
+		if ($count == 1) {
+			$endTime = $startTime;
+		}
+		else {
+			$this->objectList->seek($count - 1);
+			$endTime = $this->objectList->current()->time;
+		}
+		$this->objectList->rewind();
+		
+		// load modification log entries
+		$this->modificationLogList = new ConversationLogModificationLogList();
+		$this->modificationLogList->setConversation($this->conversation->getDecoratedObject());
+		$this->modificationLogList->getConditionBuilder()->add("modification_log.time BETWEEN ? AND ?", array($startTime, $endTime));
+		$this->modificationLogList->readObjects();
 	}
 	
 	/**
@@ -199,6 +227,7 @@ class ConversationPage extends MultipleLinkPage {
 		WCF::getTPL()->assign(array(
 			'attachmentList' => $this->objectList->getAttachmentList(),
 			'labelList' => $this->labelList,
+			'modificationLogList' => $this->modificationLogList,
 			'sidebarFactory' => $this->sidebarFactory,
 			'sortOrder' => $this->sortOrder,
 			'conversation' => $this->conversation,

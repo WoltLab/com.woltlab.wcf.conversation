@@ -1,4 +1,7 @@
 {foreach from=$objects item=message}
+	{assign var=__modificationLogTime value=$message->time}
+	{include file='conversationMessageListLog'}
+	
 	{if !$conversation|isset && $container|isset}{assign var=conversation value=$container}{/if}
 	{assign var='objectID' value=$message->messageID}
 	{assign var='userProfile' value=$message->getUserProfile()}
@@ -54,3 +57,6 @@
 		</article>
 	</li>
 {/foreach}
+
+{assign var=__modificationLogTime value=TIME_NOW}
+{include file='conversationMessageListLog'}

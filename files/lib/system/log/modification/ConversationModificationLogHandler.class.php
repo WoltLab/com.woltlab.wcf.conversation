@@ -1,13 +1,14 @@
 <?php
 namespace wcf\system\log\modification;
 use wcf\data\conversation\Conversation;
+use wcf\data\user\User;
 use wcf\data\user\UserList;
 
 /**
  * Handles conversation modification logs.
  * 
  * @author	Alexander Ebert
- * @copyright	2001-2012 WoltLab GmbH
+ * @copyright	2001-2013 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	system.log.modification
@@ -53,6 +54,20 @@ class ConversationModificationLogHandler extends ModificationLogHandler {
 	 */
 	public function open(Conversation $conversation) {
 		$this->add($conversation, 'open');
+	}
+	
+	/**
+	 * Adds a log entry for a removed participant.
+	 * 
+	 * @param	wcf\data\conversation\Conversation	$conversation
+	 * @param	integer					$userID
+	 */
+	public function removeParticipant(Conversation $conversation, $userID) {
+		$user = new User($userID);
+		$this->add($conversation, 'removeParticipant', array(
+			'userID' => $userID,
+			'username' => $user->username
+		));
 	}
 	
 	/**

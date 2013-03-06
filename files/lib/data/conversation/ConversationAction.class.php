@@ -585,6 +585,44 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	}
 	
 	/**
+	 * Validates parameters to remove a participant from a conversation.
+	 */
+	public function validateRemoveParticipant() {
+		$this->readInteger('userID');
+		
+		// validate conversation
+		$this->conversation = $this->getSingleObject();
+		if (!$this->conversation->conversationID) {
+			throw new UserInputException('objectIDs');
+		}
+		
+		// check ownership
+		if ($this->conversation->userID != WCF::getUser()->userID) {
+			throw new PermissionDeniedException();
+		}
+		
+		// validate participants
+		if ($this->parameters['userID'] == WCF::getUser()->userID || !Conversation::isParticipant(array($this->conversation->conversationID)) || !Conversation::isParticipant(array($this->conversation->conversationID), $this->parameters['userID'])) {
+			throw new PermissionDeniedException();
+		}
+		
+	}
+	
+	/**
+	 * Removes a participant from a conversation.
+	 */
+	public function removeParticipant() {
+		$this->conversation->removeParticipant($this->parameters['userID']);
+		$this->conversation->updateParticipantSummary();
+		
+		ConversationModificationLogHandler::getInstance()->removeParticipant($this->conversation->getDecoratedObject(), $this->parameters['userID']);
+		
+		return array(
+			'userID' => $this->parameters['userID']
+		);
+	}
+	
+	/**
 	 * Adds conversation modification data.
 	 * 
 	 * @param	wcf\data\conversation\Conversation	$conversation
