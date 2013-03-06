@@ -120,7 +120,7 @@
 		<item name="wcf.user.option.canSendConversation"><![CDATA[Kann Konversationen schreiben]]></item>
 	</category>
 	
-	<category name="wcf.user">
+	<category name="wcf.user.usersOnline">
 		<item name="wcf.user.usersOnline.location.ConversationAddForm"><![CDATA[Konversation erstellen]]></item>
 		<item name="wcf.user.usersOnline.location.ConversationListPage"><![CDATA[Konversationen]]></item>
 		<item name="wcf.user.usersOnline.location.ConversationMessageAddForm"><![CDATA[Antworten auf <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">Konversation „{$conversation->subject}“</a>]]></item>
