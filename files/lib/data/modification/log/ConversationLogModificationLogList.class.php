@@ -97,4 +97,27 @@ class ConversationLogModificationLogList extends ModificationLogList {
 		}
 		unset($object);
 	}
+	
+	/**
+	 * Returns all log entries created before given point of time. Applicable entries
+	 * will be returned and removed from collection.
+	 * 
+	 * @param	integer		$time
+	 * @return	array<wcf\data\modification\log\ViewableConversationModificationLog>
+	 */
+	public function getEntriesUntil($time) {
+		$entries = array();
+		foreach ($this->objects as $index => $entry) {
+			if ($entry->time < $time) {
+				$entries[] = $entry;
+				unset($this->objects[$index]);
+			}
+		}
+		
+		if (!empty($entries)) {
+			$this->indexToObject = array_keys($this->objects);
+		}
+		
+		return $entries;
+	}
 }
