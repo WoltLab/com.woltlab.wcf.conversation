@@ -352,6 +352,10 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 * @see	wcf\data\IMessageQuickReplyAction::validateMessage()
 	 */
 	public function validateMessage(DatabaseObject $container, $message) {
+		if (StringUtil::length($message) > WCF::getSession()->getPermission('user.conversation.maxLength')) {
+			throw new UserInputException('message', WCF::getLanguage()->getDynamicVariable('wcf.message.error.tooLong', array('maxTextLength' => WCF::getSession()->getPermission('user.conversation.maxLength'))));
+		}
+		
 		// search for censored words
 		if (ENABLE_CENSORSHIP) {
 			$result = Censorship::getInstance()->test($message);

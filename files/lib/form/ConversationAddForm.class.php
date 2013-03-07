@@ -113,6 +113,9 @@ class ConversationAddForm extends MessageForm {
 			
 			$this->participants = $user->username;
 		}
+		
+		// get max text length
+		$this->maxTextLength = WCF::getSession()->getPermission('user.conversation.maxLength');
 	}
 	
 	/**
