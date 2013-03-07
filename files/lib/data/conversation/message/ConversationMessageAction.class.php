@@ -315,6 +315,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		}
 		
 		$this->validateBeginEdit();
+		$this->validateMessage($this->conversation, $this->parameters['data']['message']);
 	}
 	
 	/**
