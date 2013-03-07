@@ -57,6 +57,15 @@ class ConversationModificationLogHandler extends ModificationLogHandler {
 	}
 	
 	/**
+	 * Adds a log entry for conversation leave.
+	 *
+	 * @param	wcf\data\conversation\Conversation	$conversation
+	 */
+	public function leave(Conversation $conversation) {
+		$this->add($conversation, 'leave');
+	}
+	
+	/**
 	 * Adds a log entry for a removed participant.
 	 * 
 	 * @param	wcf\data\conversation\Conversation	$conversation

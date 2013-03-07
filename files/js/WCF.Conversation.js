@@ -830,7 +830,15 @@ WCF.Conversation.RemoveParticipant = WCF.Action.Delete.extend({
 	 * @see	WCF.Action.Delete._success()
 	 */
 	_success: function(data, textStatus, jqXHR) {
-		this.triggerEffect([ data.returnValues.userID ]);
+		var $userID = data.returnValues.userID;
+		
+		for (var $index in this._containers) {
+			var $container = $('#' + this._containers[$index]);
+			if ($container.find('.jsDeleteButton').data('objectID') == $userID) {
+				$container.find('.userLink').addClass('conversationLeft');
+				$container.find('.jsDeleteButton').remove();
+			}
+		}
 	}
 });
 

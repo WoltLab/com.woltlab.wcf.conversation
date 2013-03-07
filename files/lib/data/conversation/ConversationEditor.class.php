@@ -105,11 +105,13 @@ class ConversationEditor extends DatabaseObjectEditor {
 	 * @param	integer		$userID
 	 */
 	public function removeParticipant($userID) {
-		$sql = "DELETE FROM	wcf".WCF_N."_conversation_to_user
-			WHERE		conversationID = ?
-					AND participantID = ?";
+		$sql = "UPDATE	wcf".WCF_N."_conversation_to_user
+			SET	hideConversation = ?
+			WHERE	conversationID = ?
+				AND participantID = ?";
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute(array(
+			2,
 			$this->conversationID,
 			$userID
 		));

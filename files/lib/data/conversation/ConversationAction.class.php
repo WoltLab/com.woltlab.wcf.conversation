@@ -441,6 +441,15 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			UserStorageHandler::getInstance()->reset(array(WCF::getUser()->userID), 'unreadConversationCount');
 		}
 		
+		// add modification log entry
+		if ($this->parameters['hideConversation'] == Conversation::STATE_LEFT) {
+			if (empty($this->objects)) $this->readObjects();
+			
+			foreach ($this->objects as $conversation) {
+				ConversationModificationLogHandler::getInstance()->leave($conversation->getDecoratedObject());
+			}
+		}
+		
 		// unmark items
 		$this->unmarkItems();
 		

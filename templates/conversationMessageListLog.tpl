@@ -5,15 +5,13 @@
 			<article class="message messageCollapsed">
 				<div class="messageHeader">
 					<div class="box24">
-						<span class="icon icon16 icon-tasks"></span>
+						<a href="{link controller='User' object=$modificationLogEntry->getUserProfile()}{/link}" class="framed">{@$modificationLogEntry->getUserProfile()->getAvatar()->getImageTag(24)}</a>
 						
 						<hgroup>
-							<h1>{@$modificationLogEntry}</h1>
-							<h2>
-								<a href="{link controller='User' id=$modificationLogEntry->userID title=$modificationLogEntry->username}{/link}" class="userLink" data-user-id="{@$modificationLogEntry->userID}">{$modificationLogEntry->username}</a>
+							<h1><a href="{link controller='User' object=$modificationLogEntry->getUserProfile()}{/link}" class="userLink" data-user-id="{@$modificationLogEntry->userID}">{$modificationLogEntry->username}</a>
 								-
-								{@$modificationLogEntry->time|time}
-							</h2>
+								{@$modificationLogEntry->time|time}</h1>
+							<h2>{@$modificationLogEntry}</h2>
 						</hgroup>
 					</div>
 				</div>
