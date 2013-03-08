@@ -5,6 +5,7 @@ use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\data\conversation\message\ViewableConversationMessageList;
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\IClipboardAction;
+use wcf\data\IVisitableObjectAction;
 use wcf\system\clipboard\ClipboardHandler;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
@@ -25,7 +26,7 @@ use wcf\system\WCF;
  * @subpackage	data.conversation
  * @category	Community Framework
  */
-class ConversationAction extends AbstractDatabaseObjectAction implements IClipboardAction {
+class ConversationAction extends AbstractDatabaseObjectAction implements IClipboardAction, IVisitableObjectAction {
 	/**
 	 * @see	wcf\data\AbstractDatabaseObjectAction::$className
 	 */
@@ -158,7 +159,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	}
 	
 	/**
-	 * Marks conversations as read.
+	 * @see	wcf\data\IVisitableObjectAction::markAsRead()
 	 */
 	public function markAsRead() {
 		if (empty($this->parameters['visitTime'])) {
@@ -189,7 +190,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	}
 	
 	/**
-	 * Validates the mark as read action.
+	 * @see	wcf\data\IVisitableObjectAction::validateMarkAsRead()
 	 */
 	public function validateMarkAsRead() {
 		// visitTime might not be in the future
