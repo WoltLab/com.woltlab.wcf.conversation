@@ -104,9 +104,9 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 					AND hideConversation = ?";
 			$statement = WCF::getDB()->prepareStatement($sql);
 			$statement->execute(array(
-				0,
+				Conversation::STATE_DEFAULT,
 				$conversation->conversationID,
-				1
+				Conversation::STATE_HIDDEN
 			));
 		}
 		

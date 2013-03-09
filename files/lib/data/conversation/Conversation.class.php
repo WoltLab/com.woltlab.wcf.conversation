@@ -156,7 +156,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	public function getParticipantIDs($excludeLeftParticipants = false) {
 		$conditions = new PreparedStatementConditionBuilder();
 		$conditions->add("conversationID = ?", array($this->conversationID));
-		if ($excludeLeftParticipants) $conditions->add("hideConversation <> ?", array(2));
+		if ($excludeLeftParticipants) $conditions->add("hideConversation <> ?", array(self::STATE_LEFT));
 		
 		$sql = "SELECT 		participantID
 			FROM		wcf".WCF_N."_conversation_to_user
