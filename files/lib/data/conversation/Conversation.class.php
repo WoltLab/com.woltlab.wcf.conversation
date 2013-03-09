@@ -150,15 +150,20 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	/**
 	 * Gets a list of all participants.
 	 * 
+	 * @param	boolean		$excludeLeftParticipants
 	 * @return	array<integer>
 	 */
-	public function getParticipantIDs() {
-		$participantIDs = array();
+	public function getParticipantIDs($excludeLeftParticipants = false) {
+		$conditions = new PreparedStatementConditionBuilder();
+		$conditions->add("conversationID = ?", array($this->conversationID));
+		if ($excludeLeftParticipants) $conditions->add("hideConversation <> ?", array(2));
+		
 		$sql = "SELECT 		participantID
 			FROM		wcf".WCF_N."_conversation_to_user
-			WHERE		conversationID = ?";
+			".$conditions;
 		$statement = WCF::getDB()->prepareStatement($sql);
-		$statement->execute(array($this->conversationID));
+		$statement->execute($conditions->getParameters());
+		$participantIDs = array();
 		while ($row = $statement->fetchArray()) {
 			$participantIDs[] = $row['participantID'];
 		}
