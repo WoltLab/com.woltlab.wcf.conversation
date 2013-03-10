@@ -7,6 +7,7 @@ use wcf\data\DatabaseObject;
 use wcf\data\IExtendedMessageQuickReplyAction;
 use wcf\data\IMessageInlineEditorAction;
 use wcf\data\IMessageQuoteAction;
+use wcf\system\bbcode\BBCodeParser;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
 use wcf\system\message\censorship\Censorship;
@@ -367,6 +368,12 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	public function validateMessage(DatabaseObject $container, $message) {
 		if (StringUtil::length($message) > WCF::getSession()->getPermission('user.conversation.maxLength')) {
 			throw new UserInputException('message', WCF::getLanguage()->getDynamicVariable('wcf.message.error.tooLong', array('maxTextLength' => WCF::getSession()->getPermission('user.conversation.maxLength'))));
+		}
+		
+		// search for disallowed bbcodes
+		$disallowedBBCodes = BBCodeParser::getInstance()->validateBBCodes($message, explode(',', WCF::getSession()->getPermission('user.message.allowedBBCodes')));
+		if (!empty($disallowedBBCodes)) {
+			throw new UserInputException('text', WCF::getLanguage()->getDynamicVariable('wcf.message.error.disallowedBBCodes', array('disallowedBBCodes' => $disallowedBBCodes)));
 		}
 		
 		// search for censored words

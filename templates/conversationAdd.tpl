@@ -123,6 +123,8 @@
 								{lang}wcf.message.error.tooLong{/lang}
 							{elseif $errorType == 'censoredWordsFound'}
 								{lang}wcf.message.error.censoredWordsFound{/lang}
+							{elseif $errorType == 'disallowedBBCodes'}
+								{lang}wcf.message.error.disallowedBBCodes{/lang}
 							{else}
 								{lang}wcf.conversation.message.error.{@$errorType}{/lang}
 							{/if}
