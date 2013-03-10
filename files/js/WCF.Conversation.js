@@ -903,7 +903,7 @@ WCF.Conversation.Label.Editor = Class.extend({
 		this._dialog = null;
 		this._editorHandler = editorHandler;
 		
-		this._notification = new WCF.System.Notification(WCF.Language.get('wcf.global.form.edit.success'));
+		this._notification = new WCF.System.Notification(WCF.Language.get('wcf.global.success.edit'));
 		this._proxy = new WCF.Action.Proxy({
 			success: $.proxy(this._success, this)
 		});
