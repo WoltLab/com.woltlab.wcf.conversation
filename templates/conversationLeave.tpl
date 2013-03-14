@@ -1,7 +1,7 @@
 <fieldset>
 	<legend>{lang}wcf.conversation.hideConversation{/lang}</legend>
 	
-	<dl>
+	<dl class="wide">
 		{if $hideConversation == 1}
 			<dd>
 				<label><input type="radio" name="hideConversation" value="0" /> {lang}wcf.conversation.hideConversation.restore{/lang}</label>
