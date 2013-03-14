@@ -109,14 +109,14 @@
 		<item name="wcf.user.notification.conversation.output"><![CDATA[Started the conversation “<a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a>”.]]></item>
 		<item name="wcf.user.notification.conversation.shortOutput"><![CDATA[New Conversation]]></item>
 		<item name="wcf.user.notification.com.woltlab.wcf.conversation"><![CDATA[Conversations]]></item>
-		<item name="wcf.user.notification.com.woltlab.wcf.conversation.notification.conversation"><![CDATA[New Conversation]]></item>
-		<item name="wcf.user.notification.com.woltlab.wcf.conversation.message.notification.conversationMessage"><![CDATA[Reply to Existing Conversation]]></item>
+		<item name="wcf.user.notification.com.woltlab.wcf.conversation.notification.conversation"><![CDATA[New conversation]]></item>
+		<item name="wcf.user.notification.com.woltlab.wcf.conversation.message.notification.conversationMessage"><![CDATA[Reply to existing conversation]]></item>
 	</category>
 	
 	<category name="wcf.user.option">
 		<item name="wcf.user.option.conversationMessagesPerPage"><![CDATA[Messages Per Page]]></item>
 		<item name="wcf.user.option.conversationsPerPage"><![CDATA[Conversations Per Page]]></item>
-		<item name="wcf.user.option.canSendConversation"><![CDATA[Can Start Conversations]]></item>
+		<item name="wcf.user.option.canSendConversation"><![CDATA[Can Add Me to Conversations]]></item>
 	</category>
 	
 	<category name="wcf.user.usersOnline">
