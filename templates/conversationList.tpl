@@ -196,7 +196,7 @@
 							<small>
 								<a href="{link controller='User' object=$conversation->getUserProfile()->getDecoratedObject()}{/link}" class="userLink" data-user-id="{@$conversation->userID}">{$conversation->username}</a>
 								- {@$conversation->time|time}
-								<span class="jsOnly">- <a class="jsThreadInlineEditor">{lang}wcf.global.button.edit{/lang}</a></span>
+								<span class="jsOnly">- <a class="jsConversationInlineEditor">{lang}wcf.global.button.edit{/lang}</a></span>
 							</small>
 							
 							{if $conversation->getParticipantSummary()|count}

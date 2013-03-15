@@ -421,7 +421,7 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
 	 * @see	WCF.InlineEditor._getTriggerElement()
 	 */
 	_getTriggerElement: function(element) {
-		return element.find('.jsThreadInlineEditor');
+		return element.find('.jsConversationInlineEditor');
 	},
 	
 	/**
