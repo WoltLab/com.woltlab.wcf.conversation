@@ -188,7 +188,7 @@ WCF.Conversation.EditorHandler = Class.extend({
 			case 'open':
 				$conversation.find('.statusIcons li').each(function(index, listItem) {
 					var $listItem = $(listItem);
-					if ($listItem.children('img.jsIconLock').length) {
+					if ($listItem.children('span.jsIconLock').length) {
 						$listItem.remove();
 						return false;
 					}
@@ -279,7 +279,7 @@ WCF.Conversation.EditorHandlerConversation = WCF.Conversation.EditorHandler.exte
 			break;
 			
 			case 'open':
-				$('#content > header img.jsIconLock').remove();
+				$('#content > header span.jsIconLock').remove();
 				
 				this._attributes[conversationID].isClosed = 0;
 			break;
@@ -421,7 +421,7 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
 	 * @see	WCF.InlineEditor._getTriggerElement()
 	 */
 	_getTriggerElement: function(element) {
-		return element.find('.jsThreadInlineEditor');
+		return element.find('.jsConversationInlineEditor');
 	},
 	
 	/**

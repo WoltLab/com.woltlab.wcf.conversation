@@ -8,6 +8,7 @@ use wcf\data\IExtendedMessageQuickReplyAction;
 use wcf\data\IMessageInlineEditorAction;
 use wcf\data\IMessageQuoteAction;
 use wcf\system\bbcode\BBCodeParser;
+use wcf\system\bbcode\PreParser;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
 use wcf\system\message\censorship\Censorship;
@@ -195,6 +196,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 * @see	wcf\data\IMessageQuickReply::validateQuickReply()
 	 */
 	public function validateQuickReply() {
+		QuickReplyManager::getInstance()->setAllowedBBCodes(explode(',', WCF::getSession()->getPermission('user.message.allowedBBCodes')));
 		QuickReplyManager::getInstance()->validateParameters($this, $this->parameters, 'wcf\data\conversation\Conversation');
 	}
 	
@@ -337,7 +339,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	public function save() {
 		$messageEditor = new ConversationMessageEditor($this->message);
 		$messageEditor->update(array(
-			'message' => $this->parameters['data']['message']
+			'message' => PreParser::getInstance()->parse($this->parameters['data']['message'], explode(',', WCF::getSession()->getPermission('user.message.allowedBBCodes')))
 		));
 		
 		// load new message
