@@ -61,6 +61,7 @@
 		<item name="wcf.conversation.gotoFirstNewPost"><![CDATA[Zur ersten neuen Nachricht springen]]></item>
 		<item name="wcf.conversation.gotoLastPost"><![CDATA[Zur letzten Nachricht springen]]></item>
 		<item name="wcf.conversation.searchConversations"><![CDATA[Konversationen durchsuchen]]></item>
+		<item name="wcf.conversation.participants.other"><![CDATA[und {if $conversation->participants - $participantSummaryCount == 1}ein weiterer{else}{#$conversation->participants-$participantSummaryCount} weitere{/if}]]></item>
 	</category>
 	
 	<category name="wcf.conversation.edit">
