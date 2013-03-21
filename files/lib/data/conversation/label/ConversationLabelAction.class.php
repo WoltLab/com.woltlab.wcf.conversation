@@ -54,6 +54,7 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 	public function validateUpdate() {
 		parent::validateUpdate();
 		
+		
 		if (count($this->objects) != 1) {
 			throw new UserInputException('objectID');
 		}
@@ -88,13 +89,9 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 			throw new PermissionDeniedException();
 		}
 		
-		$this->parameters['data']['labelName'] = (isset($this->parameters['data']['labelName'])) ? StringUtil::trim($this->parameters['data']['labelName']) : '';
-		if (empty($this->parameters['data']['labelName'])) {
-			throw new UserInputException('labelName');
-		}
-		
-		$this->parameters['data']['cssClassName'] = (isset($this->parameters['data']['cssClassName'])) ? StringUtil::trim($this->parameters['data']['cssClassName']) : '';
-		if (empty($this->parameters['data']['cssClassName']) || !in_array($this->parameters['data']['cssClassName'], ConversationLabel::getLabelCssClassNames())) {
+		$this->readString('labelName', false, 'data');
+		$this->readString('cssClassName', false, 'data');
+		if (!in_array($this->parameters['data']['cssClassName'], ConversationLabel::getLabelCssClassNames())) {
 			throw new UserInputException('cssClassName');
 		}
 		
