@@ -54,7 +54,6 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 	public function validateUpdate() {
 		parent::validateUpdate();
 		
-		
 		if (count($this->objects) != 1) {
 			throw new UserInputException('objectID');
 		}
