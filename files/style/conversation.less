@@ -76,3 +76,23 @@
 		top: -3px;
 	}
 }
+
+@media only screen and (max-width: 640px) {
+	.conversationList {
+		thead {
+			display: none;
+		}
+		
+		tbody {
+			.columnMark,
+			.columnReplies,
+			.columnParticipants,
+			.columnLastPost,
+			.conversationEditLink,
+			.conversationParticipantSummary,
+			.columnSubject .statusDisplay {
+				display: none;
+			}
+		}
+	}
+}

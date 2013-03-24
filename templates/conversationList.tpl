@@ -36,6 +36,11 @@
 			new WCF.Conversation.Label.Manager('{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}');
 			new WCF.Conversation.Preview();
 			new WCF.Conversation.MarkAsRead();
+			
+			// mobile safari hover workaround
+			if ($.browser.mobile) {
+				$('.sidebar').addClass('mobileSidebar').hover(function() { });
+			}
 		});
 		//]]>
 	</script>
@@ -196,11 +201,11 @@
 							<small>
 								<a href="{link controller='User' object=$conversation->getUserProfile()->getDecoratedObject()}{/link}" class="userLink" data-user-id="{@$conversation->userID}">{$conversation->username}</a>
 								- {@$conversation->time|time}
-								<span class="jsOnly">- <a class="jsConversationInlineEditor">{lang}wcf.global.button.edit{/lang}</a></span>
+								<span class="jsOnly conversationEditLink">- <a class="jsConversationInlineEditor">{lang}wcf.global.button.edit{/lang}</a></span>
 							</small>
 							
 							{if $conversation->getParticipantSummary()|count}
-								<small>
+								<small class="conversationParticipantSummary">
 									{assign var='participantSummaryCount' value=$conversation->getParticipantSummary()|count}
 									{lang}wcf.conversation.participants{/lang}: {implode from=$conversation->getParticipantSummary() item=participant}<a href="{link controller='User' object=$participant}{/link}" class="userLink{if $participant->hideConversation == 2} conversationLeft{/if}" data-user-id="{@$participant->userID}">{$participant->username}</a>{/implode}
 									{if $participantSummaryCount < $conversation->participants - 1}{lang}wcf.conversation.participants.other{/lang}{/if}
