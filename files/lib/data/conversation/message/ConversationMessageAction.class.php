@@ -218,22 +218,15 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 * @see	wcf\data\IExtendedMessageQuickReplyAction::validateJumpToExtended()
 	 */
 	public function validateJumpToExtended() {
-		if (!isset($this->parameters['message'])) {
-			throw new UserInputException('message');
-		}
+		$this->readInteger('containerID');
+		$this->readString('message', true);
 		
-		$this->parameters['containerID'] = (isset($this->parameters['containerID'])) ? intval($this->parameters['containerID']) : 0;
-		if (!$this->parameters['containerID']) {
+		$this->conversation = new Conversation($this->parameters['containerID']);
+		if (!$this->conversation->conversationID) {
 			throw new UserInputException('containerID');
 		}
-		else {
-			$this->conversation = new Conversation($this->parameters['containerID']);
-			if (!$this->conversation->conversationID) {
-				throw new UserInputException('containerID');
-			}
-			else if ($this->conversation->isClosed || !Conversation::isParticipant(array($this->conversation->conversationID))) {
-				throw new PermissionDeniedException();
-			}
+		else if ($this->conversation->isClosed || !Conversation::isParticipant(array($this->conversation->conversationID))) {
+			throw new PermissionDeniedException();
 		}
 		
 		// editing existing message
@@ -274,34 +267,25 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 * @see	wcf\data\IMessageInlineEditorAction::validateBeginEdit()
 	 */
 	public function validateBeginEdit() {
-		$this->parameters['containerID'] = (isset($this->parameters['containerID'])) ? intval($this->parameters['containerID']) : 0;
-		if (!$this->parameters['containerID']) {
+		$this->readInteger('containerID');
+		$this->readInteger('objectID');
+		
+		$this->conversation = new Conversation($this->parameters['containerID']);
+		if (!$this->conversation->conversationID) {
 			throw new UserInputException('containerID');
 		}
-		else {
-			$this->conversation = new Conversation($this->parameters['containerID']);
-			if (!$this->conversation->conversationID) {
-				throw new UserInputException('containerID');
-			}
-			
-			if ($this->conversation->isClosed || !Conversation::isParticipant(array($this->conversation->conversationID))) {
-				throw new PermissionDeniedException();
-			}
+		
+		if ($this->conversation->isClosed || !Conversation::isParticipant(array($this->conversation->conversationID))) {
+			throw new PermissionDeniedException();
 		}
 		
-		$this->parameters['objectID'] = (isset($this->parameters['objectID'])) ? intval($this->parameters['objectID']) : 0;
-		if (!$this->parameters['objectID']) {
+		$this->message = new ConversationMessage($this->parameters['objectID']);
+		if (!$this->message->messageID) {
 			throw new UserInputException('objectID');
 		}
-		else {
-			$this->message = new ConversationMessage($this->parameters['objectID']);
-			if (!$this->message->messageID) {
-				throw new UserInputException('objectID');
-			}
-			
-			if (!$this->message->canEdit()) {
-				throw new PermissionDeniedException();
-			}
+		
+		if (!$this->message->canEdit()) {
+			throw new PermissionDeniedException();
 		}
 	}
 	
@@ -325,9 +309,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 * @see	wcf\data\IMessageInlineEditorAction::validateSave()
 	 */
 	public function validateSave() {
-		if (!isset($this->parameters['data']) || !isset($this->parameters['data']['message']) || empty($this->parameters['data']['message'])) {
-			throw new UserInputException('message');
-		}
+		$this->readString('message', false, 'data');
 		
 		$this->validateBeginEdit();
 		$this->validateMessage($this->conversation, $this->parameters['data']['message']);
@@ -415,16 +397,8 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 * @see	wcf\data\IMessageQuoteAction::validateSaveFullQuote()
 	 */
 	public function validateSaveFullQuote() {
-		if (empty($this->objects)) {
-			$this->readObjects();
-				
-			if (empty($this->objects)) {
-				throw new UserInputException('objectIDs');
-			}
-		}
+		$this->message = $this->getSingleObject();
 		
-		// validate permissions
-		$this->message = current($this->objects);
 		if (!Conversation::isParticipant(array($this->message->conversationID))) {
 			throw new PermissionDeniedException();
 		}
@@ -449,20 +423,9 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 * @see	wcf\data\IMessageQuoteAction::validateSaveQuote()
 	 */
 	public function validateSaveQuote() {
-		$this->parameters['message'] = (isset($this->parameters['message'])) ? StringUtil::trim($this->parameters['message']) : '';
-		if (empty($this->parameters['message'])) {
-			throw new UserInputException('message');
-		}
+		$this->readString('message');
+		$this->message = $this->getSingleObject();
 		
-		if (empty($this->objects)) {
-			$this->readObjects();
-			
-			if (empty($this->objects)) {
-				throw new UserInputException('objectIDs');
-			}
-		}
-		
-		$this->message = current($this->objects);
 		if (!Conversation::isParticipant(array($this->message->conversationID))) {
 			throw new PermissionDeniedException();
 		}
