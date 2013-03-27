@@ -2,11 +2,13 @@
 namespace wcf\data\conversation;
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\message\ConversationMessageAction;
+use wcf\data\conversation\message\ConversationMessageList;
 use wcf\data\conversation\message\ViewableConversationMessageList;
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\IClipboardAction;
 use wcf\data\IVisitableObjectAction;
 use wcf\system\clipboard\ClipboardHandler;
+use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
 use wcf\system\log\modification\ConversationModificationLogHandler;
@@ -109,6 +111,26 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		));
 		
 		return $conversation;
+	}
+	
+	/**
+	 * @see	wcf\data\AbstractDatabaseObjectAction::delete()
+	 */
+	public function delete() {
+		// deletes messages
+		$messageList = new ConversationMessageList();
+		$messageList->getConditionBuilder('conversation_message.conversationID IN (?)', array($this->objectIDs));
+		$messageList->readObjectIDs();
+		$action = new ConversationMessageAction($messageList->getObjectIDs(), 'delete');
+		$action->executeAction();
+		
+		// delete conversations
+		parent::delete();
+	
+		if (!empty($this->objectIDs)) {
+			// delete notifications
+			UserNotificationHandler::getInstance()->deleteNotifications('conversation', 'com.woltlab.wcf.conversation.notification', array(), $this->objectIDs);
+		}
 	}
 	
 	/**
@@ -442,6 +464,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			UserStorageHandler::getInstance()->reset(array(WCF::getUser()->userID), 'unreadConversationCount');
 		}
 		
+		
 		// add modification log entry
 		if ($this->parameters['hideConversation'] == Conversation::STATE_LEFT) {
 			if (empty($this->objects)) $this->readObjects();
@@ -456,6 +479,28 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		
 		// update participant summary
 		ConversationEditor::updateParticipantSummaries($this->objectIDs);
+		
+		// delete conversation if all users have left it
+		if ($this->parameters['hideConversation'] == Conversation::STATE_LEFT) {
+			$conditionBuilder = new PreparedStatementConditionBuilder();
+			$conditionBuilder->add('conversation.conversationID IN (?)', array($this->objectIDs));
+			$conditionBuilder->add('conversation_to_user.conversationID IS NULL');
+			$conversationIDs = array();
+			$sql = "SELECT		DISTINCT conversation.conversationID
+				FROM		wcf".WCF_N."_conversation conversation
+				LEFT JOIN	wcf".WCF_N."_conversation_to_user conversation_to_user
+				ON		(conversation_to_user.conversationID = conversation.conversationID AND conversation_to_user.hideConversation <> ".Conversation::STATE_LEFT.")
+				".$conditionBuilder;
+			$statement = WCF::getDB()->prepareStatement($sql);
+			$statement->execute($conditionBuilder->getParameters());
+			while ($row = $statement->fetchArray()) {
+				$conversationIDs[] = $row['conversationID'];
+			}
+			if (!empty($conversationIDs)) {
+				$action = new ConversationAction($conversationIDs, 'delete');
+				$action->executeAction();
+			}
+		}
 		
 		return array(
 			'actionName' => 'hideConversation',

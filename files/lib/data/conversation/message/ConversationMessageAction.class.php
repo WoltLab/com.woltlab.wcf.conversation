@@ -7,6 +7,7 @@ use wcf\data\DatabaseObject;
 use wcf\data\IExtendedMessageQuickReplyAction;
 use wcf\data\IMessageInlineEditorAction;
 use wcf\data\IMessageQuoteAction;
+use wcf\system\attachment\AttachmentHandler;
 use wcf\system\bbcode\BBCodeParser;
 use wcf\system\bbcode\PreParser;
 use wcf\system\exception\PermissionDeniedException;
@@ -157,36 +158,27 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	public function delete() {
 		$count = parent::delete();
 		
-		if ($count) {
-			$message = reset($this->objects);
-			$conversationEditor = new ConversationEditor(new Conversation($message->conversationID));
-			
-			// reset user storage
-			UserStorageHandler::getInstance()->reset($conversationEditor->getParticipantIDs(), 'unreadConversationCount');
-			
-			// check if last message was deleted
-			if (($conversationEditor->replies - $count) == -1) {
-				// remove conversation
-				$conversationEditor->delete();
-			}
-			else {
-				// check if first message was deleted
-				$sql = "SELECT		messageID
-					FROM		wcf".WCF_N."_conversation_message
-					WHERE		conversationID = ?
-					ORDER BY	time DESC";
-				$statement = WCF::getDB()->prepareStatement($sql);
-				$statement->execute(array($conversationEditor->conversationID));
-				$row = $statement->fetchArray();
+		$attachmentMessageIDs = array();
+		foreach ($this->objects as $message) {
+			if ($message->attachments) {
+				$attachmentMessageIDs[] = $message->messageID;
 				
-				$data = array('replies' => ($conversationEditor->replies - $count));
-				if ($conversationEditor->firstMessageID != $row['messageID']) {
-					$data['firstMessageID'] = $row['messageID'];
-				}
-				
-				// update conversation data
-				$conversationEditor->update($data);
 			}
+		}
+		
+		// @todo: modification log, reports
+		
+		if (!empty($this->objectIDs)) {
+			// delete notifications
+			UserNotificationHandler::getInstance()->deleteNotifications('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', array(), $this->objectIDs);
+		
+			// update search index
+			SearchIndexManager::getInstance()->delete('com.woltlab.wcf.conversation.message', $this->objectIDs);
+		}
+		
+		// remove attachments
+		if (!empty($attachmentMessageIDs)) {
+			AttachmentHandler::removeAttachments('com.woltlab.wcf.conversation.message', $attachmentMessageIDs);
 		}
 		
 		return $count;
