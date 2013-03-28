@@ -208,7 +208,7 @@
 								<small class="conversationParticipantSummary">
 									{assign var='participantSummaryCount' value=$conversation->getParticipantSummary()|count}
 									{lang}wcf.conversation.participants{/lang}: {implode from=$conversation->getParticipantSummary() item=participant}<a href="{link controller='User' object=$participant}{/link}" class="userLink{if $participant->hideConversation == 2} conversationLeft{/if}" data-user-id="{@$participant->userID}">{$participant->username}</a>{/implode}
-									{if $participantSummaryCount < $conversation->participants - 1}{lang}wcf.conversation.participants.other{/lang}{/if}
+									{if $participantSummaryCount < $conversation->participants}{lang}wcf.conversation.participants.other{/lang}{/if}
 								</small>
 							{/if}
 						</td>
