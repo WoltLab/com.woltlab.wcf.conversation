@@ -183,11 +183,7 @@
 							{/hascontent}
 								
 							<h1>
-								{if $conversation->isNew()}
-									<a href="{link controller='Conversation' object=$conversation}action=firstNew{/link}" class="jsTooltip" title="{lang}wcf.conversation.gotoFirstNewPost{/lang}"><span class="icon icon16 icon-arrow-down firstNewPost"></span></a>
-								{/if}
-								
-								<a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink messageGroupLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>
+								<a href="{if $conversation->isNew()}{link controller='Conversation' object=$conversation}action=firstNew{/link}{else}{link controller='Conversation' object=$conversation}{/link}{/if}" class="conversationLink messageGroupLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>
 							</h1>
 							
 							<aside class="statusDisplay">
