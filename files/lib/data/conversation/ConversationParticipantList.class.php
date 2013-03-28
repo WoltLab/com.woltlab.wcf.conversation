@@ -23,16 +23,19 @@ class ConversationParticipantList extends UserProfileList {
 	 * Creates a new ConversationParticipantList object.
 	 * 
 	 * @param	integer		$conversationID
+	 * @param	boolean		$isAuthor		true if given user is the author of this conversation
 	 */
-	public function __construct($conversationID, $userID = 0) {
+	public function __construct($conversationID, $userID = 0, $isAuthor = false) {
 		parent::__construct();
 		
 		$this->getConditionBuilder()->add('conversation_to_user.conversationID = ?', array($conversationID));
-		if ($userID) {
-			$this->getConditionBuilder()->add('conversation_to_user.isInvisible = 0 OR conversation_to_user.participantID = ?', array($userID));
-		}
-		else {
-			$this->getConditionBuilder()->add('conversation_to_user.isInvisible = 0');	
+		if (!$isAuthor) {
+			if ($userID) {
+				$this->getConditionBuilder()->add('conversation_to_user.isInvisible = 0 OR conversation_to_user.participantID = ?', array($userID));
+			}
+			else {
+				$this->getConditionBuilder()->add('conversation_to_user.isInvisible = 0');	
+			}
 		}
 		$this->sqlConditionJoins .= " LEFT JOIN wcf".WCF_N."_user user_table ON (user_table.userID = conversation_to_user.participantID)";
 		
