@@ -426,7 +426,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			$conversation->update(array('isClosed' => 0));
 			$this->addConversationData($conversation->getDecoratedObject(), 'isClosed', 0);
 			
-			ConversationModificationLogHandler::getInstance()->close($conversation->getDecoratedObject());
+			ConversationModificationLogHandler::getInstance()->open($conversation->getDecoratedObject());
 		}
 		
 		$this->unmarkItems();
