@@ -4,6 +4,7 @@ use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\data\conversation\message\ConversationMessageList;
 use wcf\data\conversation\message\ViewableConversationMessageList;
+use wcf\data\package\PackageCache;
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\IClipboardAction;
 use wcf\data\IVisitableObjectAction;
@@ -192,6 +193,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			$this->readObjects();
 		}
 		
+		$conversationIDs = array();
 		$sql = "UPDATE	wcf".WCF_N."_conversation_to_user
 			SET	lastVisitTime = ?
 			WHERE	participantID = ?
@@ -204,11 +206,67 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 				WCF::getUser()->userID,
 				$conversation->conversationID
 			));
+			$conversationIDs[] = $conversation->conversationID;
 		}
 		WCF::getDB()->commitTransaction();
 		
 		// reset storage
 		UserStorageHandler::getInstance()->reset(array(WCF::getUser()->userID), 'unreadConversationCount');
+		
+		// delete obsolete notifications
+		if (!empty($conversationIDs)) {
+			// conversation start notification
+			$conditionBuilder = new PreparedStatementConditionBuilder();
+			$conditionBuilder->add('notification.packageID = ?', array(PackageCache::getInstance()->getPackageID('com.woltlab.wcf.conversation')));
+			$conditionBuilder->add('notification.eventID = ?', array(UserNotificationHandler::getInstance()->getEvent('com.woltlab.wcf.conversation.notification', 'conversation')->eventID));
+			$conditionBuilder->add('notification.objectID = conversation.conversationID');
+			$conditionBuilder->add('notification_to_user.notificationID = notification.notificationID');
+			$conditionBuilder->add('notification_to_user.userID = ?', array(WCF::getUser()->userID));
+			$conditionBuilder->add('conversation.conversationID IN (?)', array($conversationIDs));
+			$conditionBuilder->add('conversation.time <= ?', array($this->parameters['visitTime']));
+			
+			$sql = "SELECT		conversation.conversationID
+				FROM		wcf".WCF_N."_conversation conversation,
+						wcf".WCF_N."_user_notification notification,
+						wcf".WCF_N."_user_notification_to_user notification_to_user
+				".$conditionBuilder;
+			$statement = WCF::getDB()->prepareStatement($sql);
+			$statement->execute($conditionBuilder->getParameters());
+			$notificationObjectIDs = array();
+			while ($row = $statement->fetchArray()) {
+				$notificationObjectIDs[] = $row['conversationID'];
+			}
+			
+			if (!empty($notificationObjectIDs)) {
+				UserNotificationHandler::getInstance()->deleteNotifications('conversation', 'com.woltlab.wcf.conversation.notification', array(WCF::getUser()->userID), $notificationObjectIDs);
+			}
+			
+			// conversation reply notification
+			$conditionBuilder = new PreparedStatementConditionBuilder();
+			$conditionBuilder->add('notification.packageID = ?', array(PackageCache::getInstance()->getPackageID('com.woltlab.wcf.conversation')));
+			$conditionBuilder->add('notification.eventID = ?', array(UserNotificationHandler::getInstance()->getEvent('com.woltlab.wcf.conversation.message.notification', 'conversationMessage')->eventID));
+			$conditionBuilder->add('notification.objectID = conversation_message.messageID');
+			$conditionBuilder->add('notification_to_user.notificationID = notification.notificationID');
+			$conditionBuilder->add('notification_to_user.userID = ?', array(WCF::getUser()->userID));
+			$conditionBuilder->add('conversation_message.conversationID IN (?)', array($conversationIDs));
+			$conditionBuilder->add('conversation_message.time <= ?', array($this->parameters['visitTime']));
+				
+			$sql = "SELECT		conversation_message.messageID
+				FROM		wcf".WCF_N."_conversation_message conversation_message,
+						wcf".WCF_N."_user_notification notification,
+						wcf".WCF_N."_user_notification_to_user notification_to_user
+				".$conditionBuilder;
+			$statement = WCF::getDB()->prepareStatement($sql);
+			$statement->execute($conditionBuilder->getParameters());
+			$notificationObjectIDs = array();
+			while ($row = $statement->fetchArray()) {
+				$notificationObjectIDs[] = $row['messageID'];
+			}
+				
+			if (!empty($notificationObjectIDs)) {
+				UserNotificationHandler::getInstance()->deleteNotifications('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', array(WCF::getUser()->userID), $notificationObjectIDs);
+			}
+		}
 	}
 	
 	/**
