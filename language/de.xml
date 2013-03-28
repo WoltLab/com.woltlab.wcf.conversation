@@ -50,7 +50,13 @@
 		<item name="wcf.conversation.participantCanInvite"><![CDATA[Teilnehmer können weitere Teilnehmer hinzufügen]]></item>
 		<item name="wcf.conversation.participants"><![CDATA[Teilnehmer]]></item>
 		<item name="wcf.conversation.participants.description"><![CDATA[Mehrere Teilnehmer können mit Komma getrennt angegeben werden.]]></item>
-		<item name="wcf.conversation.participants.error.mailboxIsFull"><![CDATA[{$errorData[username]} hat das zulässige Limit für Konversationen bereits erreicht und kann an keinen neuen Konversation teilnehmen.]]></item>
+		<item name="wcf.conversation.participants.error.mailboxIsFull"><![CDATA[„{$errorData[username]}“ hat das zulässige Limit für Konversationen bereits erreicht und kann an keinen neuen Konversation teilnehmen.]]></item>
+		<item name="wcf.conversation.participants.error.notFound"><![CDATA[Der Benutzername „{$errorData[username]}“ konnte nicht gefunden werden.]]></item>
+		<item name="wcf.conversation.participants.error.isAuthor"><![CDATA[Sie sind bereits Teilnehmer dieser Konversation.]]></item>
+		<item name="wcf.conversation.participants.error.duplicate"><![CDATA[„{$errorData[username]}“ ist bereits Teilnehmer dieser Konversation.]]></item>
+		<item name="wcf.conversation.participants.error.canNotUseConversation"><![CDATA[„{$errorData[username]}“ besitzt nicht die notwendigen Berechtigungen, um an Konversation teilnehmen zu dürfen.]]></item>
+		<item name="wcf.conversation.participants.error.doesNotAcceptConversation"><![CDATA[„{$errorData[username]}“ möchte nicht an Konversationen teilnehmen.]]></item>
+		<item name="wcf.conversation.participants.error.ignoresYou"><![CDATA[„{$errorData[username]}“ hat Sie blockiert.]]></item>
 		<item name="wcf.conversation.participants.removeParticipant"><![CDATA[Teilnehmer entfernen]]></item>
 		<item name="wcf.conversation.participants.removeParticipant.confirmMessage"><![CDATA[Möchten Sie „{$participant->username}“ wirklich aus dieser Konversation entfernen?]]></item>
 		<item name="wcf.conversation.quota"><![CDATA[Speicherplatz]]></item>
