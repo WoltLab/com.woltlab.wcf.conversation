@@ -522,7 +522,6 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			UserStorageHandler::getInstance()->reset(array(WCF::getUser()->userID), 'unreadConversationCount');
 		}
 		
-		
 		// add modification log entry
 		if ($this->parameters['hideConversation'] == Conversation::STATE_LEFT) {
 			if (empty($this->objects)) $this->readObjects();
@@ -644,13 +643,13 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 */
 	public function addParticipants() {
 		try {
-			$participantIDs = Conversation::validateParticipants($this->parameters['participants']);
+			$participantIDs = Conversation::validateParticipants($this->parameters['participants'], 'participants', $this->conversation->getParticipantIDs(true));
 		}
 		catch (UserInputException $e) {
 			$errorMessage = '';
 			foreach ($e->getType() as $type) {
 				if (!empty($errorMessage)) $errorMessage .= ' ';
-				$errorMessage .= WCF::getLanguage()->getDynamicVariable('wcf.conversation.participants.error.'.$type['type'], array('username' => $type['username']));
+				$errorMessage .= WCF::getLanguage()->getDynamicVariable('wcf.conversation.participants.error.'.$type['type'], array('errorData' => array('username' => $type['username'])));
 			}
 			
 			return array(
@@ -663,30 +662,27 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		$successMessage = '';
 		if (!empty($participantIDs)) {
 			// check for already added participants
-			$participantIDs = array_diff($participantIDs, $this->conversation->getParticipantIDs());
-			if (!empty($participantIDs)) {
-				$data = array();
-				if ($this->conversation->isDraft) {
-					$draftData = unserialize($this->conversation->draftData);
-					$draftData['participants'] = array_merge($draftData['participants'], $participantIDs);
-					$data = array('data' => array('draftData' => serialize($draftData)));
-				}
-				else {
-					$data = array('participants' => $participantIDs);
-				}
-				
-				$conversationAction = new ConversationAction(array($this->conversation), 'update', $data);
-				$conversationAction->executeAction();
-				
-				$count = count($participantIDs);
-				$successMessage = WCF::getLanguage()->getDynamicVariable('wcf.conversation.edit.addParticipants.success', array('count' => $count));
-				
-				ConversationModificationLogHandler::getInstance()->addParticipants($this->conversation->getDecoratedObject(), $participantIDs);
-				
-				if (!$this->conversation->isDraft) {
-					// update participant summary
-					$this->conversation->updateParticipantSummary();
-				}
+			$data = array();
+			if ($this->conversation->isDraft) {
+				$draftData = unserialize($this->conversation->draftData);
+				$draftData['participants'] = array_merge($draftData['participants'], $participantIDs);
+				$data = array('data' => array('draftData' => serialize($draftData)));
+			}
+			else {
+				$data = array('participants' => $participantIDs);
+			}
+			
+			$conversationAction = new ConversationAction(array($this->conversation), 'update', $data);
+			$conversationAction->executeAction();
+			
+			$count = count($participantIDs);
+			$successMessage = WCF::getLanguage()->getDynamicVariable('wcf.conversation.edit.addParticipants.success', array('count' => $count));
+			
+			ConversationModificationLogHandler::getInstance()->addParticipants($this->conversation->getDecoratedObject(), $participantIDs);
+			
+			if (!$this->conversation->isDraft) {
+				// update participant summary
+				$this->conversation->updateParticipantSummary();
 			}
 		}
 		

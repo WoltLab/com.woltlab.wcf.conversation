@@ -55,24 +55,33 @@ class ConversationEditor extends DatabaseObjectEditor {
 	 * @param	array<integer>	$invisibleParticipantIDs
 	 */
 	public function updateParticipants(array $participantIDs, array $invisibleParticipantIDs = array()) {
-		$sql = "INSERT INTO	wcf".WCF_N."_conversation_to_user
-					(conversationID, participantID, isInvisible)
-			VALUES		(?, ?, ?)";
-		$statement = WCF::getDB()->prepareStatement($sql);
-		
-		WCF::getDB()->beginTransaction();
 		if (!empty($participantIDs)) {
+			WCF::getDB()->beginTransaction();
+			$sql = "INSERT INTO		wcf".WCF_N."_conversation_to_user
+							(conversationID, participantID, isInvisible)
+				VALUES			(?, ?, ?)
+				ON DUPLICATE KEY
+				UPDATE			hideConversation = 0";
+			$statement = WCF::getDB()->prepareStatement($sql);
+			
 			foreach ($participantIDs as $userID) {
 				$statement->execute(array($this->conversationID, $userID, 0));
 			}
+			WCF::getDB()->commitTransaction();
 		}
 		
 		if (!empty($invisibleParticipantIDs)) {
+			WCF::getDB()->beginTransaction();
+			$sql = "INSERT INTO		wcf".WCF_N."_conversation_to_user
+							(conversationID, participantID, isInvisible)
+				VALUES			(?, ?, ?)";
+			$statement = WCF::getDB()->prepareStatement($sql);
+			
 			foreach ($invisibleParticipantIDs as $userID) {
 				$statement->execute(array($this->conversationID, $userID, 1));
 			}
+			WCF::getDB()->commitTransaction();
 		}
-		WCF::getDB()->commitTransaction();
 	}
 	
 	/**
