@@ -21,12 +21,16 @@
 							{if $conversation->isNewMessage($message->getDecoratedObject())}
 								<p class="newMessageBadge">{lang}wcf.message.new{/lang}</p>
 							{/if}
+							
+							{event name='messageHeader'}
 						</header>
 						
 						<div class="messageBody">
 							<div>
 								<div class="messageText">
 									{@$message->getFormattedMessage()}
+									
+									{event name='messageText'}
 								</div>
 							</div>
 							
@@ -38,7 +42,11 @@
 								</div>
 							{/if}
 							
-							<div class="messageFooter"></div>
+							{event name='messageBody'}
+							
+							<div class="messageFooter">
+								{event name='messageFooterNotes'}
+							</div>
 							
 							<footer class="messageOptions">
 								<nav>
@@ -47,6 +55,7 @@
 										*}<li class="jsQuoteMessage" data-object-id="{@$message->messageID}" data-is-quoted="{if $__quoteFullQuote|isset && $message->messageID|in_array:$__quoteFullQuote}1{else}0{/if}"><a href="{link controller='ConversationMessageAdd' id=$conversation->conversationID quoteMessageID=$message->messageID}{/link}" title="{lang}wcf.message.quote.quoteMessage{/lang}" class="button jsTooltip{if $__quoteFullQuote|isset && $message->messageID|in_array:$__quoteFullQuote} active{/if}"><span class="icon icon16 icon-quote-left"></span> <span class="invisible">{lang}wcf.message.quote.quoteMessage{/lang}</span></a></li>{*
 										*}{if $message->userID != $__wcf->getUser()->userID}<li class="jsReportConversationMessage jsOnly" data-object-id="{@$message->messageID}"><a title="{lang}wcf.moderation.report.reportContent{/lang}" class="button jsTooltip"><span class="icon icon16 icon-warning-sign"></span></a></li>{/if}{*
 										*}<li class="toTopLink"><a href="{@$__wcf->getAnchor('top')}" title="{lang}wcf.global.scrollUp{/lang}" class="button jsTooltip"><span class="icon icon16 icon-arrow-up"></span> <span class="invisible">{lang}wcf.global.scrollUp{/lang}</span></a></li>{*
+										*}{event name='messageOptions'}{*
 									*}</ul>
 								</nav>
 							</footer>

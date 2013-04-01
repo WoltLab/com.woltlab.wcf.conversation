@@ -102,6 +102,8 @@
 			<p><small>{lang}wcf.conversation.quota.description{/lang}</small></p>
 		</div>
 	</fieldset>
+	
+	{event name='boxes'}
 {/capture}
 
 {capture assign='headerNavigation'}
@@ -126,7 +128,7 @@
 			<ul>
 				{content}
 					<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button"><span class="icon icon16 icon-asterisk"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>
-					{event name='largeButtonsTop'}
+					{event name='contentNavigationButtonsTop'}
 				{/content}
 			</ul>
 		</nav>
@@ -149,6 +151,8 @@
 					<th class="columnDigits columnReplies{if $sortField == 'replies'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=replies&sortOrder={if $sortField == 'replies' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.conversation.replies{/lang}</a></th>
 					<th class="columnDigits columnParticipants{if $sortField == 'participants'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=participants&sortOrder={if $sortField == 'participants' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.conversation.participants{/lang}</a></th>
 					<th class="columnText columnLastPost{if $sortField == 'lastPostTime'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=lastPostTime&sortOrder={if $sortField == 'lastPostTime' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.conversation.lastPostTime{/lang}</a></th>
+					
+					{event name='columnHeads'}
 				</tr>
 			</thead>
 			
@@ -207,6 +211,8 @@
 									{if $participantSummaryCount < $conversation->participants}{lang}wcf.conversation.participants.other{/lang}{/if}
 								</small>
 							{/if}
+							
+							{event name='conversationData'}
 						</td>
 						<td class="columnDigits columnReplies"><p>{#$conversation->replies}</p></td>
 						<td class="columnDigits columnParticipants"><p>{#$conversation->participants}</p></td>
@@ -224,6 +230,8 @@
 								</div>
 							{/if}
 						</td>
+						
+						{event name='columns'}
 					</tr>
 				{/foreach}
 			</tbody>
@@ -239,7 +247,7 @@
 			<ul>
 				{content}
 					<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button"><span class="icon icon16 icon-asterisk"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>
-					{event name='largeButtonsBottom'}
+					{event name='contentNavigationButtonsBottom'}
 				{/content}
 			</ul>
 		</nav>

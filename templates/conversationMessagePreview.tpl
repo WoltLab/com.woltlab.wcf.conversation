@@ -9,5 +9,7 @@
 		</hgroup>
 		
 		<div>{@$message->getExcerpt()|nl2br}</div>
+		
+		{event name='previewData'}
 	</div>
 </div>

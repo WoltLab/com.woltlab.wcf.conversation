@@ -50,6 +50,8 @@
 						{/if}
 					</dd>
 				</dl>
+				
+				{event name='informationFields'}
 			</fieldset>
 			
 			<fieldset>
@@ -104,6 +106,8 @@
 						<label><input type="checkbox" name="participantCanInvite" id="participantCanInvite" value="1"{if $participantCanInvite} checked="checked"{/if} /> {lang}wcf.conversation.participantCanInvite{/lang}</label>
 					</dd>
 				</dl>
+				
+				{event name='participantFields'}
 			</fieldset>
 		{/if}
 		
@@ -131,6 +135,8 @@
 					{/if}
 				</dd>
 			</dl>
+			
+			{event name='messageFields'}
 		</fieldset>
 		
 		{event name='fieldsets'}

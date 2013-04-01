@@ -59,6 +59,8 @@
 					{/if}
 				</dd>
 			</dl>
+			
+			{event name='messageFields'}
 		</fieldset>
 		
 		{event name='fieldsets'}
