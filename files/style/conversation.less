@@ -29,40 +29,50 @@
 				font-size: @wcfSmallFontSize;
 			}
 		}
+		
+		&.conversationLeft {
+			> div > a > img {
+				.grayscale;
+			}
+		}
 	}
 }
 
-.conversationLeft {
+.conversationLeft .userLink,
+.conversationLeft.userLink {
 	text-decoration: line-through;
 }
 
 .sidebar fieldset.conversationQuota {
 	> div {
 		text-align: center;
-		width: 180px;
 	}
 }
 
 .conversationUsageBar {
-	background-color: @wcfContentBackgroundColor;
-	border: 1px solid @wcfContainerBorderColor;
-	padding: 1px;
+	background-color: @wcfColor;
+	height: 20px;
+	padding: 4px;
+	
+	.borderRadius(5px);
+	.boxShadowNative(~"inset 0 1px 5px rgba(0, 0, 0, .5), 0 1px 0 rgba(255, 255, 255, .5)");
 	
 	> span {
 		color: transparent;
 		display: block;
-		font-size: @wcfSmallFontSize;
+		height: 100%;
 		
-		.linearGradient(rgba(0, 153, 0, 1), rgba(0, 153, 0, 1), rgba(0, 102, 0, 1));
+		.borderRadius(3px);
+		.boxShadowNative(~"inset 0 1px 0 rgba(255, 255, 255, .5)");
+		.linearGradient(rgba(165, 223, 65, 1), rgba(165, 223, 65, 1), rgba(76, 169, 22, 1));
 	}
 	
 	&.yellow > span {
-		.linearGradient(rgba(255, 215, 0, 1), rgba(255, 215, 0, 1), rgba(218, 165, 32, 1));
-		
+		.linearGradient(rgba(254, 207, 35, 1), rgba(254, 207, 35, 1), rgba(253, 146, 21, 1));
 	}
 	
 	&.red > span {
-		.linearGradient(rgba(153, 0, 0, 1), rgba(153, 0, 0, 1), rgba(102, 0, 0, 1));
+		.linearGradient(rgba(240, 163, 163, 1), rgba(240, 163, 163, 1), rgba(244, 35, 35, 1));
 	}
 }
 
