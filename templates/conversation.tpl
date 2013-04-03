@@ -30,7 +30,9 @@
 			
 			new WCF.Conversation.Message.InlineEditor({@$conversation->conversationID});
 			
-			{include file='__messageQuoteManager' wysiwygSelector='text' supportPaste=true}
+			{assign var=__supportPaste value=true}
+			{if $conversation->isClosed}{assign var=__supportPaste value=false}{/if}
+			{include file='__messageQuoteManager' wysiwygSelector='text' supportPaste=$__supportPaste}
 			new WCF.Conversation.Message.QuoteHandler($quoteManager);
 			{if !$conversation->isClosed}new WCF.Conversation.QuickReply($quoteManager);{/if}
 			
