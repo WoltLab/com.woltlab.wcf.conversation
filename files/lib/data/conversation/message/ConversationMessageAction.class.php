@@ -434,4 +434,27 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			'fullQuoteMessageIDs' => MessageQuoteManager::getInstance()->getFullQuoteObjectIDs(array('com.woltlab.wcf.conversation.message'))
 		);
 	}
+	
+	/**
+	 * @see	wcf\data\IMessageQuoteAction::validateGetRenderedQuotes()
+	 */
+	public function validateGetRenderedQuotes() {
+		$this->readInteger('parentObjectID');
+		
+		$this->conversation = new Conversation($this->parameters['parentObjectID']);
+		if (!$this->conversation->conversationID) {
+			throw new UserInputException('parentObjectID');
+		}
+	}
+	
+	/**
+	 * @see	wcf\data\IMessageQuoteAction::getRenderedQuotes()
+	 */
+	public function getRenderedQuotes() {
+		$quotes = MessageQuoteManager::getInstance()->getQuotesByParentObjectID('com.woltlab.wbb.conversation.message', $this->conversation->conversationID);
+	
+		return array(
+			'template' => implode("\n\n", $quotes)
+		);
+	}
 }
