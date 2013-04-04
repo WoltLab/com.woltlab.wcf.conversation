@@ -18,6 +18,7 @@
 				'wcf.conversation.edit.open': '{lang}wcf.conversation.edit.open{/lang}',
 				'wcf.conversation.leave.title': '{lang}wcf.conversation.leave.title{/lang}',
 				'wcf.global.state.closed': '{lang}wcf.global.state.closed{/lang}',
+				'wcf.message.bbcode.code.copy': '{lang}wcf.message.bbcode.code.copy{/lang}',
 				'wcf.message.error.editorAlreadyInUse': '{lang}wcf.message.error.editorAlreadyInUse{/lang}',
 				'wcf.moderation.report.reportContent': '{lang}wcf.moderation.report.reportContent{/lang}',
 				'wcf.moderation.report.success': '{lang}wcf.moderation.report.success{/lang}',
@@ -39,6 +40,7 @@
 			
 			new WCF.Moderation.Report.Content('com.woltlab.wcf.conversation.message', '.jsReportConversationMessage');
 			new WCF.Conversation.RemoveParticipant({@$conversation->conversationID});
+			new WCF.Message.BBCode.CodeViewer();
 		});
 		//]]>
 	</script>
