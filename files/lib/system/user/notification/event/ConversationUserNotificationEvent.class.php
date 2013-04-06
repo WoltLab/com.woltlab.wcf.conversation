@@ -1,7 +1,6 @@
 <?php
 namespace wcf\system\user\notification\event;
 use wcf\system\user\notification\event\AbstractUserNotificationEvent;
-use wcf\system\WCF;
 
 /**
  * User notification event for conversations.
@@ -18,15 +17,25 @@ class ConversationUserNotificationEvent extends AbstractUserNotificationEvent {
 	 * @see	wcf\system\user\notification\event\IUserNotificationEvent::getMessage()
 	 */
 	public function getTitle() {
-		return WCF::getLanguage()->get('wcf.user.notification.conversation.shortOutput');
+		return $this->getLanguage()->get('wcf.user.notification.conversation.title');
 	}
 	
 	/**
 	 * @see	wcf\system\user\notification\event\IUserNotificationEvent::getMessage()
 	 */
 	public function getMessage() {
-		return WCF::getLanguage()->getDynamicVariable('wcf.user.notification.conversation.output', array(
+		return $this->getLanguage()->getDynamicVariable('wcf.user.notification.conversation.message', array(
 			'conversation' => $this->userNotificationObject,
+		));
+	}
+	
+	/**
+	 * @see	wcf\system\user\notification\event\IUserNotificationEvent::getEmailMessage()
+	 */
+	public function getEmailMessage() {
+		return $this->getLanguage()->getDynamicVariable('wcf.user.notification.conversation.mail', array(
+			'conversation' => $this->userNotificationObject,
+			'author' => $this->author
 		));
 	}
 }
