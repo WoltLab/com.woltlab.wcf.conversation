@@ -161,6 +161,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 				$newParticipantIDs = array_diff(array_merge($this->parameters['participants'], $this->parameters['invisibleParticipants']), $participantIDs);
 				if (!empty($newParticipantIDs)) {
 					// update conversation count
+					UserStorageHandler::getInstance()->reset($newParticipantIDs, 'unreadConversationCount');
 					UserStorageHandler::getInstance()->reset($newParticipantIDs, 'conversationCount');
 					
 					// fire notification event
@@ -175,6 +176,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 					$conversation->updateParticipants(array($conversation->userID));
 					
 					// update conversation count
+					UserStorageHandler::getInstance()->reset($conversation->getParticipantIDs(), 'unreadConversationCount');
 					UserStorageHandler::getInstance()->reset($conversation->getParticipantIDs(), 'conversationCount');
 				}
 			}
