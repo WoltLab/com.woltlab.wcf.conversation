@@ -80,6 +80,14 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			// fire notification event
 			$notificationRecipients = array_merge((!empty($this->parameters['participants']) ? $this->parameters['participants'] : array()), (!empty($this->parameters['invisibleParticipants']) ? $this->parameters['invisibleParticipants'] : array()));
 			UserNotificationHandler::getInstance()->fireEvent('conversation', 'com.woltlab.wcf.conversation.notification', new ConversationUserNotificationObject($conversation), $notificationRecipients);
+			
+			// mark conversation as read for the author
+			$sql = "UPDATE	wcf".WCF_N."_conversation_to_user
+				SET	lastVisitTime = ?
+				WHERE	participantID = ?
+					AND conversationID = ?";
+			$statement = WCF::getDB()->prepareStatement($sql);
+			$statement->execute(array($data['time'], $data['userID'], $conversation->conversationID));
 		}
 		else {
 			// update conversation count
@@ -90,16 +98,14 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		$conversationEditor->updateParticipantSummary();
 		
 		// create message
-		$data = array(
-			'conversationID' => $conversation->conversationID,
-			'message' => $this->parameters['messageData']['message'],
-			'time' => $this->parameters['data']['time'],
-			'userID' => $this->parameters['data']['userID'],
-			'username' => $this->parameters['data']['username']
-		);
+		$messageData = $this->parameters['messageData'];
+		$messageData['conversationID'] = $conversation->conversationID;
+		$messageData['time'] = $this->parameters['data']['time'];
+		$messageData['userID'] = $this->parameters['data']['userID'];
+		$messageData['username'] = $this->parameters['data']['username'];
 		
 		$messageAction = new ConversationMessageAction(array(), 'create', array(
-			'data' => $data,
+			'data' => $messageData,
 			'conversation' => $conversation,
 			'isFirstPost' => true,
 			'attachmentHandler' => (isset($this->parameters['attachmentHandler']) ? $this->parameters['attachmentHandler'] : null) 
@@ -536,11 +542,11 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		// unmark items
 		$this->unmarkItems();
 		
-		// update participant summary
-		ConversationEditor::updateParticipantSummaries($this->objectIDs);
-		
-		// delete conversation if all users have left it
 		if ($this->parameters['hideConversation'] == Conversation::STATE_LEFT) {
+			// update participant summary
+			ConversationEditor::updateParticipantSummaries($this->objectIDs);
+			
+			// delete conversation if all users have left it
 			$conditionBuilder = new PreparedStatementConditionBuilder();
 			$conditionBuilder->add('conversation.conversationID IN (?)', array($this->objectIDs));
 			$conditionBuilder->add('conversation_to_user.conversationID IS NULL');

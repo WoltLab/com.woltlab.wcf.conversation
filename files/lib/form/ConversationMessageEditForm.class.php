@@ -120,7 +120,11 @@ class ConversationMessageEditForm extends ConversationAddForm {
 		
 		// save message
 		$data = array(
-			'message' => $this->text
+			'message' => $this->text,
+			'enableBBCodes' => $this->enableBBCodes,
+			'enableHtml' => $this->enableHtml,
+			'enableSmilies' => $this->enableSmilies,
+			'showSignature' => $this->showSignature
 		);
 		$messageData = array(
 			'data' => $data,

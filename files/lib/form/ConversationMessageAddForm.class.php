@@ -167,7 +167,11 @@ class ConversationMessageAddForm extends MessageForm {
 			'message' => $this->text,
 			'time' => TIME_NOW,
 			'userID' => WCF::getUser()->userID,
-			'username' => WCF::getUser()->username
+			'username' => WCF::getUser()->username,
+			'enableBBCodes' => $this->enableBBCodes,
+			'enableHtml' => $this->enableHtml,
+			'enableSmilies' => $this->enableSmilies,
+			'showSignature' => $this->showSignature
 		);
 		
 		$messageData = array(

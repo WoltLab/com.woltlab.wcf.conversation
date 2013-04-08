@@ -183,7 +183,11 @@ class ConversationAddForm extends MessageForm {
 			'data' => $data,
 			'attachmentHandler' => $this->attachmentHandler,
 			'messageData' => array(
-				'message' => $this->text
+				'message' => $this->text,
+				'enableBBCodes' => $this->enableBBCodes,
+				'enableHtml' => $this->enableHtml,
+				'enableSmilies' => $this->enableSmilies,
+				'showSignature' => $this->showSignature
 			)
 		);
 		if (!$this->draft) {
