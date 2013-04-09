@@ -38,7 +38,7 @@
 			new WCF.Conversation.MarkAsRead();
 			
 			// mobile safari hover workaround
-			if ($.browser.mobile) {
+			if ($(window).width() <= 768) {
 				$('.sidebar').addClass('mobileSidebar').hover(function() { });
 			}
 		});
