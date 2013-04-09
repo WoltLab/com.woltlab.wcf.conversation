@@ -666,6 +666,15 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			);
 		}
 		
+		// validate limit
+		$newCount = $this->conversation->participants + count($participantIDs);
+		if ($newCount > WCF::getSession()->getPermission('user.conversation.maxParticipants')) {
+			return array(
+				'actionName' => 'addParticipants',
+				'errorMessage' => WCF::getLanguage()->getDynamicVariable('wcf.conversation.participants.error.tooManyParticipants', array('remaining' => WCF::getSession()->getPermission('user.conversation.maxParticipants') - $newCount))
+			);
+		}
+		
 		$count = 0;
 		$successMessage = '';
 		if (!empty($participantIDs)) {
