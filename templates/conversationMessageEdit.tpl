@@ -9,6 +9,7 @@
 		//<![CDATA[
 		$(function() {
 			WCF.Message.Submit.registerButton('text', $('#messageContainer > .formSubmit > input[type=submit]'));
+			new WCF.Message.FormGuard();
 		});
 		//]]>
 	</script>
@@ -29,7 +30,7 @@
 	<p class="error">{lang}wcf.global.form.error{/lang}</p>
 {/if}
 
-<form id="messageContainer" method="post" action="{link controller='ConversationMessageEdit' id=$messageID}{/link}">
+<form id="messageContainer" class="jsFormGuard" method="post" action="{link controller='ConversationMessageEdit' id=$messageID}{/link}">
 	<div class="container containerPadding marginTop">
 		{if $isFirstMessage}
 			<fieldset>

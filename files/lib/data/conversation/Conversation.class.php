@@ -140,11 +140,18 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	 * @return	boolean
 	 */
 	public function canAddParticipants() {
-		if (WCF::getUser()->userID == $this->userID || $this->participantCanInvite) {
-			return true;
+		// check permissions
+		if (WCF::getUser()->userID != $this->userID && !$this->participantCanInvite) {
+			return false;
 		}
 		
-		return false;
+		// check for maximum number of participants
+		// note: 'participants' does not track invisible participants, this will be checked on the fly!
+		if ($this->participants >= WCF::getSession()->getPermission('user.conversation.maxParticipants')) {
+			return false;
+		}
+		
+		return true;
 	}
 	
 	/**

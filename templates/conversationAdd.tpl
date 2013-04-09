@@ -12,6 +12,7 @@
 			new WCF.Search.User('#invisibleParticipants', null, false, [ ], true);
 			
 			WCF.Message.Submit.registerButton('text', $('#messageContainer > .formSubmit > input[type=submit]'));
+			new WCF.Message.FormGuard();
 		});
 		//]]>
 	</script>
@@ -32,7 +33,7 @@
 	<p class="error">{lang}wcf.global.form.error{/lang}</p>
 {/if}
 
-<form id="messageContainer" method="post" action="{link controller='ConversationAdd'}{/link}">
+<form id="messageContainer" class="jsFormGuard" method="post" action="{link controller='ConversationAdd'}{/link}">
 	<div class="container containerPadding marginTop">
 		<fieldset>
 			<legend>{lang}wcf.conversation.information{/lang}</legend>

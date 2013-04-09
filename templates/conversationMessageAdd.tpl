@@ -13,6 +13,7 @@
 			new WCF.Conversation.Message.QuoteHandler($quoteManager);
 			
 			WCF.Message.Submit.registerButton('text', $('#messageContainer > .formSubmit > input[type=submit]'));
+			new WCF.Message.FormGuard();
 		});
 		//]]>
 	</script>
@@ -33,7 +34,7 @@
 	<p class="error">{lang}wcf.global.form.error{/lang}</p>
 {/if}
 
-<form id="messageContainer" method="post" action="{link controller='ConversationMessageAdd' id=$conversationID}{/link}">
+<form id="messageContainer" class="jsFormGuard" method="post" action="{link controller='ConversationMessageAdd' id=$conversationID}{/link}">
 	<div class="container containerPadding marginTop">
 		<fieldset>
 			<legend>{lang}wcf.conversation.message{/lang}</legend>

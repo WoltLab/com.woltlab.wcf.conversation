@@ -82,6 +82,29 @@ class ConversationEditor extends DatabaseObjectEditor {
 			}
 			WCF::getDB()->commitTransaction();
 		}
+		
+		$this->updateParticipantCount();
+	}
+	
+	/**
+	 * Updates participant count.
+	 */
+	public function updateParticipantCount() {
+		$sql = "UPDATE	wcf".WCF_N."_conversation
+			SET	participants = (
+					SELECT	COUNT(*) AS count
+					FROM	wcf".WCF_N."_conversation_to_user conversation_to_user
+					WHERE	conversation_to_user.conversationID = conversationID
+						AND hideConversation <> ?
+						AND participantID <> ?
+				)
+			WHERE	conversationID = ?";
+		$statement = WCF::getDB()->prepareStatement($sql);
+		$statement->execute(array(
+			Conversation::STATE_LEFT,
+			$this->userID,
+			$this->conversationID
+		));
 	}
 	
 	/**
@@ -124,6 +147,13 @@ class ConversationEditor extends DatabaseObjectEditor {
 			$this->conversationID,
 			$userID
 		));
+		
+		// decrease participant count unless it is the author
+		if ($userID != $this->userID) {
+			$this->updateCounters(array(
+				'participants' => -1
+			));
+		}
 	}
 	
 	/**
