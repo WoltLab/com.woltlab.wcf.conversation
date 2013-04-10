@@ -8,6 +8,7 @@ use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationList;
 use wcf\data\moderation\queue\ModerationQueue;
 use wcf\data\moderation\queue\ViewableModerationQueue;
+use wcf\system\moderation\queue\AbstractModerationQueueHandler;
 use wcf\system\moderation\queue\ModerationQueueManager;
 use wcf\system\WCF;
 
@@ -21,7 +22,17 @@ use wcf\system\WCF;
  * @subpackage	system.moderation.queue
  * @category	Community Framework
  */
-class ConversationMessageModerationQueueReportHandler implements IModerationQueueReportHandler {
+class ConversationMessageModerationQueueReportHandler extends AbstractModerationQueueHandler implements IModerationQueueReportHandler {
+	/**
+	 * @see	wcf\system\moderation\queue\AbstractModerationQueueHandler::$definitionName
+	 */
+	protected $definitionName = 'com.woltlab.wcf.moderation.report';
+	
+	/**
+	 * @see	wcf\system\moderation\queue\AbstractModerationQueueHandler::$objectType
+	 */
+	protected $objectType = 'com.woltlab.wbb.post';
+	
 	/**
 	 * list of conversation message
 	 * @var	array<wcf\data\conversation\message\ConversationMessage>
