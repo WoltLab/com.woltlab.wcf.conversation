@@ -7,6 +7,7 @@ use wcf\data\conversation\ConversationAction;
 use wcf\data\conversation\ConversationParticipantList;
 use wcf\data\conversation\ViewableConversation;
 use wcf\data\modification\log\ConversationLogModificationLogList;
+use wcf\data\smiley\SmileyCache;
 use wcf\system\breadcrumb\Breadcrumb;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\PermissionDeniedException;
@@ -234,7 +235,7 @@ class ConversationPage extends MultipleLinkPage {
 			'conversation' => $this->conversation,
 			'conversationID' => $this->conversationID,
 			'participants' => $this->participantList->getObjects(),
-			'defaultSmilies' => array() /* TODO: Since we do not use the message tabs, smilies are pointless to load -- what to do? */
+			'defaultSmilies' => SmileyCache::getInstance()->getCategorySmilies()
 		));
 	}
 	

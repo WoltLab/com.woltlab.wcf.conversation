@@ -2,6 +2,7 @@
 namespace wcf\data\conversation\message;
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationEditor;
+use wcf\data\smiley\SmileyCache;
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\DatabaseObject;
 use wcf\data\IExtendedMessageQuickReplyAction;
@@ -286,7 +287,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 */
 	public function beginEdit() {
 		WCF::getTPL()->assign(array(
-			'defaultSmilies' => array(), /* TODO: fix this */
+			'defaultSmilies' => SmileyCache::getInstance()->getCategorySmilies(),
 			'message' => $this->message,
 			'wysiwygSelector' => 'messageEditor'.$this->message->messageID
 		));
