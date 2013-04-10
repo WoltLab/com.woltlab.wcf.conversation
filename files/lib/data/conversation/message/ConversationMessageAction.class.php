@@ -16,6 +16,7 @@ use wcf\system\exception\UserInputException;
 use wcf\system\message\censorship\Censorship;
 use wcf\system\message\quote\MessageQuoteManager;
 use wcf\system\message\QuickReplyManager;
+use wcf\system\moderation\queue\ModerationQueueManager;
 use wcf\system\request\LinkHandler;
 use wcf\system\search\SearchIndexManager;
 use wcf\system\user\notification\object\ConversationMessageUserNotificationObject;
@@ -25,10 +26,10 @@ use wcf\system\WCF;
 use wcf\util\StringUtil;
 
 /**
- * Executes message-related actions.
+ * Executes conversation message-related actions.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2012 WoltLab GmbH
+ * @copyright	2001-2013 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation.message
@@ -167,14 +168,15 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			}
 		}
 		
-		// @todo: modification log, reports
-		
 		if (!empty($this->objectIDs)) {
 			// delete notifications
 			UserNotificationHandler::getInstance()->deleteNotifications('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', array(), $this->objectIDs);
 		
 			// update search index
 			SearchIndexManager::getInstance()->delete('com.woltlab.wcf.conversation.message', $this->objectIDs);
+			
+			// remove moderation queues
+			ModerationQueueManager::getInstance()->removeQueues('com.woltlab.wcf.conversation.message', $this->objectIDs);
 		}
 		
 		// remove attachments
