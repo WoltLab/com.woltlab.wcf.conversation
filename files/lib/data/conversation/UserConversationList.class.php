@@ -65,7 +65,6 @@ class UserConversationList extends ConversationList {
 		
 		// filter by label id
 		if ($labelID) {
-			// TODO: This is damn slow on MySQL
 			$this->getConditionBuilder()->add("conversation.conversationID IN (
 				SELECT	conversationID
 				FROM	wcf".WCF_N."_conversation_label_to_object
