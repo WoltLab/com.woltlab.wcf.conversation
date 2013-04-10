@@ -36,7 +36,7 @@
 							
 							{include file='attachments'}
 							
-							{if $message->showSignature && $entry->getUserProfile()->showSignature()}
+							{if $message->showSignature && $message->getUserProfile()->showSignature()}
 								<div class="messageSignature">
 									<div>{@$message->getUserProfile()->signatureCache}</div>
 								</div>
