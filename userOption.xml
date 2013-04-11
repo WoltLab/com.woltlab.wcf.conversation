@@ -13,7 +13,7 @@
 			</option>
 			
 			<option name="conversationsPerPage">
-				<categoryname>settings.general.interface</categoryname>
+				<categoryname>settings.general.appearance</categoryname>
 				<optiontype>select</optiontype>
 				<editable>3</editable>
 				<defaultvalue>0</defaultvalue>
@@ -26,7 +26,7 @@
 				<options>module_conversation</options>
 			</option>
 			<option name="conversationMessagesPerPage">
-				<categoryname>settings.general.interface</categoryname>
+				<categoryname>settings.general.appearance</categoryname>
 				<optiontype>select</optiontype>
 				<editable>3</editable>
 				<defaultvalue>0</defaultvalue>
