@@ -172,7 +172,7 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	 * @see	wcf\data\IMessage::isVisible()
 	 */
 	public function isVisible() {
-		return $this->getConversation()->canRead();
+		return true;
 	}
 	
 	/**
