@@ -203,9 +203,8 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			$this,
 			$this->parameters,
 			'wcf\data\conversation\ConversationAction',
-			'wcf\data\conversation\message\ViewableConversationMessageList',
-			'conversationMessageList',
-			CONVERSATION_LIST_DEFAULT_SORT_ORDER
+			CONVERSATION_LIST_DEFAULT_SORT_ORDER,
+			'conversationMessageList'
 		);
 	}
 	
@@ -362,6 +361,19 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 				throw new UserInputException('message', WCF::getLanguage()->getDynamicVariable('wcf.message.error.censoredWordsFound', array('censoredWords' => $result)));
 			}
 		}
+	}
+	
+	/**
+	 * @see	wcf\data\IMessageQuickReplyAction::getMessageList()
+	 */
+	public function getMessageList(DatabaseObject $conversation, $lastMessageTime) {
+		$messageList = new ConversationMessageList();
+		$messageList->getConditionBuilder()->add("conversation_message.conversationID = ?", array($conversation->conversationID));
+		$messageList->getConditionBuilder()->add("conversation_message.time > ?", array($lastMessageTime));
+		$messageList->sqlOrderBy = "conversation_message.time ".CONVERSATION_LIST_DEFAULT_SORT_ORDER;
+		$messageList->readObjects();
+	
+		return $messageList;
 	}
 	
 	/**
