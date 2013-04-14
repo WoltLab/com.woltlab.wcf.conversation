@@ -17,6 +17,7 @@
 				'wcf.conversation.edit.leave': '{lang}wcf.conversation.edit.leave{/lang}',
 				'wcf.conversation.edit.open': '{lang}wcf.conversation.edit.open{/lang}',
 				'wcf.conversation.leave.title': '{lang}wcf.conversation.leave.title{/lang}',
+				'wcf.global.form.error.empty': '{lang}wcf.global.form.error.empty{/lang}',
 				'wcf.global.state.closed': '{lang}wcf.global.state.closed{/lang}',
 				'wcf.message.bbcode.code.copy': '{lang}wcf.message.bbcode.code.copy{/lang}',
 				'wcf.message.error.editorAlreadyInUse': '{lang}wcf.message.error.editorAlreadyInUse{/lang}',
