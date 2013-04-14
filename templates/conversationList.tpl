@@ -193,8 +193,8 @@
 							<aside class="statusDisplay">
 								{smallpages pages=$conversation->getPages() controller='Conversation' object=$conversation link='pageNo=%d'}
 								<ul class="statusIcons">
-									{if $conversation->isClosed}<li><span class="icon icon16 icon-lock jsIconLock jsTooltip" itle="{lang}wcf.global.state.closed{/lang}"></span></li>{/if}
-									{if $conversation->attachments}<li><span class="icon icon16 icon-paper-clip jsIconAttachment jsTooltip" itle="{lang}wcf.conversation.attachments{/lang}"></span></li>{/if}
+									{if $conversation->isClosed}<li><span class="icon icon16 icon-lock jsIconLock jsTooltip" title="{lang}wcf.global.state.closed{/lang}"></span></li>{/if}
+									{if $conversation->attachments}<li><span class="icon icon16 icon-paper-clip jsIconAttachment jsTooltip" title="{lang}wcf.conversation.attachments{/lang}"></span></li>{/if}
 								</ul>
 							</aside>
 							
