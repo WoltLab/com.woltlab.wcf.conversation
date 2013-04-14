@@ -180,7 +180,7 @@ WCF.Conversation.EditorHandler = Class.extend({
 					// insert labels
 					for (var $i = 0, $length = data.length; $i < $length; $i++) {
 						var $label = $labels[data[$i]];
-						$('<li><a href="' + $label.url + '" class="badge label' + ($label.cssClassName ? " " + $label.cssClassName : "") + '">' + $label.label + '</a>&nbsp;</li>').appendTo($labelList);
+						$('<li><a href="' + $label.url + '" class="badge label' + ($label.cssClassName ? " " + $label.cssClassName : "") + '">' + WCF.String.escapeHTML($label.label) + '</a>&nbsp;</li>').appendTo($labelList);
 					}
 				}
 			break;
@@ -1128,7 +1128,7 @@ WCF.Conversation.Label.Manager = Class.extend({
 	 * @param	object		data
 	 */
 	_insertLabel: function(data) {
-		var $listItem = $('<li><a href="' + this._link + '&labelID=' + data.returnValues.labelID + '"><span class="badge label' + (data.returnValues.cssClassName ? ' ' + data.returnValues.cssClassName : '') + '">' + data.returnValues.label + '</span></a></li>');
+		var $listItem = $('<li><a href="' + this._link + '&labelID=' + data.returnValues.labelID + '"><span class="badge label' + (data.returnValues.cssClassName ? ' ' + data.returnValues.cssClassName : '') + '">' + WCF.String.escapeHTML(data.returnValues.label) + '</span></a></li>');
 		$listItem.find('a > span').data('labelID', data.returnValues.labelID).data('cssClassName', data.returnValues.cssClassName);
 		
 		var $divider = this._labels.find('.dropdownDivider:eq(0)').show();
@@ -1157,7 +1157,7 @@ WCF.Conversation.Label.Manager = Class.extend({
 		var $label = $(event.currentTarget);
 		
 		// replace legends
-		var $legend = WCF.Language.get('wcf.conversation.label.management.editLabel').replace(/#labelName#/, $label.text());
+		var $legend = WCF.Language.get('wcf.conversation.label.management.editLabel').replace(/#labelName#/, WCF.String.escapeHTML($label.text()));
 		$('#conversationLabelManagementForm').data('labelID', $label.data('labelID')).children('legend').html($legend);
 		
 		// update text input
