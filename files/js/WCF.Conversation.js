@@ -180,7 +180,7 @@ WCF.Conversation.EditorHandler = Class.extend({
 					// insert labels
 					for (var $i = 0, $length = data.length; $i < $length; $i++) {
 						var $label = $labels[data[$i]];
-						$('<li><a href="' + $label.url + '" class="badge label' + ($label.cssClassName ? " " + $label.cssClassName : "") + '">' + $label.label + '</a>&nbsp;</li>').appendTo($labelList);
+						$('<li><a href="' + $label.url + '" class="badge label' + ($label.cssClassName ? " " + $label.cssClassName : "") + '">' + WCF.String.escapeHTML($label.label) + '</a>&nbsp;</li>').appendTo($labelList);
 					}
 				}
 			break;
@@ -1157,7 +1157,7 @@ WCF.Conversation.Label.Manager = Class.extend({
 		var $label = $(event.currentTarget);
 		
 		// replace legends
-		var $legend = WCF.Language.get('wcf.conversation.label.management.editLabel').replace(/#labelName#/, $label.text());
+		var $legend = WCF.Language.get('wcf.conversation.label.management.editLabel').replace(/#labelName#/, WCF.String.escapeHTML($label.text()));
 		$('#conversationLabelManagementForm').data('labelID', $label.data('labelID')).children('legend').html($legend);
 		
 		// update text input
