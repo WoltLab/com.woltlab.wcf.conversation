@@ -113,7 +113,7 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 		return array(
 			'actionName' => 'add',
 			'cssClassName' => $label->cssClassName,
-			'label' => $label->label,
+			'label' => StringUtil::encodeHTML($label->label),
 			'labelID' => $label->labelID
 		);
 	}
