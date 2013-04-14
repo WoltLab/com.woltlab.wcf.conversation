@@ -90,15 +90,15 @@ class ConversationEditor extends DatabaseObjectEditor {
 	 * Updates participant count.
 	 */
 	public function updateParticipantCount() {
-		$sql = "UPDATE	wcf".WCF_N."_conversation
+		$sql = "UPDATE	wcf".WCF_N."_conversation conversation
 			SET	participants = (
 					SELECT	COUNT(*) AS count
 					FROM	wcf".WCF_N."_conversation_to_user conversation_to_user
-					WHERE	conversation_to_user.conversationID = conversationID
-						AND hideConversation <> ?
-						AND participantID <> ?
+					WHERE	conversation_to_user.conversationID = conversation.conversationID
+						AND conversation_to_user.hideConversation <> ?
+						AND conversation_to_user.participantID <> ?
 				)
-			WHERE	conversationID = ?";
+			WHERE	conversation.conversationID = ?";
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute(array(
 			Conversation::STATE_LEFT,
