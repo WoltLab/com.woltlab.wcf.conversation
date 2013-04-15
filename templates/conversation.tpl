@@ -4,6 +4,7 @@
 	<title>{$conversation->subject} {if $pageNo > 1}- {lang}wcf.page.pageNo{/lang} {/if} - {PAGE_TITLE|language}</title>
 	
 	{include file='headInclude'}
+	{include file='__signatureMaxImageDimensions'}
 	
 	<script type="text/javascript" src="{@$__wcf->getPath()}js/WCF.Conversation.js"></script>
 	<script type="text/javascript" src="{@$__wcf->getPath()}js/WCF.Moderation.js"></script>

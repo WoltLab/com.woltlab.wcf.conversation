@@ -126,7 +126,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	public function delete() {
 		// deletes messages
 		$messageList = new ConversationMessageList();
-		$messageList->getConditionBuilder('conversation_message.conversationID IN (?)', array($this->objectIDs));
+		$messageList->getConditionBuilder()->add('conversation_message.conversationID IN (?)', array($this->objectIDs));
 		$messageList->readObjectIDs();
 		$action = new ConversationMessageAction($messageList->getObjectIDs(), 'delete');
 		$action->executeAction();
