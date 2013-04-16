@@ -14,7 +14,7 @@
 					
 					<div class="formSubmit">
 						<button class="buttonPrimary" data-type="save" accesskey="s">{lang}wcf.global.button.submit{/lang}</button>
-						<button data-type="extended">{lang}wcf.message.button.extendedEdit{/lang}</button>
+						<button data-type="extended">{lang}wcf.message.button.extendedReply{/lang}</button>
 						<button data-type="cancel">{lang}wcf.global.button.cancel{/lang}</button>
 					</div>
 				</div>

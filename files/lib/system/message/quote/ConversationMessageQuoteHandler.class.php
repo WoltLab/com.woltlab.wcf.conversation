@@ -7,7 +7,7 @@ use wcf\data\conversation\ConversationList;
  * IMessageQuoteHandler implementation for conversation messages.
  * 
  * @author	Alexander Ebert
- * @copyright	2001-2012 WoltLab GmbH
+ * @copyright	2001-2013 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	system.message.quote
@@ -25,31 +25,48 @@ class ConversationMessageQuoteHandler extends AbstractMessageQuoteHandler {
 		$messages = $messageList->getObjects();
 		
 		// read conversations
-		$conversationIDs = array();
+		$conversationIDs = $validMessageIDs = array();
 		foreach ($messages as $message) {
 			$conversationIDs[] = $message->conversationID;
+			$validMessageIDs[] = $message->messageID;
 		}
 		
-		$conversationList = new ConversationList();
-		$conversationList->getConditionBuilder()->add("conversation.conversationID IN (?)", array($conversationIDs));
-		$conversationList->readObjects();
-		$conversations = $conversationList->getObjects();
-		
-		// create QuotedMessage objects
 		$quotedMessages = array();
-		foreach ($messages as $conversationMessage) {
-			$conversationMessage->setConversation($conversations[$conversationMessage->conversationID]);
-			$message = new QuotedMessage($conversationMessage);
+		if (!empty($conversationIDs)) {
+			$conversationList = new ConversationList();
+			$conversationList->getConditionBuilder()->add("conversation.conversationID IN (?)", array($conversationIDs));
+			$conversationList->readObjects();
+			$conversations = $conversationList->getObjects();
 			
-			foreach (array_keys($data[$conversationMessage->messageID]) as $quoteID) {
-				$message->addQuote(
-					$quoteID,
-					MessageQuoteManager::getInstance()->getQuote($quoteID, false),	// single quote or excerpt
-					MessageQuoteManager::getInstance()->getQuote($quoteID, true)	// same as above or full quote
-				);
+			// create QuotedMessage objects
+			foreach ($messages as $conversationMessage) {
+				$conversationMessage->setConversation($conversations[$conversationMessage->conversationID]);
+				$message = new QuotedMessage($conversationMessage);
+				
+				foreach (array_keys($data[$conversationMessage->messageID]) as $quoteID) {
+					$message->addQuote(
+						$quoteID,
+						MessageQuoteManager::getInstance()->getQuote($quoteID, false),	// single quote or excerpt
+						MessageQuoteManager::getInstance()->getQuote($quoteID, true)	// same as above or full quote
+					);
+				}
+				
+				$quotedMessages[] = $message;
+			}
+		}
+		
+		// check for orphaned quotes
+		if (count($validMessageIDs) != count($data)) {
+			$orphanedQuoteIDs = array();
+			foreach ($data as $messageID => $quoteIDs) {
+				if (!in_array($messageID, $validMessageIDs)) {
+					foreach (array_keys($quoteIDs) as $quoteID) {
+						$orphanedQuoteIDs[] = $quoteID;
+					}
+				}
 			}
 			
-			$quotedMessages[] = $message;
+			MessageQuoteManager::getInstance()->removeOrphanedQuotes($orphanedQuoteIDs);
 		}
 		
 		return $quotedMessages;
