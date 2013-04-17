@@ -87,7 +87,7 @@
 	}
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 800px) {
 	.conversationList {
 		thead {
 			display: none;
@@ -103,6 +103,15 @@
 			.columnSubject .statusDisplay {
 				display: none;
 			}
+		}
+	}
+}
+
+@media only screen and (max-width: 1239px) {
+	.conversationList {
+		thead .columnParticipants,
+		tbody .columnParticipants {
+			display: none;
 		}
 	}
 }
