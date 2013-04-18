@@ -96,4 +96,11 @@ class FeedConversation extends DatabaseObjectDecorator implements IFeedEntry {
 	public function getCategories() {
 		return array();
 	}
+	
+	/**
+	 * @see	wcf\data\IMessage::isVisible()
+	 */
+	public function isVisible() {
+		return $this->canRead();
+	}
 }
