@@ -148,12 +148,14 @@ class UserConversationList extends ConversationList {
 		
 		parent::readObjects();
 		
-		$labels = $this->loadLabelAssignments();
-		
-		foreach ($this->objects as $conversationID => $conversation) {
-			if (isset($labels[$conversationID])) {
-				foreach ($labels[$conversationID] as $label) {
-					$conversation->assignLabel($label);
+		if (!empty($this->objects)) {
+			$labels = $this->loadLabelAssignments();
+			
+			foreach ($this->objects as $conversationID => $conversation) {
+				if (isset($labels[$conversationID])) {
+					foreach ($labels[$conversationID] as $label) {
+						$conversation->assignLabel($label);
+					}
 				}
 			}
 		}
