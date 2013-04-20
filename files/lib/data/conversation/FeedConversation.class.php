@@ -24,7 +24,10 @@ class FeedConversation extends DatabaseObjectDecorator implements IFeedEntry {
 	 * @see	wcf\data\ILinkableObject::getLink()
 	 */
 	public function getLink() {
-		return LinkHandler::getInstance()->getLink('Conversation', array('id' => $this->getDecoratedObject()->conversationID));
+		return LinkHandler::getInstance()->getLink('Conversation', array(
+			'object' => $this->getDecoratedObject(),
+			'appendSession' => false
+		));
 	}
 	
 	/**
