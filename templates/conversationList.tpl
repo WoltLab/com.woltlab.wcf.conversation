@@ -214,8 +214,8 @@
 							
 							{event name='conversationData'}
 						</td>
-						<td class="columnDigits columnReplies"><p>{#$conversation->replies}</p></td>
-						<td class="columnDigits columnParticipants"><p>{#$conversation->participants}</p></td>
+						<td class="columnDigits columnReplies">{#$conversation->replies}</td>
+						<td class="columnDigits columnParticipants">{#$conversation->participants}</td>
 						<td class="columnText columnLastPost">
 							{if $conversation->replies != 0}
 								<div class="box24">
