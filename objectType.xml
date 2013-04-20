@@ -11,6 +11,7 @@
 			<name>com.woltlab.wcf.conversation.message</name>
 			<definitionname>com.woltlab.wcf.attachment.objectType</definitionname>
 			<classname>wcf\system\attachment\ConversationMessageAttachmentObjectType</classname>
+			<private>1</private>
 		</type>
 		
 		<type>
