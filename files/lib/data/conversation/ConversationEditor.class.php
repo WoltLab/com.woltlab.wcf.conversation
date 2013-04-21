@@ -97,12 +97,14 @@ class ConversationEditor extends DatabaseObjectEditor {
 					WHERE	conversation_to_user.conversationID = conversation.conversationID
 						AND conversation_to_user.hideConversation <> ?
 						AND conversation_to_user.participantID <> ?
+						AND conversation_to_user.isInvisible = ?
 				)
 			WHERE	conversation.conversationID = ?";
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute(array(
 			Conversation::STATE_LEFT,
 			$this->userID,
+			0,
 			$this->conversationID
 		));
 	}

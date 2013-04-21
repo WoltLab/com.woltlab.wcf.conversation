@@ -94,13 +94,19 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 				}
 			}
 			
-			// make invisible participant visible
-			$sql = "UPDATE	wcf".WCF_N."_conversation_to_user
-				SET	isInvisible = 0
-				WHERE	participantID = ?
-					AND conversationID = ?";
-			$statement = WCF::getDB()->prepareStatement($sql);
-			$statement->execute(array($message->userID, $conversation->conversationID));
+			$userConversation = Conversation::getUserConversation($conversation->conversationID, $message->userID);
+			if ($userConversation !== null && $userConversation->isInvisible) {
+				// make invisible participant visible
+				$sql = "UPDATE	wcf".WCF_N."_conversation_to_user
+					SET	isInvisible = 0
+					WHERE	participantID = ?
+						AND conversationID = ?";
+				$statement = WCF::getDB()->prepareStatement($sql);
+				$statement->execute(array($message->userID, $conversation->conversationID));
+				
+				$conversationEditor->updateParticipantSummary();
+				$conversationEditor->updateParticipantCount();
+			}
 			
 			// reset visibility if it was hidden but not left
 			$sql = "UPDATE	wcf".WCF_N."_conversation_to_user
