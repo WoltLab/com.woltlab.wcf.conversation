@@ -1141,7 +1141,7 @@ WCF.Conversation.Label.Manager = Class.extend({
 	 * Binds event listener for label management.
 	 */
 	_bindListener: function() {
-		$('#labelName').keyup($.proxy(this._updateLabels, this));
+		$('#labelName').on('keyup keydown keypress', $.proxy(this._updateLabels, this));
 		$('#addLabel').disable().click($.proxy(this._addLabel, this));
 		$('#editLabel').disable();
 		
@@ -1220,7 +1220,7 @@ WCF.Conversation.Label.Manager = Class.extend({
 	 * Updates label text within label management.
 	 */
 	_updateLabels: function() {
-		var $value = $('#labelName').val();
+		var $value = $.trim($('#labelName').val());
 		if ($value) {
 			$('#addLabel, #editLabel').enable();
 		}
