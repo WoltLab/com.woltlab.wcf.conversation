@@ -317,19 +317,21 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 			throw new UserInputException($field, 'canNotUseConversation');
 		}
 		
-		// check privacy setting
-		if ($user->canSendConversation == 2 || ($user->canSendConversation == 1 && WCF::getProfileHandler()->isFollowing($user->userID))) {
-			throw new UserInputException($field, 'doesNotAcceptConversation');
-		}
-		
-		// active user is ignored by participant
-		if ($user->isIgnoredUser(WCF::getUser()->userID)) {
-			throw new UserInputException($field, 'ignoresYou');
-		}
-		
-		// check participant's mailbox quota
-		if (ConversationHandler::getInstance()->getConversationCount($user->userID) >= $user->getPermission('user.conversation.maxConversations')) {
-			throw new UserInputException($field, 'mailboxIsFull');
+		if (!WCF::getSession()->getPermission('user.profile.cannotBeIgnored')) {
+			// check privacy setting
+			if ($user->canSendConversation == 2 || ($user->canSendConversation == 1 && WCF::getProfileHandler()->isFollowing($user->userID))) {
+				throw new UserInputException($field, 'doesNotAcceptConversation');
+			}
+			
+			// active user is ignored by participant
+			if ($user->isIgnoredUser(WCF::getUser()->userID)) {
+				throw new UserInputException($field, 'ignoresYou');
+			}
+			
+			// check participant's mailbox quota
+			if (ConversationHandler::getInstance()->getConversationCount($user->userID) >= $user->getPermission('user.conversation.maxConversations')) {
+				throw new UserInputException($field, 'mailboxIsFull');
+			}
 		}
 	}
 }
