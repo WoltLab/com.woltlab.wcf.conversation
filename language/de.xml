@@ -111,11 +111,11 @@
 	</category>
 	
 	<category name="wcf.user.notification">
-		<item name="wcf.user.notification.conversation.message.message"><![CDATA[Hat auf die Konversation „<a href="{link controller='Conversation' object=$message->getConversation()}messageID={@$message->messageID}{/link}#message{@$message->messageID}">{$message->getTitle()}</a>“ geantwortet.]]></item>
+		<item name="wcf.user.notification.conversation.message.message"><![CDATA[Hat auf die Konversation „{$message->getTitle()}“ geantwortet.]]></item>
 		<item name="wcf.user.notification.conversation.message.title"><![CDATA[Neue Antwort auf Konversation]]></item>
 		<item name="wcf.user.notification.conversation.message.mail"><![CDATA[{@$author->username} hat auf die Konversation "{@$message->getTitle()}" geantwortet:
 {link controller='Conversation' object=$message->getConversation() encode=false forceFrontend=true}messageID={@$message->messageID}{/link}#message{@$message->messageID}]]></item>
-		<item name="wcf.user.notification.conversation.message"><![CDATA[Hat die Konversation „<a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a>“ gestartet.]]></item>
+		<item name="wcf.user.notification.conversation.message"><![CDATA[Hat die Konversation „{$conversation->subject}“ gestartet.]]></item>
 		<item name="wcf.user.notification.conversation.title"><![CDATA[Neue Konversation]]></item>
 		<item name="wcf.user.notification.conversation.mail"><![CDATA[{@$author->username} hat die Konversation "{@$conversation->subject}" gestartet:
 {link controller='Conversation' object=$conversation encode=false forceFrontend=true}{/link}]]></item>

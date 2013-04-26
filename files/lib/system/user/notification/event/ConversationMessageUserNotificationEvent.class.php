@@ -1,12 +1,13 @@
 <?php
 namespace wcf\system\user\notification\event;
+use wcf\system\request\LinkHandler;
 use wcf\system\user\notification\event\AbstractUserNotificationEvent;
 
 /**
  * User notification event for conversation messages.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2012 WoltLab GmbH
+ * @copyright	2001-2013 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	system.user.notification.event
@@ -37,5 +38,15 @@ class ConversationMessageUserNotificationEvent extends AbstractUserNotificationE
 			'message' => $this->userNotificationObject,
 			'author' => $this->author
 		));
+	}
+	
+	/**
+	 * @see	wcf\system\user\notification\event\IUserNotificationEvent::getLink()
+	 */
+	public function getLink() {
+		return LinkHandler::getInstance()->getLink('Conversation', array(
+			'object' => $this->userNotificationObject->getConversation(),
+			'messageID' => $this->userNotificationObject->messageID
+		), '#message'.$this->userNotificationObject->messageID);
 	}
 }
