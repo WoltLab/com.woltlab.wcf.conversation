@@ -242,7 +242,7 @@ WCF.Conversation.EditorHandlerConversation = WCF.Conversation.EditorHandler.exte
 		
 		switch (key) {
 			case 'close':
-				$('<span class="icon icon16 icon-lock jsTooltip jsIconLock" title="' + WCF.Language.get('wcf.global.state.closed') + '" />').appendTo($('#content > header h1'));
+				$('<span class="icon icon16 icon-lock jsTooltip jsIconLock" title="' + WCF.Language.get('wcf.global.state.closed') + '" />').appendTo($('#content > header > h1'));
 				
 				this._attributes[conversationID].isClosed = 1;
 			break;

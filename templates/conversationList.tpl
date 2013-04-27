@@ -113,9 +113,7 @@
 {include file='header' sidebarOrientation='left'}
 
 <header class="boxHeadline">
-	<hgroup>
-		<h1>{if $filter}{lang}wcf.conversation.folder.{$filter}{/lang}{else}{lang}wcf.conversation.conversations{/lang}{/if}</h1>
-	</hgroup>
+	<h1>{if $filter}{lang}wcf.conversation.folder.{$filter}{/lang}{else}{lang}wcf.conversation.conversations{/lang}{/if}</h1>
 </header>
 
 {include file='userNotice'}
@@ -139,9 +137,9 @@
 	<p class="info">{lang}wcf.conversation.noConversations{/lang}</p>
 {else}
 	<div class="marginTop tabularBox tabularBoxTitle messageGroupList conversationList jsClipboardContainer" data-type="com.woltlab.wcf.conversation.conversation">
-		<hgroup>
-			<h1>{lang}wcf.conversation.conversations{/lang} <span class="badge badgeInverse">{#$items}</span></h1>
-		</hgroup>
+		<header>
+			<h2>{lang}wcf.conversation.conversations{/lang} <span class="badge badgeInverse">{#$items}</span></h2>
+		</header>
 		
 		<table class="table">
 			<thead>
@@ -186,9 +184,9 @@
 								</ul>
 							{/hascontent}
 								
-							<h1>
+							<h3>
 								<a href="{if $conversation->isNew()}{link controller='Conversation' object=$conversation}action=firstNew{/link}{else}{link controller='Conversation' object=$conversation}{/link}{/if}" class="conversationLink messageGroupLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject|wordwrap}</a>
-							</h1>
+							</h3>
 							
 							<aside class="statusDisplay">
 								{smallpages pages=$conversation->getPages() controller='Conversation' object=$conversation link='pageNo=%d'}
@@ -221,12 +219,12 @@
 								<div class="box24">
 									<a href="{link controller='Conversation' object=$conversation}action=lastPost{/link}" class="framed jsTooltip" title="{lang}wcf.conversation.gotoLastPost{/lang}">{@$conversation->getLastPosterProfile()->getAvatar()->getImageTag(24)}</a>
 									
-									<hgroup>
-										<h1>
+									<div>
+										<p>
 											<a href="{link controller='User' object=$conversation->getLastPosterProfile()->getDecoratedObject()}{/link}" class="userLink" data-user-id="{@$conversation->getLastPosterProfile()->userID}">{$conversation->lastPoster}</a>
-										</h1>
-										<h2>{@$conversation->lastPostTime|time}</h2>
-									</hgroup>
+										</p>
+										<small>{@$conversation->lastPostTime|time}</small>
+									</div>
 								</div>
 							{/if}
 						</td>

@@ -8,10 +8,10 @@
 					{@$conversation->getUserProfile()->getAvatar()->getImageTag(24)}
 				{/if}
 			</div>
-			<hgroup>
-				<h1>{$conversation->subject}</h1>
-				<h2><small>{if $conversation->lastPosterID}{$conversation->lastPoster}{else}{$conversation->username}{/if} - {@$conversation->lastPostTime|time}</small></h2>
-			</hgroup>
+			<div>
+				<h3>{$conversation->subject}</h3>
+				<small>{if $conversation->lastPosterID}{$conversation->lastPoster}{else}{$conversation->username}{/if} - {@$conversation->lastPostTime|time}</small>
+			</div>
 		</a>
 	</li>
 {/foreach}

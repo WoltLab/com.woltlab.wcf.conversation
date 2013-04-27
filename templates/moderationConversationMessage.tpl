@@ -6,13 +6,13 @@
 					<div class="box32">
 						<a href="{link controller='User' object=$message->getUserProfile()->getDecoratedObject()}{/link}" class="framed">{@$message->getUserProfile()->getAvatar()->getImageTag(32)}</a>
 						
-						<hgroup class="messageHeadline">
+						<div class="messageHeadline">
 							<h1><a href="{@$message->getLink()}">{$message->getTitle()}</a></h1>
-							<h2>
+							<p>
 								<span class="username"><a href="{link controller='User' object=$message->getUserProfile()->getDecoratedObject()}{/link}">{$message->getUsername()}</a></span>
 								{@$message->getTime()|time}
-							</h2>
-						</hgroup>
+							</p>
+						</div>
 					</div>
 				</header>
 				

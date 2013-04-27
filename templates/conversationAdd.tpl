@@ -22,9 +22,7 @@
 {include file='header'}
 
 <header class="boxHeadline">
-	<hgroup>
-		<h1>{lang}wcf.conversation.add{/lang}</h1>
-	</hgroup>
+	<h1>{lang}wcf.conversation.add{/lang}</h1>
 </header>
 
 {include file='userNotice'}

@@ -52,9 +52,7 @@
 {include file='header'}
 
 <header class="boxHeadline marginTop conversationHeadline">
-	<hgroup>
-		<h1><a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a>{if $conversation->isClosed} <span class="icon icon16 icon-lock jsTooltip jsIconLock" title="{lang}wcf.global.state.closed{/lang}"></span>{/if}</h1>
-	</hgroup>
+	<h1><a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a>{if $conversation->isClosed} <span class="icon icon16 icon-lock jsTooltip jsIconLock" title="{lang}wcf.global.state.closed{/lang}"></span>{/if}</h1>
 	
 	{hascontent}
 		<ul class="labelList">
@@ -81,19 +79,19 @@
 					<li class="jsParticipant{if $participant->hideConversation == 2} conversationLeft{/if}">
 						<div class="box24">
 							<a href="{link controller='User' object=$participant}{/link}" class="framed">{@$participant->getAvatar()->getImageTag(24)}</a>
-							<hgroup>
-								<h1>
+							<div>
+								<p>
 									<a href="{link controller='User' object=$participant}{/link}" class="userLink" data-user-id="{@$participant->userID}">{$participant->username}</a>
 									{if $participant->isInvisible}<small>({lang}wcf.conversation.invisible{/lang})</small>{/if}
 									{if ($conversation->userID == $__wcf->getUser()->userID) && ($participant->userID != $__wcf->getUser()->userID) && $participant->hideConversation != 2}
 										<a class="jsDeleteButton jsTooltip jsOnly" title="{lang}wcf.conversation.participants.removeParticipant{/lang}" data-confirm-message="{lang}wcf.conversation.participants.removeParticipant.confirmMessage{/lang}" data-object-id="{@$participant->userID}"><span class="icon icon16 icon-remove"></span></a>
 									{/if}
-								</h1>
-								<h2><dl class="plain inlineDataList">
+								</p>
+								<dl class="plain inlineDataList">
 									<dt>{lang}wcf.conversation.lastVisitTime{/lang}</dt>
 									<dd>{if $participant->lastVisitTime}{@$participant->lastVisitTime|time}{else}-{/if}</dd>
-								</dl></h2>
-							</hgroup>
+								</dl>
+							</div>
 						</div>
 					</li>
 				{/foreach}

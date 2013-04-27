@@ -7,12 +7,12 @@
 					<div class="box24">
 						<a href="{link controller='User' object=$modificationLogEntry->getUserProfile()}{/link}" class="framed">{@$modificationLogEntry->getUserProfile()->getAvatar()->getImageTag(24)}</a>
 						
-						<hgroup>
+						<div>
 							<h1><a href="{link controller='User' object=$modificationLogEntry->getUserProfile()}{/link}" class="userLink" data-user-id="{@$modificationLogEntry->userID}">{$modificationLogEntry->username}</a>
 								-
 								{@$modificationLogEntry->time|time}</h1>
-							<h2>{@$modificationLogEntry}</h2>
-						</hgroup>
+							<small>{@$modificationLogEntry}</small>
+						</div>
 					</div>
 				</div>
 			</article>

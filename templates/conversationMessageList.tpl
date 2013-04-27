@@ -14,9 +14,9 @@
 				<section class="messageContent">
 					<div>
 						<header class="messageHeader">
-							<hgroup class="messageHeadline">
-								<h2><a href="{link controller='Conversation' object=$conversation}messageID={@$message->messageID}{/link}#message{@$message->messageID}" class="permalink">{@$message->time|time}</a></h2>
-							</hgroup>
+							<div class="messageHeadline">
+								<p><a href="{link controller='Conversation' object=$conversation}messageID={@$message->messageID}{/link}#message{@$message->messageID}" class="permalink">{@$message->time|time}</a></p>
+							</div>
 							
 							{if $conversation->isNewMessage($message->getDecoratedObject())}
 								<p class="newMessageBadge">{lang}wcf.message.new{/lang}</p>

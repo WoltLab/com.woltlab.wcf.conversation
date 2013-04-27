@@ -23,9 +23,7 @@
 {include file='header'}
 
 <header class="boxHeadline">
-	<hgroup>
-		<h1>{lang}wcf.conversation.message.add{/lang}</h1>
-	</hgroup>
+	<h1>{lang}wcf.conversation.message.add{/lang}</h1>
 </header>
 
 {include file='userNotice'}
@@ -75,10 +73,8 @@
 	</div>
 </form>
 
-<header class="boxHeadline">
-	<hgroup>
-		<h1>{lang}wcf.conversation.message.add.previousPosts{/lang}</h1>
-	</hgroup>
+<header class="boxHeadline boxSubHeadline">
+	<h2>{lang}wcf.conversation.message.add.previousPosts{/lang}</h2>
 </header>
 
 <div>
@@ -95,12 +91,12 @@
 									<div class="box32">
 										<a href="{link controller='User' object=$message->getUserProfile()}{/link}" class="framed">{@$message->getUserProfile()->getAvatar()->getImageTag(32)}</a>
 										
-										<hgroup class="messageHeadline">
-											<h2>
+										<div class="messageHeadline">
+											<p>
 												<span class="username"><a href="{link controller='User' object=$message->getUserProfile()}{/link}" class="userLink" data-user-id="{@$message->userID}">{$message->username}</a></span>
 												<a href="{link controller='Conversation' object=$conversation}messageID={@$message->messageID}{/link}#message{@$message->messageID}" class="permalink">{@$message->time|time}</a>
-											</h2>
-										</hgroup>
+											</p>
+										</div>
 									</div>
 								</header>
 								

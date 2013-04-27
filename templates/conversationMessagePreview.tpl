@@ -4,9 +4,9 @@
 	{/if}
 
 	<div>
-		<hgroup class="containerHeadline">
-			<h1><a href="{link controller='User' object=$message->getUserProfile()->getDecoratedObject()}{/link}">{$message->username}</a> <small>- {@$message->time|time}</small></h1> 
-		</hgroup>
+		<div class="containerHeadline">
+			<h3><a href="{link controller='User' object=$message->getUserProfile()->getDecoratedObject()}{/link}">{$message->username}</a> <small>- {@$message->time|time}</small></h3> 
+		</div>
 		
 		<div>{@$message->getExcerpt()|nl2br}</div>
 		
