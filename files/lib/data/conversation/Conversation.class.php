@@ -319,7 +319,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 		
 		if (!WCF::getSession()->getPermission('user.profile.cannotBeIgnored')) {
 			// check privacy setting
-			if ($user->canSendConversation == 2 || ($user->canSendConversation == 1 && WCF::getProfileHandler()->isFollowing($user->userID))) {
+			if ($user->canSendConversation == 2 || ($user->canSendConversation == 1 && WCF::getUserProfileHandler()->isFollowing($user->userID))) {
 				throw new UserInputException($field, 'doesNotAcceptConversation');
 			}
 			
