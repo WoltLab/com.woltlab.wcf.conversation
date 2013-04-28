@@ -9,6 +9,7 @@ use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\IClipboardAction;
 use wcf\data\IVisitableObjectAction;
 use wcf\system\clipboard\ClipboardHandler;
+use wcf\system\conversation\ConversationHandler;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
@@ -598,7 +599,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		));
 		
 		return array(
-			'template' => WCF::getTPL()->fetch('conversationListUnread')
+			'template' => WCF::getTPL()->fetch('conversationListUnread'),
+			'totalCount' => ConversationHandler::getInstance()->getUnreadConversationCount()
 		);
 	}
 	
