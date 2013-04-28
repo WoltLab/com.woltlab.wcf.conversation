@@ -1326,6 +1326,7 @@ WCF.Conversation.UserPanel = WCF.UserPanel.extend({
 	 */
 	init: function(showAllLink, addLink) {
 		this._addLink = addLink;
+		this._noItems = 'wcf.conversation.noMoreItems';
 		this._showAllLink = showAllLink;
 		
 		this._super('unreadConversations');

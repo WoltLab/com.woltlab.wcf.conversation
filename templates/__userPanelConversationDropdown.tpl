@@ -7,6 +7,7 @@
 			$(function() {
 				WCF.Language.addObject({
 					'wcf.conversation.add': '{lang}wcf.conversation.add{/lang}',
+					'wcf.conversation.noMoreItems': '{lang}wcf.conversation.noMoreItems{/lang}',
 					'wcf.conversation.showAll': '{lang}wcf.conversation.showAll{/lang}'
 				});
 				
