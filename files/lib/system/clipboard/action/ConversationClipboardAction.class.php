@@ -1,5 +1,6 @@
 <?php
 namespace wcf\system\clipboard\action;
+use wcf\data\clipboard\action\ClipboardAction;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\WCF;
 
@@ -33,7 +34,7 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 	/**
 	 * @see	wcf\system\clipboard\action\IClipboardAction::execute()
 	 */
-	public function execute(array $objects, $actionName) {
+	public function execute(array $objects, ClipboardAction $action) {
 		if ($this->conversations === null) {
 			// validate conversations
 			$this->validateParticipation($objects);
@@ -44,13 +45,13 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 			return null;
 		}
 		
-		$item = parent::execute($objects, $actionName);
+		$item = parent::execute($objects, $action);
 		
 		if ($item === null) {
 			return null;
 		}
 		
-		switch ($actionName) {
+		switch ($action->actionName) {
 			case 'assignLabel':
 				// check if user has labels
 				$sql = "SELECT	COUNT(*) AS count
