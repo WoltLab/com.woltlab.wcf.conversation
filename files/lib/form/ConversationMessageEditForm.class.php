@@ -86,6 +86,9 @@ class ConversationMessageEditForm extends ConversationAddForm {
 		if ($this->conversation->firstMessageID == $this->message->messageID) {
 			$this->isFirstMessage = true;
 		}
+		
+		// set attachment object id
+		$this->attachmentObjectID = $this->message->messageID;
 	}
 	
 	/**
