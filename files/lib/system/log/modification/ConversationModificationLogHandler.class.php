@@ -89,4 +89,14 @@ class ConversationModificationLogHandler extends ModificationLogHandler {
 	public function add(Conversation $conversation, $action, array $additionalData = array()) {
 		parent::_add('com.woltlab.wcf.conversation.conversation', $conversation->conversationID, $action, $additionalData);
 	}
+	
+	/**
+	 * Removes the conversation log entries of the conversations with the given
+	 * ids.
+	 * 
+	 * @param	array<integer>		$objectIDs
+	 */
+	public function remove(array $objectIDs) {
+		parent::_remove('com.woltlab.wcf.conversation.conversation', $objectIDs);
+	}
 }

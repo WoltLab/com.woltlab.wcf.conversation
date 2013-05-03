@@ -134,13 +134,13 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		
 		// delete conversations
 		parent::delete();
-	
+		
 		if (!empty($this->objectIDs)) {
 			// delete notifications
 			UserNotificationHandler::getInstance()->deleteNotifications('conversation', 'com.woltlab.wcf.conversation.notification', array(), $this->objectIDs);
 			
 			// remove modification logs
-			ConversationModificationLogHandler::getInstance()->_remove('com.woltlab.wcf.conversation', $this->objectIDs);
+			ConversationModificationLogHandler::getInstance()->remove($this->objectIDs);
 		}
 	}
 	
