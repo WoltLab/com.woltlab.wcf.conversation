@@ -35,5 +35,6 @@
 		<instruction type="coreObject">coreObject.xml</instruction>
 		<instruction type="userNotificationEvent">userNotificationEvent.xml</instruction>
 		<instruction type="userOption">userOption.xml</instruction>
+		<instruction type="eventListener">eventListener.xml</instruction>
 	</instructions>
 </package>
