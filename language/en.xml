@@ -64,7 +64,7 @@
 		<item name="wcf.conversation.quota.description"><![CDATA[{#$conversationCount/$maxConversationCount*100}% used ({#$conversationCount} of {#$maxConversationCount})]]></item>
 		<item name="wcf.conversation.replies"><![CDATA[Replies]]></item>
 		<item name="wcf.conversation.showAll"><![CDATA[Show All Conversations]]></item>
-		<item name="wcf.conversation.ownPosts"><![CDATA[Conversations Contains Own Messages]]></item>
+		<item name="wcf.conversation.ownPosts"><![CDATA[Conversations contains own messages]]></item>
 		<item name="wcf.conversation.gotoLastPost"><![CDATA[Jump to Last Message]]></item>
 		<item name="wcf.conversation.searchConversations"><![CDATA[Search Conversations]]></item>
 		<item name="wcf.conversation.participants.other"><![CDATA[and {if $conversation->participants - $participantSummaryCount == 1}one other{else}{#$conversation->participants-$participantSummaryCount} others{/if}]]></item>
