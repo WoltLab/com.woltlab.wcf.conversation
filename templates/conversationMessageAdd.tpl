@@ -110,7 +110,7 @@
 									{include file='attachments'}
 									
 									<footer class="messageOptions">
-										<nav>
+										<nav class="jsMobileNavigation buttonGroupNavigation">
 											<ul class="smallButtons buttonGroup"><li class="toTopLink"><a href="{@$__wcf->getAnchor('top')}" title="{lang}wcf.global.scrollUp{/lang}" class="button jsTooltip"><span class="icon icon16 icon-arrow-up"></span> <span class="invisible">{lang}wcf.global.scrollUp{/lang}</span></a></li></ul>
 										</nav>
 									</footer>

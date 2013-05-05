@@ -49,7 +49,7 @@
 							</div>
 							
 							<footer class="messageOptions">
-								<nav>
+								<nav class="jsMobileNavigation buttonGroupNavigation">
 									<ul class="smallButtons buttonGroup">{*
 										*}{if $message->canEdit()}<li><a href="{link controller='ConversationMessageEdit' id=$message->messageID}{/link}" title="{lang}wcf.conversation.message.edit{/lang}" class="button jsMessageEditButton"><span class="icon icon16 icon-pencil"></span> <span>{lang}wcf.global.button.edit{/lang}</span></a></li>{/if}{*
 										*}<li class="jsQuoteMessage" data-object-id="{@$message->messageID}" data-is-quoted="{if $__quoteFullQuote|isset && $message->messageID|in_array:$__quoteFullQuote}1{else}0{/if}"><a href="{link controller='ConversationMessageAdd' id=$conversation->conversationID quoteMessageID=$message->messageID}{/link}" title="{lang}wcf.message.quote.quoteMessage{/lang}" class="button jsTooltip{if $__quoteFullQuote|isset && $message->messageID|in_array:$__quoteFullQuote} active{/if}"><span class="icon icon16 icon-quote-left"></span> <span class="invisible">{lang}wcf.message.quote.quoteMessage{/lang}</span></a></li>{*
