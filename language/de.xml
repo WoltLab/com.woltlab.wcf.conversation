@@ -59,7 +59,7 @@
 		<item name="wcf.conversation.participants.error.doesNotAcceptConversation"><![CDATA[„{$errorData[username]}“ möchte nicht an Konversationen teilnehmen.]]></item>
 		<item name="wcf.conversation.participants.error.ignoresYou"><![CDATA[„{$errorData[username]}“ hat Sie blockiert.]]></item>
 		<item name="wcf.conversation.participants.removeParticipant"><![CDATA[Teilnehmer entfernen]]></item>
-		<item name="wcf.conversation.participants.removeParticipant.confirmMessage"><![CDATA[Möchten Sie „{$participant->username}“ wirklich aus dieser Konversation entfernen?]]></item>
+		<item name="wcf.conversation.participants.removeParticipant.confirmMessage"><![CDATA[Wollen Sie „{$participant->username}“ wirklich aus dieser Konversation entfernen?]]></item>
 		<item name="wcf.conversation.quota"><![CDATA[Speicherplatz]]></item>
 		<item name="wcf.conversation.quota.description"><![CDATA[{#$conversationCount/$maxConversationCount*100}% belegt ({#$conversationCount} von {#$maxConversationCount})]]></item>
 		<item name="wcf.conversation.replies"><![CDATA[Antworten]]></item>
