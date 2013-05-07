@@ -34,21 +34,29 @@
 				<categoryname>user.conversation</categoryname>
 				<optiontype>integer</optiontype>
 				<defaultvalue>10</defaultvalue>
+				<minvalue>1</minvalue>
+				<maxvalue>100</maxvalue>
 			</option>
 			<option name="user.conversation.maxConversations">
 				<categoryname>user.conversation</categoryname>
 				<optiontype>integer</optiontype>
 				<defaultvalue>100</defaultvalue>
+				<minvalue>1</minvalue>
+				<maxvalue>100000</maxvalue>
 			</option>
 			<option name="user.conversation.maxLabels">
 				<categoryname>user.conversation</categoryname>
 				<optiontype>integer</optiontype>
 				<defaultvalue>5</defaultvalue>
+				<minvalue>1</minvalue>
+				<maxvalue>10</maxvalue>
 			</option>
 			<option name="user.conversation.maxLength">
 				<categoryname>user.conversation</categoryname>
 				<optiontype>integer</optiontype>
 				<defaultvalue>10000</defaultvalue>
+				<admindefaultvalue>100000</admindefaultvalue>
+				<minvalue>1000</minvalue>
 			</option>
 			
 			<option name="user.conversation.canUploadAttachment">
@@ -63,6 +71,7 @@
 				<optiontype>fileSize</optiontype>
 				<defaultvalue>1000000</defaultvalue>
 				<options>module_attachment</options>
+				<minvalue>10000</minvalue>
 			</option>
 			<option name="user.conversation.allowedAttachmentExtensions">
 				<categoryname>user.conversation</categoryname>
@@ -82,6 +91,8 @@ pdf]]></defaultvalue>
 				<optiontype>integer</optiontype>
 				<defaultvalue>5</defaultvalue>
 				<options>module_attachment</options>
+				<minvalue>1</minvalue>
+				<maxvalue>100</maxvalue>
 			</option>
 			<!-- /user -->
 		</options>
