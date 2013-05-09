@@ -38,7 +38,7 @@
 							
 							{if $message->showSignature && $message->getUserProfile()->showSignature()}
 								<div class="messageSignature">
-									<div>{@$message->getUserProfile()->signatureCache}</div>
+									<div>{@$message->getUserProfile()->getSignature()}</div>
 								</div>
 							{/if}
 							
