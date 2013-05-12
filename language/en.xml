@@ -30,7 +30,7 @@
 		<item name="wcf.conversation.folder.outbox"><![CDATA[Started]]></item>
 		<item name="wcf.conversation.hideConversation"><![CDATA[Manage Participation]]></item>
 		<item name="wcf.conversation.hideConversation.leave"><![CDATA[Hide]]></item>
-		<item name="wcf.conversation.hideConversation.leave.description"><![CDATA[Conversation will be no longer listed as active conversation until a new message is written.]]></item>
+		<item name="wcf.conversation.hideConversation.leave.description"><![CDATA[Conversation will be no longer listed as an active conversation until a new message will be written.]]></item>
 		<item name="wcf.conversation.hideConversation.leavePermanently"><![CDATA[Leave]]></item>
 		<item name="wcf.conversation.hideConversation.leavePermanently.description"><![CDATA[Conversation will be left and you will no longer be listed as an active participant.]]></item>
 		<item name="wcf.conversation.hideConversation.restore"><![CDATA[Mark Conversation As Active]]></item>
@@ -53,8 +53,8 @@
 		<item name="wcf.conversation.participants.description"><![CDATA[Multiple participants should be separated with a comma.]]></item>
 		<item name="wcf.conversation.participants.error.mailboxIsFull"><![CDATA[{$errorData[username]} has reached the maximum conversation limit and cannot participate in a new one.]]></item>
 		<item name="wcf.conversation.participants.error.notFound"><![CDATA[Username “{$errorData[username]}” does not exist.]]></item>
-		<item name="wcf.conversation.participants.error.isAuthor"><![CDATA[You are already a participant of this conversation.]]></item>
-		<item name="wcf.conversation.participants.error.duplicate"><![CDATA[“{$errorData[username]}” is already a participant of this conversation.]]></item>
+		<item name="wcf.conversation.participants.error.isAuthor"><![CDATA[You are already a participant within this conversation.]]></item>
+		<item name="wcf.conversation.participants.error.duplicate"><![CDATA[“{$errorData[username]}” is already a participant within this conversation.]]></item>
 		<item name="wcf.conversation.participants.error.canNotUseConversation"><![CDATA[“{$errorData[username]}” is not allowed to participate in a conversation.]]></item>
 		<item name="wcf.conversation.participants.error.doesNotAcceptConversation"><![CDATA[“{$errorData[username]}” does not want to be added to conversations.]]></item>
 		<item name="wcf.conversation.participants.error.ignoresYou"><![CDATA[“{$errorData[username]}” is blocking you.]]></item>
@@ -64,7 +64,7 @@
 		<item name="wcf.conversation.quota.description"><![CDATA[{#$conversationCount/$maxConversationCount*100}% used ({#$conversationCount} of {#$maxConversationCount})]]></item>
 		<item name="wcf.conversation.replies"><![CDATA[Replies]]></item>
 		<item name="wcf.conversation.showAll"><![CDATA[Show All Conversations]]></item>
-		<item name="wcf.conversation.ownPosts"><![CDATA[Conversations contains own messages]]></item>
+		<item name="wcf.conversation.ownPosts"><![CDATA[Conversations contain own messages]]></item>
 		<item name="wcf.conversation.gotoLastPost"><![CDATA[Jump to Last Message]]></item>
 		<item name="wcf.conversation.searchConversations"><![CDATA[Search Conversations]]></item>
 		<item name="wcf.conversation.participants.other"><![CDATA[and {if $conversation->participants - $participantSummaryCount == 1}one other{else}{#$conversation->participants-$participantSummaryCount} others{/if}]]></item>
@@ -122,7 +122,7 @@
 {link controller='Conversation' object=$conversation encode=false forceFrontend=true}{/link}]]></item>
 		<item name="wcf.user.notification.com.woltlab.wcf.conversation"><![CDATA[Conversations]]></item>
 		<item name="wcf.user.notification.com.woltlab.wcf.conversation.notification.conversation"><![CDATA[New conversation]]></item>
-		<item name="wcf.user.notification.com.woltlab.wcf.conversation.message.notification.conversationMessage"><![CDATA[Reply to existing conversation]]></item>
+		<item name="wcf.user.notification.com.woltlab.wcf.conversation.message.notification.conversationMessage"><![CDATA[Reply to an existing conversation]]></item>
 	</category>
 	
 	<category name="wcf.user.option">
