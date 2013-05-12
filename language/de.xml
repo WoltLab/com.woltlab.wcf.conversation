@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/maelstrom/language.xsd" languagecode="de">
+	<category name="wcf.acp.group">
+		<item name="wcf.acp.group.option.category.user.conversation"><![CDATA[Konversationen]]></item>
+		<item name="wcf.acp.group.option.mod.conversation.canModerateConversation"><![CDATA[Kann Konversationen moderieren]]></item>
+		<item name="wcf.acp.group.option.user.conversation.canUseConversation"><![CDATA[Kann Konversationen benutzen]]></item>
+		<item name="wcf.acp.group.option.user.conversation.maxParticipants"><![CDATA[Maximale Anzahl Teilnehmer]]></item>
+		<item name="wcf.acp.group.option.user.conversation.maxParticipants.description"><![CDATA[Anzahl Teilnehmer, die einer Konversation hinzugefügt werden können.]]></item>
+		<item name="wcf.acp.group.option.user.conversation.maxConversations"><![CDATA[Maximale Anzahl Konversationen]]></item>
+		<item name="wcf.acp.group.option.user.conversation.maxConversations.description"><![CDATA[Anzahl aktiver Konversationen, an der ein Benutzer maximal teilnehmen darf.]]></item>
+		<item name="wcf.acp.group.option.user.conversation.maxLabels"><![CDATA[Maximale Anzahl Labels]]></item>
+		<item name="wcf.acp.group.option.user.conversation.maxLength"><![CDATA[Maximale Nachrichtenlänge]]></item>
+		<item name="wcf.acp.group.option.user.conversation.canUploadAttachment"><![CDATA[Kann Dateien anhängen]]></item>
+		<item name="wcf.acp.group.option.user.conversation.maxAttachmentSize"><![CDATA[Maximale Dateianhangsgröße]]></item>
+		<item name="wcf.acp.group.option.user.conversation.allowedAttachmentExtensions"><![CDATA[Erlaubte Dateiendungen]]></item>
+		<item name="wcf.acp.group.option.user.conversation.allowedAttachmentExtensions.description"><![CDATA[Eine Dateiendung pro Zeile]]></item>
+		<item name="wcf.acp.group.option.user.conversation.maxAttachmentCount"><![CDATA[Maximale Dateianhänge pro Nachricht]]></item>
+	</category>
+	
 	<category name="wcf.acp.option">
 		<item name="wcf.acp.option.category.message.conversation"><![CDATA[Konversationen]]></item>
 		<item name="wcf.acp.option.conversation_list_default_sort_field"><![CDATA[Sortierung]]></item>
@@ -7,6 +24,8 @@
 		<item name="wcf.acp.option.conversation_messages_per_page"><![CDATA[Nachrichten pro Seite]]></item>
 		<item name="wcf.acp.option.conversations_per_page"><![CDATA[Konversationen pro Seite]]></item>
 		<item name="wcf.acp.option.module_conversation"><![CDATA[Konversationen]]></item>
+		<item name="wcf.acp.option.conversation_reply_show_messages_max"><![CDATA[Nachrichten beim Antworten]]></item>
+		<item name="wcf.acp.option.conversation_reply_show_messages_max.description"><![CDATA[Anzahl der letzten Antworten auf eine Konversation, die beim Erstellen einer Antwort unter dem Eingabeformular angezeigt werden.]]></item>
 	</category>
 	
 	<category name="wcf.clipboard">

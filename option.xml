@@ -36,7 +36,7 @@
 				<categoryname>message.conversation</categoryname>
 				<optiontype>select</optiontype>
 				<defaultvalue>lastPostTime</defaultvalue>
-				<selectoptions><![CDATA[subject:wcf.conversation.subject
+				<selectoptions><![CDATA[subject:wcf.global.subject
 lastPostTime:wcf.conversation.lastPostTime]]></selectoptions>
 			</option>
 			<option name="conversation_list_default_sort_order">
