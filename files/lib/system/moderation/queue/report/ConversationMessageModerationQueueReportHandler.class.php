@@ -31,7 +31,7 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
 	/**
 	 * @see	wcf\system\moderation\queue\AbstractModerationQueueHandler::$objectType
 	 */
-	protected $objectType = 'com.woltlab.wbb.post';
+	protected $objectType = 'com.woltlab.wcf.conversation.message';
 	
 	/**
 	 * list of conversation message
