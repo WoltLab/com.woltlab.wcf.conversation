@@ -8,6 +8,7 @@ use wcf\system\conversation\ConversationHandler;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\NamedUserException;
 use wcf\system\exception\UserInputException;
+use wcf\system\message\quote\MessageQuoteManager;
 use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
 use wcf\util\HeaderUtil;
@@ -17,7 +18,7 @@ use wcf\util\StringUtil;
  * Shows the conversation form.
  * 
  * @author	Marcel Werk
- * @copyright	2009-2012 WoltLab GmbH
+ * @copyright	2009-2013 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	form
@@ -116,6 +117,9 @@ class ConversationAddForm extends MessageForm {
 		
 		// get max text length
 		$this->maxTextLength = WCF::getSession()->getPermission('user.conversation.maxLength');
+		
+		// quotes
+		MessageQuoteManager::getInstance()->readParameters();
 	}
 	
 	/**
@@ -128,6 +132,9 @@ class ConversationAddForm extends MessageForm {
 		if (isset($_POST['participantCanInvite'])) $this->participantCanInvite = (bool) $_POST['participantCanInvite'];
 		if (isset($_POST['participants'])) $this->participants = StringUtil::trim($_POST['participants']);
 		if (isset($_POST['invisibleParticipants'])) $this->invisibleParticipants = StringUtil::trim($_POST['invisibleParticipants']);
+		
+		// quotes
+		MessageQuoteManager::getInstance()->readFormParameters();
 	}
 	
 	/**
@@ -197,6 +204,9 @@ class ConversationAddForm extends MessageForm {
 		
 		$this->objectAction = new ConversationAction(array(), 'create', $conversationData);
 		$resultValues = $this->objectAction->executeAction();
+		
+		MessageQuoteManager::getInstance()->saved();
+		
 		$this->saved();
 		
 		// forward
@@ -221,6 +231,8 @@ class ConversationAddForm extends MessageForm {
 	 */
 	public function assignVariables() {
 		parent::assignVariables();
+		
+		MessageQuoteManager::getInstance()->assignVariables();
 		
 		WCF::getTPL()->assign(array(
 			'participantCanInvite' => $this->participantCanInvite,

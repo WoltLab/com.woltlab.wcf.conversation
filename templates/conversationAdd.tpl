@@ -13,6 +13,8 @@
 			
 			WCF.Message.Submit.registerButton('text', $('#messageContainer > .formSubmit > input[type=submit]'));
 			new WCF.Message.FormGuard();
+			
+			{include file='__messageQuoteManager' wysiwygSelector='text' supportPaste=true}
 		});
 		//]]>
 	</script>
