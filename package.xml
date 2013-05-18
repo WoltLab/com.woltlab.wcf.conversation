@@ -3,7 +3,7 @@
 	<packageinformation>
 		<packagename>User Conversation System</packagename>
 		<packagedescription>Private conversations between multiple users</packagedescription>
-		<version>1.0.0 Beta 1</version>
+		<version>2.0.0 Beta 1</version>
 		<date>2012-07-06</date>
 	</packageinformation>
 	
@@ -14,12 +14,12 @@
 	
 	<requiredpackages>
 		<requiredpackage minversion="2.0.0 Beta 1">com.woltlab.wcf</requiredpackage>
-		<requiredpackage minversion="1.0.0 Beta 1">com.woltlab.wcf.bbcode</requiredpackage>
-		<requiredpackage minversion="1.0.0 Beta 1">com.woltlab.wcf.message</requiredpackage>
+		<requiredpackage minversion="2.0.0 Beta 1">com.woltlab.wcf.bbcode</requiredpackage>
+		<requiredpackage minversion="2.0.0 Beta 1">com.woltlab.wcf.message</requiredpackage>
 		<requiredpackage minversion="2.0.0 Beta 1">com.woltlab.wcf.message.sidebar</requiredpackage>
-		<requiredpackage minversion="1.0.0 Beta 1">com.woltlab.wcf.search</requiredpackage>
-		<requiredpackage minversion="1.0.0 Beta 1">com.woltlab.wcf.moderation</requiredpackage>
-		<requiredpackage minversion="1.0.0 Beta 1">com.woltlab.wcf.user</requiredpackage>
+		<requiredpackage minversion="2.0.0 Beta 1">com.woltlab.wcf.search</requiredpackage>
+		<requiredpackage minversion="2.0.0 Beta 1">com.woltlab.wcf.moderation</requiredpackage>
+		<requiredpackage minversion="2.0.0 Beta 1">com.woltlab.wcf.user</requiredpackage>
 	</requiredpackages>
 	
 	<instructions type="install">
