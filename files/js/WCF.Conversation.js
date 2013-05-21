@@ -85,7 +85,6 @@ WCF.Conversation.EditorHandler = Class.extend({
 		switch (key) {
 			case 'labelIDs':
 				if (this._attributes[conversationID].labelIDs === undefined) {
-					// TODO: fetch label ids
 					this._attributes[conversationID].labelIDs = [ ];
 				}
 				
