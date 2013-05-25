@@ -153,7 +153,7 @@ WCF.Conversation.EditorHandler = Class.extend({
 			
 			case 'labelIDs':
 				var $labels = { };
-				$('#conversationLabelFilter > .dropdownMenu > li > a > span').each(function(index, span) {
+				WCF.Dropdown.getDropdownMenu('conversationLabelFilter').find('li > a > span').each(function(index, span) {
 					var $span = $(span);
 					
 					$labels[$span.data('labelID')] = {
