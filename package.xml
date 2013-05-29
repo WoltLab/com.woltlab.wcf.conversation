@@ -4,7 +4,7 @@
 		<packagename>User Conversation System</packagename>
 		<packagedescription>Private conversations between multiple users</packagedescription>
 		<version>2.0.0 Beta 1</version>
-		<date>2012-07-06</date>
+		<date>2013-05-29</date>
 	</packageinformation>
 	
 	<authorinformation>
@@ -30,17 +30,5 @@
 		<instruction type="userNotificationEvent">userNotificationEvent.xml</instruction>
 		<instruction type="userOption">userOption.xml</instruction>
 		<instruction type="eventListener">eventListener.xml</instruction>
-	</instructions>
-	
-	<instructions type="update" fromversion="1.0.0 Alpha 1">
-		<instruction type="file">files.tar</instruction>
-		<instruction type="template">templates.tar</instruction>
-		
-		<instruction type="eventListener">eventListener.xml</instruction>
-		<instruction type="objectType">objectType.xml</instruction>
-		<instruction type="option">option.xml</instruction>
-		<instruction type="userGroupOption">userGroupOption.xml</instruction>
-		<instruction type="userNotificationEvent">userNotificationEvent.xml</instruction>
-		<instruction type="userOption">userOption.xml</instruction>
 	</instructions>
 </package>
