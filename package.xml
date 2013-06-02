@@ -18,10 +18,10 @@
 	
 	<instructions type="install">
 		<instruction type="file">files.tar</instruction>
+		<instruction type="userGroupOption">userGroupOption.xml</instruction>
 		<instruction type="sql">install.sql</instruction>
 		<instruction type="template">templates.tar</instruction>
 		<instruction type="option">option.xml</instruction>
-		<instruction type="userGroupOption">userGroupOption.xml</instruction>
 		<instruction type="templateListener">templateListener.xml</instruction>
 		<instruction type="language">language/*.xml</instruction>
 		<instruction type="objectType">objectType.xml</instruction>
