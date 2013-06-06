@@ -68,8 +68,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		$conversation = call_user_func(array($this->className, 'create'), $data);
 		$conversationEditor = new ConversationEditor($conversation);
 		
-		// save participants
 		if (!$conversation->isDraft) {
+			// save participants
 			$conversationEditor->updateParticipants((!empty($this->parameters['participants']) ? $this->parameters['participants'] : array()), (!empty($this->parameters['invisibleParticipants']) ? $this->parameters['invisibleParticipants'] : array()));
 			
 			// add author
@@ -77,10 +77,6 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			
 			// update conversation count
 			UserStorageHandler::getInstance()->reset($conversation->getParticipantIDs(), 'conversationCount');
-			
-			// fire notification event
-			$notificationRecipients = array_merge((!empty($this->parameters['participants']) ? $this->parameters['participants'] : array()), (!empty($this->parameters['invisibleParticipants']) ? $this->parameters['invisibleParticipants'] : array()));
-			UserNotificationHandler::getInstance()->fireEvent('conversation', 'com.woltlab.wcf.conversation.notification', new ConversationUserNotificationObject($conversation), $notificationRecipients);
 			
 			// mark conversation as read for the author
 			$sql = "UPDATE	wcf".WCF_N."_conversation_to_user
@@ -117,6 +113,13 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		$conversationEditor->update(array(
 			'firstMessageID' => $resultValues['returnValues']->messageID
 		));
+		
+		$conversation->setFirstMessage($resultValues['returnValues']);
+		if (!$conversation->isDraft) {
+			// fire notification event
+			$notificationRecipients = array_merge((!empty($this->parameters['participants']) ? $this->parameters['participants'] : array()), (!empty($this->parameters['invisibleParticipants']) ? $this->parameters['invisibleParticipants'] : array()));
+			UserNotificationHandler::getInstance()->fireEvent('conversation', 'com.woltlab.wcf.conversation.notification', new ConversationUserNotificationObject($conversation), $notificationRecipients);
+		}
 		
 		return $conversation;
 	}

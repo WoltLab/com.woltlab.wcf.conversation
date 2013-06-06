@@ -87,6 +87,18 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	}
 	
 	/**
+	 * Returns a text-only version of this message.
+	 * 
+	 * @return	string
+	 */
+	public function getMailText() {
+		MessageParser::getInstance()->setOutputType('text/simplified-html');
+		$message = MessageParser::getInstance()->parse($this->message, $this->enableSmilies, $this->enableHtml, $this->enableBBCodes);
+		
+		return StringUtil::stripHTML($message);
+	}
+	
+	/**
 	 * Returns the conversation of this message.
 	 * 
 	 * @return	wcf\data\conversation\Conversation

@@ -134,11 +134,19 @@
 		<item name="wcf.user.notification.conversation.message.message"><![CDATA[Replied to the conversation “{$message->getTitle()}”.]]></item>
 		<item name="wcf.user.notification.conversation.message.title"><![CDATA[New Reply to a Conversation]]></item>
 		<item name="wcf.user.notification.conversation.message.mail"><![CDATA[{@$author->username} replied to the conversation "{@$message->getTitle()}":
-{link controller='Conversation' object=$message->getConversation() encode=false forceFrontend=true}messageID={@$message->messageID}{/link}#message{@$message->messageID}]]></item>
+{if $notificationType == 'instant'}
+---------------------------------
+{@$message->getMailText()} 
+---------------------------------
+{/if}{link controller='Conversation' object=$message->getConversation() encode=false forceFrontend=true}messageID={@$message->messageID}{/link}#message{@$message->messageID}]]></item>
 		<item name="wcf.user.notification.conversation.message"><![CDATA[Started the conversation “{$conversation->subject}”.]]></item>
 		<item name="wcf.user.notification.conversation.title"><![CDATA[New Conversation]]></item>
 		<item name="wcf.user.notification.conversation.mail"><![CDATA[{@$author->username} started the conversation "{@$conversation->subject}":
-{link controller='Conversation' object=$conversation encode=false forceFrontend=true}{/link}]]></item>
+{if $notificationType == 'instant'}
+---------------------------------
+{@$conversation->getFirstMessage()->getMailText()} 
+---------------------------------
+{/if}{link controller='Conversation' object=$conversation encode=false forceFrontend=true}{/link}]]></item>
 		<item name="wcf.user.notification.com.woltlab.wcf.conversation"><![CDATA[Conversations]]></item>
 		<item name="wcf.user.notification.com.woltlab.wcf.conversation.notification.conversation"><![CDATA[New conversation]]></item>
 		<item name="wcf.user.notification.com.woltlab.wcf.conversation.message.notification.conversationMessage"><![CDATA[Reply to existing conversation]]></item>

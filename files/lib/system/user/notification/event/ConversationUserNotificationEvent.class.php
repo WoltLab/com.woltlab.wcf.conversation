@@ -33,10 +33,11 @@ class ConversationUserNotificationEvent extends AbstractUserNotificationEvent {
 	/**
 	 * @see	wcf\system\user\notification\event\IUserNotificationEvent::getEmailMessage()
 	 */
-	public function getEmailMessage() {
+	public function getEmailMessage($notificationType = 'instant') {
 		return $this->getLanguage()->getDynamicVariable('wcf.user.notification.conversation.mail', array(
 			'conversation' => $this->userNotificationObject,
-			'author' => $this->author
+			'author' => $this->author,
+			'notificationType' => $notificationType
 		));
 	}
 	

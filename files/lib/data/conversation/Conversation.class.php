@@ -54,6 +54,12 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	const STATE_LEFT/*4DEAD*/ = 2;
 	
 	/**
+	 * first message object
+	 * @var wcf\data\conversation\message\ConversationMessage
+	 */
+	protected $firstMessage = null;
+	
+	/**
 	 * @see	wcf\system\request\IRouteController::getTitle()
 	 */
 	public function getTitle() {
@@ -152,6 +158,28 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 		}
 		
 		return true;
+	}
+	
+	/**
+	 * Gets the first message in this conversation.
+	 * 
+	 * @return	wcf\data\conversation\message\ConversationMessage
+	 */
+	public function getFirstMessage() {
+		if ($this->firstMessage === null) {
+			$this->firstMessage = new ConversationMessage($this->firstMessageID);
+		}
+		
+		return $this->firstMessage;
+	}
+	
+	/**
+	 * Sets the first message.
+	 * 
+	 * @param	wcf\data\conversation\message\ConversationMessage	$message
+	 */
+	public function setFirstMessage(ConversationMessage $message) {
+		$this->firstMessage = $message;
 	}
 	
 	/**
