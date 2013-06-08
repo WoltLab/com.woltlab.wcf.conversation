@@ -117,6 +117,23 @@ class ConversationAddForm extends MessageForm {
 			$this->participants = $user->username;
 		}
 		
+		if (isset($_REQUEST['subject'])) {
+			$subject = StringUtil::trim($_REQUEST['subject']);
+			
+			if (StringUtil::length($subject) <= 255) {
+				// search for censored words
+				if (ENABLE_CENSORSHIP) {
+					$result = \wcf\system\message\censorship\Censorship::getInstance()->test($subject);
+					if (!$result) {
+						$this->subject = $subject;
+					}
+				}
+				else {
+					$this->subject = $subject;
+				}
+			}
+		}
+		
 		// get max text length
 		$this->maxTextLength = WCF::getSession()->getPermission('user.conversation.maxLength');
 		
