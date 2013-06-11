@@ -42,7 +42,7 @@ class SearchResultConversationMessage extends ViewableConversationMessage implem
 	 * @see	wcf\data\conversation\message\ConversationMessage::getFormattedMessage()
 	 */
 	public function getFormattedMessage() {
-		return SearchResultTextParser::getInstance()->parse($this->getDecoratedObject()->getFormattedMessage());
+		return SearchResultTextParser::getInstance()->parse($this->getDecoratedObject()->getSimplifiedFormattedMessage());
 	}
 	
 	/**

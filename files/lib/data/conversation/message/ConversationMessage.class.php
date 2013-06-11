@@ -50,6 +50,16 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	}
 	
 	/**
+	 * Returns a simplified version of the formatted message.
+	 *
+	 * @return	string
+	 */
+	public function getSimplifiedFormattedMessage() {
+		MessageParser::getInstance()->setOutputType('text/simplified-html');
+		return MessageParser::getInstance()->parse($this->message, $this->enableSmilies, $this->enableHtml, $this->enableBBCodes);
+	}
+	
+	/**
 	 * Gets and assigns embedded attachments.
 	 *
 	 * @return	wcf\data\attachment\GroupedAttachmentList
@@ -80,10 +90,7 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	 * @return	string
 	 */
 	public function getExcerpt($maxLength = 255) {
-		MessageParser::getInstance()->setOutputType('text/simplified-html');
-		$message = MessageParser::getInstance()->parse($this->message, $this->enableSmilies, $this->enableHtml, $this->enableBBCodes);
-		
-		return StringUtil::truncateHTML($message, $maxLength);
+		return StringUtil::truncateHTML($this->getSimplifiedFormattedMessage(), $maxLength);
 	}
 	
 	/**
