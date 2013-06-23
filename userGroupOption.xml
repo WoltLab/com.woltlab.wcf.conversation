@@ -81,6 +81,7 @@ zip
 txt
 pdf]]></defaultvalue>
 				<options>module_attachment</options>
+				<wildcard><![CDATA[*]]></wildcard>
 			</option>
 			<option name="user.conversation.maxAttachmentCount">
 				<categoryname>user.conversation</categoryname>
