@@ -9,6 +9,7 @@ use wcf\data\IExtendedMessageQuickReplyAction;
 use wcf\data\IMessageInlineEditorAction;
 use wcf\data\IMessageQuoteAction;
 use wcf\system\attachment\AttachmentHandler;
+use wcf\system\bbcode\BBCodeHandler;
 use wcf\system\bbcode\BBCodeParser;
 use wcf\system\bbcode\PreParser;
 use wcf\system\exception\PermissionDeniedException;
@@ -293,9 +294,12 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 * @see	wcf\data\IMessageInlineEditorAction::beginEdit()
 	 */
 	public function beginEdit() {
+		BBCodeHandler::getInstance()->setAllowedBBCodes(explode(',', WCF::getSession()->getPermission('user.message.allowedBBCodes')));
+		
 		WCF::getTPL()->assign(array(
 			'defaultSmilies' => SmileyCache::getInstance()->getCategorySmilies(),
 			'message' => $this->message,
+			'permissionCanUseSmilies' => 'user.message.canUseSmilies',
 			'wysiwygSelector' => 'messageEditor'.$this->message->messageID
 		));
 		
