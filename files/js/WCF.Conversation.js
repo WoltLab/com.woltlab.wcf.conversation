@@ -196,6 +196,8 @@ WCF.Conversation.EditorHandler = Class.extend({
 				this._attributes[conversationID].isClosed = 0;
 			break;
 		}
+		
+		WCF.Clipboard.reload();
 	}
 });
 

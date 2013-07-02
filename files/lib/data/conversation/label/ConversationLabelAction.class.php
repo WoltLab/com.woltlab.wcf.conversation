@@ -2,6 +2,7 @@
 namespace wcf\data\conversation\label;
 use wcf\data\conversation\Conversation;
 use wcf\data\AbstractDatabaseObjectAction;
+use wcf\system\clipboard\ClipboardHandler;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\PermissionDeniedException;
@@ -14,7 +15,7 @@ use wcf\util\StringUtil;
  * Executes label-related actions.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2012 WoltLab GmbH
+ * @copyright	2001-2013 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation.label
@@ -251,6 +252,10 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 				}
 			}
 			WCF::getDB()->commitTransaction();
+			
+			if (!empty($this->parameters['conversationIDs'])) {
+				ClipboardHandler::getInstance()->unmark($this->parameters['conversationIDs'], ClipboardHandler::getInstance()->getObjectTypeID('com.woltlab.wcf.conversation.conversation'));
+			}
 		}
 		
 		return array(
