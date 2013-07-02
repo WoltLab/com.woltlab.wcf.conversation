@@ -10,6 +10,8 @@
 		$(function() {
 			WCF.Message.Submit.registerButton('text', $('#messageContainer > .formSubmit > input[type=submit]'));
 			new WCF.Message.FormGuard();
+			
+			new WCF.Message.UserMention('text');
 		});
 		//]]>
 	</script>

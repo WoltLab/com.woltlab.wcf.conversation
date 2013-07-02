@@ -22,5 +22,12 @@
 		</div>
 	</article>
 	
+	<script type="text/javascript">
+		//<![CDATA[
+		$(function() {
+			new WCF.Message.UserMention('text');
+		});
+		//]]>
+	</script>
 	{include file='wysiwyg'}
 </li>
