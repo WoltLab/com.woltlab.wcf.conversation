@@ -196,6 +196,8 @@ WCF.Conversation.EditorHandler = Class.extend({
 				this._attributes[conversationID].isClosed = 0;
 			break;
 		}
+		
+		WCF.Clipboard.reload();
 	}
 });
 
@@ -1057,7 +1059,7 @@ WCF.Conversation.Label.Manager = Class.extend({
 		this._deletedLabelID = 0;
 		this._link = link;
 		
-		this._labels = $('#conversationLabelFilter .dropdownMenu');
+		this._labels = WCF.Dropdown.getDropdownMenu('conversationLabelFilter');
 		$('#manageLabel').click($.proxy(this._click, this));
 		
 		this._notification = new WCF.System.Notification(WCF.Language.get('wcf.conversation.label.management.addLabel.success'));

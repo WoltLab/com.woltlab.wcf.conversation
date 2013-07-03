@@ -8,6 +8,7 @@ use wcf\data\conversation\ConversationParticipantList;
 use wcf\data\conversation\ViewableConversation;
 use wcf\data\modification\log\ConversationLogModificationLogList;
 use wcf\data\smiley\SmileyCache;
+use wcf\system\bbcode\BBCodeHandler;
 use wcf\system\breadcrumb\Breadcrumb;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\PermissionDeniedException;
@@ -235,8 +236,11 @@ class ConversationPage extends MultipleLinkPage {
 			'conversation' => $this->conversation,
 			'conversationID' => $this->conversationID,
 			'participants' => $this->participantList->getObjects(),
-			'defaultSmilies' => SmileyCache::getInstance()->getCategorySmilies()
+			'defaultSmilies' => SmileyCache::getInstance()->getCategorySmilies(),
+			'permissionCanUseSmilies' => 'user.message.canUseSmilies'
 		));
+		
+		BBCodeHandler::getInstance()->setAllowedBBCodes(explode(',', WCF::getSession()->getPermission('user.message.allowedBBCodes')));
 	}
 	
 	/**
@@ -249,8 +253,8 @@ class ConversationPage extends MultipleLinkPage {
 		$sql = "SELECT	COUNT(*) AS messages
 			FROM 	wcf".WCF_N."_conversation_message conversation_message
 			".$conditionBuilder;
-		$statement = WCF::getDB()->prepareStatement($sql);	
-		$statement->execute($conditionBuilder->getParameters());	
+		$statement = WCF::getDB()->prepareStatement($sql);
+		$statement->execute($conditionBuilder->getParameters());
 		$row = $statement->fetchArray();
 		$this->pageNo = intval(ceil($row['messages'] / $this->itemsPerPage));
 	}
@@ -284,8 +288,8 @@ class ConversationPage extends MultipleLinkPage {
 			FROM 		wcf".WCF_N."_conversation_message conversation_message
 			".$conditionBuilder."
 			ORDER BY 	time ASC";
-		$statement = WCF::getDB()->prepareStatement($sql, 1);	
-		$statement->execute($conditionBuilder->getParameters());	
+		$statement = WCF::getDB()->prepareStatement($sql, 1);
+		$statement->execute($conditionBuilder->getParameters());
 		$row = $statement->fetchArray();
 		if ($row !== false) {
 			HeaderUtil::redirect(LinkHandler::getInstance()->getLink('Conversation', array(
