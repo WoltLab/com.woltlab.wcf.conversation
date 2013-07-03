@@ -87,5 +87,33 @@
 			<languagevariable>wcf.user.usersOnline.location.ConversationMessageEditForm</languagevariable>
 		</type>
 		<!-- /user online locations -->
+		
+		<!-- importers -->
+		<type>
+			<name>com.woltlab.wcf.conversation</name>
+			<definitionname>com.woltlab.wcf.importer</definitionname>
+			<classname><![CDATA[wcf\system\importer\ConversationImporter]]></classname>
+		</type>
+		<type>
+			<name>com.woltlab.wcf.conversation.label</name>
+			<definitionname>com.woltlab.wcf.importer</definitionname>
+			<classname><![CDATA[wcf\system\importer\ConversationLabelImporter]]></classname>
+		</type>
+		<type>
+			<name>com.woltlab.wcf.conversation.message</name>
+			<definitionname>com.woltlab.wcf.importer</definitionname>
+			<classname><![CDATA[wcf\system\importer\ConversationMessageImporter]]></classname>
+		</type>
+		<type>
+			<name>com.woltlab.wcf.conversation.user</name>
+			<definitionname>com.woltlab.wcf.importer</definitionname>
+			<classname><![CDATA[wcf\system\importer\ConversationUserImporter]]></classname>
+		</type>
+		<type>
+			<name>com.woltlab.wcf.conversation.attachment</name>
+			<definitionname>com.woltlab.wcf.importer</definitionname>
+			<classname><![CDATA[wcf\system\importer\ConversationAttachmentImporter]]></classname>
+		</type>
+		<!-- /importers -->
 	</import>
 </data>
