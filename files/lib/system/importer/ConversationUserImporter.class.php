@@ -23,9 +23,9 @@ class ConversationUserImporter implements IImporter {
 		if (!$data['conversationID']) return 0;
 		$data['participantID'] = ImportHandler::getInstance()->getNewID('com.woltlab.wcf.user', $data['participantID']);
 		
-		$sql = "INSERT INTO		wcf".WCF_N."_conversation_to_user
-						(conversationID, participantID, hideConversation, isInvisible, lastVisitTime)
-			VALUES			(?, ?, ?)";
+		$sql = "INSERT IGNORE INTO		wcf".WCF_N."_conversation_to_user
+							(conversationID, participantID, hideConversation, isInvisible, lastVisitTime)
+			VALUES				(?, ?, ?, ?, ?)";
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute(array(
 			$data['conversationID'],
@@ -37,11 +37,11 @@ class ConversationUserImporter implements IImporter {
 		
 		// save labels
 		if ($data['participantID'] && !empty($data['labelIDs'])) {
-			$sql = "INSERT INTO		wcf".WCF_N."_conversation_label_to_object
-							(labelID, conversationID)
-				VALUES			(?, ?)";
+			$sql = "INSERT IGNORE INTO		wcf".WCF_N."_conversation_label_to_object
+								(labelID, conversationID)
+				VALUES				(?, ?)";
 			$statement = WCF::getDB()->prepareStatement($sql);
-			foreach ($data['labelIDs'] as $labelIDs) {
+			foreach ($data['labelIDs'] as $labelID) {
 				$labelID = ImportHandler::getInstance()->getNewID('com.woltlab.wcf.conversation.label', $labelID);
 				if ($labelID) $statement->execute(array($labelID, $data['conversationID']));
 			}
