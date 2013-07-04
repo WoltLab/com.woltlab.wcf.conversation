@@ -24,7 +24,7 @@ class ConversationLabelImporter implements IImporter {
 			'data' => $data		
 		));
 		$returnValues = $action->executeAction();
-		$newID = $returnValues['returnValues']->label;
+		$newID = $returnValues['returnValues']->labelID;
 		
 		ImportHandler::getInstance()->saveNewID('com.woltlab.wcf.conversation.label', $oldID, $newID);
 		
