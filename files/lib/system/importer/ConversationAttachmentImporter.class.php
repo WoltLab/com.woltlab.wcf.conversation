@@ -27,20 +27,17 @@ class ConversationAttachmentImporter extends AbstractAttachmentImporter {
 	/**
 	 * @see wcf\system\importer\IImporter::import()
 	 */
-	public function import($oldID, array $data) {
+	public function import($oldID, array $data, array $additionalData = array()) {
 		$data['objectID'] = ImportHandler::getInstance()->getNewID('com.woltlab.wcf.conversation.message', $data['objectID']);
 		if (!$data['objectID']) return 0;
 		
 		$attachmentID = parent::import($oldID, $data);
 		if ($attachmentID && $attachmentID != $oldID) {
 			// fix embedded attachments
-			$message = new ConversationMessage($data['objectID']);
+			$messageObj = new ConversationMessage($data['objectID']);
 			
-			if (StringUtil::indexOfIgnoreCase($message->message, '[attach]'.$oldID.'[/attach]') !== false || StringUtil::indexOfIgnoreCase($message->message, '[attach='.$oldID.']') !== false) {
-				$newMessage = StringUtil::replaceIgnoreCase('[attach]'.$oldID.'[/attach]', '[attach]'.$attachmentID.'[/attach]', $message->message);
-				$newMessage = StringUtil::replaceIgnoreCase('[attach='.$oldID.']', '[attach='.$attachmentID.']', $newMessage);
-				
-				$editor = new ConversationMessageEditor($message);
+			if (($newMessage = $this->fixEmbeddedAttachments($messageObj->message, $oldID, $attachmentID)) !== false) {
+				$editor = new ConversationMessageEditor($messageObj);
 				$editor->update(array(
 					'message' => $newMessage	
 				));
