@@ -125,6 +125,14 @@
 		<item name="wcf.conversation.log.conversation.removeParticipant"><![CDATA[Hat folgende Teilnehmer entfernt: <a href="{link controller='User' id=$additionalData[userID] title=$additionalData[username]}{/link}" class="userLink" data-user-id="{@$additionalData[userID]}">{$additionalData[username]}</a>]]></item>
 	</category>
 	
+	<category name="wcf.acp.dataImport">
+		<item name="wcf.acp.dataImport.data.com.woltlab.wcf.conversation"><![CDATA[Konversationen]]></item>
+		<item name="wcf.acp.dataImport.data.com.woltlab.wcf.conversation.label"><![CDATA[Labels]]></item>
+		<item name="wcf.acp.dataImport.data.com.woltlab.wcf.conversation.message"><![CDATA[Nachrichten]]></item>
+		<item name="wcf.acp.dataImport.data.com.woltlab.wcf.conversation.user"><![CDATA[Teilnehmer]]></item>
+		<item name="wcf.acp.dataImport.data.com.woltlab.wcf.conversation.attachment"><![CDATA[Dateianhänge]]></item>
+	</category>
+	
 	<category name="wcf.moderation">
 		<item name="wcf.moderation.type.com.woltlab.wcf.conversation.message"><![CDATA[Konversation]]></item>
 	</category>
