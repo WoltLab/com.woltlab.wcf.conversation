@@ -22,7 +22,7 @@
 		</div>
 	</article>
 	
-	<script type="text/javascript">
+	<script>
 		//<![CDATA[
 		$(function() {
 			new WCF.Message.UserMention('text');

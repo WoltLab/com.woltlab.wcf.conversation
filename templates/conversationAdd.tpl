@@ -5,7 +5,7 @@
 	
 	{include file='headInclude'}
 	
-	<script type="text/javascript">
+	<script>
 		//<![CDATA[
 		$(function() {
 			new WCF.Search.User('#participants', null, false, [ ], true);
