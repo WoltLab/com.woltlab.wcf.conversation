@@ -1,16 +1,15 @@
 <?php
 namespace wcf\data\conversation;
-use wcf\system\database\util\PreparedStatementConditionBuilder;
-
 use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\DatabaseObjectEditor;
+use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\WCF;
 
 /**
  * Extends the conversation object with functions to create, update and delete conversations.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2012 WoltLab GmbH
+ * @copyright	2001-2013 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation
