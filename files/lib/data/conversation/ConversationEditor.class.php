@@ -143,8 +143,8 @@ class ConversationEditor extends DatabaseObjectEditor {
 		$sql = "SELECT		participantID AS userID, hideConversation, username
 			FROM		wcf".WCF_N."_conversation_to_user
 			WHERE		conversationID = ?
-					participantID <> ?
-					isInvisible = 0
+					AND participantID <> ?
+					AND isInvisible = 0
 			ORDER BY	username";
 		$statement = WCF::getDB()->prepareStatement($sql, 5);
 		$statement->execute(array($this->conversationID, $this->userID));
