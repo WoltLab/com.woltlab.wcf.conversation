@@ -25,6 +25,7 @@ DROP TABLE IF EXISTS wcf1_conversation_to_user;
 CREATE TABLE wcf1_conversation_to_user (
 	conversationID INT(10) NOT NULL,
 	participantID INT(10),
+	username VARCHAR(255) NOT NULL DEFAULT '',
 	hideConversation TINYINT(1) NOT NULL DEFAULT 0,
 	isInvisible TINYINT(1) NOT NULL DEFAULT 0,
 	lastVisitTime INT(10) NOT NULL DEFAULT 0,

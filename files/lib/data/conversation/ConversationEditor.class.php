@@ -1,5 +1,7 @@
 <?php
 namespace wcf\data\conversation;
+use wcf\system\database\util\PreparedStatementConditionBuilder;
+
 use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\DatabaseObjectEditor;
 use wcf\system\WCF;
@@ -55,17 +57,37 @@ class ConversationEditor extends DatabaseObjectEditor {
 	 * @param	array<integer>	$invisibleParticipantIDs
 	 */
 	public function updateParticipants(array $participantIDs, array $invisibleParticipantIDs = array()) {
+		$usernames = array();
+		if (!empty($participantIDs) || !empty($invisibleParticipantIDs)) {
+			$conditions = new PreparedStatementConditionBuilder();
+			$conditions->add("userID IN (?)", array(array_merge($participantIDs, $invisibleParticipantIDs)));
+			
+			$sql = "SELECT	userID, username
+				FROM	wcf".WCF_N."_user
+				".$conditions;
+			$statement = WCF::getDB()->prepareStatement($sql);
+			$statement->execute($conditions->getParameters());
+			while ($row = $statement->fetchArray()) {
+				$usernames[$row['userID']] = $row['username'];
+			}
+		}
+		
 		if (!empty($participantIDs)) {
 			WCF::getDB()->beginTransaction();
 			$sql = "INSERT INTO		wcf".WCF_N."_conversation_to_user
-							(conversationID, participantID, isInvisible)
-				VALUES			(?, ?, ?)
+							(conversationID, participantID, username, isInvisible)
+				VALUES			(?, ?, ?, ?)
 				ON DUPLICATE KEY
 				UPDATE			hideConversation = 0";
 			$statement = WCF::getDB()->prepareStatement($sql);
 			
 			foreach ($participantIDs as $userID) {
-				$statement->execute(array($this->conversationID, $userID, 0));
+				$statement->execute(array(
+					$this->conversationID,
+					$userID,
+					$usernames[$userID],
+					0
+				));
 			}
 			WCF::getDB()->commitTransaction();
 		}
@@ -73,12 +95,17 @@ class ConversationEditor extends DatabaseObjectEditor {
 		if (!empty($invisibleParticipantIDs)) {
 			WCF::getDB()->beginTransaction();
 			$sql = "INSERT INTO		wcf".WCF_N."_conversation_to_user
-							(conversationID, participantID, isInvisible)
-				VALUES			(?, ?, ?)";
+							(conversationID, participantID, username, isInvisible)
+				VALUES			(?, ?, ?, ?)";
 			$statement = WCF::getDB()->prepareStatement($sql);
 			
 			foreach ($invisibleParticipantIDs as $userID) {
-				$statement->execute(array($this->conversationID, $userID, 1));
+				$statement->execute(array(
+					$this->conversationID,
+					$userID,
+					$usernames[$userID],
+					1
+				));
 			}
 			WCF::getDB()->commitTransaction();
 		}
@@ -114,14 +141,12 @@ class ConversationEditor extends DatabaseObjectEditor {
 	 */
 	public function updateParticipantSummary() {
 		$users = array();
-		$sql = "SELECT		conversation_to_user.participantID AS userID, conversation_to_user.hideConversation, user_table.username
-			FROM		wcf".WCF_N."_conversation_to_user conversation_to_user
-			LEFT JOIN	wcf".WCF_N."_user user_table
-			ON		(user_table.userID = conversation_to_user.participantID)
-			WHERE		conversation_to_user.conversationID = ?
-					AND conversation_to_user.participantID <> ?
-					AND conversation_to_user.isInvisible = 0
-			ORDER BY	user_table.username";
+		$sql = "SELECT		participantID AS userID, hideConversation, username
+			FROM		wcf".WCF_N."_conversation_to_user
+			WHERE		conversationID = ?
+					participantID <> ?
+					isInvisible = 0
+			ORDER BY	username";
 		$statement = WCF::getDB()->prepareStatement($sql, 5);
 		$statement->execute(array($this->conversationID, $this->userID));
 		while ($row = $statement->fetchArray()) {
