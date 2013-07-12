@@ -5,8 +5,8 @@
 	
 	{include file='headInclude'}
 	
-	<script type="text/javascript" src="{@$__wcf->getPath()}js/WCF.Conversation{if !ENABLE_DEBUG_MODE}.min{/if}.js?v={@$__wcfVersion}"></script>
-	<script type="text/javascript">
+	<script src="{@$__wcf->getPath()}js/WCF.Conversation{if !ENABLE_DEBUG_MODE}.min{/if}.js?v={@$__wcfVersion}"></script>
+	<script>
 		//<![CDATA[
 		$(function() {
 			{include file='__messageQuoteManager' wysiwygSelector='text' supportPaste=true}

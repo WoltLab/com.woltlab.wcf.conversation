@@ -28,8 +28,9 @@
 			font-size: @wcfSmallFontSize;
 		}
 		
-		&.conversationLeft {
-			> div > a > img {
+		&.conversationLeft > div {
+			> a > img,
+			> span > img {
 				.grayscale;
 			}
 		}
@@ -37,7 +38,8 @@
 }
 
 .conversationLeft .userLink,
-.conversationLeft.userLink {
+.conversationLeft.userLink,
+.conversationLeft p > span {
 	text-decoration: line-through;
 }
 

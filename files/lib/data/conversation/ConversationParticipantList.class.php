@@ -1,5 +1,7 @@
 <?php 
 namespace wcf\data\conversation;
+use wcf\data\user\User;
+use wcf\data\user\UserProfile;
 use wcf\data\user\UserProfileList;
 use wcf\system\WCF;
 
@@ -7,13 +9,19 @@ use wcf\system\WCF;
  * Represents a list of conversation participants.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2012 WoltLab GmbH
+ * @copyright	2001-2013 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation
  * @category	Community Framework
  */
 class ConversationParticipantList extends UserProfileList {
+	/**
+	 * conversation id
+	 * @var	integer
+	 */
+	public $conversationID = 0;
+	
 	/**
 	 * @see	wcf\data\DatabaseObjectList::$sqlLimit
 	 */
@@ -28,6 +36,7 @@ class ConversationParticipantList extends UserProfileList {
 	public function __construct($conversationID, $userID = 0, $isAuthor = false) {
 		parent::__construct();
 		
+		$this->conversationID = $conversationID;
 		$this->getConditionBuilder()->add('conversation_to_user.conversationID = ?', array($conversationID));
 		if (!$isAuthor) {
 			if ($userID) {
@@ -72,6 +81,28 @@ class ConversationParticipantList extends UserProfileList {
 		$statement->execute($this->getConditionBuilder()->getParameters());
 		while ($row = $statement->fetchArray()) {
 			$this->objectIDs[] = $row['objectID'];
+		}
+	}
+	
+	/**
+	 * @see	wcf\data\user\UserProfileList::readObjects()
+	 */
+	public function readObjects() {
+		parent::readObjects();
+		
+		// check for deleted users
+		$sql = "SELECT	username
+			FROM	wcf".WCF_N."_conversation_to_user
+			WHERE	conversationID = ?
+				AND participantID IS NULL";
+		$statement = WCF::getDB()->prepareStatement($sql);
+		$statement->execute(array($this->conversationID));
+		$i = 0;
+		while ($row = $statement->fetchArray()) {
+			// create fake user profiles
+			$user = new User(null, array('userID' => 0, 'username' => $row['username']));
+			$this->objects['x'.++$i] = new UserProfile($user);
+			$this->indexToObject[] = 'x'.$i;
 		}
 	}
 }
