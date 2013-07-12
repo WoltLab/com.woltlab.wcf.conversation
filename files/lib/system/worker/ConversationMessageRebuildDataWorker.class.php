@@ -1,0 +1,52 @@
+<?php
+namespace wcf\system\worker;
+use wcf\system\search\SearchIndexManager;
+
+/**
+ * Worker implementation for updating conversation messages.
+ * 
+ * @author	Marcel Werk
+ * @copyright	2001-2013 WoltLab GmbH
+ * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
+ * @package	com.woltlab.wcf
+ * @subpackage	system.worker
+ * @category	Community Framework
+ */
+class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker {
+	/**
+	 * @see	wcf\system\worker\AbstractRebuildDataWorker::$objectListClassName
+	 */
+	protected $objectListClassName = 'wcf\data\conversation\message\ConversationMessageList';
+	
+	/**
+	 * @see	wcf\system\worker\AbstractWorker::$limit
+	 */
+	protected $limit = 500;
+	
+	/**
+	 * @see	wcf\system\worker\AbstractRebuildDataWorker::initObjectList
+	 */
+	protected function initObjectList() {
+		parent::initObjectList();
+		
+		$this->objectList->sqlOrderBy = 'conversation_message.messageID';
+		$this->objectList->sqlSelects = 'conversation.subject';
+		$this->objectList->sqlJoins = 'LEFT JOIN wcf'.WCF_N.'_conversation conversation ON (conversation.firstMessageID = conversation_message.messageID)';
+	}
+	
+	/**
+	 * @see	wcf\system\worker\IWorker::execute()
+	 */
+	public function execute() {
+		parent::execute();
+		
+		if (!$this->loopCount) {
+			// reset search index
+			SearchIndexManager::getInstance()->reset('com.woltlab.wcf.conversation.message');
+		}
+		
+		foreach ($this->objectList as $message) {
+			SearchIndexManager::getInstance()->add('com.woltlab.wcf.conversation.message', $message->messageID, $message->message, ($message->subject ?: ''), $message->time, $message->userID, $message->username);
+		}
+	}
+}
