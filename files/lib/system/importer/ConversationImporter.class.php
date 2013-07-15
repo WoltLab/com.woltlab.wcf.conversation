@@ -21,8 +21,10 @@ class ConversationImporter implements IImporter {
 		$data['userID'] = ImportHandler::getInstance()->getNewID('com.woltlab.wcf.user', $data['userID']);
 		
 		// check existing conversation
-		$existingConversation = new Conversation($oldID);
-		if (!$existingConversation->conversationID) $data['conversationID'] = $oldID;
+		if (is_numeric($oldID)) {
+			$existingConversation = new Conversation($oldID);
+			if (!$existingConversation->conversationID) $data['conversationID'] = $oldID;
+		}
 		
 		$conversation = ConversationEditor::create($data);
 		
