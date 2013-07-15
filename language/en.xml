@@ -30,7 +30,9 @@
 	
 	<category name="wcf.acp.rebuildData">
 		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation"><![CDATA[TODO: Konversationen aktualisieren]]></item>
+		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.description"><![CDATA[TODO: Aktualisiert Zähler der Konversationen]]></item>
 		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message"><![CDATA[TODO: Konversationsnachrichten aktualisieren]]></item>
+		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message.description"><![CDATA[TODO: Aktualisiert den Suchindex für Konversationsnachrichten]]></item>
 	</category>
 	
 	<category name="wcf.clipboard">
