@@ -59,7 +59,7 @@ CREATE TABLE wcf1_conversation_label (
 	labelID INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	userID INT(10) NOT NULL,
 	label VARCHAR(80) NOT NULL DEFAULT '',
-	cssClassName VARCHAR(255) NOT NULL
+	cssClassName VARCHAR(255) NOT NULL DEFAULT ''
 );
 
 DROP TABLE IF EXISTS wcf1_conversation_label_to_object;
