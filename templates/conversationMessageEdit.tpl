@@ -103,6 +103,7 @@
 				{/if}
 				
 				<dl>
+					<dt></dt>
 					<dd>
 						<label><input type="checkbox" name="participantCanInvite" id="participantCanInvite" value="1"{if $participantCanInvite} checked="checked"{/if} /> {lang}wcf.conversation.participantCanInvite{/lang}</label>
 					</dd>

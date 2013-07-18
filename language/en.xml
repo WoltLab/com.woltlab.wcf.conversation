@@ -28,6 +28,13 @@
 		<item name="wcf.acp.option.conversation_reply_show_messages_max.description"><![CDATA[Number of previous messages displayed on extended reply form.]]></item>
 	</category>
 	
+	<category name="wcf.acp.rebuildData">
+		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation"><![CDATA[TODO: Konversationen aktualisieren]]></item>
+		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.description"><![CDATA[TODO: Aktualisiert Zähler der Konversationen]]></item>
+		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message"><![CDATA[TODO: Konversationsnachrichten aktualisieren]]></item>
+		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message.description"><![CDATA[TODO: Aktualisiert den Suchindex für Konversationsnachrichten]]></item>
+	</category>
+	
 	<category name="wcf.clipboard">
 		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.assignLabel"><![CDATA[Assign Label ({#$count})]]></item>
 		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.close"><![CDATA[Close ({#$count})]]></item>
