@@ -1,6 +1,7 @@
 <?php
 namespace wcf\data\conversation\message;
 use wcf\data\conversation\Conversation;
+use wcf\data\conversation\ConversationAction;
 use wcf\data\conversation\ConversationEditor;
 use wcf\data\smiley\SmileyCache;
 use wcf\data\AbstractDatabaseObjectAction;
@@ -167,18 +168,27 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	public function delete() {
 		$count = parent::delete();
 		
-		$attachmentMessageIDs = array();
+		$attachmentMessageIDs = $conversationIDs = array();
 		foreach ($this->objects as $message) {
+			if (!in_array($message->conversationID, $conversationIDs)) {
+				$conversationIDs[] = $message->conversationID;
+			}
+			
 			if ($message->attachments) {
 				$attachmentMessageIDs[] = $message->messageID;
-				
 			}
+		}
+		
+		// rebuild conversations
+		if (!empty($conversationIDs)) {
+			$conversationAction = new ConversationAction($conversationIDs, 'rebuild');
+			$conversationAction->executeAction();
 		}
 		
 		if (!empty($this->objectIDs)) {
 			// delete notifications
 			UserNotificationHandler::getInstance()->deleteNotifications('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', array(), $this->objectIDs);
-		
+			
 			// update search index
 			SearchIndexManager::getInstance()->delete('com.woltlab.wcf.conversation.message', $this->objectIDs);
 			

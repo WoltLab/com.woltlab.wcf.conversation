@@ -757,6 +757,49 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	}
 	
 	/**
+	 * Rebuilds the conversation data of the relevant conversations.
+	 */
+	public function rebuild() {
+		if (empty($this->objects)) {
+			$this->readObjects();
+		}
+		
+		// collect number of messages for each conversation
+		$conditionBuilder = new PreparedStatementConditionBuilder();
+		$conditionBuilder->add('conversation_message.conversationID IN (?)', array($this->objectIDs));
+		$sql = "SELECT		conversationID, COUNT(messageID) AS messages
+			FROM		wcf".WCF_N."_conversation_message conversation_message
+			".$conditionBuilder."
+			GROUP BY	conversationID";
+		$statement = WCF::getDB()->prepareStatement($sql);
+		$statement->execute($conditionBuilder->getParameters());
+		
+		$objectIDs = array();
+		while ($row = $statement->fetchArray()) {
+			if (!$row['messages']) {
+				continue;
+			}
+			$objectIDs[] = $row['conversationID'];
+			
+			$conversationEditor = new ConversationEditor(new Conversation(null, array(
+				'conversationID' => $row['conversationID']
+			)));
+			$conversationEditor->update(array(
+				'replies' => $row['messages'] - 1
+			));
+			$conversationEditor->updateFirstMessage();
+			$conversationEditor->updateLastMessage();
+		}
+		
+		// delete conversations without messages
+		$deleteConversationIDs = array_diff($this->objectIDs, $objectIDs);
+		if (!empty($deleteConversationIDs)) {
+			$conversationAction = new ConversationAction($deleteConversationIDs, 'delete');
+			$conversationAction->executeAction();
+		}
+	}
+	
+	/**
 	 * Adds conversation modification data.
 	 * 
 	 * @param	wcf\data\conversation\Conversation	$conversation

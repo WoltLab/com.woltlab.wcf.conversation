@@ -183,6 +183,45 @@ class ConversationEditor extends DatabaseObjectEditor {
 	}
 	
 	/**
+	 * Updates the first message of this conversation.
+	 */
+	public function updateFirstMessage() {
+		$sql = "SELECT		messageID
+			FROM		wcf".WCF_N."_conversation_message
+			WHERE		conversationID = ?
+			ORDER BY	time ASC";
+		$statement = WCF::getDB()->prepareStatement($sql, 1);
+		$statement->execute(array(
+			$this->conversationID
+		));
+		
+		$this->update(array(
+			'firstMessageID' => $statement->fetchColumn()
+		));
+	}
+	
+	/**
+	 * Updates the last message of this conversation.
+	 */
+	public function updateLastMessage() {
+		$sql = "SELECT		time, userID, username
+			FROM		wcf".WCF_N."_conversation_message
+			WHERE		conversationID = ?
+			ORDER BY	time DESC";
+		$statement = WCF::getDB()->prepareStatement($sql, 1);
+		$statement->execute(array(
+			$this->conversationID
+		));
+		$row = $statement->fetchArray();
+		
+		$this->update(array(
+			'lastPostTime' => $row['time'],
+			'lastPosterID' => $row['userID'],
+			'lastPoster' => $row['username']
+		));
+	}
+	
+	/**
 	 * Updates the participant summary of the given conversations.
 	 * 
 	 * @param	array<integer>		$conversationIDs
