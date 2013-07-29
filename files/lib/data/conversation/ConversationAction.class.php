@@ -767,7 +767,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		// collect number of messages for each conversation
 		$conditionBuilder = new PreparedStatementConditionBuilder();
 		$conditionBuilder->add('conversation_message.conversationID IN (?)', array($this->objectIDs));
-		$sql = "SELECT		conversationID, COUNT(messageID) AS messages
+		$sql = "SELECT		conversationID, COUNT(messageID) AS messages, SUM(attachments) AS attachments
 			FROM		wcf".WCF_N."_conversation_message conversation_message
 			".$conditionBuilder."
 			GROUP BY	conversationID";
@@ -785,6 +785,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 				'conversationID' => $row['conversationID']
 			)));
 			$conversationEditor->update(array(
+				'attachments' => $row['attachments'],
 				'replies' => $row['messages'] - 1
 			));
 			$conversationEditor->updateFirstMessage();
