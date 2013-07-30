@@ -7,7 +7,7 @@
 		<button data-type="cancel">{lang}wcf.global.button.cancel{/lang}</button>
 	</div>
 	
-	<script>
+	<script data-relocate="true">
 		//<![CDATA[
 		$(function() {
 			new WCF.Message.UserMention('messageEditor{@$message->messageID}');

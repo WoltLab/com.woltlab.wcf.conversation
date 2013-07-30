@@ -5,7 +5,7 @@
 	
 	{include file='headInclude'}
 	
-	<script>
+	<script data-relocate="true">
 		//<![CDATA[
 		$(function() {
 			WCF.Message.Submit.registerButton('text', $('#messageContainer > .formSubmit > input[type=submit]'));

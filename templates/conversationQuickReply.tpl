@@ -22,7 +22,7 @@
 		</div>
 	</article>
 	
-	<script>
+	<script data-relocate="true">
 		//<![CDATA[
 		$(function() {
 			new WCF.Message.UserMention('text');
