@@ -751,6 +751,9 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		
 		ConversationModificationLogHandler::getInstance()->removeParticipant($this->conversation->getDecoratedObject(), $this->parameters['userID']);
 		
+		// reset storage
+		UserStorageHandler::getInstance()->reset(array($this->parameters['userID']), 'unreadConversationCount');
+		
 		return array(
 			'userID' => $this->parameters['userID']
 		);
