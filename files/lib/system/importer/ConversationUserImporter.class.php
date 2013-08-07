@@ -23,9 +23,12 @@ class ConversationUserImporter implements IImporter {
 		if (!$data['conversationID']) return 0;
 		$data['participantID'] = ImportHandler::getInstance()->getNewID('com.woltlab.wcf.user', $data['participantID']);
 		
-		$sql = "INSERT IGNORE INTO		wcf".WCF_N."_conversation_to_user
+		$sql = "INSERT INTO			wcf".WCF_N."_conversation_to_user
 							(conversationID, participantID, hideConversation, isInvisible, lastVisitTime)
-			VALUES				(?, ?, ?, ?, ?)";
+			VALUES				(?, ?, ?, ?, ?)
+			ON DUPLICATE KEY UPDATE		hideConversation = IF(hideConversation > 0 AND hideConversation = VALUES(hideConversation),hideConversation,0),
+							isInvisible = IF(isInvisible AND VALUES(isInvisible),1,0),
+							lastVisitTime = GREATEST(lastVisitTime,VALUES(lastVisitTime))";
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute(array(
 			$data['conversationID'],
