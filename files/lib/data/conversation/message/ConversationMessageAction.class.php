@@ -25,6 +25,7 @@ use wcf\system\user\notification\object\ConversationMessageUserNotificationObjec
 use wcf\system\user\notification\UserNotificationHandler;
 use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\WCF;
+use wcf\util\MessageUtil;
 use wcf\util\StringUtil;
 
 /**
@@ -335,7 +336,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	public function save() {
 		$messageEditor = new ConversationMessageEditor($this->message);
 		$messageEditor->update(array(
-			'message' => PreParser::getInstance()->parse($this->parameters['data']['message'], explode(',', WCF::getSession()->getPermission('user.message.allowedBBCodes')))
+			'message' => PreParser::getInstance()->parse(MessageUtil::stripCrap($this->parameters['data']['message']), explode(',', WCF::getSession()->getPermission('user.message.allowedBBCodes')))
 		));
 		
 		// load new message
@@ -364,6 +365,8 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 * @see	wcf\data\IMessageQuickReplyAction::validateMessage()
 	 */
 	public function validateMessage(DatabaseObject $container, $message) {
+		$message = MessageUtil::stripCrap($message);
+		
 		if (StringUtil::length($message) > WCF::getSession()->getPermission('user.conversation.maxLength')) {
 			throw new UserInputException('message', WCF::getLanguage()->getDynamicVariable('wcf.message.error.tooLong', array('maxTextLength' => WCF::getSession()->getPermission('user.conversation.maxLength'))));
 		}
