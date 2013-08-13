@@ -12,7 +12,12 @@ use wcf\data\conversation\label\ConversationLabelAction;
  * @subpackage	system.importer
  * @category	Community Framework
  */
-class ConversationLabelImporter implements IImporter {
+class ConversationLabelImporter extends AbstractImporter {
+	/**
+	 * @see wcf\system\importer\AbstractImporter::$className
+	 */
+	protected $className = 'wcf\data\conversation\label\ConversationLabel';
+	
 	/**
 	 * @see wcf\system\importer\IImporter::import()
 	 */

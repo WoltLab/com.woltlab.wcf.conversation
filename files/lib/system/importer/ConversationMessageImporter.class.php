@@ -13,7 +13,12 @@ use wcf\data\conversation\message\ConversationMessageEditor;
  * @subpackage	system.importer
  * @category	Community Framework
  */
-class ConversationMessageImporter implements IImporter {
+class ConversationMessageImporter extends AbstractImporter {
+	/**
+	 * @see wcf\system\importer\AbstractImporter::$className
+	 */
+	protected $className = 'wcf\data\conversation\message\ConversationMessage';
+	
 	/**
 	 * @see wcf\system\importer\IImporter::import()
 	 */

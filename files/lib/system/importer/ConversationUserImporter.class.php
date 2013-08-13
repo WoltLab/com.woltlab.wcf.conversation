@@ -14,7 +14,7 @@ use wcf\system\WCF;
  * @subpackage	system.importer
  * @category	Community Framework
  */
-class ConversationUserImporter implements IImporter {
+class ConversationUserImporter extends AbstractImporter {
 	/**
 	 * @see wcf\system\importer\IImporter::import()
 	 */
