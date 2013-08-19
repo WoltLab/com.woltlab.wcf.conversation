@@ -31,7 +31,7 @@ class ConversationAttachmentImporter extends AbstractAttachmentImporter {
 		$data['objectID'] = ImportHandler::getInstance()->getNewID('com.woltlab.wcf.conversation.message', $data['objectID']);
 		if (!$data['objectID']) return 0;
 		
-		$attachmentID = parent::import($oldID, $data);
+		$attachmentID = parent::import($oldID, $data, $additionalData);
 		if ($attachmentID && $attachmentID != $oldID) {
 			// fix embedded attachments
 			$messageObj = new ConversationMessage($data['objectID']);
