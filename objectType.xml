@@ -121,12 +121,12 @@
 			<name>com.woltlab.wcf.conversation</name>
 			<definitionname>com.woltlab.wcf.rebuildData</definitionname>
 			<classname><![CDATA[wcf\system\worker\ConversationRebuildDataWorker]]></classname>
-			<nicevalue>-5</nicevalue>
 		</type>
 		<type>
 			<name>com.woltlab.wcf.conversation.message</name>
 			<definitionname>com.woltlab.wcf.rebuildData</definitionname>
 			<classname><![CDATA[wcf\system\worker\ConversationMessageRebuildDataWorker]]></classname>
+			<nicevalue>-5</nicevalue>
 		</type>
 		<!-- /rebuild data workers -->
 	</import>

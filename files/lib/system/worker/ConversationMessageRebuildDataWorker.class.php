@@ -1,6 +1,9 @@
 <?php
 namespace wcf\system\worker;
+use wcf\data\conversation\message\ConversationMessageEditor;
+use wcf\data\object\type\ObjectTypeCache;
 use wcf\system\search\SearchIndexManager;
+use wcf\system\WCF;
 
 /**
  * Worker implementation for updating conversation messages.
@@ -45,8 +48,26 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker {
 			SearchIndexManager::getInstance()->reset('com.woltlab.wcf.conversation.message');
 		}
 		
+		// prepare statements
+		$attachmentObjectType = ObjectTypeCache::getInstance()->getObjectTypeByName('com.woltlab.wcf.attachment.objectType', 'com.woltlab.wcf.conversation.message');
+		$sql = "SELECT		COUNT(*) AS attachments
+			FROM		wcf".WCF_N."_attachment
+			WHERE		objectTypeID = ?
+					AND objectID = ?";
+		$attachmentStatement = WCF::getDB()->prepareStatement($sql);
+		
 		foreach ($this->objectList as $message) {
 			SearchIndexManager::getInstance()->add('com.woltlab.wcf.conversation.message', $message->messageID, $message->message, ($message->subject ?: ''), $message->time, $message->userID, $message->username);
+			
+			$editor = new ConversationMessageEditor($message);
+			$data = array();
+			
+			// count attachments
+			$attachmentStatement->execute(array($attachmentObjectType->objectTypeID, $message->messageID));
+			$row = $attachmentStatement->fetchArray();
+			$data['attachments'] = $row['attachments'];
+			
+			$editor->update($data);
 		}
 	}
 }
