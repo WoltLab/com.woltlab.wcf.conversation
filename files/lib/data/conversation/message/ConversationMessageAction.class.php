@@ -26,7 +26,6 @@ use wcf\system\user\notification\UserNotificationHandler;
 use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\WCF;
 use wcf\util\MessageUtil;
-use wcf\util\StringUtil;
 
 /**
  * Executes conversation message-related actions.
@@ -367,7 +366,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	public function validateMessage(DatabaseObject $container, $message) {
 		$message = MessageUtil::stripCrap($message);
 		
-		if (StringUtil::length($message) > WCF::getSession()->getPermission('user.conversation.maxLength')) {
+		if (mb_strlen($message) > WCF::getSession()->getPermission('user.conversation.maxLength')) {
 			throw new UserInputException('message', WCF::getLanguage()->getDynamicVariable('wcf.message.error.tooLong', array('maxTextLength' => WCF::getSession()->getPermission('user.conversation.maxLength'))));
 		}
 		
