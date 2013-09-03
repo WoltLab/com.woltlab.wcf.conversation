@@ -601,9 +601,14 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			'conversations' => $conversationList->getObjects()
 		));
 		
+		$totalCount = ConversationHandler::getInstance()->getUnreadConversationCount();
+		if (count($conversationList) < $totalCount) {
+			UserStorageHandler::getInstance()->reset(array(WCF::getUser()->userID), 'unreadConversationCount');
+		}
+		
 		return array(
 			'template' => WCF::getTPL()->fetch('conversationListUnread'),
-			'totalCount' => ConversationHandler::getInstance()->getUnreadConversationCount()
+			'totalCount' => $totalCount
 		);
 	}
 	
