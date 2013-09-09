@@ -102,7 +102,7 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 		MessageParser::getInstance()->setOutputType('text/simplified-html');
 		$message = MessageParser::getInstance()->parse($this->message, $this->enableSmilies, $this->enableHtml, $this->enableBBCodes);
 		
-		return StringUtil::stripHTML($message);
+		return StringUtil::decodeHTML(StringUtil::stripHTML($message));
 	}
 	
 	/**
