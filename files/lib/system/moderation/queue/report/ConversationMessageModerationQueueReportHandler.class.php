@@ -24,6 +24,11 @@ use wcf\system\WCF;
  */
 class ConversationMessageModerationQueueReportHandler extends AbstractModerationQueueHandler implements IModerationQueueReportHandler {
 	/**
+	 * @see	wcf\system\moderation\queue\AbstractModerationQueueHandler::$className
+	 */
+	protected $className = 'wcf\data\conversation\message\ConversationMessage';
+	
+	/**
 	 * @see	wcf\system\moderation\queue\AbstractModerationQueueHandler::$definitionName
 	 */
 	protected $definitionName = 'com.woltlab.wcf.moderation.report';
