@@ -50,7 +50,7 @@
 
 {include file='header'}
 
-<header class="boxHeadline marginTop conversationHeadline">
+<header class="boxHeadline marginTop conversationHeadline labeledHeadline">
 	<h1><a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a>{if $conversation->isClosed} <span class="icon icon16 icon-lock jsTooltip jsIconLock" title="{lang}wcf.global.state.closed{/lang}"></span>{/if}</h1>
 	
 	{hascontent}
