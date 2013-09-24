@@ -146,6 +146,10 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	 * @return	boolean
 	 */
 	public function canAddParticipants() {
+		if ($this->isDraft) {
+			return false;
+		}
+		
 		// check permissions
 		if (WCF::getUser()->userID != $this->userID && !$this->participantCanInvite) {
 			return false;
