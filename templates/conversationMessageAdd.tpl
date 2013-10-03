@@ -30,9 +30,7 @@
 
 {include file='userNotice'}
 
-{if $errorField}
-	<p class="error">{lang}wcf.global.form.error{/lang}</p>
-{/if}
+{include file='formError'}
 
 <form id="messageContainer" class="jsFormGuard" method="post" action="{link controller='ConversationMessageAdd' id=$conversationID}{/link}">
 	<div class="container containerPadding marginTop">
@@ -72,6 +70,7 @@
 	<div class="formSubmit">
 		<input type="submit" value="{lang}wcf.global.button.submit{/lang}" accesskey="s" />
 		{include file='messageFormPreviewButton'}
+		{@SECURITY_TOKEN_INPUT_TAG}
 	</div>
 </form>
 
