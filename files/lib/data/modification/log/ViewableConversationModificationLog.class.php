@@ -7,9 +7,9 @@ use wcf\system\WCF;
 
 /**
  * Provides a viewable conversation modification log.
- *
+ * 
  * @author	Alexander Ebert
- * @copyright	2001-2012 WoltLab GmbH
+ * @copyright	2001-2013 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.modification.log
@@ -23,7 +23,7 @@ class ViewableConversationModificationLog extends DatabaseObjectDecorator {
 	
 	/**
 	 * user profile object
-	 * @var wcf\data\user\UserProfile
+	 * @var	wcf\data\user\UserProfile
 	 */
 	protected $userProfile = null;
 	
@@ -36,14 +36,14 @@ class ViewableConversationModificationLog extends DatabaseObjectDecorator {
 	
 	/**
 	 * Returns the profile object of the user who created the modification entry.
-	 *
+	 * 
 	 * @return	wcf\data\user\UserProfile
 	 */
 	public function getUserProfile() {
 		if ($this->userProfile === null) {
 			$this->userProfile = new UserProfile(new User(null, $this->getDecoratedObject()->data));
 		}
-	
+		
 		return $this->userProfile;
 	}
 }

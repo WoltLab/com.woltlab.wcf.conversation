@@ -55,7 +55,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	
 	/**
 	 * first message object
-	 * @var wcf\data\conversation\message\ConversationMessage
+	 * @var	wcf\data\conversation\message\ConversationMessage
 	 */
 	protected $firstMessage = null;
 	
@@ -103,14 +103,14 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	}
 	
 	/**
-	 * Gets a specific user conversation.
+	 * Returns a specific user conversation.
 	 * 
 	 * @param	integer		$conversationID
 	 * @param	integer		$userID
 	 * @return	wcf\data\conversation\ViewableConversation
 	 */
 	public static function getUserConversation($conversationID, $userID) {
-		$sql = "SELECT 		conversation_to_user.*, conversation.*
+		$sql = "SELECT		conversation_to_user.*, conversation.*
 			FROM		wcf".WCF_N."_conversation conversation
 			LEFT JOIN	wcf".WCF_N."_conversation_to_user conversation_to_user
 			ON		(conversation_to_user.participantID = ? AND conversation_to_user.conversationID = conversation.conversationID)
@@ -126,7 +126,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	}
 	
 	/**
-	 * Returns true, if the active user has the permission to read this conversation.
+	 * Returns true if the active user has the permission to read this conversation.
 	 * 
 	 * @return	boolean
 	 */
@@ -141,7 +141,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	}
 	
 	/**
-	 * Returns true, if current user can add new participants to this conversation.
+	 * Returns true if current user can add new participants to this conversation.
 	 * 
 	 * @return	boolean
 	 */
@@ -165,7 +165,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	}
 	
 	/**
-	 * Gets the first message in this conversation.
+	 * Returns the first message in this conversation.
 	 * 
 	 * @return	wcf\data\conversation\message\ConversationMessage
 	 */
@@ -187,7 +187,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	}
 	
 	/**
-	 * Gets a list of all participants.
+	 * Returns a list of the ids of all participants.
 	 * 
 	 * @param	boolean		$excludeLeftParticipants
 	 * @return	array<integer>
@@ -197,7 +197,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 		$conditions->add("conversationID = ?", array($this->conversationID));
 		if ($excludeLeftParticipants) $conditions->add("hideConversation <> ?", array(self::STATE_LEFT));
 		
-		$sql = "SELECT 		participantID
+		$sql = "SELECT		participantID
 			FROM		wcf".WCF_N."_conversation_to_user
 			".$conditions;
 		$statement = WCF::getDB()->prepareStatement($sql);
@@ -211,7 +211,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	}
 	
 	/**
-	 * Returns a list of participants usernames.
+	 * Returns a list of the usernames of all participants.
 	 * 
 	 * @return	array<string>
 	 */
@@ -232,7 +232,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	}
 	
 	/**
-	 * Returns true, if given user id (default: current user) is participant
+	 * Returns true if given user id (default: current user) is participant
 	 * of all given conversation ids.
 	 * 
 	 * @param	array<integer>		$conversationIDs

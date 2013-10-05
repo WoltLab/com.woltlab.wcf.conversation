@@ -91,7 +91,7 @@ class ViewableConversation extends DatabaseObjectDecorator {
 	}
 	
 	/**
-	 * Gets the number of pages in this conversation.
+	 * Returns the number of pages in this conversation.
 	 * 
 	 * @return	integer
 	 */

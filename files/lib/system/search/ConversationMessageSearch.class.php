@@ -18,7 +18,7 @@ use wcf\system\WCF;
 class ConversationMessageSearch extends AbstractSearchableObjectType {
 	/**
 	 * message data cache
-	 * @var	array
+	 * @var	array<wcf\data\conversation\message\SearchResultConversationMessage>
 	 */
 	public $messageCache = array();
 	

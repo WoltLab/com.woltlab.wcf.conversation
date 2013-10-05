@@ -163,7 +163,7 @@ class ConversationMessageAddForm extends MessageForm {
 		
 		// save message
 		$data = array(
-			'conversationID' => $this->conversationID,	
+			'conversationID' => $this->conversationID,
 			'message' => $this->text,
 			'time' => TIME_NOW,
 			'userID' => WCF::getUser()->userID,

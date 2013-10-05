@@ -82,7 +82,7 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	}
 	
 	/**
-	 * Gets a list of attachments.
+	 * Reads the list of attachments.
 	 */
 	public function readAttachments() {
 		if (MODULE_ATTACHMENT == 1 && !empty($this->attachmentObjectIDs)) {

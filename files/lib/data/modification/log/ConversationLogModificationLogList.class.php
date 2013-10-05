@@ -6,7 +6,7 @@ use wcf\system\WCF;
 
 /**
  * Represents a list of modification logs for conversation log page.
- *
+ * 
  * @author	Alexander Ebert
  * @copyright	2001-2012 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
@@ -73,7 +73,7 @@ class ConversationLogModificationLogList extends ModificationLogList {
 					user_table.email, user_table.enableGravatar, user_table.disableAvatar,
 					modification_log.*
 			FROM		wcf".WCF_N."_modification_log modification_log
-			LEFT JOIN 	wcf".WCF_N."_user user_table ON (user_table.userID = modification_log.userID)
+			LEFT JOIN	wcf".WCF_N."_user user_table ON (user_table.userID = modification_log.userID)
 			LEFT JOIN	wcf".WCF_N."_user_avatar user_avatar ON (user_avatar.avatarID = user_table.avatarID)		
 			WHERE		modification_log.objectTypeID = ?
 					AND modification_log.objectID = ?

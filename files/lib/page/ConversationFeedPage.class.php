@@ -20,7 +20,7 @@ class ConversationFeedPage extends AbstractFeedPage {
 	public $loginRequired = true;
 	
 	/**
-	 * @see wcf\page\IPage::readData()
+	 * @see	wcf\page\IPage::readData()
 	 */
 	public function readData() {
 		parent::readData();

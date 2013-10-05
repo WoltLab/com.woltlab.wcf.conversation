@@ -125,7 +125,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	}
 	
 	/**
-	 * @see	wcf\data\AbstractDatabaseObjectAction::delete()
+	 * @see	wcf\data\IDeleteAction::delete()
 	 */
 	public function delete() {
 		// deletes messages
@@ -265,7 +265,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			$conditionBuilder->add('notification_to_user.userID = ?', array(WCF::getUser()->userID));
 			$conditionBuilder->add('conversation_message.conversationID IN (?)', array($conversationIDs));
 			$conditionBuilder->add('conversation_message.time <= ?', array($this->parameters['visitTime']));
-				
+			
 			$sql = "SELECT		conversation_message.messageID
 				FROM		wcf".WCF_N."_conversation_message conversation_message,
 						wcf".WCF_N."_user_notification notification,
@@ -277,7 +277,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			while ($row = $statement->fetchArray()) {
 				$notificationObjectIDs[] = $row['messageID'];
 			}
-				
+			
 			if (!empty($notificationObjectIDs)) {
 				UserNotificationHandler::getInstance()->deleteNotifications('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', array(WCF::getUser()->userID), $notificationObjectIDs);
 			}
@@ -352,7 +352,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	}
 	
 	/**
-	 * Gets a preview of a message in a specific conversation.
+	 * Returns a preview of a message in a specific conversation.
 	 * 
 	 * @return	array
 	 */
@@ -581,9 +581,11 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	}
 	
 	/**
-	 * Does nothing.
+	 * Validates the 'getUnreadConversations' action.
 	 */
-	public function validateGetUnreadConversations() { }
+	public function validateGetUnreadConversations() {
+		// does nothing
+	}
 	
 	/**
 	 * Returns the last 5 unread conversations.
@@ -613,9 +615,11 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	}
 	
 	/**
-	 * Does nothing.
+	 * Validates the 'unmarkAll' action.
 	 */
-	public function validateUnmarkAll() { }
+	public function validateUnmarkAll() {
+		// does nothing
+	}
 	
 	/**
 	 * Unmarks all conversations.

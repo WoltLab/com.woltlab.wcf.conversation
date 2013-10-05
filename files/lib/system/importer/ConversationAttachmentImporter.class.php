@@ -7,7 +7,7 @@ use wcf\util\StringUtil;
 
 /**
  * Imports conversation attachments.
- *
+ * 
  * @author	Marcel Werk
  * @copyright	2001-2013 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
@@ -25,7 +25,7 @@ class ConversationAttachmentImporter extends AbstractAttachmentImporter {
 	}
 	
 	/**
-	 * @see wcf\system\importer\IImporter::import()
+	 * @see	wcf\system\importer\IImporter::import()
 	 */
 	public function import($oldID, array $data, array $additionalData = array()) {
 		$data['objectID'] = ImportHandler::getInstance()->getNewID('com.woltlab.wcf.conversation.message', $data['objectID']);
@@ -39,7 +39,7 @@ class ConversationAttachmentImporter extends AbstractAttachmentImporter {
 			if (($newMessage = $this->fixEmbeddedAttachments($messageObj->message, $oldID, $attachmentID)) !== false) {
 				$editor = new ConversationMessageEditor($messageObj);
 				$editor->update(array(
-					'message' => $newMessage	
+					'message' => $newMessage
 				));
 			}
 		}

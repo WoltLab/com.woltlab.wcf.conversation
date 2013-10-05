@@ -188,7 +188,7 @@ class ConversationPage extends MultipleLinkPage {
 		if ($this->objectList->getAttachmentList() !== null) {
 			$this->objectList->getAttachmentList()->setPermissions(array(
 				'canDownload' => true,
-				'canViewPreview' => true		
+				'canViewPreview' => true
 			));
 		}
 		
@@ -244,7 +244,7 @@ class ConversationPage extends MultipleLinkPage {
 		$conditionBuilder->add('time '.($this->sortOrder == 'ASC' ? '<=' : '>=').' ?', array($this->message->time));
 		
 		$sql = "SELECT	COUNT(*) AS messages
-			FROM 	wcf".WCF_N."_conversation_message conversation_message
+			FROM	wcf".WCF_N."_conversation_message conversation_message
 			".$conditionBuilder;
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute($conditionBuilder->getParameters());
@@ -257,9 +257,9 @@ class ConversationPage extends MultipleLinkPage {
 	 */
 	protected function goToLastPost() {
 		$sql = "SELECT		conversation_message.messageID
-			FROM 		wcf".WCF_N."_conversation_message conversation_message
+			FROM		wcf".WCF_N."_conversation_message conversation_message
 			".$this->objectList->getConditionBuilder()."
-			ORDER BY 	time ".($this->sortOrder == 'ASC' ? 'DESC' : 'ASC');
+			ORDER BY	time ".($this->sortOrder == 'ASC' ? 'DESC' : 'ASC');
 		$statement = WCF::getDB()->prepareStatement($sql, 1);	
 		$statement->execute($this->objectList->getConditionBuilder()->getParameters());	
 		$row = $statement->fetchArray();
@@ -278,9 +278,9 @@ class ConversationPage extends MultipleLinkPage {
 		$conditionBuilder->add('time > ?', array($this->conversation->lastVisitTime));
 		
 		$sql = "SELECT		conversation_message.messageID
-			FROM 		wcf".WCF_N."_conversation_message conversation_message
+			FROM		wcf".WCF_N."_conversation_message conversation_message
 			".$conditionBuilder."
-			ORDER BY 	time ASC";
+			ORDER BY	time ASC";
 		$statement = WCF::getDB()->prepareStatement($sql, 1);
 		$statement->execute($conditionBuilder->getParameters());
 		$row = $statement->fetchArray();

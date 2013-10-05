@@ -86,13 +86,13 @@ ALTER TABLE wcf1_conversation_label_to_object ADD FOREIGN KEY (labelID) REFERENC
 ALTER TABLE wcf1_conversation_label_to_object ADD FOREIGN KEY (conversationID) REFERENCES wcf1_conversation (conversationID) ON DELETE CASCADE;
 
 -- set default mod permissions
-INSERT IGNORE INTO 	wcf1_user_group_option_value
+INSERT IGNORE INTO	wcf1_user_group_option_value
 			(groupID, optionID, optionValue)
 SELECT			5, optionID, 1
 FROM			wcf1_user_group_option
 WHERE			optionName LIKE 'mod.conversation.%';
 
-INSERT IGNORE INTO 	wcf1_user_group_option_value
+INSERT IGNORE INTO	wcf1_user_group_option_value
 			(groupID, optionID, optionValue)
 SELECT			6, optionID, 1
 FROM			wcf1_user_group_option

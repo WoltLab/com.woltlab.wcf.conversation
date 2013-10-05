@@ -394,7 +394,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		$messageList->getConditionBuilder()->add("conversation_message.time > ?", array($lastMessageTime));
 		$messageList->sqlOrderBy = "conversation_message.time ".CONVERSATION_LIST_DEFAULT_SORT_ORDER;
 		$messageList->readObjects();
-	
+		
 		return $messageList;
 	}
 	

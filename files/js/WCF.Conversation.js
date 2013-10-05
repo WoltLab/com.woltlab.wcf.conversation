@@ -588,7 +588,7 @@ WCF.Conversation.Leave = Class.extend({
 	/**
 	 * Loads the dialog overlay.
 	 */
-	_loadDialog: function()  {
+	_loadDialog: function() {
 		this._proxy.setOption('data', {
 			actionName: 'getLeaveForm',
 			className: 'wcf\\data\\conversation\\ConversationAction',

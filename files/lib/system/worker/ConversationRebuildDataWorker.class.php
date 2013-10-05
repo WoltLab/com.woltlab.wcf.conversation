@@ -76,7 +76,7 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 		foreach ($this->objectList as $conversation) {
 			$editor = new ConversationEditor($conversation);
 			$data = array();
-				
+			
 			// get first post
 			$firstMessageStatement->execute(array($conversation->conversationID));
 			if (($row = $firstMessageStatement->fetchArray()) !== false) {
@@ -85,7 +85,7 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 				$data['userID'] = $row['userID'];
 				$data['username'] = $row['username'];
 			}
-				
+			
 			// get last post
 			$lastMessageStatement->execute(array($conversation->conversationID));
 			if (($row = $lastMessageStatement->fetchArray()) !== false) {
@@ -93,13 +93,13 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 				$data['lastPosterID'] = $row['userID'];
 				$data['lastPoster'] = $row['username'];
 			}
-				
+			
 			// get stats
 			$statsStatement->execute(array($conversation->conversationID));
 			$row = $statsStatement->fetchArray();
 			$data['replies'] = ($row['messages'] ? $row['messages'] - 1 : 0);
 			$data['attachments'] = ($row['attachments'] ?: 0);
-
+			
 			// get number of participants
 			$participantCounterStatement->execute(array($conversation->conversationID, Conversation::STATE_LEFT, $conversation->userID, 0));
 			$row = $participantCounterStatement->fetchArray();

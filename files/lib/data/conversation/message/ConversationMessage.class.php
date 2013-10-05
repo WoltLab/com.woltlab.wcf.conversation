@@ -51,7 +51,7 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	
 	/**
 	 * Returns a simplified version of the formatted message.
-	 *
+	 * 
 	 * @return	string
 	 */
 	public function getSimplifiedFormattedMessage() {
@@ -60,8 +60,8 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	}
 	
 	/**
-	 * Gets and assigns embedded attachments.
-	 *
+	 * Assigns and returns the embedded attachments.
+	 * 
 	 * @return	wcf\data\attachment\GroupedAttachmentList
 	 */
 	public function getAttachments() {
@@ -73,13 +73,13 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 				'canDownload' => true,
 				'canViewPreview' => true
 			));
-				
+			
 			// set embedded attachments
 			AttachmentBBCode::setAttachmentList($attachmentList);
-				
+			
 			return $attachmentList;
 		}
-	
+		
 		return null;
 	}
 	
@@ -130,7 +130,7 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	}
 	
 	/**
-	 * Returns true, if current user may edit this message.
+	 * Returns true if current user may edit this message.
 	 * 
 	 * @return	boolean
 	 */

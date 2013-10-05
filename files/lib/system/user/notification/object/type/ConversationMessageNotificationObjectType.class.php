@@ -5,7 +5,7 @@ namespace wcf\system\user\notification\object\type;
  * Represents a conversation message notification object type.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2012 WoltLab GmbH
+ * @copyright	2001-2013 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	system.user.notification.object.type
@@ -13,17 +13,17 @@ namespace wcf\system\user\notification\object\type;
  */
 class ConversationMessageNotificationObjectType extends AbstractUserNotificationObjectType {
 	/**
-	 * @see wcf\system\user\notification\object\type\AbstractUserNotificationObjectType::$decoratorClassName
+	 * @see	wcf\system\user\notification\object\type\AbstractUserNotificationObjectType::$decoratorClassName
 	 */
 	protected static $decoratorClassName = 'wcf\system\user\notification\object\ConversationMessageUserNotificationObject';
 	
 	/**
-	 * @see wcf\system\user\notification\object\type\AbstractUserNotificationObjectType::$objectClassName
+	 * @see	wcf\system\user\notification\object\type\AbstractUserNotificationObjectType::$objectClassName
 	 */
 	protected static $objectClassName = 'wcf\data\conversation\message\ConversationMessage';
 	
 	/**
-	 * @see wcf\system\user\notification\object\type\AbstractUserNotificationObjectType::$objectListClassName
+	 * @see	wcf\system\user\notification\object\type\AbstractUserNotificationObjectType::$objectListClassName
 	 */
 	protected static $objectListClassName = 'wcf\data\conversation\message\ConversationMessageList';
 }

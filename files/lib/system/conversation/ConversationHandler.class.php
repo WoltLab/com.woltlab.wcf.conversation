@@ -42,7 +42,7 @@ class ConversationHandler extends SingletonFactory {
 			
 			// load storage data
 			UserStorageHandler::getInstance()->loadStorage(array($userID));
-				
+			
 			// get ids
 			$data = UserStorageHandler::getInstance()->getStorage(array($userID), 'unreadConversationCount');
 			
@@ -88,7 +88,7 @@ class ConversationHandler extends SingletonFactory {
 			
 			// load storage data
 			UserStorageHandler::getInstance()->loadStorage(array($userID));
-				
+			
 			// get ids
 			$data = UserStorageHandler::getInstance()->getStorage(array($userID), 'conversationCount');
 			

@@ -46,14 +46,14 @@ class SearchResultConversationMessage extends ViewableConversationMessage implem
 	}
 	
 	/**
-	 * @see wcf\data\search\ISearchResultObject::getSubject()
+	 * @see	wcf\data\search\ISearchResultObject::getSubject()
 	 */
 	public function getSubject() {
 		return $this->subject;
 	}
 	
 	/**
-	 * @see wcf\data\search\ISearchResultObject::getLink()
+	 * @see	wcf\data\search\ISearchResultObject::getLink()
 	 */
 	public function getLink($query = '') {
 		if ($query) {
@@ -63,33 +63,33 @@ class SearchResultConversationMessage extends ViewableConversationMessage implem
 				'highlight' => urlencode($query)
 			), '#message'.$this->messageID);
 		}
-			
+		
 		return $this->getDecoratedObject()->getLink();
 	}
 	
 	/**
-	 * @see wcf\data\search\ISearchResultObject::getTime()
+	 * @see	wcf\data\search\ISearchResultObject::getTime()
 	 */
 	public function getTime() {
 		return $this->time;
 	}
 	
 	/**
-	 * @see wcf\data\search\ISearchResultObject::getObjectTypeName()
+	 * @see	wcf\data\search\ISearchResultObject::getObjectTypeName()
 	 */
 	public function getObjectTypeName() {
 		return 'com.woltlab.wcf.conversation.message';
 	}
 	
 	/**
-	 * @see wcf\data\search\ISearchResultObject::getContainerTitle()
+	 * @see	wcf\data\search\ISearchResultObject::getContainerTitle()
 	 */
 	public function getContainerTitle() {
 		return '';
 	}
 	
 	/**
-	 * @see wcf\data\search\ISearchResultObject::getContainerLink()
+	 * @see	wcf\data\search\ISearchResultObject::getContainerLink()
 	 */
 	public function getContainerLink() {
 		return '';
