@@ -30,6 +30,7 @@
 		<instruction type="userNotificationEvent">userNotificationEvent.xml</instruction>
 		<instruction type="userOption">userOption.xml</instruction>
 		<instruction type="eventListener">eventListener.xml</instruction>
+		<instruction type="script">acp/install_com.woltlab.wcf.conversation_2.0.0.php</instruction>
 	</instructions>
 	
 	<instructions type="update" fromversion="2.0.0 Beta 7">
