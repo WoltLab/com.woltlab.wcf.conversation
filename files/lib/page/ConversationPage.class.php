@@ -100,12 +100,6 @@ class ConversationPage extends MultipleLinkPage {
 	public $modificationLogList = null;
 	
 	/**
-	 * sidebar factory object
-	 * @var	wcf\system\message\sidebar\MessageSidebarFactory
-	 */
-	public $sidebarFactory = null;
-	
-	/**
 	 * list of participants
 	 * @var	wcf\data\conversation\ConversationParticipantList
 	 */
@@ -231,7 +225,6 @@ class ConversationPage extends MultipleLinkPage {
 			'attachmentList' => $this->objectList->getAttachmentList(),
 			'labelList' => $this->labelList,
 			'modificationLogList' => $this->modificationLogList,
-			'sidebarFactory' => $this->sidebarFactory,
 			'sortOrder' => $this->sortOrder,
 			'conversation' => $this->conversation,
 			'conversationID' => $this->conversationID,
