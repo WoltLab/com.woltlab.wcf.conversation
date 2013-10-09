@@ -129,6 +129,9 @@ class ConversationMessageEditForm extends ConversationAddForm {
 			'enableSmilies' => $this->enableSmilies,
 			'showSignature' => $this->showSignature
 		);
+		if ($this->conversation->isDraft && !$this->draft) {
+			$data['time'] = TIME_NOW;
+		}
 		$messageData = array(
 			'data' => $data,
 			'attachmentHandler' => $this->attachmentHandler
@@ -156,6 +159,8 @@ class ConversationMessageEditForm extends ConversationAddForm {
 			if ($this->conversation->isDraft && !$this->draft) {
 				$conversationData['participants'] = $this->participantIDs;
 				$conversationData['invisibleParticipants'] = $this->invisibleParticipantIDs;
+				
+				$conversationData['data']['time'] = $conversationData['data']['lastPostTime'] = TIME_NOW;
 			}
 			
 			$conversationAction = new ConversationAction(array($this->conversation), 'update', $conversationData);
