@@ -78,13 +78,15 @@
 				{/if}
 			</div>
 			
-			<ul class="dropdownMenu">
-				{foreach from=$labelList item=label}
-					<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}&labelID={@$label->labelID}{/link}"><span class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}" data-css-class-name="{if $label->cssClassName}{@$label->cssClassName}{/if}" data-label-id="{@$label->labelID}">{$label->label}</span></a></li>
-				{/foreach}
-				<li class="dropdownDivider"{if !$labelList|count} style="display: none;"{/if}></li>
-				<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}">{lang}wcf.conversation.label.disableFilter{/lang}</a></li>
-			</ul>
+			<div class="dropdownMenu">
+				<ul class="scrollableDropdownMenu">
+					{foreach from=$labelList item=label}
+						<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}&labelID={@$label->labelID}{/link}"><span class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}" data-css-class-name="{if $label->cssClassName}{@$label->cssClassName}{/if}" data-label-id="{@$label->labelID}">{$label->label}</span></a></li>
+					{/foreach}
+					<li class="dropdownDivider"{if !$labelList|count} style="display: none;"{/if}></li>
+					<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}">{lang}wcf.conversation.label.disableFilter{/lang}</a></li>
+				</ul>
+			</div>
 		</div>
 		
 		<button id="manageLabel">{lang}wcf.conversation.label.management{/lang}</button>
