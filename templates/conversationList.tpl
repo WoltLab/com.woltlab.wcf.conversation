@@ -83,8 +83,10 @@
 					{foreach from=$labelList item=label}
 						<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}&labelID={@$label->labelID}{/link}"><span class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}" data-css-class-name="{if $label->cssClassName}{@$label->cssClassName}{/if}" data-label-id="{@$label->labelID}">{$label->label}</span></a></li>
 					{/foreach}
+				</ul>
+				<ul>
 					<li class="dropdownDivider"{if !$labelList|count} style="display: none;"{/if}></li>
-					<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}">{lang}wcf.conversation.label.disableFilter{/lang}</a></li>
+					<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}"><span class="badge label">{lang}wcf.conversation.label.disableFilter{/lang}</span></a></li>
 				</ul>
 			</div>
 		</div>

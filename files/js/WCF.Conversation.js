@@ -1059,7 +1059,7 @@ WCF.Conversation.Label.Manager = Class.extend({
 		this._deletedLabelID = 0;
 		this._link = link;
 		
-		this._labels = WCF.Dropdown.getDropdownMenu('conversationLabelFilter');
+		this._labels = WCF.Dropdown.getDropdownMenu('conversationLabelFilter').children('.scrollableDropdownMenu');
 		$('#manageLabel').click($.proxy(this._click, this));
 		
 		this._notification = new WCF.System.Notification(WCF.Language.get('wcf.conversation.label.management.addLabel.success'));
@@ -1132,8 +1132,7 @@ WCF.Conversation.Label.Manager = Class.extend({
 		var $listItem = $('<li><a href="' + this._link + '&labelID=' + data.returnValues.labelID + '"><span class="badge label' + (data.returnValues.cssClassName ? ' ' + data.returnValues.cssClassName : '') + '">' + data.returnValues.label + '</span></a></li>');
 		$listItem.find('a > span').data('labelID', data.returnValues.labelID).data('cssClassName', data.returnValues.cssClassName);
 		
-		var $divider = this._labels.find('.dropdownDivider:eq(0)').show();
-		$listItem.insertBefore($divider);
+		this._labels.append($listItem);
 		
 		this._notification.show();
 	},
