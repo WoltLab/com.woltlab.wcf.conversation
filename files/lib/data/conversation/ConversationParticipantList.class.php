@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace wcf\data\conversation;
 use wcf\data\user\User;
 use wcf\data\user\UserProfile;

@@ -76,8 +76,8 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	}
 	
 	/**
-	 * Returns true, if this conversation is new for the active user.
-	 *
+	 * Returns true if this conversation is new for the active user.
+	 * 
 	 * @return	boolean
 	 */
 	public function isNew() {
@@ -89,7 +89,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	}
 	
 	/**
-	 * Returns true, if the active user doesn't have read the given message.
+	 * Returns true if the active user doesn't have read the given message.
 	 * 
 	 * @param	wcf\data\conversation\message\ConversationMessage	$message
 	 * @return	boolean

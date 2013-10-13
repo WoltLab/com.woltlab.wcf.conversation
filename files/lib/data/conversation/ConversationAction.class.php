@@ -109,7 +109,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		));
 		$resultValues = $messageAction->executeAction();
 		
-		// update first message id 
+		// update first message id
 		$conversationEditor->update(array(
 			'firstMessageID' => $resultValues['returnValues']->messageID
 		));
@@ -433,7 +433,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	
 	/**
 	 * Opens conversations.
-	 *
+	 * 
 	 * @return	array<array>
 	 */
 	public function open() {

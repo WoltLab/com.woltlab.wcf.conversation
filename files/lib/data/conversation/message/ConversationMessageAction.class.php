@@ -489,7 +489,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 */
 	public function getRenderedQuotes() {
 		$quotes = MessageQuoteManager::getInstance()->getQuotesByParentObjectID('com.woltlab.wcf.conversation.message', $this->conversation->conversationID);
-	
+		
 		return array(
 			'template' => implode("\n\n", $quotes)
 		);

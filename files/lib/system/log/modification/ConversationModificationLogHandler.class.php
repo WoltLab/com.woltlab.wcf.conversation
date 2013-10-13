@@ -49,7 +49,7 @@ class ConversationModificationLogHandler extends ModificationLogHandler {
 	
 	/**
 	 * Adds a log entry for conversation open.
-	 *
+	 * 
 	 * @param	wcf\data\conversation\Conversation	$conversation
 	 */
 	public function open(Conversation $conversation) {
@@ -58,7 +58,7 @@ class ConversationModificationLogHandler extends ModificationLogHandler {
 	
 	/**
 	 * Adds a log entry for conversation leave.
-	 *
+	 * 
 	 * @param	wcf\data\conversation\Conversation	$conversation
 	 */
 	public function leave(Conversation $conversation) {
