@@ -24,8 +24,8 @@ class ConversationUserImporter extends AbstractImporter {
 		$data['participantID'] = ImportHandler::getInstance()->getNewID('com.woltlab.wcf.user', $data['participantID']);
 		
 		$sql = "INSERT INTO			wcf".WCF_N."_conversation_to_user
-							(conversationID, participantID, hideConversation, isInvisible, lastVisitTime)
-			VALUES				(?, ?, ?, ?, ?)
+							(conversationID, participantID, username, hideConversation, isInvisible, lastVisitTime)
+			VALUES				(?, ?, ?, ?, ?, ?)
 			ON DUPLICATE KEY UPDATE		hideConversation = IF(hideConversation > 0 AND hideConversation = VALUES(hideConversation),hideConversation,0),
 							isInvisible = IF(isInvisible AND VALUES(isInvisible),1,0),
 							lastVisitTime = GREATEST(lastVisitTime,VALUES(lastVisitTime))";
@@ -33,6 +33,7 @@ class ConversationUserImporter extends AbstractImporter {
 		$statement->execute(array(
 			$data['conversationID'],
 			$data['participantID'],
+			$data['username'],
 			$data['hideConversation'],
 			$data['isInvisible'],
 			$data['lastVisitTime']
