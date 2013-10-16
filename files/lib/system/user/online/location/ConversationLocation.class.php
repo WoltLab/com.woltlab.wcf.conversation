@@ -23,19 +23,19 @@ class ConversationLocation implements IUserOnlineLocation {
 	
 	/**
 	 * list of conversations
-	 * @var	array<wcf\data\conversation\Conversation>
+	 * @var	array<\wcf\data\conversation\Conversation>
 	 */
 	protected $conversations = null;
 	
 	/**
-	 * @see	wcf\system\user\online\location\IUserOnlineLocation::cache()
+	 * @see	\wcf\system\user\online\location\IUserOnlineLocation::cache()
 	 */
 	public function cache(UserOnline $user) {
 		if ($user->objectID) $this->conversationIDs[] = $user->objectID;
 	}
 	
 	/**
-	 * @see	wcf\system\user\online\location\IUserOnlineLocation::get()
+	 * @see	\wcf\system\user\online\location\IUserOnlineLocation::get()
 	 */
 	public function get(UserOnline $user, $languageVariable = '') {
 		if ($this->conversations === null) {

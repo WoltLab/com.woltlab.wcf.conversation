@@ -15,19 +15,19 @@ use wcf\system\request\LinkHandler;
  */
 class ConversationUserNotificationObject extends DatabaseObjectDecorator implements IUserNotificationObject {
 	/**
-	 * @see	wcf\data\DatabaseObjectDecorator::$baseClass
+	 * @see	\wcf\data\DatabaseObjectDecorator::$baseClass
 	 */
 	protected static $baseClass = 'wcf\data\conversation\Conversation';
 	
 	/**
-	 * @see	wcf\system\user\notification\object\IUserNotificationObject::getTitle()
+	 * @see	\wcf\system\user\notification\object\IUserNotificationObject::getTitle()
 	 */
 	public function getTitle() {
 		return $this->subject;
 	}
 	
 	/**
-	 * @see	wcf\system\user\notification\object\IUserNotificationObject::getURL()
+	 * @see	\wcf\system\user\notification\object\IUserNotificationObject::getURL()
 	 */
 	public function getURL() {
 		return LinkHandler::getInstance()->getLink('Conversation', array(
@@ -36,7 +36,7 @@ class ConversationUserNotificationObject extends DatabaseObjectDecorator impleme
 	}
 	
 	/**
-	 * @see	wcf\system\user\notification\object\IUserNotificationObject::getAuthorID()
+	 * @see	\wcf\system\user\notification\object\IUserNotificationObject::getAuthorID()
 	 */
 	public function getAuthorID() {
 		return $this->userID;

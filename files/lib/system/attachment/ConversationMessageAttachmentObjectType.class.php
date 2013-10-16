@@ -17,28 +17,28 @@ use wcf\util\ArrayUtil;
  */
 class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectType {
 	/**
-	 * @see	wcf\system\attachment\IAttachmentObjectType::getMaxSize()
+	 * @see	\wcf\system\attachment\IAttachmentObjectType::getMaxSize()
 	 */
 	public function getMaxSize() {
 		return WCF::getSession()->getPermission('user.conversation.maxAttachmentSize');
 	}
 	
 	/**
-	 * @see	wcf\system\attachment\IAttachmentObjectType::getAllowedExtensions()
+	 * @see	\wcf\system\attachment\IAttachmentObjectType::getAllowedExtensions()
 	 */
 	public function getAllowedExtensions() {
 		return ArrayUtil::trim(explode("\n", WCF::getSession()->getPermission('user.conversation.allowedAttachmentExtensions')));
 	}
 	
 	/**
-	 * @see	wcf\system\attachment\IAttachmentObjectType::getMaxCount()
+	 * @see	\wcf\system\attachment\IAttachmentObjectType::getMaxCount()
 	 */
 	public function getMaxCount() {
 		return WCF::getSession()->getPermission('user.conversation.maxAttachmentCount');
 	}
 	
 	/**
-	 * @see	wcf\system\attachment\IAttachmentObjectType::canDownload()
+	 * @see	\wcf\system\attachment\IAttachmentObjectType::canDownload()
 	 */
 	public function canDownload($objectID) {
 		if ($objectID) {
@@ -51,7 +51,7 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
 	}
 	
 	/**
-	 * @see	wcf\system\attachment\IAttachmentObjectType::canUpload()
+	 * @see	\wcf\system\attachment\IAttachmentObjectType::canUpload()
 	 */
 	public function canUpload($objectID, $parentObjectID = 0) {
 		if ($objectID) {
@@ -63,7 +63,7 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
 	}
 	
 	/**
-	 * @see	wcf\system\attachment\IAttachmentObjectType::canDelete()
+	 * @see	\wcf\system\attachment\IAttachmentObjectType::canDelete()
 	 */
 	public function canDelete($objectID) {
 		if ($objectID) {

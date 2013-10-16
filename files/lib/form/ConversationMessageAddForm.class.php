@@ -25,27 +25,27 @@ use wcf\util\HeaderUtil;
  */
 class ConversationMessageAddForm extends MessageForm {
 	/**
-	 * @see	wcf\page\AbstractPage::$enableTracking
+	 * @see	\wcf\page\AbstractPage::$enableTracking
 	 */
 	public $enableTracking = true;
 	
 	/**
-	 * @see	wcf\form\MessageForm::$attachmentObjectType
+	 * @see	\wcf\form\MessageForm::$attachmentObjectType
 	 */
 	public $attachmentObjectType = 'com.woltlab.wcf.conversation.message';
 	
 	/**
-	 * @see	wcf\page\AbstractPage::$loginRequired
+	 * @see	\wcf\page\AbstractPage::$loginRequired
 	 */
 	public $loginRequired = true;
 	
 	/**
-	 * @see	wcf\page\AbstractPage::$neededModules
+	 * @see	\wcf\page\AbstractPage::$neededModules
 	 */
 	public $neededModules = array('MODULE_CONVERSATION');
 	
 	/**
-	 * @see	wcf\page\AbstractPage::$neededPermissions
+	 * @see	\wcf\page\AbstractPage::$neededPermissions
 	 */
 	public $neededPermissions = array('user.conversation.canUseConversation');
 	
@@ -57,18 +57,18 @@ class ConversationMessageAddForm extends MessageForm {
 	
 	/**
 	 * conversation
-	 * @var	wcf\data\conversation\Conversation
+	 * @var	\wcf\data\conversation\Conversation
 	 */
 	public $conversation = null;
 	
 	/**
 	 * message list
-	 * @var	wcf\data\conversation\message\ConversationMessageList
+	 * @var	\wcf\data\conversation\message\ConversationMessageList
 	 */
 	public $messageList = null;
 	
 	/**
-	 * @see	wcf\form\IPage::readParameters()
+	 * @see	\wcf\form\IPage::readParameters()
 	 */
 	public function readParameters() {
 		parent::readParameters();
@@ -87,7 +87,7 @@ class ConversationMessageAddForm extends MessageForm {
 	}
 	
 	/**
-	 * @see	wcf\form\IForm::readFormParameters()
+	 * @see	\wcf\form\IForm::readFormParameters()
 	 */
 	public function readFormParameters() {
 		parent::readFormParameters();
@@ -97,12 +97,12 @@ class ConversationMessageAddForm extends MessageForm {
 	}
 	
 	/**
-	 * @see	wcf\form\MessageForm::validateSubject()
+	 * @see	\wcf\form\MessageForm::validateSubject()
 	 */
 	protected function validateSubject() {}
 	
 	/**
-	 * @see	wcf\page\IPage::readData()
+	 * @see	\wcf\page\IPage::readData()
 	 */
 	public function readData() {
 		parent::readData();
@@ -156,7 +156,7 @@ class ConversationMessageAddForm extends MessageForm {
 	}
 	
 	/**
-	 * @see	wcf\form\IForm::save()
+	 * @see	\wcf\form\IForm::save()
 	 */
 	public function save() {
 		parent::save();
@@ -195,7 +195,7 @@ class ConversationMessageAddForm extends MessageForm {
 	}
 	
 	/**
-	 * @see	wcf\page\IPage::assignVariables()
+	 * @see	\wcf\page\IPage::assignVariables()
 	 */
 	public function assignVariables() {
 		parent::assignVariables();
@@ -212,14 +212,14 @@ class ConversationMessageAddForm extends MessageForm {
 	}
 	
 	/**
-	 * @see	wcf\page\ITrackablePage::getObjectType()
+	 * @see	\wcf\page\ITrackablePage::getObjectType()
 	 */
 	public function getObjectType() {
 		return 'com.woltlab.wcf.conversation';
 	}
 	
 	/**
-	 * @see	wcf\page\ITrackablePage::getObjectID()
+	 * @see	\wcf\page\ITrackablePage::getObjectID()
 	 */
 	public function getObjectID() {
 		return $this->conversationID;

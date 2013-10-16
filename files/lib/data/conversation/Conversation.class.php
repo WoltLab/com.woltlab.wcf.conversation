@@ -26,12 +26,12 @@ use wcf\util\ArrayUtil;
  */
 class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRouteController {
 	/**
-	 * @see	wcf\data\DatabaseObject::$databaseTableName
+	 * @see	\wcf\data\DatabaseObject::$databaseTableName
 	 */
 	protected static $databaseTableName = 'conversation';
 	
 	/**
-	 * @see	wcf\data\DatabaseObject::$databaseIndexName
+	 * @see	\wcf\data\DatabaseObject::$databaseIndexName
 	 */
 	protected static $databaseTableIndexName = 'conversationID';
 	
@@ -55,19 +55,19 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	
 	/**
 	 * first message object
-	 * @var	wcf\data\conversation\message\ConversationMessage
+	 * @var	\wcf\data\conversation\message\ConversationMessage
 	 */
 	protected $firstMessage = null;
 	
 	/**
-	 * @see	wcf\system\request\IRouteController::getTitle()
+	 * @see	\wcf\system\request\IRouteController::getTitle()
 	 */
 	public function getTitle() {
 		return $this->subject;
 	}
 	
 	/**
-	 * @see	wcf\system\breadcrumb\IBreadcrumbProvider::getBreadcrumb()
+	 * @see	\wcf\system\breadcrumb\IBreadcrumbProvider::getBreadcrumb()
 	 */
 	public function getBreadcrumb() {
 		return new Breadcrumb($this->subject, LinkHandler::getInstance()->getLink('Conversation', array(
@@ -91,7 +91,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	/**
 	 * Returns true if the active user doesn't have read the given message.
 	 * 
-	 * @param	wcf\data\conversation\message\ConversationMessage	$message
+	 * @param	\wcf\data\conversation\message\ConversationMessage	$message
 	 * @return	boolean
 	 */
 	public function isNewMessage(ConversationMessage $message) {
@@ -107,7 +107,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	 * 
 	 * @param	integer		$conversationID
 	 * @param	integer		$userID
-	 * @return	wcf\data\conversation\ViewableConversation
+	 * @return	\wcf\data\conversation\ViewableConversation
 	 */
 	public static function getUserConversation($conversationID, $userID) {
 		$sql = "SELECT		conversation_to_user.*, conversation.*
@@ -167,7 +167,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	/**
 	 * Returns the first message in this conversation.
 	 * 
-	 * @return	wcf\data\conversation\message\ConversationMessage
+	 * @return	\wcf\data\conversation\message\ConversationMessage
 	 */
 	public function getFirstMessage() {
 		if ($this->firstMessage === null) {
@@ -180,7 +180,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	/**
 	 * Sets the first message.
 	 * 
-	 * @param	wcf\data\conversation\message\ConversationMessage	$message
+	 * @param	\wcf\data\conversation\message\ConversationMessage	$message
 	 */
 	public function setFirstMessage(ConversationMessage $message) {
 		$this->firstMessage = $message;
@@ -340,7 +340,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	/**
 	 * Validates the given participant.
 	 * 
-	 * @param	wcf\data\user\UserProfile	$user
+	 * @param	\wcf\data\user\UserProfile	$user
 	 * @param	string				$field
 	 */
 	public static function validateParticipant(UserProfile $user, $field = 'participants') {

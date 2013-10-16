@@ -15,14 +15,14 @@ use wcf\system\user\notification\event\AbstractUserNotificationEvent;
  */
 class ConversationMessageUserNotificationEvent extends AbstractUserNotificationEvent {
 	/**
-	 * @see	wcf\system\user\notification\event\IUserNotificationEvent::getMessage()
+	 * @see	\wcf\system\user\notification\event\IUserNotificationEvent::getMessage()
 	 */
 	public function getTitle() {
 		return $this->getLanguage()->get('wcf.user.notification.conversation.message.title');
 	}
 	
 	/**
-	 * @see	wcf\system\user\notification\event\IUserNotificationEvent::getMessage()
+	 * @see	\wcf\system\user\notification\event\IUserNotificationEvent::getMessage()
 	 */
 	public function getMessage() {
 		return $this->getLanguage()->getDynamicVariable('wcf.user.notification.conversation.message.message', array(
@@ -31,7 +31,7 @@ class ConversationMessageUserNotificationEvent extends AbstractUserNotificationE
 	}
 	
 	/**
-	 * @see	wcf\system\user\notification\event\IUserNotificationEvent::getEmailMessage()
+	 * @see	\wcf\system\user\notification\event\IUserNotificationEvent::getEmailMessage()
 	 */
 	public function getEmailMessage($notificationType = 'instant') {
 		return $this->getLanguage()->getDynamicVariable('wcf.user.notification.conversation.message.mail', array(
@@ -42,7 +42,7 @@ class ConversationMessageUserNotificationEvent extends AbstractUserNotificationE
 	}
 	
 	/**
-	 * @see	wcf\system\user\notification\event\IUserNotificationEvent::getLink()
+	 * @see	\wcf\system\user\notification\event\IUserNotificationEvent::getLink()
 	 */
 	public function getLink() {
 		return LinkHandler::getInstance()->getLink('Conversation', array(

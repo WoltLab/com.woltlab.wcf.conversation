@@ -17,13 +17,13 @@ use wcf\system\WCF;
  */
 class ViewableConversationModificationLog extends DatabaseObjectDecorator {
 	/**
-	 * @see	wcf\data\DatabaseObjectDecorator::$baseClass
+	 * @see	\wcf\data\DatabaseObjectDecorator::$baseClass
 	 */
 	protected static $baseClass = 'wcf\data\modification\log\ModificationLog';
 	
 	/**
 	 * user profile object
-	 * @var	wcf\data\user\UserProfile
+	 * @var	\wcf\data\user\UserProfile
 	 */
 	protected $userProfile = null;
 	
@@ -37,7 +37,7 @@ class ViewableConversationModificationLog extends DatabaseObjectDecorator {
 	/**
 	 * Returns the profile object of the user who created the modification entry.
 	 * 
-	 * @return	wcf\data\user\UserProfile
+	 * @return	\wcf\data\user\UserProfile
 	 */
 	public function getUserProfile() {
 		if ($this->userProfile === null) {

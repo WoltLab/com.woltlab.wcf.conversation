@@ -27,31 +27,31 @@ class ViewableConversation extends DatabaseObjectDecorator {
 	
 	/**
 	 * user profile object
-	 * @var	wcf\data\user\UserProfile
+	 * @var	\wcf\data\user\UserProfile
 	 */
 	protected $userProfile = null;
 	
 	/**
 	 * last poster's profile
-	 * @var	wcf\data\user\UserProfile
+	 * @var	\wcf\data\user\UserProfile
 	 */
 	protected $lastPosterProfile = null;
 	
 	/**
-	 * @see	wcf\data\DatabaseObjectDecorator::$baseClass
+	 * @see	\wcf\data\DatabaseObjectDecorator::$baseClass
 	 */
 	protected static $baseClass = 'wcf\data\conversation\Conversation';
 	
 	/**
 	 * list of assigned labels
-	 * @var	array<wcf\data\conversation\label\ConversationLabel>
+	 * @var	array<\wcf\data\conversation\label\ConversationLabel>
 	 */
 	protected $labels = array();
 	
 	/**
 	 * Returns the user profile object.
 	 * 
-	 * @return	wcf\data\user\UserProfile
+	 * @return	\wcf\data\user\UserProfile
 	 */
 	public function getUserProfile() {
 		if ($this->userProfile === null) {
@@ -64,7 +64,7 @@ class ViewableConversation extends DatabaseObjectDecorator {
 	/**
 	 * Returns the last poster's profile object.
 	 * 
-	 * @return	wcf\data\user\UserProfile
+	 * @return	\wcf\data\user\UserProfile
 	 */
 	public function getLastPosterProfile() {
 		if ($this->lastPosterProfile === null) {
@@ -109,7 +109,7 @@ class ViewableConversation extends DatabaseObjectDecorator {
 	/**
 	 * Returns a summary of the participants.
 	 * 
-	 * @return	array<wcf\data\user\User>
+	 * @return	array<\wcf\data\user\User>
 	 */
 	public function getParticipantSummary() {
 		if ($this->__participantSummary === null) {
@@ -135,7 +135,7 @@ class ViewableConversation extends DatabaseObjectDecorator {
 	/**
 	 * Assigns a label.
 	 * 
-	 * @param	wcf\data\conversation\label\ConversationLabel	$label
+	 * @param	\wcf\data\conversation\label\ConversationLabel	$label
 	 */
 	public function assignLabel(ConversationLabel $label) {
 		$this->labels[$label->labelID] = $label;
@@ -144,7 +144,7 @@ class ViewableConversation extends DatabaseObjectDecorator {
 	/**
 	 * Returns a list of assigned labels.
 	 * 
-	 * @return	array<wcf\data\conversation\label\ConversationLabel>
+	 * @return	array<\wcf\data\conversation\label\ConversationLabel>
 	 */
 	public function getAssignedLabels() {
 		return $this->labels;
@@ -153,9 +153,9 @@ class ViewableConversation extends DatabaseObjectDecorator {
 	/**
 	 * Converts a conversation into a viewable conversation.
 	 * 
-	 * @param	wcf\data\conversation\Conversation			$conversation
-	 * @param	wcf\data\conversation\label\ConversationLabelList	$labelList
-	 * @return	wcf\data\conversation\ViewableConversation
+	 * @param	\wcf\data\conversation\Conversation			$conversation
+	 * @param	\wcf\data\conversation\label\ConversationLabelList	$labelList
+	 * @return	\wcf\data\conversation\ViewableConversation
 	 */
 	public static function getViewableConversation(Conversation $conversation, ConversationLabelList $labelList = null) {
 		$conversation = new ViewableConversation($conversation);

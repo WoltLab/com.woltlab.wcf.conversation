@@ -13,7 +13,7 @@ namespace wcf\data\conversation\message;
  */
 class SearchResultConversationMessageList extends ViewableConversationMessageList {
 	/**
-	 * @see	wcf\data\DatabaseObjectList::$decoratorClassName
+	 * @see	\wcf\data\DatabaseObjectList::$decoratorClassName
 	 */
 	public $decoratorClassName = 'wcf\data\conversation\message\SearchResultConversationMessage';
 	

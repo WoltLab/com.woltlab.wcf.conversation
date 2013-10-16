@@ -17,14 +17,14 @@ use wcf\system\WCF;
  */
 class ConversationEditor extends DatabaseObjectEditor {
 	/**
-	 * @see	wcf\data\DatabaseObjectEditor::$baseClass
+	 * @see	\wcf\data\DatabaseObjectEditor::$baseClass
 	 */
 	protected static $baseClass = 'wcf\data\conversation\Conversation';
 	
 	/**
 	 * Adds a new message to this conversation.
 	 * 
-	 * @param	wcf\data\conversation\message\ConversationMessage	$message
+	 * @param	\wcf\data\conversation\message\ConversationMessage	$message
 	 */
 	public function addMessage(ConversationMessage $message) {
 		$data = array(

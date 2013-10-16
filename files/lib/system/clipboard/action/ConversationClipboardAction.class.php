@@ -16,23 +16,23 @@ use wcf\system\WCF;
  */
 class ConversationClipboardAction extends AbstractClipboardAction {
 	/**
-	 * @see	wcf\system\clipboard\action\AbstractClipboardAction::$actionClassActions
+	 * @see	\wcf\system\clipboard\action\AbstractClipboardAction::$actionClassActions
 	 */
 	protected $actionClassActions = array('close', 'open');
 	
 	/**
 	 * list of conversations
-	 * @var	array<wcf\data\conversation\Conversation>
+	 * @var	array<\wcf\data\conversation\Conversation>
 	 */
 	public $conversations = null;
 	
 	/**
-	 * @see	wcf\system\clipboard\action\AbstractClipboardAction::$supportedActions
+	 * @see	\wcf\system\clipboard\action\AbstractClipboardAction::$supportedActions
 	 */
 	protected $supportedActions = array('assignLabel', 'close', 'leave', 'leavePermanently', 'open', 'restore');
 	
 	/**
-	 * @see	wcf\system\clipboard\action\IClipboardAction::execute()
+	 * @see	\wcf\system\clipboard\action\IClipboardAction::execute()
 	 */
 	public function execute(array $objects, ClipboardAction $action) {
 		if ($this->conversations === null) {
@@ -91,14 +91,14 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 	}
 	
 	/**
-	 * @see	wcf\system\clipboard\action\IClipboardAction::getClassName()
+	 * @see	\wcf\system\clipboard\action\IClipboardAction::getClassName()
 	 */
 	public function getClassName() {
 		return 'wcf\data\conversation\ConversationAction';
 	}
 	
 	/**
-	 * @see	wcf\system\clipboard\action\IClipboardAction::getTypeName()
+	 * @see	\wcf\system\clipboard\action\IClipboardAction::getTypeName()
 	 */
 	public function getTypeName() {
 		return 'com.woltlab.wcf.conversation.conversation';
@@ -107,8 +107,8 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 	/**
 	 * Returns a list of conversations with user participation.
 	 * 
-	 * @param	array<wcf\data\conversation\Conversation>
-	 * @return	array<wcf\data\conversation\Conversation>
+	 * @param	array<\wcf\data\conversation\Conversation>
+	 * @return	array<\wcf\data\conversation\Conversation>
 	 */
 	protected function validateParticipation(array $conversations) {
 		$conversationIDs = array();

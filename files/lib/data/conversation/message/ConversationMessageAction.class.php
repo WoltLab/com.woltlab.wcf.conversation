@@ -39,24 +39,24 @@ use wcf\util\MessageUtil;
  */
 class ConversationMessageAction extends AbstractDatabaseObjectAction implements IExtendedMessageQuickReplyAction, IMessageInlineEditorAction, IMessageQuoteAction {
 	/**
-	 * @see	wcf\data\AbstractDatabaseObjectAction::$className
+	 * @see	\wcf\data\AbstractDatabaseObjectAction::$className
 	 */
 	protected $className = 'wcf\data\conversation\message\ConversationMessageEditor';
 	
 	/**
 	 * conversation object
-	 * @var	wcf\data\conversation\Conversation
+	 * @var	\wcf\data\conversation\Conversation
 	 */
 	public $conversation = null;
 	
 	/**
 	 * conversation message object
-	 * @var	wcf\data\conversation\message\ConversationMessage
+	 * @var	\wcf\data\conversation\message\ConversationMessage
 	 */
 	public $message = null;
 	
 	/**
-	 * @see	wcf\data\AbstractDatabaseObjectAction::create()
+	 * @see	\wcf\data\AbstractDatabaseObjectAction::create()
 	 */
 	public function create() {
 		// count attachments
@@ -145,7 +145,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\data\AbstractDatabaseObjectAction::update()
+	 * @see	\wcf\data\AbstractDatabaseObjectAction::update()
 	 */
 	public function update() {
 		// count attachments
@@ -163,7 +163,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\data\AbstractDatabaseObjectAction::delete()
+	 * @see	\wcf\data\AbstractDatabaseObjectAction::delete()
 	 */
 	public function delete() {
 		$count = parent::delete();
@@ -205,7 +205,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\data\IMessageQuickReply::validateQuickReply()
+	 * @see	\wcf\data\IMessageQuickReply::validateQuickReply()
 	 */
 	public function validateQuickReply() {
 		QuickReplyManager::getInstance()->setAllowedBBCodes(explode(',', WCF::getSession()->getPermission('user.message.allowedBBCodes')));
@@ -213,7 +213,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\data\IMessageQuickReply::quickReply()
+	 * @see	\wcf\data\IMessageQuickReply::quickReply()
 	 */
 	public function quickReply() {
 		return QuickReplyManager::getInstance()->createMessage(
@@ -226,7 +226,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\data\IExtendedMessageQuickReplyAction::validateJumpToExtended()
+	 * @see	\wcf\data\IExtendedMessageQuickReplyAction::validateJumpToExtended()
 	 */
 	public function validateJumpToExtended() {
 		$this->readInteger('containerID');
@@ -254,7 +254,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\data\IExtendedMessageQuickReplyAction::jumpToExtended()
+	 * @see	\wcf\data\IExtendedMessageQuickReplyAction::jumpToExtended()
 	 */
 	public function jumpToExtended() {
 		// quick reply
@@ -275,7 +275,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\data\IMessageInlineEditorAction::validateBeginEdit()
+	 * @see	\wcf\data\IMessageInlineEditorAction::validateBeginEdit()
 	 */
 	public function validateBeginEdit() {
 		$this->readInteger('containerID');
@@ -301,7 +301,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\data\IMessageInlineEditorAction::beginEdit()
+	 * @see	\wcf\data\IMessageInlineEditorAction::beginEdit()
 	 */
 	public function beginEdit() {
 		BBCodeHandler::getInstance()->setAllowedBBCodes(explode(',', WCF::getSession()->getPermission('user.message.allowedBBCodes')));
@@ -320,7 +320,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\data\IMessageInlineEditorAction::validateSave()
+	 * @see	\wcf\data\IMessageInlineEditorAction::validateSave()
 	 */
 	public function validateSave() {
 		$this->readString('message', false, 'data');
@@ -330,7 +330,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\data\IMessageInlineEditorAction::save()
+	 * @see	\wcf\data\IMessageInlineEditorAction::save()
 	 */
 	public function save() {
 		$messageEditor = new ConversationMessageEditor($this->message);
@@ -349,7 +349,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\data\IMessageQuickReply::validateContainer()
+	 * @see	\wcf\data\IMessageQuickReply::validateContainer()
 	 */
 	public function validateContainer(DatabaseObject $conversation) {
 		if (!$conversation->conversationID) {
@@ -361,7 +361,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\data\IMessageQuickReplyAction::validateMessage()
+	 * @see	\wcf\data\IMessageQuickReplyAction::validateMessage()
 	 */
 	public function validateMessage(DatabaseObject $container, $message) {
 		$message = MessageUtil::stripCrap($message);
@@ -386,7 +386,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\data\IMessageQuickReplyAction::getMessageList()
+	 * @see	\wcf\data\IMessageQuickReplyAction::getMessageList()
 	 */
 	public function getMessageList(DatabaseObject $conversation, $lastMessageTime) {
 		$messageList = new ViewableConversationMessageList();
@@ -399,7 +399,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\data\IMessageQuickReply::getPageNo()
+	 * @see	\wcf\data\IMessageQuickReply::getPageNo()
 	 */
 	public function getPageNo(DatabaseObject $conversation) {
 		$sql = "SELECT	COUNT(*) AS count
@@ -413,7 +413,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\data\IMessageQuickReply::getRedirectUrl()
+	 * @see	\wcf\data\IMessageQuickReply::getRedirectUrl()
 	 */
 	public function getRedirectUrl(DatabaseObject $conversation, DatabaseObject $message) {
 		return LinkHandler::getInstance()->getLink('Conversation', array(
@@ -423,7 +423,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\data\IMessageQuoteAction::validateSaveFullQuote()
+	 * @see	\wcf\data\IMessageQuoteAction::validateSaveFullQuote()
 	 */
 	public function validateSaveFullQuote() {
 		$this->message = $this->getSingleObject();
@@ -434,7 +434,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\data\IMessageQuoteAction::saveFullQuote()
+	 * @see	\wcf\data\IMessageQuoteAction::saveFullQuote()
 	 */
 	public function saveFullQuote() {
 		if (!MessageQuoteManager::getInstance()->addQuote('com.woltlab.wcf.conversation.message', $this->message->conversationID, $this->message->messageID, $this->message->getExcerpt(), $this->message->getMessage())) {
@@ -449,7 +449,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\data\IMessageQuoteAction::validateSaveQuote()
+	 * @see	\wcf\data\IMessageQuoteAction::validateSaveQuote()
 	 */
 	public function validateSaveQuote() {
 		$this->readString('message');
@@ -461,7 +461,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\data\IMessageQuoteAction::saveQuote()
+	 * @see	\wcf\data\IMessageQuoteAction::saveQuote()
 	 */
 	public function saveQuote() {
 		MessageQuoteManager::getInstance()->addQuote('com.woltlab.wcf.conversation.message', $this->message->conversationID, $this->message->messageID, $this->parameters['message']);
@@ -473,7 +473,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\data\IMessageQuoteAction::validateGetRenderedQuotes()
+	 * @see	\wcf\data\IMessageQuoteAction::validateGetRenderedQuotes()
 	 */
 	public function validateGetRenderedQuotes() {
 		$this->readInteger('parentObjectID');
@@ -485,7 +485,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	wcf\data\IMessageQuoteAction::getRenderedQuotes()
+	 * @see	\wcf\data\IMessageQuoteAction::getRenderedQuotes()
 	 */
 	public function getRenderedQuotes() {
 		$quotes = MessageQuoteManager::getInstance()->getQuotesByParentObjectID('com.woltlab.wcf.conversation.message', $this->conversation->conversationID);

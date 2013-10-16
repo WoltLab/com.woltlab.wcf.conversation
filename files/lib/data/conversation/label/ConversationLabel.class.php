@@ -15,12 +15,12 @@ use wcf\system\WCF;
  */
 class ConversationLabel extends DatabaseObject {
 	/**
-	 * @see	wcf\data\DatabaseObject::$databaseTableName
+	 * @see	\wcf\data\DatabaseObject::$databaseTableName
 	 */
 	protected static $databaseTableName = 'conversation_label';
 	
 	/**
-	 * @see	wcf\data\DatabaseObject::$databaseIndexName
+	 * @see	\wcf\data\DatabaseObject::$databaseIndexName
 	 */
 	protected static $databaseTableIndexName = 'labelID';
 	
@@ -46,7 +46,7 @@ class ConversationLabel extends DatabaseObject {
 	 * Returns a list of conversation labels for given user id.
 	 * 
 	 * @param	integer		$userID
-	 * @return	wcf\data\conversation\label\ConversationLabelList
+	 * @return	\wcf\data\conversation\label\ConversationLabelList
 	 */
 	public static function getLabelsByUser($userID = null) {
 		if ($userID === null) $userID = WCF::getUser()->userID;

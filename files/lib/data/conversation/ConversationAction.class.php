@@ -32,13 +32,13 @@ use wcf\system\WCF;
  */
 class ConversationAction extends AbstractDatabaseObjectAction implements IClipboardAction, IVisitableObjectAction {
 	/**
-	 * @see	wcf\data\AbstractDatabaseObjectAction::$className
+	 * @see	\wcf\data\AbstractDatabaseObjectAction::$className
 	 */
 	protected $className = 'wcf\data\conversation\ConversationEditor';
 	
 	/**
 	 * conversation object
-	 * @var	wcf\data\conversation\ConversationEditor
+	 * @var	\wcf\data\conversation\ConversationEditor
 	 */
 	protected $conversation = null;
 	
@@ -49,7 +49,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	protected $conversationData = array();
 	
 	/**
-	 * @see	wcf\data\AbstractDatabaseObjectAction::create()
+	 * @see	\wcf\data\AbstractDatabaseObjectAction::create()
 	 */
 	public function create() {
 		// create conversation
@@ -125,7 +125,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	}
 	
 	/**
-	 * @see	wcf\data\IDeleteAction::delete()
+	 * @see	\wcf\data\IDeleteAction::delete()
 	 */
 	public function delete() {
 		// deletes messages
@@ -148,7 +148,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	}
 	
 	/**
-	 * @see	wcf\data\AbstractDatabaseObjectAction::update()
+	 * @see	\wcf\data\AbstractDatabaseObjectAction::update()
 	 */
 	public function update() {
 		if (!isset($this->parameters['participants'])) $this->parameters['participants'] = array();
@@ -197,7 +197,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	}
 	
 	/**
-	 * @see	wcf\data\IVisitableObjectAction::markAsRead()
+	 * @see	\wcf\data\IVisitableObjectAction::markAsRead()
 	 */
 	public function markAsRead() {
 		if (empty($this->parameters['visitTime'])) {
@@ -285,7 +285,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	}
 	
 	/**
-	 * @see	wcf\data\IVisitableObjectAction::validateMarkAsRead()
+	 * @see	\wcf\data\IVisitableObjectAction::validateMarkAsRead()
 	 */
 	public function validateMarkAsRead() {
 		// visitTime might not be in the future
@@ -815,7 +815,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	/**
 	 * Adds conversation modification data.
 	 * 
-	 * @param	wcf\data\conversation\Conversation	$conversation
+	 * @param	\wcf\data\conversation\Conversation	$conversation
 	 * @param	string					$key
 	 * @param	mixed					$value
 	 */

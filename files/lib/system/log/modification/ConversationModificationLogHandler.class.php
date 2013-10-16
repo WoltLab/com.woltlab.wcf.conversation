@@ -18,7 +18,7 @@ class ConversationModificationLogHandler extends ModificationLogHandler {
 	/**
 	 * Adds a log entry for newly added conversation participants.
 	 * 
-	 * @param	wcf\data\conversation\Conversation	$conversation
+	 * @param	\wcf\data\conversation\Conversation	$conversation
 	 * @param	array<integer>				$participantIDs
 	 */
 	public function addParticipants(Conversation $conversation, array $participantIDs) {
@@ -41,7 +41,7 @@ class ConversationModificationLogHandler extends ModificationLogHandler {
 	/**
 	 * Adds a log entry for conversation close.
 	 * 
-	 * @param	wcf\data\conversation\Conversation	$conversation
+	 * @param	\wcf\data\conversation\Conversation	$conversation
 	 */
 	public function close(Conversation $conversation) {
 		$this->add($conversation, 'close');
@@ -50,7 +50,7 @@ class ConversationModificationLogHandler extends ModificationLogHandler {
 	/**
 	 * Adds a log entry for conversation open.
 	 * 
-	 * @param	wcf\data\conversation\Conversation	$conversation
+	 * @param	\wcf\data\conversation\Conversation	$conversation
 	 */
 	public function open(Conversation $conversation) {
 		$this->add($conversation, 'open');
@@ -59,7 +59,7 @@ class ConversationModificationLogHandler extends ModificationLogHandler {
 	/**
 	 * Adds a log entry for conversation leave.
 	 * 
-	 * @param	wcf\data\conversation\Conversation	$conversation
+	 * @param	\wcf\data\conversation\Conversation	$conversation
 	 */
 	public function leave(Conversation $conversation) {
 		$this->add($conversation, 'leave');
@@ -68,7 +68,7 @@ class ConversationModificationLogHandler extends ModificationLogHandler {
 	/**
 	 * Adds a log entry for a removed participant.
 	 * 
-	 * @param	wcf\data\conversation\Conversation	$conversation
+	 * @param	\wcf\data\conversation\Conversation	$conversation
 	 * @param	integer					$userID
 	 */
 	public function removeParticipant(Conversation $conversation, $userID) {
@@ -82,7 +82,7 @@ class ConversationModificationLogHandler extends ModificationLogHandler {
 	/**
 	 * Adds a conversation modification log entry.
 	 * 
-	 * @param	wcf\data\conversation\Conversation	$conversation
+	 * @param	\wcf\data\conversation\Conversation	$conversation
 	 * @param	string					$action
 	 * @param	array					$additionalData
 	 */

@@ -24,28 +24,28 @@ use wcf\system\WCF;
  */
 class ConversationMessageModerationQueueReportHandler extends AbstractModerationQueueHandler implements IModerationQueueReportHandler {
 	/**
-	 * @see	wcf\system\moderation\queue\AbstractModerationQueueHandler::$className
+	 * @see	\wcf\system\moderation\queue\AbstractModerationQueueHandler::$className
 	 */
 	protected $className = 'wcf\data\conversation\message\ConversationMessage';
 	
 	/**
-	 * @see	wcf\system\moderation\queue\AbstractModerationQueueHandler::$definitionName
+	 * @see	\wcf\system\moderation\queue\AbstractModerationQueueHandler::$definitionName
 	 */
 	protected $definitionName = 'com.woltlab.wcf.moderation.report';
 	
 	/**
-	 * @see	wcf\system\moderation\queue\AbstractModerationQueueHandler::$objectType
+	 * @see	\wcf\system\moderation\queue\AbstractModerationQueueHandler::$objectType
 	 */
 	protected $objectType = 'com.woltlab.wcf.conversation.message';
 	
 	/**
 	 * list of conversation message
-	 * @var	array<wcf\data\conversation\message\ConversationMessage>
+	 * @var	array<\wcf\data\conversation\message\ConversationMessage>
 	 */
 	protected static $messages = array();
 	
 	/**
-	 * @see	wcf\system\moderation\queue\IModerationQueueHandler::assignQueues()
+	 * @see	\wcf\system\moderation\queue\IModerationQueueHandler::assignQueues()
 	 */
 	public function assignQueues(array $queues) {
 		$assignments = array();
@@ -62,7 +62,7 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
 	}
 	
 	/**
-	 * @see	wcf\system\moderation\queue\report\IModerationQueueReportHandler::canReport()
+	 * @see	\wcf\system\moderation\queue\report\IModerationQueueReportHandler::canReport()
 	 */
 	public function canReport($objectID) {
 		if (!$this->isValid($objectID)) {
@@ -77,14 +77,14 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
 	}
 	
 	/**
-	 * @see	wcf\system\moderation\queue\IModerationQueueHandler::getContainerID()
+	 * @see	\wcf\system\moderation\queue\IModerationQueueHandler::getContainerID()
 	 */
 	public function getContainerID($objectID) {
 		return 0;
 	}
 	
 	/**
-	 * @see	wcf\system\moderation\queue\report\IModerationQueueReportHandler::getReportedContent()
+	 * @see	\wcf\system\moderation\queue\report\IModerationQueueReportHandler::getReportedContent()
 	 */
 	public function getReportedContent(ViewableModerationQueue $queue) {
 		WCF::getTPL()->assign(array(
@@ -95,7 +95,7 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
 	}
 	
 	/**
-	 * @see	wcf\system\moderation\queue\report\IModerationQueueReportHandler::getReportedObject()
+	 * @see	\wcf\system\moderation\queue\report\IModerationQueueReportHandler::getReportedObject()
 	 */
 	public function getReportedObject($objectID) {
 		if ($this->isValid($objectID)) {
@@ -106,7 +106,7 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
 	}
 	
 	/**
-	 * @see	wcf\system\moderation\queue\IModerationQueueHandler::isValid()
+	 * @see	\wcf\system\moderation\queue\IModerationQueueHandler::isValid()
 	 */
 	public function isValid($objectID) {
 		if ($this->getMessage($objectID) === null) {
@@ -120,7 +120,7 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
 	 * Returns a conversation message object by message id or null if message id is invalid.
 	 * 
 	 * @param	integer		$objectID
-	 * @return	wcf\data\conversation\message\ConversationMessage
+	 * @return	\wcf\data\conversation\message\ConversationMessage
 	 */
 	protected function getMessage($objectID) {
 		if (!array_key_exists($objectID, self::$messages)) {
@@ -134,7 +134,7 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
 	}
 	
 	/**
-	 * @see	wcf\system\moderation\queue\IModerationQueueHandler::populate()
+	 * @see	\wcf\system\moderation\queue\IModerationQueueHandler::populate()
 	 */
 	public function populate(array $queues) {
 		$objectIDs = array();
@@ -179,7 +179,7 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
 	}
 	
 	/**
-	 * @see	wcf\system\moderation\queue\IModerationQueueHandler::removeContent()
+	 * @see	\wcf\system\moderation\queue\IModerationQueueHandler::removeContent()
 	 */
 	public function removeContent(ModerationQueue $queue, $message) {
 		if ($this->isValid($queue->objectID)) {

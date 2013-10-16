@@ -23,7 +23,7 @@ class ConversationParticipantList extends UserProfileList {
 	public $conversationID = 0;
 	
 	/**
-	 * @see	wcf\data\DatabaseObjectList::$sqlLimit
+	 * @see	\wcf\data\DatabaseObjectList::$sqlLimit
 	 */
 	public $sqlLimit = 0;
 	
@@ -54,7 +54,7 @@ class ConversationParticipantList extends UserProfileList {
 	}
 	
 	/**
-	 * @see	wcf\data\DatabaseObjectList::countObjects()
+	 * @see	\wcf\data\DatabaseObjectList::countObjects()
 	 */
 	public function countObjects() {
 		$sql = "SELECT	COUNT(*) AS count
@@ -68,7 +68,7 @@ class ConversationParticipantList extends UserProfileList {
 	}
 	
 	/**
-	 * @see	wcf\data\DatabaseObjectList::readObjectIDs()
+	 * @see	\wcf\data\DatabaseObjectList::readObjectIDs()
 	 */
 	public function readObjectIDs() {
 		$this->objectIDs = array();
@@ -85,7 +85,7 @@ class ConversationParticipantList extends UserProfileList {
 	}
 	
 	/**
-	 * @see	wcf\data\user\UserProfileList::readObjects()
+	 * @see	\wcf\data\user\UserProfileList::readObjects()
 	 */
 	public function readObjects() {
 		parent::readObjects();

@@ -20,42 +20,42 @@ use wcf\system\WCF;
  */
 class ConversationListPage extends SortablePage {
 	/**
-	 * @see	wcf\page\AbstractPage::$enableTracking
+	 * @see	\wcf\page\AbstractPage::$enableTracking
 	 */
 	public $enableTracking = true;
 	
 	/**
-	 * @see	wcf\page\SortablePage::$defaultSortField
+	 * @see	\wcf\page\SortablePage::$defaultSortField
 	 */
 	public $defaultSortField = CONVERSATION_LIST_DEFAULT_SORT_FIELD;
 	
 	/**
-	 * @see	wcf\page\SortablePage::$defaultSortOrder
+	 * @see	\wcf\page\SortablePage::$defaultSortOrder
 	 */
 	public $defaultSortOrder = CONVERSATION_LIST_DEFAULT_SORT_ORDER;
 	
 	/**
-	 * @see	wcf\page\SortablePage::$validSortFields
+	 * @see	\wcf\page\SortablePage::$validSortFields
 	 */
 	public $validSortFields = array('subject', 'time', 'username', 'lastPostTime', 'replies', 'participants');
 	
 	/**
-	 * @see	wcf\page\MultipleLinkPage::$itemsPerPage
+	 * @see	\wcf\page\MultipleLinkPage::$itemsPerPage
 	 */
 	public $itemsPerPage = CONVERSATIONS_PER_PAGE;
 	
 	/**
-	 * @see	wcf\page\AbstractPage::$loginRequired
+	 * @see	\wcf\page\AbstractPage::$loginRequired
 	 */
 	public $loginRequired = true;
 	
 	/**
-	 * @see	wcf\page\AbstractPage::$neededModules
+	 * @see	\wcf\page\AbstractPage::$neededModules
 	 */
 	public $neededModules = array('MODULE_CONVERSATION');
 	
 	/**
-	 * @see	wcf\page\AbstractPage::$neededPermissions
+	 * @see	\wcf\page\AbstractPage::$neededPermissions
 	 */
 	public $neededPermissions = array('user.conversation.canUseConversation');
 	
@@ -73,12 +73,12 @@ class ConversationListPage extends SortablePage {
 	
 	/**
 	 * label list object
-	 * @var	wcf\data\conversation\label\ConversationLabelList
+	 * @var	\wcf\data\conversation\label\ConversationLabelList
 	 */
 	public $labelList = null;
 	
 	/**
-	 * @see	wcf\page\IPage::readParameters()
+	 * @see	\wcf\page\IPage::readParameters()
 	 */
 	public function readParameters() {
 		parent::readParameters();
@@ -109,7 +109,7 @@ class ConversationListPage extends SortablePage {
 	}
 	
 	/**
-	 * @see	wcf\page\MultipleLinkPage::initObjectList()
+	 * @see	\wcf\page\MultipleLinkPage::initObjectList()
 	 */
 	protected function initObjectList() {
 		$this->objectList = new UserConversationList(WCF::getUser()->userID, $this->filter, $this->labelID);
@@ -117,7 +117,7 @@ class ConversationListPage extends SortablePage {
 	}
 	
 	/**
-	 * @see	wcf\page\IPage::readData()
+	 * @see	\wcf\page\IPage::readData()
 	 */
 	public function readData() {
 		parent::readData();
@@ -129,7 +129,7 @@ class ConversationListPage extends SortablePage {
 	}
 	
 	/**
-	 * @see	wcf\page\IPage::assignVariables()
+	 * @see	\wcf\page\IPage::assignVariables()
 	 */
 	public function assignVariables() {
 		parent::assignVariables();

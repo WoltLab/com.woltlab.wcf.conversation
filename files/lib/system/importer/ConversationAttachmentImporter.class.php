@@ -25,7 +25,7 @@ class ConversationAttachmentImporter extends AbstractAttachmentImporter {
 	}
 	
 	/**
-	 * @see	wcf\system\importer\IImporter::import()
+	 * @see	\wcf\system\importer\IImporter::import()
 	 */
 	public function import($oldID, array $data, array $additionalData = array()) {
 		$data['objectID'] = ImportHandler::getInstance()->getNewID('com.woltlab.wcf.conversation.message', $data['objectID']);

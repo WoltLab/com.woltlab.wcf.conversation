@@ -25,7 +25,7 @@ use wcf\util\HeaderUtil;
  */
 class ConversationMessageEditForm extends ConversationAddForm {
 	/**
-	 * @see	wcf\page\AbstractPage::$templateName
+	 * @see	\wcf\page\AbstractPage::$templateName
 	 */
 	public $templateName = 'conversationMessageEdit';
 	
@@ -37,7 +37,7 @@ class ConversationMessageEditForm extends ConversationAddForm {
 	
 	/**
 	 * message object
-	 * @var	wcf\data\conversation\message\ConversationMessage
+	 * @var	\wcf\data\conversation\message\ConversationMessage
 	 */
 	public $message = null;
 	
@@ -49,13 +49,13 @@ class ConversationMessageEditForm extends ConversationAddForm {
 	
 	/**
 	 * conversation
-	 * @var	wcf\data\conversation\Conversation
+	 * @var	\wcf\data\conversation\Conversation
 	 */
 	public $conversation = null;
 	
 	/**
 	 * message list
-	 * @var	wcf\data\conversation\message\ConversationMessageList
+	 * @var	\wcf\data\conversation\message\ConversationMessageList
 	 */
 	public $messageList = null;
 	
@@ -66,7 +66,7 @@ class ConversationMessageEditForm extends ConversationAddForm {
 	public $isFirstMessage = false;
 	
 	/**
-	 * @see	wcf\form\IPage::readParameters()
+	 * @see	\wcf\form\IPage::readParameters()
 	 */
 	public function readParameters() {
 		MessageForm::readParameters();
@@ -92,7 +92,7 @@ class ConversationMessageEditForm extends ConversationAddForm {
 	}
 	
 	/**
-	 * @see	wcf\form\IForm::readFormParameters()
+	 * @see	\wcf\form\IForm::readFormParameters()
 	 */
 	public function readFormParameters() {
 		parent::readFormParameters();
@@ -101,7 +101,7 @@ class ConversationMessageEditForm extends ConversationAddForm {
 	}
 	
 	/**
-	 * @see	wcf\form\IForm::validate()
+	 * @see	\wcf\form\IForm::validate()
 	 */
 	public function validate() {
 		if ($this->isFirstMessage && $this->conversation->isDraft) parent::validate();
@@ -109,14 +109,14 @@ class ConversationMessageEditForm extends ConversationAddForm {
 	}
 	
 	/**
-	 * @see	wcf\form\MessageForm::validateSubject()
+	 * @see	\wcf\form\MessageForm::validateSubject()
 	 */
 	protected function validateSubject() {
 		if ($this->isFirstMessage) parent::validateSubject();
 	}
 	
 	/**
-	 * @see	wcf\form\IForm::save()
+	 * @see	\wcf\form\IForm::save()
 	 */
 	public function save() {
 		MessageForm::save();
@@ -177,7 +177,7 @@ class ConversationMessageEditForm extends ConversationAddForm {
 	}
 	
 	/**
-	 * @see	wcf\page\IPage::readData()
+	 * @see	\wcf\page\IPage::readData()
 	 */
 	public function readData() {
 		MessageForm::readData();
@@ -221,7 +221,7 @@ class ConversationMessageEditForm extends ConversationAddForm {
 	}
 	
 	/**
-	 * @see	wcf\page\IPage::assignVariables()
+	 * @see	\wcf\page\IPage::assignVariables()
 	 */
 	public function assignVariables() {
 		parent::assignVariables();
@@ -239,14 +239,14 @@ class ConversationMessageEditForm extends ConversationAddForm {
 	}
 	
 	/**
-	 * @see	wcf\page\ITrackablePage::getObjectType()
+	 * @see	\wcf\page\ITrackablePage::getObjectType()
 	 */
 	public function getObjectType() {
 		return 'com.woltlab.wcf.conversation';
 	}
 	
 	/**
-	 * @see	wcf\page\ITrackablePage::getObjectID()
+	 * @see	\wcf\page\ITrackablePage::getObjectID()
 	 */
 	public function getObjectID() {
 		return $this->conversationID;

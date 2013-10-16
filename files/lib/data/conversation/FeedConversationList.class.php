@@ -14,17 +14,17 @@ use wcf\system\WCF;
  */
 class FeedConversationList extends ConversationList {
 	/**
-	 * @see	wcf\data\DatabaseObjectList::$decoratorClassName
+	 * @see	\wcf\data\DatabaseObjectList::$decoratorClassName
 	 */
 	public $decoratorClassName = 'wcf\data\conversation\FeedConversation';
 	
 	/**
-	 * @see	wcf\data\DatabaseObjectList::$sqlOrderBy
+	 * @see	\wcf\data\DatabaseObjectList::$sqlOrderBy
 	 */
 	public $sqlOrderBy = 'conversation.lastPostTime DESC';
 	
 	/**
-	 * @see	wcf\data\DatabaseObjectList::readObjectIDs()
+	 * @see	\wcf\data\DatabaseObjectList::readObjectIDs()
 	 */
 	public function readObjectIDs() {
 		$this->objectIDs = array();
@@ -41,7 +41,7 @@ class FeedConversationList extends ConversationList {
 	}
 	
 	/**
-	 * @see	wcf\data\DatabaseObjectList::readObjects()
+	 * @see	\wcf\data\DatabaseObjectList::readObjects()
 	 */
 	public function readObjects() {
 		if ($this->objectIDs === null) {

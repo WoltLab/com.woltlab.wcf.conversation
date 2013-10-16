@@ -30,12 +30,12 @@ class UserConversationList extends ConversationList {
 	
 	/**
 	 * label list object
-	 * @var	wcf\data\conversation\label\ConversationLabelList
+	 * @var	\wcf\data\conversation\label\ConversationLabelList
 	 */
 	public $labelList = null;
 	
 	/**
-	 * @see	wcf\data\DatabaseObjectList::$decoratorClassName
+	 * @see	\wcf\data\DatabaseObjectList::$decoratorClassName
 	 */
 	public $decoratorClassName = 'wcf\data\conversation\ViewableConversation';
 	
@@ -97,14 +97,14 @@ class UserConversationList extends ConversationList {
 	/**
 	 * Sets the label list of the user the conversations belong to.
 	 * 
-	 * @param	wcf\data\conversation\label\ConversationLabelList	$labelList
+	 * @param	\wcf\data\conversation\label\ConversationLabelList	$labelList
 	 */
 	public function setLabelList(ConversationLabelList $labelList) {
 		$this->labelList = $labelList;
 	}
 	
 	/**
-	 * @see	wcf\data\DatabaseObjectList::countObjects()
+	 * @see	\wcf\data\DatabaseObjectList::countObjects()
 	 */
 	public function countObjects() {
 		if ($this->filter == 'draft') return parent::countObjects();
@@ -120,7 +120,7 @@ class UserConversationList extends ConversationList {
 	}
 	
 	/**
-	 * @see	wcf\data\DatabaseObjectList::readObjectIDs()
+	 * @see	\wcf\data\DatabaseObjectList::readObjectIDs()
 	 */
 	public function readObjectIDs() {
 		if ($this->filter == 'draft') return parent::readObjectIDs();
@@ -139,7 +139,7 @@ class UserConversationList extends ConversationList {
 	}
 	
 	/**
-	 * @see	wcf\data\DatabaseObjectList::readObjects()
+	 * @see	\wcf\data\DatabaseObjectList::readObjects()
 	 */
 	public function readObjects() {
 		if ($this->objectIDs === null) {
@@ -164,7 +164,7 @@ class UserConversationList extends ConversationList {
 	/**
 	 * Returns a list of conversation labels.
 	 * 
-	 * @return	array<wcf\data\conversation\label\ConversationLabel>
+	 * @return	array<\wcf\data\conversation\label\ConversationLabel>
 	 */
 	protected function getLabels() {
 		if ($this->labelList === null) {

@@ -23,34 +23,34 @@ use wcf\util\StringUtil;
  */
 class ConversationLabelAction extends AbstractDatabaseObjectAction {
 	/**
-	 * @see	wcf\data\AbstractDatabaseObjectAction::$className
+	 * @see	\wcf\data\AbstractDatabaseObjectAction::$className
 	 */
 	protected $className = 'wcf\data\conversation\label\ConversationLabelEditor';
 	
 	/**
-	 * @see	wcf\data\AbstractDatabaseObjectAction::$permissionsDelete
+	 * @see	\wcf\data\AbstractDatabaseObjectAction::$permissionsDelete
 	 */
 	protected $permissionsDelete = array('user.conversation.canUseConversation');
 	
 	/**
-	 * @see	wcf\data\AbstractDatabaseObjectAction::$permissionsUpdate
+	 * @see	\wcf\data\AbstractDatabaseObjectAction::$permissionsUpdate
 	 */
 	protected $permissionsUpdate = array('user.conversation.canUseConversation');
 	
 	/**
 	 * conversation object
-	 * @var	wcf\data\conversation\Conversation
+	 * @var	\wcf\data\conversation\Conversation
 	 */
 	public $conversation = null;
 	
 	/**
 	 * conversation label list object
-	 * @var	wcf\data\conversation\label\ConversationLabelList
+	 * @var	\wcf\data\conversation\label\ConversationLabelList
 	 */
 	public $labelList = null;
 	
 	/**
-	 * @see	wcf\data\AbstractDatabaseObjectAction::validateUpdate()
+	 * @see	\wcf\data\AbstractDatabaseObjectAction::validateUpdate()
 	 */
 	public function validateUpdate() {
 		parent::validateUpdate();
@@ -66,7 +66,7 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 	}
 	
 	/**
-	 * @see	wcf\data\AbstractDatabaseObjectAction::validateDelete()
+	 * @see	\wcf\data\AbstractDatabaseObjectAction::validateDelete()
 	 */
 	public function validateDelete() {
 		parent::validateDelete();

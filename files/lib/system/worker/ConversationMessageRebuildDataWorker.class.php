@@ -17,17 +17,17 @@ use wcf\system\WCF;
  */
 class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker {
 	/**
-	 * @see	wcf\system\worker\AbstractRebuildDataWorker::$objectListClassName
+	 * @see	\wcf\system\worker\AbstractRebuildDataWorker::$objectListClassName
 	 */
 	protected $objectListClassName = 'wcf\data\conversation\message\ConversationMessageList';
 	
 	/**
-	 * @see	wcf\system\worker\AbstractWorker::$limit
+	 * @see	\wcf\system\worker\AbstractWorker::$limit
 	 */
 	protected $limit = 500;
 	
 	/**
-	 * @see	wcf\system\worker\AbstractRebuildDataWorker::initObjectList
+	 * @see	\wcf\system\worker\AbstractRebuildDataWorker::initObjectList
 	 */
 	protected function initObjectList() {
 		parent::initObjectList();
@@ -38,7 +38,7 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker {
 	}
 	
 	/**
-	 * @see	wcf\system\worker\IWorker::execute()
+	 * @see	\wcf\system\worker\IWorker::execute()
 	 */
 	public function execute() {
 		parent::execute();

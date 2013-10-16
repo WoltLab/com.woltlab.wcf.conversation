@@ -23,12 +23,12 @@ class ConversationLogModificationLogList extends ModificationLogList {
 	
 	/**
 	 * conversation object
-	 * @var	wcf\data\conversation\Conversation
+	 * @var	\wcf\data\conversation\Conversation
 	 */
 	public $conversation = null;
 	
 	/**
-	 * @see	wbb\data\DatabaseObjectList::__construct()
+	 * @see	\wbb\data\DatabaseObjectList::__construct()
 	 */
 	public function __construct() {
 		parent::__construct();
@@ -41,14 +41,14 @@ class ConversationLogModificationLogList extends ModificationLogList {
 	/**
 	 * Initializes the conversation log modification log list.
 	 * 
-	 * @param	wcf\data\conversation\Conversation	$conversation
+	 * @param	\wcf\data\conversation\Conversation	$conversation
 	 */
 	public function setConversation(Conversation $conversation) {
 		$this->conversation = $conversation;
 	}
 	
 	/**
-	 * @see	wcf\data\DatabaseObjectList::countObjects()
+	 * @see	\wcf\data\DatabaseObjectList::countObjects()
 	 */
 	public function countObjects() {
 		$sql = "SELECT	COUNT(modification_log.logID) AS count
@@ -66,7 +66,7 @@ class ConversationLogModificationLogList extends ModificationLogList {
 	}
 	
 	/**
-	 * @see	wcf\data\DatabaseObjectList::readObjects()
+	 * @see	\wcf\data\DatabaseObjectList::readObjects()
 	 */
 	public function readObjects() {
 		$sql = "SELECT		user_avatar.*,
@@ -107,7 +107,7 @@ class ConversationLogModificationLogList extends ModificationLogList {
 	 * will be returned and removed from collection.
 	 * 
 	 * @param	integer		$time
-	 * @return	array<wcf\data\modification\log\ViewableConversationModificationLog>
+	 * @return	array<\wcf\data\modification\log\ViewableConversationModificationLog>
 	 */
 	public function getEntriesUntil($time) {
 		$entries = array();

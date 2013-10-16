@@ -15,12 +15,12 @@ use wcf\system\bbcode\AttachmentBBCode;
  */
 class ViewableConversationMessageList extends ConversationMessageList {
 	/**
-	 * @see	wcf\data\DatabaseObjectList::$sqlOrderBy
+	 * @see	\wcf\data\DatabaseObjectList::$sqlOrderBy
 	 */
 	public $sqlOrderBy = 'conversation_message.time';
 	
 	/**
-	 * @see	wcf\data\DatabaseObjectList::$decoratorClassName
+	 * @see	\wcf\data\DatabaseObjectList::$decoratorClassName
 	 */
 	public $decoratorClassName = 'wcf\data\conversation\message\ViewableConversationMessage';
 	
@@ -32,7 +32,7 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	
 	/**
 	 * attachment list
-	 * @var	wcf\data\attachment\GroupedAttachmentList
+	 * @var	\wcf\data\attachment\GroupedAttachmentList
 	 */
 	protected $attachmentList = null;
 	
@@ -59,7 +59,7 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	}
 	
 	/**
-	 * @see	wcf\data\DatabaseObjectList::readObjects()
+	 * @see	\wcf\data\DatabaseObjectList::readObjects()
 	 */
 	public function readObjects() {
 		if ($this->objectIDs === null) {
@@ -107,7 +107,7 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	/**
 	 * Returns the list of attachments.
 	 * 
-	 * @return	wcf\data\attachment\GroupedAttachmentList
+	 * @return	\wcf\data\attachment\GroupedAttachmentList
 	 */
 	public function getAttachmentList() {
 		return $this->attachmentList;

@@ -18,14 +18,14 @@ use wcf\system\search\SearchResultTextParser;
 class SearchResultConversationMessage extends ViewableConversationMessage implements ISearchResultObject {
 	/**
 	 * conversation object
-	 * @var	wcf\data\conversation\Conversation
+	 * @var	\wcf\data\conversation\Conversation
 	 */
 	public $conversation = null;
 	
 	/**
 	 * Returns the conversation object.
 	 * 
-	 * @return	wcf\data\conversation\Conversation
+	 * @return	\wcf\data\conversation\Conversation
 	 */
 	public function getConversation() {
 		if ($this->conversation === null) {
@@ -39,21 +39,21 @@ class SearchResultConversationMessage extends ViewableConversationMessage implem
 	}
 	
 	/**
-	 * @see	wcf\data\conversation\message\ConversationMessage::getFormattedMessage()
+	 * @see	\wcf\data\conversation\message\ConversationMessage::getFormattedMessage()
 	 */
 	public function getFormattedMessage() {
 		return SearchResultTextParser::getInstance()->parse($this->getDecoratedObject()->getSimplifiedFormattedMessage());
 	}
 	
 	/**
-	 * @see	wcf\data\search\ISearchResultObject::getSubject()
+	 * @see	\wcf\data\search\ISearchResultObject::getSubject()
 	 */
 	public function getSubject() {
 		return $this->subject;
 	}
 	
 	/**
-	 * @see	wcf\data\search\ISearchResultObject::getLink()
+	 * @see	\wcf\data\search\ISearchResultObject::getLink()
 	 */
 	public function getLink($query = '') {
 		if ($query) {
@@ -68,28 +68,28 @@ class SearchResultConversationMessage extends ViewableConversationMessage implem
 	}
 	
 	/**
-	 * @see	wcf\data\search\ISearchResultObject::getTime()
+	 * @see	\wcf\data\search\ISearchResultObject::getTime()
 	 */
 	public function getTime() {
 		return $this->time;
 	}
 	
 	/**
-	 * @see	wcf\data\search\ISearchResultObject::getObjectTypeName()
+	 * @see	\wcf\data\search\ISearchResultObject::getObjectTypeName()
 	 */
 	public function getObjectTypeName() {
 		return 'com.woltlab.wcf.conversation.message';
 	}
 	
 	/**
-	 * @see	wcf\data\search\ISearchResultObject::getContainerTitle()
+	 * @see	\wcf\data\search\ISearchResultObject::getContainerTitle()
 	 */
 	public function getContainerTitle() {
 		return '';
 	}
 	
 	/**
-	 * @see	wcf\data\search\ISearchResultObject::getContainerLink()
+	 * @see	\wcf\data\search\ISearchResultObject::getContainerLink()
 	 */
 	public function getContainerLink() {
 		return '';
