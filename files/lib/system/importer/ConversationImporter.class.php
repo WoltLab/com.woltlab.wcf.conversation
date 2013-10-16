@@ -23,6 +23,7 @@ class ConversationImporter extends AbstractImporter {
 	 * @see	wcf\system\importer\IImporter::import()
 	 */
 	public function import($oldID, array $data, array $additionalData = array()) {
+		$oldUserID = $data['userID'];
 		$data['userID'] = ImportHandler::getInstance()->getNewID('com.woltlab.wcf.user', $data['userID']);
 		
 		// check existing conversation
@@ -34,6 +35,18 @@ class ConversationImporter extends AbstractImporter {
 		$conversation = ConversationEditor::create($data);
 		
 		ImportHandler::getInstance()->saveNewID('com.woltlab.wcf.conversation', $oldID, $conversation->conversationID);
+		
+		// add author
+		if (!$data['isDraft']) {
+			ImportHandler::getInstance()->getImporter('com.woltlab.wcf.conversation.user')->import(0, array(
+				'conversationID' => $oldID,
+				'participantID' => $oldUserID,
+				'username' => $data['username'],
+				'hideConversation' => 0,
+				'isInvisible' => 0,
+				'lastVisitTime' => $data['time']
+			), array('labelIDs' => array()));
+		}
 		
 		return $conversation->conversationID;
 	}
