@@ -85,6 +85,8 @@
 		<item name="wcf.conversation.participants.error.doesNotAcceptConversation"><![CDATA[„{$errorData[username]}“ möchte nicht an Konversationen teilnehmen.]]></item>
 		<item name="wcf.conversation.participants.error.ignoresYou"><![CDATA[„{$errorData[username]}“ hat Sie blockiert.]]></item>
 		<item name="wcf.conversation.participants.error.tooManyParticipants"><![CDATA[Sie haben zu viele Teilnehmer angegeben. Das Maximum liegt bei {#$__wcf->getSession()->getPermission('user.conversation.maxParticipants')} Teilnehmern.]]></item>
+		<item name="wcf.conversation.participants.error.invisibleParticipantsNoPermission"><![CDATA[Sie haben keine Berechtigung, unsichtbare Teilnehmer hinzuzufügen.]]></item>
+		<item name="wcf.conversation.participants.error.participantCanInviteNoPermission"><![CDATA[Sie haben keine Berechtigung, Teilnehmern das Hinzufügen weiterer Teilnehmer zu erlauben.]]></item>
 		<item name="wcf.conversation.participants.removeParticipant"><![CDATA[Teilnehmer entfernen]]></item>
 		<item name="wcf.conversation.participants.removeParticipant.confirmMessage"><![CDATA[Wollen Sie „{$participant->username}“ wirklich aus dieser Konversation entfernen?]]></item>
 		<item name="wcf.conversation.quota"><![CDATA[Speicherplatz]]></item>

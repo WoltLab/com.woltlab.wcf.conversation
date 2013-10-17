@@ -83,6 +83,7 @@
 				</dd>
 			</dl>
 			
+			{if $__wcf->session->getPermission('user.conversation.canAddInvisibleParticipants')}
 			<dl{if $errorField == 'invisibleParticipants'} class="formError"{/if}>
 				<dt><label for="invisibleParticipants">{lang}wcf.conversation.invisibleParticipants{/lang}</label></dt>
 				<dd>
@@ -103,13 +104,16 @@
 					<small>{lang}wcf.conversation.invisibleParticipants.description{/lang}</small>
 				</dd>
 			</dl>
+			{/if}
 			
+			{if $__wcf->session->getPermission('user.conversation.canSetCanInvite')}
 			<dl>
 				<dt></dt>
 				<dd>
 					<label><input type="checkbox" name="participantCanInvite" id="participantCanInvite" value="1"{if $participantCanInvite} checked="checked"{/if} /> {lang}wcf.conversation.participantCanInvite{/lang}</label>
 				</dd>
 			</dl>
+			{/if}
 			
 			{event name='participantFields'}
 		</fieldset>
