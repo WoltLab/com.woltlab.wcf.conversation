@@ -3,7 +3,6 @@ namespace wcf\system\importer;
 use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\conversation\message\ConversationMessageEditor;
 use wcf\data\object\type\ObjectTypeCache;
-use wcf\util\StringUtil;
 
 /**
  * Imports conversation attachments.

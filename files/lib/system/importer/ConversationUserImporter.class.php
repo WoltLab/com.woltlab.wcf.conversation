@@ -1,7 +1,5 @@
 <?php
 namespace wcf\system\importer;
-use wcf\data\conversation\Conversation;
-use wcf\data\conversation\ConversationEditor;
 use wcf\system\WCF;
 
 /**
