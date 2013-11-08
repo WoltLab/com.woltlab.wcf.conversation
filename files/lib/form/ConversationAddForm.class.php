@@ -147,6 +147,16 @@ class ConversationAddForm extends MessageForm {
 			throw new UserInputException('participants');
 		}
 		
+		// check, if user is allowed to set invisible participants
+		if (!WCF::getSession()->getPermission('user.conversation.canAddInvisibleParticipants') && !empty($this->invisibleParticipants)) {
+			throw new UserInputException('participants', 'invisibleParticipantsNoPermission');
+		}
+		
+		// check, if user is allowed to set participantCanInvite
+		if (!WCF::getSession()->getPermission('user.conversation.canAddInvisibleParticipants') && $this->participantCanInvite) {
+			throw new UserInputException('participantCanInvite', 'participantCanInviteNoPermission');
+		}
+		
 		$this->participantIDs = Conversation::validateParticipants($this->participants);
 		$this->invisibleParticipantIDs = Conversation::validateParticipants($this->invisibleParticipants, 'invisibleParticipants');
 		

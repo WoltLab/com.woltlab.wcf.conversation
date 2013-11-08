@@ -4,6 +4,10 @@
 		<item name="wcf.acp.group.option.category.user.conversation"><![CDATA[Konversationen]]></item>
 		<item name="wcf.acp.group.option.mod.conversation.canModerateConversation"><![CDATA[Kann Konversationen moderieren]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canUseConversation"><![CDATA[Kann Konversationen benutzen]]></item>
+		<item name="wcf.acp.group.option.user.conversation.canSetCanInvite"><![CDATA[Kann Rechte erteilen]]></item>
+		<item name="wcf.acp.group.option.user.conversation.canSetCanInvite.description"><![CDATA[Mitglieder dieser Benutzergruppe können beim Start einer neuen Konversation hinzugefügten Teilnehmern das Recht erteilen, weitere Teilnehmer zur Konversation hinzufügen zu können.]]></item>
+		<item name="wcf.acp.group.option.user.conversation.canAddInvisibleParticipants"><![CDATA[Kann unsichtbare Teilnehmer hinzufügen]]></item>
+		<item name="wcf.acp.group.option.user.conversation.canAddInvisibleParticipants.description"><![CDATA[Mitglieder dieser Benutzergruppe können einer neuen Konversation unsichtbare Teilnehmer hinzufügen.]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxParticipants"><![CDATA[Maximale Anzahl Teilnehmer]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxParticipants.description"><![CDATA[Anzahl Teilnehmer, die einer Konversation hinzugefügt werden können.]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxConversations"><![CDATA[Maximale Anzahl Konversationen]]></item>
@@ -85,6 +89,8 @@
 		<item name="wcf.conversation.participants.error.doesNotAcceptConversation"><![CDATA[„{$errorData[username]}“ möchte nicht an Konversationen teilnehmen.]]></item>
 		<item name="wcf.conversation.participants.error.ignoresYou"><![CDATA[„{$errorData[username]}“ hat Sie blockiert.]]></item>
 		<item name="wcf.conversation.participants.error.tooManyParticipants"><![CDATA[Sie haben zu viele Teilnehmer angegeben. Das Maximum liegt bei {#$__wcf->getSession()->getPermission('user.conversation.maxParticipants')} Teilnehmern.]]></item>
+		<item name="wcf.conversation.participants.error.invisibleParticipantsNoPermission"><![CDATA[Sie haben keine Berechtigung, unsichtbare Teilnehmer hinzuzufügen.]]></item>
+		<item name="wcf.conversation.participants.error.participantCanInviteNoPermission"><![CDATA[Sie haben keine Berechtigung, Teilnehmern das Hinzufügen weiterer Teilnehmer zu erlauben.]]></item>
 		<item name="wcf.conversation.participants.removeParticipant"><![CDATA[Teilnehmer entfernen]]></item>
 		<item name="wcf.conversation.participants.removeParticipant.confirmMessage"><![CDATA[Wollen Sie „{$participant->username}“ wirklich aus dieser Konversation entfernen?]]></item>
 		<item name="wcf.conversation.quota"><![CDATA[Speicherplatz]]></item>
