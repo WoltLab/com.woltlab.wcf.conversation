@@ -10,7 +10,7 @@
 	<script data-relocate="true">
 		//<![CDATA[
 		$(function() {
-			new WCF.Message.UserMention('messageEditor{@$message->messageID}');
+			WCF.System.Dependency.Manager.register('CKEditor', function() { new WCF.Message.UserMention('messageEditor{@$message->messageID}'); });
 		});
 		//]]>
 	</script>

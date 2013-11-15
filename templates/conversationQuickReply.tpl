@@ -25,7 +25,7 @@
 	<script data-relocate="true">
 		//<![CDATA[
 		$(function() {
-			new WCF.Message.UserMention('text');
+			WCF.System.Dependency.Manager.register('CKEditor', function() { new WCF.Message.UserMention('text'); });
 		});
 		//]]>
 	</script>
