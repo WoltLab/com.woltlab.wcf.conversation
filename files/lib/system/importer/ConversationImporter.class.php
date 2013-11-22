@@ -37,7 +37,7 @@ class ConversationImporter extends AbstractImporter {
 		ImportHandler::getInstance()->saveNewID('com.woltlab.wcf.conversation', $oldID, $conversation->conversationID);
 		
 		// add author
-		if (!$data['isDraft']) {
+		if (empty($data['isDraft'])) {
 			ImportHandler::getInstance()->getImporter('com.woltlab.wcf.conversation.user')->import(0, array(
 				'conversationID' => $oldID,
 				'participantID' => $oldUserID,
