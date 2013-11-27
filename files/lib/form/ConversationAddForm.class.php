@@ -183,14 +183,14 @@ class ConversationAddForm extends MessageForm {
 		parent::save();
 		
 		// save conversation
-		$data = array(
+		$data = array_merge($this->additionalFields, array(
 			'subject' => $this->subject,
 			'time' => TIME_NOW,
 			'userID' => WCF::getUser()->userID,
 			'username' => WCF::getUser()->username,
 			'isDraft' => ($this->draft ? 1 : 0),
 			'participantCanInvite' => $this->participantCanInvite
-		);
+		));
 		if ($this->draft) {
 			$data['draftData'] = serialize(array(
 				'participants' => $this->participantIDs,

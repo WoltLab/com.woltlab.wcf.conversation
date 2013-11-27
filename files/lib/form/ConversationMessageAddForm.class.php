@@ -162,7 +162,7 @@ class ConversationMessageAddForm extends MessageForm {
 		parent::save();
 		
 		// save message
-		$data = array(
+		$data = array_merge($this->additionalFields, array(
 			'conversationID' => $this->conversationID,
 			'message' => $this->text,
 			'time' => TIME_NOW,
@@ -172,7 +172,7 @@ class ConversationMessageAddForm extends MessageForm {
 			'enableHtml' => $this->enableHtml,
 			'enableSmilies' => $this->enableSmilies,
 			'showSignature' => $this->showSignature
-		);
+		));
 		
 		$messageData = array(
 			'data' => $data,

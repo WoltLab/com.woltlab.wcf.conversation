@@ -122,13 +122,13 @@ class ConversationMessageEditForm extends ConversationAddForm {
 		MessageForm::save();
 		
 		// save message
-		$data = array(
+		$data = array_merge($this->additionalFields, array(
 			'message' => $this->text,
 			'enableBBCodes' => $this->enableBBCodes,
 			'enableHtml' => $this->enableHtml,
 			'enableSmilies' => $this->enableSmilies,
 			'showSignature' => $this->showSignature
-		);
+		));
 		if ($this->conversation->isDraft && !$this->draft) {
 			$data['time'] = TIME_NOW;
 		}
