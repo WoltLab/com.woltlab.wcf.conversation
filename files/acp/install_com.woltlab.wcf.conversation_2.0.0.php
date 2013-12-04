@@ -5,7 +5,7 @@ use wcf\system\WCF;
 /**
  * @author	Matthias Schmidt
  * @copyright	2001-2013 WoltLab GmbH
- * @license	WoltLab Burning Board License <http://www.woltlab.com/products/burning_board/license.php>
+ * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  */
 // set default mod permissions
 $group = new UserGroup(5);
