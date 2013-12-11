@@ -316,6 +316,32 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	}
 	
 	/**
+	 * Marks all conversations as read.
+	 */
+	public function markAllAsRead() {
+		$sql = "UPDATE	wcf".WCF_N."_conversation_to_user
+			SET	lastVisitTime = ?
+			WHERE	participantID = ?";
+		$statement = WCF::getDB()->prepareStatement($sql);
+		$statement->execute(array(
+			TIME_NOW,
+			WCF::getUser()->userID
+		));
+		
+		// reset storage
+		UserStorageHandler::getInstance()->reset(array(WCF::getUser()->userID), 'unreadConversationCount');
+		
+		// delete obsolete notifications
+		UserNotificationHandler::getInstance()->deleteNotifications('conversation', 'com.woltlab.wcf.conversation.notification', array(WCF::getUser()->userID));
+		UserNotificationHandler::getInstance()->deleteNotifications('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', array(WCF::getUser()->userID));
+	}
+	
+	/**
+	 * Validates the markAllAsRead action.
+	 */
+	public function validateMarkAllAsRead() {}
+	
+	/**
 	 * Validates user access for label management.
 	 */
 	public function validateGetLabelmanagement() {

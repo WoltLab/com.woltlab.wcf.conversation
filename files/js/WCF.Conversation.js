@@ -1440,6 +1440,72 @@ WCF.Conversation.MarkAsRead = Class.extend({
 });
 
 /**
+ * Marks all conversations as read.
+ */
+WCF.Conversation.MarkAllAsRead = Class.extend({
+	/**
+	 * action proxy
+	 * @var	WCF.Action.Proxy
+	 */
+	_proxy: null,
+	
+	/**
+	 * Initializes the WCF.Conversation.MarkAllAsRead class.
+	 */
+	init: function() {
+		this._proxy = new WCF.Action.Proxy({
+			success: $.proxy(this._success, this)
+		});
+		
+		$('.markAllAsReadButton').click($.proxy(this._dblClick, this));
+	},
+	
+	/**
+	 * Handles double-clicks.
+	 * 
+	 * @param	object		event
+	 */
+	_dblClick: function(event) {
+		this._proxy.setOption('data', {
+			actionName: 'markAllAsRead',
+			className: 'wcf\\data\\conversation\\ConversationAction'
+		});
+		this._proxy.sendRequest();
+	},
+	
+	/**
+	 * Marks all conversations as read.
+	 * 
+	 * @param	object		data
+	 * @param	string		textStatus
+	 * @param	jQuery		jqXHR
+	 */
+	_success: function(data, textStatus, jqXHR) {
+		// fix dropdown
+		var $dropdownMenu = WCF.Dropdown.getDropdownMenu('unreadConversations');
+		var $placeholder = $dropdownMenu.children('.jsDropdownPlaceholder').remove();
+		$dropdownMenu.data('count', 0);
+		$dropdownMenu.children().each(function(index, listItem) {
+			var $listItem = $(listItem);
+			if ($listItem.hasClass('dropdownDivider')) return false;
+			
+			$listItem.remove();
+		});
+		if (!$placeholder.length) {
+			$('<li><span>' + WCF.Language.get('wcf.conversation.noMoreItems') + '</span></li>').prependTo($dropdownMenu);
+		}
+		
+		// remove badge
+		$('#unreadConversations .badge').remove();
+		
+		// fix conversation list
+		var $conversationList = $('.conversationList');
+		$conversationList.find('.new').removeClass('new');
+		$conversationList.find('.columnAvatar').off('dblclick');
+	}
+});
+
+/**
  * Namespace for conversation messages.
  */
 WCF.Conversation.Message = { };

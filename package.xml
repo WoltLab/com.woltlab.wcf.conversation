@@ -34,6 +34,8 @@
 	</instructions>
 	
 	<instructions type="update" fromversion="2.0.0 RC 3">
-		<!-- fake update -->
+		<instruction type="file">files_update.tar</instruction>
+		<instruction type="template">templates_update.tar</instruction>
+		<instruction type="language">language/*.xml</instruction>
 	</instructions>
 </package>
