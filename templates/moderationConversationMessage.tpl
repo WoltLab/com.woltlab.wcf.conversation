@@ -11,7 +11,7 @@
 						{/if}
 						
 						<div class="messageHeadline">
-							<h1><a href="{@$message->getLink()}">{$message->getTitle()}</a></h1>
+							<h1>{if $message->getConversation()->canRead()}<a href="{@$message->getLink()}">{$message->getTitle()}</a>{else}{$message->getTitle()}{/if}</h1>
 							<p>
 								<span class="username">{if $message->userID}<a href="{link controller='User' object=$message->getUserProfile()->getDecoratedObject()}{/link}">{$message->getUsername()}</a>{else}{$message->getUsername()}{/if}</span>
 								{@$message->getTime()|time}
