@@ -114,7 +114,7 @@ WCF.Conversation.EditorHandler = Class.extend({
 	getAvailableLabels: function() {
 		var $labels = [ ];
 		
-		WCF.Dropdown.getDropdownMenu('conversationLabelFilter').children('li').each(function(index, listItem) {
+		WCF.Dropdown.getDropdownMenu('conversationLabelFilter').children('.scrollableDropdownMenu').children('li').each(function(index, listItem) {
 			var $listItem = $(listItem);
 			if ($listItem.hasClass('dropdownDivider')) {
 				return false;
