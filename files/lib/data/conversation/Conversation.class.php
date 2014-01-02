@@ -18,7 +18,7 @@ use wcf\util\ArrayUtil;
  * Represents a conversation.
  * 
  * @author	Marcel Werk
- * @copyright	2009-2012 WoltLab GmbH
+ * @copyright	2001-2013 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation
@@ -350,8 +350,15 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 		}
 		
 		if (!WCF::getSession()->getPermission('user.profile.cannotBeIgnored')) {
-			// check privacy setting
-			if ($user->canSendConversation == 2 || ($user->canSendConversation == 1 && WCF::getUserProfileHandler()->isFollowing($user->userID))) {
+			// check if user wants to receive any conversations
+			if ($user->canSendConversation == 2) {
+				throw new UserInputException($field, 'doesNotAcceptConversation');
+			}
+			
+			// check if user only wants to receive conversations by
+			// users they are following and if the active user is followed
+			// by the relevant user
+			if ($user->canSendConversation == 1 && !$user->isFollowing(WCF::getUser()->userID)) {
 				throw new UserInputException($field, 'doesNotAcceptConversation');
 			}
 			
