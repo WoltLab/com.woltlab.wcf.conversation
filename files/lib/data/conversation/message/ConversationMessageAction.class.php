@@ -323,7 +323,11 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 * @see	\wcf\data\IMessageInlineEditorAction::validateSave()
 	 */
 	public function validateSave() {
-		$this->readString('message', false, 'data');
+		$this->readString('message', true, 'data');
+		
+		if (empty($this->parameters['data']['message'])) {
+			throw new UserInputException('message', WCF::getLanguage()->get('wcf.global.form.error.empty'));
+		}
 		
 		$this->validateBeginEdit();
 		$this->validateMessage($this->conversation, $this->parameters['data']['message']);
