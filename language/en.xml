@@ -166,7 +166,7 @@
 ---------------------------------
 {@$message->getMailText()} 
 ---------------------------------
-{/if}{link controller='Conversation' object=$message->getConversation() encode=false forceFrontend=true}messageID={@$message->messageID}{/link}#message{@$message->messageID}]]></item>
+{/if}{link controller='Conversation' object=$message->getConversation() isEmail=true}messageID={@$message->messageID}{/link}#message{@$message->messageID}]]></item>
 		<item name="wcf.user.notification.conversation.message"><![CDATA[Started the conversation “{$conversation->subject}”.]]></item>
 		<item name="wcf.user.notification.conversation.title"><![CDATA[New Conversation]]></item>
 		<item name="wcf.user.notification.conversation.mail"><![CDATA[{@$author->username} started the conversation "{@$conversation->subject}":
@@ -174,7 +174,7 @@
 ---------------------------------
 {@$conversation->getFirstMessage()->getMailText()} 
 ---------------------------------
-{/if}{link controller='Conversation' object=$conversation encode=false forceFrontend=true}{/link}]]></item>
+{/if}{link controller='Conversation' object=$conversation isEmail=true}{/link}]]></item>
 		<item name="wcf.user.notification.com.woltlab.wcf.conversation"><![CDATA[Conversations]]></item>
 		<item name="wcf.user.notification.com.woltlab.wcf.conversation.notification.conversation"><![CDATA[New conversation]]></item>
 		<item name="wcf.user.notification.com.woltlab.wcf.conversation.message.notification.conversationMessage"><![CDATA[Reply to existing conversation]]></item>
