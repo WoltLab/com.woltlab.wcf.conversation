@@ -8,6 +8,11 @@
 	<script data-relocate="true">
 		//<![CDATA[
 		$(function() {
+			{if $isFirstMessage && $conversation->isDraft}
+				new WCF.Search.User('#participants', null, false, [ ], true);
+				new WCF.Search.User('#invisibleParticipants', null, false, [ ], true);
+			{/if}
+			
 			WCF.Message.Submit.registerButton('text', $('#messageContainer > .formSubmit > input[type=submit]'));
 			new WCF.Message.FormGuard();
 			
