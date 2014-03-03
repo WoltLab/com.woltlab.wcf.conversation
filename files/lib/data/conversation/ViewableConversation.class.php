@@ -12,7 +12,7 @@ use wcf\system\WCF;
  * Represents a viewable conversation.
  * 
  * @author	Marcel Werk
- * @copyright	2009-2013 WoltLab GmbH
+ * @copyright	2009-2014 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation
