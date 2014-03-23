@@ -2,7 +2,7 @@
  * Namespace for conversations.
  * 
  * @author	Alexander Ebert
- * @copyright	2001-2013 WoltLab GmbH
+ * @copyright	2001-2014 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  */
 WCF.Conversation = { };
@@ -752,23 +752,33 @@ WCF.Conversation.AddParticipants = Class.extend({
 	 */
 	_renderForm: function(data) {
 		this._dialog.html(data.returnValues.template);
-		var $submitButton = this._dialog.find('#addParticipants').disable().click($.proxy(this._submit, this));
+		this._dialog.find('#addParticipants').disable().click($.proxy(this._submit, this));
 		
 		new WCF.Search.User('#participantsInput', null, false, data.returnValues.excludeSearchValues, true);
 		
 		var $participantsInput = $('#participantsInput');
-		$participantsInput.keyup(function() {
-			if ($.trim($participantsInput.val()) === '') {
-				$submitButton.disable();
-			}
-			else {
-				$submitButton.enable();
-			}
-		});
+		$participantsInput.keyup($.proxy(this._toggleSubmitButton, this));
+		
+		if ($.browser.mozilla && $.browser.touch) {
+			$participantsInput.on('input', $.proxy(this._toggleSubmitButton, this));
+		}
 		
 		this._dialog.wcfDialog({
 			title: WCF.Language.get('wcf.conversation.edit.addParticipants')
 		});
+	},
+	
+	/**
+	 * Toggles the submit button if the input field contains a/no particiant.
+	 */
+	_toggleSubmitButton: function() {
+		var $submitButton = this._dialog.find('#addParticipants');
+		if ($.trim($('#participantsInput').val()) === '') {
+			$submitButton.disable();
+		}
+		else {
+			$submitButton.enable();
+		}
 	},
 	
 	/**
@@ -1142,6 +1152,10 @@ WCF.Conversation.Label.Manager = Class.extend({
 	 */
 	_bindListener: function() {
 		$('#labelName').on('keyup keydown keypress', $.proxy(this._updateLabels, this));
+		if ($.browser.mozilla && $.browser.touch) {
+			$('#labelName').on('input', $.proxy(this._updateLabels, this));
+		}
+		
 		$('#addLabel').disable().click($.proxy(this._addLabel, this));
 		$('#editLabel').disable();
 		
