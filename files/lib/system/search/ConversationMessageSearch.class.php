@@ -80,4 +80,11 @@ class ConversationMessageSearch extends AbstractSearchableObjectType {
 		
 		return $conditionBuilder;
 	}
+	
+	/**
+	 * @see	\wcf\system\search\ISearchableObjectType::isAccessible()
+	 */
+	public function isAccessible() {
+		return (WCF::getUser()->userID ? true : false);
+	}
 }
