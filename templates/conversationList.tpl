@@ -202,11 +202,14 @@
 								</ul>
 							</aside>
 							
-							<small>
-								<a href="{link controller='User' object=$conversation->getUserProfile()->getDecoratedObject()}{/link}" class="userLink" data-user-id="{@$conversation->userID}">{$conversation->username}</a>
-								- {@$conversation->time|time}
-								<span class="jsOnly conversationEditLink">- <a class="jsConversationInlineEditor">{lang}wcf.global.button.edit{/lang}</a></span>
-							</small>
+							<ul class="messageGroupInfo mobileOptimization">
+								<li class="messageGroupAuthor">{if $conversation->userID}<a href="{link controller='User' object=$conversation->getUserProfile()->getDecoratedObject()}{/link}" class="userLink" data-user-id="{@$conversation->userID}">{$conversation->username}</a>{else}{$conversation->username}{/if}</li>
+								<li class="messageGroupTime">{@$conversation->time|time}</li>
+								<li class="messageGroupLastPoster">{if $conversation->lastPosterID}<a href="{link controller='User' object=$conversation->getLastPosterProfile()->getDecoratedObject()}{/link}" class="userLink" data-user-id="{@$conversation->getLastPosterProfile()->userID}">{$conversation->lastPoster}</a>{else}{$conversation->lastPoster}{/if}</li>
+								<li class="messageGroupLastPostTime">{@$conversation->lastPostTime|time}</li>
+								<li class="messageGroupEditLink jsOnly"><a class="jsConversationInlineEditor">{lang}wcf.global.button.edit{/lang}</a></li>
+								{event name='messageGroupInfo'}
+							</ul>
 							
 							{if $conversation->getParticipantSummary()|count}
 								<small class="conversationParticipantSummary">
