@@ -153,6 +153,14 @@
 		<item name="wcf.moderation.type.com.woltlab.wcf.conversation.message"><![CDATA[Konversation]]></item>
 	</category>
 	
+	<category name="wcf.page">
+		<item name="wcf.page.com.woltlab.wcf.conversation.ConversationAddForm"><![CDATA[Neue Konversation starten]]></item>
+		<item name="wcf.page.com.woltlab.wcf.conversation.ConversationMessageAddForm"><![CDATA[Neue Konversationsantwort erstellen]]></item>
+		<item name="wcf.page.com.woltlab.wcf.conversation.ConversationMessageEditForm"><![CDATA[Konversationsnachricht bearbeiten]]></item>
+		<item name="wcf.page.com.woltlab.wcf.conversation.ConversationListPage"><![CDATA[Konversationen]]></item>
+		<item name="wcf.page.com.woltlab.wcf.conversation.ConversationPage"><![CDATA[Konversation]]></item>
+	</category>
+	
 	<category name="wcf.search">
 		<item name="wcf.search.type.com.woltlab.wcf.conversation.message"><![CDATA[Konversationen]]></item>
 		<item name="wcf.search.object.com.woltlab.wcf.conversation.message"><![CDATA[Konversation]]></item>

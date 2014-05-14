@@ -129,5 +129,33 @@
 			<nicevalue>-5</nicevalue>
 		</type>
 		<!-- /rebuild data workers -->
+		
+		<!-- pages -->
+		<type>
+			<name>com.woltlab.wcf.conversation.ConversationAddForm</name>
+			<definitionname>com.woltlab.wcf.page</definitionname>
+			<classname><![CDATA[wcf\form\ConversationAddForm]]></classname>
+		</type>
+		<type>
+			<name>com.woltlab.wcf.conversation.ConversationMessageAddForm</name>
+			<definitionname>com.woltlab.wcf.page</definitionname>
+			<classname><![CDATA[wcf\form\ConversationMessageAddForm]]></classname>
+		</type>
+		<type>
+			<name>com.woltlab.wcf.conversation.ConversationMessageEditForm</name>
+			<definitionname>com.woltlab.wcf.page</definitionname>
+			<classname><![CDATA[wcf\form\ConversationMessageEditForm]]></classname>
+		</type>
+		<type>
+			<name>com.woltlab.wcf.conversation.ConversationListPage</name>
+			<definitionname>com.woltlab.wcf.page</definitionname>
+			<classname><![CDATA[wcf\page\ConversationListPage]]></classname>
+		</type>
+		<type>
+			<name>com.woltlab.wcf.conversation.ConversationPage</name>
+			<definitionname>com.woltlab.wcf.page</definitionname>
+			<classname><![CDATA[wcf\page\ConversationPage]]></classname>
+		</type>
+		<!-- /pages -->
 	</import>
 </data>
