@@ -1533,8 +1533,8 @@ WCF.Conversation.Message.InlineEditor = WCF.Message.InlineEditor.extend({
 	/**
 	 * @see	WCF.Message.InlineEditor.init()
 	 */
-	init: function(containerID) {
-		this._super(containerID, true);
+	init: function(containerID, quoteManager) {
+		this._super(containerID, true, quoteManager);
 	},
 	
 	/**
