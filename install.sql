@@ -48,6 +48,8 @@ CREATE TABLE wcf1_conversation_message (
 	enableBBCodes TINYINT(1) NOT NULL DEFAULT 1,
 	showSignature TINYINT(1) NOT NULL DEFAULT 1,
 	ipAddress VARCHAR(39) NOT NULL DEFAULT '',
+	lastEditTime INT(10) NOT NULL DEFAULT 0,
+	editCount MEDIUMINT(7) NOT NULL DEFAULT 0,
 	
 	KEY (conversationID, userID),
 	KEY (ipAddress)

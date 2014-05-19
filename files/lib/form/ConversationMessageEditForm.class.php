@@ -132,6 +132,10 @@ class ConversationMessageEditForm extends ConversationAddForm {
 		if ($this->conversation->isDraft && !$this->draft) {
 			$data['time'] = TIME_NOW;
 		}
+		if (!$this->draft) {
+			$data['lastEditTime'] = TIME_NOW;
+			$data['editCount'] = $this->message->editCount + 1;
+		}
 		$messageData = array(
 			'data' => $data,
 			'attachmentHandler' => $this->attachmentHandler

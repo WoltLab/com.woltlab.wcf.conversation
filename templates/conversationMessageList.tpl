@@ -45,6 +45,10 @@
 							{event name='messageBody'}
 							
 							<div class="messageFooter">
+								{if $message->editCount}
+									<p class="messageFooterNote">{lang}wcf.conversation.message.editNote{/lang}</p>
+								{/if}
+								
 								{event name='messageFooterNotes'}
 							</div>
 							

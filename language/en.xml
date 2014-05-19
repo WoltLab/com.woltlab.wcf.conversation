@@ -109,6 +109,7 @@
 		<item name="wcf.conversation.attachments"><![CDATA[Conversation contains {#$conversation->attachments} attachment{if $conversation->attachments != 1}s{/if}]]></item>
 		<item name="wcf.conversation.error.mailboxIsFull"><![CDATA[You have reached your maximum limit of conversations and are unable to start new ones.]]></item>
 		<item name="wcf.conversation.markAllAsRead"><![CDATA[Mark All Conversations Read]]></item>
+		<item name="wcf.conversation.message.editNote"><![CDATA[TODO: {$message->username} hat diese Nachricht {#$message->editCount} mal editiert, zuletzt: {@$message->lastEditTime|time}.]]></item>
 	</category>
 	
 	<category name="wcf.conversation.edit">

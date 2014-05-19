@@ -338,9 +338,14 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 */
 	public function save() {
 		$messageEditor = new ConversationMessageEditor($this->message);
-		$messageEditor->update(array(
+		$data = array(
 			'message' => PreParser::getInstance()->parse(MessageUtil::stripCrap($this->parameters['data']['message']), explode(',', WCF::getSession()->getPermission('user.message.allowedBBCodes')))
-		));
+		);
+		if (!$this->message->getConversation()->isDraft) {
+			$data['lastEditTime'] = TIME_NOW;
+			$data['editCount'] = $this->message->editCount + 1;
+		}
+		$messageEditor->update($data);
 		
 		// load new message
 		$this->message = new ConversationMessage($this->message->messageID);
