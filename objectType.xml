@@ -162,5 +162,18 @@
 			<options>module_conversation</options>
 		</type>
 		<!-- /pages -->
+		
+		<!-- stat handlers -->
+		<type>
+			<name>com.woltlab.wcf.conversation</name>
+			<definitionname>com.woltlab.wcf.statDailyHandler</definitionname>
+			<classname><![CDATA[wcf\system\stat\ConversationStatDailyHandler]]></classname>
+		</type>
+		<type>
+			<name>com.woltlab.wcf.conversation.message</name>
+			<definitionname>com.woltlab.wcf.statDailyHandler</definitionname>
+			<classname><![CDATA[wcf\system\stat\ConversationMessageStatDailyHandler]]></classname>
+		</type>
+		<!-- /stat handlers -->
 	</import>
 </data>
