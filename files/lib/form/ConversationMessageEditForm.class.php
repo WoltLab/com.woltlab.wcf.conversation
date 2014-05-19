@@ -76,12 +76,12 @@ class ConversationMessageEditForm extends ConversationAddForm {
 		if (!$this->message->messageID) {
 			throw new IllegalLinkException();
 		}
-		if ($this->message->userID != WCF::getUser()->userID) {
+		if (!$this->message->canEdit()) {
 			throw new PermissionDeniedException();
 		}
 		// get conversation
 		$this->conversationID = $this->message->conversationID;
-		$this->conversation = new Conversation($this->conversationID);
+		$this->conversation = $this->message->getConversation();
 		
 		if ($this->conversation->firstMessageID == $this->message->messageID) {
 			$this->isFirstMessage = true;

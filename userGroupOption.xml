@@ -26,6 +26,11 @@
 				<defaultvalue>1</defaultvalue>
 				<enableoptions>user.conversation.canSetCanInvite,user.conversation.canAddInvisibleParticipants,user.conversation.maxParticipants,user.conversation.maxConversations,user.conversation.maxLabels,user.conversation.maxLength,user.conversation.canUploadAttachment</enableoptions>
 			</option>
+			<option name="user.conversation.canEditMessage">
+				<categoryname>user.conversation</categoryname>
+				<optiontype>boolean</optiontype>
+				<defaultvalue>1</defaultvalue>
+			</option>
 			<option name="user.conversation.canSetCanInvite">
 				<categoryname>user.conversation</categoryname>
 				<optiontype>boolean</optiontype>
