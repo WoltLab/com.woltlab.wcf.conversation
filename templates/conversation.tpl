@@ -38,7 +38,9 @@
 			new WCF.Conversation.Message.QuoteHandler($quoteManager);
 			{if !$conversation->isClosed}new WCF.Conversation.QuickReply($quoteManager);{/if}
 			
-			new WCF.Moderation.Report.Content('com.woltlab.wcf.conversation.message', '.jsReportConversationMessage');
+			{if $__wcf->session->getPermission('user.profile.canReportContent')}
+				new WCF.Moderation.Report.Content('com.woltlab.wcf.conversation.message', '.jsReportConversationMessage');
+			{/if}
 			new WCF.Conversation.RemoveParticipant({@$conversation->conversationID});
 			new WCF.Message.BBCode.CodeViewer();
 		});
