@@ -125,7 +125,9 @@
 {include file='userNotice'}
 
 <div class="contentNavigation">
-	{pages print=true assign=pagesLinks controller='ConversationList' link="filter=$filter&pageNo=%d&sortField=$sortField&sortOrder=$sortOrder"}
+	{assign var='labelIDParameter' value=''}
+	{if $labelID}{assign var='labelIDParameter' value="&labelID=$labelID"}{/if}
+	{pages print=true assign=pagesLinks controller='ConversationList' link="filter=$filter&pageNo=%d&sortField=$sortField&sortOrder=$sortOrder$labelIDParameter"}
 	
 	{hascontent}
 		<nav>
