@@ -9,6 +9,10 @@
 					</header>
 					
 					<div class="messageBody">
+						{if !$conversation->isDraft && (($conversation->userID == $__wcf->user->userID && $conversation->participants == 0) || (!$conversation->isInvisible && $conversation->participants == 1))}
+							<p class="warning" style="margin-bottom: 14px">{lang}wcf.conversation.noParticipantsWarning{/lang}</p>
+						{/if}
+						
 						<textarea id="text" name="text" rows="20" cols="40" style="width: 100%"></textarea>
 					</div>
 					

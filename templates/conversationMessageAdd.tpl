@@ -30,6 +30,10 @@
 
 {include file='userNotice'}
 
+{if !$conversation->isDraft && (($conversation->userID == $__wcf->user->userID && $conversation->participants == 0) || (!$conversation->isInvisible && $conversation->participants == 1))}
+	<p class="warning">{lang}wcf.conversation.noParticipantsWarning{/lang}</p>
+{/if}
+
 {include file='formError'}
 
 <form id="messageContainer" class="jsFormGuard" method="post" action="{link controller='ConversationMessageAdd' id=$conversationID}{/link}">
