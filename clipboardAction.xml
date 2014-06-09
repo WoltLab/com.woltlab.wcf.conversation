@@ -9,37 +9,44 @@
 				<page><![CDATA[wcf\page\ConversationListPage]]></page>
 			</pages>
 		</action>
-		<action name="restore">
+		<action name="markAsRead">
 			<actionclassname><![CDATA[wcf\system\clipboard\action\ConversationClipboardAction]]></actionclassname>
 			<showorder>2</showorder>
 			<pages>
 				<page><![CDATA[wcf\page\ConversationListPage]]></page>
 			</pages>
 		</action>
-		<action name="leave">
+		<action name="restore">
 			<actionclassname><![CDATA[wcf\system\clipboard\action\ConversationClipboardAction]]></actionclassname>
 			<showorder>3</showorder>
 			<pages>
 				<page><![CDATA[wcf\page\ConversationListPage]]></page>
 			</pages>
 		</action>
-		<action name="leavePermanently">
+		<action name="leave">
 			<actionclassname><![CDATA[wcf\system\clipboard\action\ConversationClipboardAction]]></actionclassname>
 			<showorder>4</showorder>
 			<pages>
 				<page><![CDATA[wcf\page\ConversationListPage]]></page>
 			</pages>
 		</action>
-		<action name="open">
+		<action name="leavePermanently">
 			<actionclassname><![CDATA[wcf\system\clipboard\action\ConversationClipboardAction]]></actionclassname>
 			<showorder>5</showorder>
 			<pages>
 				<page><![CDATA[wcf\page\ConversationListPage]]></page>
 			</pages>
 		</action>
-		<action name="close">
+		<action name="open">
 			<actionclassname><![CDATA[wcf\system\clipboard\action\ConversationClipboardAction]]></actionclassname>
 			<showorder>6</showorder>
+			<pages>
+				<page><![CDATA[wcf\page\ConversationListPage]]></page>
+			</pages>
+		</action>
+		<action name="close">
+			<actionclassname><![CDATA[wcf\system\clipboard\action\ConversationClipboardAction]]></actionclassname>
+			<showorder>7</showorder>
 			<pages>
 				<page><![CDATA[wcf\page\ConversationListPage]]></page>
 			</pages>

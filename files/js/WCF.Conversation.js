@@ -350,6 +350,7 @@ WCF.Conversation.Clipboard = Class.extend({
 		switch (actionName) {
 			case 'com.woltlab.wcf.conversation.conversation.leave':
 			case 'com.woltlab.wcf.conversation.conversation.leavePermanently':
+			case 'com.woltlab.wcf.conversation.conversation.markAsRead':
 			case 'com.woltlab.wcf.conversation.conversation.restore':
 				window.location.reload();
 			break;

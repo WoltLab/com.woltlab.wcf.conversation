@@ -18,7 +18,7 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 	/**
 	 * @see	\wcf\system\clipboard\action\AbstractClipboardAction::$actionClassActions
 	 */
-	protected $actionClassActions = array('close', 'open');
+	protected $actionClassActions = array('close', 'markAsRead', 'open');
 	
 	/**
 	 * list of conversations
@@ -29,7 +29,7 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 	/**
 	 * @see	\wcf\system\clipboard\action\AbstractClipboardAction::$supportedActions
 	 */
-	protected $supportedActions = array('assignLabel', 'close', 'leave', 'leavePermanently', 'open', 'restore');
+	protected $supportedActions = array('assignLabel', 'close', 'leave', 'leavePermanently', 'markAsRead', 'open', 'restore');
 	
 	/**
 	 * @see	\wcf\system\clipboard\action\IClipboardAction::execute()
@@ -78,6 +78,15 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 				$item->addInternalData('parameters', array('hideConversation' => 2));
 				$item->addParameter('actionName', 'hideConversation');
 				$item->addParameter('className', $this->getClassName());
+			break;
+			
+			case 'markAsRead':
+				$item->addParameter('objectIDs', array_keys($this->conversations));
+				$item->addParameter('actionName', 'markAsRead');
+				$item->addParameter('className', $this->getClassName());
+				$item->addInternalData('confirmMessage', WCF::getLanguage()->getDynamicVariable('wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.markAsRead.confirmMessage', array(
+					'count' => $item->getCount()
+				)));
 			break;
 			
 			case 'restore':
@@ -193,6 +202,37 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 		$conversationIDs = array();
 		while ($row = $statement->fetchArray()) {
 			$conversationIDs[] = $row['conversationID'];
+		}
+		
+		return $conversationIDs;
+	}
+	
+	/**
+	 * Validates conversations applicable for mark as read.
+	 * 
+	 * @return	array<integer>
+	 */
+	public function validateMarkAsRead() {
+		$conversationIDs = array();
+		
+		$conditions = new PreparedStatementConditionBuilder();
+		$conditions->add("conversationID IN (?)", array(array_keys($this->conversations)));
+		$conditions->add("participantID = ?", array(WCF::getUser()->userID));
+		
+		$sql = "SELECT	conversationID, lastVisitTime
+			FROM	wcf".WCF_N."_conversation_to_user
+			".$conditions;
+		$statement = WCF::getDB()->prepareStatement($sql);
+		$statement->execute($conditions->getParameters());
+		$lastVisitTime = array();
+		while ($row = $statement->fetchArray()) {
+			$lastVisitTime[$row['conversationID']] = $row['lastVisitTime'];
+		}
+		
+		foreach ($this->conversations as $conversation) {
+			if (isset($lastVisitTime[$conversation->conversationID]) && $lastVisitTime[$conversation->conversationID] < $conversation->lastPostTime) {
+				$conversationIDs[] = $conversation->conversationID;
+			}
 		}
 		
 		return $conversationIDs;

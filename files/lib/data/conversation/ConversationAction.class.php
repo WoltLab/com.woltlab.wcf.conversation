@@ -282,6 +282,10 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 				UserNotificationHandler::getInstance()->deleteNotifications('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', array(WCF::getUser()->userID), $notificationObjectIDs);
 			}
 		}
+		
+		if (!empty($conversationIDs)) {
+			$this->unmarkItems($conversationIDs);
+		}
 	}
 	
 	/**
