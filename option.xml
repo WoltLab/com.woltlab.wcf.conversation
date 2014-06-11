@@ -18,18 +18,24 @@
 			<option name="conversations_per_page">
 				<categoryname>message.conversation</categoryname>
 				<optiontype>integer</optiontype>
-				<defaultvalue><![CDATA[10]]></defaultvalue>
+				<defaultvalue>10</defaultvalue>
+				<minvalue>5</minvalue>
+				<maxvalue>40</maxvalue>
 			</option>
 			<option name="conversation_messages_per_page">
 				<categoryname>message.conversation</categoryname>
 				<optiontype>integer</optiontype>
-				<defaultvalue><![CDATA[20]]></defaultvalue>
+				<defaultvalue>20</defaultvalue>
+				<minvalue>5</minvalue>
+				<maxvalue>40</maxvalue>
 			</option>
 			
 			<option name="conversation_reply_show_messages_max">
 				<categoryname>message.conversation</categoryname>
 				<optiontype>integer</optiontype>
 				<defaultvalue>10</defaultvalue>
+				<minvalue>5</minvalue>
+				<maxvalue>40</maxvalue>
 			</option>
 			
 			<option name="conversation_list_default_sort_field">
