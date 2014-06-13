@@ -11,13 +11,13 @@
 		<eventlistener>
 			<eventclassname>wcf\data\user\UserAction</eventclassname>
 			<eventname>rename</eventname>
-			<listenerclassname>wbb\system\event\listener\ConversationUserActionRenameListener</listenerclassname>
+			<listenerclassname>wcf\system\event\listener\ConversationUserActionRenameListener</listenerclassname>
 			<environment>user</environment>
 		</eventlistener>
 		<eventlistener>
 			<eventclassname>wcf\data\user\UserAction</eventclassname>
 			<eventname>rename</eventname>
-			<listenerclassname>wbb\system\event\listener\ConversationUserActionRenameListener</listenerclassname>
+			<listenerclassname>wcf\system\event\listener\ConversationUserActionRenameListener</listenerclassname>
 			<environment>admin</environment>
 		</eventlistener>
 	</import>
