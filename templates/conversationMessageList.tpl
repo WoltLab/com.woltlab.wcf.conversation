@@ -14,6 +14,10 @@
 				<section class="messageContent">
 					<div>
 						<header class="messageHeader">
+							<ul class="messageQuickOptions">
+								<li><a href="{link controller='Conversation' object=$conversation}messageID={@$message->messageID}{/link}#message{@$message->messageID}" class="badge jsTooltip" title="{lang}wcf.conversation.message.permalink{/lang}">{#$startIndex}</a></li>
+							</ul>
+							
 							<div class="messageHeadline">
 								<p><a href="{link controller='Conversation' object=$conversation}messageID={@$message->messageID}{/link}#message{@$message->messageID}" class="permalink">{@$message->time|time}</a></p>
 							</div>
@@ -69,6 +73,8 @@
 			</div>
 		</article>
 	</li>
+	
+	{assign var="startIndex" value=$startIndex + 1}
 {/foreach}
 
 {assign var=__modificationLogTime value=TIME_NOW}
