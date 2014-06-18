@@ -15,9 +15,19 @@ use wcf\system\user\notification\event\AbstractUserNotificationEvent;
  */
 class ConversationMessageUserNotificationEvent extends AbstractUserNotificationEvent {
 	/**
+	 * @see	\wcf\system\user\notification\event\AbstractUserNotificationEvent::$isStackable
+	 */
+	protected $isStackable = true;
+	
+	/**
 	 * @see	\wcf\system\user\notification\event\IUserNotificationEvent::getMessage()
 	 */
 	public function getTitle() {
+		$count = count($this->getAuthors());
+		if ($count > 1) {
+			return $this->getLanguage()->getDynamicVariable('wcf.user.notification.conversation.message.title.stacked', array('count' => $count));
+		}
+		
 		return $this->getLanguage()->get('wcf.user.notification.conversation.message.title');
 	}
 	
@@ -25,6 +35,19 @@ class ConversationMessageUserNotificationEvent extends AbstractUserNotificationE
 	 * @see	\wcf\system\user\notification\event\IUserNotificationEvent::getMessage()
 	 */
 	public function getMessage() {
+		$authors = array_values($this->getAuthors());
+		$count = count($authors);
+		
+		if ($count > 1) {
+			return $this->getLanguage()->getDynamicVariable('wcf.user.notification.conversation.message.message.stacked', array(
+				'author' => $this->author,
+				'authors' => $authors,
+				'count' => $count,
+				'message' => $this->userNotificationObject,
+				'others' => max($count - 1, 0)
+			));
+		}
+		
 		return $this->getLanguage()->getDynamicVariable('wcf.user.notification.conversation.message.message', array(
 			'message' => $this->userNotificationObject,
 		));

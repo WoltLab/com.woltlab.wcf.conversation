@@ -13,7 +13,7 @@ use wcf\system\request\LinkHandler;
  * @subpackage	system.user.notification.object
  * @category	Community Framework
  */
-class ConversationMessageUserNotificationObject extends DatabaseObjectDecorator implements IUserNotificationObject {
+class ConversationMessageUserNotificationObject extends DatabaseObjectDecorator implements IStackableUserNotificationObject {
 	/**
 	 * @see	\wcf\data\DatabaseObjectDecorator::$baseClass
 	 */
@@ -41,5 +41,12 @@ class ConversationMessageUserNotificationObject extends DatabaseObjectDecorator 
 	 */
 	public function getAuthorID() {
 		return $this->userID;
+	}
+	
+	/**
+	 * @see	\wcf\system\user\notification\object\IStackableUserNotificationObject::getRelatedObjectID()
+	 */
+	public function getRelatedObjectID() {
+		return $this->conversationID;
 	}
 }
