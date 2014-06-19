@@ -15,9 +15,9 @@ use wcf\system\user\notification\event\AbstractUserNotificationEvent;
  */
 class ConversationMessageUserNotificationEvent extends AbstractUserNotificationEvent {
 	/**
-	 * @see	\wcf\system\user\notification\event\AbstractUserNotificationEvent::$isStackable
+	 * @see	\wcf\system\user\notification\event\AbstractUserNotificationEvent::$stackable
 	 */
-	protected $isStackable = true;
+	protected $stackable = true;
 	
 	/**
 	 * @see	\wcf\system\user\notification\event\IUserNotificationEvent::getMessage()
@@ -72,5 +72,12 @@ class ConversationMessageUserNotificationEvent extends AbstractUserNotificationE
 			'object' => $this->userNotificationObject->getConversation(),
 			'messageID' => $this->userNotificationObject->messageID
 		), '#message'.$this->userNotificationObject->messageID);
+	}
+	
+	/**
+	 * @see	\wcf\system\user\notification\event\IUserNotificationEvent::getEventHash()
+	 */
+	public function getEventHash() {
+		return sha1($this->eventID . '-' . $this->userNotificationObject->conversationID);
 	}
 }
