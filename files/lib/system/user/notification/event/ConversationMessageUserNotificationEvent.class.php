@@ -44,7 +44,7 @@ class ConversationMessageUserNotificationEvent extends AbstractUserNotificationE
 				'authors' => $authors,
 				'count' => $count,
 				'message' => $this->userNotificationObject,
-				'others' => max($count - 1, 0)
+				'others' => $count - 1
 			));
 		}
 		
