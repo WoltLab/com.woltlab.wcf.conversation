@@ -10,6 +10,7 @@
 1:wcf.user.access.following
 2:wcf.user.access.nobody]]></selectoptions>
 				<defaultvalue>0</defaultvalue>
+				<options>module_conversation</options>
 			</option>
 			
 			<option name="conversationsPerPage">
