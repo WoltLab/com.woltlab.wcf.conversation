@@ -3,7 +3,6 @@ namespace wcf\form;
 use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\data\conversation\message\ViewableConversationMessageList;
-use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationAction;
 use wcf\data\user\UserProfile;
 use wcf\system\breadcrumb\Breadcrumb;
