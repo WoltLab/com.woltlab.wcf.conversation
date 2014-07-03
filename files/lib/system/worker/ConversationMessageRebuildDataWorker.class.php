@@ -2,6 +2,7 @@
 namespace wcf\system\worker;
 use wcf\data\conversation\message\ConversationMessageEditor;
 use wcf\data\object\type\ObjectTypeCache;
+use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
 use wcf\system\search\SearchIndexManager;
 use wcf\system\WCF;
 
@@ -66,6 +67,9 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker {
 			$attachmentStatement->execute(array($attachmentObjectType->objectTypeID, $message->messageID));
 			$row = $attachmentStatement->fetchArray();
 			$data['attachments'] = $row['attachments'];
+			
+			// update embedded objects
+			$data['hasEmbeddedObjects'] = (MessageEmbeddedObjectManager::getInstance()->registerObjects('com.woltlab.wcf.conversation.message', $message->messageID, $message->message) ? 1 : 0);
 			
 			$editor->update($data);
 		}

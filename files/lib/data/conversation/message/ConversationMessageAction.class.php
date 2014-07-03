@@ -165,14 +165,16 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		parent::update();
 		
 		// update search index / embedded objects
-		foreach ($this->objects as $message) {
-			$conversation = $message->getConversation();
-			SearchIndexManager::getInstance()->update('com.woltlab.wcf.conversation.message', $message->messageID, $message->message, ($conversation->firstMessageID == $message->messageID ? $conversation->subject : ''), $message->time, $message->userID, $message->username);
-			
-			if ($message->hasEmbeddedObjects != MessageEmbeddedObjectManager::getInstance()->registerObjects('com.woltlab.wcf.conversation.message', $message->messageID, $message->message)) {
-				$message->update(array(
-					'hasEmbeddedObjects' => ($message->hasEmbeddedObjects ? 0 : 1)
-				));
+		if (isset($this->parameters['data']) && isset($this->parameters['data']['message'])) {
+			foreach ($this->objects as $message) {
+				$conversation = $message->getConversation();
+				SearchIndexManager::getInstance()->update('com.woltlab.wcf.conversation.message', $message->messageID, $this->parameters['data']['message'], ($conversation->firstMessageID == $message->messageID ? $conversation->subject : ''), $message->time, $message->userID, $message->username);
+				
+				if ($message->hasEmbeddedObjects != MessageEmbeddedObjectManager::getInstance()->registerObjects('com.woltlab.wcf.conversation.message', $message->messageID, $this->parameters['data']['message'])) {
+					$message->update(array(
+						'hasEmbeddedObjects' => ($message->hasEmbeddedObjects ? 0 : 1)
+					));
+				}
 			}
 		}
 	}
@@ -355,7 +357,6 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 * @see	\wcf\data\IMessageInlineEditorAction::save()
 	 */
 	public function save() {
-		$messageEditor = new ConversationMessageEditor($this->message);
 		$data = array(
 			'message' => PreParser::getInstance()->parse(MessageUtil::stripCrap($this->parameters['data']['message']), explode(',', WCF::getSession()->getPermission('user.message.allowedBBCodes')))
 		);
@@ -363,7 +364,9 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			$data['lastEditTime'] = TIME_NOW;
 			$data['editCount'] = $this->message->editCount + 1;
 		}
-		$messageEditor->update($data);
+		// execute update action
+		$action = new ConversationMessageAction(array($this->message), 'update', array('data' => $data));
+		$action->executeAction();
 		
 		// load new message
 		$this->message = new ConversationMessage($this->message->messageID);
