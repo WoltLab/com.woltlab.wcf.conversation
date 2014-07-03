@@ -50,6 +50,7 @@ CREATE TABLE wcf1_conversation_message (
 	ipAddress VARCHAR(39) NOT NULL DEFAULT '',
 	lastEditTime INT(10) NOT NULL DEFAULT 0,
 	editCount MEDIUMINT(7) NOT NULL DEFAULT 0,
+	hasEmbeddedObjects TINYINT(1) NOT NULL DEFAULT 0,
 	
 	KEY (conversationID, userID),
 	KEY (ipAddress)

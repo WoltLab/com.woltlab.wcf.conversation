@@ -11,7 +11,7 @@ namespace wcf\data\conversation\message;
  * @subpackage	data.conversation.message
  * @category	Community Framework
  */
-class SearchResultConversationMessageList extends ViewableConversationMessageList {
+class SearchResultConversationMessageList extends SimplifiedViewableConversationMessageList {
 	/**
 	 * @see	\wcf\data\DatabaseObjectList::$decoratorClassName
 	 */

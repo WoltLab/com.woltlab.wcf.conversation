@@ -3,7 +3,7 @@ namespace wcf\data\conversation;
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\data\conversation\message\ConversationMessageList;
-use wcf\data\conversation\message\ViewableConversationMessageList;
+use wcf\data\conversation\message\SimplifiedViewableConversationMessageList;
 use wcf\data\package\PackageCache;
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\IClipboardAction;
@@ -387,7 +387,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 * @return	array
 	 */
 	public function getMessagePreview() {
-		$messageList = new ViewableConversationMessageList();
+		$messageList = new SimplifiedViewableConversationMessageList();
 		
 		$messageList->getConditionBuilder()->add("conversation_message.messageID = ?", array($this->conversation->firstMessageID));
 		$messageList->readObjects();

@@ -144,6 +144,7 @@ class ConversationPage extends MultipleLinkPage {
 		parent::initObjectList();
 		
 		$this->objectList->getConditionBuilder()->add('conversation_message.conversationID = ?', array($this->conversation->conversationID));
+		$this->objectList->setConversation($this->conversation);
 		
 		// handle jump to
 		if ($this->action == 'lastPost') $this->goToLastPost();

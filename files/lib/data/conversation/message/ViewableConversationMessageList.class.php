@@ -1,7 +1,9 @@
 <?php
 namespace wcf\data\conversation\message;
 use wcf\data\attachment\GroupedAttachmentList;
-use wcf\system\bbcode\AttachmentBBCode;
+use wcf\data\conversation\Conversation;
+use wcf\data\object\type\ObjectTypeCache;
+use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
 
 /**
  * Represents a list of viewable conversation messages.
@@ -31,6 +33,12 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	public $attachmentObjectIDs = array();
 	
 	/**
+	 * ids of the messages with embedded objects
+	 * @var array<integer>
+	 */
+	public $embeddedObjectMessageIDs = array();
+	
+	/**
 	 * attachment list
 	 * @var	\wcf\data\attachment\GroupedAttachmentList
 	 */
@@ -41,6 +49,24 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	 * @var	integer
 	 */
 	protected $maxPostTime = 0;
+	
+	/**
+	 * enables/disables the loading of attachments
+	 * @var boolean
+	 */
+	protected $attachmentLoading = true;
+	
+	/**
+	 * enables/disables the loading of embedded objects
+	 * @var boolean
+	 */
+	protected $embeddedObjectLoading = true;
+	
+	/**
+	 * conversation object
+	 * @var \wcf\data\conversation\Conversation
+	 */
+	protected $conversation = null;
 	
 	/**
 	 * Creates a new ViewableConversationMessageList object.
@@ -68,17 +94,42 @@ class ViewableConversationMessageList extends ConversationMessageList {
 		
 		parent::readObjects();
 		
-		foreach ($this->objects as &$message) {
+		foreach ($this->objects as $message) {
 			if ($message->time > $this->maxPostTime) {
 				$this->maxPostTime = $message->time;
+			}
+			if ($this->conversation !== null) {
+				$message->setConversation($this->conversation);
 			}
 			
 			if ($message->attachments) {
 				$this->attachmentObjectIDs[] = $message->messageID;
 			}
+			
+			if ($message->hasEmbeddedObjects) {
+				$this->embeddedObjectMessageIDs[] = $message->messageID;
+			}
 		}
 		
-		$this->readAttachments();
+		if ($this->embeddedObjectLoading) {
+			$this->readEmbeddedObjects();
+		}
+		if ($this->attachmentLoading) {
+			$this->readAttachments();
+		}
+	}
+	
+	/**
+	 * Reads the embedded objects of the messages in the list.
+	 */
+	public function readEmbeddedObjects() {
+		if (!empty($this->embeddedObjectMessageIDs)) {
+			// add message objects to attachment object cache to save SQL queries
+			ObjectTypeCache::getInstance()->getObjectTypeByName('com.woltlab.wcf.attachment.objectType', 'com.woltlab.wcf.conversation.message')->getProcessor()->setCachedObjects($this->objects);
+				
+			// load embedded objects
+			MessageEmbeddedObjectManager::getInstance()->loadObjects('com.woltlab.wcf.conversation.message', $this->embeddedObjectMessageIDs);
+		}
 	}
 	
 	/**
@@ -89,9 +140,6 @@ class ViewableConversationMessageList extends ConversationMessageList {
 			$this->attachmentList = new GroupedAttachmentList('com.woltlab.wcf.conversation.message');
 			$this->attachmentList->getConditionBuilder()->add('attachment.objectID IN (?)', array($this->attachmentObjectIDs));
 			$this->attachmentList->readObjects();
-			
-			// set embedded attachments
-			AttachmentBBCode::setAttachmentList($this->attachmentList);
 		}
 	}
 	
@@ -111,5 +159,32 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	 */
 	public function getAttachmentList() {
 		return $this->attachmentList;
+	}
+	
+	/**
+	 * Enables/disables the loading of attachments.
+	 *
+	 * @param	boolean		$enable
+	 */
+	public function enableAttachmentLoading($enable = true) {
+		$this->attachmentLoading = $enable;
+	}
+	
+	/**
+	 * Enables/disables the loading of embedded objects.
+	 *
+	 * @param	boolean		$enable
+	 */
+	public function enableEmbeddedObjectLoading($enable = true) {
+		$this->embeddedObjectLoading = $enable;
+	}
+	
+	/**
+	 * Sets active conversation.
+	 *
+	 * @param	\wcf\data\conversation\Conversation		$conversation
+	 */
+	public function setConversation(Conversation $conversation) {
+		$this->conversation = $conversation;
 	}
 }

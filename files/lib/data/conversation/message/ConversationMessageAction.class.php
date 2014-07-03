@@ -16,6 +16,7 @@ use wcf\system\bbcode\PreParser;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
 use wcf\system\message\censorship\Censorship;
+use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
 use wcf\system\message\quote\MessageQuoteManager;
 use wcf\system\message\QuickReplyManager;
 use wcf\system\moderation\queue\ModerationQueueManager;
@@ -79,6 +80,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		
 		// create message
 		$message = parent::create();
+		$messageEditor = new ConversationMessageEditor($message);
 		
 		// get conversation
 		$conversation = (isset($this->parameters['converation']) ? $this->parameters['converation'] : new Conversation($message->conversationID));
@@ -129,6 +131,13 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		// update search index
 		SearchIndexManager::getInstance()->add('com.woltlab.wcf.conversation.message', $message->messageID, $message->message, (!empty($this->parameters['isFirstPost']) ? $conversation->subject : ''), $message->time, $message->userID, $message->username);
 		
+		// save embedded objects
+		if (MessageEmbeddedObjectManager::getInstance()->registerObjects('com.woltlab.wcf.conversation.message', $message->messageID, $message->message)) {
+			$messageEditor->update(array(
+				'hasEmbeddedObjects' => 1
+			));
+		}
+		
 		// update attachments
 		if (isset($this->parameters['attachmentHandler']) && $this->parameters['attachmentHandler'] !== null) {
 			$this->parameters['attachmentHandler']->updateObjectID($message->messageID);
@@ -155,10 +164,16 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		
 		parent::update();
 		
-		// update search index
+		// update search index / embedded objects
 		foreach ($this->objects as $message) {
 			$conversation = $message->getConversation();
 			SearchIndexManager::getInstance()->update('com.woltlab.wcf.conversation.message', $message->messageID, $message->message, ($conversation->firstMessageID == $message->messageID ? $conversation->subject : ''), $message->time, $message->userID, $message->username);
+			
+			if ($message->hasEmbeddedObjects != MessageEmbeddedObjectManager::getInstance()->registerObjects('com.woltlab.wcf.conversation.message', $message->messageID, $message->message)) {
+				$message->update(array(
+					'hasEmbeddedObjects' => ($message->hasEmbeddedObjects ? 0 : 1)
+				));
+			}
 		}
 	}
 	
@@ -192,6 +207,9 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			// update search index
 			SearchIndexManager::getInstance()->delete('com.woltlab.wcf.conversation.message', $this->objectIDs);
 			
+			// update embedded objects
+			MessageEmbeddedObjectManager::getInstance()->removeObjects('com.woltlab.wcf.conversation.message', $this->objectIDs);
+
 			// remove moderation queues
 			ModerationQueueManager::getInstance()->removeQueues('com.woltlab.wcf.conversation.message', $this->objectIDs);
 		}
@@ -399,6 +417,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 */
 	public function getMessageList(DatabaseObject $conversation, $lastMessageTime) {
 		$messageList = new ViewableConversationMessageList();
+		$messageList->setConversation($conversation);
 		$messageList->getConditionBuilder()->add("conversation_message.conversationID = ?", array($conversation->conversationID));
 		$messageList->getConditionBuilder()->add("conversation_message.time > ?", array($lastMessageTime));
 		$messageList->sqlOrderBy = "conversation_message.time ".CONVERSATION_LIST_DEFAULT_SORT_ORDER;

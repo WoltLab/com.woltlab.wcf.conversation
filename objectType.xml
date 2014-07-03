@@ -15,6 +15,11 @@
 		</type>
 		
 		<type>
+			<name>com.woltlab.wcf.conversation.message</name>
+			<definitionname>com.woltlab.wcf.message</definitionname>
+		</type>
+		
+		<type>
 			<name>com.woltlab.wcf.conversation.conversation</name>
 			<definitionname>com.woltlab.wcf.clipboardItem</definitionname>
 			<listclassname>wcf\data\conversation\ConversationList</listclassname>

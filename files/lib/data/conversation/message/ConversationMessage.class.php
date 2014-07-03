@@ -4,8 +4,8 @@ use wcf\data\attachment\GroupedAttachmentList;
 use wcf\data\conversation\Conversation;
 use wcf\data\DatabaseObject;
 use wcf\data\IMessage;
-use wcf\system\bbcode\AttachmentBBCode;
 use wcf\system\bbcode\MessageParser;
+use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
 use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
 use wcf\util\StringUtil;
@@ -41,9 +41,9 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	 * @see	\wcf\data\IMessage::getFormattedMessage()
 	 */
 	public function getFormattedMessage() {
-		// assign embedded attachments
-		AttachmentBBCode::setObjectID($this->messageID);
-		
+		// assign embedded objects
+		MessageEmbeddedObjectManager::getInstance()->setActiveMessage('com.woltlab.wcf.conversation.message', $this->messageID);
+  		
 		// parse and return message
 		MessageParser::getInstance()->setOutputType('text/html');
 		return MessageParser::getInstance()->parse($this->message, $this->enableSmilies, $this->enableHtml, $this->enableBBCodes);
@@ -73,9 +73,6 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 				'canDownload' => true,
 				'canViewPreview' => true
 			));
-			
-			// set embedded attachments
-			AttachmentBBCode::setAttachmentList($attachmentList);
 			
 			return $attachmentList;
 		}
@@ -112,7 +109,7 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	 */
 	public function getConversation() {
 		if ($this->conversation === null) {
-			$this->conversation = new Conversation($this->conversationID);
+			$this->conversation = Conversation::getUserConversation($this->conversationID, WCF::getUser()->userID);
 		}
 		
 		return $this->conversation;
