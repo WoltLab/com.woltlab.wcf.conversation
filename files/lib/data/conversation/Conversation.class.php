@@ -107,7 +107,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	 * 
 	 * @param	integer		$conversationID
 	 * @param	integer		$userID
-	 * @return	\wcf\data\conversation\ViewableConversation
+	 * @return	\wcf\data\conversation\Conversation
 	 */
 	public static function getUserConversation($conversationID, $userID) {
 		$sql = "SELECT		conversation_to_user.*, conversation.*
@@ -123,6 +123,31 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * Returns a list of user conversations.
+	 *
+	 * @param	array<integer>		$conversationIDs
+	 * @param	integer			$userID
+	 * @return	array<\wcf\data\conversation\Conversation>
+	 */
+	public static function getUserConversations(array $conversationIDs, $userID) {
+		$conditionBuilder = new PreparedStatementConditionBuilder();
+		$conditionBuilder->add('conversation.conversationID IN (?)', array($conversationIDs));
+		$sql = "SELECT		conversation_to_user.*, conversation.*
+			FROM		wcf".WCF_N."_conversation conversation
+			LEFT JOIN	wcf".WCF_N."_conversation_to_user conversation_to_user
+			ON		(conversation_to_user.participantID = ".$userID." AND conversation_to_user.conversationID = conversation.conversationID)
+			".$conditionBuilder;
+		$statement = WCF::getDB()->prepareStatement($sql);
+		$statement->execute($conditionBuilder->getParameters());
+		$conversations = array();
+		while ($row = $statement->fetchArray()) {
+			$conversations[$row['conversationID']] = new Conversation(null, $row);
+		}
+			
+		return $conversations;
 	}
 	
 	/**

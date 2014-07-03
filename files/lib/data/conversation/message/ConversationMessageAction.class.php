@@ -27,6 +27,7 @@ use wcf\system\user\notification\UserNotificationHandler;
 use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\WCF;
 use wcf\util\MessageUtil;
+use wcf\util\StringUtil;
 
 /**
  * Executes conversation message-related actions.
@@ -333,6 +334,21 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			'wysiwygSelector' => 'messageEditor'.$this->message->messageID
 		));
 		
+		if (MODULE_ATTACHMENT) {
+			$tmpHash = StringUtil::getRandomID();
+			$attachmentHandler = new AttachmentHandler('com.woltlab.wcf.conversation.message', $this->message->messageID, $tmpHash);
+			$attachmentList = $attachmentHandler->getAttachmentList();
+				
+			WCF::getTPL()->assign(array(
+				'attachmentHandler' => $attachmentHandler,
+				'attachmentList' => $attachmentList->getObjects(),
+				'attachmentObjectID' => $this->message->messageID,
+				'attachmentObjectType' => 'com.woltlab.wcf.conversation.message',
+				'attachmentParentObjectID' => 0,
+				'tmpHash' => $tmpHash
+			));
+		}
+		
 		return array(
 			'actionName' => 'beginEdit',
 			'template' => WCF::getTPL()->fetch('conversationMessageInlineEditor')
@@ -372,10 +388,34 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		$this->message = new ConversationMessage($this->message->messageID);
 		$this->message->getAttachments();
 		
-		return array(
+		if (MODULE_ATTACHMENT) {
+			$attachmentList = $this->message->getAttachments();
+			if ($attachmentList !== null) {
+				// set permisions
+				$attachmentList->setPermissions(array(
+					'canDownload' => true,
+					'canViewPreview' => true
+				));
+			}
+		}
+		
+		// load embedded objects
+		MessageEmbeddedObjectManager::getInstance()->loadObjects('com.woltlab.wcf.conversation.message', array($this->message->messageID));
+		
+		$data = array(
 			'actionName' => 'save',
 			'message' => $this->message->getFormattedMessage()
 		);
+		
+		if (MODULE_ATTACHMENT) {
+			WCF::getTPL()->assign(array(
+				'attachmentList' => $attachmentList,
+				'objectID' => $this->message->messageID
+			));
+			$data['attachmentList'] = WCF::getTPL()->fetch('attachments');
+		}
+		
+		return $data;
 	}
 	
 	/**

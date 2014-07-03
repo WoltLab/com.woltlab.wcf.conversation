@@ -13,7 +13,7 @@
 							<p class="warning" style="margin-bottom: 14px">{lang}wcf.conversation.noParticipantsWarning{/lang}</p>
 						{/if}
 						
-						<textarea id="text" name="text" rows="20" cols="40" style="width: 100%"></textarea>
+						<textarea id="text" name="text" rows="20" cols="40" data-autosave="com.woltlab.wcf.conversation.messageAdd-{@$conversation->conversationID}" style="width: 100%"></textarea>
 					</div>
 					
 					<div class="formSubmit">
