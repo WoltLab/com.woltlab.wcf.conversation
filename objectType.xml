@@ -141,30 +141,35 @@
 			<definitionname>com.woltlab.wcf.page</definitionname>
 			<classname><![CDATA[wcf\form\ConversationAddForm]]></classname>
 			<options>module_conversation</options>
+			<categoryname>com.woltlab.wcf.conversation</categoryname>
 		</type>
 		<type>
 			<name>com.woltlab.wcf.conversation.ConversationMessageAddForm</name>
 			<definitionname>com.woltlab.wcf.page</definitionname>
 			<classname><![CDATA[wcf\form\ConversationMessageAddForm]]></classname>
 			<options>module_conversation</options>
+			<categoryname>com.woltlab.wcf.conversation</categoryname>
 		</type>
 		<type>
 			<name>com.woltlab.wcf.conversation.ConversationMessageEditForm</name>
 			<definitionname>com.woltlab.wcf.page</definitionname>
 			<classname><![CDATA[wcf\form\ConversationMessageEditForm]]></classname>
 			<options>module_conversation</options>
+			<categoryname>com.woltlab.wcf.conversation</categoryname>
 		</type>
 		<type>
 			<name>com.woltlab.wcf.conversation.ConversationListPage</name>
 			<definitionname>com.woltlab.wcf.page</definitionname>
 			<classname><![CDATA[wcf\page\ConversationListPage]]></classname>
 			<options>module_conversation</options>
+			<categoryname>com.woltlab.wcf.conversation</categoryname>
 		</type>
 		<type>
 			<name>com.woltlab.wcf.conversation.ConversationPage</name>
 			<definitionname>com.woltlab.wcf.page</definitionname>
 			<classname><![CDATA[wcf\page\ConversationPage]]></classname>
 			<options>module_conversation</options>
+			<categoryname>com.woltlab.wcf.conversation</categoryname>
 		</type>
 		<!-- /pages -->
 		

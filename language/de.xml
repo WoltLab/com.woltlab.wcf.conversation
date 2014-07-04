@@ -166,6 +166,7 @@
 	</category>
 	
 	<category name="wcf.page">
+		<item name="wcf.page.category.com.woltlab.wcf.conversation"><![CDATA[Konversationen]]></item>
 		<item name="wcf.page.com.woltlab.wcf.conversation.ConversationAddForm"><![CDATA[Neue Konversation starten]]></item>
 		<item name="wcf.page.com.woltlab.wcf.conversation.ConversationMessageAddForm"><![CDATA[Neue Konversationsantwort erstellen]]></item>
 		<item name="wcf.page.com.woltlab.wcf.conversation.ConversationMessageEditForm"><![CDATA[Konversationsnachricht bearbeiten]]></item>
