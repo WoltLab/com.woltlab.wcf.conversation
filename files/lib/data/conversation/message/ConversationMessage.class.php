@@ -43,7 +43,7 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	public function getFormattedMessage() {
 		// assign embedded objects
 		MessageEmbeddedObjectManager::getInstance()->setActiveMessage('com.woltlab.wcf.conversation.message', $this->messageID);
-  		
+		
 		// parse and return message
 		MessageParser::getInstance()->setOutputType('text/html');
 		return MessageParser::getInstance()->parse($this->message, $this->enableSmilies, $this->enableHtml, $this->enableBBCodes);
