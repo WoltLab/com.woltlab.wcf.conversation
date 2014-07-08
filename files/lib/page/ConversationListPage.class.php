@@ -12,7 +12,7 @@ use wcf\system\WCF;
  * Shows a list of conversations.
  * 
  * @author	Marcel Werk
- * @copyright	2009-2012 WoltLab GmbH
+ * @copyright	2001-2012 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	page
@@ -78,6 +78,30 @@ class ConversationListPage extends SortablePage {
 	public $labelList = null;
 	
 	/**
+	 * number of conversations (no filter)
+	 * @var	integer
+	 */
+	public $conversationCount = 0;
+	
+	/**
+	 * number of drafts
+	 * @var	integer
+	 */
+	public $draftCount = 0;
+	
+	/**
+	 * number of hidden conversations
+	 * @var	integer
+	 */
+	public $hiddenCount = 0;
+	
+	/**
+	 * number of sent conversations
+	 * @var	integer
+	 */
+	public $outboxCount = 0;
+	
+	/**
 	 * @see	\wcf\page\IPage::readParameters()
 	 */
 	public function readParameters() {
@@ -126,6 +150,44 @@ class ConversationListPage extends SortablePage {
 			// add breadcrumbs
 			WCF::getBreadcrumbs()->add(new Breadcrumb(WCF::getLanguage()->get('wcf.conversation.conversations'), LinkHandler::getInstance()->getLink('ConversationList')));
 		}
+		
+		// read stats
+		if (!$this->labelID) {
+			switch ($this->filter) {
+				case '':
+					$this->conversationCount = $this->items;
+				break;
+				
+				case 'draft':
+					$this->draftCount = $this->items;
+				break;
+				
+				case 'hidden':
+					$this->hiddenCount = $this->items;
+				break;
+				
+				case 'outbox':
+					$this->outboxCount = $this->items;
+				break;
+			}
+		}
+		
+		if ($this->filter != '' || $this->labelID) {
+			$conversationList = new UserConversationList(WCF::getUser()->userID, '');
+			$this->conversationCount = $conversationList->countObjects();
+		}
+		if ($this->filter != 'draft' || $this->labelID) {
+			$conversationList = new UserConversationList(WCF::getUser()->userID, 'draft');
+			$this->draftCount = $conversationList->countObjects();
+		}
+		if ($this->filter != 'hidden' || $this->labelID) {
+			$conversationList = new UserConversationList(WCF::getUser()->userID, 'hidden');
+			$this->hiddenCount = $conversationList->countObjects();
+		}
+		if ($this->filter != 'outbox' || $this->labelID) {
+			$conversationList = new UserConversationList(WCF::getUser()->userID, 'outbox');
+			$this->outboxCount = $conversationList->countObjects();
+		}
 	}
 	
 	/**
@@ -138,7 +200,11 @@ class ConversationListPage extends SortablePage {
 			'filter' => $this->filter,
 			'hasMarkedItems' => ClipboardHandler::getInstance()->hasMarkedItems(ClipboardHandler::getInstance()->getObjectTypeID('com.woltlab.wcf.conversation.conversation')),
 			'labelID' => $this->labelID,
-			'labelList' => $this->labelList
+			'labelList' => $this->labelList,
+			'conversationCount' => $this->conversationCount,
+			'draftCount' => $this->draftCount,
+			'hiddenCount' => $this->hiddenCount,
+			'outboxCount' => $this->outboxCount
 		));
 	}
 }
