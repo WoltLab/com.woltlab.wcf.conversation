@@ -178,11 +178,13 @@
 			<name>com.woltlab.wcf.conversation</name>
 			<definitionname>com.woltlab.wcf.statDailyHandler</definitionname>
 			<classname><![CDATA[wcf\system\stat\ConversationStatDailyHandler]]></classname>
+			<categoryname>com.woltlab.wcf.conversation</categoryname>
 		</type>
 		<type>
 			<name>com.woltlab.wcf.conversation.message</name>
 			<definitionname>com.woltlab.wcf.statDailyHandler</definitionname>
 			<classname><![CDATA[wcf\system\stat\ConversationMessageStatDailyHandler]]></classname>
+			<categoryname>com.woltlab.wcf.conversation</categoryname>
 		</type>
 		<!-- /stat handlers -->
 	</import>

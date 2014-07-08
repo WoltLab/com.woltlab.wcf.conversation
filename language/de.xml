@@ -44,6 +44,7 @@
 	<category name="wcf.acp.stat">
 		<item name="wcf.acp.stat.com.woltlab.wcf.conversation"><![CDATA[Konversationen]]></item>
 		<item name="wcf.acp.stat.com.woltlab.wcf.conversation.message"><![CDATA[Konversations-Nachrichten]]></item>
+		<item name="wcf.acp.stat.category.com.woltlab.wcf.conversation"><![CDATA[Konversationen]]></item>
 	</category>
 	
 	<category name="wcf.clipboard">
