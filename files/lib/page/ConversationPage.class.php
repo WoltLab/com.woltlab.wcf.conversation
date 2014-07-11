@@ -8,6 +8,7 @@ use wcf\data\conversation\ConversationParticipantList;
 use wcf\data\conversation\ViewableConversation;
 use wcf\data\modification\log\ConversationLogModificationLogList;
 use wcf\data\smiley\SmileyCache;
+use wcf\system\attachment\AttachmentHandler;
 use wcf\system\bbcode\BBCodeHandler;
 use wcf\system\breadcrumb\Breadcrumb;
 use wcf\system\exception\IllegalLinkException;
@@ -16,6 +17,7 @@ use wcf\system\message\quote\MessageQuoteManager;
 use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
 use wcf\util\HeaderUtil;
+use wcf\util\StringUtil;
 
 /**
  * Shows a conversation.
@@ -222,7 +224,15 @@ class ConversationPage extends MultipleLinkPage {
 		
 		MessageQuoteManager::getInstance()->assignVariables();
 		
+		$tmpHash = StringUtil::getRandomID();
+		$attachmentHandler = new AttachmentHandler('com.woltlab.wcf.conversation.message', 0, $tmpHash, 0);
+		
 		WCF::getTPL()->assign(array(
+			'attachmentHandler' => $attachmentHandler,
+			'attachmentObjectID' => 0,
+			'attachmentObjectType' => 'com.woltlab.wcf.conversation.message',
+			'attachmentParentObjectID' => 0,
+			'tmpHash' => $tmpHash,
 			'attachmentList' => $this->objectList->getAttachmentList(),
 			'labelList' => $this->labelList,
 			'modificationLogList' => $this->modificationLogList,

@@ -14,6 +14,7 @@
 						{/if}
 						
 						<textarea id="text" name="text" rows="20" cols="40" data-autosave="com.woltlab.wcf.conversation.messageAdd-{@$conversation->conversationID}" style="width: 100%"></textarea>
+						{include file='messageFormTabsInline' inConversationQuickReply=true}
 					</div>
 					
 					<div class="formSubmit">
@@ -29,7 +30,7 @@
 	<script data-relocate="true">
 		//<![CDATA[
 		$(function() {
-			WCF.System.Dependency.Manager.register('CKEditor', function() { new WCF.Message.UserMention('text'); });
+			WCF.System.Dependency.Manager.register('Redactor_text', function() { new WCF.Message.UserMention('text'); });
 		});
 		//]]>
 	</script>

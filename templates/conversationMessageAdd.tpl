@@ -66,9 +66,9 @@
 			{event name='messageFields'}
 		</fieldset>
 		
-		{event name='fieldsets'}
-		
 		{include file='messageFormTabs' wysiwygContainerID='text'}
+		
+		{event name='fieldsets'}
 	</div>
 	
 	<div class="formSubmit">

@@ -1,5 +1,6 @@
 <div class="messageInlineEditor">
 	<textarea id="messageEditor{@$message->messageID}" rows="20" cols="40" data-autosave="com.woltlab.wcf.conversation.messageEdit-{@$message->messageID}">{$message->message}</textarea>
+	{include file='messageFormTabsInline' inConversationInlineEdit=true}
 	
 	<div class="formSubmit">
 		<button class="buttonPrimary" data-type="save">{lang}wcf.global.button.submit{/lang}</button>
