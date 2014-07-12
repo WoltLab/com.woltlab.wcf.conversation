@@ -6,7 +6,7 @@ use wcf\data\conversation\ConversationEditor;
 use wcf\data\smiley\SmileyCache;
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\DatabaseObject;
-use wcf\data\IExtendedMessageQuickReplyAction;
+use wcf\data\IAttachmentMessageQuickReplyAction;
 use wcf\data\IMessageInlineEditorAction;
 use wcf\data\IMessageQuoteAction;
 use wcf\system\attachment\AttachmentHandler;
@@ -39,7 +39,7 @@ use wcf\util\StringUtil;
  * @subpackage	data.conversation.message
  * @category	Community Framework
  */
-class ConversationMessageAction extends AbstractDatabaseObjectAction implements IExtendedMessageQuickReplyAction, IMessageInlineEditorAction, IMessageQuoteAction {
+class ConversationMessageAction extends AbstractDatabaseObjectAction implements IAttachmentMessageQuickReplyAction, IMessageInlineEditorAction, IMessageQuoteAction {
 	/**
 	 * @see	\wcf\data\AbstractDatabaseObjectAction::$className
 	 */
@@ -564,5 +564,12 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		return array(
 			'template' => implode("\n\n", $quotes)
 		);
+	}
+	
+	/**
+	 * @see	\wcf\data\IAttachmentMessageQuickReplyAction::getAttachmentHandler()
+	 */
+	public function getAttachmentHandler(DatabaseObject $conversation) {
+		return new AttachmentHandler('com.woltlab.wcf.conversation.message', 0, $this->parameters['tmpHash']);
 	}
 }
