@@ -19,8 +19,8 @@
 		<item name="wcf.acp.group.option.user.conversation.allowedAttachmentExtensions"><![CDATA[Allowed File Extensions]]></item>
 		<item name="wcf.acp.group.option.user.conversation.allowedAttachmentExtensions.description"><![CDATA[One extension per line]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxAttachmentCount"><![CDATA[Maximum Attachments per Message]]></item>
-		<item name="wcf.acp.group.option.user.conversation.canEditMessage"><![CDATA[TODO: Kann eigene Nachrichten bearbeiten]]></item>
-		<item name="wcf.acp.group.option.user.conversation.canEditMessage.description"><![CDATA[TODO: Mitglieder dieser Benutzergruppe können eigene Nachrichten in Konversationen nachträglich verändern, auch wenn diese bereits vom Empfänger gelesen wurden.]]></item>
+		<item name="wcf.acp.group.option.user.conversation.canEditMessage"><![CDATA[Can edit own messages]]></item>
+		<item name="wcf.acp.group.option.user.conversation.canEditMessage.description"><![CDATA[Users of this user group can edit their own messages, regardless if they have been read by one or more receipients.]]></item>
 	</category>
 	
 	<category name="wcf.acp.option">
@@ -114,9 +114,9 @@
 		<item name="wcf.conversation.attachments"><![CDATA[Conversation contains {#$conversation->attachments} attachment{if $conversation->attachments != 1}s{/if}]]></item>
 		<item name="wcf.conversation.error.mailboxIsFull"><![CDATA[You have reached your maximum limit of conversations and are unable to start new ones.]]></item>
 		<item name="wcf.conversation.markAllAsRead"><![CDATA[Mark All Conversations Read]]></item>
-		<item name="wcf.conversation.message.editNote"><![CDATA[TODO: {$message->username} hat diese Nachricht {#$message->editCount} mal editiert, zuletzt: {@$message->lastEditTime|time}.]]></item>
-		<item name="wcf.conversation.noParticipantsWarning"><![CDATA[TODO: Sie sind dabei auf eine Konversation ohne weitere Teilnehmer zu antworten. Alle anderen Teilnehmer haben diese Konversation verlassen. Niemand wird Ihre Nachricht lesen!]]></item>
-		<item name="wcf.conversation.message.permalink"><![CDATA[TODO: Permalink zur {#$startIndex}. Nachricht]]></item>
+		<item name="wcf.conversation.message.editNote"><![CDATA[{$message->username} edited this message {#$message->editCount} times, last: {@$message->lastEditTime|time}.]]></item>
+		<item name="wcf.conversation.noParticipantsWarning"><![CDATA[You’re about to reply to a conversation without other participants, all other participants have already left this conversation. Nobody is going to read your message!]]></item>
+		<item name="wcf.conversation.message.permalink"><![CDATA[Permalink to {#$startIndex}. message]]></item>
 	</category>
 	
 	<category name="wcf.conversation.edit">
