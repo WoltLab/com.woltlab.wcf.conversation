@@ -591,7 +591,9 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			$sql = "SELECT		DISTINCT conversation.conversationID
 				FROM		wcf".WCF_N."_conversation conversation
 				LEFT JOIN	wcf".WCF_N."_conversation_to_user conversation_to_user
-				ON		(conversation_to_user.conversationID = conversation.conversationID AND conversation_to_user.hideConversation <> ".Conversation::STATE_LEFT.")
+				ON		(	conversation_to_user.conversationID = conversation.conversationID
+						AND	conversation_to_user.hideConversation <> ".Conversation::STATE_LEFT."
+						AND	conversation_to_user.participantID IS NOT NULL)
 				".$conditionBuilder;
 			$statement = WCF::getDB()->prepareStatement($sql);
 			$statement->execute($conditionBuilder->getParameters());
