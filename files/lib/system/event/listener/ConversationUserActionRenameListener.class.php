@@ -1,6 +1,5 @@
 <?php
 namespace wcf\system\event\listener;
-use wcf\system\event\IEventListener;
 use wcf\system\WCF;
 
 /**
@@ -15,14 +14,14 @@ use wcf\system\WCF;
  */
 class ConversationUserActionRenameListener implements IEventListener {
 	/**
-	 * @see	\wcf\system\event\IEventListener::execute()
+	 * @see	\wcf\system\event\listener\IEventListener::execute()
 	 */
-	public function execute($eventObj, $className, $eventName) {
+	public function execute($eventObj, $className, $eventName, array &$parameters) {
 		$objects = $eventObj->getObjects();
 		$userID = $objects[0]->userID;
 		
-		$parameters = $eventObj->getParameters();
-		$username = $parameters['data']['username'];
+		$actionParameters = $eventObj->getParameters();
+		$username = $actionParameters['data']['username'];
 		
 		WCF::getDB()->beginTransaction();
 		

@@ -1,7 +1,6 @@
 <?php
 namespace wcf\system\event\listener;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
-use wcf\system\event\IEventListener;
 use wcf\system\WCF;
 
 /**
@@ -16,9 +15,9 @@ use wcf\system\WCF;
  */
 class ConversationUserMergeListener implements IEventListener {
 	/**
-	 * @see	\wcf\system\event\IEventListener::execute()
+	 * @see	\wcf\system\event\listener\IEventListener::execute()
 	 */
-	public function execute($eventObj, $className, $eventName) {
+	public function execute($eventObj, $className, $eventName, array &$parameters) {
 		// conversation
 		$conditions = new PreparedStatementConditionBuilder();
 		$conditions->add("userID IN (?)", array($eventObj->mergedUserIDs));
