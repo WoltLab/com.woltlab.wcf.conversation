@@ -71,7 +71,7 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 					AND conversation_to_user.participantID <> ?
 					AND conversation_to_user.isInvisible = ?
 			ORDER BY	user_table.username";
-		$participantStatement = WCF::getDB()->prepareStatement($sql);
+		$participantStatement = WCF::getDB()->prepareStatement($sql, 5);
 		
 		foreach ($this->objectList as $conversation) {
 			$editor = new ConversationEditor($conversation);
