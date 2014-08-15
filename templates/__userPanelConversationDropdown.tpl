@@ -12,7 +12,7 @@
 						'wcf.conversation.showAll': '{lang}wcf.conversation.showAll{/lang}'
 					});
 					
-					new WCF.Conversation.UserPanel('{link controller='ConversationList'}{/link}', '{link controller='ConversationAdd'}{/link}');
+					new WCF.Conversation.UserPanel('{link controller='ConversationList' encode=false}{/link}', '{link controller='ConversationAdd'}{/link}');
 				});
 				//]]>
 			</script>

@@ -33,7 +33,7 @@
 			$inlineEditor.setEditorHandler($editorHandler, 'list');
 			
 			new WCF.Conversation.Clipboard($editorHandler);
-			new WCF.Conversation.Label.Manager('{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}');
+			new WCF.Conversation.Label.Manager('{link controller='ConversationList' encode=false}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}');
 			new WCF.Conversation.Preview();
 			new WCF.Conversation.MarkAsRead();
 			new WCF.Conversation.MarkAllAsRead();
