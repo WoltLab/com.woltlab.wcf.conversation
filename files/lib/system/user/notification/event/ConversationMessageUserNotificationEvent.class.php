@@ -1,9 +1,7 @@
 <?php
 namespace wcf\system\user\notification\event;
-use wcf\data\user\notification\UserNotificationEditor;
 use wcf\system\request\LinkHandler;
 use wcf\system\user\notification\event\AbstractUserNotificationEvent;
-use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\WCF;
 
 /**
@@ -88,17 +86,6 @@ class ConversationMessageUserNotificationEvent extends AbstractUserNotificationE
 	 * @see	\wcf\system\user\notification\event\IUserNotificationEvent::checkAccess()
 	 */
 	public function checkAccess() {
-		if (!$this->userNotificationObject->getConversation()->canRead()) {
-			// remove notification
-			$userNotificationEditor = new UserNotificationEditor($this->notification);
-			$userNotificationEditor->delete();
-			
-			// reset user storage
-			UserStorageHandler::getInstance()->reset(array(WCF::getUser()->userID), 'userNotificationCount');
-			
-			return false;
-		}
-		
-		return true;
+		return $this->userNotificationObject->getConversation()->canRead();
 	}
 }
