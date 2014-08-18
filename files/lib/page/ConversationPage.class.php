@@ -139,9 +139,8 @@ class ConversationPage extends MultipleLinkPage {
 		if (WCF::getUser()->conversationMessagesPerPage) $this->itemsPerPage = WCF::getUser()->conversationMessagesPerPage;
 		
 		$this->canonicalURL = LinkHandler::getInstance()->getLink('Conversation', array(
-			'object' => $this->conversation,
-			'pageNo' => $this->pageNo
-		));
+			'object' => $this->conversation
+		), ($this->pageNo ? 'pageNo=' . $this->pageNo : ''));
 	}
 	
 	/**
