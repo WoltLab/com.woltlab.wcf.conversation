@@ -15,7 +15,7 @@ use wcf\system\WCF;
  */
 class ConversationUserMergeListener implements IParameterizedEventListener {
 	/**
-	 * @see	\wcf\system\event\listener\IEventListener::execute()
+	 * @see	\wcf\system\event\listener\IParameterizedEventListener::execute()
 	 */
 	public function execute($eventObj, $className, $eventName, array &$parameters) {
 		// conversation
