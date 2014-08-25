@@ -12,7 +12,7 @@ use wcf\system\WCF;
  * @subpackage	system.event.listener
  * @category	Community Framework
  */
-class ConversationUserActionRenameListener implements IEventListener {
+class ConversationUserActionRenameListener implements IParameterizedEventListener {
 	/**
 	 * @see	\wcf\system\event\listener\IEventListener::execute()
 	 */

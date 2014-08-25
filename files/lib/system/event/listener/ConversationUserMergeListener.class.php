@@ -13,7 +13,7 @@ use wcf\system\WCF;
  * @subpackage	system.event.listener
  * @category	Community Framework
  */
-class ConversationUserMergeListener implements IEventListener {
+class ConversationUserMergeListener implements IParameterizedEventListener {
 	/**
 	 * @see	\wcf\system\event\listener\IEventListener::execute()
 	 */
