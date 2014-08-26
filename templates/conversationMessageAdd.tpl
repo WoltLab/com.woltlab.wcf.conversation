@@ -88,7 +88,7 @@
 			{assign var='objectID' value=$message->messageID}
 			
 			<li class="marginTop">
-				<article class="message messageReduced" data-object-id="{@$message->messageID}">
+				<article class="message messageReduced{if $message->getUserProfile()->userOnlineGroupID} userOnlineGroupMarking{@$message->getUserProfile()->userOnlineGroupID}{/if}" data-object-id="{@$message->messageID}">
 					<div>
 						<section class="messageContent">
 							<div>
