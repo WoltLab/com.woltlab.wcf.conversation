@@ -113,7 +113,7 @@
 
 {capture assign='headerNavigation'}
 	<li><a rel="alternate" href="{link controller='ConversationFeed' appendSession=false}at={@$__wcf->getUser()->userID}-{@$__wcf->getUser()->accessToken}{/link}" title="{lang}wcf.global.button.rss{/lang}" class="jsTooltip"><span class="icon icon16 icon-rss"></span> <span class="invisible">{lang}wcf.global.button.rss{/lang}</span></a></li>
-	<li class="jsOnly"><a title="{lang}wcf.conversation.markAllAsRead{/lang}" class="markAllAsReadButton jsTooltip"><span class="icon icon16 icon-ok"></span> <span class="invisible">{lang}wcf.conversation.markAllAsRead{/lang}</span></a></li>
+	<li class="jsOnly"><a href="#" title="{lang}wcf.conversation.markAllAsRead{/lang}" class="markAllAsReadButton jsTooltip"><span class="icon icon16 icon-ok"></span> <span class="invisible">{lang}wcf.conversation.markAllAsRead{/lang}</span></a></li>
 {/capture}
 
 {include file='header' sidebarOrientation='left'}

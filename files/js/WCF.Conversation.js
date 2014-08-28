@@ -1472,15 +1472,17 @@ WCF.Conversation.MarkAllAsRead = Class.extend({
 			success: $.proxy(this._success, this)
 		});
 		
-		$('.markAllAsReadButton').click($.proxy(this._dblClick, this));
+		$('.markAllAsReadButton').click($.proxy(this._click, this));
 	},
 	
 	/**
-	 * Handles double-clicks.
+	 * Handles clicks.
 	 * 
 	 * @param	object		event
 	 */
-	_dblClick: function(event) {
+	_click: function(event) {
+		event.preventDefault();
+		
 		this._proxy.setOption('data', {
 			actionName: 'markAllAsRead',
 			className: 'wcf\\data\\conversation\\ConversationAction'
