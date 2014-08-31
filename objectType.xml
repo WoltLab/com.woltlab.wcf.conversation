@@ -5,6 +5,7 @@
 			<name>com.woltlab.wcf.conversation.message</name>
 			<definitionname>com.woltlab.wcf.searchableObjectType</definitionname>
 			<classname>wcf\system\search\ConversationMessageSearch</classname>
+			<searchindex>wcf1_conversation_message_search_index</searchindex>
 		</type>
 		
 		<type>
