@@ -45,6 +45,11 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
 	protected static $messages = array();
 	
 	/**
+	 * @see	\wcf\system\moderation\queue\AbstractModerationQueueHandler::$requiredPermission
+	 */
+	protected $requiredPermission = 'mod.conversation.canModerateConversation';
+	
+	/**
 	 * @see	\wcf\system\moderation\queue\IModerationQueueHandler::assignQueues()
 	 */
 	public function assignQueues(array $queues) {
