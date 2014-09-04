@@ -160,7 +160,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 		
 		if ($this->isDraft && $this->userID == WCF::getUser()->userID) return true;
 		
-		if ($this->participantID == WCF::getUser()->userID && $this->hideConversation != 2) return true;
+		if ($this->participantID == WCF::getUser()->userID && $this->hideConversation != self::STATE_LEFT) return true;
 		
 		return false;
 	}
