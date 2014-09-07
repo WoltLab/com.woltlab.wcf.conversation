@@ -262,6 +262,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 			$conditions = new PreparedStatementConditionBuilder();
 			$conditions->add("conversationID IN (?)", array($conversationIDs));
 			$conditions->add("participantID = ?", array($userID));
+			$conditions->add("hideConversation <> ?", array(self::STATE_LEFT));
 			
 			$sql = "SELECT	conversationID
 				FROM	wcf".WCF_N."_conversation_to_user
