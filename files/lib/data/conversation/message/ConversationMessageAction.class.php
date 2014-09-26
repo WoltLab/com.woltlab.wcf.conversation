@@ -434,8 +434,6 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 * @see	\wcf\data\IMessageQuickReplyAction::validateMessage()
 	 */
 	public function validateMessage(DatabaseObject $container, $message) {
-		$message = MessageUtil::stripCrap($message);
-		
 		if (mb_strlen($message) > WCF::getSession()->getPermission('user.conversation.maxLength')) {
 			throw new UserInputException('message', WCF::getLanguage()->getDynamicVariable('wcf.message.error.tooLong', array('maxTextLength' => WCF::getSession()->getPermission('user.conversation.maxLength'))));
 		}
