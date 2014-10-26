@@ -236,4 +236,20 @@ class ConversationEditor extends DatabaseObjectEditor {
 			$editor->updateParticipantSummary();
 		}
 	}
+	
+	/**
+	 * Updates the participant counts of the given conversations.
+	 * 
+	 * @param	array<integer>		$conversationIDs
+	 */
+	public static function updateParticipantCounts(array $conversationIDs) {
+		$conversationList = new ConversationList();
+		$conversationList->getConditionBuilder()->add('conversation.conversationID IN (?)', array($conversationIDs));
+		$conversationList->readObjects();
+		
+		foreach ($conversationList as $conversation) {
+			$editor = new ConversationEditor($conversation);
+			$editor->updateParticipantCount();
+		}
+	}
 }

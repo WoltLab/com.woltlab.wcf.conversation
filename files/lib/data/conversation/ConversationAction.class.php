@@ -576,7 +576,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		$this->unmarkItems();
 		
 		if ($this->parameters['hideConversation'] == Conversation::STATE_LEFT) {
-			// update participant summary
+			// update participants count and participant summary
+			ConversationEditor::updateParticipantCounts($this->objectIDs);
 			ConversationEditor::updateParticipantSummaries($this->objectIDs);
 			
 			// delete conversation if all users have left it
