@@ -132,16 +132,16 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		// update search index
 		SearchIndexManager::getInstance()->add('com.woltlab.wcf.conversation.message', $message->messageID, $message->message, (!empty($this->parameters['isFirstPost']) ? $conversation->subject : ''), $message->time, $message->userID, $message->username);
 		
+		// update attachments
+		if (isset($this->parameters['attachmentHandler']) && $this->parameters['attachmentHandler'] !== null) {
+			$this->parameters['attachmentHandler']->updateObjectID($message->messageID);
+		}
+		
 		// save embedded objects
 		if (MessageEmbeddedObjectManager::getInstance()->registerObjects('com.woltlab.wcf.conversation.message', $message->messageID, $message->message)) {
 			$messageEditor->update(array(
 				'hasEmbeddedObjects' => 1
 			));
-		}
-		
-		// update attachments
-		if (isset($this->parameters['attachmentHandler']) && $this->parameters['attachmentHandler'] !== null) {
-			$this->parameters['attachmentHandler']->updateObjectID($message->messageID);
 		}
 		
 		// clear quotes
