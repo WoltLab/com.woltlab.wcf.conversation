@@ -257,6 +257,39 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	}
 	
 	/**
+	 * Returns false, if the active user is the last participant of this conversation.
+	 * 
+	 * @return boolean
+	 */
+	public function hasOtherParticipants() {
+		if ($this->userID == WCF::getUser()->userID) {
+			// author
+			if ($this->participants == 0) return false;
+			return true;
+		}
+		else {
+			if ($this->participants > 1) return true;
+			if ($this->isInvisible && $this->participants > 0) return true;
+			
+			if ($this->userID) {
+				// check if author has left the conversation
+				$sql = "SELECT	hideConversation
+					FROM	wcf".WCF_N."_conversation_to_user
+					WHERE	conversationID = ?
+						AND participantID = ?";
+				$statement = WCF::getDB()->prepareStatement($sql);
+				$statement->execute(array($this->conversationID, $this->userID));
+				$row = $statement->fetchArray();
+				if ($row !== false) {
+					if ($row['hideConversation'] != self::STATE_LEFT) return true;
+				}
+			}
+			
+			return false;
+		}
+	}
+	
+	/**
 	 * Returns true if given user id (default: current user) is participant
 	 * of all given conversation ids.
 	 * 

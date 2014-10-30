@@ -30,7 +30,7 @@
 
 {include file='userNotice'}
 
-{if !$conversation->isDraft && (($conversation->userID == $__wcf->user->userID && $conversation->participants == 0) || ($conversation->userID != $__wcf->user->userID && !$conversation->isInvisible && $conversation->participants == 1))}
+{if !$conversation->isDraft && !$conversation->hasOtherParticipants()}
 	<p class="warning">{lang}wcf.conversation.noParticipantsWarning{/lang}</p>
 {/if}
 
