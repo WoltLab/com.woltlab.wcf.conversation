@@ -533,12 +533,18 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 * @see	\wcf\data\IMessageQuoteAction::saveQuote()
 	 */
 	public function saveQuote() {
-		MessageQuoteManager::getInstance()->addQuote('com.woltlab.wcf.conversation.message', $this->message->conversationID, $this->message->messageID, $this->parameters['message']);
+		$quoteID = MessageQuoteManager::getInstance()->addQuote('com.woltlab.wcf.conversation.message', $this->message->conversationID, $this->message->messageID, $this->parameters['message']);
 		
-		return array(
+		$returnValues = array(
 			'count' => MessageQuoteManager::getInstance()->countQuotes(),
 			'fullQuoteMessageIDs' => MessageQuoteManager::getInstance()->getFullQuoteObjectIDs(array('com.woltlab.wcf.conversation.message'))
 		);
+		
+		if ($this->parameters['renderQuote']) {
+			$returnValues['renderedQuote'] = MessageQuoteManager::getInstance()->getRenderedQuote($quoteID);
+		}
+		
+		return $returnValues;
 	}
 	
 	/**
