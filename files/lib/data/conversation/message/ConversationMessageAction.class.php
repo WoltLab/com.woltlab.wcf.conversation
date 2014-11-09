@@ -541,7 +541,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		);
 		
 		if ($this->parameters['renderQuote']) {
-			$returnValues['renderedQuote'] = MessageQuoteManager::getInstance()->getRenderedQuote($quoteID);
+			$returnValues['renderedQuote'] = MessageQuoteManager::getInstance()->getQuoteComponents($quoteID);
 		}
 		
 		return $returnValues;
