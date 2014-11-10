@@ -506,15 +506,29 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 * @see	\wcf\data\IMessageQuoteAction::saveFullQuote()
 	 */
 	public function saveFullQuote() {
-		if (!MessageQuoteManager::getInstance()->addQuote('com.woltlab.wcf.conversation.message', $this->message->conversationID, $this->message->messageID, $this->message->getExcerpt(), $this->message->getMessage())) {
-			$quoteID = MessageQuoteManager::getInstance()->getQuoteID('com.woltlab.wcf.conversation.message', $this->message->conversationID, $this->message->messageID, $this->message->getExcerpt(), $this->message->getMessage());
-			MessageQuoteManager::getInstance()->removeQuote($quoteID);
+		$quoteID = MessageQuoteManager::getInstance()->addQuote(
+			'com.woltlab.wcf.conversation.message',
+			$this->message->conversationID,
+			$this->message->messageID,
+			$this->message->getExcerpt(),
+			$this->message->getMessage()
+		);
+		
+		if ($quoteID === false) {
+			$removeQuoteID = MessageQuoteManager::getInstance()->getQuoteID('com.woltlab.wcf.conversation.message', $this->message->conversationID, $this->message->messageID, $this->message->getExcerpt(), $this->message->getMessage());
+			MessageQuoteManager::getInstance()->removeQuote($removeQuoteID);
 		}
 		
-		return array(
+		$returnValues = array(
 			'count' => MessageQuoteManager::getInstance()->countQuotes(),
 			'fullQuoteMessageIDs' => MessageQuoteManager::getInstance()->getFullQuoteObjectIDs(array('com.woltlab.wcf.conversation.message'))
 		);
+		
+		if ($quoteID) {
+			$returnValues['renderedQuote'] = MessageQuoteManager::getInstance()->getQuoteComponents($quoteID);
+		}
+		
+		return $returnValues;
 	}
 	
 	/**
@@ -533,7 +547,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 * @see	\wcf\data\IMessageQuoteAction::saveQuote()
 	 */
 	public function saveQuote() {
-		$quoteID = MessageQuoteManager::getInstance()->addQuote('com.woltlab.wcf.conversation.message', $this->message->conversationID, $this->message->messageID, $this->parameters['message']);
+		$quoteID = MessageQuoteManager::getInstance()->addQuote('com.woltlab.wcf.conversation.message', $this->message->conversationID, $this->message->messageID, $this->parameters['message'], false);
 		
 		$returnValues = array(
 			'count' => MessageQuoteManager::getInstance()->countQuotes(),
