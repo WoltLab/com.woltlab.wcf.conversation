@@ -37,7 +37,7 @@
 		<instruction type="script">acp/install_com.woltlab.wcf.conversation_2.0.0.php</instruction>
 	</instructions>
 	
-	<instructions type="update" fromversion="2.0.8">
+	<instructions type="update" fromversion="2.0.9">
 		<instruction type="file" run="standalone">files_update.tar</instruction>
 		<instruction type="template" run="standalone">templates_update.tar</instruction>
 		
