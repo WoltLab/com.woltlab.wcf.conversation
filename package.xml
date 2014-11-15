@@ -43,7 +43,9 @@
 		
 		<instruction type="language" run="standalone">language/*.xml</instruction>
 		
-		<instruction type="sql" run="standalone">update_2.1.0_alpha_1.sql</instruction>
+		<instruction type="sql" run="standalone">update1_2.1.0_alpha_1.sql</instruction>
+		<instruction type="sql" run="standalone">update2_2.1.0_alpha_1.sql</instruction>
+		<instruction type="sql" run="standalone">update3_2.1.0_alpha_1.sql</instruction>
 		
 		<instruction type="clipboardAction">clipboardAction.xml</instruction>
 		<instruction type="eventListener">eventListener.xml</instruction>
