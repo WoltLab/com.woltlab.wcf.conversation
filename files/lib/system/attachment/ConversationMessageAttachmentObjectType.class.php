@@ -92,7 +92,10 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
 				if (isset($conversations[$message->conversationID])) $message->setConversation($conversations[$message->conversationID]);
 			}
 		}
-		$this->cachedObjects = $messageList->getObjects();
+		
+		foreach ($messageList->getObjects() as $objectID => $object) {
+			$this->cachedObjects[$objectID] = $object;
+		}
 	}
 	
 	/**
