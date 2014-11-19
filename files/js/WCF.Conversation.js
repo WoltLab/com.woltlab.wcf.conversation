@@ -289,7 +289,7 @@ WCF.Conversation.EditorHandlerConversation = WCF.Conversation.EditorHandler.exte
 });
 
 /**
- * Provides extended actions for thread clipboard actions.
+ * Provides extended actions for conversation clipboard actions.
  */
 WCF.Conversation.Clipboard = Class.extend({
 	/**
