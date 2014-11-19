@@ -2,7 +2,6 @@
 namespace wcf\system\user\notification\event;
 use wcf\system\request\LinkHandler;
 use wcf\system\user\notification\event\AbstractUserNotificationEvent;
-use wcf\system\WCF;
 
 /**
  * User notification event for conversations.
@@ -27,7 +26,8 @@ class ConversationUserNotificationEvent extends AbstractUserNotificationEvent {
 	 */
 	public function getMessage() {
 		return $this->getLanguage()->getDynamicVariable('wcf.user.notification.conversation.message', array(
-			'conversation' => $this->userNotificationObject,
+			'author' => $this->author,
+			'conversation' => $this->userNotificationObject
 		));
 	}
 	
