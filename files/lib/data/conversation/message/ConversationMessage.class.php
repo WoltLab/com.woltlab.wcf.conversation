@@ -62,10 +62,11 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	/**
 	 * Assigns and returns the embedded attachments.
 	 * 
+	 * @param	boolean		$ignoreCache
 	 * @return	\wcf\data\attachment\GroupedAttachmentList
 	 */
-	public function getAttachments() {
-		if (MODULE_ATTACHMENT == 1 && $this->attachments) {
+	public function getAttachments($ignoreCache = false) {
+		if (MODULE_ATTACHMENT == 1 && ($this->attachments || $ignoreCache)) {
 			$attachmentList = new GroupedAttachmentList('com.woltlab.wcf.conversation.message');
 			$attachmentList->getConditionBuilder()->add('attachment.objectID IN (?)', array($this->messageID));
 			$attachmentList->readObjects();
@@ -73,6 +74,10 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 				'canDownload' => true,
 				'canViewPreview' => true
 			));
+			
+			if ($ignoreCache && !count($attachmentList)) {
+				return null;
+			}
 			
 			return $attachmentList;
 		}

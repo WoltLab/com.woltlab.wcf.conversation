@@ -389,13 +389,22 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		$this->message->getAttachments();
 		
 		if (MODULE_ATTACHMENT) {
-			$attachmentList = $this->message->getAttachments();
+			$attachmentList = $this->message->getAttachments(true);
+			$count = 0;
 			if ($attachmentList !== null) {
 				// set permisions
 				$attachmentList->setPermissions(array(
 					'canDownload' => true,
 					'canViewPreview' => true
 				));
+				
+				$count = count($attachmentList);
+			}
+			
+			// update count to reflect number of attachments after edit
+			if ($count != $this->message->attachments) {
+				$messageEditor = new ConversationMessageEditor($this->message);
+				$messageEditor->update(array('attachments' => $count));
 			}
 		}
 		
