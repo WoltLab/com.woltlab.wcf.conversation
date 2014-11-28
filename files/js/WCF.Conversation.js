@@ -1358,11 +1358,24 @@ WCF.Conversation.UserPanel = WCF.UserPanel.extend({
 	},
 	
 	/**
+	 * @see	WCF.UserPanel._after()
+	 */
+	_after: function(dropdownMenu) {
+		var $items = dropdownMenu.children('.conversationItemUnread');
+		if ($items.length) {
+			var $item = $items.last();
+			if ($item.next('.conversationItem').length) {
+				$('<li class="dropdownDivider" />').insertAfter($item);
+			}
+		}
+	},
+	
+	/**
 	 * @see	WCF.UserPanel._getParameters()
 	 */
 	_getParameters: function() {
 		return {
-			actionName: 'getUnreadConversations',
+			actionName: 'getMixedConversationList',
 			className: 'wcf\\data\\conversation\\ConversationAction'
 		};
 	}

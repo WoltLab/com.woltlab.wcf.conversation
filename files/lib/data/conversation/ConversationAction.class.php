@@ -614,30 +614,49 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	}
 	
 	/**
-	 * Validates the 'getUnreadConversations' action.
+	 * Validates parameters to return the mixed conversation list.
 	 */
-	public function validateGetUnreadConversations() {
+	public function validateGetMixedConversationList() {
 		// does nothing
 	}
 	
 	/**
-	 * Returns the last 5 unread conversations.
+	 * Returns a mixed conversation list with up to 5 unread conversations.
 	 * 
-	 * @return	array
+	 * @return	array<mixed>
 	 */
-	public function getUnreadConversations() {
-		$conversationList = new UserConversationList(WCF::getUser()->userID);
-		$conversationList->getConditionBuilder()->add('conversation_to_user.lastVisitTime < conversation.lastPostTime');
-		$conversationList->sqlLimit = 5;
-		$conversationList->sqlOrderBy = 'conversation.lastPostTime DESC';
-		$conversationList->readObjects();
+	public function getMixedConversationList() {
+		$unreadConversationList = new UserConversationList(WCF::getUser()->userID);
+		$unreadConversationList->getConditionBuilder()->add('conversation_to_user.lastVisitTime < conversation.lastPostTime');
+		$unreadConversationList->sqlLimit = 5;
+		$unreadConversationList->sqlOrderBy = 'conversation.lastPostTime DESC';
+		$unreadConversationList->readObjects();
+		
+		$conversations = array();
+		$count = 0;
+		foreach ($unreadConversationList as $conversation) {
+			$conversations[] = $conversation;
+			$count++;
+		}
+		
+		if ($count < 5) {
+			$conversationList = new UserConversationList(WCF::getUser()->userID);
+			$conversationList->getConditionBuilder()->add('conversation_to_user.lastVisitTime >= conversation.lastPostTime');
+			$conversationList->sqlLimit = (5 - $count);
+			$conversationList->sqlOrderBy = 'conversation.lastPostTime DESC';
+			$conversationList->readObjects();
+			
+			foreach ($conversationList as $conversation) {
+				$conversations[] = $conversation;
+			}
+		}
 		
 		WCF::getTPL()->assign(array(
-			'conversations' => $conversationList->getObjects()
+			'conversations' => $conversations
 		));
 		
 		$totalCount = ConversationHandler::getInstance()->getUnreadConversationCount();
-		if (count($conversationList) < $totalCount) {
+		if ($count < 5 && $count < $totalCount) {
 			UserStorageHandler::getInstance()->reset(array(WCF::getUser()->userID), 'unreadConversationCount');
 		}
 		
