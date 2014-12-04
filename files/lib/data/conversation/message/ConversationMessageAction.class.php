@@ -545,6 +545,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 */
 	public function validateSaveQuote() {
 		$this->readString('message');
+		$this->readBoolean('renderQuote', true);
 		$this->message = $this->getSingleObject();
 		
 		if (!Conversation::isParticipant(array($this->message->conversationID))) {
