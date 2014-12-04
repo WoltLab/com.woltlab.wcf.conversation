@@ -91,18 +91,18 @@
 		<item name="wcf.conversation.participantCanInvite"><![CDATA[Teilnehmer können weitere Teilnehmer hinzufügen]]></item>
 		<item name="wcf.conversation.participants"><![CDATA[Teilnehmer]]></item>
 		<item name="wcf.conversation.participants.description"><![CDATA[Mehrere Teilnehmer können mit Komma getrennt angegeben werden.]]></item>
-		<item name="wcf.conversation.participants.error.mailboxIsFull"><![CDATA[„{$errorData[username]}“ hat das zulässige Limit für Konversationen bereits erreicht und kann an keinen neuen Konversationen teilnehmen.]]></item>
-		<item name="wcf.conversation.participants.error.notFound"><![CDATA[Der Benutzername „{$errorData[username]}“ konnte nicht gefunden werden.]]></item>
+		<item name="wcf.conversation.participants.error.mailboxIsFull"><![CDATA[{$errorData[username]} hat das zulässige Limit für Konversationen bereits erreicht und kann an keinen neuen Konversationen teilnehmen.]]></item>
+		<item name="wcf.conversation.participants.error.notFound"><![CDATA[Der Benutzername {$errorData[username]} konnte nicht gefunden werden.]]></item>
 		<item name="wcf.conversation.participants.error.isAuthor"><![CDATA[Sie sind bereits Teilnehmer dieser Konversation.]]></item>
-		<item name="wcf.conversation.participants.error.duplicate"><![CDATA[„{$errorData[username]}“ ist bereits Teilnehmer dieser Konversation.]]></item>
-		<item name="wcf.conversation.participants.error.canNotUseConversation"><![CDATA[„{$errorData[username]}“ besitzt nicht die notwendigen Berechtigungen, um an einer Konversation teilnehmen zu dürfen.]]></item>
-		<item name="wcf.conversation.participants.error.doesNotAcceptConversation"><![CDATA[„{$errorData[username]}“ möchte nicht an Konversationen teilnehmen.]]></item>
-		<item name="wcf.conversation.participants.error.ignoresYou"><![CDATA[„{$errorData[username]}“ hat Sie blockiert.]]></item>
+		<item name="wcf.conversation.participants.error.duplicate"><![CDATA[{$errorData[username]} ist bereits Teilnehmer dieser Konversation.]]></item>
+		<item name="wcf.conversation.participants.error.canNotUseConversation"><![CDATA[{$errorData[username]} besitzt nicht die notwendigen Berechtigungen, um an einer Konversation teilnehmen zu dürfen.]]></item>
+		<item name="wcf.conversation.participants.error.doesNotAcceptConversation"><![CDATA[{$errorData[username]} möchte nicht an Konversationen teilnehmen.]]></item>
+		<item name="wcf.conversation.participants.error.ignoresYou"><![CDATA[{$errorData[username]} hat Sie blockiert.]]></item>
 		<item name="wcf.conversation.participants.error.tooManyParticipants"><![CDATA[Sie haben zu viele Teilnehmer angegeben. Das Maximum liegt bei {#$__wcf->getSession()->getPermission('user.conversation.maxParticipants')} Teilnehmern.]]></item>
 		<item name="wcf.conversation.participants.error.invisibleParticipantsNoPermission"><![CDATA[Sie haben keine Berechtigung, unsichtbare Teilnehmer hinzuzufügen.]]></item>
 		<item name="wcf.conversation.participants.error.participantCanInviteNoPermission"><![CDATA[Sie haben keine Berechtigung, Teilnehmern das Hinzufügen weiterer Teilnehmer zu erlauben.]]></item>
 		<item name="wcf.conversation.participants.removeParticipant"><![CDATA[Teilnehmer entfernen]]></item>
-		<item name="wcf.conversation.participants.removeParticipant.confirmMessage"><![CDATA[Wollen Sie „{$participant->username}“ wirklich aus dieser Konversation entfernen?]]></item>
+		<item name="wcf.conversation.participants.removeParticipant.confirmMessage"><![CDATA[Wollen Sie {$participant->username} wirklich aus dieser Konversation entfernen?]]></item>
 		<item name="wcf.conversation.quota"><![CDATA[Speicherplatz]]></item>
 		<item name="wcf.conversation.quota.description"><![CDATA[{#$conversationCount/$maxConversationCount*100}% belegt ({#$conversationCount} von {#$maxConversationCount})]]></item>
 		<item name="wcf.conversation.replies"><![CDATA[Antworten]]></item>
@@ -181,8 +181,8 @@
 	</category>
 	
 	<category name="wcf.user.notification">
-		<item name="wcf.user.notification.conversation.message.message"><![CDATA[„{@$author->getAnchorTag()}“ hat auf die Konversation „<a href="{link controller='Conversation' object=$message->getConversation()}{/link}">{$message->getConversation()->getTitle()}</a>“ geantwortet.]]></item>
-		<item name="wcf.user.notification.conversation.message.message.stacked"><![CDATA[{if $count < 4}{@$authors[0]->getAnchorTag()}{if $count == 2} und {else}, {/if}{@$authors[1]->getAnchorTag()}{if $count == 3} und {@$authors[2]->getAnchorTag()}{/if}{else}{@$authors[0]->getAnchorTag()} und {#$count} weitere{/if} haben auf die Konversation „<a href="{link controller='Conversation' object=$message->getConversation()}{/link}">{$message->getConversation()->getTitle()}</a>“ geantwortet.]]></item>
+		<item name="wcf.user.notification.conversation.message.message"><![CDATA[{@$author->getAnchorTag()} hat auf die Konversation <a href="{link controller='Conversation' object=$message->getConversation()}{/link}">{$message->getConversation()->getTitle()}</a> geantwortet.]]></item>
+		<item name="wcf.user.notification.conversation.message.message.stacked"><![CDATA[{if $count < 4}{@$authors[0]->getAnchorTag()}{if $count == 2} und {else}, {/if}{@$authors[1]->getAnchorTag()}{if $count == 3} und {@$authors[2]->getAnchorTag()}{/if}{else}{@$authors[0]->getAnchorTag()} und {#$count} weitere{/if} haben auf die Konversation <a href="{link controller='Conversation' object=$message->getConversation()}{/link}">{$message->getConversation()->getTitle()}</a> geantwortet.]]></item>
 		<item name="wcf.user.notification.conversation.message.title"><![CDATA[Neue Antwort auf Konversation]]></item>
 		<item name="wcf.user.notification.conversation.message.title.stacked"><![CDATA[{#$count} Teilnehmer haben auf eine Konversation geantwortet]]></item>
 		<item name="wcf.user.notification.conversation.message.mail"><![CDATA[{@$author->username} hat auf die Konversation "{@$message->getTitle()}" geantwortet:
@@ -191,7 +191,7 @@
 {@$message->getMailText()} 
 ---------------------------------
 {/if}{link controller='Conversation' object=$message->getConversation() isEmail=true}messageID={@$message->messageID}{/link}#message{@$message->messageID}]]></item>
-		<item name="wcf.user.notification.conversation.message"><![CDATA[„{@$author->getAnchorTag()}“ hat die Konversation „<a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a>“ gestartet.]]></item>
+		<item name="wcf.user.notification.conversation.message"><![CDATA[{@$author->getAnchorTag()} hat die Konversation <a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a> gestartet.]]></item>
 		<item name="wcf.user.notification.conversation.title"><![CDATA[Neue Konversation]]></item>
 		<item name="wcf.user.notification.conversation.mail"><![CDATA[{@$author->username} hat die Konversation "{@$conversation->subject}" gestartet:
 {if $notificationType == 'instant'}
@@ -211,10 +211,10 @@
 	</category>
 	
 	<category name="wcf.user.usersOnline">
-		<item name="wcf.user.usersOnline.location.ConversationAddForm"><![CDATA[Konversation erstellen]]></item>
-		<item name="wcf.user.usersOnline.location.ConversationListPage"><![CDATA[Konversationen]]></item>
-		<item name="wcf.user.usersOnline.location.ConversationMessageAddForm"><![CDATA[Antworten auf <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">Konversation „{$conversation->subject}“</a>]]></item>
-		<item name="wcf.user.usersOnline.location.ConversationMessageEditForm"><![CDATA[Nachricht bearbeiten in <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">Konversation „{$conversation->subject}“</a>]]></item>
-		<item name="wcf.user.usersOnline.location.ConversationPage"><![CDATA[<a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">Konversation „{$conversation->subject}“</a>]]></item>
+		<item name="wcf.user.usersOnline.location.ConversationAddForm"><![CDATA[Erstellt eine neue Konversation.]]></item>
+		<item name="wcf.user.usersOnline.location.ConversationListPage"><![CDATA[Betrachtet die Liste seiner Konversationen.]]></item>
+		<item name="wcf.user.usersOnline.location.ConversationMessageAddForm"><![CDATA[Schreibt eine Antwort auf die Konversation <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>.]]></item>
+		<item name="wcf.user.usersOnline.location.ConversationMessageEditForm"><![CDATA[Bearbeitet eine Nachricht in der Konversation <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>.]]></item>
+		<item name="wcf.user.usersOnline.location.ConversationPage"><![CDATA[Liest die Konversation <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>.]]></item>
 	</category>
 </language>
