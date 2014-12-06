@@ -83,13 +83,13 @@ class UserConversationList extends ConversationList {
 		
 		// get avatars
 		if (!empty($this->sqlSelects)) $this->sqlSelects .= ',';
-		$this->sqlSelects .= "user_avatar.*, user_table.email, user_table.disableAvatar, user_table.enableGravatar";
+		$this->sqlSelects .= "user_avatar.*, user_table.email, user_table.disableAvatar, user_table.enableGravatar, user_table.gravatarFileExtension";
 		$this->sqlJoins .= " LEFT JOIN wcf".WCF_N."_user user_table ON (user_table.userID = conversation.userID)";
 		$this->sqlJoins .= " LEFT JOIN wcf".WCF_N."_user_avatar user_avatar ON (user_avatar.avatarID = user_table.avatarID)";
 		
 		if (!empty($this->sqlSelects)) $this->sqlSelects .= ',';
 		$this->sqlSelects .= "lastposter_avatar.avatarID AS lastPosterAvatarID, lastposter_avatar.avatarName AS lastPosterAvatarName, lastposter_avatar.avatarExtension AS lastPosterAvatarExtension, lastposter_avatar.width AS lastPosterAvatarWidth, lastposter_avatar.height AS lastPosterAvatarHeight,";
-		$this->sqlSelects .= "lastposter.email AS lastPosterEmail, lastposter.disableAvatar AS lastPosterDisableAvatar, lastposter.enableGravatar AS lastPosterEnableGravatar";
+		$this->sqlSelects .= "lastposter.email AS lastPosterEmail, lastposter.disableAvatar AS lastPosterDisableAvatar, lastposter.enableGravatar AS lastPosterEnableGravatar, lastposter.gravatarFileExtension AS lastPosterGravatarFileExtension";
 		$this->sqlJoins .= " LEFT JOIN wcf".WCF_N."_user lastposter ON (lastposter.userID = conversation.lastPosterID)";
 		$this->sqlJoins .= " LEFT JOIN wcf".WCF_N."_user_avatar lastposter_avatar ON (lastposter_avatar.avatarID = lastposter.avatarID)";
 	}
