@@ -83,7 +83,7 @@ class ViewableConversation extends DatabaseObjectDecorator {
 					'email' => $this->lastPosterEmail,
 					'disableAvatar' => $this->lastPosterDisableAvatar,
 					'enableGravatar' => $this->lastPosterEnableGravatar,
-					'gravatarFileExtension' => lastPosterGravatarFileExtension
+					'gravatarFileExtension' => $this->lastPosterGravatarFileExtension
 				)));
 			}
 		}
