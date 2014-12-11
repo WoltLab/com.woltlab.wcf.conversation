@@ -118,6 +118,7 @@
 		<item name="wcf.conversation.message.editNote"><![CDATA[{$message->username} hat diese Nachricht {#$message->editCount} mal editiert, zuletzt: {@$message->lastEditTime|time}.]]></item>
 		<item name="wcf.conversation.noParticipantsWarning"><![CDATA[Sie sind dabei auf eine Konversation ohne weitere Teilnehmer zu antworten. Alle anderen Teilnehmer haben diese Konversation verlassen. Niemand wird Ihre Nachricht lesen!]]></item>
 		<item name="wcf.conversation.message.permalink"><![CDATA[Permalink zur {#$startIndex}. Nachricht]]></item>
+		<item name="wcf.conversation.markAsRead.doubleClick"><![CDATA[Konversation durch Doppelklick als gelesen markieren]]></item>
 	</category>
 	
 	<category name="wcf.conversation.edit">
