@@ -32,12 +32,13 @@ class ConversationHandler extends SingletonFactory {
 	 * Returns the number of unread conversations for given user.
 	 * 
 	 * @param	integer		$userID
+	 * @param	boolean		$skipCache
 	 * @return	integer
 	 */
-	public function getUnreadConversationCount($userID = null) {
+	public function getUnreadConversationCount($userID = null, $skipCache = false) {
 		if ($userID === null) $userID = WCF::getUser()->userID;
 		
-		if (!isset($this->unreadConversationCount[$userID])) {
+		if (!isset($this->unreadConversationCount[$userID]) || $skipCache) {
 			$this->unreadConversationCount[$userID] = 0;
 			
 			// load storage data
@@ -47,7 +48,7 @@ class ConversationHandler extends SingletonFactory {
 			$data = UserStorageHandler::getInstance()->getStorage(array($userID), 'unreadConversationCount');
 			
 			// cache does not exist or is outdated
-			if ($data[$userID] === null) {
+			if ($data[$userID] === null || $skipCache) {
 				$conditionBuilder = new PreparedStatementConditionBuilder();
 				$conditionBuilder->add('conversation.conversationID = conversation_to_user.conversationID');
 				$conditionBuilder->add('conversation_to_user.participantID = ?', array($userID));

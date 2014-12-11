@@ -81,13 +81,14 @@
 		<item name="wcf.conversation.lastPostTime"><![CDATA[Last Reply]]></item>
 		<item name="wcf.conversation.lastVisitTime"><![CDATA[Last Visited]]></item>
 		<item name="wcf.conversation.leave.title"><![CDATA[Manage Participation]]></item>
+		<item name="wcf.conversation.markAllAsRead.confirmMessage"><![CDATA[Do you really want to mark all conversations as read?]]></item>
 		<item name="wcf.conversation.message"><![CDATA[Message]]></item>
 		<item name="wcf.conversation.message.add"><![CDATA[Reply]]></item>
 		<item name="wcf.conversation.message.add.previousPosts"><![CDATA[Previous message{if $items != 1}s ({#$items}){/if}]]></item>
 		<item name="wcf.conversation.message.button.add"><![CDATA[Reply]]></item>
 		<item name="wcf.conversation.message.edit"><![CDATA[Edit Message]]></item>
 		<item name="wcf.conversation.noConversations"><![CDATA[There are no conversations matching your criteria.]]></item>
-		<item name="wcf.conversation.noMoreItems"><![CDATA[No more conversations]]></item>
+		<item name="wcf.conversation.noMoreItems"><![CDATA[No recent conversations]]></item>
 		<item name="wcf.conversation.participantCanInvite"><![CDATA[Participants can add new participants]]></item>
 		<item name="wcf.conversation.participants"><![CDATA[Participants]]></item>
 		<item name="wcf.conversation.participants.description"><![CDATA[Multiple participants should be separated with a comma.]]></item>

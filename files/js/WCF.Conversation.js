@@ -1319,6 +1319,79 @@ WCF.Conversation.Preview = WCF.Popover.extend({
 });
 
 /**
+ * User Panel implementation for conversations.
+ * 
+ * @see	WCF.User.Panel.Abstract
+ */
+WCF.User.Panel.Conversation = WCF.User.Panel.Abstract.extend({
+	/**
+	 * @see	WCF.User.Panel.Abstract.init()
+	 */
+	init: function(options) {
+		options.enableMarkAsRead = true;
+		
+		this._super($('#unreadConversations'), 'unreadConversations', options);
+	},
+	
+	/**
+	 * @see	WCF.User.Panel.Abstract._initDropdown()
+	 */
+	_initDropdown: function() {
+		var $dropdown = this._super();
+		
+		$('<li><a href="' + this._options.newConversationLink + '" title="' + this._options.newConversation + '" class="jsTooltip"><span class="icon icon16 fa-plus" /></a></li>').appendTo($dropdown.getLinkList());
+		
+		return $dropdown;
+	},
+	
+	/**
+	 * @see	WCF.User.Panel.Abstract._load()
+	 */
+	_load: function() {
+		this._proxy.setOption('data', {
+			actionName: 'getMixedConversationList',
+			className: 'wcf\\data\\conversation\\ConversationAction'
+		});
+		this._proxy.sendRequest();
+	},
+	
+	/**
+	 * @see	WCF.User.Panel.Abstract._markAsRead()
+	 */
+	_markAsRead: function(event, objectID) {
+		this._proxy.setOption('data', {
+			actionName: 'markAsRead',
+			className: 'wcf\\data\\conversation\\ConversationAction',
+			objectIDs: [ objectID ]
+		});
+		this._proxy.sendRequest();
+	},
+	
+	/**
+	 * @see	WCF.User.Panel.Abstract._markAllAsRead()
+	 */
+	_markAllAsRead: function(event) {
+		this._proxy.setOption('data', {
+			actionName: 'markAllAsRead',
+			className: 'wcf\\data\\conversation\\ConversationAction'
+		});
+		this._proxy.sendRequest();
+	},
+	
+	/**
+	 * @see	WCF.User.Panel.Abstract._success()
+	 */
+	_success: function(data) {
+		this._super(data);
+		
+		if (data.actionName === 'markAllAsConfirmed') {
+			this.resetItems();
+			this.updateBadge(0);
+		}
+	}
+});
+
+/**
  * Loads conversations for user panel.
  * 
  * @see	WCF.UserPanel

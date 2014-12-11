@@ -6,13 +6,14 @@
 			<script data-relocate="true">
 				//<![CDATA[
 				$(function() {
-					WCF.Language.addObject({
-						'wcf.conversation.add': '{lang}wcf.conversation.add{/lang}',
-						'wcf.conversation.noMoreItems': '{lang}wcf.conversation.noMoreItems{/lang}',
-						'wcf.conversation.showAll': '{lang}wcf.conversation.showAll{/lang}'
+					new WCF.User.Panel.Conversation({
+						markAllAsReadConfirmMessage: '{lang}wcf.conversation.markAllAsRead.confirmMessage{/lang}',
+						newConversation: '{lang}wcf.conversation.add{/lang}',
+						newConversationLink: '{link controller='ConversationAdd' encode=false}{/link}',
+						noItems: '{lang}wcf.conversation.noMoreItems{/lang}',
+						showAllLink: '{link controller='ConversationList' encode=false}{/link}',
+						title: '{lang}wcf.conversation.conversations{/lang}'
 					});
-					
-					new WCF.Conversation.UserPanel('{link controller='ConversationList' encode=false}{/link}', '{link controller='ConversationAdd'}{/link}');
 				});
 				//]]>
 			</script>
