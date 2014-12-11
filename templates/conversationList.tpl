@@ -171,7 +171,7 @@
 						<td class="columnIcon columnAvatar">
 							{if $conversation->getUserProfile()->getAvatar()}
 								<div>
-									<p class="framed">{@$conversation->getUserProfile()->getAvatar()->getImageTag(32)}</p>
+									<p class="framed"{if $conversation->isNew()} title="{lang}wcf.conversation.markAsRead.doubleClick{/lang}"{/if}>{@$conversation->getUserProfile()->getAvatar()->getImageTag(32)}</p>
 									
 									{if $conversation->ownPosts && $conversation->userID != $__wcf->user->userID}
 										{if $__wcf->getUserProfileHandler()->getAvatar()}

@@ -117,6 +117,7 @@
 		<item name="wcf.conversation.message.editNote"><![CDATA[{$message->username} edited this message {#$message->editCount} times, last: {@$message->lastEditTime|time}.]]></item>
 		<item name="wcf.conversation.noParticipantsWarning"><![CDATA[You’re about to reply to a conversation without other participants, all other participants have already left this conversation. Nobody is going to read your message!]]></item>
 		<item name="wcf.conversation.message.permalink"><![CDATA[Permalink to {#$startIndex}. message]]></item>
+		<item name="wcf.conversation.markAsRead.doubleClick"><![CDATA[Double-Click to Mark This Conversation Read]]></item>
 	</category>
 	
 	<category name="wcf.conversation.edit">
