@@ -649,8 +649,6 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		if ($count < 5) {
 			$conversationList = new UserConversationList(WCF::getUser()->userID);
 			$conversationList->getConditionBuilder()->add('conversation_to_user.lastVisitTime >= conversation.lastPostTime');
-			// consider only conversations last visited 3 days ago (86400 = 1 day)
-			$conversationList->getConditionBuilder()->add('conversation_to_user.lastVisitTime > ?', array(TIME_NOW - (3 * 86400)));
 			$conversationList->sqlLimit = (5 - $count);
 			$conversationList->sqlOrderBy = 'conversation.lastPostTime DESC';
 			$conversationList->readObjects();
