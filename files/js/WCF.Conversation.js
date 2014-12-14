@@ -1380,69 +1380,6 @@ WCF.User.Panel.Conversation = WCF.User.Panel.Abstract.extend({
 });
 
 /**
- * Loads conversations for user panel.
- * 
- * @see	WCF.UserPanel
- */
-WCF.Conversation.UserPanel = WCF.UserPanel.extend({
-	/**
-	 * link to conversation add
-	 * @var	string
-	 */
-	_addLink: '',
-	
-	/**
-	 * link to show all conversations
-	 * @var	string
-	 */
-	_showAllLink: '',
-	
-	/**
-	 * @see	WCF.UserPanel.init()
-	 */
-	init: function(showAllLink, addLink) {
-		this._addLink = addLink;
-		this._noItems = 'wcf.conversation.noMoreItems';
-		this._showAllLink = showAllLink;
-		
-		this._super('unreadConversations');
-	},
-	
-	/**
-	 * @see	WCF.UserPanel._addDefaultItems()
-	 */
-	_addDefaultItems: function(dropdownMenu) {
-		this._addDivider(dropdownMenu);
-		$('<li><a href="' + this._showAllLink + '">' + WCF.Language.get('wcf.conversation.showAll') + '</a></li>').appendTo(dropdownMenu);
-		this._addDivider(dropdownMenu);
-		$('<li><a href="' + this._addLink + '">' + WCF.Language.get('wcf.conversation.add') + '</a></li>').appendTo(dropdownMenu);
-	},
-	
-	/**
-	 * @see	WCF.UserPanel._after()
-	 */
-	_after: function(dropdownMenu) {
-		var $items = dropdownMenu.children('.conversationItemUnread');
-		if ($items.length) {
-			var $item = $items.last();
-			if ($item.next('.conversationItem').length) {
-				$('<li class="dropdownDivider" />').insertAfter($item);
-			}
-		}
-	},
-	
-	/**
-	 * @see	WCF.UserPanel._getParameters()
-	 */
-	_getParameters: function() {
-		return {
-			actionName: 'getMixedConversationList',
-			className: 'wcf\\data\\conversation\\ConversationAction'
-		};
-	}
-});
-
-/**
  * Provides an AJAX-based quick reply for conversations.
  */
 WCF.Conversation.QuickReply = WCF.Message.QuickReply.extend({
