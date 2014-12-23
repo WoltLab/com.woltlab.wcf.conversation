@@ -1,7 +1,9 @@
 <?php
 namespace wcf\system\worker;
 use wcf\data\conversation\Conversation;
+use wcf\data\conversation\ConversationAction;
 use wcf\data\conversation\ConversationEditor;
+use wcf\data\conversation\ConversationList;
 use wcf\system\WCF;
 
 /**
@@ -16,21 +18,30 @@ use wcf\system\WCF;
  */
 class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 	/**
-	 * @see	\wcf\system\worker\AbstractRebuildDataWorker::$objectListClassName
-	 */
-	protected $objectListClassName = 'wcf\data\conversation\ConversationList';
-	
-	/**
 	 * @see	\wcf\system\worker\AbstractWorker::$limit
 	 */
 	protected $limit = 100;
 	
 	/**
+	 * @see	\wcf\system\worker\IWorker::countObjects()
+	 */
+	public function countObjects() {
+		if ($this->count === null) {
+			$this->count = 0;
+			$sql = "SELECT	MAX(conversationID) AS conversationID
+				FROM	wcf".WCF_N."_conversation";
+			$statement = WCF::getDB()->prepareStatement($sql);
+			$statement->execute();
+			$row = $statement->fetchArray();
+			if ($row !== false) $this->count = $row['conversationID'];
+		}
+	}
+	
+	/**
 	 * @see	\wcf\system\worker\AbstractRebuildDataWorker::initObjectList
 	 */
 	protected function initObjectList() {
-		parent::initObjectList();
-		
+		$this->objectList = new ConversationList();
 		$this->objectList->sqlOrderBy = 'conversation.conversationID';
 	}
 	
@@ -38,6 +49,8 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 	 * @see	\wcf\system\worker\IWorker::execute()
 	 */
 	public function execute() {
+		$this->objectList->getConditionBuilder()->add('conversation.conversationID BETWEEN ? AND ?', array($this->limit * $this->loopCount + 1, $this->limit * $this->loopCount + $this->limit));
+		
 		parent::execute();
 		
 		// prepare statements
@@ -73,8 +86,32 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 			ORDER BY	user_table.username";
 		$participantStatement = WCF::getDB()->prepareStatement($sql, 5);
 		
+		$sql = "SELECT	COUNT(*) AS participants
+			FROM	wcf".WCF_N."_conversation_to_user
+			WHERE	conversationID = ?
+				AND participantID IS NOT NULL";
+		$existingParticipantStatement = WCF::getDB()->prepareStatement($sql, 5);
+		
+		$obsoleteConversations = array();
 		foreach ($this->objectList as $conversation) {
 			$editor = new ConversationEditor($conversation);
+			
+			// check for obsolete conversations
+			$obsolete = false;
+			if ($conversation->isDraft) {
+				if (!$conversation->userID) $obsolete = true;
+			}
+			else {
+				$existingParticipantStatement->execute(array($conversation->conversationID));
+				$row = $existingParticipantStatement->fetchArray();
+				if (!$row['participants']) $obsolete = true;
+			}
+			if ($obsolete) {
+				$obsoleteConversations[] = $editor;
+				continue;
+			}
+			
+			// update data
 			$data = array();
 			
 			// get first post
@@ -114,6 +151,12 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 			$data['participantSummary'] = serialize($users);
 			
 			$editor->update($data);
+		}
+		
+		// delete obsolete conversations
+		if (!empty($obsoleteConversations)) {
+			$action = new ConversationAction($obsoleteConversations, 'delete');
+			$action->executeAction();
 		}
 	}
 }
