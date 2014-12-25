@@ -127,7 +127,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	
 	/**
 	 * Returns a list of user conversations.
-	 *
+	 * 
 	 * @param	array<integer>		$conversationIDs
 	 * @param	integer			$userID
 	 * @return	array<\wcf\data\conversation\Conversation>
@@ -257,9 +257,9 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	}
 	
 	/**
-	 * Returns false, if the active user is the last participant of this conversation.
+	 * Returns false if the active user is the last participant of this conversation.
 	 * 
-	 * @return boolean
+	 * @return	boolean
 	 */
 	public function hasOtherParticipants() {
 		if ($this->userID == WCF::getUser()->userID) {

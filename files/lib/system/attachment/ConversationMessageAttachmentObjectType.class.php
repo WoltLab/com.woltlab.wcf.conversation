@@ -109,16 +109,16 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
 				'canDownload' => false,
 				'canViewPreview' => false
 			));
-				
+			
 			if ($this->getObject($attachment->objectID) === null) {
 				$messageIDs[] = $attachment->objectID;
 			}
 		}
-	
+		
 		if (!empty($messageIDs)) {
 			$this->cacheObjects($messageIDs);
 		}
-	
+		
 		foreach ($attachments as $attachment) {
 			if (($message = $this->getObject($attachment->objectID)) !== null) {
 				if (!$message->getConversation()->canRead()) continue;

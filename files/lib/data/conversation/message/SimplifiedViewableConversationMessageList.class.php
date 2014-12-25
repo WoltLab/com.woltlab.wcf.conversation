@@ -4,7 +4,7 @@ namespace wcf\data\conversation\message;
 /**
  * Represents a simplified version of ViewableConversationMessageList.
  * Disables the loading of attachments and embedded objects by default.
- *
+ * 
  * @author	Marcel Werk
  * @copyright	2001-2014 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>

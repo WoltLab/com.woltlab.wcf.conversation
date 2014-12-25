@@ -204,7 +204,7 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 					if ($labelID == $label->labelID) {
 						$isValid = true;
 						break;
-					} 
+					}
 				}
 				
 				if (!$isValid) {

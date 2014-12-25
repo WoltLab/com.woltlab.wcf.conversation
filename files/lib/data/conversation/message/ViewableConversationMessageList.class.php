@@ -34,7 +34,7 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	
 	/**
 	 * ids of the messages with embedded objects
-	 * @var array<integer>
+	 * @var	array<integer>
 	 */
 	public $embeddedObjectMessageIDs = array();
 	
@@ -52,19 +52,19 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	
 	/**
 	 * enables/disables the loading of attachments
-	 * @var boolean
+	 * @var	boolean
 	 */
 	protected $attachmentLoading = true;
 	
 	/**
 	 * enables/disables the loading of embedded objects
-	 * @var boolean
+	 * @var	boolean
 	 */
 	protected $embeddedObjectLoading = true;
 	
 	/**
 	 * conversation object
-	 * @var \wcf\data\conversation\Conversation
+	 * @var	\wcf\data\conversation\Conversation
 	 */
 	protected $conversation = null;
 	
@@ -163,7 +163,7 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	
 	/**
 	 * Enables/disables the loading of attachments.
-	 *
+	 * 
 	 * @param	boolean		$enable
 	 */
 	public function enableAttachmentLoading($enable = true) {
@@ -172,7 +172,7 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	
 	/**
 	 * Enables/disables the loading of embedded objects.
-	 *
+	 * 
 	 * @param	boolean		$enable
 	 */
 	public function enableEmbeddedObjectLoading($enable = true) {
@@ -181,7 +181,7 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	
 	/**
 	 * Sets active conversation.
-	 *
+	 * 
 	 * @param	\wcf\data\conversation\Conversation		$conversation
 	 */
 	public function setConversation(Conversation $conversation) {

@@ -51,7 +51,7 @@ class ConversationNotificationObjectType extends AbstractUserNotificationObjectT
 				)));
 			}
 		}
-	
+		
 		return $objects;
 	}
 }

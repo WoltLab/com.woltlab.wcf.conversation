@@ -275,8 +275,8 @@ class ConversationPage extends MultipleLinkPage {
 			FROM		wcf".WCF_N."_conversation_message conversation_message
 			".$this->objectList->getConditionBuilder()."
 			ORDER BY	time ".($this->sortOrder == 'ASC' ? 'DESC' : 'ASC');
-		$statement = WCF::getDB()->prepareStatement($sql, 1);	
-		$statement->execute($this->objectList->getConditionBuilder()->getParameters());	
+		$statement = WCF::getDB()->prepareStatement($sql, 1);
+		$statement->execute($this->objectList->getConditionBuilder()->getParameters());
 		$row = $statement->fetchArray();
 		HeaderUtil::redirect(LinkHandler::getInstance()->getLink('Conversation', array(
 			'object' => $this->conversation,
