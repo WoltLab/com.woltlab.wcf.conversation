@@ -279,6 +279,7 @@ class ConversationPage extends MultipleLinkPage {
 		$statement->execute($this->objectList->getConditionBuilder()->getParameters());
 		$row = $statement->fetchArray();
 		HeaderUtil::redirect(LinkHandler::getInstance()->getLink('Conversation', array(
+			'encodeTitle' => true,
 			'object' => $this->conversation,
 			'messageID' => $row['messageID']
 		)).'#message'.$row['messageID']);
@@ -301,6 +302,7 @@ class ConversationPage extends MultipleLinkPage {
 		$row = $statement->fetchArray();
 		if ($row !== false) {
 			HeaderUtil::redirect(LinkHandler::getInstance()->getLink('Conversation', array(
+				'encodeTitle' => true,
 				'object' => $this->conversation,
 				'messageID' => $row['messageID']
 			)).'#message'.$row['messageID']);
