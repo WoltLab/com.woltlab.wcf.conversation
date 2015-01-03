@@ -116,7 +116,7 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 			
 			// get first post
 			$firstMessageStatement->execute(array($conversation->conversationID));
-			if (($row = $firstMessageStatement->fetchArray()) !== false) {
+			if (($row = $firstMessageStatement->fetchSingleRow()) !== false) {
 				$data['firstMessageID'] = $row['messageID'];
 				$data['time'] = $row['time'];
 				$data['userID'] = $row['userID'];
@@ -125,7 +125,7 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 			
 			// get last post
 			$lastMessageStatement->execute(array($conversation->conversationID));
-			if (($row = $lastMessageStatement->fetchArray()) !== false) {
+			if (($row = $lastMessageStatement->fetchSingleRow()) !== false) {
 				$data['lastPostTime'] = $row['time'];
 				$data['lastPosterID'] = $row['userID'];
 				$data['lastPoster'] = $row['username'];
@@ -133,13 +133,13 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 			
 			// get stats
 			$statsStatement->execute(array($conversation->conversationID));
-			$row = $statsStatement->fetchArray();
+			$row = $statsStatement->fetchSingleRow();
 			$data['replies'] = ($row['messages'] ? $row['messages'] - 1 : 0);
 			$data['attachments'] = ($row['attachments'] ?: 0);
 			
 			// get number of participants
 			$participantCounterStatement->execute(array($conversation->conversationID, Conversation::STATE_LEFT, $conversation->userID, 0));
-			$row = $participantCounterStatement->fetchArray();
+			$row = $participantCounterStatement->fetchSingleRow();
 			$data['participants'] = $row['participants'];
 			
 			// get participant summary

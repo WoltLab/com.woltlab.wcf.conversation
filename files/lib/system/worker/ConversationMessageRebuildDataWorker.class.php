@@ -65,7 +65,7 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker {
 			
 			// count attachments
 			$attachmentStatement->execute(array($attachmentObjectType->objectTypeID, $message->messageID));
-			$row = $attachmentStatement->fetchArray();
+			$row = $attachmentStatement->fetchSingleRow();
 			$data['attachments'] = $row['attachments'];
 			
 			// update embedded objects
