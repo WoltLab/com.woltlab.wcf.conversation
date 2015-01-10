@@ -103,7 +103,7 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 			}
 			else {
 				$existingParticipantStatement->execute(array($conversation->conversationID));
-				$row = $existingParticipantStatement->fetchArray();
+				$row = $existingParticipantStatement->fetchSingleRow();
 				if (!$row['participants']) $obsolete = true;
 			}
 			if ($obsolete) {
