@@ -8,6 +8,10 @@
 	<script data-relocate="true">
 		//<![CDATA[
 		$(function() {
+			WCF.Language.addObject({
+				'wcf.message.bbcode.code.copy': '{lang}wcf.message.bbcode.code.copy{/lang}'
+			});
+			
 			{if $isFirstMessage && $conversation->isDraft}
 				new WCF.Search.User('#participants', null, false, [ ], true);
 				new WCF.Search.User('#invisibleParticipants', null, false, [ ], true);
@@ -15,6 +19,7 @@
 			
 			WCF.Message.Submit.registerButton('text', $('#messageContainer > .formSubmit > input[type=submit]'));
 			new WCF.Message.FormGuard();
+			new WCF.Message.BBCode.CodeViewer();
 			
 			WCF.System.Dependency.Manager.register('CKEditor', function() { new WCF.Message.UserMention('text'); });
 		});
