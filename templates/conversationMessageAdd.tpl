@@ -9,11 +9,16 @@
 	<script data-relocate="true">
 		//<![CDATA[
 		$(function() {
+			WCF.Language.addObject({
+				'wcf.message.bbcode.code.copy': '{lang}wcf.message.bbcode.code.copy{/lang}'
+			});
+			
 			{include file='__messageQuoteManager' wysiwygSelector='text' supportPaste=true}
 			new WCF.Conversation.Message.QuoteHandler($quoteManager);
 			
 			WCF.Message.Submit.registerButton('text', $('#messageContainer > .formSubmit > input[type=submit]'));
 			new WCF.Message.FormGuard();
+			new WCF.Message.BBCode.CodeViewer();
 			
 			WCF.System.Dependency.Manager.register('CKEditor', function() { new WCF.Message.UserMention('text'); });
 		});
