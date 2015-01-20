@@ -252,6 +252,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	public function validateJumpToExtended() {
 		$this->readInteger('containerID');
 		$this->readString('message', true);
+		$this->readString('tmpHash', true);
 		
 		$this->conversation = new Conversation($this->parameters['containerID']);
 		if (!$this->conversation->conversationID) {
@@ -287,6 +288,10 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			// editing message
 			QuickReplyManager::getInstance()->setMessage('conversationMessage', $this->message->messageID, $this->parameters['message']);
 			$url = LinkHandler::getInstance()->getLink('ConversationMessageEdit', array('id' => $this->message->messageID));
+		}
+		
+		if (!empty($this->parameters['tmpHash'])) {
+			QuickReplyManager::getInstance()->setTmpHash($this->parameters['tmpHash']);
 		}
 		
 		// redirect
