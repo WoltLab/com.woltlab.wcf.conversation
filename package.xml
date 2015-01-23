@@ -3,8 +3,8 @@
 	<packageinformation>
 		<packagename>User Conversation System</packagename>
 		<packagedescription>Private conversations between multiple users</packagedescription>
-		<version>2.1.0 Beta 2</version>
-		<date>2015-01-09</date>
+		<version>2.1.0 Beta 3</version>
+		<date>2015-01-23</date>
 	</packageinformation>
 	
 	<authorinformation>
@@ -13,7 +13,7 @@
 	</authorinformation>
 	
 	<requiredpackages>
-		<requiredpackage minversion="2.1.0 Beta 3">com.woltlab.wcf</requiredpackage>
+		<requiredpackage minversion="2.1.0 Beta 4">com.woltlab.wcf</requiredpackage>
 	</requiredpackages>
 	
 	<excludedpackages>
@@ -37,27 +37,25 @@
 		<instruction type="script">acp/install_com.woltlab.wcf.conversation_2.0.0.php</instruction>
 	</instructions>
 	
-	<!--
 	<instructions type="update" fromversion="2.0.9">
-		<instruction type="file" run="standalone">files_update.tar</instruction>
-		<instruction type="template" run="standalone">templates_update.tar</instruction>
+		<instruction type="file" run="standalone">files.tar</instruction>
+		<instruction type="template" run="standalone">templates.tar</instruction>
 		
 		<instruction type="language" run="standalone">language/*.xml</instruction>
 		
-		<instruction type="sql" run="standalone">update1_2.1.0_alpha_1.sql</instruction>
-		<instruction type="sql" run="standalone">update2_2.1.0_alpha_1.sql</instruction>
-		<instruction type="sql" run="standalone">update3_2.1.0_alpha_1.sql</instruction>
+		<instruction type="sql" run="standalone">update1_210.sql</instruction>
+		<instruction type="sql" run="standalone">update2_210.sql</instruction>
+		<instruction type="sql" run="standalone">update3_210.sql</instruction>
 		
 		<instruction type="clipboardAction">clipboardAction.xml</instruction>
-		<instruction type="eventListener">eventListener.xml</instruction>
+		<instruction type="eventListener">eventListener_update210.xml</instruction>
 		<instruction type="objectType">objectType.xml</instruction>
 		<instruction type="option">option.xml</instruction>
 		<instruction type="userGroupOption">userGroupOption.xml</instruction>
 		<instruction type="userOption">userOption.xml</instruction>
 	</instructions>
-	-->
 	
-	<instructions type="update" fromversion="2.1.0 Beta 1">
+	<instructions type="update" fromversion="2.1.0 Beta 2">
 		<instruction type="file">files_update.tar</instruction>
 		<instruction type="template">templates_update.tar</instruction>
 	</instructions>
