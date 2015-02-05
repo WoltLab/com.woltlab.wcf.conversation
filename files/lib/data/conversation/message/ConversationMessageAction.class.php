@@ -439,7 +439,11 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		if (!$conversation->conversationID) {
 			throw new UserInputException('objectID');
 		}
-		else if ($conversation->isClosed || !Conversation::isParticipant(array($conversation->conversationID))) {
+		if ($conversation->isClosed) {
+			throw new PermissionDeniedException();
+		}
+		$conversation->loadUserParticipation();
+		if (!$conversation->canRead()) {
 			throw new PermissionDeniedException();
 		}
 	}

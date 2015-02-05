@@ -103,6 +103,29 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	}
 	
 	/**
+	 * Loads participation data for given user id (default: current user) on runtime.
+	 * You should use \wcf\data\conversation\Conversation::getUserConversation() instead if possible.
+	 *
+	 * @param	integer		$userID
+	 */
+	public function loadUserParticipation($userID = null) {
+		if ($userID === null) {
+			$userID = WCF::getUser()->userID;
+		}
+		
+		$sql = "SELECT	*
+			FROM	wcf".WCF_N."_conversation_to_user
+			WHERE	participantID = ?
+				AND conversationID = ?";
+		$statement = WCF::getDB()->prepareStatement($sql);
+		$statement->execute(array($userID, $this->conversationID));
+		$row = $statement->fetchArray();
+		if ($row !== false) {
+			$this->data = array_merge($this->data, $row);
+		}
+	}
+	
+	/**
 	 * Returns a specific user conversation.
 	 * 
 	 * @param	integer		$conversationID

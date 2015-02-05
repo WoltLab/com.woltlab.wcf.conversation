@@ -102,7 +102,7 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
 	 * @see	\wcf\system\attachment\IAttachmentObjectType::setPermissions()
 	 */
 	public function setPermissions(array $attachments) {
-		$postIDs = array();
+		$messageIDs = array();
 		foreach ($attachments as $attachment) {
 			// set default permissions
 			$attachment->setPermissions(array(
