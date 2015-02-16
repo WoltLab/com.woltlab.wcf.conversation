@@ -57,5 +57,6 @@
 	
 	<instructions type="update" fromversion="2.1.0 Beta 3">
 		<instruction type="file">files_update.tar</instruction>
+		<instruction type="language">language/*.xml</instruction>
 	</instructions>
 </package>

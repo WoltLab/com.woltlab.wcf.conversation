@@ -213,10 +213,10 @@
 	</category>
 	
 	<category name="wcf.user.usersOnline">
-		<item name="wcf.user.usersOnline.location.ConversationAddForm"><![CDATA[Erstellt eine neue Konversation.]]></item>
-		<item name="wcf.user.usersOnline.location.ConversationListPage"><![CDATA[Betrachtet die Liste seiner Konversationen.]]></item>
-		<item name="wcf.user.usersOnline.location.ConversationMessageAddForm"><![CDATA[Schreibt eine Antwort auf die Konversation <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>.]]></item>
-		<item name="wcf.user.usersOnline.location.ConversationMessageEditForm"><![CDATA[Bearbeitet eine Nachricht in der Konversation <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>.]]></item>
-		<item name="wcf.user.usersOnline.location.ConversationPage"><![CDATA[Liest die Konversation <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>.]]></item>
+		<item name="wcf.user.usersOnline.location.ConversationAddForm"><![CDATA[Erstellt eine neue Konversation]]></item>
+		<item name="wcf.user.usersOnline.location.ConversationListPage"><![CDATA[Betrachtet die Liste seiner Konversationen]]></item>
+		<item name="wcf.user.usersOnline.location.ConversationMessageAddForm"><![CDATA[Schreibt eine Antwort auf die Konversation <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>]]></item>
+		<item name="wcf.user.usersOnline.location.ConversationMessageEditForm"><![CDATA[Bearbeitet eine Nachricht in der Konversation <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>]]></item>
+		<item name="wcf.user.usersOnline.location.ConversationPage"><![CDATA[Liest die Konversation <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>]]></item>
 	</category>
 </language>
