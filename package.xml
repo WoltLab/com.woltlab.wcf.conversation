@@ -3,8 +3,8 @@
 	<packageinformation>
 		<packagename>User Conversation System</packagename>
 		<packagedescription>Private conversations between multiple users</packagedescription>
-		<version>2.1.0 RC 1</version>
-		<date>2015-02-16</date>
+		<version>2.1.0</version>
+		<date>2015-02-26</date>
 	</packageinformation>
 	
 	<authorinformation>
@@ -13,7 +13,7 @@
 	</authorinformation>
 	
 	<requiredpackages>
-		<requiredpackage minversion="2.1.0 RC 1">com.woltlab.wcf</requiredpackage>
+		<requiredpackage minversion="2.1.0">com.woltlab.wcf</requiredpackage>
 	</requiredpackages>
 	
 	<excludedpackages>
@@ -55,8 +55,7 @@
 		<instruction type="userOption">userOption.xml</instruction>
 	</instructions>
 	
-	<instructions type="update" fromversion="2.1.0 Beta 3">
+	<instructions type="update" fromversion="2.1.0 RC 1">
 		<instruction type="file">files_update.tar</instruction>
-		<instruction type="language">language/*.xml</instruction>
 	</instructions>
 </package>
