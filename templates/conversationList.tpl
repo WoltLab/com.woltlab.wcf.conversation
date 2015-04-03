@@ -95,7 +95,7 @@
 		<button id="manageLabel">{lang}wcf.conversation.label.management{/lang}</button>
 	</fieldset>
 	
-	{event name='boxesBeforeQuota'}
+	{event name='beforeQuotaBox'}
 	
 	<fieldset class="conversationQuota">
 		<legend>{lang}wcf.conversation.quota{/lang}</legend>
