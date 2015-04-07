@@ -118,7 +118,7 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 			$firstMessageStatement->execute(array($conversation->conversationID));
 			if (($row = $firstMessageStatement->fetchSingleRow()) !== false) {
 				$data['firstMessageID'] = $row['messageID'];
-				$data['time'] = $row['time'];
+				$data['lastPostTime'] = $data['time'] = $row['time'];
 				$data['userID'] = $row['userID'];
 				$data['username'] = $row['username'];
 			}
