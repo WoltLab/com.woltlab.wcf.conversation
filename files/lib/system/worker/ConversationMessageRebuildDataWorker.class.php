@@ -1,6 +1,7 @@
 <?php
 namespace wcf\system\worker;
 use wcf\data\conversation\message\ConversationMessageEditor;
+use wcf\data\conversation\message\ConversationMessageList;
 use wcf\data\object\type\ObjectTypeCache;
 use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
 use wcf\system\search\SearchIndexManager;
@@ -18,21 +19,30 @@ use wcf\system\WCF;
  */
 class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker {
 	/**
-	 * @see	\wcf\system\worker\AbstractRebuildDataWorker::$objectListClassName
-	 */
-	protected $objectListClassName = 'wcf\data\conversation\message\ConversationMessageList';
-	
-	/**
 	 * @see	\wcf\system\worker\AbstractWorker::$limit
 	 */
 	protected $limit = 500;
 	
 	/**
+	 * @see	\wcf\system\worker\IWorker::countObjects()
+	 */
+	public function countObjects() {
+		if ($this->count === null) {
+			$this->count = 0;
+			$sql = "SELECT	MAX(messageID) AS messageID
+				FROM	wcf".WCF_N."_conversation_message";
+			$statement = WCF::getDB()->prepareStatement($sql);
+			$statement->execute();
+			$row = $statement->fetchArray();
+			if ($row !== false) $this->count = $row['messageID'];
+		}
+	}
+	
+	/**
 	 * @see	\wcf\system\worker\AbstractRebuildDataWorker::initObjectList
 	 */
 	protected function initObjectList() {
-		parent::initObjectList();
-		
+		$this->objectList = new ConversationMessageList();
 		$this->objectList->sqlOrderBy = 'conversation_message.messageID';
 		$this->objectList->sqlSelects = 'conversation.subject';
 		$this->objectList->sqlJoins = 'LEFT JOIN wcf'.WCF_N.'_conversation conversation ON (conversation.firstMessageID = conversation_message.messageID)';
@@ -42,6 +52,8 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker {
 	 * @see	\wcf\system\worker\IWorker::execute()
 	 */
 	public function execute() {
+		$this->objectList->getConditionBuilder()->add('conversation_message.messageID BETWEEN ? AND ?', array($this->limit * $this->loopCount + 1, $this->limit * $this->loopCount + $this->limit));
+		
 		parent::execute();
 		
 		if (!$this->loopCount) {
