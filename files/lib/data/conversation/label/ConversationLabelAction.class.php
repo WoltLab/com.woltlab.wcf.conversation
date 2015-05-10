@@ -89,6 +89,11 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 			throw new PermissionDeniedException();
 		}
 		
+		// check if user has already created maximum number of labels
+		if (count(ConversationLabel::getLabelsByUser()) >= WCF::getSession()->getPermission('user.conversation.maxLabels')) {
+			throw new PermissionDeniedException();
+		}
+		
 		$this->readString('labelName', false, 'data');
 		$this->readString('cssClassName', false, 'data');
 		if (!in_array($this->parameters['data']['cssClassName'], ConversationLabel::getLabelCssClassNames())) {

@@ -374,7 +374,9 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		
 		return array(
 			'actionName' => 'getLabelManagement',
-			'template' => WCF::getTPL()->fetch('conversationLabelManagement')
+			'template' => WCF::getTPL()->fetch('conversationLabelManagement'),
+			'maxLabels' => WCF::getSession()->getPermission('user.conversation.maxLabels'),
+			'labelCount' => count(ConversationLabel::getLabelsByUser())
 		);
 	}
 	

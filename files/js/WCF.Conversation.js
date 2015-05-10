@@ -1062,12 +1062,26 @@ WCF.Conversation.Label.Manager = Class.extend({
 	_proxy: null,
 	
 	/**
+	 * maximum number of labels the user may create
+	 * @var	integer
+	 */
+	_maxLabels: 0,
+	
+	/**
+	 * number of labels the user created
+	 * @var	integer
+	 */
+	_labelCount: 0,
+	
+	/**
 	 * Initializes the label manager for conversations.
 	 * 
 	 * @param	string		link
 	 */
 	init: function(link) {
 		this._deletedLabelID = 0;
+		this._maxLabels = 0;
+		this._labelCount = 0;
 		this._link = link;
 		
 		this._labels = WCF.Dropdown.getDropdownMenu('conversationLabelFilter').children('.scrollableDropdownMenu');
@@ -1109,6 +1123,9 @@ WCF.Conversation.Label.Manager = Class.extend({
 				break;
 				
 				case 'getLabelManagement':
+					this._maxLabels = parseInt(data.returnValues.maxLabels);
+					this._labelCount = parseInt(data.returnValues.labelCount);
+					
 					// render dialog
 					this._dialog.empty().html(data.returnValues.template);
 					this._dialog.wcfDialog({
@@ -1146,6 +1163,12 @@ WCF.Conversation.Label.Manager = Class.extend({
 		this._labels.append($listItem);
 		
 		this._notification.show();
+		
+		this._labelCount++;
+		
+		if (this._labelCount >= this._maxLabels) {
+			$('#conversationLabelManagementForm').hide();
+		}
 	},
 	
 	/**
@@ -1155,6 +1178,11 @@ WCF.Conversation.Label.Manager = Class.extend({
 		$('#labelName').on('keyup keydown keypress', $.proxy(this._updateLabels, this));
 		if ($.browser.mozilla && $.browser.touch) {
 			$('#labelName').on('input', $.proxy(this._updateLabels, this));
+		}
+		
+		if (this._labelCount >= this._maxLabels) {
+			$('#conversationLabelManagementForm').hide();
+			this._dialog.wcfDialog('render');
 		}
 		
 		$('#addLabel').disable().click($.proxy(this._addLabel, this));
@@ -1169,6 +1197,11 @@ WCF.Conversation.Label.Manager = Class.extend({
 	 * @param	object		event
 	 */
 	_edit: function(event) {
+		if (this._labelCount >= this._maxLabels) {
+			$('#conversationLabelManagementForm').show();
+			this._dialog.wcfDialog('render');
+		}
+		
 		var $label = $(event.currentTarget);
 		
 		// replace legends
