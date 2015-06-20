@@ -1364,6 +1364,12 @@ WCF.User.Panel.Conversation = WCF.User.Panel.Abstract.extend({
 		options.enableMarkAsRead = true;
 		
 		this._super($('#unreadConversations'), 'unreadConversations', options);
+		
+		WCF.System.Event.addListener('com.woltlab.wcf.conversation.userPanel', 'reset', (function() {
+			this.resetItems();
+			this.updateBadge(0);
+			this._loadData = true;
+		}).bind(this));
 	},
 	
 	/**
@@ -1543,21 +1549,7 @@ WCF.Conversation.MarkAllAsRead = Class.extend({
 	 */
 	_success: function(data, textStatus, jqXHR) {
 		// fix dropdown
-		var $dropdownMenu = WCF.Dropdown.getDropdownMenu('unreadConversations');
-		var $placeholder = $dropdownMenu.children('.jsDropdownPlaceholder').remove();
-		$dropdownMenu.data('count', 0);
-		$dropdownMenu.children().each(function(index, listItem) {
-			var $listItem = $(listItem);
-			if ($listItem.hasClass('dropdownDivider')) return false;
-			
-			$listItem.remove();
-		});
-		if (!$placeholder.length) {
-			$('<li><span>' + WCF.Language.get('wcf.conversation.noMoreItems') + '</span></li>').prependTo($dropdownMenu);
-		}
-		
-		// remove badge
-		$('#unreadConversations .badge').remove();
+		WCF.System.Event.fireEvent('com.woltlab.wcf.conversation.userPanel', 'reset');
 		
 		// fix conversation list
 		var $conversationList = $('.conversationList');
