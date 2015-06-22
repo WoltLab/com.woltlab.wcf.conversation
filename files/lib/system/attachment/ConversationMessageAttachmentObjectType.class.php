@@ -54,12 +54,17 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
 	 * @see	\wcf\system\attachment\IAttachmentObjectType::canUpload()
 	 */
 	public function canUpload($objectID, $parentObjectID = 0) {
+		if (!WCF::getSession()->getPermission('user.conversation.canUploadAttachment')) {
+			return false;
+		}
+		
 		if ($objectID) {
 			$message = new ConversationMessage($objectID);
 			if ($message->userID == WCF::getUser()->userID) return true;
+			return false;
 		}
 		
-		return WCF::getSession()->getPermission('user.conversation.canUploadAttachment');
+		return true;
 	}
 	
 	/**
