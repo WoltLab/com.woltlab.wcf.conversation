@@ -706,8 +706,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 */
 	public function getAddParticipantsForm() {
 		return array(
-			'actionName' => 'getAddParticipantsForm',
-			'excludeSearchValues' => $this->conversation->getParticipantNames(),
+			'excludedSearchValues' => $this->conversation->getParticipantNames(),
+			'maxItems' => WCF::getSession()->getPermission('user.conversation.maxParticipants') - $this->conversation->participants,
 			'template' => WCF::getTPL()->fetch('conversationAddParticipants')
 		);
 	}
@@ -719,7 +719,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		$this->validateGetAddParticipantsForm();
 		
 		// validate participants
-		$this->readString('participants');
+		$this->readStringArray('participants');
 	}
 	
 	/**
@@ -782,7 +782,6 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		}
 		
 		return array(
-			'actionName' => 'addParticipants',
 			'count' => $count,
 			'successMessage' => $successMessage
 		);

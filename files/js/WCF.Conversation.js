@@ -470,7 +470,9 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
 		
 		switch (optionName) {
 			case 'addParticipants':
-				new WCF.Conversation.AddParticipants($('#' + elementID).data('conversationID'));
+				require(['WoltLab/Conversation/UI/Participant/Add'], function(UIParticipantAdd) {
+					new UIParticipantAdd(document.getElementById(elementID).getAttribute('data-conversation-id'));
+				});
 			break;
 			
 			case 'assignLabel':
@@ -663,143 +665,6 @@ WCF.Conversation.Leave = Class.extend({
 			});
 			this._proxy.sendRequest();
 		}
-	}
-});
-
-/**
- * Provides methods to add new participants.
- * 
- * @param	integer		conversationID
- */
-WCF.Conversation.AddParticipants = Class.extend({
-	/**
-	 * conversation id
-	 * @var	integer
-	 */
-	_conversationID: 0,
-	
-	/**
-	 * dialog overlay
-	 * @var	jQuery
-	 */
-	_dialog: null,
-	
-	/**
-	 * action proxy
-	 * @var	WCF.Action.Proxy
-	 */
-	_proxy: null,
-	
-	/**
-	 * Initializes the WCF.Conversation.AddParticipants class
-	 * 
-	 * @param	integer		conversationID
-	 */
-	init: function(conversationID) {
-		this._conversationID = conversationID;
-		
-		this._dialog = $('#conversationAddParticipants');
-		if (!this._dialog.length) {
-			this._dialog = $('<div id="conversationAddParticipants" />').hide().appendTo(document.body);
-		}
-		
-		this._proxy = new WCF.Action.Proxy({
-			autoSend: true,
-			data: {
-				actionName: 'getAddParticipantsForm',
-				className: 'wcf\\data\\conversation\\ConversationAction',
-				objectIDs: [ this._conversationID ]
-			},
-			success: $.proxy(this._success, this)
-		});
-	},
-	
-	/**
-	 * Handles successful AJAX requests.
-	 * 
-	 * @param	object		data
-	 * @param	string		textStatus
-	 * @param	jQuery		jqXHR
-	 */
-	_success: function(data, textStatus, jqXHR) {
-		switch (data.returnValues.actionName) {
-			case 'addParticipants':
-				if (data.returnValues.errorMessage) {
-					this._dialog.find('dl.jsAddParticipants').addClass('formError');
-					this._dialog.find('dl.jsAddParticipants > dd small.innerError').remove();
-					$('<small class="innerError">' + data.returnValues.errorMessage + '</small>').appendTo(this._dialog.find('dl.jsAddParticipants > dd'));
-					return;
-				}
-				
-				if (data.returnValues.count) {
-					var $notification = new WCF.System.Notification(data.returnValues.successMessage);
-					$notification.show();
-				}
-				
-				this._dialog.find('dl.jsAddParticipants').removeClass('formError').find('small.innerError').remove();
-				this._dialog.wcfDialog('close');
-			break;
-			
-			case 'getAddParticipantsForm':
-				this._renderForm(data);
-			break;
-		}
-	},
-	
-	/**
-	 * Renders the 'add participants' form.
-	 * 
-	 * @param	object		data
-	 */
-	_renderForm: function(data) {
-		this._dialog.html(data.returnValues.template);
-		this._dialog.find('#addParticipants').disable().click($.proxy(this._submit, this));
-		
-		new WCF.Search.User('#participantsInput', null, false, data.returnValues.excludeSearchValues, true);
-		
-		var $participantsInput = $('#participantsInput');
-		$participantsInput.keyup($.proxy(this._toggleSubmitButton, this));
-		
-		if ($.browser.mozilla && $.browser.touch) {
-			$participantsInput.on('input', $.proxy(this._toggleSubmitButton, this));
-		}
-		
-		this._dialog.wcfDialog({
-			title: WCF.Language.get('wcf.conversation.edit.addParticipants')
-		});
-	},
-	
-	/**
-	 * Toggles the submit button if the input field contains a/no particiant.
-	 */
-	_toggleSubmitButton: function() {
-		var $submitButton = this._dialog.find('#addParticipants');
-		if ($.trim($('#participantsInput').val()) === '') {
-			$submitButton.disable();
-		}
-		else {
-			$submitButton.enable();
-		}
-	},
-	
-	/**
-	 * Submits the form to add new participants.
-	 */
-	_submit: function() {
-		var $participants = $.trim($('#participantsInput').val());
-		if ($participants == '') {
-			this._dialog.wcfDialog('close');
-		}
-		
-		this._proxy.setOption('data', {
-			actionName: 'addParticipants',
-			className: 'wcf\\data\\conversation\\ConversationAction',
-			objectIDs: [ this._conversationID ],
-			parameters: {
-				participants: $participants
-			}
-		});
-		this._proxy.sendRequest();
 	}
 });
 

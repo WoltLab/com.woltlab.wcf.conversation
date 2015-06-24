@@ -6,11 +6,17 @@
 	{include file='headInclude'}
 	
 	<script data-relocate="true">
-		//<![CDATA[
-		$(function() {
-			new WCF.Search.User('#participants', null, false, [ ], true);
-			new WCF.Search.User('#invisibleParticipants', null, false, [ ], true);
+		require(['WoltLab/WCF/UI/ItemList/User'], function(UIItemListUser) {
+			UIItemListUser.init('participants', {
+				maxItems: {@$__wcf->getSession()->getPermission('user.conversation.maxParticipants')}
+			});
 			
+			UIItemListUser.init('invisibleParticipants', {
+				maxItems: {@$__wcf->getSession()->getPermission('user.conversation.maxParticipants')}
+			});
+		});
+		
+		$(function() {
 			WCF.Message.Submit.registerButton('text', $('#messageContainer > .formSubmit > input[type=submit]'));
 			new WCF.Message.FormGuard();
 			
@@ -18,7 +24,6 @@
 			
 			{include file='__messageQuoteManager' wysiwygSelector='text' supportPaste=true}
 		});
-		//]]>
 	</script>
 </head>
 
@@ -65,7 +70,7 @@
 			<dl{if $errorField == 'participants'} class="formError"{/if}>
 				<dt><label for="participants">{lang}wcf.conversation.participants{/lang}</label></dt>
 				<dd>
-					<textarea id="participants" name="participants" class="long" cols="40" rows="2">{$participants}</textarea>
+					<textarea id="participants" name="participants" class="long">{$participants}</textarea>
 					{if $errorField == 'participants'}
 						<small class="innerError">
 							{if $errorType == 'empty'}

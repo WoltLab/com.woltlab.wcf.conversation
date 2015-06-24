@@ -366,7 +366,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	/**
 	 * Validates the participants.
 	 * 
-	 * @param	string		$participants
+	 * @param	mixed		$participants
 	 * @param	string		$field
 	 * @param	array<integer>	$existingParticipants
 	 * @return	array		$result
@@ -376,7 +376,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 		$error = array();
 		
 		// loop through participants and check their settings
-		$participantList = UserProfile::getUserProfilesByUsername(ArrayUtil::trim(explode(',', $participants)));
+		$participantList = UserProfile::getUserProfilesByUsername((is_array($participants) ? $participants : ArrayUtil::trim(explode(',', $participants))));
 		
 		// load user storage at once to avoid multiple queries
 		$userIDs = array();
