@@ -1,6 +1,7 @@
 <?php
 namespace wcf\data\modification\log;
 use wcf\data\conversation\Conversation;
+use wcf\data\user\UserProfileCache;
 use wcf\system\log\modification\ConversationModificationLogHandler;
 use wcf\system\WCF;
 
@@ -69,15 +70,11 @@ class ConversationLogModificationLogList extends ModificationLogList {
 	 * @see	\wcf\data\DatabaseObjectList::readObjects()
 	 */
 	public function readObjects() {
-		$sql = "SELECT		user_avatar.*,
-					user_table.email, user_table.enableGravatar, user_table.disableAvatar, user_table.gravatarFileExtension,
-					modification_log.*
-			FROM		wcf".WCF_N."_modification_log modification_log
-			LEFT JOIN	wcf".WCF_N."_user user_table ON (user_table.userID = modification_log.userID)
-			LEFT JOIN	wcf".WCF_N."_user_avatar user_avatar ON (user_avatar.avatarID = user_table.avatarID)		
-			WHERE		modification_log.objectTypeID = ?
-					AND modification_log.objectID = ?
-					".(!empty($this->sqlOrderBy) ? "ORDER BY ".$this->sqlOrderBy : '');
+		$sql = "SELECT	modification_log.*
+			FROM	wcf".WCF_N."_modification_log modification_log
+			WHERE	modification_log.objectTypeID = ?
+				AND modification_log.objectID = ?
+			".(!empty($this->sqlOrderBy) ? "ORDER BY ".$this->sqlOrderBy : '');
 		$statement = WCF::getDB()->prepareStatement($sql, $this->sqlLimit, $this->sqlOffset);
 		$statement->execute(array(
 			$this->conversationObjectTypeID,
@@ -86,15 +83,23 @@ class ConversationLogModificationLogList extends ModificationLogList {
 		$this->objects = $statement->fetchObjects(($this->objectClassName ?: $this->className));
 		
 		// use table index as array index
-		$objects = array();
+		$objects = $userIDs = [ ];
 		foreach ($this->objects as $object) {
 			$objectID = $object->{$this->getDatabaseTableIndexName()};
 			$objects[$objectID] = $object;
 			
 			$this->indexToObject[] = $objectID;
+			
+			if ($object->userID) {
+				$userIDs[] = $object->userID;
+			}
 		}
 		$this->objectIDs = $this->indexToObject;
 		$this->objects = $objects;
+		
+		if (!empty($userIDs)) {
+			UserProfileCache::getInstance()->cacheUserIDs($userIDs);
+		}
 		
 		foreach ($this->objects as &$object) {
 			$object = new ViewableConversationModificationLog($object);

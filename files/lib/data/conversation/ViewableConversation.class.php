@@ -4,7 +4,9 @@ use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\label\ConversationLabelList;
 use wcf\data\user\User;
 use wcf\data\user\UserProfile;
+use wcf\data\user\UserProfileCache;
 use wcf\data\DatabaseObjectDecorator;
+use wcf\data\TLegacyUserPropertyAccess;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\WCF;
 
@@ -19,6 +21,8 @@ use wcf\system\WCF;
  * @category	Community Framework
  */
 class ViewableConversation extends DatabaseObjectDecorator {
+	use TLegacyUserPropertyAccess;
+	
 	/**
 	 * participant summary
 	 * @var	string
@@ -38,15 +42,59 @@ class ViewableConversation extends DatabaseObjectDecorator {
 	protected $lastPosterProfile = null;
 	
 	/**
+	 * list of assigned labels
+	 * @var	array<\wcf\data\conversation\label\ConversationLabel>
+	 */
+	protected $labels = array();
+	
+	/**
 	 * @see	\wcf\data\DatabaseObjectDecorator::$baseClass
 	 */
 	protected static $baseClass = 'wcf\data\conversation\Conversation';
 	
 	/**
-	 * list of assigned labels
-	 * @var	array<\wcf\data\conversation\label\ConversationLabel>
+	 * maps legacy direct access to last poster's user profile data to the real
+	 * user profile property names
+	 * @var	array<string>
+	 * @deprecated
 	 */
-	protected $labels = array();
+	protected static $__lastUserAvatarPropertyMapping = array(
+		'lastPosterAvatarID' => 'avatarID',
+		'lastPosterAvatarName' => 'avatarName',
+		'lastPosterAvatarExtension' => 'avatarExtension',
+		'lastPosterAvatarWidth' => 'width',
+		'lastPosterAvatarHeight' => 'height',
+		'lastPosterEmail' => 'email',
+		'lastPosterDisableAvatar' => 'disableAvatar',
+		'lastPosterEnableGravatar' => 'enableGravatar',
+		'lastPosterGravatarFileExtension' => 'gravatarFileExtension',
+		'lastPosterAvatarFileHash' => 'fileHash'
+	);
+	
+	/**
+	 * @see	\wcf\data\IStorableObject::__get()
+	 * @deprecated
+	 */
+	public function __get($name) {
+		$value = parent::__get($name);
+		if ($value !== null) {
+			return $value;
+		}
+		else if (array_key_exists($name, $this->object->data)) {
+			return null;
+		}
+		
+		$value = $this->getUserProfile()->$name;
+		if ($value !== null) {
+			return $value;
+		}
+		
+		if (isset(static::$__lastUserAvatarPropertyMapping[$name])) {
+			return $this->getLastPosterProfile()->getAvatar()->{static::$__lastUserAvatarPropertyMapping[$name]};
+		}
+		
+		return null;
+	}
 	
 	/**
 	 * Returns the user profile object.
@@ -55,7 +103,14 @@ class ViewableConversation extends DatabaseObjectDecorator {
 	 */
 	public function getUserProfile() {
 		if ($this->userProfile === null) {
-			$this->userProfile = new UserProfile(new User(null, $this->getDecoratedObject()->data));
+			if ($this->userID) {
+				$this->userProfile = UserProfileCache::getInstance()->getUserProfile($this->userID);
+			}
+			else {
+				$this->userProfile = new UserProfile(new User(null, array(
+					'username' => $this->username
+				)));
+			}
 		}
 		
 		return $this->userProfile;
@@ -68,22 +123,12 @@ class ViewableConversation extends DatabaseObjectDecorator {
 	 */
 	public function getLastPosterProfile() {
 		if ($this->lastPosterProfile === null) {
-			if ($this->userID && $this->userID == $this->lastPosterID) {
-				$this->lastPosterProfile = $this->getUserProfile();
+			if ($this->lastPosterID) {
+				$this->lastPosterProfile = UserProfileCache::getInstance()->getUserProfile($this->lastPosterID);
 			}
 			else {
 				$this->lastPosterProfile = new UserProfile(new User(null, array(
-					'userID' => $this->lastPosterID,
-					'username' => $this->lastPoster,
-					'avatarID' => $this->lastPosterAvatarID,
-					'avatarName' => $this->lastPosterAvatarName,
-					'avatarExtension' => $this->lastPosterAvatarExtension,
-					'width' => $this->lastPosterAvatarWidth,
-					'height' => $this->lastPosterAvatarHeight,
-					'email' => $this->lastPosterEmail,
-					'disableAvatar' => $this->lastPosterDisableAvatar,
-					'enableGravatar' => $this->lastPosterEnableGravatar,
-					'gravatarFileExtension' => $this->lastPosterGravatarFileExtension
+					'username' => $this->lastPoster
 				)));
 			}
 		}

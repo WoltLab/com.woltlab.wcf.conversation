@@ -2,6 +2,7 @@
 namespace wcf\data\conversation;
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\label\ConversationLabelList;
+use wcf\data\user\UserProfileCache;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\WCF;
 
@@ -80,18 +81,6 @@ class UserConversationList extends ConversationList {
 		if (!empty($this->sqlSelects)) $this->sqlSelects .= ',';
 		$this->sqlSelects .= "conversation_to_user.*";
 		$this->sqlJoins .= "LEFT JOIN wcf".WCF_N."_conversation_to_user conversation_to_user ON (conversation_to_user.participantID = ".$userID." AND conversation_to_user.conversationID = conversation.conversationID)";
-		
-		// get avatars
-		if (!empty($this->sqlSelects)) $this->sqlSelects .= ',';
-		$this->sqlSelects .= "user_avatar.*, user_table.email, user_table.disableAvatar, user_table.enableGravatar, user_table.gravatarFileExtension";
-		$this->sqlJoins .= " LEFT JOIN wcf".WCF_N."_user user_table ON (user_table.userID = conversation.userID)";
-		$this->sqlJoins .= " LEFT JOIN wcf".WCF_N."_user_avatar user_avatar ON (user_avatar.avatarID = user_table.avatarID)";
-		
-		if (!empty($this->sqlSelects)) $this->sqlSelects .= ',';
-		$this->sqlSelects .= "lastposter_avatar.avatarID AS lastPosterAvatarID, lastposter_avatar.avatarName AS lastPosterAvatarName, lastposter_avatar.avatarExtension AS lastPosterAvatarExtension, lastposter_avatar.width AS lastPosterAvatarWidth, lastposter_avatar.height AS lastPosterAvatarHeight,";
-		$this->sqlSelects .= "lastposter.email AS lastPosterEmail, lastposter.disableAvatar AS lastPosterDisableAvatar, lastposter.enableGravatar AS lastPosterEnableGravatar, lastposter.gravatarFileExtension AS lastPosterGravatarFileExtension";
-		$this->sqlJoins .= " LEFT JOIN wcf".WCF_N."_user lastposter ON (lastposter.userID = conversation.lastPosterID)";
-		$this->sqlJoins .= " LEFT JOIN wcf".WCF_N."_user_avatar lastposter_avatar ON (lastposter_avatar.avatarID = lastposter.avatarID)";
 	}
 	
 	/**
@@ -151,12 +140,24 @@ class UserConversationList extends ConversationList {
 		if (!empty($this->objects)) {
 			$labels = $this->loadLabelAssignments();
 			
+			$userIDs = [ ];
 			foreach ($this->objects as $conversationID => $conversation) {
 				if (isset($labels[$conversationID])) {
 					foreach ($labels[$conversationID] as $label) {
 						$conversation->assignLabel($label);
 					}
 				}
+				
+				if ($conversation->userID) {
+					$userIDs[] = $conversation->userID;
+				}
+				if ($conversation->lastPosterID) {
+					$userIDs[] = $conversation->lastPosterID;
+				}
+			}
+			
+			if (!empty($userIDs)) {
+				UserProfileCache::getInstance()->cacheUserIDs($userIDs);
 			}
 		}
 	}

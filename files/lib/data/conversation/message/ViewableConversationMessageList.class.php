@@ -3,6 +3,7 @@ namespace wcf\data\conversation\message;
 use wcf\data\attachment\GroupedAttachmentList;
 use wcf\data\conversation\Conversation;
 use wcf\data\object\type\ObjectTypeCache;
+use wcf\data\user\UserProfileCache;
 use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
 
 /**
@@ -69,22 +70,6 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	protected $conversation = null;
 	
 	/**
-	 * Creates a new ViewableConversationMessageList object.
-	 */
-	public function __construct() {
-		parent::__construct();
-		
-		$this->sqlSelects .= "user_option_value.*, user_table.*";
-		$this->sqlJoins .= " LEFT JOIN wcf".WCF_N."_user user_table ON (user_table.userID = conversation_message.userID)";
-		$this->sqlJoins .= " LEFT JOIN wcf".WCF_N."_user_option_value user_option_value ON (user_option_value.userID = user_table.userID)";
-		
-		// get avatars
-		if (!empty($this->sqlSelects)) $this->sqlSelects .= ',';
-		$this->sqlSelects .= "user_avatar.*";
-		$this->sqlJoins .= " LEFT JOIN wcf".WCF_N."_user_avatar user_avatar ON (user_avatar.avatarID = user_table.avatarID)";
-	}
-	
-	/**
 	 * @see	\wcf\data\DatabaseObjectList::readObjects()
 	 */
 	public function readObjects() {
@@ -94,6 +79,7 @@ class ViewableConversationMessageList extends ConversationMessageList {
 		
 		parent::readObjects();
 		
+		$userIDs = [ ];
 		foreach ($this->objects as $message) {
 			if ($message->time > $this->maxPostTime) {
 				$this->maxPostTime = $message->time;
@@ -109,6 +95,13 @@ class ViewableConversationMessageList extends ConversationMessageList {
 			if ($message->hasEmbeddedObjects) {
 				$this->embeddedObjectMessageIDs[] = $message->messageID;
 			}
+			if ($message->userID) {
+				$userIDs[] = $message->userID;
+			}
+		}
+		
+		if (!empty($userIDs)) {
+			UserProfileCache::getInstance()->cacheUserIDs($userIDs);
 		}
 		
 		if ($this->embeddedObjectLoading) {
@@ -126,7 +119,7 @@ class ViewableConversationMessageList extends ConversationMessageList {
 		if (!empty($this->embeddedObjectMessageIDs)) {
 			// add message objects to attachment object cache to save SQL queries
 			ObjectTypeCache::getInstance()->getObjectTypeByName('com.woltlab.wcf.attachment.objectType', 'com.woltlab.wcf.conversation.message')->getProcessor()->setCachedObjects($this->objects);
-				
+			
 			// load embedded objects
 			MessageEmbeddedObjectManager::getInstance()->loadObjects('com.woltlab.wcf.conversation.message', $this->embeddedObjectMessageIDs);
 		}
