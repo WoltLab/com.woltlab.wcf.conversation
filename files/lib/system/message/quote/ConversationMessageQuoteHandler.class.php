@@ -20,7 +20,7 @@ class ConversationMessageQuoteHandler extends AbstractMessageQuoteHandler {
 	protected function getMessages(array $data) {
 		// read messages
 		$messageList = new ConversationMessageList();
-		$messageList->getConditionBuilder()->add("conversation_message.messageID IN (?)", array(array_keys($data)));
+		$messageList->setObjectIDs(array_keys($data));
 		$messageList->readObjects();
 		$messages = $messageList->getObjects();
 		
@@ -34,7 +34,7 @@ class ConversationMessageQuoteHandler extends AbstractMessageQuoteHandler {
 		$quotedMessages = array();
 		if (!empty($conversationIDs)) {
 			$conversationList = new ConversationList();
-			$conversationList->getConditionBuilder()->add("conversation.conversationID IN (?)", array($conversationIDs));
+			$conversationList->setObjectIDs($conversationIDs);
 			$conversationList->readObjects();
 			$conversations = $conversationList->getObjects();
 			
