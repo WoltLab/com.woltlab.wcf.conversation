@@ -84,7 +84,7 @@
 		<item name="wcf.conversation.markAllAsRead.confirmMessage"><![CDATA[Do you really want to mark all conversations as read?]]></item>
 		<item name="wcf.conversation.message"><![CDATA[Message]]></item>
 		<item name="wcf.conversation.message.add"><![CDATA[Reply]]></item>
-		<item name="wcf.conversation.message.add.previousPosts"><![CDATA[Previous message{if $items != 1}s ({#$items}){/if}]]></item>
+		<item name="wcf.conversation.message.add.previousPosts"><![CDATA[Previous message{if $items != 1}s{/if}]]></item>
 		<item name="wcf.conversation.message.button.add"><![CDATA[Reply]]></item>
 		<item name="wcf.conversation.message.edit"><![CDATA[Edit Message]]></item>
 		<item name="wcf.conversation.noConversations"><![CDATA[There are no conversations matching your criteria.]]></item>

@@ -84,7 +84,7 @@
 </form>
 
 <header class="boxHeadline boxSubHeadline">
-	<h2>{lang}wcf.conversation.message.add.previousPosts{/lang}</h2>
+	<h2>{lang}wcf.conversation.message.add.previousPosts{/lang}{if $items != 1} <span class="badge">{#$items}</span>{/if}</h2>
 </header>
 
 <div>
