@@ -153,7 +153,7 @@ class ConversationAddForm extends MessageForm {
 		}
 		
 		// check, if user is allowed to set participantCanInvite
-		if (!WCF::getSession()->getPermission('user.conversation.canAddInvisibleParticipants') && $this->participantCanInvite) {
+		if (!WCF::getSession()->getPermission('user.conversation.canSetCanInvite') && $this->participantCanInvite) {
 			throw new UserInputException('participantCanInvite', 'participantCanInviteNoPermission');
 		}
 		
