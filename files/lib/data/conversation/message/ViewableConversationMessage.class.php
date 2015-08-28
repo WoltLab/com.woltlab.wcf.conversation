@@ -38,4 +38,18 @@ class ViewableConversationMessage extends DatabaseObjectDecorator {
 		
 		return $this->userProfile;
 	}
+	
+	/**
+	 * Returns the viewable conversation message with the given id.
+	 * 
+	 * @param	integer		$messageID
+	 * @return	\wcf\data\conversation\message\ViewableConversationMessage
+	 */
+	public static function getViewableConversationMessage($messageID) {
+		$messageList = new ViewableConversationMessageList();
+		$messageList->setObjectIDs(array($messageID));
+		$messageList->readObjects();
+		
+		return $messageList->search($messageID);
+	}
 }
