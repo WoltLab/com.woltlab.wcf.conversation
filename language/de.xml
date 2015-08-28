@@ -50,8 +50,8 @@
 	<category name="wcf.clipboard">
 		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.assignLabel"><![CDATA[Label zuweisen ({#$count})]]></item>
 		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.close"><![CDATA[Schließen ({#$count})]]></item>
-		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.leave"><![CDATA[Konversation ausblenden ({#$count})]]></item>
-		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.leavePermanently"><![CDATA[Konversation verlassen ({#$count})]]></item>
+		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.leave"><![CDATA[Ausblenden ({#$count})]]></item>
+		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.leavePermanently"><![CDATA[Verlassen ({#$count})]]></item>
 		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.markAsRead"><![CDATA[Als gelesen markieren ({#$count})]]></item>
 		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.markAsRead.confirmMessage"><![CDATA[Wollen Sie die {if $count == 1}markierte Konversation{else}markierten Konversationen{/if} wirklich als gelesen markieren?]]></item>
 		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.open"><![CDATA[Öffnen ({#$count})]]></item>
@@ -69,11 +69,11 @@
 		<item name="wcf.conversation.folder.hidden"><![CDATA[Ausgeblendet]]></item>
 		<item name="wcf.conversation.folder.outbox"><![CDATA[Gestartet]]></item>
 		<item name="wcf.conversation.hideConversation"><![CDATA[Teilnahme verwalten]]></item>
-		<item name="wcf.conversation.hideConversation.leave"><![CDATA[Konversation ausblenden]]></item>
+		<item name="wcf.conversation.hideConversation.leave"><![CDATA[Ausblenden]]></item>
 		<item name="wcf.conversation.hideConversation.leave.description"><![CDATA[Die Konversation wird bis zu einer neuen Antwort nicht mehr als aktive Konversation gelistet.]]></item>
-		<item name="wcf.conversation.hideConversation.leavePermanently"><![CDATA[Konversation verlassen]]></item>
+		<item name="wcf.conversation.hideConversation.leavePermanently"><![CDATA[Verlassen]]></item>
 		<item name="wcf.conversation.hideConversation.leavePermanently.description"><![CDATA[Die Konversation wird verlassen und Sie werden nicht länger als aktiver Teilnehmer gelistet.]]></item>
-		<item name="wcf.conversation.hideConversation.restore"><![CDATA[Konversation als „aktiv“ markieren]]></item>
+		<item name="wcf.conversation.hideConversation.restore"><![CDATA[Als aktiv markieren]]></item>
 		<item name="wcf.conversation.information"><![CDATA[Informationen]]></item>
 		<item name="wcf.conversation.invisible"><![CDATA[unsichtbar]]></item>
 		<item name="wcf.conversation.invisibleParticipants"><![CDATA[Unsichtbare Teilnehmer]]></item>
