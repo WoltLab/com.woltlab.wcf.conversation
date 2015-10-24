@@ -6,12 +6,12 @@
 	{include file='headInclude'}
 	
 	<script data-relocate="true">
-		require(['WoltLab/WCF/UI/ItemList/User'], function(UIItemListUser) {
-			UIItemListUser.init('participants', {
+		require(['WoltLab/WCF/Ui/ItemList/User'], function(UiItemListUser) {
+			UiItemListUser.init('participants', {
 				maxItems: {@$__wcf->getSession()->getPermission('user.conversation.maxParticipants')}
 			});
 			
-			UIItemListUser.init('invisibleParticipants', {
+			UiItemListUser.init('invisibleParticipants', {
 				maxItems: {@$__wcf->getSession()->getPermission('user.conversation.maxParticipants')}
 			});
 		});

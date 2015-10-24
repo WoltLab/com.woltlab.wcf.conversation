@@ -4,17 +4,17 @@
  * @author	Alexander Ebert
  * @copyright	2001-2015 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @module	WoltLab/Conversation/UI/Participant/Add
+ * @module	WoltLab/Conversation/Ui/Participant/Add
  */
-define(['Ajax', 'Language', 'UI/Dialog', 'WoltLab/WCF/UI/ItemList/User'], function(Ajax, Language, UIDialog, UIItemListUser) {
+define(['Ajax', 'Language', 'Ui/Dialog', 'WoltLab/WCF/Ui/ItemList/User'], function(Ajax, Language, UiDialog, UiItemListUser) {
 	"use strict";
 	
 	/**
 	 * @constructor
 	 * @param	{integer}	conversationId		conversation id
 	 */
-	function UIParticipantAdd(conversationId) { this.init(conversationId); };
-	UIParticipantAdd.prototype = {
+	function UiParticipantAdd(conversationId) { this.init(conversationId); };
+	UiParticipantAdd.prototype = {
 		/**
 		 * Manages the form to add one or more participants to an existing conversation.
 		 * 
@@ -65,7 +65,7 @@ define(['Ajax', 'Language', 'UI/Dialog', 'WoltLab/WCF/UI/ItemList/User'], functi
 				new WCF.System.Notification(data.returnValues.successMessage).show();
 			}
 			
-			UIDialog.close(this);
+			UiDialog.close(this);
 		},
 		
 		/**
@@ -74,12 +74,12 @@ define(['Ajax', 'Language', 'UI/Dialog', 'WoltLab/WCF/UI/ItemList/User'], functi
 		 * @param	{object}	data		response data
 		 */
 		_render: function(data) {
-			UIDialog.open(this, data.returnValues.template);
+			UiDialog.open(this, data.returnValues.template);
 			
 			var buttonSubmit = document.getElementById('addParticipants');
 			buttonSubmit.disabled = true;
 			
-			UIItemListUser.init('participantsInput', {
+			UiItemListUser.init('participantsInput', {
 				callbackChange: function(elementId, values) { buttonSubmit.disabled = (values.length === 0); },
 				excludedSearchValues: data.returnValues.excludedSearchValues,
 				maxItems: data.returnValues.maxItems
@@ -92,7 +92,7 @@ define(['Ajax', 'Language', 'UI/Dialog', 'WoltLab/WCF/UI/ItemList/User'], functi
 		 * Sends a request to add participants.
 		 */
 		_submit: function() {
-			var values = UIItemListUser.getValues('participantsInput'), participants = [];
+			var values = UiItemListUser.getValues('participantsInput'), participants = [];
 			for (var i = 0, length = values.length; i < length; i++) {
 				participants.push(values[i].value);
 			}
@@ -116,5 +116,5 @@ define(['Ajax', 'Language', 'UI/Dialog', 'WoltLab/WCF/UI/ItemList/User'], functi
 		}
 	};
 	
-	return UIParticipantAdd;
+	return UiParticipantAdd;
 });

@@ -2,7 +2,9 @@
 namespace wcf\data\conversation\message;
 use wcf\data\user\User;
 use wcf\data\user\UserProfile;
+use wcf\data\user\UserProfileCache;
 use wcf\data\DatabaseObjectDecorator;
+use wcf\data\TLegacyUserPropertyAccess;
 
 /**
  * Represents a viewable conversation message.
@@ -15,6 +17,8 @@ use wcf\data\DatabaseObjectDecorator;
  * @category	Community Framework
  */
 class ViewableConversationMessage extends DatabaseObjectDecorator {
+	use TLegacyUserPropertyAccess;
+	
 	/**
 	 * @see	\wcf\data\DatabaseObjectDecorator::$baseClass
 	 */
@@ -33,9 +37,30 @@ class ViewableConversationMessage extends DatabaseObjectDecorator {
 	 */
 	public function getUserProfile() {
 		if ($this->userProfile === null) {
-			$this->userProfile = new UserProfile(new User(null, $this->getDecoratedObject()->data));
+			if ($this->userID) {
+				$this->userProfile = UserProfileCache::getInstance()->getUserProfile($this->userID);
+			}
+			else {
+				$this->userProfile = new UserProfile(new User(null, array(
+					'username' => $this->username
+				)));
+			}
 		}
 		
 		return $this->userProfile;
+	}
+	
+	/**
+	 * Returns the viewable conversation message with the given id.
+	 * 
+	 * @param	integer		$messageID
+	 * @return	\wcf\data\conversation\message\ViewableConversationMessage
+	 */
+	public static function getViewableConversationMessage($messageID) {
+		$messageList = new ViewableConversationMessageList();
+		$messageList->setObjectIDs(array($messageID));
+		$messageList->readObjects();
+		
+		return $messageList->search($messageID);
 	}
 }

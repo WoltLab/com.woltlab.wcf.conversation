@@ -27,7 +27,7 @@ class ConversationMessageSearch extends AbstractSearchableObjectType {
 	 */
 	public function cacheObjects(array $objectIDs, array $additionalData = null) {
 		$messageList = new SearchResultConversationMessageList();
-		$messageList->getConditionBuilder()->add('conversation_message.messageID IN (?)', array($objectIDs));
+		$messageList->setObjectIDs($objectIDs);
 		$messageList->readObjects();
 		foreach ($messageList->getObjects() as $message) {
 			$this->messageCache[$message->messageID] = $message;

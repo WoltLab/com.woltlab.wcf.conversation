@@ -228,7 +228,7 @@ class ConversationEditor extends DatabaseObjectEditor {
 	 */
 	public static function updateParticipantSummaries(array $conversationIDs) {
 		$conversationList = new ConversationList();
-		$conversationList->getConditionBuilder()->add('conversation.conversationID IN (?)', array($conversationIDs));
+		$conversationList->setObjectIDs($conversationIDs);
 		$conversationList->readObjects();
 		
 		foreach ($conversationList as $conversation) {
@@ -244,7 +244,7 @@ class ConversationEditor extends DatabaseObjectEditor {
 	 */
 	public static function updateParticipantCounts(array $conversationIDs) {
 		$conversationList = new ConversationList();
-		$conversationList->getConditionBuilder()->add('conversation.conversationID IN (?)', array($conversationIDs));
+		$conversationList->setObjectIDs($conversationIDs);
 		$conversationList->readObjects();
 		
 		foreach ($conversationList as $conversation) {

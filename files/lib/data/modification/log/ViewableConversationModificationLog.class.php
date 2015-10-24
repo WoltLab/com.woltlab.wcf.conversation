@@ -2,7 +2,9 @@
 namespace wcf\data\modification\log;
 use wcf\data\user\User;
 use wcf\data\user\UserProfile;
+use wcf\data\user\UserProfileCache;
 use wcf\data\DatabaseObjectDecorator;
+use wcf\data\TLegacyUserPropertyAccess;
 use wcf\system\WCF;
 
 /**
@@ -16,6 +18,8 @@ use wcf\system\WCF;
  * @category	Community Framework
  */
 class ViewableConversationModificationLog extends DatabaseObjectDecorator {
+	use TLegacyUserPropertyAccess;
+	
 	/**
 	 * @see	\wcf\data\DatabaseObjectDecorator::$baseClass
 	 */
@@ -41,7 +45,14 @@ class ViewableConversationModificationLog extends DatabaseObjectDecorator {
 	 */
 	public function getUserProfile() {
 		if ($this->userProfile === null) {
-			$this->userProfile = new UserProfile(new User(null, $this->getDecoratedObject()->data));
+			if ($this->userID) {
+				$this->userProfile = UserProfileCache::getInstance()->getUserProfile($this->userID);
+			}
+			else {
+				$this->userProfile = new UserProfile(new User(null, array(
+					'username' => $this->username
+				)));
+			}
 		}
 		
 		return $this->userProfile;

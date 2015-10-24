@@ -54,7 +54,7 @@
 		<legend>{lang}wcf.conversation.folders{/lang}</legend>
 		
 		<nav>
-			<ul>
+			<ul class="conversationFolderList">
 				<li{if $filter == ''} class="active"{/if}><a href="{link controller='ConversationList'}{/link}">{lang}wcf.conversation.conversations{/lang}{if $conversationCount} <span class="badge">{#$conversationCount}</span>{/if}</a></li>
 				<li{if $filter == 'draft'} class="active"{/if}><a href="{link controller='ConversationList'}filter=draft{/link}">{lang}wcf.conversation.folder.draft{/lang}{if $draftCount} <span class="badge">{#$draftCount}</span>{/if}</a></li>
 				<li{if $filter == 'outbox'} class="active"{/if}><a href="{link controller='ConversationList'}filter=outbox{/link}">{lang}wcf.conversation.folder.outbox{/lang}{if $outboxCount} <span class="badge">{#$outboxCount}</span>{/if}</a></li>

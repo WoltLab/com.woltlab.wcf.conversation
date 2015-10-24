@@ -74,6 +74,10 @@
 	}
 }
 
+.conversationFolderList > li > a > span {
+	float: right;
+}
+
 @media only screen and (max-width: 800px) {
 	.conversationList {
 		thead {
