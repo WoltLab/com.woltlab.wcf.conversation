@@ -24,9 +24,18 @@
 		
 		<templatelistener name="searchAreaConversationSettings">
 			<environment>user</environment>
-			<templatename>searchArea</templatename>
+			<templatename>pageHeaderSearch</templatename>
 			<eventname>settings</eventname>
 			<templatecode><![CDATA[{include file='__searchAreaConversationSettings'}]]></templatecode>
 		</templatelistener>
 	</import>
+	
+	<delete>
+		<templatelistener name="searchAreaConversationSettings">
+			<environment>user</environment>
+			<templatename>searchArea</templatename>
+			<eventname>settings</eventname>
+			<templatecode><![CDATA[{include file='__searchAreaConversationSettings'}]]></templatecode>
+		</templatelistener>
+	</delete>
 </data>

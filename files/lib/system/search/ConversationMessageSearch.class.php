@@ -17,10 +17,16 @@ use wcf\system\WCF;
  */
 class ConversationMessageSearch extends AbstractSearchableObjectType {
 	/**
+	 * id of the searched conversation
+	 * @var	integer
+	 */
+	public $conversationID = 0;
+	
+	/**
 	 * message data cache
 	 * @var	array<\wcf\data\conversation\message\SearchResultConversationMessage>
 	 */
-	public $messageCache = array();
+	public $messageCache = [];
 	
 	/**
 	 * @see	\wcf\system\search\ISearchableObjectType::cacheObjects()
@@ -32,6 +38,15 @@ class ConversationMessageSearch extends AbstractSearchableObjectType {
 		foreach ($messageList->getObjects() as $message) {
 			$this->messageCache[$message->messageID] = $message;
 		}
+	}
+	
+	/**
+	 * @see	\wcf\system\search\ISearchableObjectType::getAdditionalData()
+	 */
+	public function getAdditionalData() {
+		return [
+			'conversationID' => $this->conversationID
+		];
 	}
 	
 	/**
@@ -77,6 +92,12 @@ class ConversationMessageSearch extends AbstractSearchableObjectType {
 	public function getConditions(IForm $form = null) {
 		$conditionBuilder = new PreparedStatementConditionBuilder();
 		$conditionBuilder->add('conversation_to_user.hideConversation IN (0,1)');
+		
+		if (isset($_POST['conversationID'])) {
+			$this->conversationID = intval($_POST['conversationID']);
+			
+			$conditionBuilder->add('conversation.conversationID = ?', [$this->conversationID]);
+		}
 		
 		return $conditionBuilder;
 	}
