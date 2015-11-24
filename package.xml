@@ -21,19 +21,19 @@
 	</excludedpackages>
 	
 	<instructions type="install">
-		<instruction type="file">files.tar</instruction>
-		<instruction type="userGroupOption">userGroupOption.xml</instruction>
-		<instruction type="sql">install.sql</instruction>
-		<instruction type="template">templates.tar</instruction>
-		<instruction type="option">option.xml</instruction>
-		<instruction type="templateListener">templateListener.xml</instruction>
-		<instruction type="language">language/*.xml</instruction>
-		<instruction type="objectType">objectType.xml</instruction>
-		<instruction type="clipboardAction">clipboardAction.xml</instruction>
-		<instruction type="coreObject">coreObject.xml</instruction>
-		<instruction type="userNotificationEvent">userNotificationEvent.xml</instruction>
-		<instruction type="userOption">userOption.xml</instruction>
-		<instruction type="eventListener">eventListener.xml</instruction>
+		<instruction type="file" />
+		<instruction type="userGroupOption" />
+		<instruction type="sql" />
+		<instruction type="template" />
+		<instruction type="option" />
+		<instruction type="templateListener" />
+		<instruction type="language" />
+		<instruction type="objectType" />
+		<instruction type="clipboardAction" />
+		<instruction type="coreObject" />
+		<instruction type="userNotificationEvent" />
+		<instruction type="userOption" />
+		<instruction type="eventListener" />
 		<instruction type="script">acp/install_com.woltlab.wcf.conversation_2.0.0.php</instruction>
 	</instructions>
 </package>
