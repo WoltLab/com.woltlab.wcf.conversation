@@ -131,16 +131,12 @@
 	{if $labelID}{assign var='labelIDParameter' value="&labelID=$labelID"}{/if}
 	{pages print=true assign=pagesLinks controller='ConversationList' link="filter=$filter&pageNo=%d&sortField=$sortField&sortOrder=$sortOrder$labelIDParameter"}
 	
-	{hascontent}
-		<nav>
-			<ul>
-				{content}
-					<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button"><span class="icon icon16 icon-asterisk"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>
-					{event name='contentNavigationButtonsTop'}
-				{/content}
-			</ul>
-		</nav>
-	{/hascontent}
+	<nav>
+		<ul>
+			<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button"><span class="icon icon16 icon-asterisk"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>
+			{event name='contentNavigationButtonsTop'}
+		</ul>
+	</nav>
 </div>
 
 {if !$items}
@@ -253,16 +249,12 @@
 <div class="contentNavigation">
 	{@$pagesLinks}
 	
-	{hascontent}
-		<nav>
-			<ul>
-				{content}
-					<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button"><span class="icon icon16 icon-asterisk"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>
-					{event name='contentNavigationButtonsBottom'}
-				{/content}
-			</ul>
-		</nav>
-	{/hascontent}
+	<nav>
+		<ul>
+			<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button"><span class="icon icon16 icon-asterisk"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>
+			{event name='contentNavigationButtonsTop'}
+		</ul>
+	</nav>
 	
 	<nav class="jsClipboardEditor" data-types="[ 'com.woltlab.wcf.conversation.conversation' ]"></nav>
 </div>
