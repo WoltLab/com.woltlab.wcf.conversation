@@ -136,7 +136,7 @@
 		<item name="wcf.conversation.label.disableFilter"><![CDATA[Keine Filterung]]></item>
 		<item name="wcf.conversation.label.filter"><![CDATA[Label auswählen]]></item>
 		<item name="wcf.conversation.label.labelName"><![CDATA[Bezeichnung]]></item>
-		<item name="wcf.conversation.label.management"><![CDATA[Label verwalten]]></item>
+		<item name="wcf.conversation.label.management"><![CDATA[Labels verwalten]]></item>
 		<item name="wcf.conversation.label.management.addLabel"><![CDATA[Label hinzufügen]]></item>
 		<item name="wcf.conversation.label.management.addLabel.success"><![CDATA[Label wurde hinzugefügt]]></item>
 		<item name="wcf.conversation.label.management.deleteLabel"><![CDATA[Label löschen]]></item>
