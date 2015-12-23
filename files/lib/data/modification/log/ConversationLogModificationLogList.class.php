@@ -24,50 +24,47 @@ class ConversationLogModificationLogList extends ModificationLogList {
 	
 	/**
 	 * conversation object
-	 * @var	\wcf\data\conversation\Conversation
+	 * @var	Conversation
 	 */
 	public $conversation = null;
 	
 	/**
-	 * @see	\wbb\data\DatabaseObjectList::__construct()
+	 * @inheritDoc
 	 */
 	public function __construct() {
 		parent::__construct();
 		
-		// get object types
-		$conversationObjectType = ConversationModificationLogHandler::getInstance()->getObjectType('com.woltlab.wcf.conversation.conversation');
-		$this->conversationObjectTypeID = $conversationObjectType->objectTypeID;
+		$this->conversationObjectTypeID = ConversationModificationLogHandler::getInstance()->getObjectType()->objectTypeID;
 	}
 	
 	/**
 	 * Initializes the conversation log modification log list.
 	 * 
-	 * @param	\wcf\data\conversation\Conversation	$conversation
+	 * @param	Conversation	$conversation
 	 */
 	public function setConversation(Conversation $conversation) {
 		$this->conversation = $conversation;
 	}
 	
 	/**
-	 * @see	\wcf\data\DatabaseObjectList::countObjects()
+	 * @inheritDoc
 	 */
 	public function countObjects() {
-		$sql = "SELECT	COUNT(modification_log.logID) AS count
+		$sql = "SELECT	COUNT(modification_log.logID)
 			FROM	wcf".WCF_N."_modification_log modification_log
 			WHERE	modification_log.objectTypeID = ?
 				AND modification_log.objectID = ?";
 		$statement = WCF::getDB()->prepareStatement($sql);
-		$statement->execute(array(
+		$statement->execute([
 			$this->conversationObjectTypeID,
 			$this->conversation->conversationID
-		));
-		$row = $statement->fetchArray();
+		]);
 		
-		return $row['count'];
+		return $statement->fetchColumn();
 	}
 	
 	/**
-	 * @see	\wcf\data\DatabaseObjectList::readObjects()
+	 * @inheritDoc
 	 */
 	public function readObjects() {
 		$sql = "SELECT	modification_log.*
@@ -76,14 +73,14 @@ class ConversationLogModificationLogList extends ModificationLogList {
 				AND modification_log.objectID = ?
 			".(!empty($this->sqlOrderBy) ? "ORDER BY ".$this->sqlOrderBy : '');
 		$statement = WCF::getDB()->prepareStatement($sql, $this->sqlLimit, $this->sqlOffset);
-		$statement->execute(array(
+		$statement->execute([
 			$this->conversationObjectTypeID,
 			$this->conversation->conversationID
-		));
+		]);
 		$this->objects = $statement->fetchObjects(($this->objectClassName ?: $this->className));
 		
 		// use table index as array index
-		$objects = $userIDs = [ ];
+		$objects = $userIDs = [];
 		foreach ($this->objects as $object) {
 			$objectID = $object->{$this->getDatabaseTableIndexName()};
 			$objects[$objectID] = $object;
@@ -112,10 +109,10 @@ class ConversationLogModificationLogList extends ModificationLogList {
 	 * will be returned and removed from collection.
 	 * 
 	 * @param	integer		$time
-	 * @return	array<\wcf\data\modification\log\ViewableConversationModificationLog>
+	 * @return	ViewableConversationModificationLog[]
 	 */
 	public function getEntriesUntil($time) {
-		$entries = array();
+		$entries = [];
 		foreach ($this->objects as $index => $entry) {
 			if ($entry->time < $time) {
 				$entries[] = $entry;
