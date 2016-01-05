@@ -84,7 +84,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		$messageEditor = new ConversationMessageEditor($message);
 		
 		// get conversation
-		$conversation = (isset($this->parameters['converation']) ? $this->parameters['converation'] : new Conversation($message->conversationID));
+		$conversation = (isset($this->parameters['conversation']) ? $this->parameters['conversation'] : new Conversation($message->conversationID));
 		$conversationEditor = new ConversationEditor($conversation);
 		
 		if (empty($this->parameters['isFirstPost'])) {
@@ -397,7 +397,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			$attachmentList = $this->message->getAttachments(true);
 			$count = 0;
 			if ($attachmentList !== null) {
-				// set permisions
+				// set permissions
 				$attachmentList->setPermissions(array(
 					'canDownload' => true,
 					'canViewPreview' => true
