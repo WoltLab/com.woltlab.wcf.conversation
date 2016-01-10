@@ -133,7 +133,7 @@
 	
 	<nav>
 		<ul>
-			<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button"><span class="icon icon16 icon-asterisk"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>
+			<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button"><span class="icon icon16 fa-asterisk"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>
 			{event name='contentNavigationButtonsTop'}
 		</ul>
 	</nav>
@@ -142,44 +142,39 @@
 {if !$items}
 	<p class="info">{lang}wcf.conversation.noConversations{/lang}</p>
 {else}
-	<div class="marginTop tabularBox tabularBoxTitle messageGroupList conversationList jsClipboardContainer" data-type="com.woltlab.wcf.conversation.conversation">
-		<header>
-			<h2>{lang}wcf.conversation.conversations{/lang} <span class="badge badgeInverse">{#$items}</span></h2>
-		</header>
-		
-		<table class="table">
-			<thead>
-				<tr>
-					<th class="columnMark jsOnly"><label><input type="checkbox" class="jsClipboardMarkAll" /></label></th>
-					<th colspan="2" class="columnTitle columnSubject{if $sortField == 'subject'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=subject&sortOrder={if $sortField == 'subject' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.global.subject{/lang}</a></th>
-					<th class="columnDigits columnReplies{if $sortField == 'replies'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=replies&sortOrder={if $sortField == 'replies' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.conversation.replies{/lang}</a></th>
-					<th class="columnDigits columnParticipants{if $sortField == 'participants'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=participants&sortOrder={if $sortField == 'participants' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.conversation.participants{/lang}</a></th>
-					<th class="columnText columnLastPost{if $sortField == 'lastPostTime'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=lastPostTime&sortOrder={if $sortField == 'lastPostTime' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.conversation.lastPostTime{/lang}</a></th>
+	<div class="section tabularBox tabularBoxTitle messageGroupList conversationList jsClipboardContainer" data-type="com.woltlab.wcf.conversation.conversation">
+		<ol class="tabularList">
+			<li class="tabularListRow tabularListRowHead">
+				<ol class="tabularListColumns">
+					<li class="columnMark jsOnly"><label><input type="checkbox" class="jsClipboardMarkAll" /></label></li>
+					<li class="columnSubject{if $sortField === 'subject'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=subject&sortOrder={if $sortField == 'subject' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.global.subject{/lang}</a></li>
+					<li class="columnStats{if $sortField == 'replies'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=replies&sortOrder={if $sortField == 'replies' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.conversation.replies{/lang}</a></li>
+					<li class="columnLastPost{if $sortField === 'lastPostTime'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=lastPostTime&sortOrder={if $sortField == 'lastPostTime' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.conversation.lastPostTime{/lang}</a></li>
 					
 					{event name='columnHeads'}
-				</tr>
-			</thead>
+				</ol>
+			</li>
 			
-			<tbody>
-				{foreach from=$objects item=conversation}
-					<tr class="conversation jsClipboardObject{if $conversation->isNew()} new{/if}" data-conversation-id="{@$conversation->conversationID}" data-label-ids="[ {implode from=$conversation->getAssignedLabels() item=label}{@$label->labelID}{/implode} ]" data-is-closed="{@$conversation->isClosed}" data-can-close-conversation="{if $conversation->userID == $__wcf->getUser()->userID}1{else}0{/if}" data-can-add-participants="{if $conversation->canAddParticipants()}1{else}0{/if}">
-						<td class="columnMark jsOnly">
+			{foreach from=$objects item=conversation}
+				<li class="tabularListRow">
+					<ol class="tabularListColumns conversation jsClipboardObject{if $conversation->isNew()} new{/if}" data-conversation-id="{@$conversation->conversationID}" data-label-ids="[ {implode from=$conversation->getAssignedLabels() item=label}{@$label->labelID}{/implode} ]" data-is-closed="{@$conversation->isClosed}" data-can-close-conversation="{if $conversation->userID == $__wcf->getUser()->userID}1{else}0{/if}" data-can-add-participants="{if $conversation->canAddParticipants()}1{else}0{/if}">
+						<li class="columnMark jsOnly">
 							<label><input type="checkbox" class="jsClipboardItem" data-object-id="{@$conversation->conversationID}" /></label>
-						</td>
-						<td class="columnIcon columnAvatar">
+						</li>
+						<li class="columnIcon columnAvatar">
 							{if $conversation->getUserProfile()->getAvatar()}
 								<div>
-									<p class="framed"{if $conversation->isNew()} title="{lang}wcf.conversation.markAsRead.doubleClick{/lang}"{/if}>{@$conversation->getUserProfile()->getAvatar()->getImageTag(32)}</p>
+									<p class="framed"{if $conversation->isNew()} title="{lang}wcf.conversation.markAsRead.doubleClick{/lang}"{/if}>{@$conversation->getUserProfile()->getAvatar()->getImageTag(48)}</p>
 									
 									{if $conversation->ownPosts && $conversation->userID != $__wcf->user->userID}
 										{if $__wcf->getUserProfileHandler()->getAvatar()}
-											<small class="framed myAvatar" title="{lang}wcf.conversation.ownPosts{/lang}">{@$__wcf->getUserProfileHandler()->getAvatar()->getImageTag(16)}</small>
+											<small class="framed myAvatar" title="{lang}wcf.conversation.ownPosts{/lang}">{@$__wcf->getUserProfileHandler()->getAvatar()->getImageTag(24)}</small>
 										{/if}
 									{/if}
 								</div>
 							{/if}
-						</td>
-						<td class="columnText columnSubject">
+						</li>
+						<li class="columnSubject">
 							{hascontent}
 								<ul class="labelList">
 									{content}
@@ -202,11 +197,9 @@
 								</ul>
 							</aside>
 							
-							<ul class="messageGroupInfo mobileOptimization">
+							<ul class="messageGroupInfo">
 								<li class="messageGroupAuthor">{if $conversation->userID}<a href="{link controller='User' object=$conversation->getUserProfile()->getDecoratedObject()}{/link}" class="userLink" data-user-id="{@$conversation->userID}">{$conversation->username}</a>{else}{$conversation->username}{/if}</li>
 								<li class="messageGroupTime">{@$conversation->time|time}</li>
-								<li class="messageGroupLastPoster">{if $conversation->lastPosterID}<a href="{link controller='User' object=$conversation->getLastPosterProfile()->getDecoratedObject()}{/link}" class="userLink" data-user-id="{@$conversation->getLastPosterProfile()->userID}">{$conversation->lastPoster}</a>{else}{$conversation->lastPoster}{/if}</li>
-								<li class="messageGroupLastPostTime">{@$conversation->lastPostTime|time}</li>
 								<li class="messageGroupEditLink jsOnly"><a class="jsConversationInlineEditor">{lang}wcf.global.button.edit{/lang}</a></li>
 								{event name='messageGroupInfo'}
 							</ul>
@@ -220,13 +213,23 @@
 							{/if}
 							
 							{event name='conversationData'}
-						</td>
-						<td class="columnDigits columnReplies">{#$conversation->replies}</td>
-						<td class="columnDigits columnParticipants">{#$conversation->participants}</td>
-						<td class="columnText columnLastPost">
+						</li>
+						<li class="columnStats">
+							<dl class="plain statsDataList">
+								<dt>{lang}wcf.conversation.replies{/lang}</dt>
+								<dd>{@$conversation->replies|shortUnit}</dd>
+							</dl>
+							<dl class="plain statsDataList">
+								<dt>{lang}wcf.conversation.participants{/lang}</dt>
+								<dd>{@$conversation->participants|shortUnit}</dd>
+							</dl>
+							
+							<div class="messageGroupListStatsSimple">{@$conversation->replies|shortUnit}</div>
+						</li>
+						<li class="columnLastPost">
 							{if $conversation->replies != 0}
-								<div class="box24">
-									<a href="{link controller='Conversation' object=$conversation}action=lastPost{/link}" class="framed jsTooltip" title="{lang}wcf.conversation.gotoLastPost{/lang}">{@$conversation->getLastPosterProfile()->getAvatar()->getImageTag(24)}</a>
+								<div class="box32">
+									<a href="{link controller='Conversation' object=$conversation}action=lastPost{/link}" class="framed jsTooltip" title="{lang}wcf.conversation.gotoLastPost{/lang}">{@$conversation->getLastPosterProfile()->getAvatar()->getImageTag(32)}</a>
 									
 									<div>
 										<p>
@@ -236,13 +239,13 @@
 									</div>
 								</div>
 							{/if}
-						</td>
+						</li>
 						
 						{event name='columns'}
-					</tr>
-				{/foreach}
-			</tbody>
-		</table>
+					</ol>
+				</li>	
+			{/foreach}
+		</ol>
 	</div>
 {/if}
 
@@ -251,7 +254,7 @@
 	
 	<nav>
 		<ul>
-			<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button"><span class="icon icon16 icon-asterisk"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>
+			<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button"><span class="icon icon16 fa-asterisk"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>
 			{event name='contentNavigationButtonsTop'}
 		</ul>
 	</nav>
