@@ -3,7 +3,7 @@
 	<import>
 		<templatelistener name="userPanel">
 			<environment>user</environment>
-			<templatename>userPanel</templatename>
+			<templatename>pageHeaderUser</templatename>
 			<eventname>menuItems</eventname>
 			<templatecode><![CDATA[{include file='__userPanelConversationDropdown'}]]></templatecode>
 		</templatelistener>
