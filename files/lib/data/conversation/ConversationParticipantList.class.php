@@ -101,7 +101,7 @@ class ConversationParticipantList extends UserProfileList {
 		while ($row = $statement->fetchArray()) {
 			// create fake user profiles
 			$user = new User(null, array('userID' => 0, 'username' => $row['username']));
-			$this->objects['x'.++$i] = new UserProfile($user);
+			$this->objects['x'.(++$i)] = new UserProfile($user);
 			$this->indexToObject[] = 'x'.$i;
 		}
 	}
