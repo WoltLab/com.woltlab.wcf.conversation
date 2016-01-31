@@ -35,7 +35,7 @@
 			
 			new WCF.Conversation.Message.InlineEditor({@$conversation->conversationID}, $quoteManager);
 			new WCF.Conversation.Message.QuoteHandler($quoteManager);
-			{if !$conversation->isClosed}new WCF.Conversation.QuickReply($quoteManager);{/if}
+			{* if !$conversation->isClosed}new WCF.Conversation.QuickReply($quoteManager);{/if *}
 			
 			{if $__wcf->session->getPermission('user.profile.canReportContent')}
 				new WCF.Moderation.Report.Content('com.woltlab.wcf.conversation.message', '.jsReportConversationMessage');
@@ -105,8 +105,8 @@
 	
 	<nav>
 		<ul class="conversation jsConversationInlineEditorContainer" data-conversation-id="{@$conversation->conversationID}" data-label-ids="[ {implode from=$conversation->getAssignedLabels() item=label}{@$label->labelID}{/implode} ]" data-is-closed="{@$conversation->isClosed}" data-can-close-conversation="{if $conversation->userID == $__wcf->getUser()->userID}1{else}0{/if}" data-can-add-participants="{if $conversation->canAddParticipants()}1{else}0{/if}">
-			<li class="jsOnly"><a href="#" class="button jsConversationInlineEditor"><span class="icon icon16 icon-pencil"></span> <span>{lang}wcf.global.button.edit{/lang}</span></a></li>
-			{if !$conversation->isClosed}<li><a href="{link controller='ConversationMessageAdd' id=$conversationID}{/link}" title="{lang}wcf.conversation.message.add{/lang}" class="button buttonPrimary jsQuickReply"><span class="icon icon16 icon-plus"></span> <span>{lang}wcf.conversation.message.button.add{/lang}</span></a></li>{/if}
+			<li class="jsOnly"><a href="#" class="button jsConversationInlineEditor"><span class="icon icon16 fa-pencil"></span> <span>{lang}wcf.global.button.edit{/lang}</span></a></li>
+			{if !$conversation->isClosed}<li><a href="{link controller='ConversationMessageAdd' id=$conversationID}{/link}" title="{lang}wcf.conversation.message.add{/lang}" class="button buttonPrimary jsQuickReply"><span class="icon icon16 fa-plus"></span> <span>{lang}wcf.conversation.message.button.add{/lang}</span></a></li>{/if}
 			{event name='contentNavigationButtonsTop'}
 		</ul>
 	</nav>
@@ -126,7 +126,6 @@
 		<nav>
 			<ul>
 				{content}
-					{if !$conversation->isClosed}<li><a href="{link controller='ConversationMessageAdd' id=$conversationID}{/link}" title="{lang}wcf.conversation.message.add{/lang}" class="button buttonPrimary jsQuickReply"><span class="icon icon16 icon-plus"></span> <span>{lang}wcf.conversation.message.button.add{/lang}</span></a></li>{/if}
 					{event name='contentNavigationButtonsBottom'}
 				{/content}
 			</ul>

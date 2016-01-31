@@ -1284,33 +1284,6 @@ WCF.User.Panel.Conversation = WCF.User.Panel.Abstract.extend({
 });
 
 /**
- * Provides an AJAX-based quick reply for conversations.
- */
-WCF.Conversation.QuickReply = WCF.Message.QuickReply.extend({
-	/**
-	 * @see	WCF.Message.QuickReply.init()
-	 */
-	init: function(quoteManager) {
-		this._super(true, quoteManager);
-	},
-	
-	/**
-	 * @see	WCF.Message.QuickReply._getClassName()
-	 */
-	_getClassName: function() {
-		return 'wcf\\data\\conversation\\message\\ConversationMessageAction';
-	},
-	
-	/**
-	 * @see	WCF.Message.QuickReply._getObjectID()
-	 * @returns
-	 */
-	_getObjectID: function() {
-		return this._container.data('conversationID');
-	}
-});
-
-/**
  * Marks one conversation as read.
  */
 WCF.Conversation.MarkAsRead = Class.extend({
