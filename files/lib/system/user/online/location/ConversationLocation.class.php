@@ -1,5 +1,6 @@
 <?php
 namespace wcf\system\user\online\location;
+use wcf\data\conversation\Conversation;
 use wcf\data\user\online\UserOnline;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\WCF;
@@ -8,7 +9,7 @@ use wcf\system\WCF;
  * Implementation of IUserOnlineLocation for the conversation page location.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	system.user.online.location
@@ -62,6 +63,7 @@ class ConversationLocation implements IUserOnlineLocation {
 		$conditionBuilder = new PreparedStatementConditionBuilder();
 		$conditionBuilder->add('conversation_to_user.participantID = ?', array(WCF::getUser()->userID));
 		$conditionBuilder->add('conversation_to_user.conversationID IN (?)', array($this->conversationIDs));
+		$conditionBuilder->add('conversation_to_user.hideConversation <> ?', array(Conversation::STATE_LEFT));
 		
 		$sql = "SELECT		conversation.*
 			FROM		wcf".WCF_N."_conversation_to_user conversation_to_user
