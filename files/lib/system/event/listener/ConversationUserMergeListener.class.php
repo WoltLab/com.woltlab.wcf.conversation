@@ -33,6 +33,15 @@ class ConversationUserMergeListener implements IParameterizedEventListener {
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute($parameters);
 		
+		$participantConditions = new PreparedStatementConditionBuilder();
+		$participantConditions->add("lastPosterID IN (?)", array($eventObj->mergedUserIDs));
+		$sql = "UPDATE	wcf".WCF_N."_conversation
+			SET	lastPosterID = ?,
+				lastPoster = ?
+			".$participantConditions;
+		$statement = WCF::getDB()->prepareStatement($sql);
+		$statement->execute($parameters); // can still use $parameters, even though $participantConditions != $conditions
+		
 		// conversation_to_user
 		$participantConditions = new PreparedStatementConditionBuilder();
 		$participantConditions->add("participantID IN (?)", array($eventObj->mergedUserIDs));
