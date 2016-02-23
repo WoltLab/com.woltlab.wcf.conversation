@@ -18,36 +18,40 @@ class ConversationUserMergeListener implements IParameterizedEventListener {
 	 * @see	\wcf\system\event\listener\IParameterizedEventListener::execute()
 	 */
 	public function execute($eventObj, $className, $eventName, array &$parameters) {
-		// conversation
 		$conditions = new PreparedStatementConditionBuilder();
 		$conditions->add("userID IN (?)", array($eventObj->mergedUserIDs));
+		$parameters = array_merge(array(
+			$eventObj->destinationUserID,
+			$eventObj->users[$eventObj->destinationUserID]->username
+		), $conditions->getParameters());
+		
+		// conversation
 		$sql = "UPDATE	wcf".WCF_N."_conversation
-			SET	userID = ?
+			SET	userID = ?,
+				username = ?
 			".$conditions;
 		$statement = WCF::getDB()->prepareStatement($sql);
-		$statement->execute(array_merge(array($eventObj->destinationUserID), $conditions->getParameters()));
+		$statement->execute($parameters);
 		
 		// conversation_to_user
-		$conditions = new PreparedStatementConditionBuilder();
-		$conditions->add("participantID IN (?)", array($eventObj->mergedUserIDs));
+		$participantConditions = new PreparedStatementConditionBuilder();
+		$participantConditions->add("participantID IN (?)", array($eventObj->mergedUserIDs));
 		$sql = "UPDATE IGNORE	wcf".WCF_N."_conversation_to_user
-			SET		participantID = ?
-			".$conditions;
+			SET		participantID = ?,
+					username = ?
+			".$participantConditions;
 		$statement = WCF::getDB()->prepareStatement($sql);
-		$statement->execute(array_merge(array($eventObj->destinationUserID), $conditions->getParameters()));
+		$statement->execute($parameters); // can still use $parameters, even though $participantConditions != $conditions
 		
 		// conversation_message
-		$conditions = new PreparedStatementConditionBuilder();
-		$conditions->add("userID IN (?)", array($eventObj->mergedUserIDs));
 		$sql = "UPDATE	wcf".WCF_N."_conversation_message
-			SET	userID = ?
+			SET	userID = ?,
+				username = ?
 			".$conditions;
 		$statement = WCF::getDB()->prepareStatement($sql);
-		$statement->execute(array_merge(array($eventObj->destinationUserID), $conditions->getParameters()));
+		$statement->execute($parameters);
 		
 		// conversation_label
-		$conditions = new PreparedStatementConditionBuilder();
-		$conditions->add("userID IN (?)", array($eventObj->mergedUserIDs));
 		$sql = "UPDATE	wcf".WCF_N."_conversation_label
 			SET	userID = ?
 			".$conditions;
