@@ -49,58 +49,62 @@
 
 <body id="tpl{$templateName|ucfirst}" data-template="{$templateName}" data-application="{$templateNameApplication}">
 
-{capture assign='sidebar'}
-	<fieldset>
-		<legend>{lang}wcf.conversation.folders{/lang}</legend>
+{capture assign='sidebarLeft'}
+	<section class="box">
+		<h2 class="boxTitle">{lang}wcf.conversation.folders{/lang}</h2>
 		
-		<nav>
-			<ul class="conversationFolderList">
-				<li{if $filter == ''} class="active"{/if}><a href="{link controller='ConversationList'}{/link}">{lang}wcf.conversation.conversations{/lang}{if $conversationCount} <span class="badge">{#$conversationCount}</span>{/if}</a></li>
-				<li{if $filter == 'draft'} class="active"{/if}><a href="{link controller='ConversationList'}filter=draft{/link}">{lang}wcf.conversation.folder.draft{/lang}{if $draftCount} <span class="badge">{#$draftCount}</span>{/if}</a></li>
-				<li{if $filter == 'outbox'} class="active"{/if}><a href="{link controller='ConversationList'}filter=outbox{/link}">{lang}wcf.conversation.folder.outbox{/lang}{if $outboxCount} <span class="badge">{#$outboxCount}</span>{/if}</a></li>
-				<li{if $filter == 'hidden'} class="active"{/if}><a href="{link controller='ConversationList'}filter=hidden{/link}">{lang}wcf.conversation.folder.hidden{/lang}{if $hiddenCount} <span class="badge">{#$hiddenCount}</span>{/if}</a></li>
-			</ul>
-		</nav>
-	</fieldset>
-	
-	<fieldset class="jsOnly">
-		<legend>{lang}wcf.conversation.label{/lang}</legend>
+		<div class="boxContent">
+			<nav>
+				<ul class="conversationFolderList">
+					<li{if $filter == ''} class="active"{/if}><a href="{link controller='ConversationList'}{/link}">{lang}wcf.conversation.conversations{/lang}{if $conversationCount} <span class="badge">{#$conversationCount}</span>{/if}</a></li>
+					<li{if $filter == 'draft'} class="active"{/if}><a href="{link controller='ConversationList'}filter=draft{/link}">{lang}wcf.conversation.folder.draft{/lang}{if $draftCount} <span class="badge">{#$draftCount}</span>{/if}</a></li>
+					<li{if $filter == 'outbox'} class="active"{/if}><a href="{link controller='ConversationList'}filter=outbox{/link}">{lang}wcf.conversation.folder.outbox{/lang}{if $outboxCount} <span class="badge">{#$outboxCount}</span>{/if}</a></li>
+					<li{if $filter == 'hidden'} class="active"{/if}><a href="{link controller='ConversationList'}filter=hidden{/link}">{lang}wcf.conversation.folder.hidden{/lang}{if $hiddenCount} <span class="badge">{#$hiddenCount}</span>{/if}</a></li>
+				</ul>
+			</nav>
+		</div>
+	</section>
+
+	<section class="box" class="jsOnly">
+		<h2 class="boxTitle">{lang}wcf.conversation.label{/lang}</h2>
 		
-		<div id="conversationLabelFilter" class="dropdown">
-			<div class="dropdownToggle" data-toggle="conversationLabelFilter">
-				{if $labelID}
-					{foreach from=$labelList item=label}
-						{if $label->labelID == $labelID}
-							<span class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}">{$label->label}</span>
-						{/if}
-					{/foreach}
-				{else}
-					<span class="badge">{lang}wcf.conversation.label.filter{/lang}</span>
-				{/if}
+		<div class="boxContent">
+			<div id="conversationLabelFilter" class="dropdown">
+				<div class="dropdownToggle" data-toggle="conversationLabelFilter">
+					{if $labelID}
+						{foreach from=$labelList item=label}
+							{if $label->labelID == $labelID}
+								<span class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}">{$label->label}</span>
+							{/if}
+						{/foreach}
+					{else}
+						<span class="badge">{lang}wcf.conversation.label.filter{/lang}</span>
+					{/if}
+				</div>
+				
+				<div class="dropdownMenu">
+					<ul class="scrollableDropdownMenu">
+						{foreach from=$labelList item=label}
+							<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}&labelID={@$label->labelID}{/link}"><span class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}" data-css-class-name="{if $label->cssClassName}{@$label->cssClassName}{/if}" data-label-id="{@$label->labelID}">{$label->label}</span></a></li>
+						{/foreach}
+					</ul>
+					<ul>
+						<li class="dropdownDivider"{if !$labelList|count} style="display: none;"{/if}></li>
+						<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}"><span class="badge label">{lang}wcf.conversation.label.disableFilter{/lang}</span></a></li>
+					</ul>
+				</div>
 			</div>
 			
-			<div class="dropdownMenu">
-				<ul class="scrollableDropdownMenu">
-					{foreach from=$labelList item=label}
-						<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}&labelID={@$label->labelID}{/link}"><span class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}" data-css-class-name="{if $label->cssClassName}{@$label->cssClassName}{/if}" data-label-id="{@$label->labelID}">{$label->label}</span></a></li>
-					{/foreach}
-				</ul>
-				<ul>
-					<li class="dropdownDivider"{if !$labelList|count} style="display: none;"{/if}></li>
-					<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}"><span class="badge label">{lang}wcf.conversation.label.disableFilter{/lang}</span></a></li>
-				</ul>
-			</div>
+			<button id="manageLabel">{lang}wcf.conversation.label.management{/lang}</button>
 		</div>
-		
-		<button id="manageLabel">{lang}wcf.conversation.label.management{/lang}</button>
-	</fieldset>
+	</section>
 	
 	{event name='beforeQuotaBox'}
 	
-	<fieldset class="conversationQuota">
-		<legend>{lang}wcf.conversation.quota{/lang}</legend>
+	<section class="box conversationQuota">
+		<h2 class="boxTitle">{lang}wcf.conversation.quota{/lang}</h2>
 		
-		<div>
+		<div class="boxContent">
 			{assign var='conversationCount' value=$__wcf->getConversationHandler()->getConversationCount()}
 			{assign var='maxConversationCount' value=$__wcf->session->getPermission('user.conversation.maxConversations')}
 			<p class="conversationUsageBar{if $conversationCount/$maxConversationCount >= 1.0} red{elseif $conversationCount/$maxConversationCount > 0.9} yellow{/if}">
@@ -108,20 +112,20 @@
 			</p>
 			<p><small>{lang}wcf.conversation.quota.description{/lang}</small></p>
 		</div>
-	</fieldset>
+	</section>
 	
 	{event name='boxes'}
 {/capture}
 
 {capture assign='headerNavigation'}
-	<li><a rel="alternate" href="{link controller='ConversationFeed' appendSession=false}at={@$__wcf->getUser()->userID}-{@$__wcf->getUser()->accessToken}{/link}" title="{lang}wcf.global.button.rss{/lang}" class="jsTooltip"><span class="icon icon16 icon-rss"></span> <span class="invisible">{lang}wcf.global.button.rss{/lang}</span></a></li>
-	<li class="jsOnly"><a href="#" title="{lang}wcf.conversation.markAllAsRead{/lang}" class="markAllAsReadButton jsTooltip"><span class="icon icon16 icon-ok"></span> <span class="invisible">{lang}wcf.conversation.markAllAsRead{/lang}</span></a></li>
+	<li><a rel="alternate" href="{link controller='ConversationFeed' appendSession=false}at={@$__wcf->getUser()->userID}-{@$__wcf->getUser()->accessToken}{/link}" title="{lang}wcf.global.button.rss{/lang}" class="jsTooltip"><span class="icon icon16 fa-rss"></span> <span class="invisible">{lang}wcf.global.button.rss{/lang}</span></a></li>
+	<li class="jsOnly"><a href="#" title="{lang}wcf.conversation.markAllAsRead{/lang}" class="markAllAsReadButton jsTooltip"><span class="icon icon16 fa-check"></span> <span class="invisible">{lang}wcf.conversation.markAllAsRead{/lang}</span></a></li>
 {/capture}
 
-{include file='header' sidebarOrientation='left'}
+{include file='header'}
 
-<header class="boxHeadline">
-	<h1>{if $filter}{lang}wcf.conversation.folder.{$filter}{/lang}{else}{lang}wcf.conversation.conversations{/lang}{/if}</h1>
+<header class="contentHeader">
+	<h1 class="contentTitle">{if $filter}{lang}wcf.conversation.folder.{$filter}{/lang}{else}{lang}wcf.conversation.conversations{/lang}{/if}</h1>
 </header>
 
 {include file='userNotice'}
@@ -142,7 +146,7 @@
 {if !$items}
 	<p class="info">{lang}wcf.conversation.noConversations{/lang}</p>
 {else}
-	<div class="section tabularBox tabularBoxTitle messageGroupList conversationList jsClipboardContainer" data-type="com.woltlab.wcf.conversation.conversation">
+	<div class="section tabularBox messageGroupList conversationList jsClipboardContainer" data-type="com.woltlab.wcf.conversation.conversation">
 		<ol class="tabularList">
 			<li class="tabularListRow tabularListRowHead">
 				<ol class="tabularListColumns">
@@ -164,11 +168,11 @@
 						<li class="columnIcon columnAvatar">
 							{if $conversation->getUserProfile()->getAvatar()}
 								<div>
-									<p class="framed"{if $conversation->isNew()} title="{lang}wcf.conversation.markAsRead.doubleClick{/lang}"{/if}>{@$conversation->getUserProfile()->getAvatar()->getImageTag(48)}</p>
+									<p{if $conversation->isNew()} title="{lang}wcf.conversation.markAsRead.doubleClick{/lang}"{/if}>{@$conversation->getUserProfile()->getAvatar()->getImageTag(48)}</p>
 									
 									{if $conversation->ownPosts && $conversation->userID != $__wcf->user->userID}
 										{if $__wcf->getUserProfileHandler()->getAvatar()}
-											<small class="framed myAvatar" title="{lang}wcf.conversation.ownPosts{/lang}">{@$__wcf->getUserProfileHandler()->getAvatar()->getImageTag(24)}</small>
+											<small class="myAvatar" title="{lang}wcf.conversation.ownPosts{/lang}">{@$__wcf->getUserProfileHandler()->getAvatar()->getImageTag(24)}</small>
 										{/if}
 									{/if}
 								</div>
@@ -192,8 +196,8 @@
 							<aside class="statusDisplay">
 								{smallpages pages=$conversation->getPages() controller='Conversation' object=$conversation link='pageNo=%d'}
 								<ul class="statusIcons">
-									{if $conversation->isClosed}<li><span class="icon icon16 icon-lock jsIconLock jsTooltip" title="{lang}wcf.global.state.closed{/lang}"></span></li>{/if}
-									{if $conversation->attachments}<li><span class="icon icon16 icon-paper-clip jsIconAttachment jsTooltip" title="{lang}wcf.conversation.attachments{/lang}"></span></li>{/if}
+									{if $conversation->isClosed}<li><span class="icon icon16 fa-lock jsIconLock jsTooltip" title="{lang}wcf.global.state.closed{/lang}"></span></li>{/if}
+									{if $conversation->attachments}<li><span class="icon icon16 fa-paperclip jsIconAttachment jsTooltip" title="{lang}wcf.conversation.attachments{/lang}"></span></li>{/if}
 								</ul>
 							</aside>
 							
@@ -229,7 +233,7 @@
 						<li class="columnLastPost">
 							{if $conversation->replies != 0}
 								<div class="box32">
-									<a href="{link controller='Conversation' object=$conversation}action=lastPost{/link}" class="framed jsTooltip" title="{lang}wcf.conversation.gotoLastPost{/lang}">{@$conversation->getLastPosterProfile()->getAvatar()->getImageTag(32)}</a>
+									<a href="{link controller='Conversation' object=$conversation}action=lastPost{/link}" class="jsTooltip" title="{lang}wcf.conversation.gotoLastPost{/lang}">{@$conversation->getLastPosterProfile()->getAvatar()->getImageTag(32)}</a>
 									
 									<div>
 										<p>

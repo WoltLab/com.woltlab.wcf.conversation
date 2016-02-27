@@ -43,10 +43,8 @@
 	text-decoration: line-through;
 }
 
-.sidebar fieldset.conversationQuota {
-	> div {
-		text-align: center;
-	}
+.sidebar .box.conversationQuota .boxContent {
+	text-align: center;
 }
 
 .conversationUsageBar {

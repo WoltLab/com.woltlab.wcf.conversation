@@ -51,53 +51,75 @@
 
 {include file='header'}
 
-<header class="boxHeadline marginTop conversationHeadline labeledHeadline">
-	<h1><a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a>{if $conversation->isClosed} <span class="icon icon16 icon-lock jsTooltip jsIconLock" title="{lang}wcf.global.state.closed{/lang}"></span>{/if}</h1>
+<header class="contentHeader">
+	<h1 class="contentTitle"><a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a></h1>
 	
-	{hascontent}
-		<ul class="labelList">
-			{content}
-				{foreach from=$conversation->getAssignedLabels() item=label}
-					<li><span class="label badge{if $label->cssClassName} {$label->cssClassName}{/if}">{lang}{$label->label}{/lang}</span></li>
-				{/foreach}
-			{/content}
-		</ul>
-	{/hascontent}
-	
-	{event name='headlineData'}
+	<ul class="inlineList contentHeaderMetaData">
+		{hascontent}
+			<li>
+				<span class="icon icon16 fa-tags"></span>
+				<ul class="labelList">
+					{content}
+						{foreach from=$conversation->getAssignedLabels() item=label}
+							<li><span class="label badge{if $label->cssClassName} {$label->cssClassName}{/if}">{lang}{$label->label}{/lang}</span></li>
+						{/foreach}
+					{/content}
+				</ul>
+			</li>
+		{/hascontent}
+		
+		<li>
+			<span class="icon icon16 fa-user"></span>
+			{if $conversation->userID}
+				<a href="{link controller='User' object=$conversation->getUserProfile()->getDecoratedObject()}{/link}" class="userLink" data-user-id="{@$conversation->userID}">{$conversation->username}</a>
+			{else}
+				{$conversation->username}
+			{/if}
+		</li>
+		
+		<li>
+			<span class="icon icon16 fa-clock-o"></span>
+			{@$conversation->time|time}
+		</li>
+		
+		{if $conversation->isClosed}
+			<li>
+				<span class="icon icon16 fa-lock jsIconLock"></span>
+				{lang}wcf.global.state.closed{/lang}
+			</li>
+		{/if}
+	</ul>
 </header>
 
 {include file='userNotice'}
 
 {if !$conversation->isDraft}
-	<div class="container containerPadding marginTop">
-		<fieldset>
-			<legend>{lang}wcf.conversation.participants{/lang}</legend>
-			
-			<ul class="containerBoxList tripleColumned conversationParticipantList">
-				{foreach from=$participants item=participant}
-					<li class="jsParticipant{if !$participant->userID || $participant->hideConversation == 2} conversationLeft{/if}">
-						<div class="box24">
-							{if $participant->userID}<a href="{link controller='User' object=$participant}{/link}" class="framed">{@$participant->getAvatar()->getImageTag(24)}</a>{else}<span class="framed">{@$participant->getAvatar()->getImageTag(24)}</span>{/if}
-							<div>
-								<p>
-									{if $participant->userID}<a href="{link controller='User' object=$participant}{/link}" class="userLink" data-user-id="{@$participant->userID}">{$participant->username}</a>{else}<span>{$participant->username}</span>{/if}
-									{if $participant->isInvisible}<small>({lang}wcf.conversation.invisible{/lang})</small>{/if}
-									{if $participant->userID && ($conversation->userID == $__wcf->getUser()->userID) && ($participant->userID != $__wcf->getUser()->userID) && $participant->hideConversation != 2}
-										<a href="#" class="jsDeleteButton jsTooltip jsOnly" title="{lang}wcf.conversation.participants.removeParticipant{/lang}" data-confirm-message="{lang}wcf.conversation.participants.removeParticipant.confirmMessage{/lang}" data-object-id="{@$participant->userID}"><span class="icon icon16 icon-remove"></span></a>
-									{/if}
-								</p>
-								<dl class="plain inlineDataList">
-									<dt>{lang}wcf.conversation.lastVisitTime{/lang}</dt>
-									<dd>{if $participant->lastVisitTime}{@$participant->lastVisitTime|time}{else}-{/if}</dd>
-								</dl>
-							</div>
+	<section class="section">
+		<h2 class="sectionTitle">{lang}wcf.conversation.participants{/lang}</h2>
+		
+		<ul class="containerBoxList tripleColumned conversationParticipantList">
+			{foreach from=$participants item=participant}
+				<li class="jsParticipant{if !$participant->userID || $participant->hideConversation == 2} conversationLeft{/if}">
+					<div class="box24">
+						{if $participant->userID}<a href="{link controller='User' object=$participant}{/link}">{@$participant->getAvatar()->getImageTag(24)}</a>{else}<span>{@$participant->getAvatar()->getImageTag(24)}</span>{/if}
+						<div>
+							<p>
+								{if $participant->userID}<a href="{link controller='User' object=$participant}{/link}" class="userLink" data-user-id="{@$participant->userID}">{$participant->username}</a>{else}<span>{$participant->username}</span>{/if}
+								{if $participant->isInvisible}<small>({lang}wcf.conversation.invisible{/lang})</small>{/if}
+								{if $participant->userID && ($conversation->userID == $__wcf->getUser()->userID) && ($participant->userID != $__wcf->getUser()->userID) && $participant->hideConversation != 2}
+									<a href="#" class="jsDeleteButton jsTooltip jsOnly" title="{lang}wcf.conversation.participants.removeParticipant{/lang}" data-confirm-message="{lang}wcf.conversation.participants.removeParticipant.confirmMessage{/lang}" data-object-id="{@$participant->userID}"><span class="icon icon16 fa-times"></span></a>
+								{/if}
+							</p>
+							<dl class="plain inlineDataList">
+								<dt>{lang}wcf.conversation.lastVisitTime{/lang}</dt>
+								<dd>{if $participant->lastVisitTime}{@$participant->lastVisitTime|time}{else}-{/if}</dd>
+							</dl>
 						</div>
-					</li>
-				{/foreach}
-			</ul>
-		</fieldset>
-	</div>
+					</div>
+				</li>
+			{/foreach}
+		</ul>
+	</section>
 {/if}
 
 <div class="contentNavigation">
@@ -112,7 +134,7 @@
 	</nav>
 </div>
 
-<div class="marginTop">
+<div class="section">
 	<ul class="messageList">
 		{include file='conversationMessageList'}
 		{if !$conversation->isClosed}{include file='conversationQuickReply'}{/if}

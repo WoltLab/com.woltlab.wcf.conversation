@@ -1,5 +1,5 @@
-<fieldset>
-	<legend>{lang}wcf.conversation.hideConversation{/lang}</legend>
+<section class="section">
+	<h2 class="sectionTitle">{lang}wcf.conversation.hideConversation{/lang}</h2>
 	
 	<dl class="wide">
 		{if $hideConversation == 1}
@@ -18,7 +18,7 @@
 			<small>{lang}wcf.conversation.hideConversation.leavePermanently.description{/lang}</small>
 		</dd>
 	</dl>
-</fieldset>
+</section>
 
 <div class="formSubmit">
 	<button id="hideConversation" class="buttonPrimary">{lang}wcf.global.button.submit{/lang}</button>

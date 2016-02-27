@@ -29,8 +29,8 @@
 <body id="tpl{$templateName|ucfirst}" data-template="{$templateName}" data-application="{$templateNameApplication}">
 {include file='header'}
 
-<header class="boxHeadline">
-	<h1>{lang}wcf.conversation.message.add{/lang}</h1>
+<header class="contentHeader">
+	<h1 class="contentTitle">{lang}wcf.conversation.message.add{/lang}</h1>
 </header>
 
 {include file='userNotice'}
@@ -42,39 +42,37 @@
 {include file='formError'}
 
 <form id="messageContainer" class="jsFormGuard" method="post" action="{link controller='ConversationMessageAdd' id=$conversationID}{/link}">
-	<div class="container containerPadding marginTop">
-		<fieldset>
-			<legend>{lang}wcf.conversation.message{/lang}</legend>
-			
-			<dl class="wide{if $errorField == 'text'} formError{/if}">
-				<dt><label for="text">{lang}wcf.conversation.message{/lang}</label></dt>
-				<dd>
-					<textarea id="text" name="text" rows="20" cols="40" data-autosave="com.woltlab.wcf.conversation.messageAdd-{@$conversation->conversationID}">{$text}</textarea>
-					{if $errorField == 'text'}
-						<small class="innerError">
-							{if $errorType == 'empty'}
-								{lang}wcf.global.form.error.empty{/lang}
-							{elseif $errorType == 'tooLong'}
-								{lang}wcf.message.error.tooLong{/lang}
-							{elseif $errorType == 'censoredWordsFound'}
-								{lang}wcf.message.error.censoredWordsFound{/lang}
-							{elseif $errorType == 'disallowedBBCodes'}
-								{lang}wcf.message.error.disallowedBBCodes{/lang}
-							{else}
-								{lang}wcf.conversation.message.error.{@$errorType}{/lang}
-							{/if}
-						</small>
-					{/if}
-				</dd>
-			</dl>
-			
-			{event name='messageFields'}
-		</fieldset>
+	<section class="section">
+		<h2 class="sectionTitle">{lang}wcf.conversation.message{/lang}</h2>
 		
-		{include file='messageFormTabs' wysiwygContainerID='text'}
+		<dl class="wide{if $errorField == 'text'} formError{/if}">
+			<dt><label for="text">{lang}wcf.conversation.message{/lang}</label></dt>
+			<dd>
+				<textarea id="text" name="text" rows="20" cols="40" data-autosave="com.woltlab.wcf.conversation.messageAdd-{@$conversation->conversationID}">{$text}</textarea>
+				{if $errorField == 'text'}
+					<small class="innerError">
+						{if $errorType == 'empty'}
+							{lang}wcf.global.form.error.empty{/lang}
+						{elseif $errorType == 'tooLong'}
+							{lang}wcf.message.error.tooLong{/lang}
+						{elseif $errorType == 'censoredWordsFound'}
+							{lang}wcf.message.error.censoredWordsFound{/lang}
+						{elseif $errorType == 'disallowedBBCodes'}
+							{lang}wcf.message.error.disallowedBBCodes{/lang}
+						{else}
+							{lang}wcf.conversation.message.error.{@$errorType}{/lang}
+						{/if}
+					</small>
+				{/if}
+			</dd>
+		</dl>
 		
-		{event name='fieldsets'}
-	</div>
+		{event name='messageFields'}
+	</section>
+	
+	{include file='messageFormTabs' wysiwygContainerID='text'}
+	
+	{event name='sections'}
 	
 	<div class="formSubmit">
 		<input type="submit" value="{lang}wcf.global.button.submit{/lang}" accesskey="s" />
@@ -83,23 +81,21 @@
 	</div>
 </form>
 
-<header class="boxHeadline boxSubHeadline">
-	<h2>{lang}wcf.conversation.message.add.previousPosts{/lang}{if $items != 1} <span class="badge">{#$items}</span>{/if}</h2>
-</header>
+<section class="section sectionContainerList">
+	<h2 class="sectionTitle">{lang}wcf.conversation.message.add.previousPosts{/lang}{if $items != 1} <span class="badge">{#$items}</span>{/if}</h2>
 
-<div>
 	<ul class="messageList">
 		{foreach from=$messages item=message}
 			{assign var='objectID' value=$message->messageID}
 			
-			<li class="marginTop">
+			<li>
 				<article class="message messageReduced{if $message->getUserProfile()->userOnlineGroupID} userOnlineGroupMarking{@$message->getUserProfile()->userOnlineGroupID}{/if}" data-object-id="{@$message->messageID}">
 					<div>
 						<section class="messageContent">
 							<div>
 								<header class="messageHeader">
 									<div class="box32">
-										<a href="{link controller='User' object=$message->getUserProfile()}{/link}" class="framed">{@$message->getUserProfile()->getAvatar()->getImageTag(32)}</a>
+										<a href="{link controller='User' object=$message->getUserProfile()}{/link}">{@$message->getUserProfile()->getAvatar()->getImageTag(32)}</a>
 										
 										<div class="messageHeadline">
 											<p>
@@ -121,7 +117,7 @@
 									
 									<footer class="messageOptions">
 										<nav class="jsMobileNavigation buttonGroupNavigation">
-											<ul class="smallButtons buttonGroup"><li class="toTopLink"><a href="{$__wcf->getAnchor('top')}" title="{lang}wcf.global.scrollUp{/lang}" class="button jsTooltip"><span class="icon icon16 icon-arrow-up"></span> <span class="invisible">{lang}wcf.global.scrollUp{/lang}</span></a></li></ul>
+											<ul class="smallButtons buttonGroup"><li class="toTopLink"><a href="{$__wcf->getAnchor('top')}" title="{lang}wcf.global.scrollUp{/lang}" class="button jsTooltip"><span class="icon icon16 fa-arrow-up"></span> <span class="invisible">{lang}wcf.global.scrollUp{/lang}</span></a></li></ul>
 										</nav>
 									</footer>
 								</div>
@@ -132,7 +128,7 @@
 			</li>
 		{/foreach}
 	</ul>
-</div>
+</section>
 
 {include file='footer'}
 {include file='wysiwyg'}
