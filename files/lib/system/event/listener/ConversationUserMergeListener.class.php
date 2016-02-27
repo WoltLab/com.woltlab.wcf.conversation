@@ -18,10 +18,14 @@ class ConversationUserMergeListener extends AbstractUserMergeListener {
 	protected $databaseTables = [
 		'wcf{WCF_N}_conversation',
 		'wcf{WCF_N}_conversation_message',
-		'wcf{WCF_N}_conversation_label',
+		[
+			'name' => 'wcf{WCF_N}_conversation_label',
+			'username' => null
+		],
 		[
 			'name' => 'wcf{WCF_N}_conversation_to_user',
 			'userID' => 'participantID',
+			'username' => null,
 			'ignore' => true
 		]
 	];
