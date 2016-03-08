@@ -1,33 +1,6 @@
-#conversationLabelFilter {
-	margin-bottom: $wcfGapMedium;
-}
-
-.conversationLabelList {
-	margin-bottom: $wcfGapMedium;
-	
-	li:not(:last-child) {
-		margin-bottom: $wcfGapTiny;
-	}
-	
-	&~small {
-		display: block;
-	}
-}
-
-#unreadConversations .dropdownMenu > li {
-	h3 {
-		max-width: 250px;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-}
-
+/* list of participants */
 .conversationParticipantList {
 	> li {
-		.inlineDataList {
-			@extend .wcfFontSmall;
-		}
-		
 		&.conversationLeft > div {
 			> a > img,
 			> span > img {
@@ -37,18 +10,18 @@
 	}
 }
 
+/* participant left status */
 .conversationLeft .userLink,
 .conversationLeft.userLink,
 .conversationLeft p > span {
 	text-decoration: line-through;
 }
 
+/* quota usage display */
 .sidebar .box.conversationQuota .boxContent {
 	text-align: center;
 }
-
 .conversationUsageBar {
-	// TODO: background-color: $wcfColor;
 	border-radius: 5px;
 	box-shadow: inset 0 1px 5px rgba(0, 0, 0, .5), 0 1px 0 rgba(255, 255, 255, .5);
 	height: 20px;
@@ -72,35 +45,3 @@
 	}
 }
 
-.conversationFolderList > li > a > span {
-	float: right;
-}
-
-/*@todo
-@media only screen and (max-width: 800px) {
-	.conversationList {
-		thead {
-			display: none;
-		}
-		
-		tbody {
-			.columnMark,
-			.columnReplies,
-			.columnParticipants,
-			.columnLastPost,
-			.conversationParticipantSummary,
-			.columnSubject .statusDisplay {
-				display: none;
-			}
-		}
-	}
-}
-
-@media only screen and (max-width: 1239px) {
-	.conversationList {
-		thead .columnParticipants,
-		tbody .columnParticipants {
-			display: none;
-		}
-	}
-}*/

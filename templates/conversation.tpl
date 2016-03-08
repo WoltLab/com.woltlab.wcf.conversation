@@ -51,44 +51,50 @@
 
 {include file='header'}
 
-<header class="contentHeader">
-	<h1 class="contentTitle"><a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a></h1>
+<header class="contentHeader box64">
+	<div class="contentHeaderIcon">
+		{@$conversation->getUserProfile()->getAvatar()->getImageTag(64)}
+	</div>
 	
-	<ul class="inlineList contentHeaderMetaData">
-		{hascontent}
-			<li>
-				<span class="icon icon16 fa-tags"></span>
-				<ul class="labelList">
-					{content}
-						{foreach from=$conversation->getAssignedLabels() item=label}
-							<li><span class="label badge{if $label->cssClassName} {$label->cssClassName}{/if}">{lang}{$label->label}{/lang}</span></li>
-						{/foreach}
-					{/content}
-				</ul>
-			</li>
-		{/hascontent}
+	<div>
+		<h1 class="contentTitle"><a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a></h1>
 		
-		<li>
-			<span class="icon icon16 fa-user"></span>
-			{if $conversation->userID}
-				<a href="{link controller='User' object=$conversation->getUserProfile()->getDecoratedObject()}{/link}" class="userLink" data-user-id="{@$conversation->userID}">{$conversation->username}</a>
-			{else}
-				{$conversation->username}
+		<ul class="inlineList contentHeaderMetaData">
+			{hascontent}
+				<li>
+					<span class="icon icon16 fa-tags"></span>
+					<ul class="labelList">
+						{content}
+							{foreach from=$conversation->getAssignedLabels() item=label}
+								<li><span class="label badge{if $label->cssClassName} {$label->cssClassName}{/if}">{lang}{$label->label}{/lang}</span></li>
+							{/foreach}
+						{/content}
+					</ul>
+				</li>
+			{/hascontent}
+			
+			<li>
+				<span class="icon icon16 fa-user"></span>
+				{if $conversation->userID}
+					<a href="{link controller='User' object=$conversation->getUserProfile()->getDecoratedObject()}{/link}" class="userLink" data-user-id="{@$conversation->userID}">{$conversation->username}</a>
+				{else}
+					{$conversation->username}
+				{/if}
+			</li>
+			
+			<li>
+				<span class="icon icon16 fa-clock-o"></span>
+				{@$conversation->time|time}
+			</li>
+			
+			{if $conversation->isClosed}
+				<li>
+					<span class="icon icon16 fa-lock jsIconLock"></span>
+					{lang}wcf.global.state.closed{/lang}
+				</li>
 			{/if}
-		</li>
-		
-		<li>
-			<span class="icon icon16 fa-clock-o"></span>
-			{@$conversation->time|time}
-		</li>
-		
-		{if $conversation->isClosed}
-			<li>
-				<span class="icon icon16 fa-lock jsIconLock"></span>
-				{lang}wcf.global.state.closed{/lang}
-			</li>
-		{/if}
-	</ul>
+		</ul>
+	</div>
 </header>
 
 {include file='userNotice'}
@@ -110,7 +116,7 @@
 									<a href="#" class="jsDeleteButton jsTooltip jsOnly" title="{lang}wcf.conversation.participants.removeParticipant{/lang}" data-confirm-message="{lang}wcf.conversation.participants.removeParticipant.confirmMessage{/lang}" data-object-id="{@$participant->userID}"><span class="icon icon16 fa-times"></span></a>
 								{/if}
 							</p>
-							<dl class="plain inlineDataList">
+							<dl class="plain inlineDataList small">
 								<dt>{lang}wcf.conversation.lastVisitTime{/lang}</dt>
 								<dd>{if $participant->lastVisitTime}{@$participant->lastVisitTime|time}{else}-{/if}</dd>
 							</dl>

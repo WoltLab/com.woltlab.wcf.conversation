@@ -89,40 +89,35 @@
 			{assign var='objectID' value=$message->messageID}
 			
 			<li>
-				<article class="message messageReduced{if $message->getUserProfile()->userOnlineGroupID} userOnlineGroupMarking{@$message->getUserProfile()->userOnlineGroupID}{/if}" data-object-id="{@$message->messageID}">
-					<div>
-						<section class="messageContent">
-							<div>
-								<header class="messageHeader">
-									<div class="box32">
-										<a href="{link controller='User' object=$message->getUserProfile()}{/link}">{@$message->getUserProfile()->getAvatar()->getImageTag(32)}</a>
-										
-										<div class="messageHeadline">
-											<p>
-												<span class="username"><a href="{link controller='User' object=$message->getUserProfile()}{/link}" class="userLink" data-user-id="{@$message->userID}">{$message->username}</a></span>
-												<a href="{link controller='Conversation' object=$conversation}messageID={@$message->messageID}{/link}#message{@$message->messageID}" class="permalink">{@$message->time|time}</a>
-											</p>
-										</div>
-									</div>
-								</header>
+				<article class="message{if $message->getUserProfile()->userOnlineGroupID} userOnlineGroupMarking{@$message->getUserProfile()->userOnlineGroupID}{/if}" data-object-id="{@$message->messageID}">
+					<div class="messageContent">
+						<header class="messageHeader">
+							<div class="box32 messageHeaderWrapper">
+								<a href="{link controller='User' object=$message->getUserProfile()}{/link}">{@$message->getUserProfile()->getAvatar()->getImageTag(32)}</a>
 								
-								<div class="messageBody">
-									<div>
-										<div class="messageText">
-											{@$message->getFormattedMessage()}
-										</div>
-									</div>
+								<div class="messageHeaderBox">
+									<h2 class="messageTitle username"><a href="{link controller='User' object=$message->getUserProfile()}{/link}" class="userLink" data-user-id="{@$message->userID}">{$message->username}</a></h2>
 									
-									{include file='attachments'}
-									
-									<footer class="messageOptions">
-										<nav class="jsMobileNavigation buttonGroupNavigation">
-											<ul class="smallButtons buttonGroup"><li class="toTopLink"><a href="{$__wcf->getAnchor('top')}" title="{lang}wcf.global.scrollUp{/lang}" class="button jsTooltip"><span class="icon icon16 fa-arrow-up"></span> <span class="invisible">{lang}wcf.global.scrollUp{/lang}</span></a></li></ul>
-										</nav>
-									</footer>
+									<ul class="messageHeaderMetaData">
+										<li><a href="{link controller='Conversation' object=$conversation}messageID={@$message->messageID}{/link}#message{@$message->messageID}" class="permalink messagePublicationTime">{@$message->time|time}</a></li>
+											
+										{event name='messageHeaderMetaData'}
+									</ul>
 								</div>
 							</div>
-						</section>
+							
+							{event name='messageHeader'}
+						</header>
+						
+						<div class="messageBody">
+							{event name='beforeMessageText'}
+							
+							<div class="messageText">
+								{@$message->getFormattedMessage()}
+							</div>
+							
+							{event name='afterMessageText'}
+						</div>
 					</div>
 				</article>
 			</li>

@@ -55,12 +55,26 @@
 		
 		<div class="boxContent">
 			<nav>
-				<ul class="conversationFolderList">
-					<li{if $filter == ''} class="active"{/if}><a href="{link controller='ConversationList'}{/link}">{lang}wcf.conversation.conversations{/lang}{if $conversationCount} <span class="badge">{#$conversationCount}</span>{/if}</a></li>
-					<li{if $filter == 'draft'} class="active"{/if}><a href="{link controller='ConversationList'}filter=draft{/link}">{lang}wcf.conversation.folder.draft{/lang}{if $draftCount} <span class="badge">{#$draftCount}</span>{/if}</a></li>
-					<li{if $filter == 'outbox'} class="active"{/if}><a href="{link controller='ConversationList'}filter=outbox{/link}">{lang}wcf.conversation.folder.outbox{/lang}{if $outboxCount} <span class="badge">{#$outboxCount}</span>{/if}</a></li>
-					<li{if $filter == 'hidden'} class="active"{/if}><a href="{link controller='ConversationList'}filter=hidden{/link}">{lang}wcf.conversation.folder.hidden{/lang}{if $hiddenCount} <span class="badge">{#$hiddenCount}</span>{/if}</a></li>
-				</ul>
+				<ol class="boxMenu">
+					<li{if $filter == ''} class="active"{/if}>
+						<a class="boxMenuLink" href="{link controller='ConversationList'}{/link}"><span class="boxMenuLinkTitle">{lang}wcf.conversation.conversations{/lang}</span>{if $conversationCount} <span class="badge">{#$conversationCount}</span>{/if}</a>
+						
+						<ol class="boxMenuDepth1">
+							<li><a class="boxMenuLink" href="{link controller='ConversationList'}{/link}"><span class="boxMenuLinkTitle">{lang}wcf.conversation.conversations{/lang}</span>{if $conversationCount} <span class="badge">{#$conversationCount}</span>{/if}</a></li>
+							<li><a class="boxMenuLink" href="{link controller='ConversationList'}{/link}"><span class="boxMenuLinkTitle">{lang}wcf.conversation.conversations{/lang}</span>{if $conversationCount} <span class="badge">{#$conversationCount}</span>{/if}</a></li>
+							<li><a class="boxMenuLink" href="{link controller='ConversationList'}{/link}"><span class="boxMenuLinkTitle">{lang}wcf.conversation.conversations{/lang}</span>{if $conversationCount} <span class="badge">{#$conversationCount}</span>{/if}</a></li>
+						</ol>
+					</li>
+					<li{if $filter == 'draft'} class="active"{/if}>
+						<a class="boxMenuLink" href="{link controller='ConversationList'}filter=draft{/link}"><span class="boxMenuLinkTitle">{lang}wcf.conversation.folder.draft{/lang}</span>{if $draftCount} <span class="badge">{#$draftCount}</span>{/if}</a>
+					</li>
+					<li{if $filter == 'outbox'} class="active"{/if}>
+						<a class="boxMenuLink" href="{link controller='ConversationList'}filter=outbox{/link}"><span class="boxMenuLinkTitle">{lang}wcf.conversation.folder.outbox{/lang}</span>{if $outboxCount} <span class="badge">{#$outboxCount}</span>{/if}</a>
+					</li>
+					<li{if $filter == 'hidden'} class="active"{/if}>
+						<a class="boxMenuLink" href="{link controller='ConversationList'}filter=hidden{/link}"><span class="boxMenuLinkTitle">{lang}wcf.conversation.folder.hidden{/lang}</span>{if $hiddenCount} <span class="badge">{#$hiddenCount}</span>{/if}</a>
+					</li>
+				</ol>
 			</nav>
 		</div>
 	</section>
@@ -94,9 +108,11 @@
 					</ul>
 				</div>
 			</div>
-			
-			<button id="manageLabel">{lang}wcf.conversation.label.management{/lang}</button>
 		</div>
+		
+		<div class="boxContent">
+			<button id="manageLabel">{lang}wcf.conversation.label.management{/lang}</button>
+		</div>	
 	</section>
 	
 	{event name='beforeQuotaBox'}
