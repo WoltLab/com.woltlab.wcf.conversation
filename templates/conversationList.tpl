@@ -58,12 +58,6 @@
 				<ol class="boxMenu">
 					<li{if $filter == ''} class="active"{/if}>
 						<a class="boxMenuLink" href="{link controller='ConversationList'}{/link}"><span class="boxMenuLinkTitle">{lang}wcf.conversation.conversations{/lang}</span>{if $conversationCount} <span class="badge">{#$conversationCount}</span>{/if}</a>
-						
-						<ol class="boxMenuDepth1">
-							<li><a class="boxMenuLink" href="{link controller='ConversationList'}{/link}"><span class="boxMenuLinkTitle">{lang}wcf.conversation.conversations{/lang}</span>{if $conversationCount} <span class="badge">{#$conversationCount}</span>{/if}</a></li>
-							<li><a class="boxMenuLink" href="{link controller='ConversationList'}{/link}"><span class="boxMenuLinkTitle">{lang}wcf.conversation.conversations{/lang}</span>{if $conversationCount} <span class="badge">{#$conversationCount}</span>{/if}</a></li>
-							<li><a class="boxMenuLink" href="{link controller='ConversationList'}{/link}"><span class="boxMenuLinkTitle">{lang}wcf.conversation.conversations{/lang}</span>{if $conversationCount} <span class="badge">{#$conversationCount}</span>{/if}</a></li>
-						</ol>
 					</li>
 					<li{if $filter == 'draft'} class="active"{/if}>
 						<a class="boxMenuLink" href="{link controller='ConversationList'}filter=draft{/link}"><span class="boxMenuLinkTitle">{lang}wcf.conversation.folder.draft{/lang}</span>{if $draftCount} <span class="badge">{#$draftCount}</span>{/if}</a>
