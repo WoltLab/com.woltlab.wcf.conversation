@@ -1,21 +1,21 @@
 {hascontent}
-	<fieldset>
-		<legend>{lang}wcf.conversation.label.management.existingLabels{/lang}</legend>
-	</fieldset>
-	
-	<ul class="conversationLabelList">
-		{content}
-			{foreach from=$labelList item=label}
-				<li><a class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}" data-label-id="{@$label->labelID}" data-css-class-name="{if $label->cssClassName}{@$label->cssClassName}{else}none{/if}">{$label->label}</a></li>
-			{/foreach}
-		{/content}
-	</ul>
-	
-	<small>{lang}wcf.conversation.label.management.edit.description{/lang}</small>
+	<section class="section">
+		<header class="sectionHeader">
+			<h2 class="sectionTitle">{lang}wcf.conversation.label.management.existingLabels{/lang}</h2>
+			<small class="sectionDescription">{lang}wcf.conversation.label.management.edit.description{/lang}</small>
+		</header>
+		<ul class="conversationLabelList">
+			{content}
+				{foreach from=$labelList item=label}
+					<li><a class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}" data-label-id="{@$label->labelID}" data-css-class-name="{if $label->cssClassName}{@$label->cssClassName}{else}none{/if}">{$label->label}</a></li>
+				{/foreach}
+			{/content}
+		</ul>
+	</section>
 {/hascontent}
 
-<fieldset id="conversationLabelManagementForm">
-	<legend>{lang}wcf.conversation.label.management.addLabel{/lang}</legend>
+<section class="section" id="conversationLabelManagementForm">
+	<h2 class="sectionTitle">{lang}wcf.conversation.label.management.addLabel{/lang}</h2>
 	
 	<dl>
 		<dt><label for="labelName">{lang}wcf.conversation.label.labelName{/lang}</label></dt>
@@ -40,4 +40,4 @@
 		<button id="editLabel" style="display: none;" class="buttonPrimary">{lang}wcf.global.button.save{/lang}</button>
 		<button id="deleteLabel" style="display: none;">{lang}wcf.conversation.label.management.deleteLabel{/lang}</button>
 	</div>
-</fieldset>
+</section>

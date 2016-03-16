@@ -111,6 +111,8 @@
 		<item name="wcf.conversation.ownPosts"><![CDATA[Conversation contains own messages]]></item>
 		<item name="wcf.conversation.gotoLastPost"><![CDATA[Jump to Last Message]]></item>
 		<item name="wcf.conversation.searchConversations"><![CDATA[Search Conversations]]></item>
+		<item name="wcf.conversation.searchConversation"><![CDATA[Search This Conversation Only]]></item>
+		<item name="wcf.conversation.searchedConversation"><![CDATA[Only search conversation <a href="{link controller='Conversation' object=$searchedConversation}{/link}">{$searchedConversation->getTitle()}</a>]]></item>
 		<item name="wcf.conversation.participants.other"><![CDATA[and {if $conversation->participants - $participantSummaryCount == 1}one other{else}{#$conversation->participants-$participantSummaryCount} others{/if}]]></item>
 		<item name="wcf.conversation.attachments"><![CDATA[Conversation contains {#$conversation->attachments} attachment{if $conversation->attachments != 1}s{/if}]]></item>
 		<item name="wcf.conversation.error.mailboxIsFull"><![CDATA[You have reached your maximum limit of conversations and are unable to start new ones.]]></item>

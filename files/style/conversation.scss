@@ -1,0 +1,47 @@
+/* list of participants */
+.conversationParticipantList {
+	> li {
+		&.conversationLeft > div {
+			> a > img,
+			> span > img {
+				@extend .grayscale;
+			}
+		}
+	}
+}
+
+/* participant left status */
+.conversationLeft .userLink,
+.conversationLeft.userLink,
+.conversationLeft p > span {
+	text-decoration: line-through;
+}
+
+/* quota usage display */
+.sidebar .box.conversationQuota .boxContent {
+	text-align: center;
+}
+.conversationUsageBar {
+	border-radius: 5px;
+	box-shadow: inset 0 1px 5px rgba(0, 0, 0, .5), 0 1px 0 rgba(255, 255, 255, .5);
+	height: 20px;
+	padding: 4px;
+	
+	> span {
+		background-image: linear-gradient(rgba(165, 223, 65, 1), rgba(76, 169, 22, 1));
+		border-radius: 3px;
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5);
+		color: transparent;
+		display: block;
+		height: 100%;
+	}
+	
+	&.yellow > span {
+		background-image: linear-gradient(rgba(254, 207, 35, 1), rgba(253, 146, 21, 1));
+	}
+	
+	&.red > span {
+		background-image: linear-gradient(rgba(240, 163, 163, 1), rgba(244, 35, 35, 1));
+	}
+}
+

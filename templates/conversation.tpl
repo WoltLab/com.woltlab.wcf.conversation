@@ -35,7 +35,7 @@
 			
 			new WCF.Conversation.Message.InlineEditor({@$conversation->conversationID}, $quoteManager);
 			new WCF.Conversation.Message.QuoteHandler($quoteManager);
-			{if !$conversation->isClosed}new WCF.Conversation.QuickReply($quoteManager);{/if}
+			{* if !$conversation->isClosed}new WCF.Conversation.QuickReply($quoteManager);{/if *}
 			
 			{if $__wcf->session->getPermission('user.profile.canReportContent')}
 				new WCF.Moderation.Report.Content('com.woltlab.wcf.conversation.message', '.jsReportConversationMessage');
@@ -51,53 +51,81 @@
 
 {include file='header'}
 
-<header class="boxHeadline marginTop conversationHeadline labeledHeadline">
-	<h1><a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a>{if $conversation->isClosed} <span class="icon icon16 icon-lock jsTooltip jsIconLock" title="{lang}wcf.global.state.closed{/lang}"></span>{/if}</h1>
+<header class="contentHeader box64">
+	<div class="contentHeaderIcon">
+		{@$conversation->getUserProfile()->getAvatar()->getImageTag(64)}
+	</div>
 	
-	{hascontent}
-		<ul class="labelList">
-			{content}
-				{foreach from=$conversation->getAssignedLabels() item=label}
-					<li><span class="label badge{if $label->cssClassName} {$label->cssClassName}{/if}">{lang}{$label->label}{/lang}</span></li>
-				{/foreach}
-			{/content}
+	<div>
+		<h1 class="contentTitle"><a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a></h1>
+		
+		<ul class="inlineList contentHeaderMetaData">
+			{hascontent}
+				<li>
+					<span class="icon icon16 fa-tags"></span>
+					<ul class="labelList">
+						{content}
+							{foreach from=$conversation->getAssignedLabels() item=label}
+								<li><span class="label badge{if $label->cssClassName} {$label->cssClassName}{/if}">{lang}{$label->label}{/lang}</span></li>
+							{/foreach}
+						{/content}
+					</ul>
+				</li>
+			{/hascontent}
+			
+			<li>
+				<span class="icon icon16 fa-user"></span>
+				{if $conversation->userID}
+					<a href="{link controller='User' object=$conversation->getUserProfile()->getDecoratedObject()}{/link}" class="userLink" data-user-id="{@$conversation->userID}">{$conversation->username}</a>
+				{else}
+					{$conversation->username}
+				{/if}
+			</li>
+			
+			<li>
+				<span class="icon icon16 fa-clock-o"></span>
+				{@$conversation->time|time}
+			</li>
+			
+			{if $conversation->isClosed}
+				<li>
+					<span class="icon icon16 fa-lock jsIconLock"></span>
+					{lang}wcf.global.state.closed{/lang}
+				</li>
+			{/if}
 		</ul>
-	{/hascontent}
-	
-	{event name='headlineData'}
+	</div>
 </header>
 
 {include file='userNotice'}
 
 {if !$conversation->isDraft}
-	<div class="container containerPadding marginTop">
-		<fieldset>
-			<legend>{lang}wcf.conversation.participants{/lang}</legend>
-			
-			<ul class="containerBoxList tripleColumned conversationParticipantList">
-				{foreach from=$participants item=participant}
-					<li class="jsParticipant{if !$participant->userID || $participant->hideConversation == 2} conversationLeft{/if}">
-						<div class="box24">
-							{if $participant->userID}<a href="{link controller='User' object=$participant}{/link}" class="framed">{@$participant->getAvatar()->getImageTag(24)}</a>{else}<span class="framed">{@$participant->getAvatar()->getImageTag(24)}</span>{/if}
-							<div>
-								<p>
-									{if $participant->userID}<a href="{link controller='User' object=$participant}{/link}" class="userLink" data-user-id="{@$participant->userID}">{$participant->username}</a>{else}<span>{$participant->username}</span>{/if}
-									{if $participant->isInvisible}<small>({lang}wcf.conversation.invisible{/lang})</small>{/if}
-									{if $participant->userID && ($conversation->userID == $__wcf->getUser()->userID) && ($participant->userID != $__wcf->getUser()->userID) && $participant->hideConversation != 2}
-										<a href="#" class="jsDeleteButton jsTooltip jsOnly" title="{lang}wcf.conversation.participants.removeParticipant{/lang}" data-confirm-message="{lang}wcf.conversation.participants.removeParticipant.confirmMessage{/lang}" data-object-id="{@$participant->userID}"><span class="icon icon16 icon-remove"></span></a>
-									{/if}
-								</p>
-								<dl class="plain inlineDataList">
-									<dt>{lang}wcf.conversation.lastVisitTime{/lang}</dt>
-									<dd>{if $participant->lastVisitTime}{@$participant->lastVisitTime|time}{else}-{/if}</dd>
-								</dl>
-							</div>
+	<section class="section">
+		<h2 class="sectionTitle">{lang}wcf.conversation.participants{/lang}</h2>
+		
+		<ul class="containerBoxList tripleColumned conversationParticipantList">
+			{foreach from=$participants item=participant}
+				<li class="jsParticipant{if !$participant->userID || $participant->hideConversation == 2} conversationLeft{/if}">
+					<div class="box24">
+						{if $participant->userID}<a href="{link controller='User' object=$participant}{/link}">{@$participant->getAvatar()->getImageTag(24)}</a>{else}<span>{@$participant->getAvatar()->getImageTag(24)}</span>{/if}
+						<div>
+							<p>
+								{if $participant->userID}<a href="{link controller='User' object=$participant}{/link}" class="userLink" data-user-id="{@$participant->userID}">{$participant->username}</a>{else}<span>{$participant->username}</span>{/if}
+								{if $participant->isInvisible}<small>({lang}wcf.conversation.invisible{/lang})</small>{/if}
+								{if $participant->userID && ($conversation->userID == $__wcf->getUser()->userID) && ($participant->userID != $__wcf->getUser()->userID) && $participant->hideConversation != 2}
+									<a href="#" class="jsDeleteButton jsTooltip jsOnly" title="{lang}wcf.conversation.participants.removeParticipant{/lang}" data-confirm-message="{lang}wcf.conversation.participants.removeParticipant.confirmMessage{/lang}" data-object-id="{@$participant->userID}"><span class="icon icon16 fa-times"></span></a>
+								{/if}
+							</p>
+							<dl class="plain inlineDataList small">
+								<dt>{lang}wcf.conversation.lastVisitTime{/lang}</dt>
+								<dd>{if $participant->lastVisitTime}{@$participant->lastVisitTime|time}{else}-{/if}</dd>
+							</dl>
 						</div>
-					</li>
-				{/foreach}
-			</ul>
-		</fieldset>
-	</div>
+					</div>
+				</li>
+			{/foreach}
+		</ul>
+	</section>
 {/if}
 
 <div class="contentNavigation">
@@ -105,14 +133,14 @@
 	
 	<nav>
 		<ul class="conversation jsConversationInlineEditorContainer" data-conversation-id="{@$conversation->conversationID}" data-label-ids="[ {implode from=$conversation->getAssignedLabels() item=label}{@$label->labelID}{/implode} ]" data-is-closed="{@$conversation->isClosed}" data-can-close-conversation="{if $conversation->userID == $__wcf->getUser()->userID}1{else}0{/if}" data-can-add-participants="{if $conversation->canAddParticipants()}1{else}0{/if}">
-			<li class="jsOnly"><a href="#" class="button jsConversationInlineEditor"><span class="icon icon16 icon-pencil"></span> <span>{lang}wcf.global.button.edit{/lang}</span></a></li>
-			{if !$conversation->isClosed}<li><a href="{link controller='ConversationMessageAdd' id=$conversationID}{/link}" title="{lang}wcf.conversation.message.add{/lang}" class="button buttonPrimary jsQuickReply"><span class="icon icon16 icon-plus"></span> <span>{lang}wcf.conversation.message.button.add{/lang}</span></a></li>{/if}
+			<li class="jsOnly"><a href="#" class="button jsConversationInlineEditor"><span class="icon icon16 fa-pencil"></span> <span>{lang}wcf.global.button.edit{/lang}</span></a></li>
+			{if !$conversation->isClosed}<li><a href="{link controller='ConversationMessageAdd' id=$conversationID}{/link}" title="{lang}wcf.conversation.message.add{/lang}" class="button buttonPrimary jsQuickReply"><span class="icon icon16 fa-plus"></span> <span>{lang}wcf.conversation.message.button.add{/lang}</span></a></li>{/if}
 			{event name='contentNavigationButtonsTop'}
 		</ul>
 	</nav>
 </div>
 
-<div class="marginTop">
+<div class="section">
 	<ul class="messageList">
 		{include file='conversationMessageList'}
 		{if !$conversation->isClosed}{include file='conversationQuickReply'}{/if}
@@ -126,7 +154,6 @@
 		<nav>
 			<ul>
 				{content}
-					{if !$conversation->isClosed}<li><a href="{link controller='ConversationMessageAdd' id=$conversationID}{/link}" title="{lang}wcf.conversation.message.add{/lang}" class="button buttonPrimary jsQuickReply"><span class="icon icon16 icon-plus"></span> <span>{lang}wcf.conversation.message.button.add{/lang}</span></a></li>{/if}
 					{event name='contentNavigationButtonsBottom'}
 				{/content}
 			</ul>

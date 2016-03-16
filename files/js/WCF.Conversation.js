@@ -146,7 +146,7 @@ WCF.Conversation.EditorHandler = Class.extend({
 		
 		switch (key) {
 			case 'close':
-				$('<li><span class="icon icon16 icon-lock jsTooltip jsIconLock" title="' + WCF.Language.get('wcf.global.state.closed') + '" /></li>').prependTo($conversation.find('.statusIcons'));
+				$('<li><span class="icon icon16 fa-lock jsTooltip jsIconLock" title="' + WCF.Language.get('wcf.global.state.closed') + '" /></li>').prependTo($conversation.find('.statusIcons'));
 				
 				this._attributes[conversationID].isClosed = 1;
 			break;
@@ -243,7 +243,7 @@ WCF.Conversation.EditorHandlerConversation = WCF.Conversation.EditorHandler.exte
 		
 		switch (key) {
 			case 'close':
-				$('<span class="icon icon16 icon-lock jsTooltip jsIconLock" title="' + WCF.Language.get('wcf.global.state.closed') + '" />').appendTo($('#content > header > h1'));
+				$('<span class="icon icon16 fa-lock jsTooltip jsIconLock" title="' + WCF.Language.get('wcf.global.state.closed') + '" />').appendTo($('#content > header > h1'));
 				
 				this._attributes[conversationID].isClosed = 1;
 			break;
@@ -1280,33 +1280,6 @@ WCF.User.Panel.Conversation = WCF.User.Panel.Abstract.extend({
 			className: 'wcf\\data\\conversation\\ConversationAction'
 		});
 		this._proxy.sendRequest();
-	}
-});
-
-/**
- * Provides an AJAX-based quick reply for conversations.
- */
-WCF.Conversation.QuickReply = WCF.Message.QuickReply.extend({
-	/**
-	 * @see	WCF.Message.QuickReply.init()
-	 */
-	init: function(quoteManager) {
-		this._super(true, quoteManager);
-	},
-	
-	/**
-	 * @see	WCF.Message.QuickReply._getClassName()
-	 */
-	_getClassName: function() {
-		return 'wcf\\data\\conversation\\message\\ConversationMessageAction';
-	},
-	
-	/**
-	 * @see	WCF.Message.QuickReply._getObjectID()
-	 * @returns
-	 */
-	_getObjectID: function() {
-		return this._container.data('conversationID');
 	}
 });
 

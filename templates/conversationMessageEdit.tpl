@@ -30,8 +30,8 @@
 <body id="tpl{$templateName|ucfirst}" data-template="{$templateName}" data-application="{$templateNameApplication}">
 {include file='header'}
 
-<header class="boxHeadline">
-	<h1>{lang}wcf.conversation.message.edit{/lang}</h1>
+<header class="contentHeader">
+	<h1 class="contentTitle">{lang}wcf.conversation.message.edit{/lang}</h1>
 </header>
 
 {include file='userNotice'}
@@ -39,120 +39,118 @@
 {include file='formError'}
 
 <form id="messageContainer" class="jsFormGuard" method="post" action="{link controller='ConversationMessageEdit' id=$messageID}{/link}">
-	<div class="container containerPadding marginTop">
-		{if $isFirstMessage}
-			<fieldset>
-				<legend>{lang}wcf.conversation.information{/lang}</legend>
-				
-				<dl{if $errorField == 'subject'} class="formError"{/if}>
-					<dt><label for="subject">{lang}wcf.global.subject{/lang}</label></dt>
-					<dd>
-						<input type="text" id="subject" name="subject" value="{$subject}" required="required" maxlength="255" class="long" />
-						{if $errorField == 'subject'}
-							<small class="innerError">
-								{if $errorType == 'empty'}
-									{lang}wcf.global.form.error.empty{/lang}
-								{else}
-									{lang}wcf.conversation.subject.error.{@$errorType}{/lang}
-								{/if}
-							</small>
-						{/if}
-					</dd>
-				</dl>
-				
-				{event name='informationFields'}
-			</fieldset>
+	{if $isFirstMessage}
+		<section class="section">
+			<h2 class="sectionTitle">{lang}wcf.conversation.information{/lang}</h2>
 			
-			<fieldset>
-				<legend>{lang}wcf.conversation.participants{/lang}</legend>
-				
-				{if $conversation->isDraft}
-					<dl{if $errorField == 'participants'} class="formError"{/if}>
-						<dt><label for="participants">{lang}wcf.conversation.participants{/lang}</label></dt>
-						<dd>
-							<textarea id="participants" name="participants" class="long" cols="40" rows="2">{$participants}</textarea>
-							{if $errorField == 'participants'}
-								<small class="innerError">
-									{if $errorType == 'empty'}
-										{lang}wcf.global.form.error.empty{/lang}
-									{elseif $errorType|is_array}
-										{foreach from=$errorType item='errorData'}
-											{lang}wcf.conversation.participants.error.{@$errorData.type}{/lang}
-										{/foreach}
-									{else}
-										{lang}wcf.conversation.participants.error.{@$errorType}{/lang}
-									{/if}
-								</small>
-							{/if}
-							<small>{lang}wcf.conversation.participants.description{/lang}</small>
-						</dd>
-					</dl>
-					
-					<dl{if $errorField == 'invisibleParticipants'} class="formError"{/if}>
-						<dt><label for="invisibleParticipants">{lang}wcf.conversation.invisibleParticipants{/lang}</label></dt>
-						<dd>
-							<textarea id="invisibleParticipants" name="invisibleParticipants" class="long" cols="40" rows="2">{$invisibleParticipants}</textarea>
-							{if $errorField == 'invisibleParticipants'}
-								<small class="innerError">
-									{if $errorType == 'empty'}
-										{lang}wcf.global.form.error.empty{/lang}
-									{elseif $errorType|is_array}
-										{foreach from=$errorType item='errorData'}
-											{lang}wcf.conversation.participants.error.{@$errorData.type}{/lang}
-										{/foreach}
-									{else}
-										{lang}wcf.conversation.participants.error.{@$errorType}{/lang}
-									{/if}
-								</small>
-							{/if}
-							<small>{lang}wcf.conversation.invisibleParticipants.description{/lang}</small>
-						</dd>
-					</dl>
-				{/if}
-				
-				<dl>
-					<dt></dt>
-					<dd>
-						<label><input type="checkbox" name="participantCanInvite" id="participantCanInvite" value="1"{if $participantCanInvite} checked="checked"{/if} /> {lang}wcf.conversation.participantCanInvite{/lang}</label>
-					</dd>
-				</dl>
-				
-				{event name='participantFields'}
-			</fieldset>
-		{/if}
-		
-		<fieldset>
-			<legend>{lang}wcf.conversation.message{/lang}</legend>
-			
-			<dl class="wide{if $errorField == 'text'} formError{/if}">
-				<dt><label for="text">{lang}wcf.conversation.message{/lang}</label></dt>
+			<dl{if $errorField == 'subject'} class="formError"{/if}>
+				<dt><label for="subject">{lang}wcf.global.subject{/lang}</label></dt>
 				<dd>
-					<textarea id="text" name="text" rows="20" cols="40" data-autosave="com.woltlab.wcf.conversation.messageEdit-{@$message->messageID}">{$text}</textarea>
-					{if $errorField == 'text'}
+					<input type="text" id="subject" name="subject" value="{$subject}" required="required" maxlength="255" class="long" />
+					{if $errorField == 'subject'}
 						<small class="innerError">
 							{if $errorType == 'empty'}
 								{lang}wcf.global.form.error.empty{/lang}
-							{elseif $errorType == 'tooLong'}
-								{lang}wcf.message.error.tooLong{/lang}
-							{elseif $errorType == 'censoredWordsFound'}
-								{lang}wcf.message.error.censoredWordsFound{/lang}
-							{elseif $errorType == 'disallowedBBCodes'}
-								{lang}wcf.message.error.disallowedBBCodes{/lang}
 							{else}
-								{lang}wcf.conversation.message.error.{@$errorType}{/lang}
+								{lang}wcf.conversation.subject.error.{@$errorType}{/lang}
 							{/if}
 						</small>
 					{/if}
 				</dd>
 			</dl>
 			
-			{event name='messageFields'}
-		</fieldset>
+			{event name='informationFields'}
+		</section>
 		
-		{include file='messageFormTabs' wysiwygContainerID='text'}
+		<section class="section">
+			<h2 class="sectionTitle">{lang}wcf.conversation.participants{/lang}</h2>
+			
+			{if $conversation->isDraft}
+				<dl{if $errorField == 'participants'} class="formError"{/if}>
+					<dt><label for="participants">{lang}wcf.conversation.participants{/lang}</label></dt>
+					<dd>
+						<textarea id="participants" name="participants" class="long" cols="40" rows="2">{$participants}</textarea>
+						{if $errorField == 'participants'}
+							<small class="innerError">
+								{if $errorType == 'empty'}
+									{lang}wcf.global.form.error.empty{/lang}
+								{elseif $errorType|is_array}
+									{foreach from=$errorType item='errorData'}
+										{lang}wcf.conversation.participants.error.{@$errorData.type}{/lang}
+									{/foreach}
+								{else}
+									{lang}wcf.conversation.participants.error.{@$errorType}{/lang}
+								{/if}
+							</small>
+						{/if}
+						<small>{lang}wcf.conversation.participants.description{/lang}</small>
+					</dd>
+				</dl>
+				
+				<dl{if $errorField == 'invisibleParticipants'} class="formError"{/if}>
+					<dt><label for="invisibleParticipants">{lang}wcf.conversation.invisibleParticipants{/lang}</label></dt>
+					<dd>
+						<textarea id="invisibleParticipants" name="invisibleParticipants" class="long" cols="40" rows="2">{$invisibleParticipants}</textarea>
+						{if $errorField == 'invisibleParticipants'}
+							<small class="innerError">
+								{if $errorType == 'empty'}
+									{lang}wcf.global.form.error.empty{/lang}
+								{elseif $errorType|is_array}
+									{foreach from=$errorType item='errorData'}
+										{lang}wcf.conversation.participants.error.{@$errorData.type}{/lang}
+									{/foreach}
+								{else}
+									{lang}wcf.conversation.participants.error.{@$errorType}{/lang}
+								{/if}
+							</small>
+						{/if}
+						<small>{lang}wcf.conversation.invisibleParticipants.description{/lang}</small>
+					</dd>
+				</dl>
+			{/if}
+			
+			<dl>
+				<dt></dt>
+				<dd>
+					<label><input type="checkbox" name="participantCanInvite" id="participantCanInvite" value="1"{if $participantCanInvite} checked="checked"{/if} /> {lang}wcf.conversation.participantCanInvite{/lang}</label>
+				</dd>
+			</dl>
+			
+			{event name='participantFields'}
+		</section>
+	{/if}
+	
+	<section class="section">
+		<h2 class="sectionTitle">{lang}wcf.conversation.message{/lang}</h2>
 		
-		{event name='fieldsets'}
-	</div>
+		<dl class="wide{if $errorField == 'text'} formError{/if}">
+			<dt><label for="text">{lang}wcf.conversation.message{/lang}</label></dt>
+			<dd>
+				<textarea id="text" name="text" rows="20" cols="40" data-autosave="com.woltlab.wcf.conversation.messageEdit-{@$message->messageID}">{$text}</textarea>
+				{if $errorField == 'text'}
+					<small class="innerError">
+						{if $errorType == 'empty'}
+							{lang}wcf.global.form.error.empty{/lang}
+						{elseif $errorType == 'tooLong'}
+							{lang}wcf.message.error.tooLong{/lang}
+						{elseif $errorType == 'censoredWordsFound'}
+							{lang}wcf.message.error.censoredWordsFound{/lang}
+						{elseif $errorType == 'disallowedBBCodes'}
+							{lang}wcf.message.error.disallowedBBCodes{/lang}
+						{else}
+							{lang}wcf.conversation.message.error.{@$errorType}{/lang}
+						{/if}
+					</small>
+				{/if}
+			</dd>
+		</dl>
+		
+		{event name='messageFields'}
+	</section>
+	
+	{include file='messageFormTabs' wysiwygContainerID='text'}
+	
+	{event name='sections'}
 	
 	<div class="formSubmit">
 		<input type="submit" value="{lang}wcf.global.button.submit{/lang}" accesskey="s" />
@@ -163,56 +161,49 @@
 </form>
 
 {if $messages|count}
-	<header class="boxHeadline boxSubHeadline">
-		<h2>{lang}wcf.conversation.message.add.previousPosts{/lang}</h2>
-	</header>
+	<section class="section sectionContainerList">
+		<h2 class="sectionTitle">{lang}wcf.conversation.message.add.previousPosts{/lang}</h2>
 	
-	<div>
 		<ul class="messageList">
 			{foreach from=$messages item=message}
 				{assign var='objectID' value=$message->messageID}
 				
-				<li class="marginTop">
-					<article class="message messageReduced{if $message->getUserProfile()->userOnlineGroupID} userOnlineGroupMarking{@$message->getUserProfile()->userOnlineGroupID}{/if}">
-						<div>
-							<section class="messageContent">
-								<div>
-									<header class="messageHeader">
-										<div class="box32">
-											<a href="{link controller='User' object=$message->getUserProfile()}{/link}" class="framed">{@$message->getUserProfile()->getAvatar()->getImageTag(32)}</a>
-											
-											<div class="messageHeadline">
-												<p>
-													<span class="username"><a href="{link controller='User' object=$message->getUserProfile()}{/link}" class="userLink" data-user-id="{@$message->userID}">{$message->username}</a></span>
-													<a href="{link controller='Conversation' object=$conversation}messageID={@$message->messageID}{/link}#message{@$message->messageID}" class="permalink">{@$message->time|time}</a>
-												</p>
-											</div>
-										</div>
-									</header>
+				<li>
+					<article class="message{if $message->getUserProfile()->userOnlineGroupID} userOnlineGroupMarking{@$message->getUserProfile()->userOnlineGroupID}{/if}">
+						<div class="messageContent">
+							<header class="messageHeader">
+								<div class="box32 messageHeaderWrapper">
+									<a href="{link controller='User' object=$message->getUserProfile()}{/link}">{@$message->getUserProfile()->getAvatar()->getImageTag(32)}</a>
 									
-									<div class="messageBody">
-										<div>
-											<div class="messageText">
-												{@$message->getFormattedMessage()}
-											</div>
-										</div>
+									<div class="messageHeaderBox">
+										<h2 class="messageTitle username"><a href="{link controller='User' object=$message->getUserProfile()}{/link}" class="userLink" data-user-id="{@$message->userID}">{$message->username}</a></h2>
 										
-										{include file='attachments'}
-										
-										<footer class="messageOptions">
-											<nav class="jsMobileNavigation buttonGroupNavigation">
-												<ul class="smallButtons buttonGroup"><li class="toTopLink"><a href="{$__wcf->getAnchor('top')}" title="{lang}wcf.global.scrollUp{/lang}" class="button jsTooltip"><span class="icon icon16 icon-arrow-up"></span> <span class="invisible">{lang}wcf.global.scrollUp{/lang}</span></a></li></ul>
-											</nav>
-										</footer>
+										<ul class="messageHeaderMetaData">
+											<li><a href="{link controller='Conversation' object=$conversation}messageID={@$message->messageID}{/link}#message{@$message->messageID}" class="permalink messagePublicationTime">{@$message->time|time}</a></li>
+											
+											{event name='messageHeaderMetaData'}
+										</ul>
 									</div>
 								</div>
-							</section>
+								
+								{event name='messageHeader'}
+							</header>
+							
+							<div class="messageBody">
+								{event name='beforeMessageText'}
+								
+								<div class="messageText">
+									{@$message->getFormattedMessage()}
+								</div>
+								
+								{event name='afterMessageText'}
+							</div>
 						</div>
 					</article>
 				</li>
 			{/foreach}
 		</ul>
-	</div>
+	</section>
 {/if}
 
 {include file='footer'}
