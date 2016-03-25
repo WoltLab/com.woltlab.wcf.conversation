@@ -1,7 +1,6 @@
 <?php
 namespace wcf\system\user\notification\event;
 use wcf\system\request\LinkHandler;
-use wcf\system\user\notification\event\AbstractUserNotificationEvent;
 
 /**
  * User notification event for conversations.
