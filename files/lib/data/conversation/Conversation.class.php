@@ -18,20 +18,38 @@ use wcf\util\ArrayUtil;
  * Represents a conversation.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation
  * @category	Community Framework
+ * 
+ * @property-read	integer		$conversationID
+ * @property-read	string		$subject
+ * @property-read	integer		$time
+ * @property-read	integer		$firstMessageID
+ * @property-read	integer|null	$userID
+ * @property-read	string		$username
+ * @property-read	integer		$lastPostTime
+ * @property-read	integer|null	$lastPosterID
+ * @property-read	string		$lastPoster
+ * @property-read	integer		$replies
+ * @property-read	integer		$attachments
+ * @property-read	integer		$participants
+ * @property-read	string		$participantSummary
+ * @property-read	integer		$participantCanInvite
+ * @property-read	integer		$isClosed
+ * @property-read	integer		$isDraft
+ * @property-read	string		$draftData
  */
 class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRouteController {
 	/**
-	 * @see	\wcf\data\DatabaseObject::$databaseTableName
+	 * @inheritDoc
 	 */
 	protected static $databaseTableName = 'conversation';
 	
 	/**
-	 * @see	\wcf\data\DatabaseObject::$databaseIndexName
+	 * @inheritDoc
 	 */
 	protected static $databaseTableIndexName = 'conversationID';
 	
@@ -55,24 +73,24 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	
 	/**
 	 * first message object
-	 * @var	\wcf\data\conversation\message\ConversationMessage
+	 * @var	ConversationMessage
 	 */
 	protected $firstMessage = null;
 	
 	/**
-	 * @see	\wcf\system\request\IRouteController::getTitle()
+	 * @inheritDoc
 	 */
 	public function getTitle() {
 		return $this->subject;
 	}
 	
 	/**
-	 * @see	\wcf\system\breadcrumb\IBreadcrumbProvider::getBreadcrumb()
+	 * @inheritDoc
 	 */
 	public function getBreadcrumb() {
-		return new Breadcrumb($this->subject, LinkHandler::getInstance()->getLink('Conversation', array(
+		return new Breadcrumb($this->subject, LinkHandler::getInstance()->getLink('Conversation', [
 			'object' => $this
-		)));
+		]));
 	}
 	
 	/**
@@ -91,7 +109,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	/**
 	 * Returns true if the active user doesn't have read the given message.
 	 * 
-	 * @param	\wcf\data\conversation\message\ConversationMessage	$message
+	 * @param	ConversationMessage	$message
 	 * @return	boolean
 	 */
 	public function isNewMessage(ConversationMessage $message) {
@@ -104,7 +122,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	
 	/**
 	 * Loads participation data for given user id (default: current user) on runtime.
-	 * You should use \wcf\data\conversation\Conversation::getUserConversation() instead if possible.
+	 * You should use Conversation::getUserConversation() instead if possible.
 	 *
 	 * @param	integer		$userID
 	 */
@@ -118,7 +136,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 			WHERE	participantID = ?
 				AND conversationID = ?";
 		$statement = WCF::getDB()->prepareStatement($sql);
-		$statement->execute(array($userID, $this->conversationID));
+		$statement->execute([$userID, $this->conversationID]);
 		$row = $statement->fetchArray();
 		if ($row !== false) {
 			$this->data = array_merge($this->data, $row);
@@ -130,7 +148,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	 * 
 	 * @param	integer		$conversationID
 	 * @param	integer		$userID
-	 * @return	\wcf\data\conversation\Conversation
+	 * @return	Conversation
 	 */
 	public static function getUserConversation($conversationID, $userID) {
 		$sql = "SELECT		conversation_to_user.*, conversation.*
@@ -139,7 +157,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 			ON		(conversation_to_user.participantID = ? AND conversation_to_user.conversationID = conversation.conversationID)
 			WHERE		conversation.conversationID = ?";
 		$statement = WCF::getDB()->prepareStatement($sql);
-		$statement->execute(array($userID, $conversationID));
+		$statement->execute([$userID, $conversationID]);
 		$row = $statement->fetchArray();
 		if ($row !== false) {
 			return new Conversation(null, $row);
@@ -151,13 +169,13 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	/**
 	 * Returns a list of user conversations.
 	 * 
-	 * @param	array<integer>		$conversationIDs
+	 * @param	integer[]		$conversationIDs
 	 * @param	integer			$userID
-	 * @return	array<\wcf\data\conversation\Conversation>
+	 * @return	Conversation[]
 	 */
 	public static function getUserConversations(array $conversationIDs, $userID) {
 		$conditionBuilder = new PreparedStatementConditionBuilder();
-		$conditionBuilder->add('conversation.conversationID IN (?)', array($conversationIDs));
+		$conditionBuilder->add('conversation.conversationID IN (?)', [$conversationIDs]);
 		$sql = "SELECT		conversation_to_user.*, conversation.*
 			FROM		wcf".WCF_N."_conversation conversation
 			LEFT JOIN	wcf".WCF_N."_conversation_to_user conversation_to_user
@@ -165,11 +183,11 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 			".$conditionBuilder;
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute($conditionBuilder->getParameters());
-		$conversations = array();
+		$conversations = [];
 		while ($row = $statement->fetchArray()) {
 			$conversations[$row['conversationID']] = new Conversation(null, $row);
 		}
-			
+		
 		return $conversations;
 	}
 	
@@ -215,7 +233,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	/**
 	 * Returns the first message in this conversation.
 	 * 
-	 * @return	\wcf\data\conversation\message\ConversationMessage
+	 * @return	ConversationMessage
 	 */
 	public function getFirstMessage() {
 		if ($this->firstMessage === null) {
@@ -228,7 +246,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	/**
 	 * Sets the first message.
 	 * 
-	 * @param	\wcf\data\conversation\message\ConversationMessage	$message
+	 * @param	ConversationMessage	$message
 	 */
 	public function setFirstMessage(ConversationMessage $message) {
 		$this->firstMessage = $message;
@@ -238,19 +256,19 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	 * Returns a list of the ids of all participants.
 	 * 
 	 * @param	boolean		$excludeLeftParticipants
-	 * @return	array<integer>
+	 * @return	integer[]
 	 */
 	public function getParticipantIDs($excludeLeftParticipants = false) {
 		$conditions = new PreparedStatementConditionBuilder();
-		$conditions->add("conversationID = ?", array($this->conversationID));
-		if ($excludeLeftParticipants) $conditions->add("hideConversation <> ?", array(self::STATE_LEFT));
+		$conditions->add("conversationID = ?", [$this->conversationID]);
+		if ($excludeLeftParticipants) $conditions->add("hideConversation <> ?", [self::STATE_LEFT]);
 		
 		$sql = "SELECT		participantID
 			FROM		wcf".WCF_N."_conversation_to_user
 			".$conditions;
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute($conditions->getParameters());
-		$participantIDs = array();
+		$participantIDs = [];
 		while ($row = $statement->fetchArray()) {
 			$participantIDs[] = $row['participantID'];
 		}
@@ -261,17 +279,17 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	/**
 	 * Returns a list of the usernames of all participants.
 	 * 
-	 * @return	array<string>
+	 * @return	string[]
 	 */
 	public function getParticipantNames() {
-		$participants = array();
+		$participants = [];
 		$sql = "SELECT		user_table.username
 			FROM		wcf".WCF_N."_conversation_to_user conversation_to_user
 			LEFT JOIN	wcf".WCF_N."_user user_table
 			ON		(user_table.userID = conversation_to_user.participantID)
 			WHERE		conversationID = ?";
 		$statement = WCF::getDB()->prepareStatement($sql);
-		$statement->execute(array($this->conversationID));
+		$statement->execute([$this->conversationID]);
 		while ($row = $statement->fetchArray()) {
 			$participants[] = $row['username'];
 		}
@@ -301,7 +319,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 					WHERE	conversationID = ?
 						AND participantID = ?";
 				$statement = WCF::getDB()->prepareStatement($sql);
-				$statement->execute(array($this->conversationID, $this->userID));
+				$statement->execute([$this->conversationID, $this->userID]);
 				$row = $statement->fetchArray();
 				if ($row !== false) {
 					if ($row['hideConversation'] != self::STATE_LEFT) return true;
@@ -316,8 +334,8 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	 * Returns true if given user id (default: current user) is participant
 	 * of all given conversation ids.
 	 * 
-	 * @param	array<integer>		$conversationIDs
-	 * @param	integer			$userID
+	 * @param	integer[]	$conversationIDs
+	 * @param	integer		$userID
 	 * @return	boolean
 	 */
 	public static function isParticipant(array $conversationIDs, $userID = null) {
@@ -325,8 +343,8 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 		
 		// check if user is the initial author
 		$conditions = new PreparedStatementConditionBuilder();
-		$conditions->add("conversationID IN (?)", array($conversationIDs));
-		$conditions->add("userID = ?", array($userID));
+		$conditions->add("conversationID IN (?)", [$conversationIDs]);
+		$conditions->add("userID = ?", [$userID]);
 		
 		$sql = "SELECT	conversationID
 			FROM	wcf".WCF_N."_conversation
@@ -341,9 +359,9 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 		// check for participation
 		if (!empty($conversationIDs)) {
 			$conditions = new PreparedStatementConditionBuilder();
-			$conditions->add("conversationID IN (?)", array($conversationIDs));
-			$conditions->add("participantID = ?", array($userID));
-			$conditions->add("hideConversation <> ?", array(self::STATE_LEFT));
+			$conditions->add("conversationID IN (?)", [$conversationIDs]);
+			$conditions->add("participantID = ?", [$userID]);
+			$conditions->add("hideConversation <> ?", [self::STATE_LEFT]);
 			
 			$sql = "SELECT	conversationID
 				FROM	wcf".WCF_N."_conversation_to_user
@@ -368,18 +386,18 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	 * 
 	 * @param	mixed		$participants
 	 * @param	string		$field
-	 * @param	array<integer>	$existingParticipants
+	 * @param	integer[]	$existingParticipants
 	 * @return	array		$result
 	 */
-	public static function validateParticipants($participants, $field = 'participants', array $existingParticipants = array()) {
-		$result = array();
-		$error = array();
+	public static function validateParticipants($participants, $field = 'participants', array $existingParticipants = []) {
+		$result = [];
+		$error = [];
 		
 		// loop through participants and check their settings
 		$participantList = UserProfile::getUserProfilesByUsername((is_array($participants) ? $participants : ArrayUtil::trim(explode(',', $participants))));
 		
 		// load user storage at once to avoid multiple queries
-		$userIDs = array();
+		$userIDs = [];
 		foreach ($participantList as $user) {
 			if ($user) {
 				$userIDs[] = $user->userID;
@@ -408,7 +426,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 				$existingParticipants[] = $result[] = $user->userID;
 			}
 			catch (UserInputException $e) {
-				$error[] = array('type' => $e->getType(), 'username' => $participant);
+				$error[] = ['type' => $e->getType(), 'username' => $participant];
 			}
 		}
 		
@@ -422,8 +440,8 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	/**
 	 * Validates the given participant.
 	 * 
-	 * @param	\wcf\data\user\UserProfile	$user
-	 * @param	string				$field
+	 * @param	UserProfile	$user
+	 * @param	string		$field
 	 */
 	public static function validateParticipant(UserProfile $user, $field = 'participants') {
 		// check participant's settings and permissions

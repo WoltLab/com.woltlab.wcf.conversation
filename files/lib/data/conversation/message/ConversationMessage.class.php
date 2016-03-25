@@ -15,22 +15,38 @@ use wcf\util\StringUtil;
  * Represents a conversation message.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation.message
  * @category	Community Framework
+ *
+ * @property-read	integer		$messageID
+ * @property-read	integer		$conversationID
+ * @property-read	integer|null	$userID
+ * @property-read	string		$username
+ * @property-read	string		$message
+ * @property-read	integer		$time
+ * @property-read	integer		$attachments
+ * @property-read	integer		$enableSmilies
+ * @property-read	integer		$enableHtml
+ * @property-read	integer		$enableBBCodes
+ * @property-read	integer		$showSignature
+ * @property-read	string		$ipAddress
+ * @property-read	integer		$lastEditTime
+ * @property-read	integer		$editCount
+ * @property-read	integer		$hasEmbeddedObjects
  */
 class ConversationMessage extends DatabaseObject implements IMessage {
 	use TUserContent;
 	
 	/**
-	 * @inheritdoc
+	 * @inheritDoc
 	 */
 	protected static $databaseTableName = 'conversation_message';
 	
 	/**
-	 * @inheritdoc
+	 * @inheritDoc
 	 */
 	protected static $databaseTableIndexName = 'messageID';
 	
@@ -41,7 +57,7 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	protected $conversation = null;
 	
 	/**
-	 * @inheritdoc
+	 * @inheritDoc
 	 */
 	public function getFormattedMessage() {
 		// assign embedded objects
@@ -89,7 +105,7 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	}
 	
 	/**
-	 * @inheritdoc
+	 * @inheritDoc
 	 */
 	public function getExcerpt($maxLength = 255) {
 		return StringUtil::truncateHTML($this->getSimplifiedFormattedMessage(), $maxLength);
@@ -141,14 +157,14 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	}
 	
 	/**
-	 * @inheritdoc
+	 * @inheritDoc
 	 */
 	public function getMessage() {
 		return $this->message;
 	}
 	
 	/**
-	 * @inheritdoc
+	 * @inheritDoc
 	 */
 	public function getLink() {
 		return LinkHandler::getInstance()->getLink('Conversation', [
@@ -158,7 +174,7 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	}
 	
 	/**
-	 * @inheritdoc
+	 * @inheritDoc
 	 */
 	public function getTitle() {
 		if ($this->messageID == $this->getConversation()->firstMessageID) {
@@ -169,14 +185,14 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	}
 	
 	/**
-	 * @inheritdoc
+	 * @inheritDoc
 	 */
 	public function isVisible() {
 		return true;
 	}
 	
 	/**
-	 * @inheritdoc
+	 * @inheritDoc
 	 */
 	public function __toString() {
 		return $this->getFormattedMessage();

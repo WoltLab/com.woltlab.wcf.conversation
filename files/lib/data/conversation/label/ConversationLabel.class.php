@@ -7,28 +7,33 @@ use wcf\system\WCF;
  * Represents a conversation label.
  * 
  * @author	Marcel Werk
- * @copyright	2009-2012 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation.label
  * @category	Community Framework
+ * 
+ * @property-read	integer		$labelID
+ * @property-read	integer		$userID
+ * @property-read	string		$label
+ * @property-read	string		$cssClassName
  */
 class ConversationLabel extends DatabaseObject {
 	/**
-	 * @see	\wcf\data\DatabaseObject::$databaseTableName
+	 * @inheritDoc
 	 */
 	protected static $databaseTableName = 'conversation_label';
 	
 	/**
-	 * @see	\wcf\data\DatabaseObject::$databaseIndexName
+	 * @inheritDoc
 	 */
 	protected static $databaseTableIndexName = 'labelID';
 	
 	/**
 	 * list of pre-defined css class names
-	 * @var	array<string>
+	 * @var	string[]
 	 */
-	public static $availableCssClassNames = array(
+	public static $availableCssClassNames = [
 		'yellow',
 		'orange',
 		'brown',
@@ -40,19 +45,19 @@ class ConversationLabel extends DatabaseObject {
 		'black',
 		
 		'none' /* not a real value */
-	);
+	];
 	
 	/**
 	 * Returns a list of conversation labels for given user id.
 	 * 
 	 * @param	integer		$userID
-	 * @return	\wcf\data\conversation\label\ConversationLabelList
+	 * @return	ConversationLabelList
 	 */
 	public static function getLabelsByUser($userID = null) {
 		if ($userID === null) $userID = WCF::getUser()->userID;
 		
 		$labelList = new ConversationLabelList();
-		$labelList->getConditionBuilder()->add("conversation_label.userID = ?", array($userID));
+		$labelList->getConditionBuilder()->add("conversation_label.userID = ?", [$userID]);
 		$labelList->readObjects();
 		
 		return $labelList;
@@ -61,7 +66,7 @@ class ConversationLabel extends DatabaseObject {
 	/**
 	 * Returns a list of available CSS class names.
 	 * 
-	 * @return	array<string>
+	 * @return	string[]
 	 */
 	public static function getLabelCssClassNames() {
 		return self::$availableCssClassNames;

@@ -6,3 +6,7 @@
 
 * Only search active conversation when using search bar in a conversation.
 * Filter option for conversation participants on conversation list page.
+
+#### Documentation
+
+* `@property-read` tags for database table columns of classes extending `wcf\data\DatabaseObject`.
