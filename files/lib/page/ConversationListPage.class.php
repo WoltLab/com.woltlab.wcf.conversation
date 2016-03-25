@@ -43,7 +43,7 @@ class ConversationListPage extends SortablePage {
 	/**
 	 * @inheritDoc
 	 */
-	public $itemsPerPage = 1;
+	public $itemsPerPage = CONVERSATIONS_PER_PAGE;
 	
 	/**
 	 * @inheritDoc
