@@ -64,6 +64,7 @@
 		<item name="wcf.conversation.button.add"><![CDATA[New Conversation]]></item>
 		<item name="wcf.conversation.button.saveAsDraft"><![CDATA[Save Draft]]></item>
 		<item name="wcf.conversation.conversations"><![CDATA[Conversations]]></item>
+		<item name="wcf.conversation.filter.participants"><![CDATA[Filter by Participants]]></item>
 		<item name="wcf.conversation.folders"><![CDATA[Folders]]></item>
 		<item name="wcf.conversation.folder.draft"><![CDATA[Drafts]]></item>
 		<item name="wcf.conversation.folder.hidden"><![CDATA[Hidden]]></item>

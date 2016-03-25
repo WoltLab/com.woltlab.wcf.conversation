@@ -8,9 +8,8 @@
 	<link rel="alternate" type="application/rss+xml" title="{lang}wcf.global.button.rss{/lang}" href="{link controller='ConversationFeed' appendSession=false}at={@$__wcf->getUser()->userID}-{@$__wcf->getUser()->accessToken}{/link}" />
 	<script data-relocate="true" src="{@$__wcf->getPath()}js/WCF.Conversation{if !ENABLE_DEBUG_MODE}.min{/if}.js?v={@LAST_UPDATE_TIME}"></script>
 	<script data-relocate="true">
-		//<![CDATA[
-		$(function() {
-			WCF.Language.addObject({
+		require(['Language', 'WoltLab/WCF/Ui/ItemList/User'], function(Language, UiItemListUser) {
+			Language.addObject({
 				'wcf.conversation.edit.addParticipants': '{lang}wcf.conversation.edit.addParticipants{/lang}',
 				'wcf.conversation.edit.assignLabel': '{lang}wcf.conversation.edit.assignLabel{/lang}',
 				'wcf.conversation.edit.close': '{lang}wcf.conversation.edit.close{/lang}',
@@ -33,7 +32,7 @@
 			$inlineEditor.setEditorHandler($editorHandler, 'list');
 			
 			new WCF.Conversation.Clipboard($editorHandler);
-			new WCF.Conversation.Label.Manager('{link controller='ConversationList' encode=false}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}');
+			new WCF.Conversation.Label.Manager('{link controller='ConversationList' encode=false}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}');
 			new WCF.Conversation.Preview();
 			new WCF.Conversation.MarkAsRead();
 			new WCF.Conversation.MarkAllAsRead();
@@ -42,8 +41,11 @@
 			if ($(window).width() <= 800) {
 				$('.sidebar').addClass('mobileSidebar').hover(function() { });
 			}
+			
+			UiItemListUser.init('participants', {
+				excludedSearchValues: ['{$__wcf->user->username|encodeJs}']
+			});
 		});
-		//]]>
 	</script>
 </head>
 
@@ -72,7 +74,25 @@
 			</nav>
 		</div>
 	</section>
-
+	
+	<section class="box">
+		<h2 class="boxTitle">{lang}wcf.conversation.filter.participants{/lang}</h2>
+		
+		<div class="boxContent">
+			<form action="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}" method="post">
+				<dl>
+					<dt></dt>
+					<dd><label><textarea id="participants" name="participants" class="long">{implode from=$participants item=participant glue=','}{$participant}{/implode}</textarea></label></dd>
+				</dl>
+				
+				<div class="formSubmit">
+					<input type="submit" value="{lang}wcf.global.button.submit{/lang}" accesskey="s" />
+					{@SECURITY_TOKEN_INPUT_TAG}
+				</div>
+			</form>
+		</div>
+	</section>
+	
 	<section class="box" class="jsOnly">
 		<h2 class="boxTitle">{lang}wcf.conversation.label{/lang}</h2>
 		
@@ -93,12 +113,12 @@
 				<div class="dropdownMenu">
 					<ul class="scrollableDropdownMenu">
 						{foreach from=$labelList item=label}
-							<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}&labelID={@$label->labelID}{/link}"><span class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}" data-css-class-name="{if $label->cssClassName}{@$label->cssClassName}{/if}" data-label-id="{@$label->labelID}">{$label->label}</span></a></li>
+							<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}&labelID={@$label->labelID}{/link}"><span class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}" data-css-class-name="{if $label->cssClassName}{@$label->cssClassName}{/if}" data-label-id="{@$label->labelID}">{$label->label}</span></a></li>
 						{/foreach}
 					</ul>
 					<ul>
 						<li class="dropdownDivider"{if !$labelList|count} style="display: none;"{/if}></li>
-						<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}"><span class="badge label">{lang}wcf.conversation.label.disableFilter{/lang}</span></a></li>
+						<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}"><span class="badge label">{lang}wcf.conversation.label.disableFilter{/lang}</span></a></li>
 					</ul>
 				</div>
 			</div>
@@ -141,9 +161,11 @@
 {include file='userNotice'}
 
 <div class="contentNavigation">
+	{assign var='participantsParameter' value=''}
+	{if $participants}{capture assign='participantsParameter'}&participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}{/capture}{/if}
 	{assign var='labelIDParameter' value=''}
 	{if $labelID}{assign var='labelIDParameter' value="&labelID=$labelID"}{/if}
-	{pages print=true assign=pagesLinks controller='ConversationList' link="filter=$filter&pageNo=%d&sortField=$sortField&sortOrder=$sortOrder$labelIDParameter"}
+	{pages print=true assign=pagesLinks controller='ConversationList' link="filter=$filter$participantsParameter&pageNo=%d&sortField=$sortField&sortOrder=$sortOrder$labelIDParameter"}
 	
 	<nav>
 		<ul>
@@ -161,9 +183,9 @@
 			<li class="tabularListRow tabularListRowHead">
 				<ol class="tabularListColumns">
 					<li class="columnMark jsOnly"><label><input type="checkbox" class="jsClipboardMarkAll" /></label></li>
-					<li class="columnSubject{if $sortField === 'subject'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=subject&sortOrder={if $sortField == 'subject' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.global.subject{/lang}</a></li>
-					<li class="columnStats{if $sortField == 'replies'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=replies&sortOrder={if $sortField == 'replies' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.conversation.replies{/lang}</a></li>
-					<li class="columnLastPost{if $sortField === 'lastPostTime'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}pageNo={@$pageNo}&sortField=lastPostTime&sortOrder={if $sortField == 'lastPostTime' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.conversation.lastPostTime{/lang}</a></li>
+					<li class="columnSubject{if $sortField === 'subject'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}pageNo={@$pageNo}&sortField=subject&sortOrder={if $sortField == 'subject' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.global.subject{/lang}</a></li>
+					<li class="columnStats{if $sortField == 'replies'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}pageNo={@$pageNo}&sortField=replies&sortOrder={if $sortField == 'replies' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.conversation.replies{/lang}</a></li>
+					<li class="columnLastPost{if $sortField === 'lastPostTime'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}pageNo={@$pageNo}&sortField=lastPostTime&sortOrder={if $sortField == 'lastPostTime' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.conversation.lastPostTime{/lang}</a></li>
 					
 					{event name='columnHeads'}
 				</ol>
@@ -193,7 +215,7 @@
 								<ul class="labelList">
 									{content}
 										{foreach from=$conversation->getAssignedLabels() item=label}
-											<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}{/if}&sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}&labelID={@$label->labelID}{/link}" class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}">{$label->label}</a></li>
+											<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}&labelID={@$label->labelID}{/link}" class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}">{$label->label}</a></li>
 										{/foreach}
 									{/content}
 								</ul>
