@@ -2,6 +2,7 @@
 namespace wcf\page;
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\message\ConversationMessage;
+use wcf\data\conversation\message\ViewableConversationMessageList;
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationAction;
 use wcf\data\conversation\ConversationParticipantList;
@@ -23,7 +24,7 @@ use wcf\util\StringUtil;
  * Shows a conversation.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	page
@@ -31,39 +32,39 @@ use wcf\util\StringUtil;
  */
 class ConversationPage extends MultipleLinkPage {
 	/**
-	 * @see	\wcf\page\AbstractPage::$enableTracking
+	 * @inheritDoc
 	 */
 	public $enableTracking = true;
 	
 	/**
-	 * @see	\wcf\page\MultipleLinkPage::$itemsPerPage
+	 * @inheritDoc
 	 */
 	public $itemsPerPage = CONVERSATION_MESSAGES_PER_PAGE;
 	
 	/**
-	 * @see	\wcf\page\MultipleLinkPage::$sortOrder
+	 * @inheritDoc
 	 */
 	public $sortOrder = 'ASC';
 	
 	/**
-	 * @see	\wcf\page\MultipleLinkPage::$objectListClassName
+	 * @inheritDoc
 	 */
-	public $objectListClassName = 'wcf\data\conversation\message\ViewableConversationMessageList';
+	public $objectListClassName = ViewableConversationMessageList::class;
 	
 	/**
-	 * @see	\wcf\page\AbstractPage::$loginRequired
+	 * @inheritDoc
 	 */
 	public $loginRequired = true;
 	
 	/**
-	 * @see	\wcf\page\AbstractPage::$neededModules
+	 * @inheritDoc
 	 */
-	public $neededModules = array('MODULE_CONVERSATION');
+	public $neededModules = ['MODULE_CONVERSATION'];
 	
 	/**
-	 * @see	\wcf\page\AbstractPage::$neededPermissions
+	 * @inheritDoc
 	 */
-	public $neededPermissions = array('user.conversation.canUseConversation');
+	public $neededPermissions = ['user.conversation.canUseConversation'];
 	
 	/**
 	 * conversation id
@@ -73,13 +74,13 @@ class ConversationPage extends MultipleLinkPage {
 	
 	/**
 	 * viewable conversation object
-	 * @var	\wcf\data\conversation\ViewableConversation
+	 * @var	ViewableConversation
 	 */
 	public $conversation = null;
 	
 	/**
 	 * conversation label list
-	 * @var	\wcf\data\conversation\label\ConversationLabelList
+	 * @var	ConversationLabelList
 	 */
 	public $labelList = null;
 	
@@ -91,24 +92,24 @@ class ConversationPage extends MultipleLinkPage {
 	
 	/**
 	 * conversation message object
-	 * @var	\wcf\data\conversation\message\ConversationMessage
+	 * @var	ConversationMessage
 	 */
 	public $message = null;
 	
 	/**
 	 * modification log list object
-	 * @var	\wcf\data\wcf\data\modification\log\ConversationLogModificationLogList
+	 * @var	ConversationLogModificationLogList
 	 */
 	public $modificationLogList = null;
 	
 	/**
 	 * list of participants
-	 * @var	\wcf\data\conversation\ConversationParticipantList
+	 * @var	ConversationParticipantList
 	 */
 	public $participantList = null;
 	
 	/**
-	 * @see	\wcf\page\IPage::readParameters()
+	 * @inheritDoc
 	 */
 	public function readParameters() {
 		parent::readParameters();
@@ -138,18 +139,18 @@ class ConversationPage extends MultipleLinkPage {
 		// posts per page
 		if (WCF::getUser()->conversationMessagesPerPage) $this->itemsPerPage = WCF::getUser()->conversationMessagesPerPage;
 		
-		$this->canonicalURL = LinkHandler::getInstance()->getLink('Conversation', array(
+		$this->canonicalURL = LinkHandler::getInstance()->getLink('Conversation', [
 			'object' => $this->conversation
-		), ($this->pageNo ? 'pageNo=' . $this->pageNo : ''));
+		], ($this->pageNo ? 'pageNo=' . $this->pageNo : ''));
 	}
 	
 	/**
-	 * @see	\wcf\page\MultipleLinkPage::initObjectList()
+	 * @inheritDoc
 	 */
 	protected function initObjectList() {
 		parent::initObjectList();
 		
-		$this->objectList->getConditionBuilder()->add('conversation_message.conversationID = ?', array($this->conversation->conversationID));
+		$this->objectList->getConditionBuilder()->add('conversation_message.conversationID = ?', [$this->conversation->conversationID]);
 		$this->objectList->setConversation($this->conversation->getDecoratedObject());
 		
 		// handle jump to
@@ -159,7 +160,7 @@ class ConversationPage extends MultipleLinkPage {
 	}
 	
 	/**
-	 * @see	\wcf\page\IPage::readData()
+	 * @inheritDoc
 	 */
 	public function readData() {
 		parent::readData();
@@ -167,16 +168,16 @@ class ConversationPage extends MultipleLinkPage {
 		// add breadcrumbs
 		WCF::getBreadcrumbs()->add(new Breadcrumb(WCF::getLanguage()->get('wcf.conversation.conversations'), LinkHandler::getInstance()->getLink('ConversationList')));
 		if ($this->conversation->isDraft) {
-			WCF::getBreadcrumbs()->add(new Breadcrumb(WCF::getLanguage()->get('wcf.conversation.folder.draft'), LinkHandler::getInstance()->getLink('ConversationList', array(
+			WCF::getBreadcrumbs()->add(new Breadcrumb(WCF::getLanguage()->get('wcf.conversation.folder.draft'), LinkHandler::getInstance()->getLink('ConversationList', [
 				'filter' => 'draft'
-			))));
+			])));
 		}
 		
 		// update last visit time count
 		if ($this->conversation->isNew() && $this->objectList->getMaxPostTime() > $this->conversation->lastVisitTime) {
 			$visitTime = $this->objectList->getMaxPostTime();
 			if ($visitTime == $this->conversation->lastPostTime) $visitTime = TIME_NOW;
-			$conversationAction = new ConversationAction(array($this->conversation->getDecoratedObject()), 'markAsRead', array('visitTime' => $visitTime));
+			$conversationAction = new ConversationAction([$this->conversation->getDecoratedObject()], 'markAsRead', ['visitTime' => $visitTime]);
 			$conversationAction->executeAction();
 		}
 		
@@ -185,7 +186,7 @@ class ConversationPage extends MultipleLinkPage {
 		$this->participantList->readObjects();
 		
 		// init quote objects
-		$messageIDs = array();
+		$messageIDs = [];
 		foreach ($this->objectList as $message) {
 			$messageIDs[] = $message->messageID;
 		}
@@ -193,10 +194,10 @@ class ConversationPage extends MultipleLinkPage {
 		
 		// set attachment permissions
 		if ($this->objectList->getAttachmentList() !== null) {
-			$this->objectList->getAttachmentList()->setPermissions(array(
+			$this->objectList->getAttachmentList()->setPermissions([
 				'canDownload' => true,
 				'canViewPreview' => true
-			));
+			]);
 		}
 		
 		// get timeframe for modifications
@@ -216,12 +217,12 @@ class ConversationPage extends MultipleLinkPage {
 		// load modification log entries
 		$this->modificationLogList = new ConversationLogModificationLogList();
 		$this->modificationLogList->setConversation($this->conversation->getDecoratedObject());
-		$this->modificationLogList->getConditionBuilder()->add("modification_log.time BETWEEN ? AND ?", array($startTime, $endTime));
+		$this->modificationLogList->getConditionBuilder()->add("modification_log.time BETWEEN ? AND ?", [$startTime, $endTime]);
 		$this->modificationLogList->readObjects();
 	}
 	
 	/**
-	 * @see	\wcf\page\IPage::assignVariables()
+	 * @inheritDoc
 	 */
 	public function assignVariables() {
 		parent::assignVariables();
@@ -231,7 +232,7 @@ class ConversationPage extends MultipleLinkPage {
 		$tmpHash = StringUtil::getRandomID();
 		$attachmentHandler = new AttachmentHandler('com.woltlab.wcf.conversation.message', 0, $tmpHash, 0);
 		
-		WCF::getTPL()->assign(array(
+		WCF::getTPL()->assign([
 			'attachmentHandler' => $attachmentHandler,
 			'attachmentObjectID' => 0,
 			'attachmentObjectType' => 'com.woltlab.wcf.conversation.message',
@@ -246,7 +247,7 @@ class ConversationPage extends MultipleLinkPage {
 			'participants' => $this->participantList->getObjects(),
 			'defaultSmilies' => SmileyCache::getInstance()->getCategorySmilies(),
 			'permissionCanUseSmilies' => 'user.message.canUseSmilies'
-		));
+		]);
 		
 		BBCodeHandler::getInstance()->setAllowedBBCodes(explode(',', WCF::getSession()->getPermission('user.message.allowedBBCodes')));
 	}
@@ -256,7 +257,7 @@ class ConversationPage extends MultipleLinkPage {
 	 */
 	protected function goToPost() {
 		$conditionBuilder = clone $this->objectList->getConditionBuilder();
-		$conditionBuilder->add('time '.($this->sortOrder == 'ASC' ? '<=' : '>=').' ?', array($this->message->time));
+		$conditionBuilder->add('time '.($this->sortOrder == 'ASC' ? '<=' : '>=').' ?', [$this->message->time]);
 		
 		$sql = "SELECT	COUNT(*) AS messages
 			FROM	wcf".WCF_N."_conversation_message conversation_message
@@ -278,11 +279,11 @@ class ConversationPage extends MultipleLinkPage {
 		$statement = WCF::getDB()->prepareStatement($sql, 1);
 		$statement->execute($this->objectList->getConditionBuilder()->getParameters());
 		$row = $statement->fetchArray();
-		HeaderUtil::redirect(LinkHandler::getInstance()->getLink('Conversation', array(
+		HeaderUtil::redirect(LinkHandler::getInstance()->getLink('Conversation', [
 			'encodeTitle' => true,
 			'object' => $this->conversation,
 			'messageID' => $row['messageID']
-		)).'#message'.$row['messageID']);
+		]).'#message'.$row['messageID']);
 		exit;
 	}
 	
@@ -291,7 +292,7 @@ class ConversationPage extends MultipleLinkPage {
 	 */
 	protected function goToFirstNewPost() {
 		$conditionBuilder = clone $this->objectList->getConditionBuilder();
-		$conditionBuilder->add('time > ?', array($this->conversation->lastVisitTime));
+		$conditionBuilder->add('time > ?', [$this->conversation->lastVisitTime]);
 		
 		$sql = "SELECT		conversation_message.messageID
 			FROM		wcf".WCF_N."_conversation_message conversation_message
@@ -301,11 +302,11 @@ class ConversationPage extends MultipleLinkPage {
 		$statement->execute($conditionBuilder->getParameters());
 		$row = $statement->fetchArray();
 		if ($row !== false) {
-			HeaderUtil::redirect(LinkHandler::getInstance()->getLink('Conversation', array(
+			HeaderUtil::redirect(LinkHandler::getInstance()->getLink('Conversation', [
 				'encodeTitle' => true,
 				'object' => $this->conversation,
 				'messageID' => $row['messageID']
-			)).'#message'.$row['messageID']);
+			]).'#message'.$row['messageID']);
 			exit;
 		}
 		else {
@@ -314,14 +315,14 @@ class ConversationPage extends MultipleLinkPage {
 	}
 	
 	/**
-	 * @see	\wcf\page\ITrackablePage::getObjectType()
+	 * @inheritDoc
 	 */
 	public function getObjectType() {
 		return 'com.woltlab.wcf.conversation';
 	}
 	
 	/**
-	 * @see	\wcf\page\ITrackablePage::getObjectID()
+	 * @inheritDoc
 	 */
 	public function getObjectID() {
 		return $this->conversationID;
