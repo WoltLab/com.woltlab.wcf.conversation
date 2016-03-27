@@ -1,6 +1,5 @@
 <?php
 namespace wcf\data\modification\log;
-use wcf\data\user\User;
 use wcf\data\user\UserProfile;
 use wcf\data\DatabaseObjectDecorator;
 use wcf\data\TLegacyUserPropertyAccess;
@@ -33,6 +32,8 @@ class ViewableConversationModificationLog extends DatabaseObjectDecorator {
 	
 	/**
 	 * Returns readable representation of current log entry.
+	 * 
+	 * @return	string
 	 */
 	public function __toString() {
 		return WCF::getLanguage()->getDynamicVariable('wcf.conversation.log.conversation.'.$this->action, array('additionalData' => $this->additionalData));
@@ -49,9 +50,7 @@ class ViewableConversationModificationLog extends DatabaseObjectDecorator {
 				$this->userProfile = UserProfileRuntimeCache::getInstance()->getObject($this->userID);
 			}
 			else {
-				$this->userProfile = new UserProfile(new User(null, array(
-					'username' => $this->username
-				)));
+				$this->userProfile = UserProfile::getGuestUserProfile($this->username);
 			}
 		}
 		

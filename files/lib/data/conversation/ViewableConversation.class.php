@@ -107,9 +107,7 @@ class ViewableConversation extends DatabaseObjectDecorator {
 				$this->userProfile = UserProfileRuntimeCache::getInstance()->getObject($this->userID);
 			}
 			else {
-				$this->userProfile = new UserProfile(new User(null, [
-					'username' => $this->username
-				]));
+				$this->userProfile = UserProfile::getGuestUserProfile($this->username);
 			}
 		}
 		
@@ -127,9 +125,7 @@ class ViewableConversation extends DatabaseObjectDecorator {
 				$this->lastPosterProfile = UserProfileRuntimeCache::getInstance()->getObject($this->lastPosterID);
 			}
 			else {
-				$this->lastPosterProfile = new UserProfile(new User(null, [
-					'username' => $this->lastPoster
-				]));
+				$this->lastPosterProfile = UserProfile::getGuestUserProfile($this->lastPoster);
 			}
 		}
 		
