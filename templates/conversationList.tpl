@@ -269,7 +269,11 @@
 									
 									<div>
 										<p>
-											<a href="{link controller='User' object=$conversation->getLastPosterProfile()->getDecoratedObject()}{/link}" class="userLink" data-user-id="{@$conversation->getLastPosterProfile()->userID}">{$conversation->lastPoster}</a>
+											{if $conversation->lastPosterID}
+												<a href="{link controller='User' object=$conversation->getLastPosterProfile()->getDecoratedObject()}{/link}" class="userLink" data-user-id="{@$conversation->getLastPosterProfile()->userID}">{$conversation->lastPoster}</a>
+											{else}
+												{$conversation->lastPoster}
+											{/if}
 										</p>
 										<small>{@$conversation->lastPostTime|time}</small>
 									</div>
