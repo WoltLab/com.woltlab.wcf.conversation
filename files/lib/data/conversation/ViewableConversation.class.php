@@ -4,9 +4,9 @@ use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\label\ConversationLabelList;
 use wcf\data\user\User;
 use wcf\data\user\UserProfile;
-use wcf\data\user\UserProfileCache;
 use wcf\data\DatabaseObjectDecorator;
 use wcf\data\TLegacyUserPropertyAccess;
+use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\WCF;
 
@@ -104,7 +104,7 @@ class ViewableConversation extends DatabaseObjectDecorator {
 	public function getUserProfile() {
 		if ($this->userProfile === null) {
 			if ($this->userID) {
-				$this->userProfile = UserProfileCache::getInstance()->getUserProfile($this->userID);
+				$this->userProfile = UserProfileRuntimeCache::getInstance()->getObject($this->userID);
 			}
 			else {
 				$this->userProfile = new UserProfile(new User(null, [
@@ -124,7 +124,7 @@ class ViewableConversation extends DatabaseObjectDecorator {
 	public function getLastPosterProfile() {
 		if ($this->lastPosterProfile === null) {
 			if ($this->lastPosterID) {
-				$this->lastPosterProfile = UserProfileCache::getInstance()->getUserProfile($this->lastPosterID);
+				$this->lastPosterProfile = UserProfileRuntimeCache::getInstance()->getObject($this->lastPosterID);
 			}
 			else {
 				$this->lastPosterProfile = new UserProfile(new User(null, [

@@ -1,7 +1,7 @@
 <?php
 namespace wcf\data\modification\log;
 use wcf\data\conversation\Conversation;
-use wcf\data\user\UserProfileCache;
+use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\log\modification\ConversationModificationLogHandler;
 use wcf\system\WCF;
 
@@ -95,7 +95,7 @@ class ConversationLogModificationLogList extends ModificationLogList {
 		$this->objects = $objects;
 		
 		if (!empty($userIDs)) {
-			UserProfileCache::getInstance()->cacheUserIDs($userIDs);
+			UserProfileRuntimeCache::getInstance()->cacheObjectIDs($userIDs);
 		}
 		
 		foreach ($this->objects as &$object) {

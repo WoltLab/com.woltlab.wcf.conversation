@@ -3,7 +3,7 @@ namespace wcf\data\conversation\message;
 use wcf\data\attachment\GroupedAttachmentList;
 use wcf\data\conversation\Conversation;
 use wcf\data\object\type\ObjectTypeCache;
-use wcf\data\user\UserProfileCache;
+use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
 
 /**
@@ -101,7 +101,7 @@ class ViewableConversationMessageList extends ConversationMessageList {
 		}
 		
 		if (!empty($userIDs)) {
-			UserProfileCache::getInstance()->cacheUserIDs($userIDs);
+			UserProfileRuntimeCache::getInstance()->cacheObjectIDs($userIDs);
 		}
 		
 		if ($this->embeddedObjectLoading) {

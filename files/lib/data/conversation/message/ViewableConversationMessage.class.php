@@ -2,9 +2,9 @@
 namespace wcf\data\conversation\message;
 use wcf\data\user\User;
 use wcf\data\user\UserProfile;
-use wcf\data\user\UserProfileCache;
 use wcf\data\DatabaseObjectDecorator;
 use wcf\data\TLegacyUserPropertyAccess;
+use wcf\system\cache\runtime\UserProfileRuntimeCache;
 
 /**
  * Represents a viewable conversation message.
@@ -38,7 +38,7 @@ class ViewableConversationMessage extends DatabaseObjectDecorator {
 	public function getUserProfile() {
 		if ($this->userProfile === null) {
 			if ($this->userID) {
-				$this->userProfile = UserProfileCache::getInstance()->getUserProfile($this->userID);
+				$this->userProfile = UserProfileRuntimeCache::getInstance()->getObject($this->userID);
 			}
 			else {
 				$this->userProfile = new UserProfile(new User(null, array(
