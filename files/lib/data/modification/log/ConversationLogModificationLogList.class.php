@@ -16,55 +16,16 @@ use wcf\system\WCF;
  */
 class ConversationLogModificationLogList extends ModificationLogList {
 	/**
-	 * conversation object type id
-	 * @var	integer
-	 */
-	public $conversationObjectTypeID = 0;
-	
-	/**
-	 * conversation object
-	 * @var	\wcf\data\conversation\Conversation
-	 */
-	public $conversation = null;
-	
-	/**
 	 * @see	\wbb\data\DatabaseObjectList::__construct()
 	 */
-	public function __construct() {
+	public function __construct($conversationID) {
 		parent::__construct();
 		
-		// get object types
-		$conversationObjectType = ConversationModificationLogHandler::getInstance()->getObjectType('com.woltlab.wcf.conversation.conversation');
-		$this->conversationObjectTypeID = $conversationObjectType->objectTypeID;
+		// set conditions
+		$this->getConditionBuilder()->add('modification_log.objectTypeID = ?', array(ConversationModificationLogHandler::getInstance()->getObjectType('com.woltlab.wcf.conversation.conversation')->objectTypeID));
+		$this->getConditionBuilder()->add('modification_log.objectID = ?', array($conversationID));
 	}
-	
-	/**
-	 * Initializes the conversation log modification log list.
-	 * 
-	 * @param	\wcf\data\conversation\Conversation	$conversation
-	 */
-	public function setConversation(Conversation $conversation) {
-		$this->conversation = $conversation;
-	}
-	
-	/**
-	 * @see	\wcf\data\DatabaseObjectList::countObjects()
-	 */
-	public function countObjects() {
-		$sql = "SELECT	COUNT(modification_log.logID) AS count
-			FROM	wcf".WCF_N."_modification_log modification_log
-			WHERE	modification_log.objectTypeID = ?
-				AND modification_log.objectID = ?";
-		$statement = WCF::getDB()->prepareStatement($sql);
-		$statement->execute(array(
-			$this->conversationObjectTypeID,
-			$this->conversation->conversationID
-		));
-		$row = $statement->fetchArray();
 		
-		return $row['count'];
-	}
-	
 	/**
 	 * @see	\wcf\data\DatabaseObjectList::readObjects()
 	 */
@@ -75,14 +36,10 @@ class ConversationLogModificationLogList extends ModificationLogList {
 			FROM		wcf".WCF_N."_modification_log modification_log
 			LEFT JOIN	wcf".WCF_N."_user user_table ON (user_table.userID = modification_log.userID)
 			LEFT JOIN	wcf".WCF_N."_user_avatar user_avatar ON (user_avatar.avatarID = user_table.avatarID)		
-			WHERE		modification_log.objectTypeID = ?
-					AND modification_log.objectID = ?
-					".(!empty($this->sqlOrderBy) ? "ORDER BY ".$this->sqlOrderBy : '');
+			".$this->getConditionBuilder()."
+			".(!empty($this->sqlOrderBy) ? "ORDER BY ".$this->sqlOrderBy : '');
 		$statement = WCF::getDB()->prepareStatement($sql, $this->sqlLimit, $this->sqlOffset);
-		$statement->execute(array(
-			$this->conversationObjectTypeID,
-			$this->conversation->conversationID
-		));
+		$statement->execute($this->getConditionBuilder()->getParameters());
 		$this->objects = $statement->fetchObjects(($this->objectClassName ?: $this->className));
 		
 		// use table index as array index
