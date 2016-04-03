@@ -69,7 +69,7 @@
 		<dl{if $errorField == 'participants'} class="formError"{/if}>
 			<dt><label for="participants">{lang}wcf.conversation.participants{/lang}</label></dt>
 			<dd>
-				<textarea id="participants" name="participants" class="long">{$participants}</textarea>
+				<input type="text" id="participants" name="participants" class="long" value="{$participants}">
 				{if $errorField == 'participants'}
 					<small class="innerError">
 						{if $errorType == 'empty'}
@@ -88,35 +88,35 @@
 		</dl>
 		
 		{if $__wcf->session->getPermission('user.conversation.canAddInvisibleParticipants')}
-		<dl{if $errorField == 'invisibleParticipants'} class="formError"{/if}>
-			<dt><label for="invisibleParticipants">{lang}wcf.conversation.invisibleParticipants{/lang}</label></dt>
-			<dd>
-				<textarea id="invisibleParticipants" name="invisibleParticipants" class="long" cols="40" rows="2">{$invisibleParticipants}</textarea>
-				{if $errorField == 'invisibleParticipants'}
-					<small class="innerError">
-						{if $errorType == 'empty'}
-							{lang}wcf.global.form.error.empty{/lang}
-						{elseif $errorType|is_array}
-							{foreach from=$errorType item='errorData'}
-								{lang}wcf.conversation.participants.error.{@$errorData.type}{/lang}
-							{/foreach}
-						{else}
-							{lang}wcf.conversation.participants.error.{@$errorType}{/lang}
-						{/if}
-					</small>
-				{/if}
-				<small>{lang}wcf.conversation.invisibleParticipants.description{/lang}</small>
-			</dd>
-		</dl>
+			<dl{if $errorField == 'invisibleParticipants'} class="formError"{/if}>
+				<dt><label for="invisibleParticipants">{lang}wcf.conversation.invisibleParticipants{/lang}</label></dt>
+				<dd>
+					<input type="text" id="invisibleParticipants" name="invisibleParticipants" class="long" value="{$invisibleParticipants}">
+					{if $errorField == 'invisibleParticipants'}
+						<small class="innerError">
+							{if $errorType == 'empty'}
+								{lang}wcf.global.form.error.empty{/lang}
+							{elseif $errorType|is_array}
+								{foreach from=$errorType item='errorData'}
+									{lang}wcf.conversation.participants.error.{@$errorData.type}{/lang}
+								{/foreach}
+							{else}
+								{lang}wcf.conversation.participants.error.{@$errorType}{/lang}
+							{/if}
+						</small>
+					{/if}
+					<small>{lang}wcf.conversation.invisibleParticipants.description{/lang}</small>
+				</dd>
+			</dl>
 		{/if}
 		
 		{if $__wcf->session->getPermission('user.conversation.canSetCanInvite')}
-		<dl>
-			<dt></dt>
-			<dd>
-				<label><input type="checkbox" name="participantCanInvite" id="participantCanInvite" value="1"{if $participantCanInvite} checked="checked"{/if} /> {lang}wcf.conversation.participantCanInvite{/lang}</label>
-			</dd>
-		</dl>
+			<dl>
+				<dt></dt>
+				<dd>
+					<label><input type="checkbox" name="participantCanInvite" id="participantCanInvite" value="1"{if $participantCanInvite} checked="checked"{/if} /> {lang}wcf.conversation.participantCanInvite{/lang}</label>
+				</dd>
+			</dl>
 		{/if}
 		
 		{event name='participantFields'}
