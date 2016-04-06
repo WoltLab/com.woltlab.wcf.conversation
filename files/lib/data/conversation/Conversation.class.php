@@ -388,6 +388,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	 * @param	string		$field
 	 * @param	integer[]	$existingParticipants
 	 * @return	array		$result
+	 * @throws	UserInputException
 	 */
 	public static function validateParticipants($participants, $field = 'participants', array $existingParticipants = []) {
 		$result = [];
@@ -442,6 +443,7 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	 * 
 	 * @param	UserProfile	$user
 	 * @param	string		$field
+	 * @throws	UserInputException
 	 */
 	public static function validateParticipant(UserProfile $user, $field = 'participants') {
 		// check participant's settings and permissions
