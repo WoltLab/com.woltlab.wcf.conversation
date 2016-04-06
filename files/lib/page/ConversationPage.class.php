@@ -203,20 +203,26 @@ class ConversationPage extends MultipleLinkPage {
 		// get timeframe for modifications
 		$this->objectList->rewind();
 		$startTime = $this->objectList->current()->time;
+		$endTime = TIME_NOW;
 		
 		$count = count($this->objectList);
-		if ($count == 1) {
-			$endTime = $startTime;
-		}
-		else {
+		if ($count > 1) {
 			$this->objectList->seek($count - 1);
-			$endTime = $this->objectList->current()->time;
+			if ($this->objectList->current()->time < $this->conversation->lastPostTime) {
+				$sql = "SELECT          time
+					FROM            wcf".WCF_N."_conversation_message
+					WHERE           conversationID = ?
+							AND time > ?
+					ORDER BY        time";
+				$statement = WCF::getDB()->prepareStatement($sql, 1);
+				$statement->execute(array($this->conversationID, $this->objectList->current()->time));
+				$endTime = $statement->fetchSingleColumn() - 1;
+			}	
 		}
 		$this->objectList->rewind();
 		
 		// load modification log entries
-		$this->modificationLogList = new ConversationLogModificationLogList();
-		$this->modificationLogList->setConversation($this->conversation->getDecoratedObject());
+		$this->modificationLogList = new ConversationLogModificationLogList($this->conversation->conversationID);
 		$this->modificationLogList->getConditionBuilder()->add("modification_log.time BETWEEN ? AND ?", [$startTime, $endTime]);
 		$this->modificationLogList->readObjects();
 	}

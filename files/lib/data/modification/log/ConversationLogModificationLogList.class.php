@@ -17,50 +17,14 @@ use wcf\system\WCF;
  */
 class ConversationLogModificationLogList extends ModificationLogList {
 	/**
-	 * conversation object type id
-	 * @var	integer
-	 */
-	public $conversationObjectTypeID = 0;
-	
-	/**
-	 * conversation object
-	 * @var	Conversation
-	 */
-	public $conversation = null;
-	
-	/**
 	 * @inheritDoc
 	 */
-	public function __construct() {
+	public function __construct($conversationID) {
 		parent::__construct();
 		
-		$this->conversationObjectTypeID = ConversationModificationLogHandler::getInstance()->getObjectType()->objectTypeID;
-	}
-	
-	/**
-	 * Initializes the conversation log modification log list.
-	 * 
-	 * @param	Conversation	$conversation
-	 */
-	public function setConversation(Conversation $conversation) {
-		$this->conversation = $conversation;
-	}
-	
-	/**
-	 * @inheritDoc
-	 */
-	public function countObjects() {
-		$sql = "SELECT	COUNT(modification_log.logID)
-			FROM	wcf".WCF_N."_modification_log modification_log
-			WHERE	modification_log.objectTypeID = ?
-				AND modification_log.objectID = ?";
-		$statement = WCF::getDB()->prepareStatement($sql);
-		$statement->execute([
-			$this->conversationObjectTypeID,
-			$this->conversation->conversationID
-		]);
-		
-		return $statement->fetchColumn();
+		// set conditions
+		$this->getConditionBuilder()->add('modification_log.objectTypeID = ?', array(ConversationModificationLogHandler::getInstance()->getObjectType('com.woltlab.wcf.conversation.conversation')->objectTypeID));
+		$this->getConditionBuilder()->add('modification_log.objectID = ?', array($conversationID));
 	}
 	
 	/**
@@ -69,14 +33,10 @@ class ConversationLogModificationLogList extends ModificationLogList {
 	public function readObjects() {
 		$sql = "SELECT	modification_log.*
 			FROM	wcf".WCF_N."_modification_log modification_log
-			WHERE	modification_log.objectTypeID = ?
-				AND modification_log.objectID = ?
+			".$this->getConditionBuilder()."
 			".(!empty($this->sqlOrderBy) ? "ORDER BY ".$this->sqlOrderBy : '');
 		$statement = WCF::getDB()->prepareStatement($sql, $this->sqlLimit, $this->sqlOffset);
-		$statement->execute([
-			$this->conversationObjectTypeID,
-			$this->conversation->conversationID
-		]);
+		$statement->execute($this->getConditionBuilder()->getParameters());
 		$this->objects = $statement->fetchObjects(($this->objectClassName ?: $this->className));
 		
 		// use table index as array index

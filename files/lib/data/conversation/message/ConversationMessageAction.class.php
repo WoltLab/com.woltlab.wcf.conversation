@@ -533,7 +533,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		);
 		
 		if ($quoteID === false) {
-			$removeQuoteID = MessageQuoteManager::getInstance()->getQuoteID('com.woltlab.wcf.conversation.message', $this->message->conversationID, $this->message->messageID, $this->message->getExcerpt(), $this->message->getMessage());
+			$removeQuoteID = MessageQuoteManager::getInstance()->getQuoteID('com.woltlab.wcf.conversation.message', $this->message->messageID, $this->message->getExcerpt(), $this->message->getMessage());
 			MessageQuoteManager::getInstance()->removeQuote($removeQuoteID);
 		}
 		
