@@ -1,6 +1,7 @@
 <?php
 namespace wcf\page;
 use wcf\data\conversation\label\ConversationLabel;
+use wcf\data\conversation\label\ConversationLabelList;
 use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\conversation\message\ViewableConversationMessageList;
 use wcf\data\conversation\Conversation;
