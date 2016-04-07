@@ -178,6 +178,11 @@
 		<item name="wcf.page.com.woltlab.wcf.conversation.ConversationMessageEditForm"><![CDATA[Konversationsnachricht bearbeiten]]></item>
 		<item name="wcf.page.com.woltlab.wcf.conversation.ConversationListPage"><![CDATA[Konversationen]]></item>
 		<item name="wcf.page.com.woltlab.wcf.conversation.ConversationPage"><![CDATA[Konversation]]></item>
+		<item name="wcf.page.onlineLocation.com.woltlab.wcf.conversation.ConversationAdd"><![CDATA[Neue Konversation]]></item>
+		<item name="wcf.page.onlineLocation.com.woltlab.wcf.conversation.ConversationList"><![CDATA[Konversationenliste]]></item>
+		<item name="wcf.page.onlineLocation.com.woltlab.wcf.conversation.ConversationMessageAdd"><![CDATA[Antwort erstellen in Konversation <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>]]></item>
+		<item name="wcf.page.onlineLocation.com.woltlab.wcf.conversation.ConversationMessageEdit"><![CDATA[Nachricht bearbeiten in Konversation <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>]]></item>
+		<item name="wcf.page.onlineLocation.com.woltlab.wcf.conversation.Conversation"><![CDATA[Konversation <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>]]></item>
 	</category>
 	
 	<category name="wcf.search">
@@ -213,13 +218,5 @@
 		<item name="wcf.user.option.conversationMessagesPerPage"><![CDATA[Nachrichten pro Seite]]></item>
 		<item name="wcf.user.option.conversationsPerPage"><![CDATA[Konversationen pro Seite]]></item>
 		<item name="wcf.user.option.canSendConversation"><![CDATA[Kann Konversationen schreiben]]></item>
-	</category>
-	
-	<category name="wcf.user.usersOnline">
-		<item name="wcf.user.usersOnline.location.ConversationAddForm"><![CDATA[Erstellt eine neue Konversation]]></item>
-		<item name="wcf.user.usersOnline.location.ConversationListPage"><![CDATA[Betrachtet die Liste seiner Konversationen]]></item>
-		<item name="wcf.user.usersOnline.location.ConversationMessageAddForm"><![CDATA[Schreibt eine Antwort auf die Konversation <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>]]></item>
-		<item name="wcf.user.usersOnline.location.ConversationMessageEditForm"><![CDATA[Bearbeitet eine Nachricht in der Konversation <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>]]></item>
-		<item name="wcf.user.usersOnline.location.ConversationPage"><![CDATA[Liest die Konversation <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>]]></item>
 	</category>
 </language>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/maelstrom/page.xsd">
+	<import>
+		<page identifier="com.woltlab.wcf.conversation.ConversationList">
+			<controller>wcf\page\ConversationListPage</controller>
+			<name language="de"><![CDATA[Konversationenliste]]></name>
+			<name language="en"><![CDATA[Conversation List]]></name>
+			<pagetype>system</pagetype>
+		</page>
+		<page identifier="com.woltlab.wcf.conversation.Conversation">
+			<controller>wcf\page\ConversationPage</controller>
+			<handler>wcf\system\page\handler\DefaultConversationRelatedPageHandler</handler>
+			<name language="de"><![CDATA[Konversation]]></name>
+			<name language="en"><![CDATA[Conversation]]></name>
+			<pagetype>system</pagetype>
+		</page>
+		<page identifier="com.woltlab.wcf.conversation.ConversationAdd">
+			<controller>wcf\form\ConversationAddForm</controller>
+			<handler>wcf\system\page\handler\DefaultConversationRelatedPageHandler</handler>
+			<name language="de"><![CDATA[Konversation starten]]></name>
+			<name language="en"><![CDATA[New Conversation]]></name>
+			<pagetype>system</pagetype>
+		</page>
+		<page identifier="com.woltlab.wcf.conversation.ConversationMessageAdd">
+			<controller>wcf\form\ConversationMessageAddForm</controller>
+			<handler>wcf\system\page\handler\DefaultConversationRelatedPageHandler</handler>
+			<name language="de"><![CDATA[Antwort auf Konversation erstellen]]></name>
+			<name language="en"><![CDATA[Reply to Conversation]]></name>
+			<pagetype>system</pagetype>
+			<requireObjectID>1</requireObjectID>
+		</page>
+		<page identifier="com.woltlab.wcf.conversation.ConversationMessageEdit">
+			<controller>wcf\form\ConversationMessageEditForm</controller>
+			<name language="de"><![CDATA[Antwort auf Konversation bearbeiten]]></name>
+			<name language="en"><![CDATA[Edit Reply to Conversation]]></name>
+			<pagetype>system</pagetype>
+			<requireObjectID>1</requireObjectID>
+		</page>
+	</import>
+</data>

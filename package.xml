@@ -35,5 +35,6 @@
 		<instruction type="userOption" />
 		<instruction type="eventListener" />
 		<instruction type="script">acp/install_com.woltlab.wcf.conversation.php</instruction>
+		<instruction type="page" />
 	</instructions>
 </package>

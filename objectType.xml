@@ -58,42 +58,6 @@
 		</type>
 		<!-- /Modification Log -->
 		
-		<!-- user online locations -->
-		<type>
-			<name>com.woltlab.wcf.conversation.ConversationListPage</name>
-			<definitionname>com.woltlab.wcf.user.online.location</definitionname>
-			<controller>wcf\page\ConversationListPage</controller>
-			<languagevariable>wcf.user.usersOnline.location.ConversationListPage</languagevariable>
-		</type>
-		<type>
-			<name>com.woltlab.wcf.conversation.ConversationAddForm</name>
-			<definitionname>com.woltlab.wcf.user.online.location</definitionname>
-			<controller>wcf\form\ConversationAddForm</controller>
-			<languagevariable>wcf.user.usersOnline.location.ConversationAddForm</languagevariable>
-		</type>
-		<type>
-			<name>com.woltlab.wcf.conversation.ConversationPage</name>
-			<definitionname>com.woltlab.wcf.user.online.location</definitionname>
-			<classname>wcf\system\user\online\location\ConversationLocation</classname>
-			<controller>wcf\page\ConversationPage</controller>
-			<languagevariable>wcf.user.usersOnline.location.ConversationPage</languagevariable>
-		</type>
-		<type>
-			<name>com.woltlab.wcf.conversation.ConversationMessageAddForm</name>
-			<definitionname>com.woltlab.wcf.user.online.location</definitionname>
-			<classname>wcf\system\user\online\location\ConversationLocation</classname>
-			<controller>wcf\form\ConversationMessageAddForm</controller>
-			<languagevariable>wcf.user.usersOnline.location.ConversationMessageAddForm</languagevariable>
-		</type>
-		<type>
-			<name>com.woltlab.wcf.conversation.ConversationMessageEditForm</name>
-			<definitionname>com.woltlab.wcf.user.online.location</definitionname>
-			<classname>wcf\system\user\online\location\ConversationLocation</classname>
-			<controller>wcf\form\ConversationMessageEditForm</controller>
-			<languagevariable>wcf.user.usersOnline.location.ConversationMessageEditForm</languagevariable>
-		</type>
-		<!-- /user online locations -->
-		
 		<!-- importers -->
 		<type>
 			<name>com.woltlab.wcf.conversation</name>
