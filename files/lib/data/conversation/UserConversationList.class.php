@@ -140,7 +140,7 @@ class UserConversationList extends ConversationList {
 		if (!empty($this->objects)) {
 			$labels = $this->loadLabelAssignments();
 			
-			$userIDs = [ ];
+			$userIDs = [];
 			foreach ($this->objects as $conversationID => $conversation) {
 				if (isset($labels[$conversationID])) {
 					foreach ($labels[$conversationID] as $label) {

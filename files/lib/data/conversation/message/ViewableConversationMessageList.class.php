@@ -79,7 +79,7 @@ class ViewableConversationMessageList extends ConversationMessageList {
 		
 		parent::readObjects();
 		
-		$userIDs = [ ];
+		$userIDs = [];
 		foreach ($this->objects as $message) {
 			if ($message->time > $this->maxPostTime) {
 				$this->maxPostTime = $message->time;
