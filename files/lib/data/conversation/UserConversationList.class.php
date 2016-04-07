@@ -112,7 +112,7 @@ class UserConversationList extends ConversationList {
 	 * @see	\wcf\data\DatabaseObjectList::readObjectIDs()
 	 */
 	public function readObjectIDs() {
-		if ($this->filter == 'draft') return parent::readObjectIDs();
+		if ($this->filter == 'draft') parent::readObjectIDs();
 		
 		$this->objectIDs = array();
 		$sql = "SELECT	conversation_to_user.conversationID AS objectID
