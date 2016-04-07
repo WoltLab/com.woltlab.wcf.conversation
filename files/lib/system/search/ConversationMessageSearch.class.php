@@ -1,5 +1,6 @@
 <?php
 namespace wcf\system\search;
+use wcf\data\conversation\message\SearchResultConversationMessage;
 use wcf\data\conversation\message\SearchResultConversationMessageList;
 use wcf\data\conversation\Conversation;
 use wcf\form\IForm;
@@ -31,7 +32,7 @@ class ConversationMessageSearch extends AbstractSearchableObjectType {
 	
 	/**
 	 * message data cache
-	 * @var	array<\wcf\data\conversation\message\SearchResultConversationMessage>
+	 * @var	SearchResultConversationMessage[]
 	 */
 	public $messageCache = [];
 	

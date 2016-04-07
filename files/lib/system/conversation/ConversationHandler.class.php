@@ -18,13 +18,13 @@ use wcf\system\WCF;
 class ConversationHandler extends SingletonFactory {
 	/**
 	 * number of unread conversations
-	 * @var	array<integer>
+	 * @var	integer[]
 	 */
 	protected $unreadConversationCount = array();
 	
 	/**
 	 * number of conversations
-	 * @var	array<integer>
+	 * @var	integer[]
 	 */
 	protected $conversationCount = array();
 	

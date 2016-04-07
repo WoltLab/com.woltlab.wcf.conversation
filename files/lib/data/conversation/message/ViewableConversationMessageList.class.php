@@ -29,13 +29,13 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	
 	/**
 	 * attachment object ids
-	 * @var	array<integer>
+	 * @var	integer[]
 	 */
 	public $attachmentObjectIDs = array();
 	
 	/**
 	 * ids of the messages with embedded objects
-	 * @var	array<integer>
+	 * @var	integer[]
 	 */
 	public $embeddedObjectMessageIDs = array();
 	

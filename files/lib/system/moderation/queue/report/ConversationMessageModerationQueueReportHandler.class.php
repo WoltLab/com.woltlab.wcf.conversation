@@ -40,7 +40,7 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
 	
 	/**
 	 * list of conversation message
-	 * @var	array<\wcf\data\conversation\message\ConversationMessage>
+	 * @var	ConversationMessage[]
 	 */
 	protected static $messages = array();
 	

@@ -1,6 +1,7 @@
 <?php
 namespace wcf\system\clipboard\action;
 use wcf\data\clipboard\action\ClipboardAction;
+use wcf\data\conversation\Conversation;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\WCF;
 
@@ -22,7 +23,7 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 	
 	/**
 	 * list of conversations
-	 * @var	array<\wcf\data\conversation\Conversation>
+	 * @var	Conversation[]
 	 */
 	public $conversations = null;
 	
@@ -116,8 +117,8 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 	/**
 	 * Returns a list of conversations with user participation.
 	 * 
-	 * @param	array<\wcf\data\conversation\Conversation>
-	 * @return	array<\wcf\data\conversation\Conversation>
+	 * @param	Conversation[]		$conversations
+	 * @return	Conversation[]
 	 */
 	protected function validateParticipation(array $conversations) {
 		$conversationIDs = array();
@@ -163,7 +164,7 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 	/**
 	 * Validates if user may close the given conversations.
 	 * 
-	 * @return	array<integer>
+	 * @return	integer[]
 	 */
 	protected function validateClose() {
 		$conversationIDs = array();
@@ -180,7 +181,7 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 	/**
 	 * Validates conversations available for leaving.
 	 * 
-	 * @return	array<integer>
+	 * @return	integer[]
 	 */
 	public function validateLeave() {
 		$tmpIDs = array();
@@ -210,7 +211,7 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 	/**
 	 * Validates conversations applicable for mark as read.
 	 * 
-	 * @return	array<integer>
+	 * @return	integer[]
 	 */
 	public function validateMarkAsRead() {
 		$conversationIDs = array();
@@ -241,7 +242,7 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 	/**
 	 * Validates if user may open the given conversations.
 	 * 
-	 * @return	array<integer>
+	 * @return	integer[]
 	 */
 	protected function validateOpen() {
 		$conversationIDs = array();
@@ -258,7 +259,7 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 	/**
 	 * Validates conversations available for restore.
 	 * 
-	 * @return	array<integer>
+	 * @return	integer[]
 	 */
 	public function validateRestore() {
 		$tmpIDs = array();

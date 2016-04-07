@@ -76,13 +76,13 @@ class ConversationAddForm extends MessageForm {
 	
 	/**
 	 * participants (user ids)
-	 * @var	array<integer>
+	 * @var	integer[]
 	 */
 	public $participantIDs = array();
 	
 	/**
 	 * invisible participants (user ids)
-	 * @var	array<integer>
+	 * @var	integer[]
 	 */
 	public $invisibleParticipantIDs = array();
 	

@@ -19,7 +19,7 @@ use wcf\system\WCF;
 class UserConversationList extends ConversationList {
 	/**
 	 * list of available filters
-	 * @var	array<string>
+	 * @var	string[]
 	 */
 	public static $availableFilters = array('hidden', 'draft', 'outbox');
 	
@@ -165,7 +165,7 @@ class UserConversationList extends ConversationList {
 	/**
 	 * Returns a list of conversation labels.
 	 * 
-	 * @return	array<\wcf\data\conversation\label\ConversationLabel>
+	 * @return	ConversationLabel[]
 	 */
 	protected function getLabels() {
 		if ($this->labelList === null) {
@@ -178,7 +178,7 @@ class UserConversationList extends ConversationList {
 	/**
 	 * Returns label assignments per conversation.
 	 * 
-	 * @return	array<array>
+	 * @return	ConversationLabel[][]
 	 */
 	protected function loadLabelAssignments() {
 		$labels = $this->getLabels();

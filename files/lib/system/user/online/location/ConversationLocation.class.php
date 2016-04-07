@@ -18,13 +18,13 @@ use wcf\system\WCF;
 class ConversationLocation implements IUserOnlineLocation {
 	/**
 	 * conversation ids
-	 * @var	array<integer>
+	 * @var	integer[]
 	 */
 	protected $conversationIDs = array();
 	
 	/**
 	 * list of conversations
-	 * @var	array<\wcf\data\conversation\Conversation>
+	 * @var	Conversation[]
 	 */
 	protected $conversations = null;
 	

@@ -43,7 +43,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	
 	/**
 	 * list of conversation data modifications
-	 * @var	array<array>
+	 * @var	mixed[][]
 	 */
 	protected $conversationData = [];
 	
@@ -436,7 +436,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	/**
 	 * Closes conversations.
 	 * 
-	 * @return	array<array>
+	 * @return	mixed[][]
 	 */
 	public function close() {
 		foreach ($this->objects as $conversation) {
@@ -475,7 +475,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	/**
 	 * Opens conversations.
 	 * 
-	 * @return	array<array>
+	 * @return	mixed[][]
 	 */
 	public function open() {
 		foreach ($this->objects as $conversation) {
@@ -634,7 +634,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	/**
 	 * Returns a mixed conversation list with up to 5 unread conversations.
 	 * 
-	 * @return	array<mixed>
+	 * @return	mixed[][]
 	 */
 	public function getMixedConversationList() {
 		$unreadConversationList = new UserConversationList(WCF::getUser()->userID);
@@ -892,7 +892,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	/**
 	 * Returns conversation data.
 	 * 
-	 * @return	array<array>
+	 * @return	mixed[][]
 	 */
 	protected function getConversationData() {
 		return [
