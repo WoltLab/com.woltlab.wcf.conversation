@@ -5,19 +5,19 @@
 		<item name="wcf.acp.group.option.mod.conversation.canModerateConversation"><![CDATA[Can moderate conversations]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canUseConversation"><![CDATA[Can use conversations]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canSetCanInvite"><![CDATA[Can grant permissions]]></item>
-		<item name="wcf.acp.group.option.user.conversation.canSetCanInvite.description"><![CDATA[When starting a new conversation, users of this group can grant added participants the permission, to add new participants. Changes to not affect existing conversations.]]></item>
+		<item name="wcf.acp.group.option.user.conversation.canSetCanInvite.description"><![CDATA[When starting a new conversation, users of this group can grant added participants the permission to add new participants. Changes do not affect existing conversations.]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canAddInvisibleParticipants"><![CDATA[Can add invisible participants]]></item>
-		<item name="wcf.acp.group.option.user.conversation.canAddInvisibleParticipants.description"><![CDATA[Users of this group can add invisible participants upon the creation of a new conversation. Changes to not affect existing conversations.]]></item>
+		<item name="wcf.acp.group.option.user.conversation.canAddInvisibleParticipants.description"><![CDATA[Users of this group can add invisible participants upon the creation of a new conversation. Changes do not affect existing conversations.]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxParticipants"><![CDATA[Maximum Participants]]></item>
-		<item name="wcf.acp.group.option.user.conversation.maxParticipants.description"><![CDATA[Maximum number of participants per conversation]]></item>
+		<item name="wcf.acp.group.option.user.conversation.maxParticipants.description"><![CDATA[Maximum number of participants per conversation.]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxConversations"><![CDATA[Maximum Conversations]]></item>
-		<item name="wcf.acp.group.option.user.conversation.maxConversations.description"><![CDATA[Maximum number of active conversations per user]]></item>
+		<item name="wcf.acp.group.option.user.conversation.maxConversations.description"><![CDATA[Maximum number of active conversations per user.]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxLabels"><![CDATA[Maximum Labels]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxLength"><![CDATA[Maximum Message Length]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canUploadAttachment"><![CDATA[Can upload attachments]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxAttachmentSize"><![CDATA[Maximum File Size]]></item>
 		<item name="wcf.acp.group.option.user.conversation.allowedAttachmentExtensions"><![CDATA[Allowed File Extensions]]></item>
-		<item name="wcf.acp.group.option.user.conversation.allowedAttachmentExtensions.description"><![CDATA[One extension per line]]></item>
+		<item name="wcf.acp.group.option.user.conversation.allowedAttachmentExtensions.description"><![CDATA[Enter one extension per line.]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxAttachmentCount"><![CDATA[Maximum Attachments per Message]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canEditMessage"><![CDATA[Can edit own messages]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canEditMessage.description"><![CDATA[Users of this user group can edit their own messages, regardless if they have been read by one or more receipients.]]></item>
@@ -25,20 +25,20 @@
 	
 	<category name="wcf.acp.option">
 		<item name="wcf.acp.option.category.message.conversation"><![CDATA[Conversations]]></item>
-		<item name="wcf.acp.option.conversation_list_default_sort_field"><![CDATA[Sort Field]]></item>
+		<item name="wcf.acp.option.conversation_list_default_sort_field"><![CDATA[Sort By]]></item>
 		<item name="wcf.acp.option.conversation_list_default_sort_order"><![CDATA[Sort Order]]></item>
 		<item name="wcf.acp.option.conversation_messages_per_page"><![CDATA[Messages Per Page]]></item>
 		<item name="wcf.acp.option.conversations_per_page"><![CDATA[Conversations Per Page]]></item>
 		<item name="wcf.acp.option.module_conversation"><![CDATA[Conversations]]></item>
 		<item name="wcf.acp.option.conversation_reply_show_messages_max"><![CDATA[Previous Messages]]></item>
-		<item name="wcf.acp.option.conversation_reply_show_messages_max.description"><![CDATA[Number of previous messages displayed on extended reply form.]]></item>
+		<item name="wcf.acp.option.conversation_reply_show_messages_max.description"><![CDATA[Number of previous messages displayed on the extended reply form.]]></item>
 	</category>
 	
 	<category name="wcf.acp.rebuildData">
 		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation"><![CDATA[Rebuild Conversations]]></item>
-		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.description"><![CDATA[Rebuilds conversation counters]]></item>
+		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.description"><![CDATA[Rebuilds the conversation counters.]]></item>
 		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message"><![CDATA[Rebuild Conversation Messages]]></item>
-		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message.description"><![CDATA[Rebuild search index for conversation messages]]></item>
+		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message.description"><![CDATA[Rebuilds the search index for the conversation messages.]]></item>
 	</category>
 	
 	<category name="wcf.acp.stat">
@@ -70,7 +70,7 @@
 		<item name="wcf.conversation.folder.outbox"><![CDATA[Started]]></item>
 		<item name="wcf.conversation.hideConversation"><![CDATA[Manage Participation]]></item>
 		<item name="wcf.conversation.hideConversation.leave"><![CDATA[Hide]]></item>
-		<item name="wcf.conversation.hideConversation.leave.description"><![CDATA[Conversation will be no longer listed as active conversation until a new message is written.]]></item>
+		<item name="wcf.conversation.hideConversation.leave.description"><![CDATA[Conversation will no longer be listed as an active conversation until a new message is written.]]></item>
 		<item name="wcf.conversation.hideConversation.leavePermanently"><![CDATA[Leave]]></item>
 		<item name="wcf.conversation.hideConversation.leavePermanently.description"><![CDATA[Conversation will be left and you will no longer be listed as an active participant.]]></item>
 		<item name="wcf.conversation.hideConversation.restore"><![CDATA[Mark As Active]]></item>
