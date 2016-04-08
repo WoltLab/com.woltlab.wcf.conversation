@@ -13,6 +13,7 @@
 			<name language="de"><![CDATA[Konversation]]></name>
 			<name language="en"><![CDATA[Conversation]]></name>
 			<pageType>system</pageType>
+			<parent>com.woltlab.wcf.conversation.ConversationList</parent>
 		</page>
 		<page identifier="com.woltlab.wcf.conversation.ConversationAdd">
 			<controller>wcf\form\ConversationAddForm</controller>
@@ -20,6 +21,7 @@
 			<name language="de"><![CDATA[Konversation starten]]></name>
 			<name language="en"><![CDATA[New Conversation]]></name>
 			<pageType>system</pageType>
+			<parent>com.woltlab.wcf.conversation.ConversationList</parent>
 		</page>
 		<page identifier="com.woltlab.wcf.conversation.ConversationMessageAdd">
 			<controller>wcf\form\ConversationMessageAddForm</controller>
@@ -28,6 +30,7 @@
 			<name language="en"><![CDATA[Reply to Conversation]]></name>
 			<pageType>system</pageType>
 			<requireObjectID>1</requireObjectID>
+			<parent>com.woltlab.wcf.conversation.Conversation</parent>
 		</page>
 		<page identifier="com.woltlab.wcf.conversation.ConversationMessageEdit">
 			<controller>wcf\form\ConversationMessageEditForm</controller>
@@ -35,6 +38,7 @@
 			<name language="en"><![CDATA[Edit Reply to Conversation]]></name>
 			<pageType>system</pageType>
 			<requireObjectID>1</requireObjectID>
+			<parent>com.woltlab.wcf.conversation.Conversation</parent>
 		</page>
 	</import>
 </data>
