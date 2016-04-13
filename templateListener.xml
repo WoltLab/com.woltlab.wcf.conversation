@@ -28,6 +28,13 @@
 			<eventname>settings</eventname>
 			<templatecode><![CDATA[{include file='__searchAreaConversationSettings'}]]></templatecode>
 		</templatelistener>
+		
+		<templatelistener name="userProfileStartConversation">
+			<environment>user</environment>
+			<templatename>userHeader</templatename>
+			<eventname>menuInteraction</eventname>
+			<templatecode><![CDATA[{include file='__userProfileStartConversation'}]]></templatecode>
+		</templatelistener>
 	</import>
 	
 	<delete>
