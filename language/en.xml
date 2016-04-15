@@ -9,9 +9,9 @@
 		<item name="wcf.acp.group.option.user.conversation.canAddInvisibleParticipants"><![CDATA[Can add invisible participants]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canAddInvisibleParticipants.description"><![CDATA[While creating a new conversation, users of this group can add invisible participants. Changes do not affect existing conversations.]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxParticipants"><![CDATA[Maximum Participants]]></item>
-		<item name="wcf.acp.group.option.user.conversation.maxParticipants.description"><![CDATA[The allowed number of participants per conversation.]]></item>
+		<item name="wcf.acp.group.option.user.conversation.maxParticipants.description"><![CDATA[The amount of participants allowed per conversation.]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxConversations"><![CDATA[Maximum Conversations]]></item>
-		<item name="wcf.acp.group.option.user.conversation.maxConversations.description"><![CDATA[The allowed number of active conversations per user.]]></item>
+		<item name="wcf.acp.group.option.user.conversation.maxConversations.description"><![CDATA[The amount of active conversations allowed per user.]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxLabels"><![CDATA[Maximum Labels]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxLength"><![CDATA[Maximum Message Length]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canUploadAttachment"><![CDATA[Can upload attachments]]></item>
