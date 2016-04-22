@@ -1,40 +1,8 @@
-{include file='documentHeader'}
+{capture assign='pageTitle'}{lang}wcf.conversation.message.edit{/lang} - {$conversation->subject}{/capture}
 
-<head>
-	<title>{lang}wcf.conversation.message.edit{/lang} - {$conversation->subject} - {PAGE_TITLE|language}</title>
-	
-	{include file='headInclude'}
-	
-	<script data-relocate="true">
-		//<![CDATA[
-		$(function() {
-			WCF.Language.addObject({
-				'wcf.message.bbcode.code.copy': '{lang}wcf.message.bbcode.code.copy{/lang}'
-			});
-			
-			{if $isFirstMessage && $conversation->isDraft}
-				new WCF.Search.User('#participants', null, false, [ ], true);
-				new WCF.Search.User('#invisibleParticipants', null, false, [ ], true);
-			{/if}
-			
-			WCF.Message.Submit.registerButton('text', $('#messageContainer > .formSubmit > input[type=submit]'));
-			new WCF.Message.FormGuard();
-			new WCF.Message.BBCode.CodeViewer();
-			
-			WCF.System.Dependency.Manager.register('CKEditor', function() { new WCF.Message.UserMention('text'); });
-		});
-		//]]>
-	</script>
-</head>
+{capture assign='contentTitle'}{lang}wcf.conversation.message.edit{/lang}{/capture}
 
-<body id="tpl{$templateName|ucfirst}" data-template="{$templateName}" data-application="{$templateNameApplication}">
 {include file='header'}
-
-<header class="contentHeader">
-	<h1 class="contentTitle">{lang}wcf.conversation.message.edit{/lang}</h1>
-</header>
-
-{include file='userNotice'}
 
 {include file='formError'}
 
@@ -206,8 +174,26 @@
 	</section>
 {/if}
 
-{include file='footer'}
-{include file='wysiwyg'}
+<script data-relocate="true">
+	//<![CDATA[
+	$(function() {
+		WCF.Language.addObject({
+			'wcf.message.bbcode.code.copy': '{lang}wcf.message.bbcode.code.copy{/lang}'
+		});
+		
+		{if $isFirstMessage && $conversation->isDraft}
+		new WCF.Search.User('#participants', null, false, [ ], true);
+		new WCF.Search.User('#invisibleParticipants', null, false, [ ], true);
+		{/if}
+		
+		WCF.Message.Submit.registerButton('text', $('#messageContainer > .formSubmit > input[type=submit]'));
+		new WCF.Message.FormGuard();
+		new WCF.Message.BBCode.CodeViewer();
+		
+		WCF.System.Dependency.Manager.register('CKEditor', function() { new WCF.Message.UserMention('text'); });
+	});
+	//]]>
+</script>
 
-</body>
-</html>
+{include file='wysiwyg'}
+{include file='footer'}

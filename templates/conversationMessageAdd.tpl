@@ -1,39 +1,8 @@
-{include file='documentHeader'}
+{capture assign='pageTitle'}{lang}wcf.conversation.message.add{/lang} - {$conversation->subject}{/capture}
 
-<head>
-	<title>{lang}wcf.conversation.message.add{/lang} - {$conversation->subject} - {PAGE_TITLE|language}</title>
-	
-	{include file='headInclude'}
-	
-	<script data-relocate="true" src="{@$__wcf->getPath()}js/WCF.Conversation{if !ENABLE_DEBUG_MODE}.min{/if}.js?v={@LAST_UPDATE_TIME}"></script>
-	<script data-relocate="true">
-		//<![CDATA[
-		$(function() {
-			WCF.Language.addObject({
-				'wcf.message.bbcode.code.copy': '{lang}wcf.message.bbcode.code.copy{/lang}'
-			});
-			
-			{include file='__messageQuoteManager' wysiwygSelector='text' supportPaste=true}
-			new WCF.Conversation.Message.QuoteHandler($quoteManager);
-			
-			WCF.Message.Submit.registerButton('text', $('#messageContainer > .formSubmit > input[type=submit]'));
-			new WCF.Message.FormGuard();
-			new WCF.Message.BBCode.CodeViewer();
-			
-			WCF.System.Dependency.Manager.register('CKEditor', function() { new WCF.Message.UserMention('text'); });
-		});
-		//]]>
-	</script>
-</head>
+{capture assign='contentTitle'}{lang}wcf.conversation.message.add{/lang}{/capture}
 
-<body id="tpl{$templateName|ucfirst}" data-template="{$templateName}" data-application="{$templateNameApplication}">
 {include file='header'}
-
-<header class="contentHeader">
-	<h1 class="contentTitle">{lang}wcf.conversation.message.add{/lang}</h1>
-</header>
-
-{include file='userNotice'}
 
 {if !$conversation->isDraft && !$conversation->hasOtherParticipants()}
 	<p class="warning">{lang}wcf.conversation.noParticipantsWarning{/lang}</p>
@@ -125,8 +94,25 @@
 	</ul>
 </section>
 
-{include file='footer'}
-{include file='wysiwyg'}
+<script data-relocate="true" src="{@$__wcf->getPath()}js/WCF.Conversation{if !ENABLE_DEBUG_MODE}.min{/if}.js?v={@LAST_UPDATE_TIME}"></script>
+<script data-relocate="true">
+	//<![CDATA[
+	$(function() {
+		WCF.Language.addObject({
+			'wcf.message.bbcode.code.copy': '{lang}wcf.message.bbcode.code.copy{/lang}'
+		});
+		
+		{include file='__messageQuoteManager' wysiwygSelector='text' supportPaste=true}
+		new WCF.Conversation.Message.QuoteHandler($quoteManager);
+		
+		WCF.Message.Submit.registerButton('text', $('#messageContainer > .formSubmit > input[type=submit]'));
+		new WCF.Message.FormGuard();
+		new WCF.Message.BBCode.CodeViewer();
+		
+		WCF.System.Dependency.Manager.register('CKEditor', function() { new WCF.Message.UserMention('text'); });
+	});
+	//]]>
+</script>
 
-</body>
-</html>
+{include file='wysiwyg'}
+{include file='footer'}

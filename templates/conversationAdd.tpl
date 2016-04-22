@@ -1,40 +1,8 @@
-{include file='documentHeader'}
+{capture assign='pageTitle'}{lang}wcf.conversation.add{/lang}{/capture}
 
-<head>
-	<title>{lang}wcf.conversation.add{/lang} - {PAGE_TITLE|language}</title>
-	
-	{include file='headInclude'}
-	
-	<script data-relocate="true">
-		require(['WoltLab/WCF/Ui/ItemList/User'], function(UiItemListUser) {
-			UiItemListUser.init('participants', {
-				maxItems: {@$__wcf->getSession()->getPermission('user.conversation.maxParticipants')}
-			});
-			
-			UiItemListUser.init('invisibleParticipants', {
-				maxItems: {@$__wcf->getSession()->getPermission('user.conversation.maxParticipants')}
-			});
-		});
-		
-		$(function() {
-			WCF.Message.Submit.registerButton('text', $('#messageContainer > .formSubmit > input[type=submit]'));
-			new WCF.Message.FormGuard();
-			
-			WCF.System.Dependency.Manager.register('Redactor_text', function() { new WCF.Message.UserMention('text'); });
-			
-			{include file='__messageQuoteManager' wysiwygSelector='text' supportPaste=true}
-		});
-	</script>
-</head>
+{capture assign='contentTitle'}{lang}wcf.conversation.add{/lang}{/capture}
 
-<body id="tpl{$templateName|ucfirst}" data-template="{$templateName}" data-application="{$templateNameApplication}">
 {include file='header'}
-
-<header class="contentHeader">
-	<h1 class="contentTitle">{lang}wcf.conversation.add{/lang}</h1>
-</header>
-
-{include file='userNotice'}
 
 {include file='formError'}
 
@@ -162,8 +130,26 @@
 	</div>
 </form>
 
-{include file='footer'}
-{include file='wysiwyg'}
+<script data-relocate="true">
+	require(['WoltLab/WCF/Ui/ItemList/User'], function(UiItemListUser) {
+		UiItemListUser.init('participants', {
+			maxItems: {@$__wcf->getSession()->getPermission('user.conversation.maxParticipants')}
+		});
+		
+		UiItemListUser.init('invisibleParticipants', {
+			maxItems: {@$__wcf->getSession()->getPermission('user.conversation.maxParticipants')}
+		});
+	});
+	
+	$(function() {
+		WCF.Message.Submit.registerButton('text', $('#messageContainer > .formSubmit > input[type=submit]'));
+		new WCF.Message.FormGuard();
+		
+		WCF.System.Dependency.Manager.register('Redactor_text', function() { new WCF.Message.UserMention('text'); });
+		
+		{include file='__messageQuoteManager' wysiwygSelector='text' supportPaste=true}
+	});
+</script>
 
-</body>
-</html>
+{include file='wysiwyg'}
+{include file='footer'}

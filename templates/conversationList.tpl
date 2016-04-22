@@ -1,55 +1,25 @@
-{include file='documentHeader'}
+{capture assign='pageTitle'}{lang}wcf.conversation.conversations{/lang}{if $pageNo > 1} - {lang}wcf.page.pageNo{/lang}{/if}{/capture}
 
-<head>
-	<title>{lang}wcf.conversation.conversations{/lang} {if $pageNo > 1}- {lang}wcf.page.pageNo{/lang} {/if}- {PAGE_TITLE|language}</title>
-	
-	{include file='headInclude'}
-	
+{capture assign='contentHeader'}
+	<header class="contentHeader">
+		<div class="contentHeaderTitle">
+			<h1 class="contentTitle">{if $filter}{lang}wcf.conversation.folder.{$filter}{/lang}{else}{lang}wcf.conversation.conversations{/lang}{/if}</h1>
+		</div>
+		
+		{hascontent}
+			<nav class="contentHeaderNavigation">
+				<ul>
+					<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button"><span class="icon icon16 fa-asterisk"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>
+					{event name='contentHeaderNavigation'}
+				</ul>
+			</nav>
+		{/hascontent}
+	</header>
+{/capture}
+
+{capture assign='headContent'}
 	<link rel="alternate" type="application/rss+xml" title="{lang}wcf.global.button.rss{/lang}" href="{link controller='ConversationFeed' appendSession=false}at={@$__wcf->getUser()->userID}-{@$__wcf->getUser()->accessToken}{/link}" />
-	<script data-relocate="true" src="{@$__wcf->getPath()}js/WCF.Conversation{if !ENABLE_DEBUG_MODE}.min{/if}.js?v={@LAST_UPDATE_TIME}"></script>
-	<script data-relocate="true">
-		require(['Language', 'WoltLab/WCF/Ui/ItemList/User'], function(Language, UiItemListUser) {
-			Language.addObject({
-				'wcf.conversation.edit.addParticipants': '{lang}wcf.conversation.edit.addParticipants{/lang}',
-				'wcf.conversation.edit.assignLabel': '{lang}wcf.conversation.edit.assignLabel{/lang}',
-				'wcf.conversation.edit.close': '{lang}wcf.conversation.edit.close{/lang}',
-				'wcf.conversation.edit.leave': '{lang}wcf.conversation.edit.leave{/lang}',
-				'wcf.conversation.edit.open': '{lang}wcf.conversation.edit.open{/lang}',
-				'wcf.conversation.label.management': '{lang}wcf.conversation.label.management{/lang}',
-				'wcf.conversation.label.management.addLabel.success': '{lang}wcf.conversation.label.management.addLabel.success{/lang}',
-				'wcf.conversation.label.management.deleteLabel.confirmMessage': '{lang}wcf.conversation.label.management.deleteLabel.confirmMessage{/lang}',
-				'wcf.conversation.label.management.editLabel': '{lang}wcf.conversation.label.management.editLabel{/lang}',
-				'wcf.conversation.label.placeholder': '{lang}wcf.conversation.label.placeholder{/lang}',
-				'wcf.conversation.leave.title': '{lang}wcf.conversation.leave.title{/lang}',
-				'wcf.global.state.closed': '{lang}wcf.global.state.closed{/lang}',
-				'wcf.conversation.label.assignLabels': '{lang}wcf.conversation.label.assignLabels{/lang}'
-			});
-			
-			WCF.Clipboard.init('wcf\\page\\ConversationListPage', {@$hasMarkedItems}, { });
-			
-			var $editorHandler = new WCF.Conversation.EditorHandler();
-			var $inlineEditor = new WCF.Conversation.InlineEditor('.conversation');
-			$inlineEditor.setEditorHandler($editorHandler, 'list');
-			
-			new WCF.Conversation.Clipboard($editorHandler);
-			new WCF.Conversation.Label.Manager('{link controller='ConversationList' encode=false}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}');
-			new WCF.Conversation.Preview();
-			new WCF.Conversation.MarkAsRead();
-			new WCF.Conversation.MarkAllAsRead();
-			
-			// mobile safari hover workaround
-			if ($(window).width() <= 800) {
-				$('.sidebar').addClass('mobileSidebar').hover(function() { });
-			}
-			
-			UiItemListUser.init('participants', {
-				excludedSearchValues: ['{$__wcf->user->username|encodeJs}']
-			});
-		});
-	</script>
-</head>
-
-<body id="tpl{$templateName|ucfirst}" data-template="{$templateName}" data-application="{$templateNameApplication}">
+{/capture}
 
 {capture assign='sidebarLeft'}
 	<section class="box">
@@ -93,7 +63,7 @@
 		</div>
 	</section>
 	
-	<section class="box" class="jsOnly">
+	<section class="box jsOnly">
 		<h2 class="boxTitle">{lang}wcf.conversation.label{/lang}</h2>
 		
 		<div class="boxContent">
@@ -154,26 +124,17 @@
 
 {include file='header'}
 
-<header class="contentHeader">
-	<h1 class="contentTitle">{if $filter}{lang}wcf.conversation.folder.{$filter}{/lang}{else}{lang}wcf.conversation.conversations{/lang}{/if}</h1>
-</header>
-
-{include file='userNotice'}
-
-<div class="contentNavigation">
-	{assign var='participantsParameter' value=''}
-	{if $participants}{capture assign='participantsParameter'}&participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}{/capture}{/if}
-	{assign var='labelIDParameter' value=''}
-	{if $labelID}{assign var='labelIDParameter' value="&labelID=$labelID"}{/if}
-	{pages print=true assign=pagesLinks controller='ConversationList' link="filter=$filter$participantsParameter&pageNo=%d&sortField=$sortField&sortOrder=$sortOrder$labelIDParameter"}
-	
-	<nav>
-		<ul>
-			<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button"><span class="icon icon16 fa-asterisk"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>
-			{event name='contentNavigationButtonsTop'}
-		</ul>
-	</nav>
-</div>
+{hascontent}
+	<div class="paginationTop">
+		{content}
+			{assign var='participantsParameter' value=''}
+			{if $participants}{capture assign='participantsParameter'}&participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}{/capture}{/if}
+			{assign var='labelIDParameter' value=''}
+			{if $labelID}{assign var='labelIDParameter' value="&labelID=$labelID"}{/if}
+			{pages print=true assign=pagesLinks controller='ConversationList' link="filter=$filter$participantsParameter&pageNo=%d&sortField=$sortField&sortOrder=$sortOrder$labelIDParameter"}
+		{/content}
+	</div>
+{/hascontent}
 
 {if !$items}
 	<p class="info">{lang}wcf.conversation.noConversations{/lang}</p>
@@ -289,20 +250,61 @@
 	</div>
 {/if}
 
-<div class="contentNavigation">
-	{@$pagesLinks}
+<footer class="contentFooter">
+	{hascontent}
+		<div class="paginationBottom">
+			{content}{@$pagesLinks}{/content}
+		</div>
+	{/hascontent}
 	
-	<nav>
+	<nav class="contentFooterNavigation">
 		<ul>
 			<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button"><span class="icon icon16 fa-asterisk"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>
-			{event name='contentNavigationButtonsTop'}
+			{event name='contentFooterNavigation'}
 		</ul>
 	</nav>
-	
-	<nav class="jsClipboardEditor" data-types="[ 'com.woltlab.wcf.conversation.conversation' ]"></nav>
-</div>
+</footer>
+
+<script data-relocate="true" src="{@$__wcf->getPath()}js/WCF.Conversation{if !ENABLE_DEBUG_MODE}.min{/if}.js?v={@LAST_UPDATE_TIME}"></script>
+<script data-relocate="true">
+	require(['Language', 'WoltLab/WCF/Ui/ItemList/User'], function(Language, UiItemListUser) {
+		Language.addObject({
+			'wcf.conversation.edit.addParticipants': '{lang}wcf.conversation.edit.addParticipants{/lang}',
+			'wcf.conversation.edit.assignLabel': '{lang}wcf.conversation.edit.assignLabel{/lang}',
+			'wcf.conversation.edit.close': '{lang}wcf.conversation.edit.close{/lang}',
+			'wcf.conversation.edit.leave': '{lang}wcf.conversation.edit.leave{/lang}',
+			'wcf.conversation.edit.open': '{lang}wcf.conversation.edit.open{/lang}',
+			'wcf.conversation.label.management': '{lang}wcf.conversation.label.management{/lang}',
+			'wcf.conversation.label.management.addLabel.success': '{lang}wcf.conversation.label.management.addLabel.success{/lang}',
+			'wcf.conversation.label.management.deleteLabel.confirmMessage': '{lang}wcf.conversation.label.management.deleteLabel.confirmMessage{/lang}',
+			'wcf.conversation.label.management.editLabel': '{lang}wcf.conversation.label.management.editLabel{/lang}',
+			'wcf.conversation.label.placeholder': '{lang}wcf.conversation.label.placeholder{/lang}',
+			'wcf.conversation.leave.title': '{lang}wcf.conversation.leave.title{/lang}',
+			'wcf.global.state.closed': '{lang}wcf.global.state.closed{/lang}',
+			'wcf.conversation.label.assignLabels': '{lang}wcf.conversation.label.assignLabels{/lang}'
+		});
+		
+		WCF.Clipboard.init('wcf\\page\\ConversationListPage', {@$hasMarkedItems}, { });
+		
+		var $editorHandler = new WCF.Conversation.EditorHandler();
+		var $inlineEditor = new WCF.Conversation.InlineEditor('.conversation');
+		$inlineEditor.setEditorHandler($editorHandler, 'list');
+		
+		new WCF.Conversation.Clipboard($editorHandler);
+		new WCF.Conversation.Label.Manager('{link controller='ConversationList' encode=false}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}');
+		new WCF.Conversation.Preview();
+		new WCF.Conversation.MarkAsRead();
+		new WCF.Conversation.MarkAllAsRead();
+		
+		// mobile safari hover workaround
+		if ($(window).width() <= 800) {
+			$('.sidebar').addClass('mobileSidebar').hover(function() { });
+		}
+		
+		UiItemListUser.init('participants', {
+			excludedSearchValues: ['{$__wcf->user->username|encodeJs}']
+		});
+	});
+</script>
 
 {include file='footer'}
-
-</body>
-</html>
