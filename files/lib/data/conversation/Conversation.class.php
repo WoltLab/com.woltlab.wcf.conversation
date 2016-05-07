@@ -1,10 +1,9 @@
 <?php
 namespace wcf\data\conversation;
 use wcf\data\conversation\message\ConversationMessage;
+use wcf\data\ITitledLinkObject;
 use wcf\data\user\UserProfile;
 use wcf\data\DatabaseObject;
-use wcf\system\breadcrumb\Breadcrumb;
-use wcf\system\breadcrumb\IBreadcrumbProvider;
 use wcf\system\conversation\ConversationHandler;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\exception\UserInputException;
@@ -42,7 +41,7 @@ use wcf\util\ArrayUtil;
  * @property-read	integer		$isDraft
  * @property-read	string		$draftData
  */
-class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRouteController {
+class Conversation extends DatabaseObject implements IRouteController, ITitledLinkObject {
 	/**
 	 * @inheritDoc
 	 */
@@ -87,10 +86,8 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	/**
 	 * @inheritDoc
 	 */
-	public function getBreadcrumb() {
-		return new Breadcrumb($this->subject, LinkHandler::getInstance()->getLink('Conversation', [
-			'object' => $this
-		]));
+	public function getLink() {
+		return LinkHandler::getInstance()->getLink('Conversation', ['object' => $this]);
 	}
 	
 	/**

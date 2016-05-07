@@ -5,9 +5,9 @@ use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\data\conversation\message\ViewableConversationMessageList;
 use wcf\data\conversation\ConversationAction;
 use wcf\data\user\UserProfile;
-use wcf\system\breadcrumb\Breadcrumb;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\PermissionDeniedException;
+use wcf\system\page\PageLocationManager;
 use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
 use wcf\util\HeaderUtil;
@@ -211,8 +211,8 @@ class ConversationMessageEditForm extends ConversationAddForm {
 		}
 		
 		// add breadcrumbs
-		WCF::getBreadcrumbs()->add(new Breadcrumb(WCF::getLanguage()->get('wcf.conversation.conversations'), LinkHandler::getInstance()->getLink('ConversationList')));
-		WCF::getBreadcrumbs()->add($this->conversation->getBreadcrumb());
+		PageLocationManager::getInstance()->addParentLocation('com.woltlab.wcf.conversation.Conversation', $this->conversation->conversationID, $this->conversation);
+		PageLocationManager::getInstance()->addParentLocation('com.woltlab.wcf.conversation.ConversationList');
 		
 		// get message list
 		$this->messageList = new ViewableConversationMessageList();

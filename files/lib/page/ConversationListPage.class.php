@@ -6,7 +6,7 @@ use wcf\data\conversation\UserConversationList;
 use wcf\system\breadcrumb\Breadcrumb;
 use wcf\system\clipboard\ClipboardHandler;
 use wcf\system\exception\IllegalLinkException;
-use wcf\system\request\LinkHandler;
+use wcf\system\page\PageLocationManager;
 use wcf\system\WCF;
 use wcf\util\ArrayUtil;
 
@@ -165,7 +165,8 @@ class ConversationListPage extends SortablePage {
 		
 		if ($this->filter != '') {
 			// add breadcrumbs
-			WCF::getBreadcrumbs()->add(new Breadcrumb(WCF::getLanguage()->get('wcf.conversation.conversations'), LinkHandler::getInstance()->getLink('ConversationList')));
+			// TODO: this is not working at the moment as PageLocationManager already sets this as the current page based on request data which is later discarded 
+			PageLocationManager::getInstance()->addParentLocation('com.woltlab.wcf.conversation.ConversationList');
 		}
 		
 		// read stats

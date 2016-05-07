@@ -12,10 +12,10 @@ use wcf\data\modification\log\ConversationLogModificationLogList;
 use wcf\data\smiley\SmileyCache;
 use wcf\system\attachment\AttachmentHandler;
 use wcf\system\bbcode\BBCodeHandler;
-use wcf\system\breadcrumb\Breadcrumb;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\message\quote\MessageQuoteManager;
+use wcf\system\page\PageLocationManager;
 use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
 use wcf\util\HeaderUtil;
@@ -167,11 +167,13 @@ class ConversationPage extends MultipleLinkPage {
 		parent::readData();
 		
 		// add breadcrumbs
-		WCF::getBreadcrumbs()->add(new Breadcrumb(WCF::getLanguage()->get('wcf.conversation.conversations'), LinkHandler::getInstance()->getLink('ConversationList')));
+		PageLocationManager::getInstance()->addParentLocation('com.woltlab.wcf.conversation.ConversationList');
 		if ($this->conversation->isDraft) {
+			/* TODO
 			WCF::getBreadcrumbs()->add(new Breadcrumb(WCF::getLanguage()->get('wcf.conversation.folder.draft'), LinkHandler::getInstance()->getLink('ConversationList', [
 				'filter' => 'draft'
 			])));
+			*/
 		}
 		
 		// update last visit time count

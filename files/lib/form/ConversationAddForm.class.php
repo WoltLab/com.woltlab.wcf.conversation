@@ -3,12 +3,12 @@ namespace wcf\form;
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationAction;
 use wcf\data\user\UserProfile;
-use wcf\system\breadcrumb\Breadcrumb;
 use wcf\system\conversation\ConversationHandler;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\NamedUserException;
 use wcf\system\exception\UserInputException;
 use wcf\system\message\quote\MessageQuoteManager;
+use wcf\system\page\PageLocationManager;
 use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
 use wcf\util\HeaderUtil;
@@ -235,7 +235,7 @@ class ConversationAddForm extends MessageForm {
 		parent::readData();
 		
 		// add breadcrumbs
-		WCF::getBreadcrumbs()->add(new Breadcrumb(WCF::getLanguage()->get('wcf.conversation.conversations'), LinkHandler::getInstance()->getLink('ConversationList')));
+		PageLocationManager::getInstance()->addParentLocation('com.woltlab.wcf.conversation.ConversationList');
 	}
 	
 	/**
