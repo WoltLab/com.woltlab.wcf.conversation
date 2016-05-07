@@ -118,7 +118,6 @@ class UserConversationList extends ConversationList {
 			return;
 		}
 		
-		$this->objectIDs = array();
 		$sql = "SELECT	conversation_to_user.conversationID AS objectID
 			FROM	wcf".WCF_N."_conversation_to_user conversation_to_user
 				".$this->sqlConditionJoins."
@@ -126,9 +125,7 @@ class UserConversationList extends ConversationList {
 				".(!empty($this->sqlOrderBy) ? "ORDER BY ".$this->sqlOrderBy : '');
 		$statement = WCF::getDB()->prepareStatement($sql, $this->sqlLimit, $this->sqlOffset);
 		$statement->execute($this->getConditionBuilder()->getParameters());
-		while ($row = $statement->fetchArray()) {
-			$this->objectIDs[] = $row['objectID'];
-		}
+		$this->objectIDs = $statement->fetchColumns();
 	}
 	
 	/**

@@ -200,12 +200,7 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute($conditions->getParameters());
 		
-		$conversationIDs = array();
-		while ($row = $statement->fetchArray()) {
-			$conversationIDs[] = $row['conversationID'];
-		}
-		
-		return $conversationIDs;
+		return $statement->fetchColumns();
 	}
 	
 	/**
@@ -278,11 +273,6 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute($conditions->getParameters());
 		
-		$conversationIDs = array();
-		while ($row = $statement->fetchArray()) {
-			$conversationIDs[] = $row['conversationID'];
-		}
-		
-		return $conversationIDs;
+		return $statement->fetchColumns();
 	}
 }

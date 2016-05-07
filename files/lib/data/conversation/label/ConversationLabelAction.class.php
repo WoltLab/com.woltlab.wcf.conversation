@@ -175,10 +175,7 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 				".$conditions;
 			$statement = WCF::getDB()->prepareStatement($sql);
 			$statement->execute($conditions->getParameters());
-			$assignedLabels = array();
-			while ($row = $statement->fetchArray()) {
-				$assignedLabels[] = $row['labelID'];
-			}
+			$assignedLabels = $statement->fetchColumns();
 		}
 		
 		WCF::getTPL()->assign(array(

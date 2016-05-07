@@ -243,10 +243,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 				".$conditionBuilder;
 			$statement = WCF::getDB()->prepareStatement($sql);
 			$statement->execute($conditionBuilder->getParameters());
-			$notificationObjectIDs = [];
-			while ($row = $statement->fetchArray()) {
-				$notificationObjectIDs[] = $row['conversationID'];
-			}
+			$notificationObjectIDs = $statement->fetchColumns();
 			
 			if (!empty($notificationObjectIDs)) {
 				UserNotificationHandler::getInstance()->markAsConfirmed('conversation', 'com.woltlab.wcf.conversation.notification', [WCF::getUser()->userID], $notificationObjectIDs);
@@ -266,10 +263,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 				".$conditionBuilder;
 			$statement = WCF::getDB()->prepareStatement($sql);
 			$statement->execute($conditionBuilder->getParameters());
-			$notificationObjectIDs = [];
-			while ($row = $statement->fetchArray()) {
-				$notificationObjectIDs[] = $row['messageID'];
-			}
+			$notificationObjectIDs = $statement->fetchColumns();
 			
 			if (!empty($notificationObjectIDs)) {
 				UserNotificationHandler::getInstance()->markAsConfirmed('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', [WCF::getUser()->userID], $notificationObjectIDs);
@@ -599,7 +593,6 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			$conditionBuilder = new PreparedStatementConditionBuilder();
 			$conditionBuilder->add('conversation.conversationID IN (?)', [$this->objectIDs]);
 			$conditionBuilder->add('conversation_to_user.conversationID IS NULL');
-			$conversationIDs = [];
 			$sql = "SELECT		DISTINCT conversation.conversationID
 				FROM		wcf".WCF_N."_conversation conversation
 				LEFT JOIN	wcf".WCF_N."_conversation_to_user conversation_to_user
@@ -609,9 +602,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 				".$conditionBuilder;
 			$statement = WCF::getDB()->prepareStatement($sql);
 			$statement->execute($conditionBuilder->getParameters());
-			while ($row = $statement->fetchArray()) {
-				$conversationIDs[] = $row['conversationID'];
-			}
+			$conversationIDs = $statement->fetchColumns();
+			
 			if (!empty($conversationIDs)) {
 				$action = new ConversationAction($conversationIDs, 'delete');
 				$action->executeAction();

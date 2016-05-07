@@ -268,12 +268,8 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 			".$conditions;
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute($conditions->getParameters());
-		$participantIDs = [];
-		while ($row = $statement->fetchArray()) {
-			$participantIDs[] = $row['participantID'];
-		}
 		
-		return $participantIDs;
+		return $statement->fetchColumns();
 	}
 	
 	/**
@@ -282,7 +278,6 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 	 * @return	string[]
 	 */
 	public function getParticipantNames() {
-		$participants = [];
 		$sql = "SELECT		user_table.username
 			FROM		wcf".WCF_N."_conversation_to_user conversation_to_user
 			LEFT JOIN	wcf".WCF_N."_user user_table
@@ -290,11 +285,8 @@ class Conversation extends DatabaseObject implements IBreadcrumbProvider, IRoute
 			WHERE		conversationID = ?";
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute([$this->conversationID]);
-		while ($row = $statement->fetchArray()) {
-			$participants[] = $row['username'];
-		}
 		
-		return $participants;
+		return $statement->fetchColumns();
 	}
 	
 	/**
