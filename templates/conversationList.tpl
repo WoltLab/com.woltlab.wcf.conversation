@@ -6,14 +6,12 @@
 			<h1 class="contentTitle">{if $filter}{lang}wcf.conversation.folder.{$filter}{/lang}{else}{lang}wcf.conversation.conversations{/lang}{/if}</h1>
 		</div>
 		
-		{hascontent}
-			<nav class="contentHeaderNavigation">
-				<ul>
-					<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button"><span class="icon icon16 fa-asterisk"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>
-					{event name='contentHeaderNavigation'}
-				</ul>
-			</nav>
-		{/hascontent}
+		<nav class="contentHeaderNavigation">
+			<ul>
+				<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button"><span class="icon icon16 fa-asterisk"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>
+				{event name='contentHeaderNavigation'}
+			</ul>
+		</nav>
 	</header>
 {/capture}
 
