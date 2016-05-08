@@ -266,7 +266,7 @@ class Conversation extends DatabaseObject implements IRouteController, ITitledLi
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute($conditions->getParameters());
 		
-		return $statement->fetchColumns();
+		return $statement->fetchAll(\PDO::FETCH_COLUMN);
 	}
 	
 	/**
@@ -283,7 +283,7 @@ class Conversation extends DatabaseObject implements IRouteController, ITitledLi
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute([$this->conversationID]);
 		
-		return $statement->fetchColumns();
+		return $statement->fetchAll(\PDO::FETCH_COLUMN);
 	}
 	
 	/**

@@ -130,7 +130,7 @@ class ConversationMessageAddForm extends MessageForm {
 						WHERE	conversationID = ?";
 					$statement = WCF::getDB()->prepareStatement($sql);
 					$statement->execute(array($this->conversation->conversationID));
-					$messageIDs = $statement->fetchColumns();
+					$messageIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
 					
 					$renderedQuotes = MessageQuoteManager::getInstance()->getQuotesByObjectIDs('com.woltlab.wcf.conversation.message', $messageIDs);
 					if (!empty($renderedQuotes)) {

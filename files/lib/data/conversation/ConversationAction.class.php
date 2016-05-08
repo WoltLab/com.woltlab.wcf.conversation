@@ -243,7 +243,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 				".$conditionBuilder;
 			$statement = WCF::getDB()->prepareStatement($sql);
 			$statement->execute($conditionBuilder->getParameters());
-			$notificationObjectIDs = $statement->fetchColumns();
+			$notificationObjectIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
 			
 			if (!empty($notificationObjectIDs)) {
 				UserNotificationHandler::getInstance()->markAsConfirmed('conversation', 'com.woltlab.wcf.conversation.notification', [WCF::getUser()->userID], $notificationObjectIDs);
@@ -263,7 +263,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 				".$conditionBuilder;
 			$statement = WCF::getDB()->prepareStatement($sql);
 			$statement->execute($conditionBuilder->getParameters());
-			$notificationObjectIDs = $statement->fetchColumns();
+			$notificationObjectIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
 			
 			if (!empty($notificationObjectIDs)) {
 				UserNotificationHandler::getInstance()->markAsConfirmed('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', [WCF::getUser()->userID], $notificationObjectIDs);
@@ -602,7 +602,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 				".$conditionBuilder;
 			$statement = WCF::getDB()->prepareStatement($sql);
 			$statement->execute($conditionBuilder->getParameters());
-			$conversationIDs = $statement->fetchColumns();
+			$conversationIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
 			
 			if (!empty($conversationIDs)) {
 				$action = new ConversationAction($conversationIDs, 'delete');

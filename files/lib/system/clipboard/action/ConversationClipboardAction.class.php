@@ -200,7 +200,7 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute($conditions->getParameters());
 		
-		return $statement->fetchColumns();
+		return $statement->fetchAll(\PDO::FETCH_COLUMN);
 	}
 	
 	/**
@@ -273,6 +273,6 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute($conditions->getParameters());
 		
-		return $statement->fetchColumns();
+		return $statement->fetchAll(\PDO::FETCH_COLUMN);
 	}
 }
