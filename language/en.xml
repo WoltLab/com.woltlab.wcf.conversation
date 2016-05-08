@@ -54,7 +54,7 @@
 		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.close"><![CDATA[Close ({#$count})]]></item>
 		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.leave"><![CDATA[Hide ({#$count})]]></item>
 		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.leavePermanently"><![CDATA[Leave ({#$count})]]></item>
-		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.markAsRead"><![CDATA[Mark As Read ({#$count})]]></item>
+		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.markAsRead"><![CDATA[Mark as Read ({#$count})]]></item>
 		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.markAsRead.confirmMessage"><![CDATA[Do you really want to mark the marked conversation{if $count != 1}s{/if} as read?]]></item>
 		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.open"><![CDATA[Open ({#$count})]]></item>
 		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.restore"><![CDATA[Mark As Active ({#$count})]]></item>
@@ -215,10 +215,10 @@
 	</category>
 	
 	<category name="wcf.user.usersOnline">
-		<item name="wcf.user.usersOnline.location.ConversationAddForm"><![CDATA[Creating a new conversation.]]></item>
-		<item name="wcf.user.usersOnline.location.ConversationListPage"><![CDATA[Viewing the list of conversations.]]></item>
-		<item name="wcf.user.usersOnline.location.ConversationMessageAddForm"><![CDATA[Writing a reply to conversation <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>.]]></item>
-		<item name="wcf.user.usersOnline.location.ConversationMessageEditForm"><![CDATA[Editing message in conversation <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>.]]></item>
-		<item name="wcf.user.usersOnline.location.ConversationPage"><![CDATA[Reading conversation <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>.]]></item>
+		<item name="wcf.user.usersOnline.location.ConversationAddForm"><![CDATA[Creating a conversation]]></item>
+		<item name="wcf.user.usersOnline.location.ConversationListPage"><![CDATA[Viewing list of conversations]]></item>
+		<item name="wcf.user.usersOnline.location.ConversationMessageAddForm"><![CDATA[Writing a reply to conversation <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>]]></item>
+		<item name="wcf.user.usersOnline.location.ConversationMessageEditForm"><![CDATA[Editing message in conversation <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>]]></item>
+		<item name="wcf.user.usersOnline.location.ConversationPage"><![CDATA[Reading conversation <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>]]></item>
 	</category>
 </language>
