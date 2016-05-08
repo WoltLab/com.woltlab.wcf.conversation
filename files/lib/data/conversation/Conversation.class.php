@@ -1,9 +1,9 @@
 <?php
 namespace wcf\data\conversation;
 use wcf\data\conversation\message\ConversationMessage;
-use wcf\data\ITitledLinkObject;
 use wcf\data\user\UserProfile;
 use wcf\data\DatabaseObject;
+use wcf\data\ITitledLinkObject;
 use wcf\system\conversation\ConversationHandler;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\exception\UserInputException;
