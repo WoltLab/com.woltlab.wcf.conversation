@@ -90,7 +90,7 @@
 		<item name="wcf.conversation.message.button.add"><![CDATA[Reply]]></item>
 		<item name="wcf.conversation.message.edit"><![CDATA[Edit Message]]></item>
 		<item name="wcf.conversation.noConversations"><![CDATA[There are no conversations matching your criteria.]]></item>
-		<item name="wcf.conversation.noMoreItems"><![CDATA[No recent conversations]]></item>
+		<item name="wcf.conversation.noMoreItems"><![CDATA[No recent conversations.]]></item>
 		<item name="wcf.conversation.participantCanInvite"><![CDATA[Participants can add new participants]]></item>
 		<item name="wcf.conversation.participants"><![CDATA[Participants]]></item>
 		<item name="wcf.conversation.participants.description"><![CDATA[Multiple participants should be separated with a comma.]]></item>
@@ -109,7 +109,7 @@
 		<item name="wcf.conversation.quota"><![CDATA[Quota]]></item>
 		<item name="wcf.conversation.quota.description"><![CDATA[{#$conversationCount/$maxConversationCount*100}% used ({#$conversationCount} of {#$maxConversationCount})]]></item>
 		<item name="wcf.conversation.replies"><![CDATA[Replies]]></item>
-		<item name="wcf.conversation.showAll"><![CDATA[Show All Conversations]]></item>
+		<item name="wcf.conversation.showAll"><![CDATA[Display All Conversations]]></item>
 		<item name="wcf.conversation.ownPosts"><![CDATA[Conversation contains your own messages]]></item>
 		<item name="wcf.conversation.gotoLastPost"><![CDATA[Jump to Last Message]]></item>
 		<item name="wcf.conversation.searchConversations"><![CDATA[Search Conversations]]></item>
