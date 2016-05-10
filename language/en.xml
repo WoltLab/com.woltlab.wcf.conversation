@@ -25,7 +25,7 @@
 	
 	<category name="wcf.acp.option">
 		<item name="wcf.acp.option.category.message.conversation"><![CDATA[Conversations]]></item>
-		<item name="wcf.acp.option.conversation_list_default_sort_field"><![CDATA[Sort By]]></item>
+		<item name="wcf.acp.option.conversation_list_default_sort_field"><![CDATA[Sort by]]></item>
 		<item name="wcf.acp.option.conversation_list_default_sort_field.description"><![CDATA[You can sort the conversations by one of the following options.]]></item>
 		<item name="wcf.acp.option.conversation_list_default_sort_order"><![CDATA[Sort Order]]></item>
 		<item name="wcf.acp.option.conversation_list_default_sort_order.description"><![CDATA[The default sort order for the conversations.]]></item>
