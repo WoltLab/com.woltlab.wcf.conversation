@@ -15,13 +15,17 @@ use wcf\system\WCF;
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation
  * @category	Community Framework
+ * 
+ * @method	ViewableConversation		current()
+ * @method	ViewableConversation[]		getObjects()
+ * @method	ViewableConversation|null	search($objectID)
  */
 class UserConversationList extends ConversationList {
 	/**
 	 * list of available filters
 	 * @var	string[]
 	 */
-	public static $availableFilters = array('hidden', 'draft', 'outbox');
+	public static $availableFilters = ['hidden', 'draft', 'outbox'];
 	
 	/**
 	 * active filter
@@ -31,14 +35,14 @@ class UserConversationList extends ConversationList {
 	
 	/**
 	 * label list object
-	 * @var	\wcf\data\conversation\label\ConversationLabelList
+	 * @var	ConversationLabelList
 	 */
 	public $labelList = null;
 	
 	/**
-	 * @see	\wcf\data\DatabaseObjectList::$decoratorClassName
+	 * @inheritDoc
 	 */
-	public $decoratorClassName = 'wcf\data\conversation\ViewableConversation';
+	public $decoratorClassName = ViewableConversation::class;
 	
 	/**
 	 * Creates a new UserConversationList
@@ -54,14 +58,14 @@ class UserConversationList extends ConversationList {
 		
 		// apply filter
 		if ($this->filter == 'draft') {
-			$this->getConditionBuilder()->add('conversation.userID = ?', array($userID));
+			$this->getConditionBuilder()->add('conversation.userID = ?', [$userID]);
 			$this->getConditionBuilder()->add('conversation.isDraft = 1');
 		}
 		else {
-			$this->getConditionBuilder()->add('conversation_to_user.participantID = ?', array($userID));
-			$this->getConditionBuilder()->add('conversation_to_user.hideConversation = ?', array(($this->filter == 'hidden' ? 1 : 0)));
+			$this->getConditionBuilder()->add('conversation_to_user.participantID = ?', [$userID]);
+			$this->getConditionBuilder()->add('conversation_to_user.hideConversation = ?', [($this->filter == 'hidden' ? 1 : 0)]);
 			$this->sqlConditionJoins = "LEFT JOIN wcf".WCF_N."_conversation conversation ON (conversation.conversationID = conversation_to_user.conversationID)";
-			if ($this->filter == 'outbox') $this->getConditionBuilder()->add('conversation.userID = ?', array($userID));
+			if ($this->filter == 'outbox') $this->getConditionBuilder()->add('conversation.userID = ?', [$userID]);
 		}
 		
 		// filter by label id
@@ -70,7 +74,7 @@ class UserConversationList extends ConversationList {
 				SELECT	conversationID
 				FROM	wcf".WCF_N."_conversation_label_to_object
 				WHERE	labelID = ?
-			)", array($labelID));
+			)", [$labelID]);
 		}
 		
 		// own posts
@@ -86,14 +90,14 @@ class UserConversationList extends ConversationList {
 	/**
 	 * Sets the label list of the user the conversations belong to.
 	 * 
-	 * @param	\wcf\data\conversation\label\ConversationLabelList	$labelList
+	 * @param	ConversationLabelList	$labelList
 	 */
 	public function setLabelList(ConversationLabelList $labelList) {
 		$this->labelList = $labelList;
 	}
 	
 	/**
-	 * @see	\wcf\data\DatabaseObjectList::countObjects()
+	 * @inheritDoc
 	 */
 	public function countObjects() {
 		if ($this->filter == 'draft') return parent::countObjects();
@@ -109,7 +113,7 @@ class UserConversationList extends ConversationList {
 	}
 	
 	/**
-	 * @see	\wcf\data\DatabaseObjectList::readObjectIDs()
+	 * @inheritDoc
 	 */
 	public function readObjectIDs() {
 		if ($this->filter == 'draft') {
@@ -129,7 +133,7 @@ class UserConversationList extends ConversationList {
 	}
 	
 	/**
-	 * @see	\wcf\data\DatabaseObjectList::readObjects()
+	 * @inheritDoc
 	 */
 	public function readObjects() {
 		if ($this->objectIDs === null) {
@@ -184,22 +188,22 @@ class UserConversationList extends ConversationList {
 	protected function loadLabelAssignments() {
 		$labels = $this->getLabels();
 		if (empty($labels)) {
-			return array();
+			return [];
 		}
 		
 		$conditions = new PreparedStatementConditionBuilder();
-		$conditions->add("conversationID IN (?)", array(array_keys($this->objects)));
-		$conditions->add("labelID IN (?)", array(array_keys($labels)));
+		$conditions->add("conversationID IN (?)", [array_keys($this->objects)]);
+		$conditions->add("labelID IN (?)", [array_keys($labels)]);
 		
 		$sql = "SELECT	labelID, conversationID
 			FROM	wcf".WCF_N."_conversation_label_to_object
 			".$conditions;
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute($conditions->getParameters());
-		$data = array();
+		$data = [];
 		while ($row = $statement->fetchArray()) {
 			if (!isset($data[$row['conversationID']])) {
-				$data[$row['conversationID']] = array();
+				$data[$row['conversationID']] = [];
 			}
 			
 			$data[$row['conversationID']][$row['labelID']] = $labels[$row['labelID']];

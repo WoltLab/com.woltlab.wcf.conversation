@@ -11,6 +11,10 @@ use wcf\data\DatabaseObjectList;
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation
  * @category	Community Framework
+ *
+ * @method	Conversation		current()
+ * @method	Conversation[]		getObjects()
+ * @method	Conversation|null	search($objectID)
  */
 class ConversationList extends DatabaseObjectList {
 	/**

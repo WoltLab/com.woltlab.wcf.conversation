@@ -6,25 +6,29 @@ use wcf\system\WCF;
  * Represents a list of conversations for RSS feeds.
  * 
  * @author	Alexander Ebert
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation
  * @category	Community Framework
+ *
+ * @method	FeedConversation	current()
+ * @method	FeedConversation[]	getObjects()
+ * @method	FeedConversation|null	search($objectID)
  */
 class FeedConversationList extends ConversationList {
 	/**
-	 * @see	\wcf\data\DatabaseObjectList::$decoratorClassName
+	 * @inheritDoc
 	 */
-	public $decoratorClassName = 'wcf\data\conversation\FeedConversation';
+	public $decoratorClassName = FeedConversation::class;
 	
 	/**
-	 * @see	\wcf\data\DatabaseObjectList::$sqlOrderBy
+	 * @inheritDoc
 	 */
 	public $sqlOrderBy = 'conversation.lastPostTime DESC';
 	
 	/**
-	 * @see	\wcf\data\DatabaseObjectList::readObjectIDs()
+	 * @inheritDoc
 	 */
 	public function readObjectIDs() {
 		$sql = "SELECT	conversation_to_user.conversationID AS objectID
@@ -38,7 +42,7 @@ class FeedConversationList extends ConversationList {
 	}
 	
 	/**
-	 * @see	\wcf\data\DatabaseObjectList::readObjects()
+	 * @inheritDoc
 	 */
 	public function readObjects() {
 		if ($this->objectIDs === null) {

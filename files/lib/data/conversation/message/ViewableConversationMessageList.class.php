@@ -10,38 +10,42 @@ use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
  * Represents a list of viewable conversation messages.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation.message
  * @category	Community Framework
+ *
+ * @method	ViewableConversationMessage		current()
+ * @method	ViewableConversationMessage[]		getObjects()
+ * @method	ViewableConversationMessage|null	search($objectID)
  */
 class ViewableConversationMessageList extends ConversationMessageList {
 	/**
-	 * @see	\wcf\data\DatabaseObjectList::$sqlOrderBy
+	 * @inheritDoc
 	 */
 	public $sqlOrderBy = 'conversation_message.time';
 	
 	/**
-	 * @see	\wcf\data\DatabaseObjectList::$decoratorClassName
+	 * @inheritDoc
 	 */
-	public $decoratorClassName = 'wcf\data\conversation\message\ViewableConversationMessage';
+	public $decoratorClassName = ViewableConversationMessage::class;
 	
 	/**
 	 * attachment object ids
 	 * @var	integer[]
 	 */
-	public $attachmentObjectIDs = array();
+	public $attachmentObjectIDs = [];
 	
 	/**
 	 * ids of the messages with embedded objects
 	 * @var	integer[]
 	 */
-	public $embeddedObjectMessageIDs = array();
+	public $embeddedObjectMessageIDs = [];
 	
 	/**
 	 * attachment list
-	 * @var	\wcf\data\attachment\GroupedAttachmentList
+	 * @var	GroupedAttachmentList
 	 */
 	protected $attachmentList = null;
 	
@@ -65,12 +69,12 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	
 	/**
 	 * conversation object
-	 * @var	\wcf\data\conversation\Conversation
+	 * @var	Conversation
 	 */
 	protected $conversation = null;
 	
 	/**
-	 * @see	\wcf\data\DatabaseObjectList::readObjects()
+	 * @inheritDoc
 	 */
 	public function readObjects() {
 		if ($this->objectIDs === null) {
@@ -131,7 +135,7 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	public function readAttachments() {
 		if (MODULE_ATTACHMENT == 1 && !empty($this->attachmentObjectIDs)) {
 			$this->attachmentList = new GroupedAttachmentList('com.woltlab.wcf.conversation.message');
-			$this->attachmentList->getConditionBuilder()->add('attachment.objectID IN (?)', array($this->attachmentObjectIDs));
+			$this->attachmentList->getConditionBuilder()->add('attachment.objectID IN (?)', [$this->attachmentObjectIDs]);
 			$this->attachmentList->readObjects();
 		}
 	}
@@ -148,7 +152,7 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	/**
 	 * Returns the list of attachments.
 	 * 
-	 * @return	\wcf\data\attachment\GroupedAttachmentList
+	 * @return	GroupedAttachmentList
 	 */
 	public function getAttachmentList() {
 		return $this->attachmentList;
@@ -175,7 +179,7 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	/**
 	 * Sets active conversation.
 	 * 
-	 * @param	\wcf\data\conversation\Conversation		$conversation
+	 * @param	Conversation		$conversation
 	 */
 	public function setConversation(Conversation $conversation) {
 		$this->conversation = $conversation;

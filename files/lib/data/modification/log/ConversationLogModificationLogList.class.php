@@ -8,11 +8,15 @@ use wcf\system\WCF;
  * Represents a list of modification logs for conversation log page.
  * 
  * @author	Alexander Ebert
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.modification.log
  * @category	Community Framework
+ *
+ * @method	ViewableConversationModificationLog		current()
+ * @method	ViewableConversationModificationLog[]		getObjects()
+ * @method	ViewableConversationModificationLog|null	search($objectID)
  */
 class ConversationLogModificationLogList extends ModificationLogList {
 	/**

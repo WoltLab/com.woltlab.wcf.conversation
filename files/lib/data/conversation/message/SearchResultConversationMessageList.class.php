@@ -5,17 +5,21 @@ namespace wcf\data\conversation\message;
  * Represents a list of search results.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation.message
  * @category	Community Framework
+ *
+ * @method	SearchResultConversationMessage		current()
+ * @method	SearchResultConversationMessage[]	getObjects()
+ * @method	SearchResultConversationMessage|null	search($objectID)
  */
 class SearchResultConversationMessageList extends SimplifiedViewableConversationMessageList {
 	/**
-	 * @see	\wcf\data\DatabaseObjectList::$decoratorClassName
+	 * @inheritDoc
 	 */
-	public $decoratorClassName = 'wcf\data\conversation\message\SearchResultConversationMessage';
+	public $decoratorClassName = SearchResultConversationMessage::class;
 	
 	/**
 	 * Creates a new SearchResultConversationMessageList object.
