@@ -15,6 +15,7 @@ use wcf\data\DatabaseObjectList;
  * @method	ConversationLabel		current()
  * @method	ConversationLabel[]		getObjects()
  * @method	ConversationLabel|null		search($objectID)
+ * @property	ConversationLabel[]		$objects
  */
 class ConversationLabelList extends DatabaseObjectList {
 	/**

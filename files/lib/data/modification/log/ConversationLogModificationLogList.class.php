@@ -17,6 +17,7 @@ use wcf\system\WCF;
  * @method	ViewableConversationModificationLog		current()
  * @method	ViewableConversationModificationLog[]		getObjects()
  * @method	ViewableConversationModificationLog|null	search($objectID)
+ * @property	ViewableConversationModificationLog[]		$objects
  */
 class ConversationLogModificationLogList extends ModificationLogList {
 	/**
