@@ -3,7 +3,6 @@ namespace wcf\page;
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\label\ConversationLabelList;
 use wcf\data\conversation\UserConversationList;
-use wcf\system\breadcrumb\Breadcrumb;
 use wcf\system\clipboard\ClipboardHandler;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\page\PageLocationManager;
