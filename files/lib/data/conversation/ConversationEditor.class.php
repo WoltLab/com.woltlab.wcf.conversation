@@ -9,33 +9,34 @@ use wcf\system\WCF;
  * Extends the conversation object with functions to create, update and delete conversations.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation
  * @category	Community Framework
+ *
+ * @method	Conversation	getDecoratedObject()
+ * @mixin	Conversation
  */
 class ConversationEditor extends DatabaseObjectEditor {
 	/**
-	 * @see	\wcf\data\DatabaseObjectEditor::$baseClass
+	 * @inheritDoc
 	 */
-	protected static $baseClass = 'wcf\data\conversation\Conversation';
+	protected static $baseClass = Conversation::class;
 	
 	/**
 	 * Adds a new message to this conversation.
 	 * 
-	 * @param	\wcf\data\conversation\message\ConversationMessage	$message
+	 * @param	ConversationMessage	$message
 	 */
 	public function addMessage(ConversationMessage $message) {
-		$data = array(
+		$this->update([
 			'lastPoster' => $message->username,
 			'lastPostTime' => $message->time,
 			'lastPosterID' => $message->userID,
 			'replies' => $this->replies + 1,
 			'attachments' => $this->attachments + $message->attachments
-		);
-		
-		$this->update($data);
+		]);
 	}
 	
 	/**
@@ -46,7 +47,7 @@ class ConversationEditor extends DatabaseObjectEditor {
 			WHERE		conversationID = ?
 					AND participantID <> ?";
 		$statement = WCF::getDB()->prepareStatement($sql);
-		$statement->execute(array($this->conversationID, $this->userID));
+		$statement->execute([$this->conversationID, $this->userID]);
 	}
 	
 	/**
@@ -55,11 +56,11 @@ class ConversationEditor extends DatabaseObjectEditor {
 	 * @param	integer[]	$participantIDs
 	 * @param	integer[]	$invisibleParticipantIDs
 	 */
-	public function updateParticipants(array $participantIDs, array $invisibleParticipantIDs = array()) {
-		$usernames = array();
+	public function updateParticipants(array $participantIDs, array $invisibleParticipantIDs = []) {
+		$usernames = [];
 		if (!empty($participantIDs) || !empty($invisibleParticipantIDs)) {
 			$conditions = new PreparedStatementConditionBuilder();
-			$conditions->add("userID IN (?)", array(array_merge($participantIDs, $invisibleParticipantIDs)));
+			$conditions->add("userID IN (?)", [array_merge($participantIDs, $invisibleParticipantIDs)]);
 			
 			$sql = "SELECT	userID, username
 				FROM	wcf".WCF_N."_user
@@ -81,12 +82,12 @@ class ConversationEditor extends DatabaseObjectEditor {
 			$statement = WCF::getDB()->prepareStatement($sql);
 			
 			foreach ($participantIDs as $userID) {
-				$statement->execute(array(
+				$statement->execute([
 					$this->conversationID,
 					$userID,
 					$usernames[$userID],
 					0
-				));
+				]);
 			}
 			WCF::getDB()->commitTransaction();
 		}
@@ -99,12 +100,12 @@ class ConversationEditor extends DatabaseObjectEditor {
 			$statement = WCF::getDB()->prepareStatement($sql);
 			
 			foreach ($invisibleParticipantIDs as $userID) {
-				$statement->execute(array(
+				$statement->execute([
 					$this->conversationID,
 					$userID,
 					$usernames[$userID],
 					1
-				));
+				]);
 			}
 			WCF::getDB()->commitTransaction();
 		}
@@ -127,19 +128,19 @@ class ConversationEditor extends DatabaseObjectEditor {
 				)
 			WHERE	conversation.conversationID = ?";
 		$statement = WCF::getDB()->prepareStatement($sql);
-		$statement->execute(array(
+		$statement->execute([
 			Conversation::STATE_LEFT,
 			$this->userID,
 			0,
 			$this->conversationID
-		));
+		]);
 	}
 	
 	/**
 	 * Updates the participant summary of this conversation.
 	 */
 	public function updateParticipantSummary() {
-		$users = array();
+		$users = [];
 		$sql = "SELECT		participantID AS userID, hideConversation, username
 			FROM		wcf".WCF_N."_conversation_to_user
 			WHERE		conversationID = ?
@@ -147,14 +148,12 @@ class ConversationEditor extends DatabaseObjectEditor {
 					AND isInvisible = 0
 			ORDER BY	username";
 		$statement = WCF::getDB()->prepareStatement($sql, 5);
-		$statement->execute(array($this->conversationID, $this->userID));
+		$statement->execute([$this->conversationID, $this->userID]);
 		while ($row = $statement->fetchArray()) {
 			$users[] = $row;
 		}
 		
-		$this->update(array(
-			'participantSummary' => serialize($users)
-		));
+		$this->update(['participantSummary' => serialize($users)]);
 	}
 	
 	/**
@@ -168,17 +167,17 @@ class ConversationEditor extends DatabaseObjectEditor {
 			WHERE	conversationID = ?
 				AND participantID = ?";
 		$statement = WCF::getDB()->prepareStatement($sql);
-		$statement->execute(array(
+		$statement->execute([
 			2,
 			$this->conversationID,
 			$userID
-		));
+		]);
 		
 		// decrease participant count unless it is the author
 		if ($userID != $this->userID) {
-			$this->updateCounters(array(
+			$this->updateCounters([
 				'participants' => -1
-			));
+			]);
 		}
 	}
 	
@@ -191,13 +190,13 @@ class ConversationEditor extends DatabaseObjectEditor {
 			WHERE		conversationID = ?
 			ORDER BY	time ASC";
 		$statement = WCF::getDB()->prepareStatement($sql, 1);
-		$statement->execute(array(
+		$statement->execute([
 			$this->conversationID
-		));
+		]);
 		
-		$this->update(array(
+		$this->update([
 			'firstMessageID' => $statement->fetchColumn()
-		));
+		]);
 	}
 	
 	/**
@@ -209,16 +208,16 @@ class ConversationEditor extends DatabaseObjectEditor {
 			WHERE		conversationID = ?
 			ORDER BY	time DESC";
 		$statement = WCF::getDB()->prepareStatement($sql, 1);
-		$statement->execute(array(
+		$statement->execute([
 			$this->conversationID
-		));
+		]);
 		$row = $statement->fetchArray();
 		
-		$this->update(array(
+		$this->update([
 			'lastPostTime' => $row['time'],
 			'lastPosterID' => $row['userID'],
 			'lastPoster' => $row['username']
-		));
+		]);
 	}
 	
 	/**

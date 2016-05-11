@@ -19,6 +19,9 @@ use wcf\system\WCF;
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation
  * @category	Community Framework
+ * 
+ * @method	Conversation	getDecoratedObject()
+ * @mixin	Conversation
  */
 class ViewableConversation extends DatabaseObjectDecorator {
 	use TLegacyUserPropertyAccess;
@@ -50,7 +53,7 @@ class ViewableConversation extends DatabaseObjectDecorator {
 	/**
 	 * @inheritDoc
 	 */
-	protected static $baseClass = 'wcf\data\conversation\Conversation';
+	protected static $baseClass = Conversation::class;
 	
 	/**
 	 * maps legacy direct access to last poster's user profile data to the real

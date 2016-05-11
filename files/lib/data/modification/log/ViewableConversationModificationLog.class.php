@@ -10,23 +10,26 @@ use wcf\system\WCF;
  * Provides a viewable conversation modification log.
  * 
  * @author	Alexander Ebert
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.modification.log
  * @category	Community Framework
+ *
+ * @method	ModificationLog		getDecoratedObject()
+ * @mixin	ModificationLog
  */
 class ViewableConversationModificationLog extends DatabaseObjectDecorator {
 	use TLegacyUserPropertyAccess;
 	
 	/**
-	 * @see	\wcf\data\DatabaseObjectDecorator::$baseClass
+	 * @inheritDoc
 	 */
-	protected static $baseClass = 'wcf\data\modification\log\ModificationLog';
+	protected static $baseClass = ModificationLog::class;
 	
 	/**
 	 * user profile object
-	 * @var	\wcf\data\user\UserProfile
+	 * @var	UserProfile
 	 */
 	protected $userProfile = null;
 	
@@ -36,13 +39,13 @@ class ViewableConversationModificationLog extends DatabaseObjectDecorator {
 	 * @return	string
 	 */
 	public function __toString() {
-		return WCF::getLanguage()->getDynamicVariable('wcf.conversation.log.conversation.'.$this->action, array('additionalData' => $this->additionalData));
+		return WCF::getLanguage()->getDynamicVariable('wcf.conversation.log.conversation.'.$this->action, ['additionalData' => $this->additionalData]);
 	}
 	
 	/**
 	 * Returns the profile object of the user who created the modification entry.
 	 * 
-	 * @return	\wcf\data\user\UserProfile
+	 * @return	UserProfile
 	 */
 	public function getUserProfile() {
 		if ($this->userProfile === null) {

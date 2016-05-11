@@ -1,5 +1,6 @@
 <?php
 namespace wcf\system\user\notification\object;
+use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\DatabaseObjectDecorator;
 use wcf\system\request\LinkHandler;
 
@@ -7,44 +8,47 @@ use wcf\system\request\LinkHandler;
  * Notification object for conversations.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	system.user.notification.object
  * @category	Community Framework
+ *
+ * @method	ConversationMessage	getDecoratedObject()
+ * @mixin	ConversationMessage
  */
 class ConversationMessageUserNotificationObject extends DatabaseObjectDecorator implements IStackableUserNotificationObject {
 	/**
-	 * @see	\wcf\data\DatabaseObjectDecorator::$baseClass
+	 * @inheritDoc
 	 */
-	protected static $baseClass = 'wcf\data\conversation\message\ConversationMessage';
+	protected static $baseClass = ConversationMessage::class;
 	
 	/**
-	 * @see	\wcf\system\user\notification\object\IUserNotificationObject::getTitle()
+	 * @inheritDoc
 	 */
 	public function getTitle() {
 		return $this->getConversation()->subject;
 	}
 	
 	/**
-	 * @see	\wcf\system\user\notification\object\IUserNotificationObject::getURL()
+	 * @inheritDoc
 	 */
 	public function getURL() {
-		return LinkHandler::getInstance()->getLink('Conversation', array(
+		return LinkHandler::getInstance()->getLink('Conversation', [
 			'object' => $this->getConversation(),
 			'messageID' => $this->messageID
-		)).'#message'.$this->messageID;
+		]).'#message'.$this->messageID;
 	}
 	
 	/**
-	 * @see	\wcf\system\user\notification\object\IUserNotificationObject::getAuthorID()
+	 * @inheritDoc
 	 */
 	public function getAuthorID() {
 		return $this->userID;
 	}
 	
 	/**
-	 * @see	\wcf\system\user\notification\object\IStackableUserNotificationObject::getRelatedObjectID()
+	 * @inheritDoc
 	 */
 	public function getRelatedObjectID() {
 		return $this->conversationID;

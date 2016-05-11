@@ -9,30 +9,33 @@ use wcf\system\cache\runtime\UserProfileRuntimeCache;
  * Represents a viewable conversation message.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation.message
  * @category	Community Framework
+ * 
+ * @method	ConversationMessage	getDecoratedObject()
+ * @mixin	ConversationMessage
  */
 class ViewableConversationMessage extends DatabaseObjectDecorator {
 	use TLegacyUserPropertyAccess;
 	
 	/**
-	 * @see	\wcf\data\DatabaseObjectDecorator::$baseClass
+	 * @inheritDoc
 	 */
-	protected static $baseClass = 'wcf\data\conversation\message\ConversationMessage';
+	protected static $baseClass = ConversationMessage::class;
 	
 	/**
 	 * user profile object
-	 * @var	\wcf\data\user\UserProfile
+	 * @var	UserProfile
 	 */
 	protected $userProfile = null;
 	
 	/**
 	 * Returns the user profile object.
 	 * 
-	 * @return	\wcf\data\user\UserProfile
+	 * @return	UserProfile
 	 */
 	public function getUserProfile() {
 		if ($this->userProfile === null) {
@@ -51,11 +54,11 @@ class ViewableConversationMessage extends DatabaseObjectDecorator {
 	 * Returns the viewable conversation message with the given id.
 	 * 
 	 * @param	integer		$messageID
-	 * @return	\wcf\data\conversation\message\ViewableConversationMessage
+	 * @return	ViewableConversationMessage
 	 */
 	public static function getViewableConversationMessage($messageID) {
 		$messageList = new ViewableConversationMessageList();
-		$messageList->setObjectIDs(array($messageID));
+		$messageList->setObjectIDs([$messageID]);
 		$messageList->readObjects();
 		
 		return $messageList->search($messageID);

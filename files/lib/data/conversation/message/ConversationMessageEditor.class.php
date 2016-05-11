@@ -11,10 +11,13 @@ use wcf\data\DatabaseObjectEditor;
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation.message
  * @category	Community Framework
+ * 
+ * @method	ConversationMessage	getDecoratedObject()
+ * @mixin	ConversationMessage
  */
 class ConversationMessageEditor extends DatabaseObjectEditor {
 	/**
-	 * @see	\wcf\data\DatabaseObjectEditor::$baseClass
+	 * @inheritDoc
 	 */
-	protected static $baseClass = 'wcf\data\conversation\message\ConversationMessage';
+	protected static $baseClass = ConversationMessage::class;
 }
