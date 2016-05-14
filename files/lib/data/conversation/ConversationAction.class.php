@@ -139,7 +139,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		
 		if (!empty($this->objectIDs)) {
 			// delete notifications
-			UserNotificationHandler::getInstance()->deleteNotifications('conversation', 'com.woltlab.wcf.conversation.notification', [], $this->objectIDs);
+			UserNotificationHandler::getInstance()->removeNotifications('com.woltlab.wcf.conversation.notification', $this->objectIDs);
 			
 			// remove modification logs
 			ConversationModificationLogHandler::getInstance()->deleteLogs($this->objectIDs);
@@ -332,9 +332,9 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		// reset storage
 		UserStorageHandler::getInstance()->reset([WCF::getUser()->userID], 'unreadConversationCount');
 		
-		// delete obsolete notifications
-		UserNotificationHandler::getInstance()->deleteNotifications('conversation', 'com.woltlab.wcf.conversation.notification', [WCF::getUser()->userID]);
-		UserNotificationHandler::getInstance()->deleteNotifications('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', [WCF::getUser()->userID]);
+		// confirm obsolete notifications
+		UserNotificationHandler::getInstance()->markAsConfirmed('conversation', 'com.woltlab.wcf.conversation.notification', [WCF::getUser()->userID]);
+		UserNotificationHandler::getInstance()->markAsConfirmed('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', [WCF::getUser()->userID]);
 		
 		return [
 			'markAllAsRead' => true

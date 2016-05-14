@@ -4,7 +4,7 @@ use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\data\conversation\message\ViewableConversationMessageList;
 use wcf\data\conversation\ConversationAction;
-use wcf\data\user\UserProfile;
+use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\page\PageLocationManager;
@@ -195,15 +195,19 @@ class ConversationMessageEditForm extends ConversationAddForm {
 				if ($this->conversation->isDraft && $this->conversation->draftData) {
 					$draftData = @unserialize($this->conversation->draftData);
 					if (!empty($draftData['participants'])) {
-						foreach (UserProfile::getUserProfiles($draftData['participants']) as $user) {
-							if (!empty($this->participants)) $this->participants .= ', ';
-							$this->participants .= $user->username;
+						foreach (UserProfileRuntimeCache::getInstance()->getObjects($draftData['participants']) as $user) {
+							if ($user !== null) {
+								if (!empty($this->participants)) $this->participants .= ', ';
+								$this->participants .= $user->username;
+							}
 						}
 					}
 					if (!empty($draftData['invisibleParticipants'])) {
-						foreach (UserProfile::getUserProfiles($draftData['invisibleParticipants']) as $user) {
-							if (!empty($this->invisibleParticipants)) $this->invisibleParticipants .= ', ';
-							$this->invisibleParticipants .= $user->username;
+						foreach (UserProfileRuntimeCache::getInstance()->getObjects($draftData['invisibleParticipants']) as $user) {
+							if ($user !== null) {
+								if (!empty($this->invisibleParticipants)) $this->invisibleParticipants .= ', ';
+								$this->invisibleParticipants .= $user->username;
+							}
 						}
 					}
 				}
