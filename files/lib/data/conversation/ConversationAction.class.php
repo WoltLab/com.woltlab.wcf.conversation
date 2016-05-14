@@ -161,7 +161,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		parent::update();
 		
 		foreach ($this->objects as $conversation) {
-			// partipants
+			// participants
 			if (!empty($this->parameters['participants']) || !empty($this->parameters['invisibleParticipants'])) {
 				// get current participants
 				$participantIDs = $conversation->getParticipantIDs();
@@ -355,7 +355,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	/**
 	 * Validates user access for label management.
 	 */
-	public function validateGetLabelmanagement() {
+	public function validateGetLabelManagement() {
 		if (!WCF::getSession()->getPermission('user.conversation.canUseConversation')) {
 			throw new PermissionDeniedException();
 		}
