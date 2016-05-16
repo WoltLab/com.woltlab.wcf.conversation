@@ -397,7 +397,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			$attachmentList = $this->message->getAttachments(true);
 			$count = 0;
 			if ($attachmentList !== null) {
-				// set permisions
+				// set permissions
 				$attachmentList->setPermissions(array(
 					'canDownload' => true,
 					'canViewPreview' => true
