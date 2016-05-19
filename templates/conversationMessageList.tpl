@@ -6,7 +6,7 @@
 	{assign var='objectID' value=$message->messageID}
 	{assign var='userProfile' value=$message->getUserProfile()}
 	
-	<li id="message{@$message->messageID}"{if MESSAGE_SIDEBAR_ENABLE_MESSAGE_GROUP_STARTER_ICON && $conversation->userID == $message->userID} class="messageGroupStarter"{/if}>
+	<li id="message{@$message->messageID}"{if $conversation->userID == $message->userID} class="messageGroupStarter"{/if}>
 		<article class="message messageSidebarOrientation{@$__wcf->getStyleHandler()->getStyle()->getVariable('messageSidebarOrientation')|ucfirst} jsMessage{if $userProfile->userOnlineGroupID} userOnlineGroupMarking{@$userProfile->userOnlineGroupID}{/if}" data-can-edit="{if $message->canEdit()}1{else}0{/if}" data-object-id="{@$message->messageID}">
 			{include file='messageSidebar'}
 			
