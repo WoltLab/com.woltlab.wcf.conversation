@@ -14,12 +14,12 @@ namespace wcf\data\conversation\message;
  */
 class SimplifiedViewableConversationMessageList extends ViewableConversationMessageList {
 	/**
-	 * @see	\wcf\data\conversation\message\ViewableConversationMessageList::$attachmentLoading
+	 * @inheritDoc
 	 */
 	protected $attachmentLoading = false;
 	
 	/**
-	 * @see	\wcf\data\conversation\message\ViewableConversationMessageList::$embeddedObjectLoading
+	 * @inheritDoc
 	 */
 	protected $embeddedObjectLoading = false;
 }

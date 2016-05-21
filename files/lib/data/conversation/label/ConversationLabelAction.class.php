@@ -23,17 +23,17 @@ use wcf\util\StringUtil;
  */
 class ConversationLabelAction extends AbstractDatabaseObjectAction {
 	/**
-	 * @see	\wcf\data\AbstractDatabaseObjectAction::$className
+	 * @inheritDoc
 	 */
 	protected $className = 'wcf\data\conversation\label\ConversationLabelEditor';
 	
 	/**
-	 * @see	\wcf\data\AbstractDatabaseObjectAction::$permissionsDelete
+	 * @inheritDoc
 	 */
 	protected $permissionsDelete = ['user.conversation.canUseConversation'];
 	
 	/**
-	 * @see	\wcf\data\AbstractDatabaseObjectAction::$permissionsUpdate
+	 * @inheritDoc
 	 */
 	protected $permissionsUpdate = ['user.conversation.canUseConversation'];
 	
@@ -50,7 +50,7 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 	public $labelList = null;
 	
 	/**
-	 * @see	\wcf\data\AbstractDatabaseObjectAction::validateUpdate()
+	 * @inheritDoc
 	 */
 	public function validateUpdate() {
 		parent::validateUpdate();
@@ -66,7 +66,7 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 	}
 	
 	/**
-	 * @see	\wcf\data\AbstractDatabaseObjectAction::validateDelete()
+	 * @inheritDoc
 	 */
 	public function validateDelete() {
 		parent::validateDelete();

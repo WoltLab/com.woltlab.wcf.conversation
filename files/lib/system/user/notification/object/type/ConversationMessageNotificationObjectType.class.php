@@ -13,17 +13,17 @@ namespace wcf\system\user\notification\object\type;
  */
 class ConversationMessageNotificationObjectType extends AbstractUserNotificationObjectType {
 	/**
-	 * @see	\wcf\system\user\notification\object\type\AbstractUserNotificationObjectType::$decoratorClassName
+	 * @inheritDoc
 	 */
 	protected static $decoratorClassName = 'wcf\system\user\notification\object\ConversationMessageUserNotificationObject';
 	
 	/**
-	 * @see	\wcf\system\user\notification\object\type\AbstractUserNotificationObjectType::$objectClassName
+	 * @inheritDoc
 	 */
 	protected static $objectClassName = 'wcf\data\conversation\message\ConversationMessage';
 	
 	/**
-	 * @see	\wcf\system\user\notification\object\type\AbstractUserNotificationObjectType::$objectListClassName
+	 * @inheritDoc
 	 */
 	protected static $objectListClassName = 'wcf\data\conversation\message\ConversationMessageList';
 }

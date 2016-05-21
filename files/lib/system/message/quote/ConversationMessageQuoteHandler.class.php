@@ -15,7 +15,7 @@ use wcf\data\conversation\ConversationList;
  */
 class ConversationMessageQuoteHandler extends AbstractMessageQuoteHandler {
 	/**
-	 * @see	\wcf\system\message\quote\AbstractMessageQuoteHandler::getMessages()
+	 * @inheritDoc
 	 */
 	protected function getMessages(array $data) {
 		// read messages

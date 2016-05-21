@@ -18,12 +18,12 @@ use wcf\system\WCF;
  */
 class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 	/**
-	 * @see	\wcf\system\worker\AbstractWorker::$limit
+	 * @inheritDoc
 	 */
 	protected $limit = 100;
 	
 	/**
-	 * @see	\wcf\system\worker\IWorker::countObjects()
+	 * @inheritDoc
 	 */
 	public function countObjects() {
 		if ($this->count === null) {
@@ -38,7 +38,7 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 	}
 	
 	/**
-	 * @see	\wcf\system\worker\AbstractRebuildDataWorker::initObjectList
+	 * @inheritDoc
 	 */
 	protected function initObjectList() {
 		$this->objectList = new ConversationList();
@@ -46,7 +46,7 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 	}
 	
 	/**
-	 * @see	\wcf\system\worker\IWorker::execute()
+	 * @inheritDoc
 	 */
 	public function execute() {
 		$this->objectList->getConditionBuilder()->add('conversation.conversationID BETWEEN ? AND ?', [$this->limit * $this->loopCount + 1, $this->limit * $this->loopCount + $this->limit]);

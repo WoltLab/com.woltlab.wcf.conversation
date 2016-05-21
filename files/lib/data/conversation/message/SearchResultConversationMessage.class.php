@@ -39,21 +39,21 @@ class SearchResultConversationMessage extends ViewableConversationMessage implem
 	}
 	
 	/**
-	 * @see	\wcf\data\conversation\message\ConversationMessage::getFormattedMessage()
+	 * @inheritDoc
 	 */
 	public function getFormattedMessage() {
 		return SearchResultTextParser::getInstance()->parse($this->getDecoratedObject()->getSimplifiedFormattedMessage());
 	}
 	
 	/**
-	 * @see	\wcf\data\search\ISearchResultObject::getSubject()
+	 * @inheritDoc
 	 */
 	public function getSubject() {
 		return $this->subject;
 	}
 	
 	/**
-	 * @see	\wcf\data\search\ISearchResultObject::getLink()
+	 * @inheritDoc
 	 */
 	public function getLink($query = '') {
 		if ($query) {
@@ -68,28 +68,28 @@ class SearchResultConversationMessage extends ViewableConversationMessage implem
 	}
 	
 	/**
-	 * @see	\wcf\data\search\ISearchResultObject::getTime()
+	 * @inheritDoc
 	 */
 	public function getTime() {
 		return $this->time;
 	}
 	
 	/**
-	 * @see	\wcf\data\search\ISearchResultObject::getObjectTypeName()
+	 * @inheritDoc
 	 */
 	public function getObjectTypeName() {
 		return 'com.woltlab.wcf.conversation.message';
 	}
 	
 	/**
-	 * @see	\wcf\data\search\ISearchResultObject::getContainerTitle()
+	 * @inheritDoc
 	 */
 	public function getContainerTitle() {
 		return '';
 	}
 	
 	/**
-	 * @see	\wcf\data\search\ISearchResultObject::getContainerLink()
+	 * @inheritDoc
 	 */
 	public function getContainerLink() {
 		return '';

@@ -15,22 +15,22 @@ use wcf\system\WCF;
  */
 class ConversationNotificationObjectType extends AbstractUserNotificationObjectType {
 	/**
-	 * @see	\wcf\system\user\notification\object\type\AbstractUserNotificationObjectType::$decoratorClassName
+	 * @inheritDoc
 	 */
 	protected static $decoratorClassName = 'wcf\system\user\notification\object\ConversationUserNotificationObject';
 	
 	/**
-	 * @see	\wcf\system\user\notification\object\type\AbstractUserNotificationObjectType::$objectClassName
+	 * @inheritDoc
 	 */
 	protected static $objectClassName = 'wcf\data\conversation\Conversation';
 	
 	/**
-	 * @see	\wcf\system\user\notification\object\type\AbstractUserNotificationObjectType::$objectListClassName
+	 * @inheritDoc
 	 */
 	protected static $objectListClassName = 'wcf\data\conversation\ConversationList';
 	
 	/**
-	 * @see	\wcf\system\user\notification\object\type\IUserNotificationObjectType::getObjectsByIDs()
+	 * @inheritDoc
 	 */
 	public function getObjectsByIDs(array $objectIDs) {
 		$objects = Conversation::getUserConversations($objectIDs, WCF::getUser()->userID);

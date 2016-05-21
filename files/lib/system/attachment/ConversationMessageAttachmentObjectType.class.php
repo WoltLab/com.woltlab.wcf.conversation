@@ -18,28 +18,28 @@ use wcf\util\ArrayUtil;
  */
 class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectType {
 	/**
-	 * @see	\wcf\system\attachment\IAttachmentObjectType::getMaxSize()
+	 * @inheritDoc
 	 */
 	public function getMaxSize() {
 		return WCF::getSession()->getPermission('user.conversation.maxAttachmentSize');
 	}
 	
 	/**
-	 * @see	\wcf\system\attachment\IAttachmentObjectType::getAllowedExtensions()
+	 * @inheritDoc
 	 */
 	public function getAllowedExtensions() {
 		return ArrayUtil::trim(explode("\n", WCF::getSession()->getPermission('user.conversation.allowedAttachmentExtensions')));
 	}
 	
 	/**
-	 * @see	\wcf\system\attachment\IAttachmentObjectType::getMaxCount()
+	 * @inheritDoc
 	 */
 	public function getMaxCount() {
 		return WCF::getSession()->getPermission('user.conversation.maxAttachmentCount');
 	}
 	
 	/**
-	 * @see	\wcf\system\attachment\IAttachmentObjectType::canDownload()
+	 * @inheritDoc
 	 */
 	public function canDownload($objectID) {
 		if ($objectID) {
@@ -52,7 +52,7 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
 	}
 	
 	/**
-	 * @see	\wcf\system\attachment\IAttachmentObjectType::canUpload()
+	 * @inheritDoc
 	 */
 	public function canUpload($objectID, $parentObjectID = 0) {
 		if (!WCF::getSession()->getPermission('user.conversation.canUploadAttachment')) {
@@ -69,7 +69,7 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
 	}
 	
 	/**
-	 * @see	\wcf\system\attachment\IAttachmentObjectType::canDelete()
+	 * @inheritDoc
 	 */
 	public function canDelete($objectID) {
 		if ($objectID) {
@@ -81,7 +81,7 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
 	}
 	
 	/**
-	 * @see	\wcf\system\attachment\IAttachmentObjectType::cacheObjects()
+	 * @inheritDoc
 	 */
 	public function cacheObjects(array $objectIDs) {
 		$messageList = new ConversationMessageList();
@@ -104,7 +104,7 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
 	}
 	
 	/**
-	 * @see	\wcf\system\attachment\IAttachmentObjectType::setPermissions()
+	 * @inheritDoc
 	 */
 	public function setPermissions(array $attachments) {
 		$messageIDs = [];

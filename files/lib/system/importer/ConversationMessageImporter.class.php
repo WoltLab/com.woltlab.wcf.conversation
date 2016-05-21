@@ -15,12 +15,12 @@ use wcf\data\conversation\message\ConversationMessageEditor;
  */
 class ConversationMessageImporter extends AbstractImporter {
 	/**
-	 * @see	\wcf\system\importer\AbstractImporter::$className
+	 * @inheritDoc
 	 */
 	protected $className = 'wcf\data\conversation\message\ConversationMessage';
 	
 	/**
-	 * @see	\wcf\system\importer\IImporter::import()
+	 * @inheritDoc
 	 */
 	public function import($oldID, array $data, array $additionalData = []) {
 		$data['conversationID'] = ImportHandler::getInstance()->getNewID('com.woltlab.wcf.conversation', $data['conversationID']);

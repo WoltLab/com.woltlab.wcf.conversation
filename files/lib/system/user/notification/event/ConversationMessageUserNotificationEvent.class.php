@@ -14,12 +14,12 @@ use wcf\system\request\LinkHandler;
  */
 class ConversationMessageUserNotificationEvent extends AbstractUserNotificationEvent {
 	/**
-	 * @see	\wcf\system\user\notification\event\AbstractUserNotificationEvent::$stackable
+	 * @inheritDoc
 	 */
 	protected $stackable = true;
 	
 	/**
-	 * @see	\wcf\system\user\notification\event\IUserNotificationEvent::getMessage()
+	 * @inheritDoc
 	 */
 	public function getTitle() {
 		$count = count($this->getAuthors());
@@ -31,7 +31,7 @@ class ConversationMessageUserNotificationEvent extends AbstractUserNotificationE
 	}
 	
 	/**
-	 * @see	\wcf\system\user\notification\event\IUserNotificationEvent::getMessage()
+	 * @inheritDoc
 	 */
 	public function getMessage() {
 		$authors = array_values($this->getAuthors());
@@ -54,7 +54,7 @@ class ConversationMessageUserNotificationEvent extends AbstractUserNotificationE
 	}
 	
 	/**
-	 * @see	\wcf\system\user\notification\event\IUserNotificationEvent::getEmailMessage()
+	 * @inheritDoc
 	 */
 	public function getEmailMessage($notificationType = 'instant') {
 		return $this->getLanguage()->getDynamicVariable('wcf.user.notification.conversation.message.mail', [
@@ -65,7 +65,7 @@ class ConversationMessageUserNotificationEvent extends AbstractUserNotificationE
 	}
 	
 	/**
-	 * @see	\wcf\system\user\notification\event\IUserNotificationEvent::getLink()
+	 * @inheritDoc
 	 */
 	public function getLink() {
 		return LinkHandler::getInstance()->getLink('Conversation', [
@@ -75,14 +75,14 @@ class ConversationMessageUserNotificationEvent extends AbstractUserNotificationE
 	}
 	
 	/**
-	 * @see	\wcf\system\user\notification\event\IUserNotificationEvent::getEventHash()
+	 * @inheritDoc
 	 */
 	public function getEventHash() {
 		return sha1($this->eventID . '-' . $this->userNotificationObject->conversationID);
 	}
 	
 	/**
-	 * @see	\wcf\system\user\notification\event\IUserNotificationEvent::checkAccess()
+	 * @inheritDoc
 	 */
 	public function checkAccess() {
 		return $this->userNotificationObject->getConversation()->canRead();

@@ -16,12 +16,12 @@ use wcf\system\request\LinkHandler;
  */
 class FeedConversation extends DatabaseObjectDecorator implements IFeedEntry {
 	/**
-	 * @see	\wcf\data\DatabaseObjectDecorator::$baseClass
+	 * @inheritDoc
 	 */
 	protected static $baseClass = 'wcf\data\conversation\Conversation';
 	
 	/**
-	 * @see	\wcf\data\ILinkableObject::getLink()
+	 * @inheritDoc
 	 */
 	public function getLink() {
 		return LinkHandler::getInstance()->getLink('Conversation', [
@@ -32,77 +32,77 @@ class FeedConversation extends DatabaseObjectDecorator implements IFeedEntry {
 	}
 	
 	/**
-	 * @see	\wcf\data\ITitledObject::getTitle()
+	 * @inheritDoc
 	 */
 	public function getTitle() {
 		return $this->getDecoratedObject()->getTitle();
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessage::getFormattedMessage()
+	 * @inheritDoc
 	 */
 	public function getFormattedMessage() {
 		return '';
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessage::getMessage()
+	 * @inheritDoc
 	 */
 	public function getMessage() {
 		return '';
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessage::getExcerpt()
+	 * @inheritDoc
 	 */
 	public function getExcerpt($maxLength = 255) {
 		return '';
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessage::getUserID()
+	 * @inheritDoc
 	 */
 	public function getUserID() {
 		return $this->getDecoratedObject()->lastPosterID;
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessage::getUsername()
+	 * @inheritDoc
 	 */
 	public function getUsername() {
 		return $this->getDecoratedObject()->lastPoster;
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessage::getTime()
+	 * @inheritDoc
 	 */
 	public function getTime() {
 		return $this->getDecoratedObject()->lastPostTime;
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessage::__toString()
+	 * @inheritDoc
 	 */
 	public function __toString() {
 		return $this->getDecoratedObject()->__toString();
 	}
 	
 	/**
-	 * @see	\wcf\data\IFeedEntry::getComments()
+	 * @inheritDoc
 	 */
 	public function getComments() {
 		return $this->replies;
 	}
 	
 	/**
-	 * @see	\wcf\data\IFeedEntry::getCategories()
+	 * @inheritDoc
 	 */
 	public function getCategories() {
 		return [];
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessage::isVisible()
+	 * @inheritDoc
 	 */
 	public function isVisible() {
 		return $this->canRead();

@@ -17,7 +17,7 @@ use wcf\system\WCF;
  */
 class ConversationClipboardAction extends AbstractClipboardAction {
 	/**
-	 * @see	\wcf\system\clipboard\action\AbstractClipboardAction::$actionClassActions
+	 * @inheritDoc
 	 */
 	protected $actionClassActions = ['close', 'markAsRead', 'open'];
 	
@@ -28,12 +28,12 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 	public $conversations = null;
 	
 	/**
-	 * @see	\wcf\system\clipboard\action\AbstractClipboardAction::$supportedActions
+	 * @inheritDoc
 	 */
 	protected $supportedActions = ['assignLabel', 'close', 'leave', 'leavePermanently', 'markAsRead', 'open', 'restore'];
 	
 	/**
-	 * @see	\wcf\system\clipboard\action\IClipboardAction::execute()
+	 * @inheritDoc
 	 */
 	public function execute(array $objects, ClipboardAction $action) {
 		if ($this->conversations === null) {
@@ -101,14 +101,14 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 	}
 	
 	/**
-	 * @see	\wcf\system\clipboard\action\IClipboardAction::getClassName()
+	 * @inheritDoc
 	 */
 	public function getClassName() {
 		return 'wcf\data\conversation\ConversationAction';
 	}
 	
 	/**
-	 * @see	\wcf\system\clipboard\action\IClipboardAction::getTypeName()
+	 * @inheritDoc
 	 */
 	public function getTypeName() {
 		return 'com.woltlab.wcf.conversation.conversation';

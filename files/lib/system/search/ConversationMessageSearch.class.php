@@ -37,7 +37,7 @@ class ConversationMessageSearch extends AbstractSearchableObjectType {
 	public $messageCache = [];
 	
 	/**
-	 * @see	\wcf\system\search\ISearchableObjectType::cacheObjects()
+	 * @inheritDoc
 	 */
 	public function cacheObjects(array $objectIDs, array $additionalData = null) {
 		$messageList = new SearchResultConversationMessageList();
@@ -49,7 +49,7 @@ class ConversationMessageSearch extends AbstractSearchableObjectType {
 	}
 	
 	/**
-	 * @see	\wcf\system\search\ISearchableObjectType::getAdditionalData()
+	 * @inheritDoc
 	 */
 	public function getAdditionalData() {
 		return [
@@ -58,7 +58,7 @@ class ConversationMessageSearch extends AbstractSearchableObjectType {
 	}
 	
 	/**
-	 * @see	\wcf\system\search\ISearchableObjectType::getObject()
+	 * @inheritDoc
 	 */
 	public function getObject($objectID) {
 		if (isset($this->messageCache[$objectID])) return $this->messageCache[$objectID];
@@ -66,7 +66,7 @@ class ConversationMessageSearch extends AbstractSearchableObjectType {
 	}
 	
 	/**
-	 * @see	\wcf\system\search\ISearchableObjectType::getJoins()
+	 * @inheritDoc
 	 */
 	public function getJoins() {
 		return "JOIN wcf".WCF_N."_conversation_to_user conversation_to_user ON (conversation_to_user.participantID = ".WCF::getUser()->userID." AND conversation_to_user.conversationID = ".$this->getTableName().".conversationID)
@@ -74,28 +74,28 @@ class ConversationMessageSearch extends AbstractSearchableObjectType {
 	}
 	
 	/**
-	 * @see	\wcf\system\search\ISearchableObjectType::getTableName()
+	 * @inheritDoc
 	 */
 	public function getTableName() {
 		return 'wcf'.WCF_N.'_conversation_message';
 	}
 	
 	/**
-	 * @see	\wcf\system\search\ISearchableObjectType::getIDFieldName()
+	 * @inheritDoc
 	 */
 	public function getIDFieldName() {
 		return $this->getTableName().'.messageID';
 	}
 	
 	/**
-	 * @see	\wcf\system\search\ISearchableObjectType::getSubjectFieldName()
+	 * @inheritDoc
 	 */
 	public function getSubjectFieldName() {
 		return 'conversation.subject';
 	}
 	
 	/**
-	 * @see	\wcf\system\search\ISearchableObjectType::getConditions()
+	 * @inheritDoc
 	 */
 	public function getConditions(IForm $form = null) {
 		$conditionBuilder = new PreparedStatementConditionBuilder();
@@ -111,14 +111,14 @@ class ConversationMessageSearch extends AbstractSearchableObjectType {
 	}
 	
 	/**
-	 * @see	\wcf\system\search\ISearchableObjectType::isAccessible()
+	 * @inheritDoc
 	 */
 	public function isAccessible() {
 		return (WCF::getUser()->userID ? true : false);
 	}
 	
 	/**
-	 * @see	\wcf\system\search\ISearchableObjectType::getFormTemplateName()
+	 * @inheritDoc
 	 */
 	public function getFormTemplateName() {
 		if ($this->conversation) {
@@ -129,7 +129,7 @@ class ConversationMessageSearch extends AbstractSearchableObjectType {
 	}
 	
 	/**
-	 * @see	\wcf\system\search\ISearchableObjectType::show()
+	 * @inheritDoc
 	 */
 	public function show(IForm $form = null) {
 		// get existing values

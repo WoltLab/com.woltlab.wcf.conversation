@@ -24,7 +24,7 @@ use wcf\util\HeaderUtil;
  */
 class ConversationMessageEditForm extends ConversationAddForm {
 	/**
-	 * @see	\wcf\page\AbstractPage::$templateName
+	 * @inheritDoc
 	 */
 	public $templateName = 'conversationMessageEdit';
 	
@@ -65,7 +65,7 @@ class ConversationMessageEditForm extends ConversationAddForm {
 	public $isFirstMessage = false;
 	
 	/**
-	 * @see	\wcf\form\IPage::readParameters()
+	 * @inheritDoc
 	 */
 	public function readParameters() {
 		MessageForm::readParameters();
@@ -91,7 +91,7 @@ class ConversationMessageEditForm extends ConversationAddForm {
 	}
 	
 	/**
-	 * @see	\wcf\form\IForm::readFormParameters()
+	 * @inheritDoc
 	 */
 	public function readFormParameters() {
 		parent::readFormParameters();
@@ -100,7 +100,7 @@ class ConversationMessageEditForm extends ConversationAddForm {
 	}
 	
 	/**
-	 * @see	\wcf\form\IForm::validate()
+	 * @inheritDoc
 	 */
 	public function validate() {
 		if ($this->isFirstMessage && $this->conversation->isDraft) parent::validate();
@@ -108,14 +108,14 @@ class ConversationMessageEditForm extends ConversationAddForm {
 	}
 	
 	/**
-	 * @see	\wcf\form\MessageForm::validateSubject()
+	 * @inheritDoc
 	 */
 	protected function validateSubject() {
 		if ($this->isFirstMessage) parent::validateSubject();
 	}
 	
 	/**
-	 * @see	\wcf\form\IForm::save()
+	 * @inheritDoc
 	 */
 	public function save() {
 		MessageForm::save();
@@ -180,7 +180,7 @@ class ConversationMessageEditForm extends ConversationAddForm {
 	}
 	
 	/**
-	 * @see	\wcf\page\IPage::readData()
+	 * @inheritDoc
 	 */
 	public function readData() {
 		MessageForm::readData();
@@ -225,7 +225,7 @@ class ConversationMessageEditForm extends ConversationAddForm {
 	}
 	
 	/**
-	 * @see	\wcf\page\IPage::assignVariables()
+	 * @inheritDoc
 	 */
 	public function assignVariables() {
 		parent::assignVariables();
@@ -243,14 +243,14 @@ class ConversationMessageEditForm extends ConversationAddForm {
 	}
 	
 	/**
-	 * @see	\wcf\page\ITrackablePage::getObjectType()
+	 * @inheritDoc
 	 */
 	public function getObjectType() {
 		return 'com.woltlab.wcf.conversation';
 	}
 	
 	/**
-	 * @see	\wcf\page\ITrackablePage::getObjectID()
+	 * @inheritDoc
 	 */
 	public function getObjectID() {
 		return $this->conversationID;

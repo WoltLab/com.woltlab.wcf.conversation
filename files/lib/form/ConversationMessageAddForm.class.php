@@ -25,27 +25,27 @@ use wcf\util\HeaderUtil;
  */
 class ConversationMessageAddForm extends MessageForm {
 	/**
-	 * @see	\wcf\page\AbstractPage::$enableTracking
+	 * @inheritDoc
 	 */
 	public $enableTracking = true;
 	
 	/**
-	 * @see	\wcf\form\MessageForm::$attachmentObjectType
+	 * @inheritDoc
 	 */
 	public $attachmentObjectType = 'com.woltlab.wcf.conversation.message';
 	
 	/**
-	 * @see	\wcf\page\AbstractPage::$loginRequired
+	 * @inheritDoc
 	 */
 	public $loginRequired = true;
 	
 	/**
-	 * @see	\wcf\page\AbstractPage::$neededModules
+	 * @inheritDoc
 	 */
 	public $neededModules = ['MODULE_CONVERSATION'];
 	
 	/**
-	 * @see	\wcf\page\AbstractPage::$neededPermissions
+	 * @inheritDoc
 	 */
 	public $neededPermissions = ['user.conversation.canUseConversation'];
 	
@@ -68,7 +68,7 @@ class ConversationMessageAddForm extends MessageForm {
 	public $messageList = null;
 	
 	/**
-	 * @see	\wcf\form\IPage::readParameters()
+	 * @inheritDoc
 	 */
 	public function readParameters() {
 		parent::readParameters();
@@ -87,7 +87,7 @@ class ConversationMessageAddForm extends MessageForm {
 	}
 	
 	/**
-	 * @see	\wcf\form\IForm::readFormParameters()
+	 * @inheritDoc
 	 */
 	public function readFormParameters() {
 		parent::readFormParameters();
@@ -97,12 +97,12 @@ class ConversationMessageAddForm extends MessageForm {
 	}
 	
 	/**
-	 * @see	\wcf\form\MessageForm::validateSubject()
+	 * @inheritDoc
 	 */
 	protected function validateSubject() {}
 	
 	/**
-	 * @see	\wcf\page\IPage::readData()
+	 * @inheritDoc
 	 */
 	public function readData() {
 		parent::readData();
@@ -154,7 +154,7 @@ class ConversationMessageAddForm extends MessageForm {
 	}
 	
 	/**
-	 * @see	\wcf\form\IForm::save()
+	 * @inheritDoc
 	 */
 	public function save() {
 		parent::save();
@@ -193,7 +193,7 @@ class ConversationMessageAddForm extends MessageForm {
 	}
 	
 	/**
-	 * @see	\wcf\page\IPage::assignVariables()
+	 * @inheritDoc
 	 */
 	public function assignVariables() {
 		parent::assignVariables();
@@ -210,14 +210,14 @@ class ConversationMessageAddForm extends MessageForm {
 	}
 	
 	/**
-	 * @see	\wcf\page\ITrackablePage::getObjectType()
+	 * @inheritDoc
 	 */
 	public function getObjectType() {
 		return 'com.woltlab.wcf.conversation';
 	}
 	
 	/**
-	 * @see	\wcf\page\ITrackablePage::getObjectID()
+	 * @inheritDoc
 	 */
 	public function getObjectID() {
 		return $this->conversationID;

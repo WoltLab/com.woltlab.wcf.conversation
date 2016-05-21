@@ -26,27 +26,27 @@ use wcf\util\StringUtil;
  */
 class ConversationAddForm extends MessageForm {
 	/**
-	 * @see	\wcf\page\AbstractPage::$enableTracking
+	 * @inheritDoc
 	 */
 	public $enableTracking = true;
 	
 	/**
-	 * @see	\wcf\form\MessageForm::$attachmentObjectType
+	 * @inheritDoc
 	 */
 	public $attachmentObjectType = 'com.woltlab.wcf.conversation.message';
 	
 	/**
-	 * @see	\wcf\page\AbstractPage::$loginRequired
+	 * @inheritDoc
 	 */
 	public $loginRequired = true;
 	
 	/**
-	 * @see	\wcf\page\AbstractPage::$neededModules
+	 * @inheritDoc
 	 */
 	public $neededModules = ['MODULE_CONVERSATION'];
 	
 	/**
-	 * @see	\wcf\page\AbstractPage::$neededPermissions
+	 * @inheritDoc
 	 */
 	public $neededPermissions = ['user.conversation.canUseConversation'];
 	
@@ -87,7 +87,7 @@ class ConversationAddForm extends MessageForm {
 	public $invisibleParticipantIDs = [];
 	
 	/**
-	 * @see	\wcf\page\IPage::readParameters()
+	 * @inheritDoc
 	 */
 	public function readParameters() {
 		parent::readParameters();
@@ -125,7 +125,7 @@ class ConversationAddForm extends MessageForm {
 	}
 	
 	/**
-	 * @see	\wcf\form\IForm::readFormParameters()
+	 * @inheritDoc
 	 */
 	public function readFormParameters() {
 		parent::readFormParameters();
@@ -140,7 +140,7 @@ class ConversationAddForm extends MessageForm {
 	}
 	
 	/**
-	 * @see	\wcf\form\IForm::validate()
+	 * @inheritDoc
 	 */
 	public function validate() {
 		if (empty($this->participants) && empty($this->invisibleParticipants) && !$this->draft) {
@@ -177,7 +177,7 @@ class ConversationAddForm extends MessageForm {
 	}
 	
 	/**
-	 * @see	\wcf\form\IForm::save()
+	 * @inheritDoc
 	 */
 	public function save() {
 		parent::save();
@@ -229,7 +229,7 @@ class ConversationAddForm extends MessageForm {
 	}
 	
 	/**
-	 * @see	\wcf\page\IPage::readData()
+	 * @inheritDoc
 	 */
 	public function readData() {
 		parent::readData();
@@ -239,7 +239,7 @@ class ConversationAddForm extends MessageForm {
 	}
 	
 	/**
-	 * @see	\wcf\page\IPage::assignVariables()
+	 * @inheritDoc
 	 */
 	public function assignVariables() {
 		parent::assignVariables();

@@ -15,12 +15,12 @@ use wcf\data\conversation\ConversationEditor;
  */
 class ConversationImporter extends AbstractImporter {
 	/**
-	 * @see	\wcf\system\importer\AbstractImporter::$className
+	 * @inheritDoc
 	 */
 	protected $className = 'wcf\data\conversation\Conversation';
 	
 	/**
-	 * @see	\wcf\system\importer\IImporter::import()
+	 * @inheritDoc
 	 */
 	public function import($oldID, array $data, array $additionalData = []) {
 		$oldUserID = $data['userID'];

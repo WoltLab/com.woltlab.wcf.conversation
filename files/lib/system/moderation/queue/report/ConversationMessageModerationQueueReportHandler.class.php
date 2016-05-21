@@ -24,17 +24,17 @@ use wcf\system\WCF;
  */
 class ConversationMessageModerationQueueReportHandler extends AbstractModerationQueueHandler implements IModerationQueueReportHandler {
 	/**
-	 * @see	\wcf\system\moderation\queue\AbstractModerationQueueHandler::$className
+	 * @inheritDoc
 	 */
 	protected $className = 'wcf\data\conversation\message\ConversationMessage';
 	
 	/**
-	 * @see	\wcf\system\moderation\queue\AbstractModerationQueueHandler::$definitionName
+	 * @inheritDoc
 	 */
 	protected $definitionName = 'com.woltlab.wcf.moderation.report';
 	
 	/**
-	 * @see	\wcf\system\moderation\queue\AbstractModerationQueueHandler::$objectType
+	 * @inheritDoc
 	 */
 	protected $objectType = 'com.woltlab.wcf.conversation.message';
 	
@@ -45,12 +45,12 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
 	protected static $messages = [];
 	
 	/**
-	 * @see	\wcf\system\moderation\queue\AbstractModerationQueueHandler::$requiredPermission
+	 * @inheritDoc
 	 */
 	protected $requiredPermission = 'mod.conversation.canModerateConversation';
 	
 	/**
-	 * @see	\wcf\system\moderation\queue\IModerationQueueHandler::assignQueues()
+	 * @inheritDoc
 	 */
 	public function assignQueues(array $queues) {
 		$assignments = [];
@@ -67,7 +67,7 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
 	}
 	
 	/**
-	 * @see	\wcf\system\moderation\queue\report\IModerationQueueReportHandler::canReport()
+	 * @inheritDoc
 	 */
 	public function canReport($objectID) {
 		if (!$this->isValid($objectID)) {
@@ -82,14 +82,14 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
 	}
 	
 	/**
-	 * @see	\wcf\system\moderation\queue\IModerationQueueHandler::getContainerID()
+	 * @inheritDoc
 	 */
 	public function getContainerID($objectID) {
 		return 0;
 	}
 	
 	/**
-	 * @see	\wcf\system\moderation\queue\report\IModerationQueueReportHandler::getReportedContent()
+	 * @inheritDoc
 	 */
 	public function getReportedContent(ViewableModerationQueue $queue) {
 		WCF::getTPL()->assign([
@@ -100,7 +100,7 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
 	}
 	
 	/**
-	 * @see	\wcf\system\moderation\queue\report\IModerationQueueReportHandler::getReportedObject()
+	 * @inheritDoc
 	 */
 	public function getReportedObject($objectID) {
 		if ($this->isValid($objectID)) {
@@ -111,7 +111,7 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
 	}
 	
 	/**
-	 * @see	\wcf\system\moderation\queue\IModerationQueueHandler::isValid()
+	 * @inheritDoc
 	 */
 	public function isValid($objectID) {
 		if ($this->getMessage($objectID) === null) {
@@ -139,7 +139,7 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
 	}
 	
 	/**
-	 * @see	\wcf\system\moderation\queue\IModerationQueueHandler::populate()
+	 * @inheritDoc
 	 */
 	public function populate(array $queues) {
 		$objectIDs = [];
@@ -184,7 +184,7 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
 	}
 	
 	/**
-	 * @see	\wcf\system\moderation\queue\IModerationQueueHandler::removeContent()
+	 * @inheritDoc
 	 */
 	public function removeContent(ModerationQueue $queue, $message) {
 		if ($this->isValid($queue->objectID)) {

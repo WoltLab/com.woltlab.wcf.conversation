@@ -19,12 +19,12 @@ use wcf\system\WCF;
  */
 class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker {
 	/**
-	 * @see	\wcf\system\worker\AbstractWorker::$limit
+	 * @inheritDoc
 	 */
 	protected $limit = 500;
 	
 	/**
-	 * @see	\wcf\system\worker\IWorker::countObjects()
+	 * @inheritDoc
 	 */
 	public function countObjects() {
 		if ($this->count === null) {
@@ -39,7 +39,7 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker {
 	}
 	
 	/**
-	 * @see	\wcf\system\worker\AbstractRebuildDataWorker::initObjectList
+	 * @inheritDoc
 	 */
 	protected function initObjectList() {
 		$this->objectList = new ConversationMessageList();
@@ -49,7 +49,7 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker {
 	}
 	
 	/**
-	 * @see	\wcf\system\worker\IWorker::execute()
+	 * @inheritDoc
 	 */
 	public function execute() {
 		$this->objectList->getConditionBuilder()->add('conversation_message.messageID BETWEEN ? AND ?', [$this->limit * $this->loopCount + 1, $this->limit * $this->loopCount + $this->limit]);

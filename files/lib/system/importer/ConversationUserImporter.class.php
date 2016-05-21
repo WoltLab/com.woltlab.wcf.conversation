@@ -14,7 +14,7 @@ use wcf\system\WCF;
  */
 class ConversationUserImporter extends AbstractImporter {
 	/**
-	 * @see	\wcf\system\importer\IImporter::import()
+	 * @inheritDoc
 	 */
 	public function import($oldID, array $data, array $additionalData = []) {
 		$data['conversationID'] = ImportHandler::getInstance()->getNewID('com.woltlab.wcf.conversation', $data['conversationID']);

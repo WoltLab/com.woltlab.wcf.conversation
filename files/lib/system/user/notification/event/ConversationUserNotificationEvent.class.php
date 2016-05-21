@@ -14,14 +14,14 @@ use wcf\system\request\LinkHandler;
  */
 class ConversationUserNotificationEvent extends AbstractUserNotificationEvent {
 	/**
-	 * @see	\wcf\system\user\notification\event\IUserNotificationEvent::getMessage()
+	 * @inheritDoc
 	 */
 	public function getTitle() {
 		return $this->getLanguage()->get('wcf.user.notification.conversation.title');
 	}
 	
 	/**
-	 * @see	\wcf\system\user\notification\event\IUserNotificationEvent::getMessage()
+	 * @inheritDoc
 	 */
 	public function getMessage() {
 		return $this->getLanguage()->getDynamicVariable('wcf.user.notification.conversation.message', [
@@ -31,7 +31,7 @@ class ConversationUserNotificationEvent extends AbstractUserNotificationEvent {
 	}
 	
 	/**
-	 * @see	\wcf\system\user\notification\event\IUserNotificationEvent::getEmailMessage()
+	 * @inheritDoc
 	 */
 	public function getEmailMessage($notificationType = 'instant') {
 		return $this->getLanguage()->getDynamicVariable('wcf.user.notification.conversation.mail', [
@@ -42,14 +42,14 @@ class ConversationUserNotificationEvent extends AbstractUserNotificationEvent {
 	}
 	
 	/**
-	 * @see	\wcf\system\user\notification\event\IUserNotificationEvent::getLink()
+	 * @inheritDoc
 	 */
 	public function getLink() {
 		return LinkHandler::getInstance()->getLink('Conversation', ['object' => $this->userNotificationObject]);
 	}
 	
 	/**
-	 * @see	\wcf\system\user\notification\event\IUserNotificationEvent::checkAccess()
+	 * @inheritDoc
 	 */
 	public function checkAccess() {
 		return $this->userNotificationObject->canRead();
