@@ -87,7 +87,7 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
 		$messageList = new ConversationMessageList();
 		$messageList->setObjectIDs($objectIDs);
 		$messageList->readObjects();
-		$conversationIDs = array();
+		$conversationIDs = [];
 		foreach ($messageList as $message) {
 			$conversationIDs[] = $message->conversationID;
 		}
@@ -107,13 +107,13 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
 	 * @see	\wcf\system\attachment\IAttachmentObjectType::setPermissions()
 	 */
 	public function setPermissions(array $attachments) {
-		$messageIDs = array();
+		$messageIDs = [];
 		foreach ($attachments as $attachment) {
 			// set default permissions
-			$attachment->setPermissions(array(
+			$attachment->setPermissions([
 				'canDownload' => false,
 				'canViewPreview' => false
-			));
+			]);
 			
 			if ($this->getObject($attachment->objectID) === null) {
 				$messageIDs[] = $attachment->objectID;
@@ -128,16 +128,16 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
 			if (($message = $this->getObject($attachment->objectID)) !== null) {
 				if (!$message->getConversation()->canRead()) continue;
 				
-				$attachment->setPermissions(array(
+				$attachment->setPermissions([
 					'canDownload' => true,
 					'canViewPreview' => true
-				));
+				]);
 			}
 			else if ($attachment->tmpHash != '' && $attachment->userID == WCF::getUser()->userID) {
-				$attachment->setPermissions(array(
+				$attachment->setPermissions([
 					'canDownload' => true,
 					'canViewPreview' => true
-				));
+				]);
 			}
 		}
 	}

@@ -52,7 +52,7 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker {
 	 * @see	\wcf\system\worker\IWorker::execute()
 	 */
 	public function execute() {
-		$this->objectList->getConditionBuilder()->add('conversation_message.messageID BETWEEN ? AND ?', array($this->limit * $this->loopCount + 1, $this->limit * $this->loopCount + $this->limit));
+		$this->objectList->getConditionBuilder()->add('conversation_message.messageID BETWEEN ? AND ?', [$this->limit * $this->loopCount + 1, $this->limit * $this->loopCount + $this->limit]);
 		
 		parent::execute();
 		
@@ -73,10 +73,10 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker {
 			SearchIndexManager::getInstance()->add('com.woltlab.wcf.conversation.message', $message->messageID, $message->message, ($message->subject ?: ''), $message->time, $message->userID, $message->username);
 			
 			$editor = new ConversationMessageEditor($message);
-			$data = array();
+			$data = [];
 			
 			// count attachments
-			$attachmentStatement->execute(array($attachmentObjectType->objectTypeID, $message->messageID));
+			$attachmentStatement->execute([$attachmentObjectType->objectTypeID, $message->messageID]);
 			$row = $attachmentStatement->fetchSingleRow();
 			$data['attachments'] = $row['attachments'];
 			

@@ -45,10 +45,10 @@ class ConversationNotificationObjectType extends AbstractUserNotificationObjectT
 				// '__unknownNotificationObject' tells the notification API
 				// that the object does not exist anymore so that the related
 				// notification can be deleted automatically
-				$objects[$objectID] = new static::$decoratorClassName(new static::$objectClassName(null, array(
+				$objects[$objectID] = new static::$decoratorClassName(new static::$objectClassName(null, [
 					'__unknownNotificationObject' => true,
 					'conversationID' => $objectID
-				)));
+				]));
 			}
 		}
 		

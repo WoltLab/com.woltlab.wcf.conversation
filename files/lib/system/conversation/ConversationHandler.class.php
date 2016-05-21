@@ -20,13 +20,13 @@ class ConversationHandler extends SingletonFactory {
 	 * number of unread conversations
 	 * @var	integer[]
 	 */
-	protected $unreadConversationCount = array();
+	protected $unreadConversationCount = [];
 	
 	/**
 	 * number of conversations
 	 * @var	integer[]
 	 */
-	protected $conversationCount = array();
+	protected $conversationCount = [];
 	
 	/**
 	 * Returns the number of unread conversations for given user.
@@ -42,16 +42,16 @@ class ConversationHandler extends SingletonFactory {
 			$this->unreadConversationCount[$userID] = 0;
 			
 			// load storage data
-			UserStorageHandler::getInstance()->loadStorage(array($userID));
+			UserStorageHandler::getInstance()->loadStorage([$userID]);
 			
 			// get ids
-			$data = UserStorageHandler::getInstance()->getStorage(array($userID), 'unreadConversationCount');
+			$data = UserStorageHandler::getInstance()->getStorage([$userID], 'unreadConversationCount');
 			
 			// cache does not exist or is outdated
 			if ($data[$userID] === null || $skipCache) {
 				$conditionBuilder = new PreparedStatementConditionBuilder();
 				$conditionBuilder->add('conversation.conversationID = conversation_to_user.conversationID');
-				$conditionBuilder->add('conversation_to_user.participantID = ?', array($userID));
+				$conditionBuilder->add('conversation_to_user.participantID = ?', [$userID]);
 				$conditionBuilder->add('conversation_to_user.hideConversation = 0');
 				$conditionBuilder->add('conversation_to_user.lastVisitTime < conversation.lastPostTime');
 				
@@ -88,18 +88,18 @@ class ConversationHandler extends SingletonFactory {
 			$this->conversationCount[$userID] = 0;
 			
 			// load storage data
-			UserStorageHandler::getInstance()->loadStorage(array($userID));
+			UserStorageHandler::getInstance()->loadStorage([$userID]);
 			
 			// get ids
-			$data = UserStorageHandler::getInstance()->getStorage(array($userID), 'conversationCount');
+			$data = UserStorageHandler::getInstance()->getStorage([$userID], 'conversationCount');
 			
 			// cache does not exist or is outdated
 			if ($data[$userID] === null) {
 				$conditionBuilder1 = new PreparedStatementConditionBuilder();
-				$conditionBuilder1->add('conversation_to_user.participantID = ?', array($userID));
+				$conditionBuilder1->add('conversation_to_user.participantID = ?', [$userID]);
 				$conditionBuilder1->add('conversation_to_user.hideConversation IN (0,1)');
 				$conditionBuilder2 = new PreparedStatementConditionBuilder();
-				$conditionBuilder2->add('conversation.userID = ?', array($userID));
+				$conditionBuilder2->add('conversation.userID = ?', [$userID]);
 				$conditionBuilder2->add('conversation.isDraft = 1');
 				
 				$sql = "SELECT (SELECT	COUNT(*)

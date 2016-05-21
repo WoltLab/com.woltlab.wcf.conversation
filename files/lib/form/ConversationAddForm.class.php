@@ -43,12 +43,12 @@ class ConversationAddForm extends MessageForm {
 	/**
 	 * @see	\wcf\page\AbstractPage::$neededModules
 	 */
-	public $neededModules = array('MODULE_CONVERSATION');
+	public $neededModules = ['MODULE_CONVERSATION'];
 	
 	/**
 	 * @see	\wcf\page\AbstractPage::$neededPermissions
 	 */
-	public $neededPermissions = array('user.conversation.canUseConversation');
+	public $neededPermissions = ['user.conversation.canUseConversation'];
 	
 	/**
 	 * participants (comma separated user names)
@@ -78,13 +78,13 @@ class ConversationAddForm extends MessageForm {
 	 * participants (user ids)
 	 * @var	integer[]
 	 */
-	public $participantIDs = array();
+	public $participantIDs = [];
 	
 	/**
 	 * invisible participants (user ids)
 	 * @var	integer[]
 	 */
-	public $invisibleParticipantIDs = array();
+	public $invisibleParticipantIDs = [];
 	
 	/**
 	 * @see	\wcf\page\IPage::readParameters()
@@ -111,7 +111,7 @@ class ConversationAddForm extends MessageForm {
 				Conversation::validateParticipant($user);
 			}
 			catch (UserInputException $e) {
-				throw new NamedUserException(WCF::getLanguage()->getDynamicVariable('wcf.conversation.participants.error.'.$e->getType(), array('errorData' => array('username' => $user->username))));
+				throw new NamedUserException(WCF::getLanguage()->getDynamicVariable('wcf.conversation.participants.error.'.$e->getType(), ['errorData' => ['username' => $user->username]]));
 			}
 			
 			$this->participants = $user->username;
@@ -183,38 +183,38 @@ class ConversationAddForm extends MessageForm {
 		parent::save();
 		
 		// save conversation
-		$data = array_merge($this->additionalFields, array(
+		$data = array_merge($this->additionalFields, [
 			'subject' => $this->subject,
 			'time' => TIME_NOW,
 			'userID' => WCF::getUser()->userID,
 			'username' => WCF::getUser()->username,
 			'isDraft' => ($this->draft ? 1 : 0),
 			'participantCanInvite' => $this->participantCanInvite
-		));
+		]);
 		if ($this->draft) {
-			$data['draftData'] = serialize(array(
+			$data['draftData'] = serialize([
 				'participants' => $this->participantIDs,
 				'invisibleParticipants' => $this->invisibleParticipantIDs
-			));
+			]);
 		}
 		
-		$conversationData = array(
+		$conversationData = [
 			'data' => $data,
 			'attachmentHandler' => $this->attachmentHandler,
-			'messageData' => array(
+			'messageData' => [
 				'message' => $this->text,
 				'enableBBCodes' => $this->enableBBCodes,
 				'enableHtml' => $this->enableHtml,
 				'enableSmilies' => $this->enableSmilies,
 				'showSignature' => $this->showSignature
-			)
-		);
+			]
+		];
 		if (!$this->draft) {
 			$conversationData['participants'] = $this->participantIDs;
 			$conversationData['invisibleParticipants'] = $this->invisibleParticipantIDs;
 		}
 		
-		$this->objectAction = new ConversationAction(array(), 'create', $conversationData);
+		$this->objectAction = new ConversationAction([], 'create', $conversationData);
 		$resultValues = $this->objectAction->executeAction();
 		
 		MessageQuoteManager::getInstance()->saved();
@@ -222,9 +222,9 @@ class ConversationAddForm extends MessageForm {
 		$this->saved();
 		
 		// forward
-		HeaderUtil::redirect(LinkHandler::getInstance()->getLink('Conversation', array(
+		HeaderUtil::redirect(LinkHandler::getInstance()->getLink('Conversation', [
 			'object' => $resultValues['returnValues']
-		)));
+		]));
 		exit;
 	}
 	
@@ -246,10 +246,10 @@ class ConversationAddForm extends MessageForm {
 		
 		MessageQuoteManager::getInstance()->assignVariables();
 		
-		WCF::getTPL()->assign(array(
+		WCF::getTPL()->assign([
 			'participantCanInvite' => $this->participantCanInvite,
 			'participants' => $this->participants,
 			'invisibleParticipants' => $this->invisibleParticipants
-		));
+		]);
 	}
 }

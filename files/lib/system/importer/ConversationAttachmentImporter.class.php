@@ -26,7 +26,7 @@ class ConversationAttachmentImporter extends AbstractAttachmentImporter {
 	/**
 	 * @see	\wcf\system\importer\IImporter::import()
 	 */
-	public function import($oldID, array $data, array $additionalData = array()) {
+	public function import($oldID, array $data, array $additionalData = []) {
 		$data['objectID'] = ImportHandler::getInstance()->getNewID('com.woltlab.wcf.conversation.message', $data['objectID']);
 		if (!$data['objectID']) return 0;
 		
@@ -37,9 +37,9 @@ class ConversationAttachmentImporter extends AbstractAttachmentImporter {
 			
 			if (($newMessage = $this->fixEmbeddedAttachments($messageObj->message, $oldID, $attachmentID)) !== false) {
 				$editor = new ConversationMessageEditor($messageObj);
-				$editor->update(array(
+				$editor->update([
 					'message' => $newMessage
-				));
+				]);
 			}
 		}
 		

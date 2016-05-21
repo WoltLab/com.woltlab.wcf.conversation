@@ -24,28 +24,28 @@ class ConversationUserNotificationEvent extends AbstractUserNotificationEvent {
 	 * @see	\wcf\system\user\notification\event\IUserNotificationEvent::getMessage()
 	 */
 	public function getMessage() {
-		return $this->getLanguage()->getDynamicVariable('wcf.user.notification.conversation.message', array(
+		return $this->getLanguage()->getDynamicVariable('wcf.user.notification.conversation.message', [
 			'author' => $this->author,
 			'conversation' => $this->userNotificationObject
-		));
+		]);
 	}
 	
 	/**
 	 * @see	\wcf\system\user\notification\event\IUserNotificationEvent::getEmailMessage()
 	 */
 	public function getEmailMessage($notificationType = 'instant') {
-		return $this->getLanguage()->getDynamicVariable('wcf.user.notification.conversation.mail', array(
+		return $this->getLanguage()->getDynamicVariable('wcf.user.notification.conversation.mail', [
 			'conversation' => $this->userNotificationObject,
 			'author' => $this->author,
 			'notificationType' => $notificationType
-		));
+		]);
 	}
 	
 	/**
 	 * @see	\wcf\system\user\notification\event\IUserNotificationEvent::getLink()
 	 */
 	public function getLink() {
-		return LinkHandler::getInstance()->getLink('Conversation', array('object' => $this->userNotificationObject));
+		return LinkHandler::getInstance()->getLink('Conversation', ['object' => $this->userNotificationObject]);
 	}
 	
 	/**

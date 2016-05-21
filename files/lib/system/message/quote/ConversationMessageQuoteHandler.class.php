@@ -25,13 +25,13 @@ class ConversationMessageQuoteHandler extends AbstractMessageQuoteHandler {
 		$messages = $messageList->getObjects();
 		
 		// read conversations
-		$conversationIDs = $validMessageIDs = array();
+		$conversationIDs = $validMessageIDs = [];
 		foreach ($messages as $message) {
 			$conversationIDs[] = $message->conversationID;
 			$validMessageIDs[] = $message->messageID;
 		}
 		
-		$quotedMessages = array();
+		$quotedMessages = [];
 		if (!empty($conversationIDs)) {
 			$conversationList = new ConversationList();
 			$conversationList->setObjectIDs($conversationIDs);
@@ -57,7 +57,7 @@ class ConversationMessageQuoteHandler extends AbstractMessageQuoteHandler {
 		
 		// check for orphaned quotes
 		if (count($validMessageIDs) != count($data)) {
-			$orphanedQuoteIDs = array();
+			$orphanedQuoteIDs = [];
 			foreach ($data as $messageID => $quoteIDs) {
 				if (!in_array($messageID, $validMessageIDs)) {
 					foreach (array_keys($quoteIDs) as $quoteID) {

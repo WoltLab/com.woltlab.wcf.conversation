@@ -19,7 +19,7 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 	/**
 	 * @see	\wcf\system\clipboard\action\AbstractClipboardAction::$actionClassActions
 	 */
-	protected $actionClassActions = array('close', 'markAsRead', 'open');
+	protected $actionClassActions = ['close', 'markAsRead', 'open'];
 	
 	/**
 	 * list of conversations
@@ -30,7 +30,7 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 	/**
 	 * @see	\wcf\system\clipboard\action\AbstractClipboardAction::$supportedActions
 	 */
-	protected $supportedActions = array('assignLabel', 'close', 'leave', 'leavePermanently', 'markAsRead', 'open', 'restore');
+	protected $supportedActions = ['assignLabel', 'close', 'leave', 'leavePermanently', 'markAsRead', 'open', 'restore'];
 	
 	/**
 	 * @see	\wcf\system\clipboard\action\IClipboardAction::execute()
@@ -59,7 +59,7 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 					FROM	wcf".WCF_N."_conversation_label
 					WHERE	userID = ?";
 				$statement = WCF::getDB()->prepareStatement($sql);
-				$statement->execute(array(WCF::getUser()->userID));
+				$statement->execute([WCF::getUser()->userID]);
 				$row = $statement->fetchArray();
 				if ($row['count'] == 0) {
 					return null;
@@ -69,14 +69,14 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 			break;
 			
 			case 'leave':
-				$item->addInternalData('parameters', array('hideConversation' => 1));
+				$item->addInternalData('parameters', ['hideConversation' => 1]);
 				$item->addParameter('actionName', 'hideConversation');
 				$item->addParameter('className', $this->getClassName());
 			break;
 			
 			case 'leavePermanently':
 				$item->addParameter('objectIDs', array_keys($this->conversations));
-				$item->addInternalData('parameters', array('hideConversation' => 2));
+				$item->addInternalData('parameters', ['hideConversation' => 2]);
 				$item->addParameter('actionName', 'hideConversation');
 				$item->addParameter('className', $this->getClassName());
 			break;
@@ -85,13 +85,13 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 				$item->addParameter('objectIDs', array_keys($this->conversations));
 				$item->addParameter('actionName', 'markAsRead');
 				$item->addParameter('className', $this->getClassName());
-				$item->addInternalData('confirmMessage', WCF::getLanguage()->getDynamicVariable('wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.markAsRead.confirmMessage', array(
+				$item->addInternalData('confirmMessage', WCF::getLanguage()->getDynamicVariable('wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.markAsRead.confirmMessage', [
 					'count' => $item->getCount()
-				)));
+				]));
 			break;
 			
 			case 'restore':
-				$item->addInternalData('parameters', array('hideConversation' => 0));
+				$item->addInternalData('parameters', ['hideConversation' => 0]);
 				$item->addParameter('actionName', 'hideConversation');
 				$item->addParameter('className', $this->getClassName());
 			break;
@@ -121,7 +121,7 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 	 * @return	Conversation[]
 	 */
 	protected function validateParticipation(array $conversations) {
-		$conversationIDs = array();
+		$conversationIDs = [];
 		
 		// validate ownership
 		foreach ($conversations as $conversation) {
@@ -133,8 +133,8 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 		// validate participation as non-owner
 		if (!empty($conversationIDs)) {
 			$conditions = new PreparedStatementConditionBuilder();
-			$conditions->add("conversationID IN (?)", array($conversationIDs));
-			$conditions->add("participantID = ?", array(WCF::getUser()->userID));
+			$conditions->add("conversationID IN (?)", [$conversationIDs]);
+			$conditions->add("participantID = ?", [WCF::getUser()->userID]);
 			
 			$sql = "SELECT	conversationID
 				FROM	wcf".WCF_N."_conversation_to_user
@@ -167,7 +167,7 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 	 * @return	integer[]
 	 */
 	protected function validateClose() {
-		$conversationIDs = array();
+		$conversationIDs = [];
 		
 		foreach ($this->conversations as $conversation) {
 			if (!$conversation->isClosed && $conversation->userID == WCF::getUser()->userID) {
@@ -184,15 +184,15 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 	 * @return	integer[]
 	 */
 	public function validateLeave() {
-		$tmpIDs = array();
+		$tmpIDs = [];
 		foreach ($this->conversations as $conversation) {
 			$tmpIDs[] = $conversation->conversationID;
 		}
 		
 		$conditions = new PreparedStatementConditionBuilder();
-		$conditions->add("conversationID IN (?)", array($tmpIDs));
-		$conditions->add("participantID = ?", array(WCF::getUser()->userID));
-		$conditions->add("hideConversation <> ?", array(1));
+		$conditions->add("conversationID IN (?)", [$tmpIDs]);
+		$conditions->add("participantID = ?", [WCF::getUser()->userID]);
+		$conditions->add("hideConversation <> ?", [1]);
 		
 		$sql = "SELECT	conversationID
 			FROM	wcf".WCF_N."_conversation_to_user
@@ -209,18 +209,18 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 	 * @return	integer[]
 	 */
 	public function validateMarkAsRead() {
-		$conversationIDs = array();
+		$conversationIDs = [];
 		
 		$conditions = new PreparedStatementConditionBuilder();
-		$conditions->add("conversationID IN (?)", array(array_keys($this->conversations)));
-		$conditions->add("participantID = ?", array(WCF::getUser()->userID));
+		$conditions->add("conversationID IN (?)", [array_keys($this->conversations)]);
+		$conditions->add("participantID = ?", [WCF::getUser()->userID]);
 		
 		$sql = "SELECT	conversationID, lastVisitTime
 			FROM	wcf".WCF_N."_conversation_to_user
 			".$conditions;
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute($conditions->getParameters());
-		$lastVisitTime = array();
+		$lastVisitTime = [];
 		while ($row = $statement->fetchArray()) {
 			$lastVisitTime[$row['conversationID']] = $row['lastVisitTime'];
 		}
@@ -240,7 +240,7 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 	 * @return	integer[]
 	 */
 	protected function validateOpen() {
-		$conversationIDs = array();
+		$conversationIDs = [];
 		
 		foreach ($this->conversations as $conversation) {
 			if ($conversation->isClosed && $conversation->userID == WCF::getUser()->userID) {
@@ -257,15 +257,15 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 	 * @return	integer[]
 	 */
 	public function validateRestore() {
-		$tmpIDs = array();
+		$tmpIDs = [];
 		foreach ($this->conversations as $conversation) {
 			$tmpIDs[] = $conversation->conversationID;
 		}
 		
 		$conditions = new PreparedStatementConditionBuilder();
-		$conditions->add("conversationID IN (?)", array($tmpIDs));
-		$conditions->add("participantID = ?", array(WCF::getUser()->userID));
-		$conditions->add("hideConversation <> ?", array(0));
+		$conditions->add("conversationID IN (?)", [$tmpIDs]);
+		$conditions->add("participantID = ?", [WCF::getUser()->userID]);
+		$conditions->add("hideConversation <> ?", [0]);
 		
 		$sql = "SELECT	conversationID
 			FROM	wcf".WCF_N."_conversation_to_user

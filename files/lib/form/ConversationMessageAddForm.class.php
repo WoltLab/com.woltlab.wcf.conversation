@@ -42,12 +42,12 @@ class ConversationMessageAddForm extends MessageForm {
 	/**
 	 * @see	\wcf\page\AbstractPage::$neededModules
 	 */
-	public $neededModules = array('MODULE_CONVERSATION');
+	public $neededModules = ['MODULE_CONVERSATION'];
 	
 	/**
 	 * @see	\wcf\page\AbstractPage::$neededPermissions
 	 */
-	public $neededPermissions = array('user.conversation.canUseConversation');
+	public $neededPermissions = ['user.conversation.canUseConversation'];
 	
 	/**
 	 * conversation id
@@ -129,7 +129,7 @@ class ConversationMessageAddForm extends MessageForm {
 						FROM	wcf".WCF_N."_conversation_message
 						WHERE	conversationID = ?";
 					$statement = WCF::getDB()->prepareStatement($sql);
-					$statement->execute(array($this->conversation->conversationID));
+					$statement->execute([$this->conversation->conversationID]);
 					$messageIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
 					
 					$renderedQuotes = MessageQuoteManager::getInstance()->getQuotesByObjectIDs('com.woltlab.wcf.conversation.message', $messageIDs);
@@ -149,7 +149,7 @@ class ConversationMessageAddForm extends MessageForm {
 		$this->messageList->setConversation($this->conversation);
 		$this->messageList->sqlLimit = CONVERSATION_REPLY_SHOW_MESSAGES_MAX;
 		$this->messageList->sqlOrderBy = 'conversation_message.time DESC';
-		$this->messageList->getConditionBuilder()->add('conversation_message.conversationID = ?', array($this->conversation->conversationID));
+		$this->messageList->getConditionBuilder()->add('conversation_message.conversationID = ?', [$this->conversation->conversationID]);
 		$this->messageList->readObjects();
 	}
 	
@@ -160,7 +160,7 @@ class ConversationMessageAddForm extends MessageForm {
 		parent::save();
 		
 		// save message
-		$data = array_merge($this->additionalFields, array(
+		$data = array_merge($this->additionalFields, [
 			'conversationID' => $this->conversationID,
 			'message' => $this->text,
 			'time' => TIME_NOW,
@@ -170,14 +170,14 @@ class ConversationMessageAddForm extends MessageForm {
 			'enableHtml' => $this->enableHtml,
 			'enableSmilies' => $this->enableSmilies,
 			'showSignature' => $this->showSignature
-		));
+		]);
 		
-		$messageData = array(
+		$messageData = [
 			'data' => $data,
 			'attachmentHandler' => $this->attachmentHandler
-		);
+		];
 		
-		$this->objectAction = new ConversationMessageAction(array(), 'create', $messageData);
+		$this->objectAction = new ConversationMessageAction([], 'create', $messageData);
 		$resultValues = $this->objectAction->executeAction();
 		
 		MessageQuoteManager::getInstance()->saved();
@@ -185,10 +185,10 @@ class ConversationMessageAddForm extends MessageForm {
 		$this->saved();
 		
 		// forward
-		HeaderUtil::redirect(LinkHandler::getInstance()->getLink('Conversation', array(
+		HeaderUtil::redirect(LinkHandler::getInstance()->getLink('Conversation', [
 			'object' => $this->conversation,
 			'messageID' => $resultValues['returnValues']->messageID
-		)).'#message'.$resultValues['returnValues']->messageID);
+			]).'#message'.$resultValues['returnValues']->messageID);
 		exit;
 	}
 	
@@ -200,13 +200,13 @@ class ConversationMessageAddForm extends MessageForm {
 		
 		MessageQuoteManager::getInstance()->assignVariables();
 		
-		WCF::getTPL()->assign(array(
+		WCF::getTPL()->assign([
 			'conversation' => $this->conversation,
 			'conversationID' => $this->conversationID,
 			'items' => $this->messageList->countObjects(),
 			'messages' => $this->messageList->getObjects(),
 			'attachmentList' => $this->messageList->getAttachmentList()
-		));
+		]);
 	}
 	
 	/**

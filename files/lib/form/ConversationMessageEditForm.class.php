@@ -121,13 +121,13 @@ class ConversationMessageEditForm extends ConversationAddForm {
 		MessageForm::save();
 		
 		// save message
-		$data = array_merge($this->additionalFields, array(
+		$data = array_merge($this->additionalFields, [
 			'message' => $this->text,
 			'enableBBCodes' => $this->enableBBCodes,
 			'enableHtml' => $this->enableHtml,
 			'enableSmilies' => $this->enableSmilies,
 			'showSignature' => $this->showSignature
-		));
+		]);
 		if ($this->conversation->isDraft && !$this->draft) {
 			$data['time'] = TIME_NOW;
 		}
@@ -135,30 +135,30 @@ class ConversationMessageEditForm extends ConversationAddForm {
 			$data['lastEditTime'] = TIME_NOW;
 			$data['editCount'] = $this->message->editCount + 1;
 		}
-		$messageData = array(
+		$messageData = [
 			'data' => $data,
 			'attachmentHandler' => $this->attachmentHandler
-		);
-		$this->objectAction = new ConversationMessageAction(array($this->message), 'update', $messageData);
+		];
+		$this->objectAction = new ConversationMessageAction([$this->message], 'update', $messageData);
 		$this->objectAction->executeAction();
 		
 		// update conversation
 		if ($this->isFirstMessage) {
-			$data = array(
+			$data = [
 				'subject' => $this->subject,
 				'isDraft' => ($this->draft ? 1 : 0),
 				'participantCanInvite' => $this->participantCanInvite
-			);
+			];
 			if ($this->draft) {
-				$data['draftData'] = serialize(array(
+				$data['draftData'] = serialize([
 					'participants' => $this->participantIDs,
 					'invisibleParticipants' => $this->invisibleParticipantIDs
-				));
+				]);
 			}
 			
-			$conversationData = array(
+			$conversationData = [
 				'data' => $data
-			);
+			];
 			if ($this->conversation->isDraft && !$this->draft) {
 				$conversationData['participants'] = $this->participantIDs;
 				$conversationData['invisibleParticipants'] = $this->invisibleParticipantIDs;
@@ -166,16 +166,16 @@ class ConversationMessageEditForm extends ConversationAddForm {
 				$conversationData['data']['time'] = $conversationData['data']['lastPostTime'] = TIME_NOW;
 			}
 			
-			$conversationAction = new ConversationAction(array($this->conversation), 'update', $conversationData);
+			$conversationAction = new ConversationAction([$this->conversation], 'update', $conversationData);
 			$conversationAction->executeAction();
 		}
 		$this->saved();
 		
 		// forward
-		HeaderUtil::redirect(LinkHandler::getInstance()->getLink('Conversation', array(
+		HeaderUtil::redirect(LinkHandler::getInstance()->getLink('Conversation', [
 			'object' => $this->conversation,
 			'messageID' => $this->messageID
-		)).'#message'.$this->messageID);
+			]).'#message'.$this->messageID);
 		exit;
 	}
 	
@@ -219,8 +219,8 @@ class ConversationMessageEditForm extends ConversationAddForm {
 		$this->messageList->setConversation($this->conversation);
 		$this->messageList->sqlLimit = CONVERSATION_REPLY_SHOW_MESSAGES_MAX;
 		$this->messageList->sqlOrderBy = 'conversation_message.time DESC';
-		$this->messageList->getConditionBuilder()->add('conversation_message.conversationID = ?', array($this->message->conversationID));
-		$this->messageList->getConditionBuilder()->add("conversation_message.messageID <> ?", array($this->message->messageID));
+		$this->messageList->getConditionBuilder()->add('conversation_message.conversationID = ?', [$this->message->conversationID]);
+		$this->messageList->getConditionBuilder()->add("conversation_message.messageID <> ?", [$this->message->messageID]);
 		$this->messageList->readObjects();
 	}
 	
@@ -230,7 +230,7 @@ class ConversationMessageEditForm extends ConversationAddForm {
 	public function assignVariables() {
 		parent::assignVariables();
 		
-		WCF::getTPL()->assign(array(
+		WCF::getTPL()->assign([
 			'messageID' => $this->messageID,
 			'message' => $this->message,
 			'conversationID' => $this->conversationID,
@@ -239,7 +239,7 @@ class ConversationMessageEditForm extends ConversationAddForm {
 			'items' => $this->messageList->countObjects(),
 			'messages' => $this->messageList->getObjects(),
 			'attachmentList' => $this->messageList->getAttachmentList()
-		));
+		]);
 	}
 	
 	/**

@@ -29,10 +29,10 @@ class SearchResultConversationMessage extends ViewableConversationMessage implem
 	 */
 	public function getConversation() {
 		if ($this->conversation === null) {
-			$this->conversation = new Conversation(null, array(
+			$this->conversation = new Conversation(null, [
 				'conversationID' => $this->conversationID,
 				'subject' => $this->subject
-			));
+			]);
 		}
 		
 		return $this->conversation;
@@ -57,11 +57,11 @@ class SearchResultConversationMessage extends ViewableConversationMessage implem
 	 */
 	public function getLink($query = '') {
 		if ($query) {
-			return LinkHandler::getInstance()->getLink('Conversation', array(
+			return LinkHandler::getInstance()->getLink('Conversation', [
 				'object' => $this->getConversation(),
 				'messageID' => $this->messageID,
 				'highlight' => urlencode($query)
-			), '#message'.$this->messageID);
+			], '#message'.$this->messageID);
 		}
 		
 		return $this->getDecoratedObject()->getLink();

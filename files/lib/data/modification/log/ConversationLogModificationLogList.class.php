@@ -27,8 +27,8 @@ class ConversationLogModificationLogList extends ModificationLogList {
 		parent::__construct();
 		
 		// set conditions
-		$this->getConditionBuilder()->add('modification_log.objectTypeID = ?', array(ConversationModificationLogHandler::getInstance()->getObjectType('com.woltlab.wcf.conversation.conversation')->objectTypeID));
-		$this->getConditionBuilder()->add('modification_log.objectID = ?', array($conversationID));
+		$this->getConditionBuilder()->add('modification_log.objectTypeID = ?', [ConversationModificationLogHandler::getInstance()->getObjectType('com.woltlab.wcf.conversation.conversation')->objectTypeID]);
+		$this->getConditionBuilder()->add('modification_log.objectID = ?', [$conversationID]);
 	}
 	
 	/**

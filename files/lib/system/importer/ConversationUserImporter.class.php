@@ -16,7 +16,7 @@ class ConversationUserImporter extends AbstractImporter {
 	/**
 	 * @see	\wcf\system\importer\IImporter::import()
 	 */
-	public function import($oldID, array $data, array $additionalData = array()) {
+	public function import($oldID, array $data, array $additionalData = []) {
 		$data['conversationID'] = ImportHandler::getInstance()->getNewID('com.woltlab.wcf.conversation', $data['conversationID']);
 		if (!$data['conversationID']) return 0;
 		$data['participantID'] = ImportHandler::getInstance()->getNewID('com.woltlab.wcf.user', $data['participantID']);
@@ -28,14 +28,14 @@ class ConversationUserImporter extends AbstractImporter {
 							isInvisible = IF(isInvisible AND VALUES(isInvisible),1,0),
 							lastVisitTime = GREATEST(lastVisitTime,VALUES(lastVisitTime))";
 		$statement = WCF::getDB()->prepareStatement($sql);
-		$statement->execute(array(
+		$statement->execute([
 			$data['conversationID'],
 			$data['participantID'],
 			$data['username'],
 			$data['hideConversation'],
 			$data['isInvisible'],
 			$data['lastVisitTime']
-		));
+		]);
 		
 		// save labels
 		if ($data['participantID'] && !empty($additionalData['labelIDs'])) {
@@ -45,7 +45,7 @@ class ConversationUserImporter extends AbstractImporter {
 			$statement = WCF::getDB()->prepareStatement($sql);
 			foreach ($additionalData['labelIDs'] as $labelID) {
 				$labelID = ImportHandler::getInstance()->getNewID('com.woltlab.wcf.conversation.label', $labelID);
-				if ($labelID) $statement->execute(array($labelID, $data['conversationID']));
+				if ($labelID) $statement->execute([$labelID, $data['conversationID']]);
 			}
 		}
 		

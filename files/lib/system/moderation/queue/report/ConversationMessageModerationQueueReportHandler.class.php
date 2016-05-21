@@ -42,7 +42,7 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
 	 * list of conversation message
 	 * @var	ConversationMessage[]
 	 */
-	protected static $messages = array();
+	protected static $messages = [];
 	
 	/**
 	 * @see	\wcf\system\moderation\queue\AbstractModerationQueueHandler::$requiredPermission
@@ -53,7 +53,7 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
 	 * @see	\wcf\system\moderation\queue\IModerationQueueHandler::assignQueues()
 	 */
 	public function assignQueues(array $queues) {
-		$assignments = array();
+		$assignments = [];
 		foreach ($queues as $queue) {
 			$assignUser = false;
 			if (WCF::getSession()->getPermission('mod.conversation.canModerateConversation')) {
@@ -74,7 +74,7 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
 			return false;
 		}
 		
-		if (!Conversation::isParticipant(array($this->getMessage($objectID)->conversationID))) {
+		if (!Conversation::isParticipant([$this->getMessage($objectID)->conversationID])) {
 			return false;
 		}
 		
@@ -92,9 +92,9 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
 	 * @see	\wcf\system\moderation\queue\report\IModerationQueueReportHandler::getReportedContent()
 	 */
 	public function getReportedContent(ViewableModerationQueue $queue) {
-		WCF::getTPL()->assign(array(
+		WCF::getTPL()->assign([
 			'message' => new ViewableConversationMessage($queue->getAffectedObject())
-		));
+		]);
 		
 		return WCF::getTPL()->fetch('moderationConversationMessage');
 	}
@@ -142,7 +142,7 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
 	 * @see	\wcf\system\moderation\queue\IModerationQueueHandler::populate()
 	 */
 	public function populate(array $queues) {
-		$objectIDs = array();
+		$objectIDs = [];
 		foreach ($queues as $object) {
 			$objectIDs[] = $object->objectID;
 		}
@@ -161,7 +161,7 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
 		}
 		
 		// fetch conversations
-		$conversationIDs = array();
+		$conversationIDs = [];
 		foreach ($messages as $message) {
 			$conversationIDs[] = $message->conversationID;
 		}
@@ -188,7 +188,7 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
 	 */
 	public function removeContent(ModerationQueue $queue, $message) {
 		if ($this->isValid($queue->objectID)) {
-			$messageAction = new ConversationMessageAction(array($this->getMessage($queue->objectID)), 'delete');
+			$messageAction = new ConversationMessageAction([$this->getMessage($queue->objectID)], 'delete');
 			$messageAction->executeAction();
 		}
 	}

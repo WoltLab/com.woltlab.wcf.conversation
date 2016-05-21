@@ -36,10 +36,10 @@ class ConversationParticipantList extends UserProfileList {
 		parent::__construct();
 		
 		$this->conversationID = $conversationID;
-		$this->getConditionBuilder()->add('conversation_to_user.conversationID = ?', array($conversationID));
+		$this->getConditionBuilder()->add('conversation_to_user.conversationID = ?', [$conversationID]);
 		if (!$isAuthor) {
 			if ($userID) {
-				$this->getConditionBuilder()->add('conversation_to_user.isInvisible = 0 OR conversation_to_user.participantID = ?', array($userID));
+				$this->getConditionBuilder()->add('conversation_to_user.isInvisible = 0 OR conversation_to_user.participantID = ?', [$userID]);
 			}
 			else {
 				$this->getConditionBuilder()->add('conversation_to_user.isInvisible = 0');
@@ -70,7 +70,7 @@ class ConversationParticipantList extends UserProfileList {
 	 * @see	\wcf\data\DatabaseObjectList::readObjectIDs()
 	 */
 	public function readObjectIDs() {
-		$this->objectIDs = array();
+		$this->objectIDs = [];
 		$sql = "SELECT	conversation_to_user.participantID AS objectID
 			FROM	wcf".WCF_N."_conversation_to_user conversation_to_user
 				".$this->sqlConditionJoins."
@@ -93,7 +93,7 @@ class ConversationParticipantList extends UserProfileList {
 			WHERE	conversationID = ?
 				AND participantID IS NULL";
 		$statement = WCF::getDB()->prepareStatement($sql);
-		$statement->execute(array($this->conversationID));
+		$statement->execute([$this->conversationID]);
 		$i = 0;
 		while ($row = $statement->fetchArray()) {
 			// create fake user profiles

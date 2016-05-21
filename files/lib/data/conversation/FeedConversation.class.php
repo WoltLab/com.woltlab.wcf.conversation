@@ -24,11 +24,11 @@ class FeedConversation extends DatabaseObjectDecorator implements IFeedEntry {
 	 * @see	\wcf\data\ILinkableObject::getLink()
 	 */
 	public function getLink() {
-		return LinkHandler::getInstance()->getLink('Conversation', array(
+		return LinkHandler::getInstance()->getLink('Conversation', [
 			'object' => $this->getDecoratedObject(),
 			'appendSession' => false,
 			'encodeTitle' => true
-		));
+		]);
 	}
 	
 	/**
@@ -98,7 +98,7 @@ class FeedConversation extends DatabaseObjectDecorator implements IFeedEntry {
 	 * @see	\wcf\data\IFeedEntry::getCategories()
 	 */
 	public function getCategories() {
-		return array();
+		return [];
 	}
 	
 	/**
