@@ -84,7 +84,7 @@ class FeedConversation extends DatabaseObjectDecorator implements IFeedEntry {
 	 * @see	\wcf\data\IMessage::__toString()
 	 */
 	public function __toString() {
-		return $this->getDecoratedObject()->__toString();
+		return $this->getFormattedMessage();
 	}
 	
 	/**
