@@ -30,6 +30,7 @@ class ConversationParticipantList extends UserProfileList {
 	 * Creates a new ConversationParticipantList object.
 	 * 
 	 * @param	integer		$conversationID
+	 * @param	integer		$userID
 	 * @param	boolean		$isAuthor		true if given user is the author of this conversation
 	 */
 	public function __construct($conversationID, $userID = 0, $isAuthor = false) {
