@@ -16,7 +16,7 @@ use wcf\system\WCF;
  * An implementation of IModerationQueueReportHandler for conversation messages.
  * 
  * @author	Alexander Ebert
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	com.woltlab.wcf.conversation
  * @subpackage	system.moderation.queue
