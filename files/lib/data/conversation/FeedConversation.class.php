@@ -84,7 +84,7 @@ class FeedConversation extends DatabaseObjectDecorator implements IFeedEntry {
 	 * @inheritDoc
 	 */
 	public function __toString() {
-		return $this->getDecoratedObject()->__toString();
+		return $this->getFormattedMessage();
 	}
 	
 	/**
