@@ -2,6 +2,7 @@
 namespace wcf\system\clipboard\action;
 use wcf\data\clipboard\action\ClipboardAction;
 use wcf\data\conversation\Conversation;
+use wcf\data\conversation\ConversationAction;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\WCF;
 
@@ -104,7 +105,7 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 	 * @inheritDoc
 	 */
 	public function getClassName() {
-		return 'wcf\data\conversation\ConversationAction';
+		return ConversationAction::class;
 	}
 	
 	/**

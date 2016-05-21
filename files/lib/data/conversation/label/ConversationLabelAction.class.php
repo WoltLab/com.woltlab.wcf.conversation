@@ -25,7 +25,7 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 	/**
 	 * @inheritDoc
 	 */
-	protected $className = 'wcf\data\conversation\label\ConversationLabelEditor';
+	protected $className = ConversationLabelEditor::class;
 	
 	/**
 	 * @inheritDoc

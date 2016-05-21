@@ -26,7 +26,7 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
 	/**
 	 * @inheritDoc
 	 */
-	protected $className = 'wcf\data\conversation\message\ConversationMessage';
+	protected $className = ConversationMessage::class;
 	
 	/**
 	 * @inheritDoc

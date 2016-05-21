@@ -18,7 +18,7 @@ class FeedConversation extends DatabaseObjectDecorator implements IFeedEntry {
 	/**
 	 * @inheritDoc
 	 */
-	protected static $baseClass = 'wcf\data\conversation\Conversation';
+	protected static $baseClass = Conversation::class;
 	
 	/**
 	 * @inheritDoc

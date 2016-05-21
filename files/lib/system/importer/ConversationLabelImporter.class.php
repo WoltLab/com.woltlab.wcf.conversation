@@ -1,5 +1,6 @@
 <?php
 namespace wcf\system\importer;
+use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\label\ConversationLabelAction;
 
 /**
@@ -16,7 +17,7 @@ class ConversationLabelImporter extends AbstractImporter {
 	/**
 	 * @inheritDoc
 	 */
-	protected $className = 'wcf\data\conversation\label\ConversationLabel';
+	protected $className = ConversationLabel::class;
 	
 	/**
 	 * @inheritDoc

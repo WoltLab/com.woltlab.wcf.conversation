@@ -17,7 +17,7 @@ class ConversationMessageImporter extends AbstractImporter {
 	/**
 	 * @inheritDoc
 	 */
-	protected $className = 'wcf\data\conversation\message\ConversationMessage';
+	protected $className = ConversationMessage::class;
 	
 	/**
 	 * @inheritDoc

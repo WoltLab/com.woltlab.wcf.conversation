@@ -43,7 +43,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	/**
 	 * @inheritDoc
 	 */
-	protected $className = 'wcf\data\conversation\message\ConversationMessageEditor';
+	protected $className = ConversationMessageEditor::class;
 	
 	/**
 	 * conversation object
@@ -230,7 +230,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 */
 	public function validateQuickReply() {
 		QuickReplyManager::getInstance()->setAllowedBBCodes(explode(',', WCF::getSession()->getPermission('user.message.allowedBBCodes')));
-		QuickReplyManager::getInstance()->validateParameters($this, $this->parameters, 'wcf\data\conversation\Conversation');
+		QuickReplyManager::getInstance()->validateParameters($this, $this->parameters, Conversation::class);
 	}
 	
 	/**
@@ -240,7 +240,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		return QuickReplyManager::getInstance()->createMessage(
 			$this,
 			$this->parameters,
-			'wcf\data\conversation\ConversationAction',
+			ConversationAction::class,
 			CONVERSATION_LIST_DEFAULT_SORT_ORDER,
 			'conversationMessageList'
 		);

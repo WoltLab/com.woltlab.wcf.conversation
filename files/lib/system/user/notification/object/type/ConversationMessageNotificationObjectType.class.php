@@ -1,5 +1,8 @@
 <?php
 namespace wcf\system\user\notification\object\type;
+use wcf\data\conversation\message\ConversationMessage;
+use wcf\data\conversation\message\ConversationMessageList;
+use wcf\system\user\notification\object\ConversationMessageUserNotificationObject;
 
 /**
  * Represents a conversation message notification object type.
@@ -15,15 +18,15 @@ class ConversationMessageNotificationObjectType extends AbstractUserNotification
 	/**
 	 * @inheritDoc
 	 */
-	protected static $decoratorClassName = 'wcf\system\user\notification\object\ConversationMessageUserNotificationObject';
+	protected static $decoratorClassName = ConversationMessageUserNotificationObject::class;
 	
 	/**
 	 * @inheritDoc
 	 */
-	protected static $objectClassName = 'wcf\data\conversation\message\ConversationMessage';
+	protected static $objectClassName = ConversationMessage::class;
 	
 	/**
 	 * @inheritDoc
 	 */
-	protected static $objectListClassName = 'wcf\data\conversation\message\ConversationMessageList';
+	protected static $objectListClassName = ConversationMessageList::class;
 }

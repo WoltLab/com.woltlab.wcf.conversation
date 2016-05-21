@@ -1,6 +1,8 @@
 <?php
 namespace wcf\system\user\notification\object\type;
 use wcf\data\conversation\Conversation;
+use wcf\data\conversation\ConversationList;
+use wcf\system\user\notification\object\ConversationUserNotificationObject;
 use wcf\system\WCF;
 
 /**
@@ -17,17 +19,17 @@ class ConversationNotificationObjectType extends AbstractUserNotificationObjectT
 	/**
 	 * @inheritDoc
 	 */
-	protected static $decoratorClassName = 'wcf\system\user\notification\object\ConversationUserNotificationObject';
+	protected static $decoratorClassName = ConversationUserNotificationObject::class;
 	
 	/**
 	 * @inheritDoc
 	 */
-	protected static $objectClassName = 'wcf\data\conversation\Conversation';
+	protected static $objectClassName = Conversation::class;
 	
 	/**
 	 * @inheritDoc
 	 */
-	protected static $objectListClassName = 'wcf\data\conversation\ConversationList';
+	protected static $objectListClassName = ConversationList::class;
 	
 	/**
 	 * @inheritDoc
