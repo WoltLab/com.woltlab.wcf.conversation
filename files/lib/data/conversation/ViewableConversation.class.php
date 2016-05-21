@@ -87,6 +87,7 @@ class ViewableConversation extends DatabaseObjectDecorator {
 			return null;
 		}
 		
+		/** @noinspection PhpVariableVariableInspection */
 		$value = $this->getUserProfile()->$name;
 		if ($value !== null) {
 			return $value;
