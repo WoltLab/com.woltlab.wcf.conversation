@@ -475,6 +475,8 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 * @inheritDoc
 	 */
 	public function getMessageList(DatabaseObject $conversation, $lastMessageTime) {
+		/** @var Conversation $conversation */
+		
 		$messageList = new ViewableConversationMessageList();
 		$messageList->setConversation($conversation);
 		$messageList->getConditionBuilder()->add("conversation_message.conversationID = ?", [$conversation->conversationID]);
