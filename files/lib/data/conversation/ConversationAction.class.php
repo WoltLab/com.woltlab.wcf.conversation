@@ -28,6 +28,9 @@ use wcf\system\WCF;
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation
  * @category	Community Framework
+ * 
+ * @method	ConversationEditor[]	getObjects()
+ * @method	ConversationEditor	getSingleObject()
  */
 class ConversationAction extends AbstractDatabaseObjectAction implements IClipboardAction, IVisitableObjectAction {
 	/**
@@ -49,6 +52,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	
 	/**
 	 * @inheritDoc
+	 * @return	Conversation
 	 */
 	public function create() {
 		// create conversation

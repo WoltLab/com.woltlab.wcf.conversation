@@ -38,6 +38,9 @@ use wcf\util\StringUtil;
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation.message
  * @category	Community Framework
+ * 
+ * @method	ConversationMessageEditor[]	getObjects()
+ * @method	ConversationMessageEditor	getSingleObject()
  */
 class ConversationMessageAction extends AbstractDatabaseObjectAction implements IAttachmentMessageQuickReplyAction, IMessageInlineEditorAction, IMessageQuoteAction {
 	/**
@@ -59,6 +62,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	
 	/**
 	 * @inheritDoc
+	 * @return	ConversationMessage
 	 */
 	public function create() {
 		// count attachments

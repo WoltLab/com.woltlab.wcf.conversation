@@ -20,6 +20,10 @@ use wcf\util\StringUtil;
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation.label
  * @category	Community Framework
+ * 
+ * @method	ConversationLabel		create()
+ * @method	ConversationLabelEditor[]	getObjects()
+ * @method	ConversationLabelEditor		getSingleObject()
  */
 class ConversationLabelAction extends AbstractDatabaseObjectAction {
 	/**
