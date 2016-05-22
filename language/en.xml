@@ -112,7 +112,7 @@
 		<item name="wcf.conversation.replies"><![CDATA[Replies]]></item>
 		<item name="wcf.conversation.showAll"><![CDATA[Display All Conversations]]></item>
 		<item name="wcf.conversation.ownPosts"><![CDATA[Conversation contains your own messages]]></item>
-		<item name="wcf.conversation.gotoLastPost"><![CDATA[Jump to Last Message]]></item>
+		<item name="wcf.conversation.gotoLastPost"><![CDATA[Go to Last Message]]></item>
 		<item name="wcf.conversation.searchConversations"><![CDATA[Search Conversations]]></item>
 		<item name="wcf.conversation.searchConversation"><![CDATA[Search This Conversation Only]]></item>
 		<item name="wcf.conversation.searchedConversation"><![CDATA[Only search conversation <a href="{link controller='Conversation' object=$searchedConversation}{/link}">{$searchedConversation->getTitle()}</a>]]></item>
