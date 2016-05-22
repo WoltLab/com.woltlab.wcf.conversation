@@ -1,9 +1,9 @@
-{capture assign='pageTitle'}{lang}wcf.conversation.conversations{/lang}{if $pageNo > 1} - {lang}wcf.page.pageNo{/lang}{/if}{/capture}
+{capture assign='pageTitle'}{if $filter}{lang}wcf.conversation.folder.{$filter}{/lang}{else}{$__wcf->getActivePage()->getTitle()}{/if}{if $pageNo > 1} - {lang}wcf.page.pageNo{/lang}{/if}{/capture}
 
 {capture assign='contentHeader'}
 	<header class="contentHeader">
 		<div class="contentHeaderTitle">
-			<h1 class="contentTitle">{if $filter}{lang}wcf.conversation.folder.{$filter}{/lang}{else}{lang}wcf.conversation.conversations{/lang}{/if}</h1>
+			<h1 class="contentTitle">{if $filter}{lang}wcf.conversation.folder.{$filter}{/lang}{else}{$__wcf->getActivePage()->getTitle()}{/if}</h1>
 		</div>
 		
 		<nav class="contentHeaderNavigation">

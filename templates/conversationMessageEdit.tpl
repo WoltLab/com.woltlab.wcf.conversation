@@ -1,6 +1,4 @@
-{capture assign='pageTitle'}{lang}wcf.conversation.message.edit{/lang} - {$conversation->subject}{/capture}
-
-{capture assign='contentTitle'}{lang}wcf.conversation.message.edit{/lang}{/capture}
+{capture assign='pageTitle'}{$__wcf->getActivePage()->getTitle()} - {$conversation->subject}{/capture}
 
 {include file='header'}
 

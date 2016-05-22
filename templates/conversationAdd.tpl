@@ -1,7 +1,3 @@
-{capture assign='pageTitle'}{lang}wcf.conversation.add{/lang}{/capture}
-
-{capture assign='contentTitle'}{lang}wcf.conversation.add{/lang}{/capture}
-
 {include file='header'}
 
 {include file='formError'}

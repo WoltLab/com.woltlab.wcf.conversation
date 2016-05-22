@@ -3,9 +3,17 @@
 	<import>
 		<page identifier="com.woltlab.wcf.conversation.ConversationList">
 			<controller>wcf\page\ConversationListPage</controller>
+			<handler>wcf\system\page\handler\ConversationListPageHandler</handler>
 			<name language="de"><![CDATA[Konversationenliste]]></name>
 			<name language="en"><![CDATA[Conversation List]]></name>
 			<pageType>system</pageType>
+			
+			<content language="en">
+				<title>Conversations</title>
+			</content>
+			<content language="de">
+				<title>Konversationen</title>
+			</content>
 		</page>
 		<page identifier="com.woltlab.wcf.conversation.Conversation">
 			<controller>wcf\page\ConversationPage</controller>
@@ -13,15 +21,22 @@
 			<name language="de"><![CDATA[Konversation]]></name>
 			<name language="en"><![CDATA[Conversation]]></name>
 			<pageType>system</pageType>
+			<requireObjectID>1</requireObjectID>
 			<parent>com.woltlab.wcf.conversation.ConversationList</parent>
 		</page>
 		<page identifier="com.woltlab.wcf.conversation.ConversationAdd">
 			<controller>wcf\form\ConversationAddForm</controller>
-			<handler>wcf\system\page\handler\DefaultConversationRelatedPageHandler</handler>
 			<name language="de"><![CDATA[Konversation starten]]></name>
 			<name language="en"><![CDATA[New Conversation]]></name>
 			<pageType>system</pageType>
 			<parent>com.woltlab.wcf.conversation.ConversationList</parent>
+			
+			<content language="en">
+				<title>New Conversation</title>
+			</content>
+			<content language="de">
+				<title>Konversation starten</title>
+			</content>
 		</page>
 		<page identifier="com.woltlab.wcf.conversation.ConversationMessageAdd">
 			<controller>wcf\form\ConversationMessageAddForm</controller>
@@ -31,6 +46,13 @@
 			<pageType>system</pageType>
 			<requireObjectID>1</requireObjectID>
 			<parent>com.woltlab.wcf.conversation.Conversation</parent>
+			
+			<content language="en">
+				<title>Reply to Conversation</title>
+			</content>
+			<content language="de">
+				<title>Antwort auf Konversation erstellen</title>
+			</content>
 		</page>
 		<page identifier="com.woltlab.wcf.conversation.ConversationMessageEdit">
 			<controller>wcf\form\ConversationMessageEditForm</controller>
@@ -39,6 +61,13 @@
 			<pageType>system</pageType>
 			<requireObjectID>1</requireObjectID>
 			<parent>com.woltlab.wcf.conversation.Conversation</parent>
+			
+			<content language="en">
+				<title>Edit Reply to Conversation</title>
+			</content>
+			<content language="de">
+				<title>Antwort auf Konversation bearbeiten</title>
+			</content>
 		</page>
 	</import>
 </data>

@@ -172,14 +172,6 @@
 	</category>
 	
 	<category name="wcf.page">
-		<item name="wcf.page.com.woltlab.wcf.conversation.Conversation"><![CDATA[Konversation]]></item>
-		<item name="wcf.page.com.woltlab.wcf.conversation.ConversationAdd"><![CDATA[Konversation starten]]></item>
-		<item name="wcf.page.com.woltlab.wcf.conversation.ConversationList"><![CDATA[Konversationenliste]]></item>
-		<item name="wcf.page.com.woltlab.wcf.conversation.ConversationMessageAdd"><![CDATA[Antwort auf Konversation erstellen]]></item>
-		<item name="wcf.page.com.woltlab.wcf.conversation.ConversationMessageEdit"><![CDATA[Antwort auf Konversation bearbeiten]]></item>
-		
-		<item name="wcf.page.onlineLocation.com.woltlab.wcf.conversation.ConversationAdd"><![CDATA[Neue Konversation]]></item>
-		<item name="wcf.page.onlineLocation.com.woltlab.wcf.conversation.ConversationList"><![CDATA[Konversationenliste]]></item>
 		<item name="wcf.page.onlineLocation.com.woltlab.wcf.conversation.ConversationMessageAdd"><![CDATA[Antwort erstellen in Konversation <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>]]></item>
 		<item name="wcf.page.onlineLocation.com.woltlab.wcf.conversation.ConversationMessageEdit"><![CDATA[Nachricht bearbeiten in Konversation <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>]]></item>
 		<item name="wcf.page.onlineLocation.com.woltlab.wcf.conversation.Conversation"><![CDATA[Konversation <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>]]></item>
