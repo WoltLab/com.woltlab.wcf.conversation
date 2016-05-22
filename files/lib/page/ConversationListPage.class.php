@@ -18,6 +18,8 @@ use wcf\util\ArrayUtil;
  * @package	com.woltlab.wcf.conversation
  * @subpackage	page
  * @category	Community Framework
+ * 
+ * @property	UserConversationList	$objectList
  */
 class ConversationListPage extends SortablePage {
 	/**

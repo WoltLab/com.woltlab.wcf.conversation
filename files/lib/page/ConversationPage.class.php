@@ -30,6 +30,8 @@ use wcf\util\StringUtil;
  * @package	com.woltlab.wcf.conversation
  * @subpackage	page
  * @category	Community Framework
+ * 
+ * @property	ViewableConversationMessageList		$objectList
  */
 class ConversationPage extends MultipleLinkPage {
 	/**
