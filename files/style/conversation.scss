@@ -45,3 +45,16 @@
 	}
 }
 
+.conversationItem {
+	.conversationInfo {
+		display: flex;
+	}
+	
+	.conversationParticipant {
+		flex: 1 1 auto;
+	}
+	.conversationLastPostTime {
+		flex: 0 0 auto;
+		margin-left: 10px;
+	}
+}

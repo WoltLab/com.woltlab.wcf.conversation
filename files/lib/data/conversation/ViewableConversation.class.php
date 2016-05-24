@@ -30,19 +30,25 @@ class ViewableConversation extends DatabaseObjectDecorator {
 	 * participant summary
 	 * @var	string
 	 */
-	protected $__participantSummary = null;
+	protected $__participantSummary;
 	
 	/**
 	 * user profile object
 	 * @var	UserProfile
 	 */
-	protected $userProfile = null;
+	protected $userProfile;
 	
 	/**
 	 * last poster's profile
 	 * @var	UserProfile
 	 */
-	protected $lastPosterProfile = null;
+	protected $lastPosterProfile;
+	
+	/**
+	 * other participant's profile
+	 * @var	UserProfile
+	 */
+	protected $otherParticipantProfile;
 	
 	/**
 	 * list of assigned labels
@@ -176,6 +182,24 @@ class ViewableConversation extends DatabaseObjectDecorator {
 		}
 		
 		return $this->__participantSummary;
+	}
+	
+	/**
+	 * Returns the other participant's profile object.
+	 *
+	 * @return	UserProfile
+	 */
+	public function getOtherParticipantProfile() {
+		if ($this->otherParticipantProfile === null) {
+			if ($this->otherParticipantID) {
+				$this->otherParticipantProfile = UserProfileRuntimeCache::getInstance()->getObject($this->otherParticipantID);
+			}
+			else {
+				$this->otherParticipantProfile = UserProfile::getGuestUserProfile($this->otherParticipant);
+			}
+		}
+		
+		return $this->otherParticipantProfile;
 	}
 	
 	/**

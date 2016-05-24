@@ -633,7 +633,11 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 * @return	mixed[][]
 	 */
 	public function getMixedConversationList() {
+		$sqlSelect = '  , (SELECT participantID FROM wcf'.WCF_N.'_conversation_to_user WHERE conversationID = conversation.conversationID AND participantID <> conversation.userID AND isInvisible = 0 ORDER BY username, participantID LIMIT 1) AS otherParticipantID
+				, (SELECT username FROM wcf'.WCF_N.'_conversation_to_user WHERE conversationID = conversation.conversationID AND participantID <> conversation.userID AND isInvisible = 0 ORDER BY username, participantID LIMIT 1) AS otherParticipant';
+		
 		$unreadConversationList = new UserConversationList(WCF::getUser()->userID);
+		$unreadConversationList->sqlSelects .= $sqlSelect;
 		$unreadConversationList->getConditionBuilder()->add('conversation_to_user.lastVisitTime < conversation.lastPostTime');
 		$unreadConversationList->sqlLimit = 10;
 		$unreadConversationList->sqlOrderBy = 'conversation.lastPostTime DESC';
@@ -648,6 +652,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		
 		if ($count < 10) {
 			$conversationList = new UserConversationList(WCF::getUser()->userID);
+			$conversationList->sqlSelects .= $sqlSelect;
 			$conversationList->getConditionBuilder()->add('conversation_to_user.lastVisitTime >= conversation.lastPostTime');
 			$conversationList->sqlLimit = (10 - $count);
 			$conversationList->sqlOrderBy = 'conversation.lastPostTime DESC';
