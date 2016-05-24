@@ -7,6 +7,7 @@
 * Only search active conversation when using search bar in a conversation.
 * Filter option for conversation participants on conversation list page.
 * Increased number of items in conversation drop down to 10.
+* Overhauled conversation drop drop.
 
 #### Documentation
 
