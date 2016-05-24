@@ -628,14 +628,14 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	}
 	
 	/**
-	 * Returns a mixed conversation list with up to 5 unread conversations.
+	 * Returns a mixed conversation list with up to 10 unread conversations.
 	 * 
 	 * @return	mixed[][]
 	 */
 	public function getMixedConversationList() {
 		$unreadConversationList = new UserConversationList(WCF::getUser()->userID);
 		$unreadConversationList->getConditionBuilder()->add('conversation_to_user.lastVisitTime < conversation.lastPostTime');
-		$unreadConversationList->sqlLimit = 5;
+		$unreadConversationList->sqlLimit = 10;
 		$unreadConversationList->sqlOrderBy = 'conversation.lastPostTime DESC';
 		$unreadConversationList->readObjects();
 		
@@ -646,10 +646,10 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			$count++;
 		}
 		
-		if ($count < 5) {
+		if ($count < 10) {
 			$conversationList = new UserConversationList(WCF::getUser()->userID);
 			$conversationList->getConditionBuilder()->add('conversation_to_user.lastVisitTime >= conversation.lastPostTime');
-			$conversationList->sqlLimit = (5 - $count);
+			$conversationList->sqlLimit = (10 - $count);
 			$conversationList->sqlOrderBy = 'conversation.lastPostTime DESC';
 			$conversationList->readObjects();
 			
@@ -663,7 +663,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		]);
 		
 		$totalCount = ConversationHandler::getInstance()->getUnreadConversationCount();
-		if ($count < 5 && $count < $totalCount) {
+		if ($count < 10 && $count < $totalCount) {
 			UserStorageHandler::getInstance()->reset([WCF::getUser()->userID], 'unreadConversationCount');
 		}
 		
