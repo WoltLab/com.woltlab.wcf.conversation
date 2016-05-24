@@ -82,7 +82,7 @@
 		<item name="wcf.conversation.invisibleParticipants"><![CDATA[Invisible Participants]]></item>
 		<item name="wcf.conversation.invisibleParticipants.description"><![CDATA[Invisible participants remain invisible to other participants until they write a message. Multiple participants should be separated with a comma.]]></item>
 		<item name="wcf.conversation.lastPostTime"><![CDATA[Last Reply]]></item>
-		<item name="wcf.conversation.lastVisitTime"><![CDATA[Last Visited]]></item>
+		<item name="wcf.conversation.lastVisitTime"><![CDATA[Conversation Read]]></item>
 		<item name="wcf.conversation.leave.title"><![CDATA[Manage Participation]]></item>
 		<item name="wcf.conversation.markAllAsRead.confirmMessage"><![CDATA[Do you really want to mark all conversations as read?]]></item>
 		<item name="wcf.conversation.message"><![CDATA[Message]]></item>
