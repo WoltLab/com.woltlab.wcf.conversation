@@ -25,11 +25,6 @@ class ConversationListPage extends SortablePage {
 	/**
 	 * @inheritDoc
 	 */
-	public $enableTracking = true;
-	
-	/**
-	 * @inheritDoc
-	 */
 	public $defaultSortField = CONVERSATION_LIST_DEFAULT_SORT_FIELD;
 	
 	/**

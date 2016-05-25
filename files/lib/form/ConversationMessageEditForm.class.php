@@ -241,18 +241,4 @@ class ConversationMessageEditForm extends ConversationAddForm {
 			'attachmentList' => $this->messageList->getAttachmentList()
 		]);
 	}
-	
-	/**
-	 * @inheritDoc
-	 */
-	public function getObjectType() {
-		return 'com.woltlab.wcf.conversation';
-	}
-	
-	/**
-	 * @inheritDoc
-	 */
-	public function getObjectID() {
-		return $this->conversationID;
-	}
 }

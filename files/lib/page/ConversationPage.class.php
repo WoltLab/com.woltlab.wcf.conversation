@@ -37,11 +37,6 @@ class ConversationPage extends MultipleLinkPage {
 	/**
 	 * @inheritDoc
 	 */
-	public $enableTracking = true;
-	
-	/**
-	 * @inheritDoc
-	 */
 	public $itemsPerPage = CONVERSATION_MESSAGES_PER_PAGE;
 	
 	/**
@@ -323,19 +318,5 @@ class ConversationPage extends MultipleLinkPage {
 		else {
 			$this->goToLastPost();
 		}
-	}
-	
-	/**
-	 * @inheritDoc
-	 */
-	public function getObjectType() {
-		return 'com.woltlab.wcf.conversation';
-	}
-	
-	/**
-	 * @inheritDoc
-	 */
-	public function getObjectID() {
-		return $this->conversationID;
 	}
 }

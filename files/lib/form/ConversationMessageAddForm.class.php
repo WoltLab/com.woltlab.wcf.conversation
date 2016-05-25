@@ -27,11 +27,6 @@ class ConversationMessageAddForm extends MessageForm {
 	/**
 	 * @inheritDoc
 	 */
-	public $enableTracking = true;
-	
-	/**
-	 * @inheritDoc
-	 */
 	public $attachmentObjectType = 'com.woltlab.wcf.conversation.message';
 	
 	/**
@@ -207,19 +202,5 @@ class ConversationMessageAddForm extends MessageForm {
 			'messages' => $this->messageList->getObjects(),
 			'attachmentList' => $this->messageList->getAttachmentList()
 		]);
-	}
-	
-	/**
-	 * @inheritDoc
-	 */
-	public function getObjectType() {
-		return 'com.woltlab.wcf.conversation';
-	}
-	
-	/**
-	 * @inheritDoc
-	 */
-	public function getObjectID() {
-		return $this->conversationID;
 	}
 }

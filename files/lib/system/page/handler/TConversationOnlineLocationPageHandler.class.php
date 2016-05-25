@@ -29,11 +29,11 @@ trait TConversationOnlineLocationPageHandler {
 	 * @return	string
 	 */
 	public function getOnlineLocation(Page $page, UserOnline $user) {
-		if ($user->objectID === null) {
+		if ($user->pageObjectID === null) {
 			return '';
 		}
 		
-		$conversation = UserConversationRuntimeCache::getInstance()->getObject($user->objectID);
+		$conversation = UserConversationRuntimeCache::getInstance()->getObject($user->pageObjectID);
 		if ($conversation === null || !$conversation->canRead()) {
 			return '';
 		}
@@ -51,8 +51,8 @@ trait TConversationOnlineLocationPageHandler {
 	 * @param	UserOnline	$user		user online object with request data
 	 */
 	public function prepareOnlineLocation(Page $page, UserOnline $user) {
-		if ($user->objectID !== null) {
-			UserConversationRuntimeCache::getInstance()->cacheObjectID($user->objectID);
+		if ($user->pageObjectID !== null) {
+			UserConversationRuntimeCache::getInstance()->cacheObjectID($user->pageObjectID);
 		}
 	}
 }
