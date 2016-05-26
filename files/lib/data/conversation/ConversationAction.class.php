@@ -108,7 +108,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			'data' => $messageData,
 			'conversation' => $conversation,
 			'isFirstPost' => true,
-			'attachmentHandler' => (isset($this->parameters['attachmentHandler']) ? $this->parameters['attachmentHandler'] : null)
+			'attachmentHandler' => (isset($this->parameters['attachmentHandler']) ? $this->parameters['attachmentHandler'] : null),
+			'htmlInputProcessor' => (isset($this->parameters['htmlInputProcessor']) ? $this->parameters['htmlInputProcessor'] : null)
 		]);
 		$resultValues = $messageAction->executeAction();
 		

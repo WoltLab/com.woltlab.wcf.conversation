@@ -6,6 +6,7 @@ use wcf\data\DatabaseObject;
 use wcf\data\IMessage;
 use wcf\data\TUserContent;
 use wcf\system\bbcode\MessageParser;
+use wcf\system\html\output\HtmlOutputProcessor;
 use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
 use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
@@ -63,9 +64,13 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 		// assign embedded objects
 		MessageEmbeddedObjectManager::getInstance()->setActiveMessage('com.woltlab.wcf.conversation.message', $this->messageID);
 		
+		// TODO
+		return (new HtmlOutputProcessor())->process($this->message);
+		
+		// TODO
 		// parse and return message
-		MessageParser::getInstance()->setOutputType('text/html');
-		return MessageParser::getInstance()->parse($this->message, $this->enableSmilies, $this->enableHtml, $this->enableBBCodes);
+		/*MessageParser::getInstance()->setOutputType('text/html');
+		return MessageParser::getInstance()->parse($this->message, $this->enableSmilies, $this->enableHtml, $this->enableBBCodes);*/
 	}
 	
 	/**

@@ -15,6 +15,7 @@ use wcf\system\bbcode\BBCodeParser;
 use wcf\system\bbcode\PreParser;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
+use wcf\system\html\input\HtmlInputProcessor;
 use wcf\system\message\censorship\Censorship;
 use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
 use wcf\system\message\quote\MessageQuoteManager;
@@ -81,6 +82,12 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			if (isset($this->parameters['data']['ipAddress'])) {
 				unset($this->parameters['data']['ipAddress']);
 			}
+		}
+		
+		if (!empty($this->parameters['htmlInputProcessor'])) {
+			/** @var HtmlInputProcessor $htmlInputProcessor */
+			$htmlInputProcessor = $this->parameters['htmlInputProcessor'];
+			$this->parameters['data']['message'] = $htmlInputProcessor->getHtml();
 		}
 		
 		// create message
@@ -375,7 +382,8 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		}
 		
 		$this->validateBeginEdit();
-		$this->validateMessage($this->conversation, $this->parameters['data']['message']);
+		
+		$this->validateMessage($this->conversation, $this->getHtmlInputProcessor($this->parameters['data']['message']));
 	}
 	
 	/**
@@ -383,8 +391,9 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 */
 	public function save() {
 		$data = [
-			'message' => PreParser::getInstance()->parse(MessageUtil::stripCrap($this->parameters['data']['message']), explode(',', WCF::getSession()->getPermission('user.message.allowedBBCodes')))
+			//'message' => PreParser::getInstance()->parse(MessageUtil::stripCrap($this->parameters['data']['message']), explode(',', WCF::getSession()->getPermission('user.message.allowedBBCodes')))
 		];
+		
 		if (!$this->message->getConversation()->isDraft) {
 			$data['lastEditTime'] = TIME_NOW;
 			$data['editCount'] = $this->message->editCount + 1;
@@ -455,8 +464,8 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	/**
 	 * @inheritDoc
 	 */
-	public function validateMessage(DatabaseObject $container, $message) {
-		if (mb_strlen($message) > WCF::getSession()->getPermission('user.conversation.maxLength')) {
+	public function validateMessage(DatabaseObject $container, HtmlInputProcessor $htmlInputProcessor) {
+		/*if (mb_strlen($message) > WCF::getSession()->getPermission('user.conversation.maxLength')) {
 			throw new UserInputException('message', WCF::getLanguage()->getDynamicVariable('wcf.message.error.tooLong', ['maxTextLength' => WCF::getSession()->getPermission('user.conversation.maxLength')]));
 		}
 		
@@ -472,7 +481,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			if ($result) {
 				throw new UserInputException('message', WCF::getLanguage()->getDynamicVariable('wcf.message.error.censoredWordsFound', ['censoredWords' => $result]));
 			}
-		}
+		}*/
 	}
 	
 	/**
@@ -614,5 +623,19 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 */
 	public function getAttachmentHandler(DatabaseObject $conversation) {
 		return new AttachmentHandler('com.woltlab.wcf.conversation.message', 0, $this->parameters['tmpHash']);
+	}
+	
+	/**
+	 * @inheritDoc
+	 */
+	public function getHtmlInputProcessor($message = null) {
+		if ($message === null) {
+			return $this->htmlInputProcessor;
+		}
+		
+		$this->htmlInputProcessor = new HtmlInputProcessor();
+		$this->htmlInputProcessor->process($message);
+		
+		return $this->htmlInputProcessor;
 	}
 }
