@@ -1126,7 +1126,7 @@ WCF.Conversation.Label.Manager = Class.extend({
 				
 				this._deletedLabelID = $('#conversationLabelManagementForm').data('labelID');
 			}
-		}, this));
+		}, this), undefined, undefined, true);
 	},
 	
 	/**
