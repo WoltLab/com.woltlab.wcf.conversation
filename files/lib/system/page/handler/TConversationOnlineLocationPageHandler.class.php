@@ -50,7 +50,7 @@ trait TConversationOnlineLocationPageHandler {
 	 * @param	Page		$page		visited page
 	 * @param	UserOnline	$user		user online object with request data
 	 */
-	public function prepareOnlineLocation(Page $page, UserOnline $user) {
+	public function prepareOnlineLocation(/** @noinspection PhpUnusedParameterInspection */Page $page, UserOnline $user) {
 		if ($user->pageObjectID !== null) {
 			UserConversationRuntimeCache::getInstance()->cacheObjectID($user->pageObjectID);
 		}
