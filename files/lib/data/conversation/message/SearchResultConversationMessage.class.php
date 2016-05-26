@@ -24,6 +24,7 @@ class SearchResultConversationMessage extends ViewableConversationMessage implem
 	 */
 	public $conversation = null;
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * Returns the conversation object.
 	 * 
@@ -40,6 +41,7 @@ class SearchResultConversationMessage extends ViewableConversationMessage implem
 		return $this->conversation;
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */
@@ -69,6 +71,7 @@ class SearchResultConversationMessage extends ViewableConversationMessage implem
 		return $this->getDecoratedObject()->getLink();
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */

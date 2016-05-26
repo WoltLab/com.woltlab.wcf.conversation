@@ -28,6 +28,7 @@ class FeedConversationList extends ConversationList {
 	 */
 	public $sqlOrderBy = 'conversation.lastPostTime DESC';
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */

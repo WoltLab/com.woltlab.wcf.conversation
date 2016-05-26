@@ -64,6 +64,7 @@ class ConversationMessageEditForm extends ConversationAddForm {
 	 */
 	public $isFirstMessage = false;
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */
@@ -114,6 +115,7 @@ class ConversationMessageEditForm extends ConversationAddForm {
 		if ($this->isFirstMessage) parent::validateSubject();
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */
@@ -181,6 +183,7 @@ class ConversationMessageEditForm extends ConversationAddForm {
 		exit;
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */

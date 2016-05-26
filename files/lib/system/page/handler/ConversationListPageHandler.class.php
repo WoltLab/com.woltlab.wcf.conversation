@@ -15,6 +15,7 @@ use wcf\system\WCF;
  * @since	2.2
  */
 class ConversationListPageHandler extends AbstractMenuPageHandler {
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */
@@ -22,6 +23,7 @@ class ConversationListPageHandler extends AbstractMenuPageHandler {
 		return ConversationHandler::getInstance()->getUnreadConversationCount();
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */

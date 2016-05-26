@@ -91,10 +91,13 @@ class ConversationMessageAddForm extends MessageForm {
 		MessageQuoteManager::getInstance()->readFormParameters();
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */
-	protected function validateSubject() {}
+	protected function validateSubject() {
+		// does nothing
+	}
 	
 	/**
 	 * @inheritDoc

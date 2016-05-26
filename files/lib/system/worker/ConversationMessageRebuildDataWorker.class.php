@@ -23,6 +23,7 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker {
 	 */
 	protected $limit = 500;
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */
@@ -38,6 +39,7 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker {
 		}
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */

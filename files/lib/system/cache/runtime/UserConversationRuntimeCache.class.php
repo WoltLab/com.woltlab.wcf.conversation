@@ -24,6 +24,7 @@ class UserConversationRuntimeCache extends AbstractRuntimeCache {
 	 */
 	protected $listClassName = UserConversationList::class;
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */

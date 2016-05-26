@@ -56,6 +56,7 @@ class ConversationMessageUserNotificationEvent extends AbstractUserNotificationE
 		]);
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */
@@ -77,6 +78,7 @@ class ConversationMessageUserNotificationEvent extends AbstractUserNotificationE
 		], '#message'.$this->getUserNotificationObject()->messageID);
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */
@@ -84,6 +86,7 @@ class ConversationMessageUserNotificationEvent extends AbstractUserNotificationE
 		return sha1($this->eventID . '-' . $this->getUserNotificationObject()->conversationID);
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */

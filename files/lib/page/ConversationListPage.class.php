@@ -142,6 +142,7 @@ class ConversationListPage extends SortablePage {
 		if (isset($_REQUEST['participants'])) $this->participants = ArrayUtil::trim(explode(',', $_REQUEST['participants']));
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */

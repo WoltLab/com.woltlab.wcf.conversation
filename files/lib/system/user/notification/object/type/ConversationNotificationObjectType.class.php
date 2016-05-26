@@ -31,6 +31,7 @@ class ConversationNotificationObjectType extends AbstractUserNotificationObjectT
 	 */
 	protected static $objectListClassName = ConversationList::class;
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */

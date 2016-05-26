@@ -19,6 +19,7 @@ use wcf\util\ArrayUtil;
  * @method	ConversationMessage	getObject($objectID)
  */
 class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectType {
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */
@@ -26,6 +27,7 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
 		return WCF::getSession()->getPermission('user.conversation.maxAttachmentSize');
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */
@@ -33,6 +35,7 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
 		return ArrayUtil::trim(explode("\n", WCF::getSession()->getPermission('user.conversation.allowedAttachmentExtensions')));
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */
@@ -105,6 +108,7 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
 		}
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */

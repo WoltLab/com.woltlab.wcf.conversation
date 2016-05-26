@@ -49,6 +49,7 @@ class ConversationMessageSearch extends AbstractSearchableObjectType {
 		}
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */
@@ -66,6 +67,7 @@ class ConversationMessageSearch extends AbstractSearchableObjectType {
 		return null;
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */
@@ -88,6 +90,7 @@ class ConversationMessageSearch extends AbstractSearchableObjectType {
 		return $this->getTableName().'.messageID';
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */
@@ -95,6 +98,7 @@ class ConversationMessageSearch extends AbstractSearchableObjectType {
 		return 'conversation.subject';
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */
@@ -111,6 +115,7 @@ class ConversationMessageSearch extends AbstractSearchableObjectType {
 		return $conditionBuilder;
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */
@@ -118,6 +123,7 @@ class ConversationMessageSearch extends AbstractSearchableObjectType {
 		return (WCF::getUser()->userID ? true : false);
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */

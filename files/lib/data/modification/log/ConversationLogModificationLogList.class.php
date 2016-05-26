@@ -31,6 +31,7 @@ class ConversationLogModificationLogList extends ModificationLogList {
 		$this->getConditionBuilder()->add('modification_log.objectID = ?', [$conversationID]);
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */

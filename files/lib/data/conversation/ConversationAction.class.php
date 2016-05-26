@@ -50,6 +50,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 */
 	protected $conversationData = [];
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 * @return	Conversation

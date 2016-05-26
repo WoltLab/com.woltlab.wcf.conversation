@@ -33,6 +33,7 @@ class ConversationUserNotificationEvent extends AbstractUserNotificationEvent {
 		]);
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */
@@ -51,6 +52,7 @@ class ConversationUserNotificationEvent extends AbstractUserNotificationEvent {
 		return LinkHandler::getInstance()->getLink('Conversation', ['object' => $this->userNotificationObject]);
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * @inheritDoc
 	 */
