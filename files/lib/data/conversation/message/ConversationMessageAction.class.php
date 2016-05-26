@@ -51,15 +51,20 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	
 	/**
 	 * conversation object
-	 * @var	\wcf\data\conversation\Conversation
+	 * @var	Conversation
 	 */
-	public $conversation = null;
+	public $conversation;
+	
+	/**
+	 * @var HtmlInputProcessor
+	 */
+	public $htmlInputProcessor;
 	
 	/**
 	 * conversation message object
-	 * @var	\wcf\data\conversation\message\ConversationMessage
+	 * @var	ConversationMessage
 	 */
-	public $message = null;
+	public $message;
 	
 	/**
 	 * @inheritDoc
