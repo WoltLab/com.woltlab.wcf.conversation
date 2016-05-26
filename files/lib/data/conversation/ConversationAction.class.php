@@ -165,7 +165,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		
 		parent::update();
 		
-		foreach ($this->objects as $conversation) {
+		foreach ($this->getObjects() as $conversation) {
 			// participants
 			if (!empty($this->parameters['participants']) || !empty($this->parameters['invisibleParticipants'])) {
 				// get current participants
@@ -219,7 +219,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 				AND conversationID = ?";
 		$statement = WCF::getDB()->prepareStatement($sql);
 		WCF::getDB()->beginTransaction();
-		foreach ($this->objects as $conversation) {
+		foreach ($this->getObjects() as $conversation) {
 			$statement->execute([
 				$this->parameters['visitTime'],
 				WCF::getUser()->userID,
@@ -308,7 +308,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		
 		// check participation
 		$conversationIDs = [];
-		foreach ($this->objects as $conversation) {
+		foreach ($this->getObjects() as $conversation) {
 			$conversationIDs[] = $conversation->conversationID;
 		}
 		
@@ -425,7 +425,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		}
 		
 		// validate ownership
-		foreach ($this->objects as $conversation) {
+		foreach ($this->getObjects() as $conversation) {
 			if ($conversation->isClosed || ($conversation->userID != WCF::getUser()->userID)) {
 				throw new PermissionDeniedException();
 			}
@@ -438,7 +438,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 * @return	mixed[][]
 	 */
 	public function close() {
-		foreach ($this->objects as $conversation) {
+		foreach ($this->getObjects() as $conversation) {
 			$conversation->update(['isClosed' => 1]);
 			$this->addConversationData($conversation->getDecoratedObject(), 'isClosed', 1);
 			
@@ -464,7 +464,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		}
 		
 		// validate ownership
-		foreach ($this->objects as $conversation) {
+		foreach ($this->getObjects() as $conversation) {
 			if (!$conversation->isClosed || ($conversation->userID != WCF::getUser()->userID)) {
 				throw new PermissionDeniedException();
 			}
@@ -477,7 +477,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 * @return	mixed[][]
 	 */
 	public function open() {
-		foreach ($this->objects as $conversation) {
+		foreach ($this->getObjects() as $conversation) {
 			$conversation->update(['isClosed' => 0]);
 			$this->addConversationData($conversation->getDecoratedObject(), 'isClosed', 0);
 			
@@ -581,7 +581,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		if ($this->parameters['hideConversation'] == Conversation::STATE_LEFT) {
 			if (empty($this->objects)) $this->readObjects();
 			
-			foreach ($this->objects as $conversation) {
+			foreach ($this->getObjects() as $conversation) {
 				ConversationModificationLogHandler::getInstance()->leave($conversation->getDecoratedObject());
 			}
 		}

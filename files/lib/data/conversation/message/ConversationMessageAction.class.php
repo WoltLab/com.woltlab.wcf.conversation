@@ -96,6 +96,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		}
 		
 		// create message
+		/** @var ConversationMessage $message */
 		$message = parent::create();
 		$messageEditor = new ConversationMessageEditor($message);
 		
@@ -183,7 +184,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		
 		// update search index / embedded objects
 		if (isset($this->parameters['data']) && isset($this->parameters['data']['message'])) {
-			foreach ($this->objects as $message) {
+			foreach ($this->getObjects() as $message) {
 				$conversation = $message->getConversation();
 				SearchIndexManager::getInstance()->update('com.woltlab.wcf.conversation.message', $message->messageID, $this->parameters['data']['message'], ($conversation->firstMessageID == $message->messageID ? $conversation->subject : ''), $message->time, $message->userID, $message->username);
 				
@@ -203,7 +204,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		$count = parent::delete();
 		
 		$attachmentMessageIDs = $conversationIDs = [];
-		foreach ($this->objects as $message) {
+		foreach ($this->getObjects() as $message) {
 			if (!in_array($message->conversationID, $conversationIDs)) {
 				$conversationIDs[] = $message->conversationID;
 			}
