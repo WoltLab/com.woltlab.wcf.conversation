@@ -22,6 +22,8 @@ use wcf\system\WCF;
  * 
  * @method	Conversation	getDecoratedObject()
  * @mixin	Conversation
+ * @property-read	integer|null	$otherParticipantID
+ * @property-read	string|null	$otherParticipant
  */
 class ViewableConversation extends DatabaseObjectDecorator {
 	use TLegacyUserPropertyAccess;
@@ -148,7 +150,9 @@ class ViewableConversation extends DatabaseObjectDecorator {
 	 * @return	integer
 	 */
 	public function getPages() {
+		/** @noinspection PhpUndefinedFieldInspection */
 		if (WCF::getUser()->conversationMessagesPerPage) {
+			/** @noinspection PhpUndefinedFieldInspection */
 			$messagesPerPage = WCF::getUser()->conversationMessagesPerPage;
 		}
 		else {

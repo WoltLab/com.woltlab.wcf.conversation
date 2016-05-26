@@ -115,7 +115,11 @@ class ConversationListPage extends SortablePage {
 		if (!in_array($this->filter, UserConversationList::$availableFilters)) $this->filter = '';
 		
 		// user settings
-		if (WCF::getUser()->conversationsPerPage) $this->itemsPerPage = WCF::getUser()->conversationsPerPage;
+		/** @noinspection PhpUndefinedFieldInspection */
+		if (WCF::getUser()->conversationsPerPage) {
+			/** @noinspection PhpUndefinedFieldInspection */
+			$this->itemsPerPage = WCF::getUser()->conversationsPerPage;
+		}
 		
 		// labels
 		$this->labelList = ConversationLabel::getLabelsByUser();

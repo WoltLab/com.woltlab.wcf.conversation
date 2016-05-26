@@ -1,6 +1,7 @@
 <?php
 namespace wcf\system\user\notification\event;
 use wcf\system\request\LinkHandler;
+use wcf\system\user\notification\object\ConversationMessageUserNotificationObject;
 
 /**
  * User notification event for conversation messages.
@@ -11,6 +12,8 @@ use wcf\system\request\LinkHandler;
  * @package	com.woltlab.wcf.conversation
  * @subpackage	system.user.notification.event
  * @category	Community Framework
+ * 
+ * @method	ConversationMessageUserNotificationObject	getUserNotificationObject()
  */
 class ConversationMessageUserNotificationEvent extends AbstractUserNotificationEvent {
 	/**
@@ -69,22 +72,22 @@ class ConversationMessageUserNotificationEvent extends AbstractUserNotificationE
 	 */
 	public function getLink() {
 		return LinkHandler::getInstance()->getLink('Conversation', [
-			'object' => $this->userNotificationObject->getConversation(),
-			'messageID' => $this->userNotificationObject->messageID
-		], '#message'.$this->userNotificationObject->messageID);
+			'object' => $this->getUserNotificationObject()->getConversation(),
+			'messageID' => $this->getUserNotificationObject()->messageID
+		], '#message'.$this->getUserNotificationObject()->messageID);
 	}
 	
 	/**
 	 * @inheritDoc
 	 */
 	public function getEventHash() {
-		return sha1($this->eventID . '-' . $this->userNotificationObject->conversationID);
+		return sha1($this->eventID . '-' . $this->getUserNotificationObject()->conversationID);
 	}
 	
 	/**
 	 * @inheritDoc
 	 */
 	public function checkAccess() {
-		return $this->userNotificationObject->getConversation()->canRead();
+		return $this->getUserNotificationObject()->getConversation()->canRead();
 	}
 }

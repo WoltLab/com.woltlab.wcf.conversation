@@ -58,7 +58,7 @@ class ConversationMessageAddForm extends MessageForm {
 	
 	/**
 	 * message list
-	 * @var	\wcf\data\conversation\message\ConversationMessageList
+	 * @var	ViewableConversationMessageList
 	 */
 	public $messageList = null;
 	
@@ -161,10 +161,12 @@ class ConversationMessageAddForm extends MessageForm {
 			'time' => TIME_NOW,
 			'userID' => WCF::getUser()->userID,
 			'username' => WCF::getUser()->username,
+			/* TODO:
 			'enableBBCodes' => $this->enableBBCodes,
 			'enableHtml' => $this->enableHtml,
 			'enableSmilies' => $this->enableSmilies,
 			'showSignature' => $this->showSignature
+			*/
 		]);
 		
 		$messageData = [

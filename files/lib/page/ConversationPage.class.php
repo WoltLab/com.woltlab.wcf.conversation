@@ -134,8 +134,12 @@ class ConversationPage extends MultipleLinkPage {
 		$this->labelList = ConversationLabel::getLabelsByUser();
 		$this->conversation = ViewableConversation::getViewableConversation($this->conversation, $this->labelList);
 		
-		// posts per page
-		if (WCF::getUser()->conversationMessagesPerPage) $this->itemsPerPage = WCF::getUser()->conversationMessagesPerPage;
+		// messages per page
+		/** @noinspection PhpUndefinedFieldInspection */
+		if (WCF::getUser()->conversationMessagesPerPage) {
+			/** @noinspection PhpUndefinedFieldInspection */
+			$this->itemsPerPage = WCF::getUser()->conversationMessagesPerPage;
+		}
 		
 		$this->canonicalURL = LinkHandler::getInstance()->getLink('Conversation', [
 			'object' => $this->conversation

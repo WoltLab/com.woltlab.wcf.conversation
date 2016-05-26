@@ -13,6 +13,9 @@ use wcf\system\request\LinkHandler;
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation
  * @category	Community Framework
+ *
+ * @method	Conversation	getDecoratedObject()
+ * @mixin	Conversation
  */
 class FeedConversation extends DatabaseObjectDecorator implements IFeedEntry {
 	/**

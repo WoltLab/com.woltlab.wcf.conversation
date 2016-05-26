@@ -54,7 +54,7 @@ class ConversationMessageEditForm extends ConversationAddForm {
 	
 	/**
 	 * message list
-	 * @var	\wcf\data\conversation\message\ConversationMessageList
+	 * @var	ViewableConversationMessageList
 	 */
 	public $messageList = null;
 	
@@ -123,10 +123,12 @@ class ConversationMessageEditForm extends ConversationAddForm {
 		// save message
 		$data = array_merge($this->additionalFields, [
 			'message' => $this->text,
+			/* TODO:
 			'enableBBCodes' => $this->enableBBCodes,
 			'enableHtml' => $this->enableHtml,
 			'enableSmilies' => $this->enableSmilies,
 			'showSignature' => $this->showSignature
+			*/
 		]);
 		if ($this->conversation->isDraft && !$this->draft) {
 			$data['time'] = TIME_NOW;

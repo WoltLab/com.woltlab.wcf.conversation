@@ -4,6 +4,7 @@ use wcf\data\conversation\message\SearchResultConversationMessage;
 use wcf\data\conversation\message\SearchResultConversationMessageList;
 use wcf\data\conversation\Conversation;
 use wcf\form\IForm;
+use wcf\form\SearchForm;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\WCF;
 
@@ -132,6 +133,8 @@ class ConversationMessageSearch extends AbstractSearchableObjectType {
 	 * @inheritDoc
 	 */
 	public function show(IForm $form = null) {
+		/** @var SearchForm $form */
+		
 		// get existing values
 		if ($form !== null && isset($form->searchData['additionalData']['com.woltlab.wcf.conversation.message']['conversationID'])) {
 			$this->conversationID = $form->searchData['additionalData']['com.woltlab.wcf.conversation.message']['conversationID'];

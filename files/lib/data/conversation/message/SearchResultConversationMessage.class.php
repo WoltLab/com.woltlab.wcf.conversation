@@ -14,6 +14,8 @@ use wcf\system\search\SearchResultTextParser;
  * @package	com.woltlab.wcf.conversation
  * @subpackage	data.conversation.message
  * @category	Community Framework
+ * 
+ * @property-read	string|null	$subject
  */
 class SearchResultConversationMessage extends ViewableConversationMessage implements ISearchResultObject {
 	/**

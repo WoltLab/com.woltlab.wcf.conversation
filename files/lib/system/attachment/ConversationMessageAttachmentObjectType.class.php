@@ -15,6 +15,8 @@ use wcf\util\ArrayUtil;
  * @package	com.woltlab.wcf.conversation
  * @subpackage	system.attachment
  * @category	Community Framework
+ * 
+ * @method	ConversationMessage	getObject($objectID)
  */
 class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectType {
 	/**

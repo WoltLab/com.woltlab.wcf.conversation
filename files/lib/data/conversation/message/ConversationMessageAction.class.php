@@ -151,6 +151,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		
 		// update attachments
 		if (isset($this->parameters['attachmentHandler']) && $this->parameters['attachmentHandler'] !== null) {
+			/** @noinspection PhpUndefinedMethodInspection */
 			$this->parameters['attachmentHandler']->updateObjectID($message->messageID);
 		}
 		
@@ -456,6 +457,8 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 * @inheritDoc
 	 */
 	public function validateContainer(DatabaseObject $conversation) {
+		/** @var Conversation $conversation */
+		
 		if (!$conversation->conversationID) {
 			throw new UserInputException('objectID');
 		}
@@ -511,6 +514,8 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 * @inheritDoc
 	 */
 	public function getPageNo(DatabaseObject $conversation) {
+		/** @var Conversation $conversation */
+		
 		$sql = "SELECT	COUNT(*) AS count
 			FROM	wcf".WCF_N."_conversation_message
 			WHERE	conversationID = ?";
@@ -525,6 +530,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 * @inheritDoc
 	 */
 	public function getRedirectUrl(DatabaseObject $conversation, DatabaseObject $message) {
+		/** @var ConversationMessage $message */
 		return LinkHandler::getInstance()->getLink('Conversation', [
 			'object' => $conversation,
 			'messageID' => $message->messageID

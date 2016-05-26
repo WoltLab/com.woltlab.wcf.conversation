@@ -1,6 +1,7 @@
 <?php
 namespace wcf\system\user\notification\event;
 use wcf\system\request\LinkHandler;
+use wcf\system\user\notification\object\ConversationUserNotificationObject;
 
 /**
  * User notification event for conversations.
@@ -11,6 +12,8 @@ use wcf\system\request\LinkHandler;
  * @package	com.woltlab.wcf.conversation
  * @subpackage	system.user.notification.event
  * @category	Community Framework
+ * 
+ * @method	ConversationUserNotificationObject	getUserNotificationObject()
  */
 class ConversationUserNotificationEvent extends AbstractUserNotificationEvent {
 	/**
@@ -52,6 +55,6 @@ class ConversationUserNotificationEvent extends AbstractUserNotificationEvent {
 	 * @inheritDoc
 	 */
 	public function checkAccess() {
-		return $this->userNotificationObject->canRead();
+		return $this->getUserNotificationObject()->canRead();
 	}
 }
