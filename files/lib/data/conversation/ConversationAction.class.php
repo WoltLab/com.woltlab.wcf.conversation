@@ -761,7 +761,6 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		$successMessage = '';
 		if (!empty($participantIDs)) {
 			// check for already added participants
-			$data = [];
 			if ($this->conversation->isDraft) {
 				$draftData = unserialize($this->conversation->draftData);
 				$draftData['participants'] = array_merge($draftData['participants'], $participantIDs);
