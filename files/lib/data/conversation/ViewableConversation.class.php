@@ -245,7 +245,7 @@ class ViewableConversation extends DatabaseObjectDecorator {
 				".$conditions;
 			$statement = WCF::getDB()->prepareStatement($sql);
 			$statement->execute($conditions->getParameters());
-			while ($row = $statement->fetchArray()) {
+			while (($row = $statement->fetchArray())) {
 				$conversation->assignLabel($labels[$row['labelID']]);
 			}
 		}

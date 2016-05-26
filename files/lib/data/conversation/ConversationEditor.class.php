@@ -67,7 +67,7 @@ class ConversationEditor extends DatabaseObjectEditor {
 				".$conditions;
 			$statement = WCF::getDB()->prepareStatement($sql);
 			$statement->execute($conditions->getParameters());
-			while ($row = $statement->fetchArray()) {
+			while (($row = $statement->fetchArray())) {
 				$usernames[$row['userID']] = $row['username'];
 			}
 		}
@@ -140,7 +140,6 @@ class ConversationEditor extends DatabaseObjectEditor {
 	 * Updates the participant summary of this conversation.
 	 */
 	public function updateParticipantSummary() {
-		$users = [];
 		$sql = "SELECT		participantID AS userID, hideConversation, username
 			FROM		wcf".WCF_N."_conversation_to_user
 			WHERE		conversationID = ?
@@ -149,11 +148,8 @@ class ConversationEditor extends DatabaseObjectEditor {
 			ORDER BY	username";
 		$statement = WCF::getDB()->prepareStatement($sql, 5);
 		$statement->execute([$this->conversationID, $this->userID]);
-		while ($row = $statement->fetchArray()) {
-			$users[] = $row;
-		}
 		
-		$this->update(['participantSummary' => serialize($users)]);
+		$this->update(['participantSummary' => serialize($statement->fetchAll(\PDO::FETCH_ASSOC))]);
 	}
 	
 	/**

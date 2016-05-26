@@ -850,7 +850,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		$statement->execute($conditionBuilder->getParameters());
 		
 		$objectIDs = [];
-		while ($row = $statement->fetchArray()) {
+		while (($row = $statement->fetchArray())) {
 			if (!$row['messages']) {
 				continue;
 			}

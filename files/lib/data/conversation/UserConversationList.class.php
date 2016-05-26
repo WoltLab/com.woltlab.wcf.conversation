@@ -202,7 +202,7 @@ class UserConversationList extends ConversationList {
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute($conditions->getParameters());
 		$data = [];
-		while ($row = $statement->fetchArray()) {
+		while (($row = $statement->fetchArray())) {
 			if (!isset($data[$row['conversationID']])) {
 				$data[$row['conversationID']] = [];
 			}

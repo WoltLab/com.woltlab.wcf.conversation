@@ -181,7 +181,7 @@ class Conversation extends DatabaseObject implements IRouteController, ITitledLi
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute($conditionBuilder->getParameters());
 		$conversations = [];
-		while ($row = $statement->fetchArray()) {
+		while (($row = $statement->fetchArray())) {
 			$conversations[$row['conversationID']] = new Conversation(null, $row);
 		}
 		
@@ -340,7 +340,7 @@ class Conversation extends DatabaseObject implements IRouteController, ITitledLi
 			".$conditions;
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute($conditions->getParameters());
-		while ($row = $statement->fetchArray()) {
+		while (($row = $statement->fetchArray())) {
 			$index = array_search($row['conversationID'], $conversationIDs);
 			unset($conversationIDs[$index]);
 		}
@@ -357,7 +357,7 @@ class Conversation extends DatabaseObject implements IRouteController, ITitledLi
 				".$conditions;
 			$statement = WCF::getDB()->prepareStatement($sql);
 			$statement->execute($conditions->getParameters());
-			while ($row = $statement->fetchArray()) {
+			while (($row = $statement->fetchArray())) {
 				$index = array_search($row['conversationID'], $conversationIDs);
 				unset($conversationIDs[$index]);
 			}
