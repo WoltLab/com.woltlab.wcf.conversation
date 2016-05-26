@@ -411,6 +411,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		$this->message = new ConversationMessage($this->message->messageID);
 		$this->message->getAttachments();
 		
+		$attachmentList = null;
 		if (MODULE_ATTACHMENT) {
 			$attachmentList = $this->message->getAttachments(true);
 			$count = 0;
