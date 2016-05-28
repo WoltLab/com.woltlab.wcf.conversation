@@ -90,9 +90,8 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		}
 		
 		if (!empty($this->parameters['htmlInputProcessor'])) {
-			/** @var HtmlInputProcessor $htmlInputProcessor */
-			$htmlInputProcessor = $this->parameters['htmlInputProcessor'];
-			$this->parameters['data']['message'] = $htmlInputProcessor->getHtml();
+			/** @noinspection PhpUndefinedMethodInspection */
+			$this->parameters['data']['message'] = $this->parameters['htmlInputProcessor']->getHtml();
 		}
 		
 		// create message
@@ -156,10 +155,10 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		}
 		
 		// save embedded objects
-		if (MessageEmbeddedObjectManager::getInstance()->registerObjects('com.woltlab.wcf.conversation.message', $message->messageID, $message->message)) {
-			$messageEditor->update([
-				'hasEmbeddedObjects' => 1
-			]);
+		if (!empty($this->parameters['htmlInputProcessor'])) {
+			if (MessageEmbeddedObjectManager::getInstance()->registerObjects($this->parameters['htmlInputProcessor'], 'com.woltlab.wcf.conversation.message', $message->messageID)) {
+				$messageEditor->update(['hasEmbeddedObjects' => 1]);
+			}
 		}
 		
 		// clear quotes
@@ -181,6 +180,11 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			$this->parameters['data']['attachments'] = count($this->parameters['attachmentHandler']);
 		}
 		
+		if (!empty($this->parameters['htmlInputProcessor'])) {
+			/** @noinspection PhpUndefinedMethodInspection */
+			$this->parameters['data']['message'] = $this->parameters['htmlInputProcessor']->getHtml();
+		}
+		
 		parent::update();
 		
 		// update search index / embedded objects
@@ -189,10 +193,10 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 				$conversation = $message->getConversation();
 				SearchIndexManager::getInstance()->update('com.woltlab.wcf.conversation.message', $message->messageID, $this->parameters['data']['message'], ($conversation->firstMessageID == $message->messageID ? $conversation->subject : ''), $message->time, $message->userID, $message->username);
 				
-				if ($message->hasEmbeddedObjects != MessageEmbeddedObjectManager::getInstance()->registerObjects('com.woltlab.wcf.conversation.message', $message->messageID, $this->parameters['data']['message'])) {
-					$message->update([
-						'hasEmbeddedObjects' => ($message->hasEmbeddedObjects ? 0 : 1)
-					]);
+				if (!empty($this->parameters['htmlInputProcessor'])) {
+					if ($message->hasEmbeddedObjects != MessageEmbeddedObjectManager::getInstance()->registerObjects($this->parameters['htmlInputProcessor'], 'com.woltlab.wcf.conversation.message', $message->messageID)) {
+						$message->update(['hasEmbeddedObjects' => ($message->hasEmbeddedObjects ? 0 : 1)]);
+					}
 				}
 			}
 		}
@@ -397,16 +401,17 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 * @inheritDoc
 	 */
 	public function save() {
-		$data = [
-			//'message' => PreParser::getInstance()->parse(MessageUtil::stripCrap($this->parameters['data']['message']), explode(',', WCF::getSession()->getPermission('user.message.allowedBBCodes')))
-		];
+		$data = [];
 		
 		if (!$this->message->getConversation()->isDraft) {
 			$data['lastEditTime'] = TIME_NOW;
 			$data['editCount'] = $this->message->editCount + 1;
 		}
 		// execute update action
-		$action = new ConversationMessageAction([$this->message], 'update', ['data' => $data]);
+		$action = new ConversationMessageAction([$this->message], 'update', [
+			'data' => $data,
+			'htmlInputProcessor' => $this->getHtmlInputProcessor()
+		]);
 		$action->executeAction();
 		
 		// load new message
