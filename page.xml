@@ -38,36 +38,5 @@
 				<title>Konversation starten</title>
 			</content>
 		</page>
-		<page identifier="com.woltlab.wcf.conversation.ConversationMessageAdd">
-			<controller>wcf\form\ConversationMessageAddForm</controller>
-			<handler>wcf\system\page\handler\DefaultConversationRelatedPageHandler</handler>
-			<name language="de"><![CDATA[Antwort auf Konversation erstellen]]></name>
-			<name language="en"><![CDATA[Reply to Conversation]]></name>
-			<pageType>system</pageType>
-			<requireObjectID>1</requireObjectID>
-			<parent>com.woltlab.wcf.conversation.Conversation</parent>
-			
-			<content language="en">
-				<title>Reply to Conversation</title>
-			</content>
-			<content language="de">
-				<title>Antwort auf Konversation erstellen</title>
-			</content>
-		</page>
-		<page identifier="com.woltlab.wcf.conversation.ConversationMessageEdit">
-			<controller>wcf\form\ConversationMessageEditForm</controller>
-			<name language="de"><![CDATA[Antwort auf Konversation bearbeiten]]></name>
-			<name language="en"><![CDATA[Edit Reply to Conversation]]></name>
-			<pageType>system</pageType>
-			<requireObjectID>1</requireObjectID>
-			<parent>com.woltlab.wcf.conversation.Conversation</parent>
-			
-			<content language="en">
-				<title>Edit Reply to Conversation</title>
-			</content>
-			<content language="de">
-				<title>Antwort auf Konversation bearbeiten</title>
-			</content>
-		</page>
 	</import>
 </data>

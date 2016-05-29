@@ -17,7 +17,6 @@
 			<footer class="messageFooter">
 				<div class="formSubmit">
 					<button class="buttonPrimary" data-type="save" accesskey="s">{lang}wcf.global.button.submit{/lang}</button>
-					<button data-type="extended">{lang}wcf.message.button.extendedReply{/lang}</button>
 				</div>
 			</footer>
 		</div>

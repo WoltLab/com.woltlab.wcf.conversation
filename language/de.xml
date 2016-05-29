@@ -84,8 +84,6 @@
 		<item name="wcf.conversation.leave.title"><![CDATA[Teilnahme verwalten]]></item>
 		<item name="wcf.conversation.markAllAsRead.confirmMessage"><![CDATA[Wollen Sie wirklich alle Konversationen als gelesen markieren?]]></item>
 		<item name="wcf.conversation.message"><![CDATA[Nachricht]]></item>
-		<item name="wcf.conversation.message.add"><![CDATA[Neue Antwort erstellen]]></item>
-		<item name="wcf.conversation.message.add.previousPosts"><![CDATA[{if $items == 1}Vorherige Nachricht{else}Vorherige Nachrichten{/if}]]></item>
 		<item name="wcf.conversation.message.button.add"><![CDATA[Antworten]]></item>
 		<item name="wcf.conversation.message.edit"><![CDATA[Nachricht bearbeiten]]></item>
 		<item name="wcf.conversation.noConversations"><![CDATA[Es wurden keine Konversationen gefunden.]]></item>
@@ -172,8 +170,6 @@
 	</category>
 	
 	<category name="wcf.page">
-		<item name="wcf.page.onlineLocation.com.woltlab.wcf.conversation.ConversationMessageAdd"><![CDATA[Antwort erstellen in Konversation <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>]]></item>
-		<item name="wcf.page.onlineLocation.com.woltlab.wcf.conversation.ConversationMessageEdit"><![CDATA[Nachricht bearbeiten in Konversation <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>]]></item>
 		<item name="wcf.page.onlineLocation.com.woltlab.wcf.conversation.Conversation"><![CDATA[Konversation <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>]]></item>
 	</category>
 	
