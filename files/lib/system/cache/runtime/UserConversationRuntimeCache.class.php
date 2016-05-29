@@ -14,7 +14,8 @@ use wcf\system\WCF;
  * @subpackage	system.cache.runtime
  * @category	Community Framework
  * @since	2.2
- *
+ * 
+ * @method	Conversation[]		getCachedObjects()
  * @method	Conversation		getObject($objectID)
  * @method	Conversation[]		getObjects(array $objectIDs)
  */

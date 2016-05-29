@@ -13,7 +13,8 @@ use wcf\data\conversation\ConversationList;
  * @subpackage	system.cache.runtime
  * @category	Community Framework
  * @since	2.2
- *
+ * 
+ * @method	Conversation[]		getCachedObjects()
  * @method	Conversation		getObject($objectID)
  * @method	Conversation[]		getObjects(array $objectIDs)
  */
