@@ -1,11 +1,13 @@
 <div class="messageInlineEditor">
-	<textarea id="messageEditor{@$message->messageID}" rows="20" cols="40" data-autosave="com.woltlab.wcf.conversation.messageEdit-{@$message->messageID}">{$message->message}</textarea>
+	<textarea id="messageEditor{@$message->messageID}" rows="20" cols="40"
+	          data-autosave="com.woltlab.wcf.conversation.messageEdit-{@$message->messageID}"
+	          data-support-mention="true"
+	>{$message->message}</textarea>
 	{capture assign=wysiwygContainerID}messageEditor{@$message->messageID}{/capture}
 	{include file='messageFormTabsInline' inConversationInlineEdit=true wysiwygContainerID=$wysiwygContainerID}
 	
 	<div class="formSubmit">
 		<button class="buttonPrimary" data-type="save">{lang}wcf.global.button.submit{/lang}</button>
-		<button data-type="extended">{lang}wcf.message.button.extendedEdit{/lang}</button>
 		<button data-type="cancel">{lang}wcf.global.button.cancel{/lang}</button>
 	</div>
 	

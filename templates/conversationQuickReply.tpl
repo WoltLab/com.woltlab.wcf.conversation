@@ -10,6 +10,7 @@
 				
 				<textarea id="text" name="text" rows="20" cols="40" style="width: 100%"
 				          data-autosave="com.woltlab.wcf.conversation.messageAdd-{@$conversation->conversationID}"
+				          data-support-mention="true"
 				></textarea>
 				{include file='messageFormTabsInline' inConversationQuickReply=true}
 			</div>
