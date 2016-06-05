@@ -92,7 +92,7 @@
 		<dl class="wide{if $errorField == 'text'} formError{/if}">
 			<dt><label for="text">{lang}wcf.conversation.message{/lang}</label></dt>
 			<dd>
-				<textarea id="text" name="text" rows="20" cols="40"
+				<textarea id="text" name="text" class="wysiwygTextarea"
 				          data-autosave="com.woltlab.wcf.conversation.conversationAdd"
 				          data-autosave-prompt="true"
 				          data-support-mention="true"
@@ -123,7 +123,7 @@
 	{event name='sections'}
 	
 	<div class="formSubmit">
-		<input type="submit" value="{lang}wcf.global.button.submit{/lang}" accesskey="s" />
+		<input type="submit" value="{lang}wcf.global.button.submit{/lang}" accesskey="s">
 		<button name="draft" accesskey="d" value="1">{lang}wcf.conversation.button.saveAsDraft{/lang}</button>
 		{include file='messageFormPreviewButton'}
 		{@SECURITY_TOKEN_INPUT_TAG}

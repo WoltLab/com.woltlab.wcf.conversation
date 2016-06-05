@@ -1,5 +1,5 @@
 <div class="messageInlineEditor">
-	<textarea id="messageEditor{@$message->messageID}" rows="20" cols="40"
+	<textarea id="messageEditor{@$message->messageID}" class="wysiwygTextarea"
 	          data-autosave="com.woltlab.wcf.conversation.messageEdit-{@$message->messageID}"
 	          data-support-mention="true"
 	>{$message->message}</textarea>

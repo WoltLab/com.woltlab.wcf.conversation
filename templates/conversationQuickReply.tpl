@@ -8,7 +8,7 @@
 					<p class="warning" style="margin-bottom: 14px">{lang}wcf.conversation.noParticipantsWarning{/lang}</p>
 				{/if}
 				
-				<textarea id="text" name="text" rows="20" cols="40" style="width: 100%"
+				<textarea id="text" name="text" class="wysiwygTextarea"
 				          data-autosave="com.woltlab.wcf.conversation.messageAdd-{@$conversation->conversationID}"
 				          data-support-mention="true"
 				></textarea>
