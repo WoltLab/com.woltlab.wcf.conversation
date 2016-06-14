@@ -19,7 +19,7 @@
 	
 	<dl>
 		<dt><label for="labelName">{lang}wcf.conversation.label.labelName{/lang}</label></dt>
-		<dd><input type="text" id="labelName" class="long" /></dd>
+		<dd><input type="text" id="labelName" class="long"></dd>
 	</dl>
 	<dl>
 		<dt>{lang}wcf.conversation.label.cssClassName{/lang}</dt>
@@ -27,7 +27,7 @@
 			<ul id="labelManagementList">
 				{foreach from=$cssClassNames item=cssClassName}
 					<li><label>
-						<input type="radio" name="cssClassName" value="{@$cssClassName}"{if $cssClassName == 'none'} checked="checked"{/if} />
+						<input type="radio" name="cssClassName" value="{@$cssClassName}"{if $cssClassName == 'none'} checked="checked"{/if}>
 						<span class="badge label{if $cssClassName != 'none'} {@$cssClassName}{/if}">{lang}wcf.conversation.label.placeholder{/lang}</span>
 					</label></li>
 				{/foreach}

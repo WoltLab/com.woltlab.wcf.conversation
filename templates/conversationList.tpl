@@ -16,7 +16,7 @@
 {/capture}
 
 {capture assign='headContent'}
-	<link rel="alternate" type="application/rss+xml" title="{lang}wcf.global.button.rss{/lang}" href="{link controller='ConversationFeed' appendSession=false}at={@$__wcf->getUser()->userID}-{@$__wcf->getUser()->accessToken}{/link}" />
+	<link rel="alternate" type="application/rss+xml" title="{lang}wcf.global.button.rss{/lang}" href="{link controller='ConversationFeed' appendSession=false}at={@$__wcf->getUser()->userID}-{@$__wcf->getUser()->accessToken}{/link}">
 {/capture}
 
 {capture assign='sidebarLeft'}
@@ -54,7 +54,7 @@
 				</dl>
 				
 				<div class="formSubmit">
-					<input type="submit" value="{lang}wcf.global.button.submit{/lang}" accesskey="s" />
+					<input type="submit" value="{lang}wcf.global.button.submit{/lang}" accesskey="s">
 					{@SECURITY_TOKEN_INPUT_TAG}
 				</div>
 			</form>
@@ -141,7 +141,7 @@
 		<ol class="tabularList">
 			<li class="tabularListRow tabularListRowHead">
 				<ol class="tabularListColumns">
-					<li class="columnMark jsOnly"><label><input type="checkbox" class="jsClipboardMarkAll" /></label></li>
+					<li class="columnMark jsOnly"><label><input type="checkbox" class="jsClipboardMarkAll"></label></li>
 					<li class="columnSubject{if $sortField === 'subject'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}pageNo={@$pageNo}&sortField=subject&sortOrder={if $sortField == 'subject' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.global.subject{/lang}</a></li>
 					<li class="columnStats{if $sortField == 'replies'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}pageNo={@$pageNo}&sortField=replies&sortOrder={if $sortField == 'replies' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.conversation.replies{/lang}</a></li>
 					<li class="columnLastPost{if $sortField === 'lastPostTime'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}pageNo={@$pageNo}&sortField=lastPostTime&sortOrder={if $sortField == 'lastPostTime' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.conversation.lastPostTime{/lang}</a></li>
@@ -154,7 +154,7 @@
 				<li class="tabularListRow">
 					<ol class="tabularListColumns conversation jsClipboardObject{if $conversation->isNew()} new{/if}" data-conversation-id="{@$conversation->conversationID}" data-label-ids="[ {implode from=$conversation->getAssignedLabels() item=label}{@$label->labelID}{/implode} ]" data-is-closed="{@$conversation->isClosed}" data-can-close-conversation="{if $conversation->userID == $__wcf->getUser()->userID}1{else}0{/if}" data-can-add-participants="{if $conversation->canAddParticipants()}1{else}0{/if}">
 						<li class="columnMark jsOnly">
-							<label><input type="checkbox" class="jsClipboardItem" data-object-id="{@$conversation->conversationID}" /></label>
+							<label><input type="checkbox" class="jsClipboardItem" data-object-id="{@$conversation->conversationID}"></label>
 						</li>
 						<li class="columnIcon columnAvatar">
 							{if $conversation->getUserProfile()->getAvatar()}
