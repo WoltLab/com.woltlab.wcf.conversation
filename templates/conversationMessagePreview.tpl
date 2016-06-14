@@ -8,7 +8,7 @@
 			<h3><a href="{link controller='User' object=$message->getUserProfile()->getDecoratedObject()}{/link}">{$message->username}</a> <small class="separatorLeft">{@$message->time|time}</small></h3> 
 		</div>
 		
-		<div>{@$message->getExcerpt()|nl2br}</div>
+		<div>{@$message->getExcerpt()|nl2br:false}</div>
 		
 		{event name='previewData'}
 	</div>
