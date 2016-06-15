@@ -15,9 +15,7 @@ use wcf\util\ArrayUtil;
  * @author	Marcel Werk
  * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package	com.woltlab.wcf.conversation
- * @subpackage	page
- * @category	Community Framework
+ * @package	WoltLabSuite\Core\Page
  * 
  * @property	UserConversationList	$objectList
  */

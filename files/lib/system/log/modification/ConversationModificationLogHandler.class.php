@@ -10,9 +10,7 @@ use wcf\data\user\UserList;
  * @author	Alexander Ebert
  * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package	com.woltlab.wcf.conversation
- * @subpackage	system.log.modification
- * @category	Community Framework
+ * @package	WoltLabSuite\Core\System\Log\Modification
  */
 class ConversationModificationLogHandler extends AbstractModificationLogHandler {
 	/**
@@ -100,7 +98,7 @@ class ConversationModificationLogHandler extends AbstractModificationLogHandler 
 	 * ids.
 	 * 
 	 * @param	integer[]	$objectIDs
-	 * @deprecated	since 2.2, use deleteLogs()
+	 * @deprecated	3.0, use deleteLogs()
 	 */
 	public function remove(array $objectIDs) {
 		$this->deleteLogs($objectIDs);
