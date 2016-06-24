@@ -27,7 +27,7 @@
 			<ul id="labelManagementList">
 				{foreach from=$cssClassNames item=cssClassName}
 					<li><label>
-						<input type="radio" name="cssClassName" value="{@$cssClassName}"{if $cssClassName == 'none'} checked="checked"{/if}>
+						<input type="radio" name="cssClassName" value="{@$cssClassName}"{if $cssClassName == 'none'} checked{/if}>
 						<span class="badge label{if $cssClassName != 'none'} {@$cssClassName}{/if}">{lang}wcf.conversation.label.placeholder{/lang}</span>
 					</label></li>
 				{/foreach}
