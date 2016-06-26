@@ -154,7 +154,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		
 		// save embedded objects
 		if (!empty($this->parameters['htmlInputProcessor'])) {
-			if (MessageEmbeddedObjectManager::getInstance()->registerObjects($this->parameters['htmlInputProcessor'], 'com.woltlab.wcf.conversation.message', $message->messageID)) {
+			if (MessageEmbeddedObjectManager::getInstance()->registerObjects($this->parameters['htmlInputProcessor'])) {
 				$messageEditor->update(['hasEmbeddedObjects' => 1]);
 			}
 		}
@@ -192,7 +192,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 				SearchIndexManager::getInstance()->update('com.woltlab.wcf.conversation.message', $message->messageID, $this->parameters['data']['message'], ($conversation->firstMessageID == $message->messageID ? $conversation->subject : ''), $message->time, $message->userID, $message->username);
 				
 				if (!empty($this->parameters['htmlInputProcessor'])) {
-					if ($message->hasEmbeddedObjects != MessageEmbeddedObjectManager::getInstance()->registerObjects($this->parameters['htmlInputProcessor'], 'com.woltlab.wcf.conversation.message', $message->messageID)) {
+					if ($message->hasEmbeddedObjects != MessageEmbeddedObjectManager::getInstance()->registerObjects($this->parameters['htmlInputProcessor'])) {
 						$message->update(['hasEmbeddedObjects' => ($message->hasEmbeddedObjects ? 0 : 1)]);
 					}
 				}

@@ -3,6 +3,7 @@ namespace wcf\system\worker;
 use wcf\data\conversation\message\ConversationMessageEditor;
 use wcf\data\conversation\message\ConversationMessageList;
 use wcf\data\object\type\ObjectTypeCache;
+use wcf\system\exception\SystemException;
 use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
 use wcf\system\search\SearchIndexManager;
 use wcf\system\WCF;
@@ -81,7 +82,8 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker {
 			$data['attachments'] = $row['attachments'];
 			
 			// update embedded objects
-			$data['hasEmbeddedObjects'] = (MessageEmbeddedObjectManager::getInstance()->registerObjects('com.woltlab.wcf.conversation.message', $message->messageID, $message->message) ? 1 : 0);
+			throw new SystemException("TODO: we need the html input processor here");
+			$data['hasEmbeddedObjects'] = (MessageEmbeddedObjectManager::getInstance()->registerObjects('com.woltlab.wcf.conversation.message') ? 1 : 0);
 			
 			$editor->update($data);
 		}
