@@ -392,7 +392,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		
 		$this->validateBeginEdit();
 		
-		$this->validateMessage($this->conversation, $this->getHtmlInputProcessor($this->parameters['data']['message']));
+		$this->validateMessage($this->conversation, $this->getHtmlInputProcessor($this->parameters['data']['message'], $this->message->messageID));
 	}
 	
 	/**
@@ -644,13 +644,13 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	/**
 	 * @inheritDoc
 	 */
-	public function getHtmlInputProcessor($message = null) {
+	public function getHtmlInputProcessor($message = null, $objectID = 0) {
 		if ($message === null) {
 			return $this->htmlInputProcessor;
 		}
 		
 		$this->htmlInputProcessor = new HtmlInputProcessor();
-		$this->htmlInputProcessor->process($message);
+		$this->htmlInputProcessor->process($message, 'com.woltlab.wcf.conversation.message', $objectID);
 		
 		return $this->htmlInputProcessor;
 	}
