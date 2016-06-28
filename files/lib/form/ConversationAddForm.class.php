@@ -36,6 +36,11 @@ class ConversationAddForm extends MessageForm {
 	/**
 	 * @inheritDoc
 	 */
+	public $messageObjectType = 'com.woltlab.wcf.conversation.message';
+	
+	/**
+	 * @inheritDoc
+	 */
 	public $neededModules = ['MODULE_CONVERSATION'];
 	
 	/**
