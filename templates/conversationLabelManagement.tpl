@@ -2,7 +2,7 @@
 	<section class="section">
 		<header class="sectionHeader">
 			<h2 class="sectionTitle">{lang}wcf.conversation.label.management.existingLabels{/lang}</h2>
-			<small class="sectionDescription">{lang}wcf.conversation.label.management.edit.description{/lang}</small>
+			<p class="sectionDescription">{lang}wcf.conversation.label.management.edit.description{/lang}</p>
 		</header>
 		<ul class="conversationLabelList">
 			{content}
