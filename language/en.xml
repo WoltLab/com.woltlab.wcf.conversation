@@ -5,9 +5,9 @@
 		<item name="wcf.acp.group.option.mod.conversation.canModerateConversation"><![CDATA[Can moderate conversations]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canUseConversation"><![CDATA[Can use conversations]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canSetCanInvite"><![CDATA[Can grant permissions]]></item>
-		<item name="wcf.acp.group.option.user.conversation.canSetCanInvite.description"><![CDATA[While creating a new conversation, users of this group can grant added participants the permission to add new participants. Changes do not affect existing conversations.]]></item>
+		<item name="wcf.acp.group.option.user.conversation.canSetCanInvite.description"><![CDATA[While creating a conversation, users can grant added participants the permission to add new participants. Changes do not affect existing conversations.]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canAddInvisibleParticipants"><![CDATA[Can add invisible participants]]></item>
-		<item name="wcf.acp.group.option.user.conversation.canAddInvisibleParticipants.description"><![CDATA[While creating a new conversation, users of this group can add invisible participants. Changes do not affect existing conversations.]]></item>
+		<item name="wcf.acp.group.option.user.conversation.canAddInvisibleParticipants.description"><![CDATA[While creating a conversation, users can add invisible participants. Changes do not affect existing conversations.]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxParticipants"><![CDATA[Maximum Participants]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxParticipants.description"><![CDATA[The maximum number of participants allowed per conversation.]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxConversations"><![CDATA[Maximum Conversations]]></item>
@@ -20,16 +20,16 @@
 		<item name="wcf.acp.group.option.user.conversation.allowedAttachmentExtensions.description"><![CDATA[Enter one extension per line.]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxAttachmentCount"><![CDATA[Maximum Attachments per Message]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxAttachmentCount.description"><![CDATA[The maximum number of attachments allowed per message.]]></item>
-		<item name="wcf.acp.group.option.user.conversation.canEditMessage"><![CDATA[Can edit their own messages]]></item>
-		<item name="wcf.acp.group.option.user.conversation.canEditMessage.description"><![CDATA[Users of this user group can edit their own messages, regardless if they have been read by one or more receipients.]]></item>
+		<item name="wcf.acp.group.option.user.conversation.canEditMessage"><![CDATA[Can edit their messages]]></item>
+		<item name="wcf.acp.group.option.user.conversation.canEditMessage.description"><![CDATA[Users can edit their messages, regardless if they have been read by one or more recipients.]]></item>
 	</category>
 	
 	<category name="wcf.acp.option">
 		<item name="wcf.acp.option.category.message.conversation"><![CDATA[Conversations]]></item>
 		<item name="wcf.acp.option.conversation_list_default_sort_field"><![CDATA[Sort by]]></item>
-		<item name="wcf.acp.option.conversation_list_default_sort_field.description"><![CDATA[You can sort the conversations by one of the following options.]]></item>
+		<item name="wcf.acp.option.conversation_list_default_sort_field.description"><![CDATA[Choose default sort option of the conversations.]]></item>
 		<item name="wcf.acp.option.conversation_list_default_sort_order"><![CDATA[Sort Order]]></item>
-		<item name="wcf.acp.option.conversation_list_default_sort_order.description"><![CDATA[The default sort order for the conversations.]]></item>
+		<item name="wcf.acp.option.conversation_list_default_sort_order.description"><![CDATA[Choose default sort order of the conversations.]]></item>
 		<item name="wcf.acp.option.conversation_messages_per_page"><![CDATA[Messages per Page]]></item>
 		<item name="wcf.acp.option.conversations_per_page"><![CDATA[Conversations per Page]]></item>
 		<item name="wcf.acp.option.module_conversation"><![CDATA[Conversations]]></item>
@@ -73,14 +73,14 @@
 		<item name="wcf.conversation.folder.outbox"><![CDATA[Started]]></item>
 		<item name="wcf.conversation.hideConversation"><![CDATA[Manage Participation]]></item>
 		<item name="wcf.conversation.hideConversation.leave"><![CDATA[Hide]]></item>
-		<item name="wcf.conversation.hideConversation.leave.description"><![CDATA[The conversation will no longer be listed as an active conversation, until a new message is written to it.]]></item>
+		<item name="wcf.conversation.hideConversation.leave.description"><![CDATA[The conversation will no longer be listed as an active conversation until a new message is written to it.]]></item>
 		<item name="wcf.conversation.hideConversation.leavePermanently"><![CDATA[Leave]]></item>
 		<item name="wcf.conversation.hideConversation.leavePermanently.description"><![CDATA[After leaving the conversation, you will no longer be listed as an active participant.]]></item>
 		<item name="wcf.conversation.hideConversation.restore"><![CDATA[Mark as Active]]></item>
 		<item name="wcf.conversation.information"><![CDATA[Details]]></item>
 		<item name="wcf.conversation.invisible"><![CDATA[invisible]]></item>
 		<item name="wcf.conversation.invisibleParticipants"><![CDATA[Invisible Participants]]></item>
-		<item name="wcf.conversation.invisibleParticipants.description"><![CDATA[Invisible participants remain invisible to other participants until they write a message. Multiple participants should be separated with a comma.]]></item>
+		<item name="wcf.conversation.invisibleParticipants.description"><![CDATA[Invisible participants remain invisible to other participants until they write a message. Separate multiple participants with a comma.]]></item>
 		<item name="wcf.conversation.lastPostTime"><![CDATA[Last Reply]]></item>
 		<item name="wcf.conversation.lastVisitTime"><![CDATA[Last Visited]]></item>
 		<item name="wcf.conversation.leave.title"><![CDATA[Manage Participation]]></item>
@@ -90,21 +90,21 @@
 		<item name="wcf.conversation.message.add.previousPosts"><![CDATA[Previous message{if $items != 1}s{/if}]]></item>
 		<item name="wcf.conversation.message.button.add"><![CDATA[Reply]]></item>
 		<item name="wcf.conversation.message.edit"><![CDATA[Edit Message]]></item>
-		<item name="wcf.conversation.noConversations"><![CDATA[There are no conversations matching your criteria.]]></item>
-		<item name="wcf.conversation.noMoreItems"><![CDATA[No recent conversations.]]></item>
+		<item name="wcf.conversation.noConversations"><![CDATA[There are not any conversations at the moment.]]></item>
+		<item name="wcf.conversation.noMoreItems"><![CDATA[You have no recent conversations.]]></item>
 		<item name="wcf.conversation.participantCanInvite"><![CDATA[Participants can add new participants]]></item>
 		<item name="wcf.conversation.participants"><![CDATA[Participants]]></item>
-		<item name="wcf.conversation.participants.description"><![CDATA[Multiple participants should be separated with a comma.]]></item>
-		<item name="wcf.conversation.participants.error.mailboxIsFull"><![CDATA[{$errorData[username]} has reached the maximum conversation limit and cannot participate in a new one.]]></item>
-		<item name="wcf.conversation.participants.error.notFound"><![CDATA[Username {$errorData[username]} does not exist.]]></item>
+		<item name="wcf.conversation.participants.description"><![CDATA[Separate multiple participants with a comma.]]></item>
+		<item name="wcf.conversation.participants.error.mailboxIsFull"><![CDATA[{$errorData[username]} is already participating in too many conversations and cannot be added.]]></item>
+		<item name="wcf.conversation.participants.error.notFound"><![CDATA[The username {$errorData[username]} does not exist.]]></item>
 		<item name="wcf.conversation.participants.error.isAuthor"><![CDATA[You are already a participant of this conversation.]]></item>
 		<item name="wcf.conversation.participants.error.duplicate"><![CDATA[{$errorData[username]} is already a participant of this conversation.]]></item>
 		<item name="wcf.conversation.participants.error.canNotUseConversation"><![CDATA[{$errorData[username]} is not allowed to participate in a conversation.]]></item>
 		<item name="wcf.conversation.participants.error.doesNotAcceptConversation"><![CDATA[{$errorData[username]} does not want to be added to conversations.]]></item>
 		<item name="wcf.conversation.participants.error.ignoresYou"><![CDATA[{$errorData[username]} is blocking you.]]></item>
-		<item name="wcf.conversation.participants.error.tooManyParticipants"><![CDATA[You have added too many participants. You may add up to {#$__wcf->getSession()->getPermission('user.conversation.maxParticipants')} participants.]]></item>
-		<item name="wcf.conversation.participants.error.invisibleParticipantsNoPermission"><![CDATA[You don't have the permission to add invisible participants.]]></item>
-		<item name="wcf.conversation.participants.error.participantCanInviteNoPermission"><![CDATA[You don't have the permission to allow participants to add new participants.]]></item>
+		<item name="wcf.conversation.participants.error.tooManyParticipants"><![CDATA[You have added too many participants, you can add up to {#$__wcf->getSession()->getPermission('user.conversation.maxParticipants')} participants.]]></item>
+		<item name="wcf.conversation.participants.error.invisibleParticipantsNoPermission"><![CDATA[You do not have the permission to add invisible participants.]]></item>
+		<item name="wcf.conversation.participants.error.participantCanInviteNoPermission"><![CDATA[You do not have the permission to allow participants to add new participants.]]></item>
 		<item name="wcf.conversation.participants.removeParticipant"><![CDATA[Remove Participant]]></item>
 		<item name="wcf.conversation.participants.removeParticipant.confirmMessage"><![CDATA[Do you really want to remove {$participant->username} from this conversation?]]></item>
 		<item name="wcf.conversation.quota"><![CDATA[Quota]]></item>
@@ -116,10 +116,10 @@
 		<item name="wcf.conversation.searchConversations"><![CDATA[Search Conversations]]></item>
 		<item name="wcf.conversation.participants.other"><![CDATA[and {if $conversation->participants - $participantSummaryCount == 1}one other{else}{#$conversation->participants-$participantSummaryCount} others{/if}]]></item>
 		<item name="wcf.conversation.attachments"><![CDATA[Conversation contains {#$conversation->attachments} attachment{if $conversation->attachments != 1}s{/if}]]></item>
-		<item name="wcf.conversation.error.mailboxIsFull"><![CDATA[You have reached your maximum limit of conversations and are unable to start new ones.]]></item>
+		<item name="wcf.conversation.error.mailboxIsFull"><![CDATA[You have reached your maximum conversations limit and cannot start new conversations.]]></item>
 		<item name="wcf.conversation.markAllAsRead"><![CDATA[Mark All Conversations Read]]></item>
 		<item name="wcf.conversation.message.editNote"><![CDATA[{$message->username} edited this message {#$message->editCount} times, last: {@$message->lastEditTime|time}.]]></item>
-		<item name="wcf.conversation.noParticipantsWarning"><![CDATA[You’re about to reply to a conversation without other participants, all other participants have already left this conversation. Nobody is going to read your message!]]></item>
+		<item name="wcf.conversation.noParticipantsWarning"><![CDATA[You are about to reply to a conversation without other participants, nobody is going to read your message!]]></item>
 		<item name="wcf.conversation.message.permalink"><![CDATA[Permalink to {#$startIndex}. message]]></item>
 		<item name="wcf.conversation.markAsRead.doubleClick"><![CDATA[Double-Click to Mark This Conversation Read]]></item>
 	</category>
@@ -205,8 +205,8 @@
 ---------------------------------
 {/if}{link controller='Conversation' object=$conversation isEmail=true}{/link}]]></item>
 		<item name="wcf.user.notification.com.woltlab.wcf.conversation"><![CDATA[Conversations]]></item>
-		<item name="wcf.user.notification.com.woltlab.wcf.conversation.notification.conversation"><![CDATA[Notify when I receive new conversations]]></item>
-		<item name="wcf.user.notification.com.woltlab.wcf.conversation.message.notification.conversationMessage"><![CDATA[Notify when I receive replies to existing conversations]]></item>
+		<item name="wcf.user.notification.com.woltlab.wcf.conversation.notification.conversation"><![CDATA[Notify me of new conversations]]></item>
+		<item name="wcf.user.notification.com.woltlab.wcf.conversation.message.notification.conversationMessage"><![CDATA[Notify me of new replies in conversations]]></item>
 	</category>
 	
 	<category name="wcf.user.option">
