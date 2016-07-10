@@ -22,6 +22,7 @@
 			<name language="en"><![CDATA[Conversation]]></name>
 			<pageType>system</pageType>
 			<requireObjectID>1</requireObjectID>
+			<hasFixedParent>1</hasFixedParent>
 			<parent>com.woltlab.wcf.conversation.ConversationList</parent>
 		</page>
 		<page identifier="com.woltlab.wcf.conversation.ConversationAdd">
@@ -29,6 +30,7 @@
 			<name language="de"><![CDATA[Konversation starten]]></name>
 			<name language="en"><![CDATA[New Conversation]]></name>
 			<pageType>system</pageType>
+			<hasFixedParent>1</hasFixedParent>
 			<parent>com.woltlab.wcf.conversation.ConversationList</parent>
 			
 			<content language="en">

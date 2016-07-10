@@ -59,9 +59,6 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	 * @inheritDoc
 	 */
 	public function getFormattedMessage() {
-		// assign embedded objects
-		MessageEmbeddedObjectManager::getInstance()->setActiveMessage('com.woltlab.wcf.conversation.message', $this->messageID);
-		
 		$processor = new HtmlOutputProcessor();
 		$processor->process($this->message, 'com.woltlab.wcf.conversation.message', $this->messageID);
 		
