@@ -2,7 +2,7 @@
 	{assign var=__modificationLogEntries value=$modificationLogList->getEntriesUntil($__modificationLogTime)}
 	{foreach from=$__modificationLogEntries item=modificationLogEntry}
 		<li class="jsModificationLogEntry">
-			<article class="message">
+			<article class="message messageReduced">
 				<div class="messageContent">
 					<div class="messageHeader">
 						<div class="box32 messageHeaderWrapper">
