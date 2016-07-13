@@ -56,7 +56,7 @@
 		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.markAsRead.confirmMessage"><![CDATA[Wollen Sie die {if $count == 1}markierte Konversation{else}markierten Konversationen{/if} wirklich als gelesen markieren?]]></item>
 		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.open"><![CDATA[Öffnen ({#$count})]]></item>
 		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.restore"><![CDATA[Als aktiv markieren ({#$count})]]></item>
-		<item name="wcf.clipboard.label.com.woltlab.wcf.conversation.conversation.marked"><![CDATA[{if $count == 1}Eine Konversation{else}{#$count} Konversationen{/if} markiert]]></item>
+		<item name="wcf.clipboard.label.com.woltlab.wcf.conversation.conversation.marked"><![CDATA[{if $count == 1}Eine Konversation{else}{#$count} Konversationen{/if}]]></item>
 	</category>
 	
 	<category name="wcf.conversation">
