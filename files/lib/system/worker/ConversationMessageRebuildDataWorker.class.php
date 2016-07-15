@@ -71,7 +71,7 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker {
 		$attachmentStatement = WCF::getDB()->prepareStatement($sql);
 		
 		foreach ($this->objectList as $message) {
-			SearchIndexManager::getInstance()->add('com.woltlab.wcf.conversation.message', $message->messageID, $message->message, ($message->subject ?: ''), $message->time, $message->userID, $message->username);
+			SearchIndexManager::getInstance()->set('com.woltlab.wcf.conversation.message', $message->messageID, $message->message, ($message->subject ?: ''), $message->time, $message->userID, $message->username);
 			
 			$editor = new ConversationMessageEditor($message);
 			$data = [];

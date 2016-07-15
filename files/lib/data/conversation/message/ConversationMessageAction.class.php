@@ -144,7 +144,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		UserStorageHandler::getInstance()->reset($conversation->getParticipantIDs(), 'unreadConversationCount');
 		
 		// update search index
-		SearchIndexManager::getInstance()->add('com.woltlab.wcf.conversation.message', $message->messageID, $message->message, (!empty($this->parameters['isFirstPost']) ? $conversation->subject : ''), $message->time, $message->userID, $message->username);
+		SearchIndexManager::getInstance()->set('com.woltlab.wcf.conversation.message', $message->messageID, $message->message, (!empty($this->parameters['isFirstPost']) ? $conversation->subject : ''), $message->time, $message->userID, $message->username);
 		
 		// update attachments
 		if (isset($this->parameters['attachmentHandler']) && $this->parameters['attachmentHandler'] !== null) {
@@ -189,7 +189,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		if (isset($this->parameters['data']) && isset($this->parameters['data']['message'])) {
 			foreach ($this->getObjects() as $message) {
 				$conversation = $message->getConversation();
-				SearchIndexManager::getInstance()->update('com.woltlab.wcf.conversation.message', $message->messageID, $this->parameters['data']['message'], ($conversation->firstMessageID == $message->messageID ? $conversation->subject : ''), $message->time, $message->userID, $message->username);
+				SearchIndexManager::getInstance()->set('com.woltlab.wcf.conversation.message', $message->messageID, $this->parameters['data']['message'], ($conversation->firstMessageID == $message->messageID ? $conversation->subject : ''), $message->time, $message->userID, $message->username);
 				
 				if (!empty($this->parameters['htmlInputProcessor'])) {
 					if ($message->hasEmbeddedObjects != MessageEmbeddedObjectManager::getInstance()->registerObjects($this->parameters['htmlInputProcessor'])) {
