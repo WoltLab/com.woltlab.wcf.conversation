@@ -96,11 +96,11 @@
 		<item name="wcf.conversation.participants"><![CDATA[Participants]]></item>
 		<item name="wcf.conversation.participants.description"><![CDATA[Separate multiple participants with a comma.]]></item>
 		<item name="wcf.conversation.participants.error.mailboxIsFull"><![CDATA[{$errorData[username]} is already participating in too many conversations and cannot be added.]]></item>
-		<item name="wcf.conversation.participants.error.notFound"><![CDATA[The username {$errorData[username]} does not exist.]]></item>
+		<item name="wcf.conversation.participants.error.notFound"><![CDATA[The username “{$errorData[username]}” does not exist.]]></item>
 		<item name="wcf.conversation.participants.error.isAuthor"><![CDATA[You are already a participant of this conversation.]]></item>
 		<item name="wcf.conversation.participants.error.duplicate"><![CDATA[{$errorData[username]} is already a participant of this conversation.]]></item>
 		<item name="wcf.conversation.participants.error.canNotUseConversation"><![CDATA[{$errorData[username]} is not allowed to participate in a conversation.]]></item>
-		<item name="wcf.conversation.participants.error.doesNotAcceptConversation"><![CDATA[{$errorData[username]} does not want to be added to conversations.]]></item>
+		<item name="wcf.conversation.participants.error.doesNotAcceptConversation"><![CDATA[{$errorData[username]} does not want to be added in conversations.]]></item>
 		<item name="wcf.conversation.participants.error.ignoresYou"><![CDATA[{$errorData[username]} is blocking you.]]></item>
 		<item name="wcf.conversation.participants.error.tooManyParticipants"><![CDATA[You have added too many participants, you can add up to {#$__wcf->getSession()->getPermission('user.conversation.maxParticipants')} participants.]]></item>
 		<item name="wcf.conversation.participants.error.invisibleParticipantsNoPermission"><![CDATA[You do not have the permission to add invisible participants.]]></item>
