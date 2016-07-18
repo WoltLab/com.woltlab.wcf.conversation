@@ -7,7 +7,6 @@ use wcf\data\IMessage;
 use wcf\data\TUserContent;
 use wcf\system\bbcode\MessageParser;
 use wcf\system\html\output\HtmlOutputProcessor;
-use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
 use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
 use wcf\util\StringUtil;

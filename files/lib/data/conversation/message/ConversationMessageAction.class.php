@@ -27,7 +27,6 @@ use wcf\system\user\notification\object\ConversationMessageUserNotificationObjec
 use wcf\system\user\notification\UserNotificationHandler;
 use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\WCF;
-use wcf\util\MessageUtil;
 use wcf\util\StringUtil;
 
 /**
