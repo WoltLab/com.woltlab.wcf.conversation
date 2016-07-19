@@ -2,23 +2,23 @@
  * Adds participants to an existing conversation.
  * 
  * @author	Alexander Ebert
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @module	WoltLab/Conversation/Ui/Participant/Add
  */
-define(['Ajax', 'Language', 'Ui/Dialog', 'WoltLab/WCF/Ui/ItemList/User'], function(Ajax, Language, UiDialog, UiItemListUser) {
+define(['Ajax', 'Language', 'Ui/Dialog', 'Ui/Notification', 'WoltLab/WCF/Ui/ItemList/User'], function(Ajax, Language, UiDialog, UiNotification, UiItemListUser) {
 	"use strict";
 	
 	/**
 	 * @constructor
-	 * @param	{integer}	conversationId		conversation id
+	 * @param	{int}   conversationId		conversation id
 	 */
-	function UiParticipantAdd(conversationId) { this.init(conversationId); };
+	function UiParticipantAdd(conversationId) { this.init(conversationId); }
 	UiParticipantAdd.prototype = {
 		/**
 		 * Manages the form to add one or more participants to an existing conversation.
 		 * 
-		 * @param	{integer}	conversationId		conversation id
+		 * @param	{int}   conversationId          conversation id
 		 */
 		init: function(conversationId) {
 			this._conversationId = conversationId;
@@ -40,7 +40,7 @@ define(['Ajax', 'Language', 'Ui/Dialog', 'WoltLab/WCF/Ui/ItemList/User'], functi
 		/**
 		 * Handles successful Ajax requests.
 		 * 
-		 * @param	{object}	data		response data
+		 * @param	{Object}	data		response data
 		 */
 		_ajaxSuccess: function(data) {
 			switch (data.actionName) {
@@ -57,12 +57,13 @@ define(['Ajax', 'Language', 'Ui/Dialog', 'WoltLab/WCF/Ui/ItemList/User'], functi
 		/**
 		 * Shows the success message and closes the dialog overlay.
 		 * 
-		 * @param	{object}	data		response data
+		 * @param	{Object}	data		response data
 		 */
 		_handleResponse: function(data) {
+			//noinspection JSUnresolvedVariable
 			if (data.returnValues.count) {
-				// TODO
-				new WCF.System.Notification(data.returnValues.successMessage).show();
+				//noinspection JSUnresolvedVariable
+				UiNotification.show(data.returnValues.successMessage);
 			}
 			
 			UiDialog.close(this);
@@ -74,11 +75,13 @@ define(['Ajax', 'Language', 'Ui/Dialog', 'WoltLab/WCF/Ui/ItemList/User'], functi
 		 * @param	{object}	data		response data
 		 */
 		_render: function(data) {
+			//noinspection JSUnresolvedVariable
 			UiDialog.open(this, data.returnValues.template);
 			
 			var buttonSubmit = document.getElementById('addParticipants');
 			buttonSubmit.disabled = true;
 			
+			//noinspection JSUnresolvedVariable
 			UiItemListUser.init('participantsInput', {
 				callbackChange: function(elementId, values) { buttonSubmit.disabled = (values.length === 0); },
 				excludedSearchValues: data.returnValues.excludedSearchValues,

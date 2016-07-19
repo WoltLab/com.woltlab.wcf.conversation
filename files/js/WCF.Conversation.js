@@ -179,7 +179,7 @@ WCF.Conversation.EditorHandler = Class.extend({
 					// insert labels
 					for (var $i = 0, $length = data.length; $i < $length; $i++) {
 						var $label = $labels[data[$i]];
-						$('<li><a href="' + $label.url + '" class="badge label' + ($label.cssClassName ? " " + $label.cssClassName : "") + '">' + WCF.String.escapeHTML($label.label) + '</a>&nbsp;</li>').appendTo($labelList);
+						$('<li><a href="' + $label.url + '" class="badge label' + ($label.cssClassName ? " " + $label.cssClassName : "") + '">' + WCF.String.escapeHTML($label.label) + '</a></li>').appendTo($labelList);
 					}
 				}
 			break;
@@ -241,46 +241,43 @@ WCF.Conversation.EditorHandlerConversation = WCF.Conversation.EditorHandler.exte
 			return;
 		}
 		
+		var container = $('.contentHeaderTitle > .contentHeaderMetaData');
+		
 		switch (key) {
 			case 'close':
-				$('<span class="icon icon16 fa-lock jsTooltip jsIconLock" title="' + WCF.Language.get('wcf.global.state.closed') + '" />').appendTo($('#content > header > h1'));
+				$('<li><span class="icon icon16 fa-lock jsIconLock" /> ' + WCF.Language.get('wcf.global.state.closed') + '</li>').appendTo(container);
 				
 				this._attributes[conversationID].isClosed = 1;
 			break;
 			
 			case 'labelIDs':
-				var $container = $('.conversationHeadline');
+				var labelList = container.find('.labelList');
 				if (!data.length) {
-					// remove all labels
-					$container.find('ul.labelList').remove();
+					labelList.parent().remove();
 				}
 				else {
-					var $labelList = $container.find('ul.labelList');
-					if (!$labelList.length) {
-						$labelList = $('<ul class="labelList" />').appendTo($container);
+					var availableLabels = this.getAvailableLabels();
+					
+					if (!labelList.length) {
+						labelList = $('<li><span class="icon icon16 fa-tags"></span> <ul class="labelList"></ul></li>').prependTo(container);
+						labelList = labelList.children('ul');
 					}
 					
-					// remove existing labels
-					$labelList.empty();
-					
-					// add new labels
-					for (var $i = 0, $length = data.length; $i < $length; $i++) {
-						var $labelID = data[$i];
-						
-						for (var $j = 0, $innerLength = this.getAvailableLabels().length; $j < $innerLength; $j++) {
-							var $label = this.getAvailableLabels()[$j];
-							if ($label.labelID == $labelID) {
-								$('<li><span class="label badge' + ($label.cssClassName ? " " + $label.cssClassName : "") + '">' + $label.label + '</span>&nbsp;</li>').appendTo($labelList);
-								
-								break;
+					var html = '';
+					data.forEach(function(labelId) {
+						availableLabels.forEach(function(label) {
+							if (label.labelID == labelId) {
+								html += '<li><span class="label badge' + (label.cssClassName ? ' ' + label.cssClassName : '') + '">' + label.label + '</span></li>';
 							}
-						}
-					}
+						});
+					});
+					
+					labelList[0].innerHTML = html;
 				}
 			break;
 			
 			case 'open':
-				$('#content > header span.jsIconLock').remove();
+				container.find('.jsIconLock').parent().remove();
 				
 				this._attributes[conversationID].isClosed = 0;
 			break;
@@ -301,33 +298,29 @@ WCF.Conversation.Clipboard = Class.extend({
 	/**
 	 * Initializes a new WCF.Conversation.Clipboard object.
 	 * 
-	 * @param	WCF.Conversation.EditorHandler	editorHandler
+	 * @param	{WCF.Conversation.EditorHandler}	editorHandler
 	 */
 	init: function(editorHandler) {
 		this._editorHandler = editorHandler;
 		
-		// bind listener
-		$('.jsClipboardEditor').each($.proxy(function(index, container) {
-			var $container = $(container);
-			var $types = eval($container.data('types'));
-			if (WCF.inArray('com.woltlab.wcf.conversation.conversation', $types)) {
-				$container.on('clipboardAction', $.proxy(this._execute, this));
-				$container.on('clipboardActionResponse', $.proxy(this._evaluateResponse, this));
-				return false;
+		WCF.System.Event.addListener('com.woltlab.wcf.clipboard', 'com.woltlab.wcf.conversation.conversation', (function (data) {
+			if (data.responseData === null) {
+				this._execute(data.data.actionName, data.data.parameters);
 			}
-		}, this));
+			else {
+				this._evaluateResponse(data.data.actionName, data.responseData);
+			}
+		}).bind(this));
 	},
 	
 	/**
 	 * Handles clipboard actions.
 	 * 
-	 * @param	object		event
-	 * @param	string		type
-	 * @param	string		actionName
-	 * @param	object		parameters
+	 * @param	{string}	actionName
+	 * @param	{Object}	parameters
 	 */
-	_execute: function(event, type, actionName, parameters) {
-		if (type === 'com.woltlab.wcf.conversation.conversation' && actionName === 'com.woltlab.wcf.conversation.conversation.assignLabel') {
+	_execute: function(actionName, parameters) {
+		if (actionName === 'com.woltlab.wcf.conversation.conversation.assignLabel') {
 			new WCF.Conversation.Label.Editor(this._editorHandler, null, parameters.objectIDs);
 		}
 	},
@@ -335,18 +328,10 @@ WCF.Conversation.Clipboard = Class.extend({
 	/**
 	 * Evaluates AJAX responses.
 	 * 
-	 * @param	object		event
-	 * @param	object		data
-	 * @param	string		type
-	 * @param	string		actionName
-	 * @param	object		parameters
+	 * @param	{Object}	data
+	 * @param	{string}	actionName
 	 */
-	_evaluateResponse: function(event, data, type, actionName, parameters) {
-		if (type !== 'com.woltlab.wcf.conversation.conversation') {
-			// ignore unreleated events
-			return;
-		}
-		
+	_evaluateResponse: function(actionName, data) {
 		switch (actionName) {
 			case 'com.woltlab.wcf.conversation.conversation.leave':
 			case 'com.woltlab.wcf.conversation.conversation.leavePermanently':
@@ -357,10 +342,15 @@ WCF.Conversation.Clipboard = Class.extend({
 			
 			case 'com.woltlab.wcf.conversation.conversation.close':
 			case 'com.woltlab.wcf.conversation.conversation.open':
-				for (var $conversationID in data.returnValues.conversationData) {
-					var $data = data.returnValues.conversationData[$conversationID];
-					
-					this._editorHandler.update($conversationID, ($data.isClosed ? 'close' : 'open'), $data);
+				//noinspection JSUnresolvedVariable
+				for (var conversationId in data.returnValues.conversationData) {
+					//noinspection JSUnresolvedVariable
+					if (data.returnValues.conversationData.hasOwnProperty(conversationId)) {
+						//noinspection JSUnresolvedVariable
+						var $data = data.returnValues.conversationData[conversationId];
+						
+						this._editorHandler.update(conversationId, ($data.isClosed ? 'close' : 'open'), $data);
+					}
 				}
 			break;
 		}
