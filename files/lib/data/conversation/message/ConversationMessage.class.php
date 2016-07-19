@@ -26,10 +26,7 @@ use wcf\util\StringUtil;
  * @property-read	string		$message
  * @property-read	integer		$time
  * @property-read	integer		$attachments
- * @property-read	integer		$enableSmilies
  * @property-read	integer		$enableHtml
- * @property-read	integer		$enableBBCodes
- * @property-read	integer		$showSignature
  * @property-read	string		$ipAddress
  * @property-read	integer		$lastEditTime
  * @property-read	integer		$editCount
@@ -70,8 +67,11 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	 * @return	string
 	 */
 	public function getSimplifiedFormattedMessage() {
-		MessageParser::getInstance()->setOutputType('text/simplified-html');
-		return MessageParser::getInstance()->parse($this->message, $this->enableSmilies, $this->enableHtml, $this->enableBBCodes);
+		$processor = new HtmlOutputProcessor();
+		$processor->setOutputType('text/simplified-html');
+		$processor->process($this->message, 'com.woltlab.wcf.conversation.message', $this->messageID);
+		
+		return $processor->getHtml();
 	}
 	
 	/**
@@ -113,10 +113,7 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	 * @return	string
 	 */
 	public function getMailText() {
-		MessageParser::getInstance()->setOutputType('text/simplified-html');
-		$message = MessageParser::getInstance()->parse($this->message, $this->enableSmilies, $this->enableHtml, $this->enableBBCodes);
-		
-		return MessageParser::getInstance()->stripHTML($message);
+		return MessageParser::getInstance()->stripHTML($this->getSimplifiedFormattedMessage());
 	}
 	
 	/**
