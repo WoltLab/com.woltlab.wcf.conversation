@@ -68,6 +68,8 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 * @return	ConversationMessage
 	 */
 	public function create() {
+		if (!isset($this->parameters['data']['enableHtml'])) $this->parameters['data']['enableHtml'] = 1;
+		
 		// count attachments
 		if (isset($this->parameters['attachmentHandler']) && $this->parameters['attachmentHandler'] !== null) {
 			$this->parameters['data']['attachments'] = count($this->parameters['attachmentHandler']);
@@ -153,6 +155,9 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		
 		// save embedded objects
 		if (!empty($this->parameters['htmlInputProcessor'])) {
+			/** @noinspection PhpUndefinedMethodInspection */
+			$this->parameters['htmlInputProcessor']->setObjectID($message->messageID);
+			
 			if (MessageEmbeddedObjectManager::getInstance()->registerObjects($this->parameters['htmlInputProcessor'])) {
 				$messageEditor->update(['hasEmbeddedObjects' => 1]);
 			}
@@ -191,6 +196,9 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 				SearchIndexManager::getInstance()->set('com.woltlab.wcf.conversation.message', $message->messageID, $this->parameters['data']['message'], ($conversation->firstMessageID == $message->messageID ? $conversation->subject : ''), $message->time, $message->userID, $message->username);
 				
 				if (!empty($this->parameters['htmlInputProcessor'])) {
+					/** @noinspection PhpUndefinedMethodInspection */
+					$this->parameters['htmlInputProcessor']->setObjectID($message->messageID);
+					
 					if ($message->hasEmbeddedObjects != MessageEmbeddedObjectManager::getInstance()->registerObjects($this->parameters['htmlInputProcessor'])) {
 						$message->update(['hasEmbeddedObjects' => ($message->hasEmbeddedObjects ? 0 : 1)]);
 					}
