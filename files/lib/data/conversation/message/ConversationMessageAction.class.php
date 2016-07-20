@@ -256,7 +256,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 * @inheritDoc
 	 */
 	public function validateQuickReply() {
-		QuickReplyManager::getInstance()->setAllowedBBCodes(explode(',', WCF::getSession()->getPermission('user.message.allowedBBCodes')));
+		QuickReplyManager::getInstance()->setDisallowedBBCodes(explode(',', WCF::getSession()->getPermission('user.message.disallowedBBCodes')));
 		QuickReplyManager::getInstance()->validateParameters($this, $this->parameters, Conversation::class);
 	}
 	
@@ -351,14 +351,14 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		if (!$this->message->canEdit()) {
 			throw new PermissionDeniedException();
 		}
+		
+		BBCodeHandler::getInstance()->setDisallowedBBCodes(explode(',', WCF::getSession()->getPermission('user.message.disallowedBBCodes')));
 	}
 	
 	/**
 	 * @inheritDoc
 	 */
 	public function beginEdit() {
-		BBCodeHandler::getInstance()->setAllowedBBCodes(explode(',', WCF::getSession()->getPermission('user.message.allowedBBCodes')));
-		
 		WCF::getTPL()->assign([
 			'defaultSmilies' => SmileyCache::getInstance()->getCategorySmilies(),
 			'message' => $this->message,
@@ -485,12 +485,13 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 * @inheritDoc
 	 */
 	public function validateMessage(DatabaseObject $container, HtmlInputProcessor $htmlInputProcessor) {
-		/*if (mb_strlen($message) > WCF::getSession()->getPermission('user.conversation.maxLength')) {
+		$message = $htmlInputProcessor->getTextContent();
+		if (mb_strlen($message) > WCF::getSession()->getPermission('user.conversation.maxLength')) {
 			throw new UserInputException('message', WCF::getLanguage()->getDynamicVariable('wcf.message.error.tooLong', ['maxTextLength' => WCF::getSession()->getPermission('user.conversation.maxLength')]));
 		}
 		
 		// search for disallowed bbcodes
-		$disallowedBBCodes = BBCodeParser::getInstance()->validateBBCodes($message, explode(',', WCF::getSession()->getPermission('user.message.allowedBBCodes')));
+		$disallowedBBCodes = $htmlInputProcessor->validate();
 		if (!empty($disallowedBBCodes)) {
 			throw new UserInputException('text', WCF::getLanguage()->getDynamicVariable('wcf.message.error.disallowedBBCodes', ['disallowedBBCodes' => $disallowedBBCodes]));
 		}
@@ -501,7 +502,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			if ($result) {
 				throw new UserInputException('message', WCF::getLanguage()->getDynamicVariable('wcf.message.error.censoredWordsFound', ['censoredWords' => $result]));
 			}
-		}*/
+		}
 	}
 	
 	/**
