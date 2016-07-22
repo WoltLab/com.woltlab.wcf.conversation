@@ -2,7 +2,7 @@
 namespace wcf\form;
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationAction;
-use wcf\data\user\UserProfile;
+use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\conversation\ConversationHandler;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\NamedUserException;
@@ -99,7 +99,7 @@ class ConversationAddForm extends MessageForm {
 		
 		if (isset($_REQUEST['userID'])) {
 			$userID = intval($_REQUEST['userID']);
-			$user = UserProfile::getUserProfile($userID);
+			$user = UserProfileRuntimeCache::getInstance()->getObject($userID);
 			if ($user === null || $user->userID == WCF::getUser()->userID) {
 				throw new IllegalLinkException();
 			}

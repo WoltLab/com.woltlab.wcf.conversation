@@ -232,7 +232,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		
 		if (!empty($this->objectIDs)) {
 			// delete notifications
-			UserNotificationHandler::getInstance()->deleteNotifications('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', [], $this->objectIDs);
+			UserNotificationHandler::getInstance()->removeNotifications('com.woltlab.wcf.conversation.message.notification', $this->objectIDs);
 			
 			// update search index
 			SearchIndexManager::getInstance()->delete('com.woltlab.wcf.conversation.message', $this->objectIDs);
