@@ -31,7 +31,7 @@
 		
 		<templatelistener name="userProfileStartConversation">
 			<environment>user</environment>
-			<templatename>userHeader</templatename>
+			<templatename>user</templatename>
 			<eventname>menuInteraction</eventname>
 			<templatecode><![CDATA[{include file='__userProfileStartConversation'}]]></templatecode>
 		</templatelistener>
