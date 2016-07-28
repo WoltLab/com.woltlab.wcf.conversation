@@ -257,7 +257,7 @@ class ConversationPage extends MultipleLinkPage {
 			'permissionCanUseSmilies' => 'user.message.canUseSmilies'
 		]);
 		
-		BBCodeHandler::getInstance()->setAllowedBBCodes(explode(',', WCF::getSession()->getPermission('user.message.allowedBBCodes')));
+		BBCodeHandler::getInstance()->setDisallowedBBCodes(explode(',', WCF::getSession()->getPermission('user.message.disallowedBBCodes')));
 	}
 	
 	/**

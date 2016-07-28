@@ -1,5 +1,6 @@
+{capture assign='wysiwygSelector'}messageEditor{@$message->messageID}{/capture}
 <div class="messageInlineEditor">
-	<textarea id="messageEditor{@$message->messageID}" class="wysiwygTextarea"
+	<textarea id="{$wysiwygSelector}" class="wysiwygTextarea"
 	          data-autosave="com.woltlab.wcf.conversation.messageEdit-{@$message->messageID}"
 	          data-support-mention="true"
 	>{$message->message}</textarea>
@@ -8,6 +9,9 @@
 	
 	<div class="formSubmit">
 		<button class="buttonPrimary" data-type="save">{lang}wcf.global.button.submit{/lang}</button>
+		
+		{include file='messageFormPreviewButton' previewMessageFieldID=$wysiwygSelector previewButtonID=$wysiwygSelector|concat:'_PreviewButton' previewMessageObjectType='com.woltlab.wcf.conversation.message' previewMessageObjectID=$message->messageID}
+		
 		<button data-type="cancel">{lang}wcf.global.button.cancel{/lang}</button>
 	</div>
 	

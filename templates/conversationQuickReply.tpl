@@ -18,6 +18,7 @@
 			<footer class="messageFooter">
 				<div class="formSubmit">
 					<button class="buttonPrimary" data-type="save" accesskey="s">{lang}wcf.global.button.submit{/lang}</button>
+					{include file='messageFormPreviewButton' previewMessageObjectType='com.woltlab.wcf.conversation.message' previewMessageObjectID=0}
 				</div>
 			</footer>
 		</div>
