@@ -110,7 +110,12 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			if (!$conversation->isDraft) {
 				$notificationRecipients = array_diff($conversation->getParticipantIDs(true), [$message->userID]); // don't notify message author
 				if (!empty($notificationRecipients)) {
-					UserNotificationHandler::getInstance()->fireEvent('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', new ConversationMessageUserNotificationObject($message), $notificationRecipients);
+					UserNotificationHandler::getInstance()->fireEvent(
+						'conversationMessage',
+						'com.woltlab.wcf.conversation.message.notification',
+						new ConversationMessageUserNotificationObject($message),
+						$notificationRecipients
+					);
 				}
 			}
 			
@@ -145,7 +150,15 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		UserStorageHandler::getInstance()->reset($conversation->getParticipantIDs(), 'unreadConversationCount');
 		
 		// update search index
-		SearchIndexManager::getInstance()->set('com.woltlab.wcf.conversation.message', $message->messageID, $message->message, (!empty($this->parameters['isFirstPost']) ? $conversation->subject : ''), $message->time, $message->userID, $message->username);
+		SearchIndexManager::getInstance()->set(
+			'com.woltlab.wcf.conversation.message',
+			$message->messageID,
+			$message->message,
+			!empty($this->parameters['isFirstPost']) ? $conversation->subject : '',
+			$message->time,
+			$message->userID,
+			$message->username
+		);
 		
 		// update attachments
 		if (isset($this->parameters['attachmentHandler']) && $this->parameters['attachmentHandler'] !== null) {
@@ -193,7 +206,15 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		if (isset($this->parameters['data']) && isset($this->parameters['data']['message'])) {
 			foreach ($this->getObjects() as $message) {
 				$conversation = $message->getConversation();
-				SearchIndexManager::getInstance()->set('com.woltlab.wcf.conversation.message', $message->messageID, $this->parameters['data']['message'], ($conversation->firstMessageID == $message->messageID ? $conversation->subject : ''), $message->time, $message->userID, $message->username);
+				SearchIndexManager::getInstance()->set(
+					'com.woltlab.wcf.conversation.message',
+					$message->messageID,
+					$this->parameters['data']['message'],
+					$conversation->firstMessageID == $message->messageID ? $conversation->subject : '',
+					$message->time,
+					$message->userID,
+					$message->username
+				);
 				
 				if (!empty($this->parameters['htmlInputProcessor'])) {
 					/** @noinspection PhpUndefinedMethodInspection */
@@ -572,7 +593,12 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		);
 		
 		if ($quoteID === false) {
-			$removeQuoteID = MessageQuoteManager::getInstance()->getQuoteID('com.woltlab.wcf.conversation.message', $this->message->messageID, $this->message->getExcerpt(), $this->message->getMessage());
+			$removeQuoteID = MessageQuoteManager::getInstance()->getQuoteID(
+				'com.woltlab.wcf.conversation.message',
+				$this->message->messageID,
+				$this->message->getExcerpt(),
+				$this->message->getMessage()
+			);
 			MessageQuoteManager::getInstance()->removeQuote($removeQuoteID);
 		}
 		
@@ -605,7 +631,13 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 * @inheritDoc
 	 */
 	public function saveQuote() {
-		$quoteID = MessageQuoteManager::getInstance()->addQuote('com.woltlab.wcf.conversation.message', $this->message->conversationID, $this->message->messageID, $this->parameters['message'], false);
+		$quoteID = MessageQuoteManager::getInstance()->addQuote(
+			'com.woltlab.wcf.conversation.message',
+			$this->message->conversationID,
+			$this->message->messageID,
+			$this->parameters['message'],
+			false
+		);
 		
 		$returnValues = [
 			'count' => MessageQuoteManager::getInstance()->countQuotes(),

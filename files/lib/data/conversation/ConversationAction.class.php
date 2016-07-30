@@ -121,7 +121,12 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		if (!$conversation->isDraft) {
 			// fire notification event
 			$notificationRecipients = array_merge((!empty($this->parameters['participants']) ? $this->parameters['participants'] : []), (!empty($this->parameters['invisibleParticipants']) ? $this->parameters['invisibleParticipants'] : []));
-			UserNotificationHandler::getInstance()->fireEvent('conversation', 'com.woltlab.wcf.conversation.notification', new ConversationUserNotificationObject($conversation), $notificationRecipients);
+			UserNotificationHandler::getInstance()->fireEvent(
+				'conversation',
+				'com.woltlab.wcf.conversation.notification',
+				new ConversationUserNotificationObject($conversation),
+				$notificationRecipients
+			);
 		}
 		
 		return $conversation;
@@ -181,7 +186,12 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 					UserStorageHandler::getInstance()->reset($newParticipantIDs, 'conversationCount');
 					
 					// fire notification event
-					UserNotificationHandler::getInstance()->fireEvent('conversation', 'com.woltlab.wcf.conversation.notification', new ConversationUserNotificationObject($conversation->getDecoratedObject()), $newParticipantIDs);
+					UserNotificationHandler::getInstance()->fireEvent(
+						'conversation',
+						'com.woltlab.wcf.conversation.notification',
+						new ConversationUserNotificationObject($conversation->getDecoratedObject()),
+						$newParticipantIDs
+					);
 				}
 			}
 			
