@@ -221,7 +221,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 					$this->parameters['htmlInputProcessor']->setObjectID($message->messageID);
 					
 					if ($message->hasEmbeddedObjects != MessageEmbeddedObjectManager::getInstance()->registerObjects($this->parameters['htmlInputProcessor'])) {
-						$message->update(['hasEmbeddedObjects' => ($message->hasEmbeddedObjects ? 0 : 1)]);
+						$message->update(['hasEmbeddedObjects' => $message->hasEmbeddedObjects ? 0 : 1]);
 					}
 				}
 			}

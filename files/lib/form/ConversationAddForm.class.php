@@ -186,7 +186,7 @@ class ConversationAddForm extends MessageForm {
 			'time' => TIME_NOW,
 			'userID' => WCF::getUser()->userID,
 			'username' => WCF::getUser()->username,
-			'isDraft' => ($this->draft ? 1 : 0),
+			'isDraft' => $this->draft ? 1 : 0,
 			'participantCanInvite' => $this->participantCanInvite
 		]);
 		if ($this->draft) {

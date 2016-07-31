@@ -65,7 +65,7 @@ class ConversationEditor extends DatabaseObjectEditor {
 				".$conditions;
 			$statement = WCF::getDB()->prepareStatement($sql);
 			$statement->execute($conditions->getParameters());
-			while (($row = $statement->fetchArray())) {
+			while ($row = $statement->fetchArray()) {
 				$usernames[$row['userID']] = $row['username'];
 			}
 		}

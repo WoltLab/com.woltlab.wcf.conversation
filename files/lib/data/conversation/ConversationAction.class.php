@@ -107,8 +107,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			'data' => $messageData,
 			'conversation' => $conversation,
 			'isFirstPost' => true,
-			'attachmentHandler' => (isset($this->parameters['attachmentHandler']) ? $this->parameters['attachmentHandler'] : null),
-			'htmlInputProcessor' => (isset($this->parameters['htmlInputProcessor']) ? $this->parameters['htmlInputProcessor'] : null)
+			'attachmentHandler' => isset($this->parameters['attachmentHandler']) ? $this->parameters['attachmentHandler'] : null,
+			'htmlInputProcessor' => isset($this->parameters['htmlInputProcessor']) ? $this->parameters['htmlInputProcessor'] : null
 		]);
 		$resultValues = $messageAction->executeAction();
 		
@@ -542,7 +542,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 * Validates parameters to hide conversations.
 	 */
 	public function validateHideConversation() {
-		$this->parameters['hideConversation'] = (isset($this->parameters['hideConversation'])) ? intval($this->parameters['hideConversation']) : null;
+		$this->parameters['hideConversation'] = isset($this->parameters['hideConversation']) ? intval($this->parameters['hideConversation']) : null;
 		if ($this->parameters['hideConversation'] === null || !in_array($this->parameters['hideConversation'], [Conversation::STATE_DEFAULT, Conversation::STATE_HIDDEN, Conversation::STATE_LEFT])) {
 			throw new UserInputException('hideConversation');
 		}
@@ -859,7 +859,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		$statement->execute($conditionBuilder->getParameters());
 		
 		$objectIDs = [];
-		while (($row = $statement->fetchArray())) {
+		while ($row = $statement->fetchArray()) {
 			if (!$row['messages']) {
 				continue;
 			}

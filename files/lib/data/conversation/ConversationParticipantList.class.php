@@ -96,7 +96,7 @@ class ConversationParticipantList extends UserProfileList {
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute([$this->conversationID]);
 		$i = 0;
-		while (($row = $statement->fetchArray())) {
+		while ($row = $statement->fetchArray()) {
 			// create fake user profiles
 			$this->objects['x'.(++$i)] = UserProfile::getGuestUserProfile($row['username']);
 			$this->indexToObject[] = 'x'.$i;

@@ -135,7 +135,7 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 		}
 		
 		// validate conversation id
-		$this->parameters['conversationIDs'] = (isset($this->parameters['conversationIDs'])) ? ArrayUtil::toIntegerArray($this->parameters['conversationIDs']) : [];
+		$this->parameters['conversationIDs'] = isset($this->parameters['conversationIDs']) ? ArrayUtil::toIntegerArray($this->parameters['conversationIDs']) : [];
 		if (empty($this->parameters['conversationIDs'])) {
 			throw new UserInputException('conversationID');
 		}

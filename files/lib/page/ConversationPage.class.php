@@ -184,7 +184,7 @@ class ConversationPage extends MultipleLinkPage {
 		}
 		
 		// get participants
-		$this->participantList = new ConversationParticipantList($this->conversationID, WCF::getUser()->userID, ($this->conversation->userID == WCF::getUser()->userID));
+		$this->participantList = new ConversationParticipantList($this->conversationID, WCF::getUser()->userID, $this->conversation->userID == WCF::getUser()->userID);
 		$this->participantList->readObjects();
 		
 		// init quote objects

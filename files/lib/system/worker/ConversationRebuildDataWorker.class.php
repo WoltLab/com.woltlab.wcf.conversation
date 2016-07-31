@@ -145,7 +145,7 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 			// get participant summary
 			$participantStatement->execute([$conversation->conversationID, $conversation->userID, 0]);
 			$users = [];
-			while (($row = $participantStatement->fetchArray())) {
+			while ($row = $participantStatement->fetchArray()) {
 				$users[] = $row;
 			}
 			$data['participantSummary'] = serialize($users);

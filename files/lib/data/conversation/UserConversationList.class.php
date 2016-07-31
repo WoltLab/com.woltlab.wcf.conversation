@@ -62,7 +62,7 @@ class UserConversationList extends ConversationList {
 		}
 		else {
 			$this->getConditionBuilder()->add('conversation_to_user.participantID = ?', [$userID]);
-			$this->getConditionBuilder()->add('conversation_to_user.hideConversation = ?', [($this->filter == 'hidden' ? 1 : 0)]);
+			$this->getConditionBuilder()->add('conversation_to_user.hideConversation = ?', [$this->filter == 'hidden' ? 1 : 0]);
 			$this->sqlConditionJoins = "LEFT JOIN wcf".WCF_N."_conversation conversation ON (conversation.conversationID = conversation_to_user.conversationID)";
 			if ($this->filter == 'outbox') $this->getConditionBuilder()->add('conversation.userID = ?', [$userID]);
 		}
@@ -200,7 +200,7 @@ class UserConversationList extends ConversationList {
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute($conditions->getParameters());
 		$data = [];
-		while (($row = $statement->fetchArray())) {
+		while ($row = $statement->fetchArray()) {
 			if (!isset($data[$row['conversationID']])) {
 				$data[$row['conversationID']] = [];
 			}
