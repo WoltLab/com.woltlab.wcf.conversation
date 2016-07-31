@@ -4,8 +4,8 @@
 		<page identifier="com.woltlab.wcf.conversation.ConversationList">
 			<controller>wcf\page\ConversationListPage</controller>
 			<handler>wcf\system\page\handler\ConversationListPageHandler</handler>
-			<name language="de"><![CDATA[Konversationenliste]]></name>
-			<name language="en"><![CDATA[Conversation List]]></name>
+			<name language="de">Konversationenliste</name>
+			<name language="en">Conversation List</name>
 			<pageType>system</pageType>
 			
 			<content language="en">
@@ -18,8 +18,8 @@
 		<page identifier="com.woltlab.wcf.conversation.Conversation">
 			<controller>wcf\page\ConversationPage</controller>
 			<handler>wcf\system\page\handler\DefaultConversationRelatedPageHandler</handler>
-			<name language="de"><![CDATA[Konversation]]></name>
-			<name language="en"><![CDATA[Conversation]]></name>
+			<name language="de">Konversation</name>
+			<name language="en">Conversation</name>
 			<pageType>system</pageType>
 			<requireObjectID>1</requireObjectID>
 			<hasFixedParent>1</hasFixedParent>
@@ -27,8 +27,8 @@
 		</page>
 		<page identifier="com.woltlab.wcf.conversation.ConversationAdd">
 			<controller>wcf\form\ConversationAddForm</controller>
-			<name language="de"><![CDATA[Konversation starten]]></name>
-			<name language="en"><![CDATA[New Conversation]]></name>
+			<name language="de">Konversation starten</name>
+			<name language="en">New Conversation</name>
 			<pageType>system</pageType>
 			<hasFixedParent>1</hasFixedParent>
 			<parent>com.woltlab.wcf.conversation.ConversationList</parent>

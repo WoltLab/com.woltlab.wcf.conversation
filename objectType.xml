@@ -62,27 +62,27 @@
 		<type>
 			<name>com.woltlab.wcf.conversation</name>
 			<definitionname>com.woltlab.wcf.importer</definitionname>
-			<classname><![CDATA[wcf\system\importer\ConversationImporter]]></classname>
+			<classname>wcf\system\importer\ConversationImporter</classname>
 		</type>
 		<type>
 			<name>com.woltlab.wcf.conversation.label</name>
 			<definitionname>com.woltlab.wcf.importer</definitionname>
-			<classname><![CDATA[wcf\system\importer\ConversationLabelImporter]]></classname>
+			<classname>wcf\system\importer\ConversationLabelImporter</classname>
 		</type>
 		<type>
 			<name>com.woltlab.wcf.conversation.message</name>
 			<definitionname>com.woltlab.wcf.importer</definitionname>
-			<classname><![CDATA[wcf\system\importer\ConversationMessageImporter]]></classname>
+			<classname>wcf\system\importer\ConversationMessageImporter</classname>
 		</type>
 		<type>
 			<name>com.woltlab.wcf.conversation.user</name>
 			<definitionname>com.woltlab.wcf.importer</definitionname>
-			<classname><![CDATA[wcf\system\importer\ConversationUserImporter]]></classname>
+			<classname>wcf\system\importer\ConversationUserImporter</classname>
 		</type>
 		<type>
 			<name>com.woltlab.wcf.conversation.attachment</name>
 			<definitionname>com.woltlab.wcf.importer</definitionname>
-			<classname><![CDATA[wcf\system\importer\ConversationAttachmentImporter]]></classname>
+			<classname>wcf\system\importer\ConversationAttachmentImporter</classname>
 		</type>
 		<!-- /importers -->
 		
@@ -90,12 +90,12 @@
 		<type>
 			<name>com.woltlab.wcf.conversation</name>
 			<definitionname>com.woltlab.wcf.rebuildData</definitionname>
-			<classname><![CDATA[wcf\system\worker\ConversationRebuildDataWorker]]></classname>
+			<classname>wcf\system\worker\ConversationRebuildDataWorker</classname>
 		</type>
 		<type>
 			<name>com.woltlab.wcf.conversation.message</name>
 			<definitionname>com.woltlab.wcf.rebuildData</definitionname>
-			<classname><![CDATA[wcf\system\worker\ConversationMessageRebuildDataWorker]]></classname>
+			<classname>wcf\system\worker\ConversationMessageRebuildDataWorker</classname>
 			<nicevalue>-5</nicevalue>
 		</type>
 		<!-- /rebuild data workers -->
@@ -104,13 +104,13 @@
 		<type>
 			<name>com.woltlab.wcf.conversation</name>
 			<definitionname>com.woltlab.wcf.statDailyHandler</definitionname>
-			<classname><![CDATA[wcf\system\stat\ConversationStatDailyHandler]]></classname>
+			<classname>wcf\system\stat\ConversationStatDailyHandler</classname>
 			<categoryname>com.woltlab.wcf.conversation</categoryname>
 		</type>
 		<type>
 			<name>com.woltlab.wcf.conversation.message</name>
 			<definitionname>com.woltlab.wcf.statDailyHandler</definitionname>
-			<classname><![CDATA[wcf\system\stat\ConversationMessageStatDailyHandler]]></classname>
+			<classname>wcf\system\stat\ConversationMessageStatDailyHandler</classname>
 			<categoryname>com.woltlab.wcf.conversation</categoryname>
 		</type>
 		<!-- /stat handlers -->

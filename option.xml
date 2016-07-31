@@ -42,15 +42,15 @@
 				<categoryname>message.conversation</categoryname>
 				<optiontype>select</optiontype>
 				<defaultvalue>lastPostTime</defaultvalue>
-				<selectoptions><![CDATA[subject:wcf.global.subject
-lastPostTime:wcf.conversation.lastPostTime]]></selectoptions>
+				<selectoptions>subject:wcf.global.subject
+lastPostTime:wcf.conversation.lastPostTime</selectoptions>
 			</option>
 			<option name="conversation_list_default_sort_order">
 				<categoryname>message.conversation</categoryname>
 				<optiontype>select</optiontype>
 				<defaultvalue>DESC</defaultvalue>
-				<selectoptions><![CDATA[ASC:wcf.global.sortOrder.ascending
-DESC:wcf.global.sortOrder.descending]]></selectoptions>
+				<selectoptions>ASC:wcf.global.sortOrder.ascending
+DESC:wcf.global.sortOrder.descending</selectoptions>
 			</option>
 		</options>
 	</import>

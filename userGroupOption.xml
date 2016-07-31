@@ -97,16 +97,16 @@
 			<option name="user.conversation.allowedAttachmentExtensions">
 				<categoryname>user.conversation</categoryname>
 				<optiontype>textarea</optiontype>
-				<defaultvalue><![CDATA[gif
+				<defaultvalue>gif
 jpg
 jpeg
 png
 bmp
 zip
 txt
-pdf]]></defaultvalue>
+pdf</defaultvalue>
 				<options>module_attachment</options>
-				<wildcard><![CDATA[*]]></wildcard>
+				<wildcard>*</wildcard>
 				<usersonly>1</usersonly>
 			</option>
 			<option name="user.conversation.maxAttachmentCount">
