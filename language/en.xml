@@ -200,6 +200,8 @@
 {@$conversation->getFirstMessage()->getMailText()} 
 ---------------------------------
 {/if}{link controller='Conversation' object=$conversation isEmail=true}{/link}]]></item>
+		<item name="wcf.user.notification.conversation.mail.plaintext"><![CDATA[{@$event->getAuthor()->username} [URL:{link controller='User' object=$event->getAuthor() isEmail=true}{/link}] started the conversation “{@$event->getUserNotificationObject()->subject}” [URL:{link controller='Conversation' object=$event->getUserNotificationObject() isEmail=true}{/link}]:]]></item>
+		<item name="wcf.user.notification.conversation.mail.html"><![CDATA[<p><a href="{link controller='User' object=$event->getAuthor() isEmail=true}{/link}">{$event->getAuthor()->username}</a> started the conversation <a href="{link controller='Conversation' object=$event->getUserNotificationObject() isEmail=true}{/link}">{$event->getUserNotificationObject()->subject}</a>:</p>]]></item>
 		<item name="wcf.user.notification.com.woltlab.wcf.conversation"><![CDATA[Conversations]]></item>
 		<item name="wcf.user.notification.com.woltlab.wcf.conversation.notification.conversation"><![CDATA[Notify when I receive new conversations]]></item>
 		<item name="wcf.user.notification.com.woltlab.wcf.conversation.message.notification.conversationMessage"><![CDATA[Notify when I receive replies to existing conversations]]></item>
