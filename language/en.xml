@@ -5,9 +5,9 @@
 		<item name="wcf.acp.group.option.mod.conversation.canModerateConversation"><![CDATA[Can moderate conversations]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canUseConversation"><![CDATA[Can use conversations]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canSetCanInvite"><![CDATA[Can grant permissions]]></item>
-		<item name="wcf.acp.group.option.user.conversation.canSetCanInvite.description"><![CDATA[While creating a conversation, users can grant added participants the permission to add new participants. Changes do not affect existing conversations.]]></item>
+		<item name="wcf.acp.group.option.user.conversation.canSetCanInvite.description"><![CDATA[Users can grant added participants the permission to add new participants while creating conversations. Changes do not affect existing conversations.]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canAddInvisibleParticipants"><![CDATA[Can add invisible participants]]></item>
-		<item name="wcf.acp.group.option.user.conversation.canAddInvisibleParticipants.description"><![CDATA[While creating a conversation, users can add invisible participants. Changes do not affect existing conversations.]]></item>
+		<item name="wcf.acp.group.option.user.conversation.canAddInvisibleParticipants.description"><![CDATA[Users can add invisible participants while creating conversations. Changes do not affect existing conversations.]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxParticipants"><![CDATA[Maximum Participants]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxParticipants.description"><![CDATA[The maximum number of participants allowed per conversation.]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxConversations"><![CDATA[Maximum Conversations]]></item>
@@ -27,14 +27,14 @@
 	<category name="wcf.acp.option">
 		<item name="wcf.acp.option.category.message.conversation"><![CDATA[Conversations]]></item>
 		<item name="wcf.acp.option.conversation_list_default_sort_field"><![CDATA[Sort by]]></item>
-		<item name="wcf.acp.option.conversation_list_default_sort_field.description"><![CDATA[Choose default sort option of the conversations.]]></item>
+		<item name="wcf.acp.option.conversation_list_default_sort_field.description"><![CDATA[Choose default sort option of conversations.]]></item>
 		<item name="wcf.acp.option.conversation_list_default_sort_order"><![CDATA[Sort Order]]></item>
-		<item name="wcf.acp.option.conversation_list_default_sort_order.description"><![CDATA[Choose default sort order of the conversations.]]></item>
+		<item name="wcf.acp.option.conversation_list_default_sort_order.description"><![CDATA[Choose default sort order of conversations.]]></item>
 		<item name="wcf.acp.option.conversation_messages_per_page"><![CDATA[Messages per Page]]></item>
 		<item name="wcf.acp.option.conversations_per_page"><![CDATA[Conversations per Page]]></item>
 		<item name="wcf.acp.option.module_conversation"><![CDATA[Conversations]]></item>
 		<item name="wcf.acp.option.conversation_reply_show_messages_max"><![CDATA[Previous Messages]]></item>
-		<item name="wcf.acp.option.conversation_reply_show_messages_max.description"><![CDATA[The number of previous messages displayed on the extended reply form.]]></item>
+		<item name="wcf.acp.option.conversation_reply_show_messages_max.description"><![CDATA[The number of previous messages displayed on the reply form.]]></item>
 	</category>
 	
 	<category name="wcf.acp.rebuildData">
@@ -106,7 +106,7 @@
 		<item name="wcf.conversation.participants.error.invisibleParticipantsNoPermission"><![CDATA[You do not have the permission to add invisible participants.]]></item>
 		<item name="wcf.conversation.participants.error.participantCanInviteNoPermission"><![CDATA[You do not have the permission to allow participants to add new participants.]]></item>
 		<item name="wcf.conversation.participants.removeParticipant"><![CDATA[Remove Participant]]></item>
-		<item name="wcf.conversation.participants.removeParticipant.confirmMessage"><![CDATA[Do you really want to remove {$participant->username} from this conversation?]]></item>
+		<item name="wcf.conversation.participants.removeParticipant.confirmMessage"><![CDATA[Do you really want to remove “{$participant->username}” from this conversation?]]></item>
 		<item name="wcf.conversation.quota"><![CDATA[Quota]]></item>
 		<item name="wcf.conversation.quota.description"><![CDATA[{#$conversationCount/$maxConversationCount*100}% used ({#$conversationCount} of {#$maxConversationCount})]]></item>
 		<item name="wcf.conversation.replies"><![CDATA[Replies]]></item>
