@@ -108,12 +108,24 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	}
 	
 	/**
-	 * Returns a text-only version of this message.
+	 * Returns a version of this message optimized for use in emails.
 	 * 
+	 * @param	string	$mimeType	Either 'text/plain' or 'text/html'
 	 * @return	string
 	 */
-	public function getMailText() {
-		return MessageParser::getInstance()->stripHTML($this->getSimplifiedFormattedMessage());
+	public function getMailText($mimeType = 'text/plain') {
+		switch ($mimeType) {
+			case 'text/plain':
+				$processor = new HtmlOutputProcessor();
+				$processor->setOutputType('text/plain');
+				$processor->process($this->message, 'com.woltlab.wcf.conversation.message', $this->messageID);
+				
+				return $processor->getHtml();
+			case 'text/html':
+				return $this->getSimplifiedFormattedMessage();
+		}
+		
+		throw new \LogicException('Unreachable');
 	}
 	
 	/**

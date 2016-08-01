@@ -1,5 +1,6 @@
 <?php
 namespace wcf\system\user\notification\event;
+use wcf\system\email\Email;
 use wcf\system\request\LinkHandler;
 use wcf\system\user\notification\object\ConversationMessageUserNotificationObject;
 
@@ -59,11 +60,14 @@ class ConversationMessageUserNotificationEvent extends AbstractUserNotificationE
 	 * @inheritDoc
 	 */
 	public function getEmailMessage($notificationType = 'instant') {
-		return $this->getLanguage()->getDynamicVariable('wcf.user.notification.conversation.message.mail', [
-			'message' => $this->userNotificationObject,
-			'author' => $this->author,
-			'notificationType' => $notificationType
-		]);
+		$messageID = '<com.woltlab.wcf.conversation.notification/'.$this->getUserNotificationObject()->getConversation()->conversationID.'@'.Email::getHost().'>';
+		
+		return [
+			'template' => 'email_notification_conversationMessage',
+			'application' => 'wcf',
+			'in-reply-to' => [$messageID],
+			'references' => [$messageID]
+		];
 	}
 	
 	/**

@@ -36,11 +36,11 @@ class ConversationUserNotificationEvent extends AbstractUserNotificationEvent {
 	 * @inheritDoc
 	 */
 	public function getEmailMessage($notificationType = 'instant') {
-		return $this->getLanguage()->getDynamicVariable('wcf.user.notification.conversation.mail', [
-			'conversation' => $this->userNotificationObject,
-			'author' => $this->author,
-			'notificationType' => $notificationType
-		]);
+		return [
+			'message-id' => 'com.woltlab.wcf.conversation.notification/'.$this->getUserNotificationObject()->conversationID,
+			'template' => 'email_notification_conversation',
+			'application' => 'wcf'
+		];
 	}
 	
 	/**
