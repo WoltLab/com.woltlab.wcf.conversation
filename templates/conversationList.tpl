@@ -300,7 +300,7 @@
 		}
 		
 		UiItemListUser.init('participants', {
-			excludedSearchValues: ['{$__wcf->user->username|encodeJs}']
+			excludedSearchValues: ['{$__wcf->user->username|encodeJS}']
 		});
 	});
 </script>
