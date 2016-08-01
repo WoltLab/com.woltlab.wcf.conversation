@@ -192,14 +192,10 @@
 {@$message->getMailText()} 
 ---------------------------------
 {/if}{link controller='Conversation' object=$message->getConversation() isEmail=true}messageID={@$message->messageID}{/link}#message{@$message->messageID}]]></item>
+		<item name="wcf.user.notification.conversation.message.mail.plaintext"><![CDATA[{@$authorList} replied to the conversation “{$event->getUserNotificationObject()->getConversation()->subject}” [URL:{link controller='Conversation' object=$event->getUserNotificationObject()->getConversation() isEmail=true}{/link}]{if $count == 1 && !$guestTimesTriggered}:{else}.{/if}]]></item>
+		<item name="wcf.user.notification.conversation.message.mail.html"><![CDATA[<p>{@$authorList} replied to the conversation <a href="{link controller='Conversation' object=$event->getUserNotificationObject()->getConversation() isEmail=true}{/link}">{$event->getUserNotificationObject()->getConversation()->subject}</a>:</p>]]></item>
 		<item name="wcf.user.notification.conversation.message"><![CDATA[{@$author->getAnchorTag()} started the conversation <a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a>.]]></item>
 		<item name="wcf.user.notification.conversation.title"><![CDATA[New Conversation]]></item>
-		<item name="wcf.user.notification.conversation.mail"><![CDATA[{@$author->username} started the conversation "{@$conversation->subject}":
-{if $notificationType == 'instant'}
----------------------------------
-{@$conversation->getFirstMessage()->getMailText()} 
----------------------------------
-{/if}{link controller='Conversation' object=$conversation isEmail=true}{/link}]]></item>
 		<item name="wcf.user.notification.conversation.mail.plaintext"><![CDATA[{@$event->getAuthor()->username} [URL:{link controller='User' object=$event->getAuthor() isEmail=true}{/link}] started the conversation “{@$event->getUserNotificationObject()->subject}” [URL:{link controller='Conversation' object=$event->getUserNotificationObject() isEmail=true}{/link}]:]]></item>
 		<item name="wcf.user.notification.conversation.mail.html"><![CDATA[<p><a href="{link controller='User' object=$event->getAuthor() isEmail=true}{/link}">{$event->getAuthor()->username}</a> started the conversation <a href="{link controller='Conversation' object=$event->getUserNotificationObject() isEmail=true}{/link}">{$event->getUserNotificationObject()->subject}</a>:</p>]]></item>
 		<item name="wcf.user.notification.com.woltlab.wcf.conversation"><![CDATA[Conversations]]></item>
