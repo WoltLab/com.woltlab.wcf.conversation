@@ -265,7 +265,7 @@
 
 <script data-relocate="true" src="{@$__wcf->getPath()}js/WCF.Conversation{if !ENABLE_DEBUG_MODE}.min{/if}.js?v={@LAST_UPDATE_TIME}"></script>
 <script data-relocate="true">
-	require(['Language', 'WoltLab/WCF/Ui/ItemList/User'], function(Language, UiItemListUser) {
+	require(['Language', 'WoltLabSuite/Core/Ui/ItemList/User'], function(Language, UiItemListUser) {
 		Language.addObject({
 			'wcf.conversation.edit.addParticipants': '{lang}wcf.conversation.edit.addParticipants{/lang}',
 			'wcf.conversation.edit.assignLabel': '{lang}wcf.conversation.edit.assignLabel{/lang}',

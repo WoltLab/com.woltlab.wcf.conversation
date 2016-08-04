@@ -4,9 +4,9 @@
  * @author	Alexander Ebert
  * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @module	WoltLab/Conversation/Ui/Participant/Add
+ * @module	WoltLabSuite/Core/Conversation/Ui/Participant/Add
  */
-define(['Ajax', 'Language', 'Ui/Dialog', 'Ui/Notification', 'WoltLab/WCF/Ui/ItemList/User'], function(Ajax, Language, UiDialog, UiNotification, UiItemListUser) {
+define(['Ajax', 'Language', 'Ui/Dialog', 'Ui/Notification', 'WoltLabSuite/Core/Ui/ItemList/User'], function(Ajax, Language, UiDialog, UiNotification, UiItemListUser) {
 	"use strict";
 	
 	/**

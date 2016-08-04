@@ -131,7 +131,7 @@
 </form>
 
 <script data-relocate="true">
-	require(['WoltLab/WCF/Ui/ItemList/User'], function(UiItemListUser) {
+	require(['WoltLabSuite/Core/Ui/ItemList/User'], function(UiItemListUser) {
 		UiItemListUser.init('participants', {
 			maxItems: {@$__wcf->getSession()->getPermission('user.conversation.maxParticipants')}
 		});

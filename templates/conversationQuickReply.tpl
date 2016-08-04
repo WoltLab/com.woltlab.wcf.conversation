@@ -25,7 +25,7 @@
 	</article>
 	
 	<script data-relocate="true">
-		require(['WoltLab/WCF/Ui/Message/Reply'], function(UiMessageReply) {
+		require(['WoltLabSuite/Core/Ui/Message/Reply'], function(UiMessageReply) {
 			new UiMessageReply({
 				ajax: {
 					className: 'wcf\\data\\conversation\\message\\ConversationMessageAction'
