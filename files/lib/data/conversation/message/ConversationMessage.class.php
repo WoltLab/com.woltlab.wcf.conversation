@@ -36,16 +36,6 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	use TUserContent;
 	
 	/**
-	 * @inheritDoc
-	 */
-	protected static $databaseTableName = 'conversation_message';
-	
-	/**
-	 * @inheritDoc
-	 */
-	protected static $databaseTableIndexName = 'messageID';
-	
-	/**
 	 * conversation object
 	 * @var	Conversation
 	 */

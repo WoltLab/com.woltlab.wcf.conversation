@@ -18,16 +18,6 @@ use wcf\system\WCF;
  */
 class ConversationLabel extends DatabaseObject {
 	/**
-	 * @inheritDoc
-	 */
-	protected static $databaseTableName = 'conversation_label';
-	
-	/**
-	 * @inheritDoc
-	 */
-	protected static $databaseTableIndexName = 'labelID';
-	
-	/**
 	 * list of pre-defined css class names
 	 * @var	string[]
 	 */

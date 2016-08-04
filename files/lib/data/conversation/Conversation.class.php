@@ -45,16 +45,6 @@ use wcf\util\ArrayUtil;
  */
 class Conversation extends DatabaseObject implements IRouteController, ITitledLinkObject {
 	/**
-	 * @inheritDoc
-	 */
-	protected static $databaseTableName = 'conversation';
-	
-	/**
-	 * @inheritDoc
-	 */
-	protected static $databaseTableIndexName = 'conversationID';
-	
-	/**
 	 * default participation state
 	 * @var	integer
 	 */
