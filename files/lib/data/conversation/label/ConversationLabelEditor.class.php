@@ -10,8 +10,9 @@ use wcf\data\DatabaseObjectEditor;
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	WoltLabSuite\Core\Data\Conversation\Label
  * 
- * @method	ConversationLabel	getDecoratedObject()
- * @mixin	ConversationLabel
+ * @method static	ConversationLabel	create(array $parameters = [])
+ * @method		ConversationLabel	getDecoratedObject()
+ * @mixin		ConversationLabel
  */
 class ConversationLabelEditor extends DatabaseObjectEditor {
 	/**

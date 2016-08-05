@@ -12,9 +12,10 @@ use wcf\system\WCF;
  * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	WoltLabSuite\Core\Data\Conversation
- *
- * @method	Conversation	getDecoratedObject()
- * @mixin	Conversation
+ * 
+ * @method static	Conversation	create(array $parameters = [])
+ * @method		Conversation	getDecoratedObject()
+ * @mixin		Conversation
  */
 class ConversationEditor extends DatabaseObjectEditor {
 	/**

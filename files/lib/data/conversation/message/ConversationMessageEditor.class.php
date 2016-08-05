@@ -10,8 +10,9 @@ use wcf\data\DatabaseObjectEditor;
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	WoltLabSuite\Core\Data\Conversation\Message
  * 
- * @method	ConversationMessage	getDecoratedObject()
- * @mixin	ConversationMessage
+ * @method static	ConversationMessage	create(array $parameters = [])
+ * @method		ConversationMessage	getDecoratedObject()
+ * @mixin		ConversationMessage
  */
 class ConversationMessageEditor extends DatabaseObjectEditor {
 	/**
