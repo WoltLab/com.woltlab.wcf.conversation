@@ -27,7 +27,6 @@ class FeedConversation extends DatabaseObjectDecorator implements IFeedEntry {
 	public function getLink() {
 		return LinkHandler::getInstance()->getLink('Conversation', [
 			'object' => $this->getDecoratedObject(),
-			'appendSession' => false,
 			'encodeTitle' => true
 		]);
 	}
