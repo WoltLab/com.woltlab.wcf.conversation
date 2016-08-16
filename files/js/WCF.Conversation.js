@@ -460,7 +460,7 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
 		
 		switch (optionName) {
 			case 'addParticipants':
-				require(['WoltLab/Conversation/Ui/Participant/Add'], function(UiParticipantAdd) {
+				require(['WoltLabSuite/Core/Conversation/Ui/Participant/Add'], function(UiParticipantAdd) {
 					new UiParticipantAdd(document.getElementById(elementID).getAttribute('data-conversation-id'));
 				});
 			break;
