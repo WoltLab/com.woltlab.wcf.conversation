@@ -1225,6 +1225,14 @@ WCF.User.Panel.Conversation = WCF.User.Panel.Abstract.extend({
 			this.updateBadge(0);
 			this._loadData = true;
 		}).bind(this));
+		
+		require(['EventHandler'], (function(EventHandler) {
+			EventHandler.add('com.woltlab.wcf.UserMenuMobile', 'more', (function(data) {
+				if (data.identifier === 'com.woltlab.wcf.conversation') {
+					this.toggle();
+				}
+			}).bind(this));
+		}).bind(this));
 	},
 	
 	/**

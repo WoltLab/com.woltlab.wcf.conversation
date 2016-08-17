@@ -35,6 +35,13 @@
 			<eventname>menuInteraction</eventname>
 			<templatecode><![CDATA[{include file='__userProfileStartConversation'}]]></templatecode>
 		</templatelistener>
+		
+		<templatelistener name="mobileMenuConversation">
+			<environment>user</environment>
+			<templatename>pageMenuMobile</templatename>
+			<eventname>userMenuItems</eventname>
+			<templatecode><![CDATA[{include file='__mobileMenuConversation'}]]></templatecode>
+		</templatelistener>
 	</import>
 	
 	<delete>
