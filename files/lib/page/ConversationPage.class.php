@@ -253,8 +253,7 @@ class ConversationPage extends MultipleLinkPage {
 			'conversation' => $this->conversation,
 			'conversationID' => $this->conversationID,
 			'participants' => $this->participantList->getObjects(),
-			'defaultSmilies' => SmileyCache::getInstance()->getCategorySmilies(),
-			'permissionCanUseSmilies' => 'user.message.canUseSmilies'
+			'defaultSmilies' => SmileyCache::getInstance()->getCategorySmilies()
 		]);
 		
 		BBCodeHandler::getInstance()->setDisallowedBBCodes(explode(',', WCF::getSession()->getPermission('user.message.disallowedBBCodes')));
