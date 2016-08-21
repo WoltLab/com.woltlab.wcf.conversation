@@ -415,7 +415,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		$this->readString('message', true, 'data');
 		
 		if (empty($this->parameters['data']['message'])) {
-			throw new UserInputException('message', WCF::getLanguage()->get('wcf.global.form.error.empty'));
+			throw new UserInputException('message', WCF::getLanguage()->getDynamicVariable('wcf.global.form.error.empty'));
 		}
 		
 		$this->validateBeginEdit();
