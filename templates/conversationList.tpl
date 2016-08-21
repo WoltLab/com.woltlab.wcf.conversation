@@ -163,7 +163,7 @@
 									
 									{if $conversation->ownPosts && $conversation->userID != $__wcf->user->userID}
 										{if $__wcf->getUserProfileHandler()->getAvatar()}
-											<small class="myAvatar" title="{lang}wcf.conversation.ownPosts{/lang}">{@$__wcf->getUserProfileHandler()->getAvatar()->getImageTag(24)}</small>
+											<small class="myAvatar jsTooltip" title="{lang}wcf.conversation.ownPosts{/lang}">{@$__wcf->getUserProfileHandler()->getAvatar()->getImageTag(24)}</small>
 										{/if}
 									{/if}
 								</div>
