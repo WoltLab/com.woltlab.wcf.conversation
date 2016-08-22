@@ -5,7 +5,6 @@ use wcf\data\conversation\Conversation;
 use wcf\data\DatabaseObject;
 use wcf\data\IMessage;
 use wcf\data\TUserContent;
-use wcf\system\bbcode\MessageParser;
 use wcf\system\html\output\HtmlOutputProcessor;
 use wcf\system\request\LinkHandler;
 use wcf\system\WCF;

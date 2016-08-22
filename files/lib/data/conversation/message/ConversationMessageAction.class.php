@@ -11,8 +11,6 @@ use wcf\data\IMessageInlineEditorAction;
 use wcf\data\IMessageQuoteAction;
 use wcf\system\attachment\AttachmentHandler;
 use wcf\system\bbcode\BBCodeHandler;
-use wcf\system\bbcode\BBCodeParser;
-use wcf\system\bbcode\PreParser;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
 use wcf\system\html\input\HtmlInputProcessor;
