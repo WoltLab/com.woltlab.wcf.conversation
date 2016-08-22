@@ -8,7 +8,7 @@
 		
 		<nav class="contentHeaderNavigation">
 			<ul>
-				<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button"><span class="icon icon16 fa-asterisk"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>
+				<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button"><span class="icon icon16 fa-plus"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>
 				{event name='contentHeaderNavigation'}
 			</ul>
 		</nav>
@@ -265,7 +265,7 @@
 	
 	<nav class="contentFooterNavigation">
 		<ul>
-			<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button"><span class="icon icon16 fa-asterisk"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>
+			<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button"><span class="icon icon16 fa-plus"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>
 			{event name='contentFooterNavigation'}
 		</ul>
 	</nav>
