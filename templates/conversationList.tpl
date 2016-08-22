@@ -152,7 +152,7 @@
 			
 			{foreach from=$objects item=conversation}
 				<li class="tabularListRow">
-					<ol class="tabularListColumns conversation jsClipboardObject{if $conversation->isNew()} new{/if}" data-conversation-id="{@$conversation->conversationID}" data-label-ids="[ {implode from=$conversation->getAssignedLabels() item=label}{@$label->labelID}{/implode} ]" data-is-closed="{@$conversation->isClosed}" data-can-close-conversation="{if $conversation->userID == $__wcf->getUser()->userID}1{else}0{/if}" data-can-add-participants="{if $conversation->canAddParticipants()}1{else}0{/if}">
+					<ol class="tabularListColumns messageGroup conversation jsClipboardObject{if $conversation->isNew()} new{/if}" data-conversation-id="{@$conversation->conversationID}" data-label-ids="[ {implode from=$conversation->getAssignedLabels() item=label}{@$label->labelID}{/implode} ]" data-is-closed="{@$conversation->isClosed}" data-can-close-conversation="{if $conversation->userID == $__wcf->getUser()->userID}1{else}0{/if}" data-can-add-participants="{if $conversation->canAddParticipants()}1{else}0{/if}">
 						<li class="columnMark jsOnly">
 							<label><input type="checkbox" class="jsClipboardItem" data-object-id="{@$conversation->conversationID}"></label>
 						</li>
@@ -182,6 +182,9 @@
 								
 							<h3>
 								<a href="{if $conversation->isNew()}{link controller='Conversation' object=$conversation}action=firstNew{/link}{else}{link controller='Conversation' object=$conversation}{/link}{/if}" class="conversationLink messageGroupLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>
+								{if $conversation->replies}
+									<span class="badge messageGroupCounterMobile">{@$conversation->replies|shortUnit}</span>
+								{/if}
 							</h3>
 							
 							<aside class="statusDisplay">
@@ -197,6 +200,11 @@
 								<li class="messageGroupTime">{@$conversation->time|time}</li>
 								<li class="messageGroupEditLink jsOnly"><a class="jsConversationInlineEditor">{lang}wcf.global.button.edit{/lang}</a></li>
 								{event name='messageGroupInfo'}
+							</ul>
+							
+							<ul class="messageGroupInfoMobile">
+								<li class="messageGroupAuthorMobile">{$conversation->username}</li>
+								<li class="messageGroupLastPostTimeMobile">{@$conversation->lastPostTime|time}</li>
 							</ul>
 							
 							{if $conversation->getParticipantSummary()|count}
