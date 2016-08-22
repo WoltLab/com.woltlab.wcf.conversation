@@ -1241,7 +1241,7 @@ WCF.User.Panel.Conversation = WCF.User.Panel.Abstract.extend({
 	_initDropdown: function() {
 		var $dropdown = this._super();
 		
-		$('<li><a href="' + this._options.newConversationLink + '" title="' + this._options.newConversation + '" class="jsTooltip"><span class="icon icon16 fa-plus" /></a></li>').appendTo($dropdown.getLinkList());
+		$('<li><a href="' + this._options.newConversationLink + '" title="' + this._options.newConversation + '" class="jsTooltip"><span class="icon icon24 fa-plus" /></a></li>').appendTo($dropdown.getLinkList());
 		
 		return $dropdown;
 	},
