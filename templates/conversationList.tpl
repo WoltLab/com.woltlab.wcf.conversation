@@ -19,7 +19,7 @@
 	<link rel="alternate" type="application/rss+xml" title="{lang}wcf.global.button.rss{/lang}" href="{link controller='ConversationFeed'}at={@$__wcf->getUser()->userID}-{@$__wcf->getUser()->accessToken}{/link}">
 {/capture}
 
-{capture assign='sidebarLeft'}
+{capture assign='sidebarRight'}
 	<section class="box">
 		<h2 class="boxTitle">{lang}wcf.conversation.folders{/lang}</h2>
 		
