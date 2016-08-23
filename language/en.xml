@@ -109,6 +109,7 @@
 		<item name="wcf.conversation.quota"><![CDATA[Quota]]></item>
 		<item name="wcf.conversation.quota.description"><![CDATA[{#$conversationCount/$maxConversationCount*100}% used ({#$conversationCount} of {#$maxConversationCount})]]></item>
 		<item name="wcf.conversation.replies"><![CDATA[Replies]]></item>
+		<item name="wcf.conversation.reply"><![CDATA[Reply to this conversation…]]></item>
 		<item name="wcf.conversation.showAll"><![CDATA[Display All Conversations]]></item>
 		<item name="wcf.conversation.ownPosts"><![CDATA[Conversation contains your own messages]]></item>
 		<item name="wcf.conversation.gotoLastPost"><![CDATA[Go to Last Message]]></item>

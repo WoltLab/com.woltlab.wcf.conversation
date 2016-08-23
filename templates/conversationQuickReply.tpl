@@ -10,6 +10,7 @@
 				
 				<textarea id="text" name="text" class="wysiwygTextarea"
 				          data-autosave="com.woltlab.wcf.conversation.messageAdd-{@$conversation->conversationID}"
+				          data-placeholder="{lang}wcf.conversation.reply{/lang}"
 				          data-support-mention="true"
 				></textarea>
 				{include file='messageFormTabsInline' inConversationQuickReply=true}
