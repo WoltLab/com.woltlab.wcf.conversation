@@ -96,27 +96,14 @@
 <div class="section">
 	<ul class="messageList">
 		{include file='conversationMessageList'}
+		{hascontent}
+			<li class="messageListPagination">
+				{content}{@$pagesLinks}{/content}
+			</li>
+		{/hascontent}
 		{if !$conversation->isClosed}{include file='conversationQuickReply'}{/if}
 	</ul>
 </div>
-
-<footer class="contentFooter">
-	{hascontent}
-		<div class="paginationBottom">
-			{content}{@$pagesLinks}{/content}
-		</div>
-	{/hascontent}
-	
-	{hascontent}
-		<nav class="contentFooterNavigation">
-			<ul>
-				{content}
-					{event name='contentFooterNavigation'}
-				{/content}
-			</ul>
-		</nav>
-	{/hascontent}
-</footer>
 
 {if !ENABLE_DEBUG_MODE}<script src="{@$__wcf->getPath()}js/WoltLabSuite.Core.Conversation.min.js?v={@LAST_UPDATE_TIME}"></script>{/if}
 <script data-relocate="true" src="{@$__wcf->getPath()}js/WCF.Conversation{if !ENABLE_DEBUG_MODE}.min{/if}.js?v={@LAST_UPDATE_TIME}"></script>
