@@ -1,4 +1,4 @@
-<li id="messageQuickReply" class="jsOnly{if $conversation->userID == $__wcf->getUser()->userID} messageGroupStarter{/if}" data-object-id="{@$conversation->conversationID}" data-last-post-time="{@$conversation->lastPostTime}" data-page-no="{@$pageNo}">
+<li id="messageQuickReply" class="jsOnly{if $conversation->userID == $__wcf->getUser()->userID} messageGroupStarter{/if}{if $pageNo < $pages} messageQuickReplyCollapsed{/if}" data-object-id="{@$conversation->conversationID}" data-last-post-time="{@$conversation->lastPostTime}" data-page-no="{@$pageNo}">
 	<article class="message messageSidebarOrientation{@$__wcf->getStyleHandler()->getStyle()->getVariable('messageSidebarOrientation')|ucfirst}{if $__wcf->getUserProfileHandler()->userOnlineGroupID} userOnlineGroupMarking{@$__wcf->getUserProfileHandler()->userOnlineGroupID}{/if}">
 		{include file='messageSidebar' userProfile=$__wcf->getUserProfileHandler()->getUserProfile()}
 		
@@ -10,7 +10,7 @@
 				
 				<textarea id="text" name="text" class="wysiwygTextarea"
 				          data-autosave="com.woltlab.wcf.conversation.messageAdd-{@$conversation->conversationID}"
-				          data-placeholder="{lang}wcf.conversation.reply{/lang}"
+				          {if $pageNo < $pages}data-reply-placeholder="{lang}wcf.conversation.reply{/lang}"{/if}
 				          data-support-mention="true"
 				></textarea>
 				{include file='messageFormTabsInline' inConversationQuickReply=true}
