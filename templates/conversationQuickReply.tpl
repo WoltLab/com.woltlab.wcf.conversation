@@ -2,7 +2,7 @@
 	<article class="message messageSidebarOrientation{@$__wcf->getStyleHandler()->getStyle()->getVariable('messageSidebarOrientation')|ucfirst}{if $__wcf->getUserProfileHandler()->userOnlineGroupID} userOnlineGroupMarking{@$__wcf->getUserProfileHandler()->userOnlineGroupID}{/if}">
 		{include file='messageSidebar' userProfile=$__wcf->getUserProfileHandler()->getUserProfile()}
 		
-		<div class="messageContent messageQuickReplyContent">
+		<div class="messageContent messageQuickReplyContent"{if $pageNo < $pages} data-placeholder="{lang}wcf.conversation.reply{/lang}"{/if}>
 			<div class="messageBody">
 				{if !$conversation->isDraft && !$conversation->hasOtherParticipants()}
 					<p class="warning" style="margin-bottom: 14px">{lang}wcf.conversation.noParticipantsWarning{/lang}</p>
@@ -10,7 +10,6 @@
 				
 				<textarea id="text" name="text" class="wysiwygTextarea"
 				          data-autosave="com.woltlab.wcf.conversation.messageAdd-{@$conversation->conversationID}"
-				          {if $pageNo < $pages}data-reply-placeholder="{lang}wcf.conversation.reply{/lang}"{/if}
 				          data-support-mention="true"
 				></textarea>
 				{include file='messageFormTabsInline' inConversationQuickReply=true}
