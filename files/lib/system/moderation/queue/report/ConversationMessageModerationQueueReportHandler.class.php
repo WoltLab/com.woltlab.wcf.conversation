@@ -124,7 +124,7 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
 	 * Returns a conversation message object by message id or null if message id is invalid.
 	 * 
 	 * @param	integer		$objectID
-	 * @return	\wcf\data\conversation\message\ConversationMessage
+	 * @return	ConversationMessage
 	 */
 	protected function getMessage($objectID) {
 		if (!array_key_exists($objectID, self::$messages)) {

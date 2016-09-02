@@ -41,13 +41,13 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 	
 	/**
 	 * conversation object
-	 * @var	\wcf\data\conversation\Conversation
+	 * @var	Conversation
 	 */
 	public $conversation = null;
 	
 	/**
 	 * conversation label list object
-	 * @var	\wcf\data\conversation\label\ConversationLabelList
+	 * @var	ConversationLabelList
 	 */
 	public $labelList = null;
 	

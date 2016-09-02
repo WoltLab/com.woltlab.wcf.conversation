@@ -18,7 +18,7 @@ use wcf\system\search\SearchResultTextParser;
 class SearchResultConversationMessage extends ViewableConversationMessage implements ISearchResultObject {
 	/**
 	 * conversation object
-	 * @var	\wcf\data\conversation\Conversation
+	 * @var	Conversation
 	 */
 	public $conversation = null;
 	
@@ -26,7 +26,7 @@ class SearchResultConversationMessage extends ViewableConversationMessage implem
 	/**
 	 * Returns the conversation object.
 	 * 
-	 * @return	\wcf\data\conversation\Conversation
+	 * @return	Conversation
 	 */
 	public function getConversation() {
 		if ($this->conversation === null) {
