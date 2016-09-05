@@ -160,7 +160,18 @@ class ConversationListPage extends SortablePage {
 	 * @inheritDoc
 	 */
 	public function readData() {
+		// if sort field is `username`, `conversation.` has to prepended because `username`
+		// alone is ambiguous 
+		if ($this->sortField === 'username') {
+			$this->sortField = 'conversation.username';
+		}
+		
 		parent::readData();
+		
+		// change back to old value
+		if ($this->sortField === 'conversation.username') {
+			$this->sortField = 'username';
+		}
 		
 		if ($this->filter != '') {
 			// add breadcrumbs
