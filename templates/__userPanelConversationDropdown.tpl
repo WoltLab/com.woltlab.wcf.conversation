@@ -4,7 +4,6 @@
 		{if !OFFLINE || $__wcf->session->getPermission('admin.general.canViewPageDuringOfflineMode')}
 			<script data-relocate="true" src="{@$__wcf->getPath()}js/WCF.Conversation{if !ENABLE_DEBUG_MODE}.min{/if}.js?v={@LAST_UPDATE_TIME}"></script>
 			<script data-relocate="true">
-				//<![CDATA[
 				$(function() {
 					new WCF.User.Panel.Conversation({
 						markAllAsReadConfirmMessage: '{lang}wcf.conversation.markAllAsRead.confirmMessage{/lang}',
@@ -15,7 +14,6 @@
 						title: '{lang}wcf.conversation.conversations{/lang}'
 					});
 				});
-				//]]>
 			</script>
 		{/if}
 	</li>

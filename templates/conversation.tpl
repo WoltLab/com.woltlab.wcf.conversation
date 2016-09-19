@@ -108,7 +108,6 @@
 {if !ENABLE_DEBUG_MODE}<script src="{@$__wcf->getPath()}js/WoltLabSuite.Core.Conversation.min.js?v={@LAST_UPDATE_TIME}"></script>{/if}
 <script data-relocate="true" src="{@$__wcf->getPath()}js/WCF.Conversation{if !ENABLE_DEBUG_MODE}.min{/if}.js?v={@LAST_UPDATE_TIME}"></script>
 <script data-relocate="true">
-	//<![CDATA[
 	$(function() {
 		WCF.Language.addObject({
 			'wcf.conversation.edit.addParticipants': '{lang}wcf.conversation.edit.addParticipants{/lang}',
@@ -144,7 +143,6 @@
 		new WCF.Conversation.RemoveParticipant({@$conversation->conversationID});
 		new WCF.Message.BBCode.CodeViewer();
 	});
-	//]]>
 </script>
 
 {include file='footer'}
