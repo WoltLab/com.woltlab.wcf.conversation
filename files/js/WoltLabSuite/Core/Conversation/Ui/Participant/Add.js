@@ -63,7 +63,7 @@ define(['Ajax', 'Language', 'Ui/Dialog', 'Ui/Notification', 'WoltLabSuite/Core/U
 			//noinspection JSUnresolvedVariable
 			if (data.returnValues.count) {
 				//noinspection JSUnresolvedVariable
-				UiNotification.show(data.returnValues.successMessage);
+				UiNotification.show(data.returnValues.successMessage, window.location.reload.bind(window.location));
 			}
 			
 			UiDialog.close(this);
