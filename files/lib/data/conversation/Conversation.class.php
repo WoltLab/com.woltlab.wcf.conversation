@@ -66,7 +66,7 @@ class Conversation extends DatabaseObject implements IRouteController, ITitledLi
 	 * first message object
 	 * @var	ConversationMessage
 	 */
-	protected $firstMessage = null;
+	protected $firstMessage;
 	
 	/**
 	 * @inheritDoc

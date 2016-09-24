@@ -71,7 +71,7 @@ class ConversationListPage extends SortablePage {
 	 * label list object
 	 * @var	ConversationLabelList
 	 */
-	public $labelList = null;
+	public $labelList;
 	
 	/**
 	 * number of conversations (no filter)

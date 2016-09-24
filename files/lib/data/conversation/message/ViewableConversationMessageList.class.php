@@ -46,7 +46,7 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	 * attachment list
 	 * @var	GroupedAttachmentList
 	 */
-	protected $attachmentList = null;
+	protected $attachmentList;
 	
 	/**
 	 * max post time
@@ -70,7 +70,7 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	 * conversation object
 	 * @var	Conversation
 	 */
-	protected $conversation = null;
+	protected $conversation;
 	
 	/**
 	 * @inheritDoc

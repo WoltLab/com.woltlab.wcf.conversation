@@ -29,7 +29,7 @@ class ViewableConversationModificationLog extends DatabaseObjectDecorator {
 	 * user profile object
 	 * @var	UserProfile
 	 */
-	protected $userProfile = null;
+	protected $userProfile;
 	
 	/**
 	 * Returns readable representation of current log entry.

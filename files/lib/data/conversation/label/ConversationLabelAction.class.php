@@ -43,13 +43,13 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 	 * conversation object
 	 * @var	Conversation
 	 */
-	public $conversation = null;
+	public $conversation;
 	
 	/**
 	 * conversation label list object
 	 * @var	ConversationLabelList
 	 */
-	public $labelList = null;
+	public $labelList;
 	
 	/**
 	 * @inheritDoc

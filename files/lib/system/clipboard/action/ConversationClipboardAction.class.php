@@ -24,7 +24,7 @@ class ConversationClipboardAction extends AbstractClipboardAction {
 	 * list of conversations
 	 * @var	Conversation[]
 	 */
-	public $conversations = null;
+	public $conversations;
 	
 	/**
 	 * @inheritDoc

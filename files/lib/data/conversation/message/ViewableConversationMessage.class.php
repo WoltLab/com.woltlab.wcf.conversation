@@ -28,7 +28,7 @@ class ViewableConversationMessage extends DatabaseObjectDecorator {
 	 * user profile object
 	 * @var	UserProfile
 	 */
-	protected $userProfile = null;
+	protected $userProfile;
 	
 	/**
 	 * Returns the user profile object.

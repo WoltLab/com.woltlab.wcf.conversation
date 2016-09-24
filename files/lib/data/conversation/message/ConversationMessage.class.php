@@ -38,7 +38,7 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	 * conversation object
 	 * @var	Conversation
 	 */
-	protected $conversation = null;
+	protected $conversation;
 	
 	/**
 	 * @inheritDoc

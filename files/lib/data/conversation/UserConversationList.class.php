@@ -36,7 +36,7 @@ class UserConversationList extends ConversationList {
 	 * label list object
 	 * @var	ConversationLabelList
 	 */
-	public $labelList = null;
+	public $labelList;
 	
 	/**
 	 * @inheritDoc

@@ -20,7 +20,7 @@ class SearchResultConversationMessage extends ViewableConversationMessage implem
 	 * conversation object
 	 * @var	Conversation
 	 */
-	public $conversation = null;
+	public $conversation;
 	
 	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**

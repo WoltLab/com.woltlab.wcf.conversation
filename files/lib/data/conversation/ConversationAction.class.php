@@ -40,7 +40,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 * conversation object
 	 * @var	ConversationEditor
 	 */
-	protected $conversation = null;
+	protected $conversation;
 	
 	/**
 	 * list of conversation data modifications
