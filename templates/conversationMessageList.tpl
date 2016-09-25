@@ -73,7 +73,7 @@
 							{if $message->userID != $__wcf->getUser()->userID && $__wcf->session->getPermission('user.profile.canReportContent')}<li class="jsReportConversationMessage jsOnly" data-object-id="{@$message->messageID}"><a href="#" title="{lang}wcf.moderation.report.reportContent{/lang}" class="button jsTooltip"><span class="icon icon16 fa-exclamation-triangle"></span> <span class="invisible">{lang}wcf.moderation.report.reportContent{/lang}</span></a></li>{/if}
 							{event name='messageFooterButtons'}
 						</ul>
-					</div>	
+					</div>
 				</footer>
 			</div>
 		</article>

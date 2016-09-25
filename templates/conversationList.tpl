@@ -94,7 +94,7 @@
 		
 		<div class="boxContent">
 			<button id="manageLabel">{lang}wcf.conversation.label.management{/lang}</button>
-		</div>	
+		</div>
 	</section>
 	
 	{event name='beforeQuotaBox'}
@@ -250,7 +250,7 @@
 						
 						{event name='columns'}
 					</ol>
-				</li>	
+				</li>
 			{/foreach}
 		</ol>
 	</div>
