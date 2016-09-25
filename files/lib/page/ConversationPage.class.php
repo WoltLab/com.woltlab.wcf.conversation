@@ -16,6 +16,7 @@ use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\message\quote\MessageQuoteManager;
 use wcf\system\page\PageLocationManager;
+use wcf\system\page\ParentPageLocation;
 use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
 use wcf\util\HeaderUtil;
@@ -166,14 +167,14 @@ class ConversationPage extends MultipleLinkPage {
 		parent::readData();
 		
 		// add breadcrumbs
-		PageLocationManager::getInstance()->addParentLocation('com.woltlab.wcf.conversation.ConversationList');
 		if ($this->conversation->isDraft) {
-			/* TODO
-			WCF::getBreadcrumbs()->add(new Breadcrumb(WCF::getLanguage()->get('wcf.conversation.folder.draft'), LinkHandler::getInstance()->getLink('ConversationList', [
-				'filter' => 'draft'
-			])));
-			*/
+			// `-1` = pseudo object id to have to pages with identifier `com.woltlab.wcf.conversation.ConversationList`
+			PageLocationManager::getInstance()->addParentLocation('com.woltlab.wcf.conversation.ConversationList', -1, new ParentPageLocation(
+				WCF::getLanguage()->get('wcf.conversation.folder.draft'),
+				LinkHandler::getInstance()->getLink('ConversationList', ['filter' => 'draft'])
+			));
 		}
+		PageLocationManager::getInstance()->addParentLocation('com.woltlab.wcf.conversation.ConversationList');
 		
 		// update last visit time count
 		if ($this->conversation->isNew() && $this->objectList->getMaxPostTime() > $this->conversation->lastVisitTime) {

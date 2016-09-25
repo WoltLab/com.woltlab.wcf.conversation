@@ -174,9 +174,8 @@ class ConversationListPage extends SortablePage {
 		}
 		
 		if ($this->filter != '') {
-			// add breadcrumbs
-			// TODO: this is not working at the moment as PageLocationManager already sets this as the current page based on request data which is later discarded 
-			PageLocationManager::getInstance()->addParentLocation('com.woltlab.wcf.conversation.ConversationList');
+			// `-1` = pseudo object id to have to pages with identifier `com.woltlab.wcf.conversation.ConversationList`
+			PageLocationManager::getInstance()->addParentLocation('com.woltlab.wcf.conversation.ConversationList', -1);
 		}
 		
 		// read stats
