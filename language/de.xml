@@ -78,7 +78,7 @@
 		<item name="wcf.conversation.information"><![CDATA[Informationen]]></item>
 		<item name="wcf.conversation.invisible"><![CDATA[unsichtbar]]></item>
 		<item name="wcf.conversation.invisibleParticipants"><![CDATA[Unsichtbare Teilnehmer]]></item>
-		<item name="wcf.conversation.invisibleParticipants.description"><![CDATA[Unsichtbare Teilnehmer sind für andere Teilnehmer nicht sichtbar. Mehrere Teilnehmer können mit Komma getrennt angegeben werden.]]></item>
+		<item name="wcf.conversation.invisibleParticipants.description"><![CDATA[Unsichtbare Teilnehmer sind für andere Teilnehmer nicht sichtbar.]]></item>
 		<item name="wcf.conversation.lastPostTime"><![CDATA[Letzte Antwort]]></item>
 		<item name="wcf.conversation.lastVisitTime"><![CDATA[Konversation gelesen]]></item>
 		<item name="wcf.conversation.leave.title"><![CDATA[Teilnahme verwalten]]></item>
@@ -90,7 +90,7 @@
 		<item name="wcf.conversation.noMoreItems"><![CDATA[Keine aktuellen Konversationen]]></item>
 		<item name="wcf.conversation.participantCanInvite"><![CDATA[Teilnehmer können weitere Teilnehmer hinzufügen]]></item>
 		<item name="wcf.conversation.participants"><![CDATA[Teilnehmer]]></item>
-		<item name="wcf.conversation.participants.description"><![CDATA[Mehrere Teilnehmer können mit Komma getrennt angegeben werden.]]></item>
+		<item name="wcf.conversation.participants.description"><![CDATA[]]></item>
 		<item name="wcf.conversation.participants.error.mailboxIsFull"><![CDATA[{$errorData[username]} hat das zulässige Limit für Konversationen bereits erreicht und kann an keinen neuen Konversationen teilnehmen.]]></item>
 		<item name="wcf.conversation.participants.error.notFound"><![CDATA[Der Benutzername {$errorData[username]} konnte nicht gefunden werden.]]></item>
 		<item name="wcf.conversation.participants.error.isAuthor"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Du bist{else}Sie sind{/if} bereits Teilnehmer dieser Konversation.]]></item>
