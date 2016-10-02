@@ -73,13 +73,13 @@ class ConversationPage extends MultipleLinkPage {
 	 * viewable conversation object
 	 * @var	ViewableConversation
 	 */
-	public $conversation = null;
+	public $conversation;
 	
 	/**
 	 * conversation label list
 	 * @var	ConversationLabelList
 	 */
-	public $labelList = null;
+	public $labelList;
 	
 	/**
 	 * message id
@@ -91,19 +91,19 @@ class ConversationPage extends MultipleLinkPage {
 	 * conversation message object
 	 * @var	ConversationMessage
 	 */
-	public $message = null;
+	public $message;
 	
 	/**
 	 * modification log list object
 	 * @var	ConversationLogModificationLogList
 	 */
-	public $modificationLogList = null;
+	public $modificationLogList;
 	
 	/**
 	 * list of participants
 	 * @var	ConversationParticipantList
 	 */
-	public $participantList = null;
+	public $participantList;
 	
 	/**
 	 * @inheritDoc
