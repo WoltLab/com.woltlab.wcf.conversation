@@ -1,33 +1,32 @@
 <?php
 namespace wcf\system\importer;
+use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\label\ConversationLabelAction;
 
 /**
  * Imports conversation labels.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package	com.woltlab.wcf.conversation
- * @subpackage	system.importer
- * @category	Community Framework
+ * @package	WoltLabSuite\Core\System\Importer
  */
 class ConversationLabelImporter extends AbstractImporter {
 	/**
-	 * @see	\wcf\system\importer\AbstractImporter::$className
+	 * @inheritDoc
 	 */
-	protected $className = 'wcf\data\conversation\label\ConversationLabel';
+	protected $className = ConversationLabel::class;
 	
 	/**
-	 * @see	\wcf\system\importer\IImporter::import()
+	 * @inheritDoc
 	 */
-	public function import($oldID, array $data, array $additionalData = array()) {
+	public function import($oldID, array $data, array $additionalData = []) {
 		$data['userID'] = ImportHandler::getInstance()->getNewID('com.woltlab.wcf.user', $data['userID']);
 		if (!$data['userID']) return 0;
 		
-		$action = new ConversationLabelAction(array(), 'create', array(
+		$action = new ConversationLabelAction([], 'create', [
 			'data' => $data
-		));
+		]);
 		$returnValues = $action->executeAction();
 		$newID = $returnValues['returnValues']->labelID;
 		

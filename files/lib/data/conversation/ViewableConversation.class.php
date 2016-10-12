@@ -5,6 +5,8 @@ use wcf\data\conversation\label\ConversationLabelList;
 use wcf\data\user\User;
 use wcf\data\user\UserProfile;
 use wcf\data\DatabaseObjectDecorator;
+use wcf\data\TLegacyUserPropertyAccess;
+use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\WCF;
 
@@ -12,50 +14,111 @@ use wcf\system\WCF;
  * Represents a viewable conversation.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package	com.woltlab.wcf.conversation
- * @subpackage	data.conversation
- * @category	Community Framework
+ * @package	WoltLabSuite\Core\Data\Conversation
+ * 
+ * @method	Conversation	getDecoratedObject()
+ * @mixin	Conversation
+ * @property-read	integer|null	$otherParticipantID
+ * @property-read	string|null	$otherParticipant
  */
 class ViewableConversation extends DatabaseObjectDecorator {
+	use TLegacyUserPropertyAccess;
+	
 	/**
 	 * participant summary
 	 * @var	string
 	 */
-	protected $__participantSummary = null;
+	protected $__participantSummary;
 	
 	/**
 	 * user profile object
-	 * @var	\wcf\data\user\UserProfile
+	 * @var	UserProfile
 	 */
-	protected $userProfile = null;
+	protected $userProfile;
 	
 	/**
 	 * last poster's profile
-	 * @var	\wcf\data\user\UserProfile
+	 * @var	UserProfile
 	 */
-	protected $lastPosterProfile = null;
+	protected $lastPosterProfile;
 	
 	/**
-	 * @see	\wcf\data\DatabaseObjectDecorator::$baseClass
+	 * other participant's profile
+	 * @var	UserProfile
 	 */
-	protected static $baseClass = 'wcf\data\conversation\Conversation';
+	protected $otherParticipantProfile;
 	
 	/**
 	 * list of assigned labels
-	 * @var	array<\wcf\data\conversation\label\ConversationLabel>
+	 * @var	ConversationLabel[]
 	 */
-	protected $labels = array();
+	protected $labels = [];
+	
+	/**
+	 * @inheritDoc
+	 */
+	protected static $baseClass = Conversation::class;
+	
+	/**
+	 * maps legacy direct access to last poster's user profile data to the real
+	 * user profile property names
+	 * @var	string[]
+	 * @deprecated
+	 */
+	protected static $__lastUserAvatarPropertyMapping = [
+		'lastPosterAvatarID' => 'avatarID',
+		'lastPosterAvatarName' => 'avatarName',
+		'lastPosterAvatarExtension' => 'avatarExtension',
+		'lastPosterAvatarWidth' => 'width',
+		'lastPosterAvatarHeight' => 'height',
+		'lastPosterEmail' => 'email',
+		'lastPosterDisableAvatar' => 'disableAvatar',
+		'lastPosterEnableGravatar' => 'enableGravatar',
+		'lastPosterGravatarFileExtension' => 'gravatarFileExtension',
+		'lastPosterAvatarFileHash' => 'fileHash'
+	];
+	
+	/**
+	 * @inheritDoc
+	 * @deprecated
+	 */
+	public function __get($name) {
+		$value = parent::__get($name);
+		if ($value !== null) {
+			return $value;
+		}
+		else if (array_key_exists($name, $this->object->data)) {
+			return null;
+		}
+		
+		/** @noinspection PhpVariableVariableInspection */
+		$value = $this->getUserProfile()->$name;
+		if ($value !== null) {
+			return $value;
+		}
+		
+		if (isset(static::$__lastUserAvatarPropertyMapping[$name])) {
+			return $this->getLastPosterProfile()->getAvatar()->{static::$__lastUserAvatarPropertyMapping[$name]};
+		}
+		
+		return null;
+	}
 	
 	/**
 	 * Returns the user profile object.
 	 * 
-	 * @return	\wcf\data\user\UserProfile
+	 * @return	UserProfile
 	 */
 	public function getUserProfile() {
 		if ($this->userProfile === null) {
-			$this->userProfile = new UserProfile(new User(null, $this->getDecoratedObject()->data));
+			if ($this->userID) {
+				$this->userProfile = UserProfileRuntimeCache::getInstance()->getObject($this->userID);
+			}
+			else {
+				$this->userProfile = UserProfile::getGuestUserProfile($this->username);
+			}
 		}
 		
 		return $this->userProfile;
@@ -64,27 +127,15 @@ class ViewableConversation extends DatabaseObjectDecorator {
 	/**
 	 * Returns the last poster's profile object.
 	 * 
-	 * @return	\wcf\data\user\UserProfile
+	 * @return	UserProfile
 	 */
 	public function getLastPosterProfile() {
 		if ($this->lastPosterProfile === null) {
-			if ($this->userID && $this->userID == $this->lastPosterID) {
-				$this->lastPosterProfile = $this->getUserProfile();
+			if ($this->lastPosterID) {
+				$this->lastPosterProfile = UserProfileRuntimeCache::getInstance()->getObject($this->lastPosterID);
 			}
 			else {
-				$this->lastPosterProfile = new UserProfile(new User(null, array(
-					'userID' => $this->lastPosterID,
-					'username' => $this->lastPoster,
-					'avatarID' => $this->lastPosterAvatarID,
-					'avatarName' => $this->lastPosterAvatarName,
-					'avatarExtension' => $this->lastPosterAvatarExtension,
-					'width' => $this->lastPosterAvatarWidth,
-					'height' => $this->lastPosterAvatarHeight,
-					'email' => $this->lastPosterEmail,
-					'disableAvatar' => $this->lastPosterDisableAvatar,
-					'enableGravatar' => $this->lastPosterEnableGravatar,
-					'gravatarFileExtension' => $this->lastPosterGravatarFileExtension
-				)));
+				$this->lastPosterProfile = UserProfile::getGuestUserProfile($this->lastPoster);
 			}
 		}
 		
@@ -97,7 +148,9 @@ class ViewableConversation extends DatabaseObjectDecorator {
 	 * @return	integer
 	 */
 	public function getPages() {
+		/** @noinspection PhpUndefinedFieldInspection */
 		if (WCF::getUser()->conversationMessagesPerPage) {
+			/** @noinspection PhpUndefinedFieldInspection */
 			$messagesPerPage = WCF::getUser()->conversationMessagesPerPage;
 		}
 		else {
@@ -110,21 +163,21 @@ class ViewableConversation extends DatabaseObjectDecorator {
 	/**
 	 * Returns a summary of the participants.
 	 * 
-	 * @return	array<\wcf\data\user\User>
+	 * @return	User[]
 	 */
 	public function getParticipantSummary() {
 		if ($this->__participantSummary === null) {
-			$this->__participantSummary = array();
+			$this->__participantSummary = [];
 			
 			if ($this->participantSummary) {
 				$data = unserialize($this->participantSummary);
 				if ($data !== false) {
 					foreach ($data as $userData) {
-						$this->__participantSummary[] = new User(null, array(
+						$this->__participantSummary[] = new User(null, [
 							'userID' => $userData['userID'],
 							'username' => $userData['username'],
 							'hideConversation' => $userData['hideConversation']
-						));
+						]);
 					}
 				}
 			}
@@ -134,9 +187,27 @@ class ViewableConversation extends DatabaseObjectDecorator {
 	}
 	
 	/**
+	 * Returns the other participant's profile object.
+	 *
+	 * @return	UserProfile
+	 */
+	public function getOtherParticipantProfile() {
+		if ($this->otherParticipantProfile === null) {
+			if ($this->otherParticipantID) {
+				$this->otherParticipantProfile = UserProfileRuntimeCache::getInstance()->getObject($this->otherParticipantID);
+			}
+			else {
+				$this->otherParticipantProfile = UserProfile::getGuestUserProfile($this->otherParticipant);
+			}
+		}
+		
+		return $this->otherParticipantProfile;
+	}
+	
+	/**
 	 * Assigns a label.
 	 * 
-	 * @param	\wcf\data\conversation\label\ConversationLabel	$label
+	 * @param	ConversationLabel	$label
 	 */
 	public function assignLabel(ConversationLabel $label) {
 		$this->labels[$label->labelID] = $label;
@@ -145,7 +216,7 @@ class ViewableConversation extends DatabaseObjectDecorator {
 	/**
 	 * Returns a list of assigned labels.
 	 * 
-	 * @return	array<\wcf\data\conversation\label\ConversationLabel>
+	 * @return	ConversationLabel[]
 	 */
 	public function getAssignedLabels() {
 		return $this->labels;
@@ -154,9 +225,9 @@ class ViewableConversation extends DatabaseObjectDecorator {
 	/**
 	 * Converts a conversation into a viewable conversation.
 	 * 
-	 * @param	\wcf\data\conversation\Conversation			$conversation
-	 * @param	\wcf\data\conversation\label\ConversationLabelList	$labelList
-	 * @return	\wcf\data\conversation\ViewableConversation
+	 * @param	Conversation		$conversation
+	 * @param	ConversationLabelList	$labelList
+	 * @return	ViewableConversation
 	 */
 	public static function getViewableConversation(Conversation $conversation, ConversationLabelList $labelList = null) {
 		$conversation = new ViewableConversation($conversation);
@@ -168,15 +239,14 @@ class ViewableConversation extends DatabaseObjectDecorator {
 		$labels = $labelList->getObjects();
 		if (!empty($labels)) {
 			$conditions = new PreparedStatementConditionBuilder();
-			$conditions->add("conversationID = ?", array($conversation->conversationID));
-			$conditions->add("labelID IN (?)", array(array_keys($labels)));
+			$conditions->add("conversationID = ?", [$conversation->conversationID]);
+			$conditions->add("labelID IN (?)", [array_keys($labels)]);
 			
 			$sql = "SELECT	labelID
 				FROM	wcf".WCF_N."_conversation_label_to_object
 				".$conditions;
 			$statement = WCF::getDB()->prepareStatement($sql);
 			$statement->execute($conditions->getParameters());
-			$data = array();
 			while ($row = $statement->fetchArray()) {
 				$conversation->assignLabel($labels[$row['labelID']]);
 			}

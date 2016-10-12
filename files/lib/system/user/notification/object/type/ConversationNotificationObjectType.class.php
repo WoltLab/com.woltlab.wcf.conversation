@@ -1,36 +1,37 @@
 <?php
 namespace wcf\system\user\notification\object\type;
 use wcf\data\conversation\Conversation;
+use wcf\data\conversation\ConversationList;
+use wcf\system\user\notification\object\ConversationUserNotificationObject;
 use wcf\system\WCF;
 
 /**
  * Represents a conversation notification object type.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package	com.woltlab.wcf.conversation
- * @subpackage	system.user.notification.object.type
- * @category	Community Framework
+ * @package	WoltLabSuite\Core\System\User\Notification\Object\Type
  */
 class ConversationNotificationObjectType extends AbstractUserNotificationObjectType {
 	/**
-	 * @see	\wcf\system\user\notification\object\type\AbstractUserNotificationObjectType::$decoratorClassName
+	 * @inheritDoc
 	 */
-	protected static $decoratorClassName = 'wcf\system\user\notification\object\ConversationUserNotificationObject';
+	protected static $decoratorClassName = ConversationUserNotificationObject::class;
 	
 	/**
-	 * @see	\wcf\system\user\notification\object\type\AbstractUserNotificationObjectType::$objectClassName
+	 * @inheritDoc
 	 */
-	protected static $objectClassName = 'wcf\data\conversation\Conversation';
+	protected static $objectClassName = Conversation::class;
 	
 	/**
-	 * @see	\wcf\system\user\notification\object\type\AbstractUserNotificationObjectType::$objectListClassName
+	 * @inheritDoc
 	 */
-	protected static $objectListClassName = 'wcf\data\conversation\ConversationList';
+	protected static $objectListClassName = ConversationList::class;
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
-	 * @see	\wcf\system\user\notification\object\type\IUserNotificationObjectType::getObjectsByIDs()
+	 * @inheritDoc
 	 */
 	public function getObjectsByIDs(array $objectIDs) {
 		$objects = Conversation::getUserConversations($objectIDs, WCF::getUser()->userID);
@@ -45,10 +46,10 @@ class ConversationNotificationObjectType extends AbstractUserNotificationObjectT
 				// '__unknownNotificationObject' tells the notification API
 				// that the object does not exist anymore so that the related
 				// notification can be deleted automatically
-				$objects[$objectID] = new static::$decoratorClassName(new static::$objectClassName(null, array(
+				$objects[$objectID] = new static::$decoratorClassName(new static::$objectClassName(null, [
 					'__unknownNotificationObject' => true,
 					'conversationID' => $objectID
-				)));
+				]));
 			}
 		}
 		

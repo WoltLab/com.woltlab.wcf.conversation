@@ -1,6 +1,5 @@
 <?php
 namespace wcf\data\conversation;
-use wcf\data\user\User;
 use wcf\data\user\UserProfile;
 use wcf\data\user\UserProfileList;
 use wcf\system\WCF;
@@ -9,11 +8,9 @@ use wcf\system\WCF;
  * Represents a list of conversation participants.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package	com.woltlab.wcf.conversation
- * @subpackage	data.conversation
- * @category	Community Framework
+ * @package	WoltLabSuite\Core\Data\Conversation
  */
 class ConversationParticipantList extends UserProfileList {
 	/**
@@ -23,7 +20,7 @@ class ConversationParticipantList extends UserProfileList {
 	public $conversationID = 0;
 	
 	/**
-	 * @see	\wcf\data\DatabaseObjectList::$sqlLimit
+	 * @inheritDoc
 	 */
 	public $sqlLimit = 0;
 	
@@ -31,16 +28,17 @@ class ConversationParticipantList extends UserProfileList {
 	 * Creates a new ConversationParticipantList object.
 	 * 
 	 * @param	integer		$conversationID
+	 * @param	integer		$userID
 	 * @param	boolean		$isAuthor		true if given user is the author of this conversation
 	 */
 	public function __construct($conversationID, $userID = 0, $isAuthor = false) {
 		parent::__construct();
 		
 		$this->conversationID = $conversationID;
-		$this->getConditionBuilder()->add('conversation_to_user.conversationID = ?', array($conversationID));
+		$this->getConditionBuilder()->add('conversation_to_user.conversationID = ?', [$conversationID]);
 		if (!$isAuthor) {
 			if ($userID) {
-				$this->getConditionBuilder()->add('conversation_to_user.isInvisible = 0 OR conversation_to_user.participantID = ?', array($userID));
+				$this->getConditionBuilder()->add('conversation_to_user.isInvisible = 0 OR conversation_to_user.participantID = ?', [$userID]);
 			}
 			else {
 				$this->getConditionBuilder()->add('conversation_to_user.isInvisible = 0');
@@ -53,8 +51,9 @@ class ConversationParticipantList extends UserProfileList {
 		$this->sqlJoins .= " LEFT JOIN wcf".WCF_N."_conversation_to_user conversation_to_user ON (conversation_to_user.participantID = user_table.userID AND conversation_to_user.conversationID = ".$conversationID.")";
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
-	 * @see	\wcf\data\DatabaseObjectList::countObjects()
+	 * @inheritDoc
 	 */
 	public function countObjects() {
 		$sql = "SELECT	COUNT(*) AS count
@@ -67,11 +66,12 @@ class ConversationParticipantList extends UserProfileList {
 		return $row['count'];
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
-	 * @see	\wcf\data\DatabaseObjectList::readObjectIDs()
+	 * @inheritDoc
 	 */
 	public function readObjectIDs() {
-		$this->objectIDs = array();
+		$this->objectIDs = [];
 		$sql = "SELECT	conversation_to_user.participantID AS objectID
 			FROM	wcf".WCF_N."_conversation_to_user conversation_to_user
 				".$this->sqlConditionJoins."
@@ -79,13 +79,11 @@ class ConversationParticipantList extends UserProfileList {
 				".(!empty($this->sqlOrderBy) ? "ORDER BY ".$this->sqlOrderBy : '');
 		$statement = WCF::getDB()->prepareStatement($sql, $this->sqlLimit, $this->sqlOffset);
 		$statement->execute($this->getConditionBuilder()->getParameters());
-		while ($row = $statement->fetchArray()) {
-			$this->objectIDs[] = $row['objectID'];
-		}
+		$this->objectIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
 	}
 	
 	/**
-	 * @see	\wcf\data\user\UserProfileList::readObjects()
+	 * @inheritDoc
 	 */
 	public function readObjects() {
 		parent::readObjects();
@@ -96,12 +94,11 @@ class ConversationParticipantList extends UserProfileList {
 			WHERE	conversationID = ?
 				AND participantID IS NULL";
 		$statement = WCF::getDB()->prepareStatement($sql);
-		$statement->execute(array($this->conversationID));
+		$statement->execute([$this->conversationID]);
 		$i = 0;
 		while ($row = $statement->fetchArray()) {
 			// create fake user profiles
-			$user = new User(null, array('userID' => 0, 'username' => $row['username']));
-			$this->objects['x'.(++$i)] = new UserProfile($user);
+			$this->objects['x'.(++$i)] = UserProfile::getGuestUserProfile($row['username']);
 			$this->indexToObject[] = 'x'.$i;
 		}
 	}

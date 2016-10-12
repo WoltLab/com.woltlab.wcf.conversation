@@ -7,27 +7,25 @@ use wcf\system\WCF;
  * Shows most recent conversations.
  * 
  * @author	Alexander Ebert
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package	com.woltlab.wcf.conversation
- * @subpackage	page
- * @category	Community Framework
+ * @package	WoltLabSuite\Core\Page
  */
 class ConversationFeedPage extends AbstractFeedPage {
 	/**
-	 * @see	\wcf\page\AbstractPage::$loginRequired
+	 * @inheritDoc
 	 */
 	public $loginRequired = true;
 	
 	/**
-	 * @see	\wcf\page\IPage::readData()
+	 * @inheritDoc
 	 */
 	public function readData() {
 		parent::readData();
 		
 		$this->items = new FeedConversationList();
-		$this->items->getConditionBuilder()->add('conversation_to_user.participantID = ?', array(WCF::getUser()->userID));
-		$this->items->getConditionBuilder()->add('conversation_to_user.hideConversation = ?', array(0));
+		$this->items->getConditionBuilder()->add('conversation_to_user.participantID = ?', [WCF::getUser()->userID]);
+		$this->items->getConditionBuilder()->add('conversation_to_user.hideConversation = ?', [0]);
 		$this->items->sqlConditionJoins = "LEFT JOIN wcf".WCF_N."_conversation conversation ON (conversation.conversationID = conversation_to_user.conversationID)";
 		$this->items->sqlLimit = 20;
 		$this->items->readObjects();

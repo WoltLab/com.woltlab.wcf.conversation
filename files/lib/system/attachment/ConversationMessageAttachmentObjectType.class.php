@@ -10,36 +10,39 @@ use wcf\util\ArrayUtil;
  * Attachment object type implementation for conversations.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package	com.woltlab.wcf.conversation
- * @subpackage	system.attachment
- * @category	Community Framework
+ * @package	WoltLabSuite\Core\System\Attachment
+ * 
+ * @method	ConversationMessage	getObject($objectID)
  */
 class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectType {
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
-	 * @see	\wcf\system\attachment\IAttachmentObjectType::getMaxSize()
+	 * @inheritDoc
 	 */
 	public function getMaxSize() {
 		return WCF::getSession()->getPermission('user.conversation.maxAttachmentSize');
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
-	 * @see	\wcf\system\attachment\IAttachmentObjectType::getAllowedExtensions()
+	 * @inheritDoc
 	 */
 	public function getAllowedExtensions() {
 		return ArrayUtil::trim(explode("\n", WCF::getSession()->getPermission('user.conversation.allowedAttachmentExtensions')));
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
-	 * @see	\wcf\system\attachment\IAttachmentObjectType::getMaxCount()
+	 * @inheritDoc
 	 */
 	public function getMaxCount() {
 		return WCF::getSession()->getPermission('user.conversation.maxAttachmentCount');
 	}
 	
 	/**
-	 * @see	\wcf\system\attachment\IAttachmentObjectType::canDownload()
+	 * @inheritDoc
 	 */
 	public function canDownload($objectID) {
 		if ($objectID) {
@@ -52,7 +55,7 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
 	}
 	
 	/**
-	 * @see	\wcf\system\attachment\IAttachmentObjectType::canUpload()
+	 * @inheritDoc
 	 */
 	public function canUpload($objectID, $parentObjectID = 0) {
 		if (!WCF::getSession()->getPermission('user.conversation.canUploadAttachment')) {
@@ -69,7 +72,7 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
 	}
 	
 	/**
-	 * @see	\wcf\system\attachment\IAttachmentObjectType::canDelete()
+	 * @inheritDoc
 	 */
 	public function canDelete($objectID) {
 		if ($objectID) {
@@ -81,13 +84,13 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
 	}
 	
 	/**
-	 * @see	\wcf\system\attachment\IAttachmentObjectType::cacheObjects()
+	 * @inheritDoc
 	 */
 	public function cacheObjects(array $objectIDs) {
 		$messageList = new ConversationMessageList();
 		$messageList->setObjectIDs($objectIDs);
 		$messageList->readObjects();
-		$conversationIDs = array();
+		$conversationIDs = [];
 		foreach ($messageList as $message) {
 			$conversationIDs[] = $message->conversationID;
 		}
@@ -103,17 +106,18 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
 		}
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
-	 * @see	\wcf\system\attachment\IAttachmentObjectType::setPermissions()
+	 * @inheritDoc
 	 */
 	public function setPermissions(array $attachments) {
-		$messageIDs = array();
+		$messageIDs = [];
 		foreach ($attachments as $attachment) {
 			// set default permissions
-			$attachment->setPermissions(array(
+			$attachment->setPermissions([
 				'canDownload' => false,
 				'canViewPreview' => false
-			));
+			]);
 			
 			if ($this->getObject($attachment->objectID) === null) {
 				$messageIDs[] = $attachment->objectID;
@@ -128,16 +132,16 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
 			if (($message = $this->getObject($attachment->objectID)) !== null) {
 				if (!$message->getConversation()->canRead()) continue;
 				
-				$attachment->setPermissions(array(
+				$attachment->setPermissions([
 					'canDownload' => true,
 					'canViewPreview' => true
-				));
+				]);
 			}
 			else if ($attachment->tmpHash != '' && $attachment->userID == WCF::getUser()->userID) {
-				$attachment->setPermissions(array(
+				$attachment->setPermissions([
 					'canDownload' => true,
 					'canViewPreview' => true
-				));
+				]);
 			}
 		}
 	}

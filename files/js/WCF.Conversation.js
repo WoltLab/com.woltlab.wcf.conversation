@@ -146,7 +146,7 @@ WCF.Conversation.EditorHandler = Class.extend({
 		
 		switch (key) {
 			case 'close':
-				$('<li><span class="icon icon16 icon-lock jsTooltip jsIconLock" title="' + WCF.Language.get('wcf.global.state.closed') + '" /></li>').prependTo($conversation.find('.statusIcons'));
+				$('<li><span class="icon icon16 fa-lock jsTooltip jsIconLock" title="' + WCF.Language.get('wcf.global.state.closed') + '" /></li>').prependTo($conversation.find('.statusIcons'));
 				
 				this._attributes[conversationID].isClosed = 1;
 			break;
@@ -179,7 +179,7 @@ WCF.Conversation.EditorHandler = Class.extend({
 					// insert labels
 					for (var $i = 0, $length = data.length; $i < $length; $i++) {
 						var $label = $labels[data[$i]];
-						$('<li><a href="' + $label.url + '" class="badge label' + ($label.cssClassName ? " " + $label.cssClassName : "") + '">' + WCF.String.escapeHTML($label.label) + '</a>&nbsp;</li>').appendTo($labelList);
+						$('<li><a href="' + $label.url + '" class="badge label' + ($label.cssClassName ? " " + $label.cssClassName : "") + '">' + WCF.String.escapeHTML($label.label) + '</a></li>').appendTo($labelList);
 					}
 				}
 			break;
@@ -241,46 +241,43 @@ WCF.Conversation.EditorHandlerConversation = WCF.Conversation.EditorHandler.exte
 			return;
 		}
 		
+		var container = $('.contentHeaderTitle > .contentHeaderMetaData');
+		
 		switch (key) {
 			case 'close':
-				$('<span class="icon icon16 icon-lock jsTooltip jsIconLock" title="' + WCF.Language.get('wcf.global.state.closed') + '" />').appendTo($('#content > header > h1'));
+				$('<li><span class="icon icon16 fa-lock jsIconLock" /> ' + WCF.Language.get('wcf.global.state.closed') + '</li>').appendTo(container);
 				
 				this._attributes[conversationID].isClosed = 1;
 			break;
 			
 			case 'labelIDs':
-				var $container = $('.conversationHeadline');
+				var labelList = container.find('.labelList');
 				if (!data.length) {
-					// remove all labels
-					$container.find('ul.labelList').remove();
+					labelList.parent().remove();
 				}
 				else {
-					var $labelList = $container.find('ul.labelList');
-					if (!$labelList.length) {
-						$labelList = $('<ul class="labelList" />').appendTo($container);
+					var availableLabels = this.getAvailableLabels();
+					
+					if (!labelList.length) {
+						labelList = $('<li><span class="icon icon16 fa-tags"></span> <ul class="labelList"></ul></li>').prependTo(container);
+						labelList = labelList.children('ul');
 					}
 					
-					// remove existing labels
-					$labelList.empty();
-					
-					// add new labels
-					for (var $i = 0, $length = data.length; $i < $length; $i++) {
-						var $labelID = data[$i];
-						
-						for (var $j = 0, $innerLength = this.getAvailableLabels().length; $j < $innerLength; $j++) {
-							var $label = this.getAvailableLabels()[$j];
-							if ($label.labelID == $labelID) {
-								$('<li><span class="label badge' + ($label.cssClassName ? " " + $label.cssClassName : "") + '">' + $label.label + '</span>&nbsp;</li>').appendTo($labelList);
-								
-								break;
+					var html = '';
+					data.forEach(function(labelId) {
+						availableLabels.forEach(function(label) {
+							if (label.labelID == labelId) {
+								html += '<li><span class="label badge' + (label.cssClassName ? ' ' + label.cssClassName : '') + '">' + label.label + '</span></li>';
 							}
-						}
-					}
+						});
+					});
+					
+					labelList[0].innerHTML = html;
 				}
 			break;
 			
 			case 'open':
-				$('#content > header span.jsIconLock').remove();
+				container.find('.jsIconLock').parent().remove();
 				
 				this._attributes[conversationID].isClosed = 0;
 			break;
@@ -301,33 +298,29 @@ WCF.Conversation.Clipboard = Class.extend({
 	/**
 	 * Initializes a new WCF.Conversation.Clipboard object.
 	 * 
-	 * @param	WCF.Conversation.EditorHandler	editorHandler
+	 * @param	{WCF.Conversation.EditorHandler}	editorHandler
 	 */
 	init: function(editorHandler) {
 		this._editorHandler = editorHandler;
 		
-		// bind listener
-		$('.jsClipboardEditor').each($.proxy(function(index, container) {
-			var $container = $(container);
-			var $types = eval($container.data('types'));
-			if (WCF.inArray('com.woltlab.wcf.conversation.conversation', $types)) {
-				$container.on('clipboardAction', $.proxy(this._execute, this));
-				$container.on('clipboardActionResponse', $.proxy(this._evaluateResponse, this));
-				return false;
+		WCF.System.Event.addListener('com.woltlab.wcf.clipboard', 'com.woltlab.wcf.conversation.conversation', (function (data) {
+			if (data.responseData === null) {
+				this._execute(data.data.actionName, data.data.parameters);
 			}
-		}, this));
+			else {
+				this._evaluateResponse(data.data.actionName, data.responseData);
+			}
+		}).bind(this));
 	},
 	
 	/**
 	 * Handles clipboard actions.
 	 * 
-	 * @param	object		event
-	 * @param	string		type
-	 * @param	string		actionName
-	 * @param	object		parameters
+	 * @param	{string}	actionName
+	 * @param	{Object}	parameters
 	 */
-	_execute: function(event, type, actionName, parameters) {
-		if (type === 'com.woltlab.wcf.conversation.conversation' && actionName === 'com.woltlab.wcf.conversation.conversation.assignLabel') {
+	_execute: function(actionName, parameters) {
+		if (actionName === 'com.woltlab.wcf.conversation.conversation.assignLabel') {
 			new WCF.Conversation.Label.Editor(this._editorHandler, null, parameters.objectIDs);
 		}
 	},
@@ -335,18 +328,10 @@ WCF.Conversation.Clipboard = Class.extend({
 	/**
 	 * Evaluates AJAX responses.
 	 * 
-	 * @param	object		event
-	 * @param	object		data
-	 * @param	string		type
-	 * @param	string		actionName
-	 * @param	object		parameters
+	 * @param	{Object}	data
+	 * @param	{string}	actionName
 	 */
-	_evaluateResponse: function(event, data, type, actionName, parameters) {
-		if (type !== 'com.woltlab.wcf.conversation.conversation') {
-			// ignore unreleated events
-			return;
-		}
-		
+	_evaluateResponse: function(actionName, data) {
 		switch (actionName) {
 			case 'com.woltlab.wcf.conversation.conversation.leave':
 			case 'com.woltlab.wcf.conversation.conversation.leavePermanently':
@@ -357,10 +342,15 @@ WCF.Conversation.Clipboard = Class.extend({
 			
 			case 'com.woltlab.wcf.conversation.conversation.close':
 			case 'com.woltlab.wcf.conversation.conversation.open':
-				for (var $conversationID in data.returnValues.conversationData) {
-					var $data = data.returnValues.conversationData[$conversationID];
-					
-					this._editorHandler.update($conversationID, ($data.isClosed ? 'close' : 'open'), $data);
+				//noinspection JSUnresolvedVariable
+				for (var conversationId in data.returnValues.conversationData) {
+					//noinspection JSUnresolvedVariable
+					if (data.returnValues.conversationData.hasOwnProperty(conversationId)) {
+						//noinspection JSUnresolvedVariable
+						var $data = data.returnValues.conversationData[conversationId];
+						
+						this._editorHandler.update(conversationId, ($data.isClosed ? 'close' : 'open'), $data);
+					}
 				}
 			break;
 		}
@@ -470,7 +460,9 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
 		
 		switch (optionName) {
 			case 'addParticipants':
-				new WCF.Conversation.AddParticipants($('#' + elementID).data('conversationID'));
+				require(['WoltLabSuite/Core/Conversation/Ui/Participant/Add'], function(UiParticipantAdd) {
+					new UiParticipantAdd(document.getElementById(elementID).getAttribute('data-conversation-id'));
+				});
 			break;
 			
 			case 'assignLabel':
@@ -663,143 +655,6 @@ WCF.Conversation.Leave = Class.extend({
 			});
 			this._proxy.sendRequest();
 		}
-	}
-});
-
-/**
- * Provides methods to add new participants.
- * 
- * @param	integer		conversationID
- */
-WCF.Conversation.AddParticipants = Class.extend({
-	/**
-	 * conversation id
-	 * @var	integer
-	 */
-	_conversationID: 0,
-	
-	/**
-	 * dialog overlay
-	 * @var	jQuery
-	 */
-	_dialog: null,
-	
-	/**
-	 * action proxy
-	 * @var	WCF.Action.Proxy
-	 */
-	_proxy: null,
-	
-	/**
-	 * Initializes the WCF.Conversation.AddParticipants class
-	 * 
-	 * @param	integer		conversationID
-	 */
-	init: function(conversationID) {
-		this._conversationID = conversationID;
-		
-		this._dialog = $('#conversationAddParticipants');
-		if (!this._dialog.length) {
-			this._dialog = $('<div id="conversationAddParticipants" />').hide().appendTo(document.body);
-		}
-		
-		this._proxy = new WCF.Action.Proxy({
-			autoSend: true,
-			data: {
-				actionName: 'getAddParticipantsForm',
-				className: 'wcf\\data\\conversation\\ConversationAction',
-				objectIDs: [ this._conversationID ]
-			},
-			success: $.proxy(this._success, this)
-		});
-	},
-	
-	/**
-	 * Handles successful AJAX requests.
-	 * 
-	 * @param	object		data
-	 * @param	string		textStatus
-	 * @param	jQuery		jqXHR
-	 */
-	_success: function(data, textStatus, jqXHR) {
-		switch (data.returnValues.actionName) {
-			case 'addParticipants':
-				if (data.returnValues.errorMessage) {
-					this._dialog.find('dl.jsAddParticipants').addClass('formError');
-					this._dialog.find('dl.jsAddParticipants > dd small.innerError').remove();
-					$('<small class="innerError">' + data.returnValues.errorMessage + '</small>').appendTo(this._dialog.find('dl.jsAddParticipants > dd'));
-					return;
-				}
-				
-				if (data.returnValues.count) {
-					var $notification = new WCF.System.Notification(data.returnValues.successMessage);
-					$notification.show();
-				}
-				
-				this._dialog.find('dl.jsAddParticipants').removeClass('formError').find('small.innerError').remove();
-				this._dialog.wcfDialog('close');
-			break;
-			
-			case 'getAddParticipantsForm':
-				this._renderForm(data);
-			break;
-		}
-	},
-	
-	/**
-	 * Renders the 'add participants' form.
-	 * 
-	 * @param	object		data
-	 */
-	_renderForm: function(data) {
-		this._dialog.html(data.returnValues.template);
-		this._dialog.find('#addParticipants').disable().click($.proxy(this._submit, this));
-		
-		new WCF.Search.User('#participantsInput', null, false, data.returnValues.excludeSearchValues, true);
-		
-		var $participantsInput = $('#participantsInput');
-		$participantsInput.keyup($.proxy(this._toggleSubmitButton, this));
-		
-		if ($.browser.mozilla && $.browser.touch) {
-			$participantsInput.on('input', $.proxy(this._toggleSubmitButton, this));
-		}
-		
-		this._dialog.wcfDialog({
-			title: WCF.Language.get('wcf.conversation.edit.addParticipants')
-		});
-	},
-	
-	/**
-	 * Toggles the submit button if the input field contains a/no particiant.
-	 */
-	_toggleSubmitButton: function() {
-		var $submitButton = this._dialog.find('#addParticipants');
-		if ($.trim($('#participantsInput').val()) === '') {
-			$submitButton.disable();
-		}
-		else {
-			$submitButton.enable();
-		}
-	},
-	
-	/**
-	 * Submits the form to add new participants.
-	 */
-	_submit: function() {
-		var $participants = $.trim($('#participantsInput').val());
-		if ($participants == '') {
-			this._dialog.wcfDialog('close');
-		}
-		
-		this._proxy.setOption('data', {
-			actionName: 'addParticipants',
-			className: 'wcf\\data\\conversation\\ConversationAction',
-			objectIDs: [ this._conversationID ],
-			parameters: {
-				participants: $participants
-			}
-		});
-		this._proxy.sendRequest();
 	}
 });
 
@@ -1261,7 +1116,7 @@ WCF.Conversation.Label.Manager = Class.extend({
 				
 				this._deletedLabelID = $('#conversationLabelManagementForm').data('labelID');
 			}
-		}, this));
+		}, this), undefined, undefined, true);
 	},
 	
 	/**
@@ -1370,6 +1225,14 @@ WCF.User.Panel.Conversation = WCF.User.Panel.Abstract.extend({
 			this.updateBadge(0);
 			this._loadData = true;
 		}).bind(this));
+		
+		require(['EventHandler'], (function(EventHandler) {
+			EventHandler.add('com.woltlab.wcf.UserMenuMobile', 'more', (function(data) {
+				if (data.identifier === 'com.woltlab.wcf.conversation') {
+					this.toggle();
+				}
+			}).bind(this));
+		}).bind(this));
 	},
 	
 	/**
@@ -1378,7 +1241,7 @@ WCF.User.Panel.Conversation = WCF.User.Panel.Abstract.extend({
 	_initDropdown: function() {
 		var $dropdown = this._super();
 		
-		$('<li><a href="' + this._options.newConversationLink + '" title="' + this._options.newConversation + '" class="jsTooltip"><span class="icon icon16 fa-plus" /></a></li>').appendTo($dropdown.getLinkList());
+		$('<li><a href="' + this._options.newConversationLink + '" title="' + this._options.newConversation + '" class="jsTooltip"><span class="icon icon24 fa-plus" /></a></li>').appendTo($dropdown.getLinkList());
 		
 		return $dropdown;
 	},
@@ -1415,33 +1278,6 @@ WCF.User.Panel.Conversation = WCF.User.Panel.Abstract.extend({
 			className: 'wcf\\data\\conversation\\ConversationAction'
 		});
 		this._proxy.sendRequest();
-	}
-});
-
-/**
- * Provides an AJAX-based quick reply for conversations.
- */
-WCF.Conversation.QuickReply = WCF.Message.QuickReply.extend({
-	/**
-	 * @see	WCF.Message.QuickReply.init()
-	 */
-	init: function(quoteManager) {
-		this._super(true, quoteManager);
-	},
-	
-	/**
-	 * @see	WCF.Message.QuickReply._getClassName()
-	 */
-	_getClassName: function() {
-		return 'wcf\\data\\conversation\\message\\ConversationMessageAction';
-	},
-	
-	/**
-	 * @see	WCF.Message.QuickReply._getObjectID()
-	 * @returns
-	 */
-	_getObjectID: function() {
-		return this._container.data('conversationID');
 	}
 });
 

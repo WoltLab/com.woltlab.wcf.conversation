@@ -9,87 +9,90 @@ use wcf\system\search\SearchResultTextParser;
  * Represents a list of search result.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package	com.woltlab.wcf.conversation
- * @subpackage	data.conversation.message
- * @category	Community Framework
+ * @package	WoltLabSuite\Core\Data\Conversation\Message
+ * 
+ * @property-read	string|null	$subject
  */
 class SearchResultConversationMessage extends ViewableConversationMessage implements ISearchResultObject {
 	/**
 	 * conversation object
-	 * @var	\wcf\data\conversation\Conversation
+	 * @var	Conversation
 	 */
-	public $conversation = null;
+	public $conversation;
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
 	 * Returns the conversation object.
 	 * 
-	 * @return	\wcf\data\conversation\Conversation
+	 * @return	Conversation
 	 */
 	public function getConversation() {
 		if ($this->conversation === null) {
-			$this->conversation = new Conversation(null, array(
+			$this->conversation = new Conversation(null, [
 				'conversationID' => $this->conversationID,
 				'subject' => $this->subject
-			));
+			]);
 		}
 		
 		return $this->conversation;
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
-	 * @see	\wcf\data\conversation\message\ConversationMessage::getFormattedMessage()
+	 * @inheritDoc
 	 */
 	public function getFormattedMessage() {
 		return SearchResultTextParser::getInstance()->parse($this->getDecoratedObject()->getSimplifiedFormattedMessage());
 	}
 	
 	/**
-	 * @see	\wcf\data\search\ISearchResultObject::getSubject()
+	 * @inheritDoc
 	 */
 	public function getSubject() {
 		return $this->subject;
 	}
 	
 	/**
-	 * @see	\wcf\data\search\ISearchResultObject::getLink()
+	 * @inheritDoc
 	 */
 	public function getLink($query = '') {
 		if ($query) {
-			return LinkHandler::getInstance()->getLink('Conversation', array(
+			return LinkHandler::getInstance()->getLink('Conversation', [
 				'object' => $this->getConversation(),
 				'messageID' => $this->messageID,
 				'highlight' => urlencode($query)
-			), '#message'.$this->messageID);
+			], '#message'.$this->messageID);
 		}
 		
 		return $this->getDecoratedObject()->getLink();
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
-	 * @see	\wcf\data\search\ISearchResultObject::getTime()
+	 * @inheritDoc
 	 */
 	public function getTime() {
 		return $this->time;
 	}
 	
 	/**
-	 * @see	\wcf\data\search\ISearchResultObject::getObjectTypeName()
+	 * @inheritDoc
 	 */
 	public function getObjectTypeName() {
 		return 'com.woltlab.wcf.conversation.message';
 	}
 	
 	/**
-	 * @see	\wcf\data\search\ISearchResultObject::getContainerTitle()
+	 * @inheritDoc
 	 */
 	public function getContainerTitle() {
 		return '';
 	}
 	
 	/**
-	 * @see	\wcf\data\search\ISearchResultObject::getContainerLink()
+	 * @inheritDoc
 	 */
 	public function getContainerLink() {
 		return '';

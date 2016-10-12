@@ -2,13 +2,13 @@
 namespace wcf\form;
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationAction;
-use wcf\data\user\UserProfile;
-use wcf\system\breadcrumb\Breadcrumb;
+use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\conversation\ConversationHandler;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\NamedUserException;
 use wcf\system\exception\UserInputException;
 use wcf\system\message\quote\MessageQuoteManager;
+use wcf\system\page\PageLocationManager;
 use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
 use wcf\util\HeaderUtil;
@@ -18,37 +18,35 @@ use wcf\util\StringUtil;
  * Shows the conversation form.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package	com.woltlab.wcf.conversation
- * @subpackage	form
- * @category	Community Framework
+ * @package	WoltLabSuite\Core\Form
  */
 class ConversationAddForm extends MessageForm {
 	/**
-	 * @see	\wcf\page\AbstractPage::$enableTracking
-	 */
-	public $enableTracking = true;
-	
-	/**
-	 * @see	\wcf\form\MessageForm::$attachmentObjectType
+	 * @inheritDoc
 	 */
 	public $attachmentObjectType = 'com.woltlab.wcf.conversation.message';
 	
 	/**
-	 * @see	\wcf\page\AbstractPage::$loginRequired
+	 * @inheritDoc
 	 */
 	public $loginRequired = true;
 	
 	/**
-	 * @see	\wcf\page\AbstractPage::$neededModules
+	 * @inheritDoc
 	 */
-	public $neededModules = array('MODULE_CONVERSATION');
+	public $messageObjectType = 'com.woltlab.wcf.conversation.message';
 	
 	/**
-	 * @see	\wcf\page\AbstractPage::$neededPermissions
+	 * @inheritDoc
 	 */
-	public $neededPermissions = array('user.conversation.canUseConversation');
+	public $neededModules = ['MODULE_CONVERSATION'];
+	
+	/**
+	 * @inheritDoc
+	 */
+	public $neededPermissions = ['user.conversation.canUseConversation'];
 	
 	/**
 	 * participants (comma separated user names)
@@ -76,18 +74,18 @@ class ConversationAddForm extends MessageForm {
 	
 	/**
 	 * participants (user ids)
-	 * @var	array<integer>
+	 * @var	integer[]
 	 */
-	public $participantIDs = array();
+	public $participantIDs = [];
 	
 	/**
 	 * invisible participants (user ids)
-	 * @var	array<integer>
+	 * @var	integer[]
 	 */
-	public $invisibleParticipantIDs = array();
+	public $invisibleParticipantIDs = [];
 	
 	/**
-	 * @see	\wcf\page\IPage::readParameters()
+	 * @inheritDoc
 	 */
 	public function readParameters() {
 		parent::readParameters();
@@ -101,7 +99,7 @@ class ConversationAddForm extends MessageForm {
 		
 		if (isset($_REQUEST['userID'])) {
 			$userID = intval($_REQUEST['userID']);
-			$user = UserProfile::getUserProfile($userID);
+			$user = UserProfileRuntimeCache::getInstance()->getObject($userID);
 			if ($user === null || $user->userID == WCF::getUser()->userID) {
 				throw new IllegalLinkException();
 			}
@@ -111,7 +109,7 @@ class ConversationAddForm extends MessageForm {
 				Conversation::validateParticipant($user);
 			}
 			catch (UserInputException $e) {
-				throw new NamedUserException(WCF::getLanguage()->getDynamicVariable('wcf.conversation.participants.error.'.$e->getType(), array('errorData' => array('username' => $user->username))));
+				throw new NamedUserException(WCF::getLanguage()->getDynamicVariable('wcf.conversation.participants.error.'.$e->getType(), ['errorData' => ['username' => $user->username]]));
 			}
 			
 			$this->participants = $user->username;
@@ -125,7 +123,7 @@ class ConversationAddForm extends MessageForm {
 	}
 	
 	/**
-	 * @see	\wcf\form\IForm::readFormParameters()
+	 * @inheritDoc
 	 */
 	public function readFormParameters() {
 		parent::readFormParameters();
@@ -140,7 +138,7 @@ class ConversationAddForm extends MessageForm {
 	}
 	
 	/**
-	 * @see	\wcf\form\IForm::validate()
+	 * @inheritDoc
 	 */
 	public function validate() {
 		if (empty($this->participants) && empty($this->invisibleParticipants) && !$this->draft) {
@@ -177,44 +175,39 @@ class ConversationAddForm extends MessageForm {
 	}
 	
 	/**
-	 * @see	\wcf\form\IForm::save()
+	 * @inheritDoc
 	 */
 	public function save() {
 		parent::save();
 		
 		// save conversation
-		$data = array_merge($this->additionalFields, array(
+		$data = array_merge($this->additionalFields, [
 			'subject' => $this->subject,
 			'time' => TIME_NOW,
 			'userID' => WCF::getUser()->userID,
 			'username' => WCF::getUser()->username,
-			'isDraft' => ($this->draft ? 1 : 0),
+			'isDraft' => $this->draft ? 1 : 0,
 			'participantCanInvite' => $this->participantCanInvite
-		));
+		]);
 		if ($this->draft) {
-			$data['draftData'] = serialize(array(
+			$data['draftData'] = serialize([
 				'participants' => $this->participantIDs,
 				'invisibleParticipants' => $this->invisibleParticipantIDs
-			));
+			]);
 		}
 		
-		$conversationData = array(
+		$conversationData = [
 			'data' => $data,
 			'attachmentHandler' => $this->attachmentHandler,
-			'messageData' => array(
-				'message' => $this->text,
-				'enableBBCodes' => $this->enableBBCodes,
-				'enableHtml' => $this->enableHtml,
-				'enableSmilies' => $this->enableSmilies,
-				'showSignature' => $this->showSignature
-			)
-		);
+			'htmlInputProcessor' => $this->htmlInputProcessor,
+			'messageData' => []
+		];
 		if (!$this->draft) {
 			$conversationData['participants'] = $this->participantIDs;
 			$conversationData['invisibleParticipants'] = $this->invisibleParticipantIDs;
 		}
 		
-		$this->objectAction = new ConversationAction(array(), 'create', $conversationData);
+		$this->objectAction = new ConversationAction([], 'create', $conversationData);
 		$resultValues = $this->objectAction->executeAction();
 		
 		MessageQuoteManager::getInstance()->saved();
@@ -222,34 +215,34 @@ class ConversationAddForm extends MessageForm {
 		$this->saved();
 		
 		// forward
-		HeaderUtil::redirect(LinkHandler::getInstance()->getLink('Conversation', array(
+		HeaderUtil::redirect(LinkHandler::getInstance()->getLink('Conversation', [
 			'object' => $resultValues['returnValues']
-		)));
+		]));
 		exit;
 	}
 	
 	/**
-	 * @see	\wcf\page\IPage::readData()
+	 * @inheritDoc
 	 */
 	public function readData() {
 		parent::readData();
 		
 		// add breadcrumbs
-		WCF::getBreadcrumbs()->add(new Breadcrumb(WCF::getLanguage()->get('wcf.conversation.conversations'), LinkHandler::getInstance()->getLink('ConversationList')));
+		PageLocationManager::getInstance()->addParentLocation('com.woltlab.wcf.conversation.ConversationList');
 	}
 	
 	/**
-	 * @see	\wcf\page\IPage::assignVariables()
+	 * @inheritDoc
 	 */
 	public function assignVariables() {
 		parent::assignVariables();
 		
 		MessageQuoteManager::getInstance()->assignVariables();
 		
-		WCF::getTPL()->assign(array(
+		WCF::getTPL()->assign([
 			'participantCanInvite' => $this->participantCanInvite,
 			'participants' => $this->participants,
 			'invisibleParticipants' => $this->invisibleParticipants
-		));
+		]);
 	}
 }

@@ -8,101 +8,101 @@ use wcf\system\request\LinkHandler;
  * Represents a conversation for RSS feeds.
  * 
  * @author	Alexander Ebert
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package	com.woltlab.wcf.conversation
- * @subpackage	data.conversation
- * @category	Community Framework
+ * @package	WoltLabSuite\Core\Data\Conversation
+ *
+ * @method	Conversation	getDecoratedObject()
+ * @mixin	Conversation
  */
 class FeedConversation extends DatabaseObjectDecorator implements IFeedEntry {
 	/**
-	 * @see	\wcf\data\DatabaseObjectDecorator::$baseClass
+	 * @inheritDoc
 	 */
-	protected static $baseClass = 'wcf\data\conversation\Conversation';
+	protected static $baseClass = Conversation::class;
 	
 	/**
-	 * @see	\wcf\data\ILinkableObject::getLink()
+	 * @inheritDoc
 	 */
 	public function getLink() {
-		return LinkHandler::getInstance()->getLink('Conversation', array(
+		return LinkHandler::getInstance()->getLink('Conversation', [
 			'object' => $this->getDecoratedObject(),
-			'appendSession' => false,
 			'encodeTitle' => true
-		));
+		]);
 	}
 	
 	/**
-	 * @see	\wcf\data\ITitledObject::getTitle()
+	 * @inheritDoc
 	 */
 	public function getTitle() {
 		return $this->getDecoratedObject()->getTitle();
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessage::getFormattedMessage()
+	 * @inheritDoc
 	 */
 	public function getFormattedMessage() {
 		return '';
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessage::getMessage()
+	 * @inheritDoc
 	 */
 	public function getMessage() {
 		return '';
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessage::getExcerpt()
+	 * @inheritDoc
 	 */
 	public function getExcerpt($maxLength = 255) {
 		return '';
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessage::getUserID()
+	 * @inheritDoc
 	 */
 	public function getUserID() {
 		return $this->getDecoratedObject()->lastPosterID;
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessage::getUsername()
+	 * @inheritDoc
 	 */
 	public function getUsername() {
 		return $this->getDecoratedObject()->lastPoster;
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessage::getTime()
+	 * @inheritDoc
 	 */
 	public function getTime() {
 		return $this->getDecoratedObject()->lastPostTime;
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessage::__toString()
+	 * @inheritDoc
 	 */
 	public function __toString() {
 		return $this->getFormattedMessage();
 	}
 	
 	/**
-	 * @see	\wcf\data\IFeedEntry::getComments()
+	 * @inheritDoc
 	 */
 	public function getComments() {
 		return $this->replies;
 	}
 	
 	/**
-	 * @see	\wcf\data\IFeedEntry::getCategories()
+	 * @inheritDoc
 	 */
 	public function getCategories() {
-		return array();
+		return [];
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessage::isVisible()
+	 * @inheritDoc
 	 */
 	public function isVisible() {
 		return $this->canRead();

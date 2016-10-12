@@ -1,7 +1,10 @@
 <?php
 namespace wcf\system\search;
+use wcf\data\conversation\message\SearchResultConversationMessage;
 use wcf\data\conversation\message\SearchResultConversationMessageList;
+use wcf\data\conversation\Conversation;
 use wcf\form\IForm;
+use wcf\form\SearchForm;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\WCF;
 
@@ -9,82 +12,147 @@ use wcf\system\WCF;
  * An implementation of ISearchableObjectType for searching in conversations.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package	com.woltlab.wcf.conversation
- * @subpackage	system.search
- * @category	Community Framework
+ * @package	WoltLabSuite\Core\System\Search
  */
 class ConversationMessageSearch extends AbstractSearchableObjectType {
 	/**
-	 * message data cache
-	 * @var	array<\wcf\data\conversation\message\SearchResultConversationMessage>
+	 * id of the searched conversation
+	 * @var	integer
 	 */
-	public $messageCache = array();
+	public $conversationID = 0;
 	
 	/**
-	 * @see	\wcf\system\search\ISearchableObjectType::cacheObjects()
+	 * searched conversation
+	 * @var	Conversation
+	 */
+	public $conversation;
+	
+	/**
+	 * message data cache
+	 * @var	SearchResultConversationMessage[]
+	 */
+	public $messageCache = [];
+	
+	/**
+	 * @inheritDoc
 	 */
 	public function cacheObjects(array $objectIDs, array $additionalData = null) {
 		$messageList = new SearchResultConversationMessageList();
-		$messageList->getConditionBuilder()->add('conversation_message.messageID IN (?)', array($objectIDs));
+		$messageList->setObjectIDs($objectIDs);
 		$messageList->readObjects();
 		foreach ($messageList->getObjects() as $message) {
 			$this->messageCache[$message->messageID] = $message;
 		}
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
-	 * @see	\wcf\system\search\ISearchableObjectType::getObject()
+	 * @inheritDoc
+	 */
+	public function getAdditionalData() {
+		return [
+			'conversationID' => $this->conversationID
+		];
+	}
+	
+	/**
+	 * @inheritDoc
 	 */
 	public function getObject($objectID) {
 		if (isset($this->messageCache[$objectID])) return $this->messageCache[$objectID];
 		return null;
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
-	 * @see	\wcf\system\search\ISearchableObjectType::getJoins()
+	 * @inheritDoc
 	 */
 	public function getJoins() {
 		return "JOIN wcf".WCF_N."_conversation_to_user conversation_to_user ON (conversation_to_user.participantID = ".WCF::getUser()->userID." AND conversation_to_user.conversationID = ".$this->getTableName().".conversationID)
-		LEFT JOIN wcf".WCF_N."_conversation conversation ON (conversation.conversationID = ".$this->getTableName().".conversationID)";
+			LEFT JOIN wcf".WCF_N."_conversation conversation ON (conversation.conversationID = ".$this->getTableName().".conversationID)";
 	}
 	
 	/**
-	 * @see	\wcf\system\search\ISearchableObjectType::getTableName()
+	 * @inheritDoc
 	 */
 	public function getTableName() {
 		return 'wcf'.WCF_N.'_conversation_message';
 	}
 	
 	/**
-	 * @see	\wcf\system\search\ISearchableObjectType::getIDFieldName()
+	 * @inheritDoc
 	 */
 	public function getIDFieldName() {
 		return $this->getTableName().'.messageID';
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
-	 * @see	\wcf\system\search\ISearchableObjectType::getSubjectFieldName()
+	 * @inheritDoc
 	 */
 	public function getSubjectFieldName() {
 		return 'conversation.subject';
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
-	 * @see	\wcf\system\search\ISearchableObjectType::getConditions()
+	 * @inheritDoc
 	 */
 	public function getConditions(IForm $form = null) {
 		$conditionBuilder = new PreparedStatementConditionBuilder();
 		$conditionBuilder->add('conversation_to_user.hideConversation IN (0,1)');
 		
+		if (isset($_POST['conversationID'])) {
+			$this->conversationID = intval($_POST['conversationID']);
+			
+			$conditionBuilder->add('conversation.conversationID = ?', [$this->conversationID]);
+		}
+		
 		return $conditionBuilder;
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
-	 * @see	\wcf\system\search\ISearchableObjectType::isAccessible()
+	 * @inheritDoc
 	 */
 	public function isAccessible() {
 		return (WCF::getUser()->userID ? true : false);
+	}
+	
+	/** @noinspection PhpMissingParentCallCommonInspection */
+	/**
+	 * @inheritDoc
+	 */
+	public function getFormTemplateName() {
+		if ($this->conversation) {
+			return 'searchConversationMessage';
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * @inheritDoc
+	 */
+	public function show(IForm $form = null) {
+		/** @var SearchForm $form */
+		
+		// get existing values
+		if ($form !== null && isset($form->searchData['additionalData']['com.woltlab.wcf.conversation.message']['conversationID'])) {
+			$this->conversationID = $form->searchData['additionalData']['com.woltlab.wcf.conversation.message']['conversationID'];
+			
+			if ($this->conversationID) {
+				$this->conversation = Conversation::getUserConversation($this->conversationID, WCF::getUser()->userID);
+				
+				if ($this->conversation === null || !$this->conversation->canRead()) {
+					$this->conversationID = 0;
+					$this->conversation = null;
+				}
+			}
+		}
+		
+		WCF::getTPL()->assign('searchedConversation', $this->conversation);
 	}
 }

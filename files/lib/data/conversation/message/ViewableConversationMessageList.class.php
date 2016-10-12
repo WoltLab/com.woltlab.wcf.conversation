@@ -3,46 +3,50 @@ namespace wcf\data\conversation\message;
 use wcf\data\attachment\GroupedAttachmentList;
 use wcf\data\conversation\Conversation;
 use wcf\data\object\type\ObjectTypeCache;
+use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
 
 /**
  * Represents a list of viewable conversation messages.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package	com.woltlab.wcf.conversation
- * @subpackage	data.conversation.message
- * @category	Community Framework
+ * @package	WoltLabSuite\Core\Data\Conversation\Message
+ *
+ * @method	ViewableConversationMessage		current()
+ * @method	ViewableConversationMessage[]		getObjects()
+ * @method	ViewableConversationMessage|null	search($objectID)
+ * @property	ViewableConversationMessage[]		$objects
  */
 class ViewableConversationMessageList extends ConversationMessageList {
 	/**
-	 * @see	\wcf\data\DatabaseObjectList::$sqlOrderBy
+	 * @inheritDoc
 	 */
 	public $sqlOrderBy = 'conversation_message.time';
 	
 	/**
-	 * @see	\wcf\data\DatabaseObjectList::$decoratorClassName
+	 * @inheritDoc
 	 */
-	public $decoratorClassName = 'wcf\data\conversation\message\ViewableConversationMessage';
+	public $decoratorClassName = ViewableConversationMessage::class;
 	
 	/**
 	 * attachment object ids
-	 * @var	array<integer>
+	 * @var	integer[]
 	 */
-	public $attachmentObjectIDs = array();
+	public $attachmentObjectIDs = [];
 	
 	/**
 	 * ids of the messages with embedded objects
-	 * @var	array<integer>
+	 * @var	integer[]
 	 */
-	public $embeddedObjectMessageIDs = array();
+	public $embeddedObjectMessageIDs = [];
 	
 	/**
 	 * attachment list
-	 * @var	\wcf\data\attachment\GroupedAttachmentList
+	 * @var	GroupedAttachmentList
 	 */
-	protected $attachmentList = null;
+	protected $attachmentList;
 	
 	/**
 	 * max post time
@@ -64,28 +68,12 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	
 	/**
 	 * conversation object
-	 * @var	\wcf\data\conversation\Conversation
+	 * @var	Conversation
 	 */
-	protected $conversation = null;
+	protected $conversation;
 	
 	/**
-	 * Creates a new ViewableConversationMessageList object.
-	 */
-	public function __construct() {
-		parent::__construct();
-		
-		$this->sqlSelects .= "user_option_value.*, user_table.*";
-		$this->sqlJoins .= " LEFT JOIN wcf".WCF_N."_user user_table ON (user_table.userID = conversation_message.userID)";
-		$this->sqlJoins .= " LEFT JOIN wcf".WCF_N."_user_option_value user_option_value ON (user_option_value.userID = user_table.userID)";
-		
-		// get avatars
-		if (!empty($this->sqlSelects)) $this->sqlSelects .= ',';
-		$this->sqlSelects .= "user_avatar.*";
-		$this->sqlJoins .= " LEFT JOIN wcf".WCF_N."_user_avatar user_avatar ON (user_avatar.avatarID = user_table.avatarID)";
-	}
-	
-	/**
-	 * @see	\wcf\data\DatabaseObjectList::readObjects()
+	 * @inheritDoc
 	 */
 	public function readObjects() {
 		if ($this->objectIDs === null) {
@@ -94,6 +82,7 @@ class ViewableConversationMessageList extends ConversationMessageList {
 		
 		parent::readObjects();
 		
+		$userIDs = [];
 		foreach ($this->objects as $message) {
 			if ($message->time > $this->maxPostTime) {
 				$this->maxPostTime = $message->time;
@@ -109,6 +98,13 @@ class ViewableConversationMessageList extends ConversationMessageList {
 			if ($message->hasEmbeddedObjects) {
 				$this->embeddedObjectMessageIDs[] = $message->messageID;
 			}
+			if ($message->userID) {
+				$userIDs[] = $message->userID;
+			}
+		}
+		
+		if (!empty($userIDs)) {
+			UserProfileRuntimeCache::getInstance()->cacheObjectIDs($userIDs);
 		}
 		
 		if ($this->embeddedObjectLoading) {
@@ -126,7 +122,7 @@ class ViewableConversationMessageList extends ConversationMessageList {
 		if (!empty($this->embeddedObjectMessageIDs)) {
 			// add message objects to attachment object cache to save SQL queries
 			ObjectTypeCache::getInstance()->getObjectTypeByName('com.woltlab.wcf.attachment.objectType', 'com.woltlab.wcf.conversation.message')->getProcessor()->setCachedObjects($this->objects);
-				
+			
 			// load embedded objects
 			MessageEmbeddedObjectManager::getInstance()->loadObjects('com.woltlab.wcf.conversation.message', $this->embeddedObjectMessageIDs);
 		}
@@ -138,7 +134,7 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	public function readAttachments() {
 		if (MODULE_ATTACHMENT == 1 && !empty($this->attachmentObjectIDs)) {
 			$this->attachmentList = new GroupedAttachmentList('com.woltlab.wcf.conversation.message');
-			$this->attachmentList->getConditionBuilder()->add('attachment.objectID IN (?)', array($this->attachmentObjectIDs));
+			$this->attachmentList->getConditionBuilder()->add('attachment.objectID IN (?)', [$this->attachmentObjectIDs]);
 			$this->attachmentList->readObjects();
 		}
 	}
@@ -155,7 +151,7 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	/**
 	 * Returns the list of attachments.
 	 * 
-	 * @return	\wcf\data\attachment\GroupedAttachmentList
+	 * @return	GroupedAttachmentList
 	 */
 	public function getAttachmentList() {
 		return $this->attachmentList;
@@ -182,7 +178,7 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	/**
 	 * Sets active conversation.
 	 * 
-	 * @param	\wcf\data\conversation\Conversation		$conversation
+	 * @param	Conversation		$conversation
 	 */
 	public function setConversation(Conversation $conversation) {
 		$this->conversation = $conversation;

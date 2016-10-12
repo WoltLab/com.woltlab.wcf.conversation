@@ -10,20 +10,21 @@ use wcf\system\WCF;
  * Worker implementation for updating conversations.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package	com.woltlab.wcf
- * @subpackage	system.worker
- * @category	Community Framework
+ * @package	WoltLabSuite\Core\System\Worker
+ * 
+ * @method	ConversationList	getObjectList()
  */
 class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 	/**
-	 * @see	\wcf\system\worker\AbstractWorker::$limit
+	 * @inheritDoc
 	 */
 	protected $limit = 100;
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
-	 * @see	\wcf\system\worker\IWorker::countObjects()
+	 * @inheritDoc
 	 */
 	public function countObjects() {
 		if ($this->count === null) {
@@ -37,8 +38,9 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 		}
 	}
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
-	 * @see	\wcf\system\worker\AbstractRebuildDataWorker::initObjectList
+	 * @inheritDoc
 	 */
 	protected function initObjectList() {
 		$this->objectList = new ConversationList();
@@ -46,10 +48,10 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 	}
 	
 	/**
-	 * @see	\wcf\system\worker\IWorker::execute()
+	 * @inheritDoc
 	 */
 	public function execute() {
-		$this->objectList->getConditionBuilder()->add('conversation.conversationID BETWEEN ? AND ?', array($this->limit * $this->loopCount + 1, $this->limit * $this->loopCount + $this->limit));
+		$this->objectList->getConditionBuilder()->add('conversation.conversationID BETWEEN ? AND ?', [$this->limit * $this->loopCount + 1, $this->limit * $this->loopCount + $this->limit]);
 		
 		parent::execute();
 		
@@ -92,7 +94,7 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 				AND participantID IS NOT NULL";
 		$existingParticipantStatement = WCF::getDB()->prepareStatement($sql, 5);
 		
-		$obsoleteConversations = array();
+		$obsoleteConversations = [];
 		foreach ($this->objectList as $conversation) {
 			$editor = new ConversationEditor($conversation);
 			
@@ -102,7 +104,7 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 				if (!$conversation->userID) $obsolete = true;
 			}
 			else {
-				$existingParticipantStatement->execute(array($conversation->conversationID));
+				$existingParticipantStatement->execute([$conversation->conversationID]);
 				$row = $existingParticipantStatement->fetchSingleRow();
 				if (!$row['participants']) $obsolete = true;
 			}
@@ -112,10 +114,10 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 			}
 			
 			// update data
-			$data = array();
+			$data = [];
 			
 			// get first post
-			$firstMessageStatement->execute(array($conversation->conversationID));
+			$firstMessageStatement->execute([$conversation->conversationID]);
 			if (($row = $firstMessageStatement->fetchSingleRow()) !== false) {
 				$data['firstMessageID'] = $row['messageID'];
 				$data['lastPostTime'] = $data['time'] = $row['time'];
@@ -124,7 +126,7 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 			}
 			
 			// get last post
-			$lastMessageStatement->execute(array($conversation->conversationID));
+			$lastMessageStatement->execute([$conversation->conversationID]);
 			if (($row = $lastMessageStatement->fetchSingleRow()) !== false) {
 				$data['lastPostTime'] = $row['time'];
 				$data['lastPosterID'] = $row['userID'];
@@ -132,19 +134,19 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 			}
 			
 			// get stats
-			$statsStatement->execute(array($conversation->conversationID));
+			$statsStatement->execute([$conversation->conversationID]);
 			$row = $statsStatement->fetchSingleRow();
 			$data['replies'] = ($row['messages'] ? $row['messages'] - 1 : 0);
 			$data['attachments'] = ($row['attachments'] ?: 0);
 			
 			// get number of participants
-			$participantCounterStatement->execute(array($conversation->conversationID, Conversation::STATE_LEFT, $conversation->userID, 0));
+			$participantCounterStatement->execute([$conversation->conversationID, Conversation::STATE_LEFT, $conversation->userID, 0]);
 			$row = $participantCounterStatement->fetchSingleRow();
 			$data['participants'] = $row['participants'];
 			
 			// get participant summary
-			$participantStatement->execute(array($conversation->conversationID, $conversation->userID, 0));
-			$users = array();
+			$participantStatement->execute([$conversation->conversationID, $conversation->userID, 0]);
+			$users = [];
 			while ($row = $participantStatement->fetchArray()) {
 				$users[] = $row;
 			}

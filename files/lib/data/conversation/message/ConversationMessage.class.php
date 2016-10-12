@@ -4,8 +4,8 @@ use wcf\data\attachment\GroupedAttachmentList;
 use wcf\data\conversation\Conversation;
 use wcf\data\DatabaseObject;
 use wcf\data\IMessage;
-use wcf\system\bbcode\MessageParser;
-use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
+use wcf\data\TUserContent;
+use wcf\system\html\output\HtmlOutputProcessor;
 use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
 use wcf\util\StringUtil;
@@ -14,39 +14,40 @@ use wcf\util\StringUtil;
  * Represents a conversation message.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package	com.woltlab.wcf.conversation
- * @subpackage	data.conversation.message
- * @category	Community Framework
+ * @package	WoltLabSuite\Core\Data\Conversation\Message
+ *
+ * @property-read	integer		$messageID
+ * @property-read	integer		$conversationID
+ * @property-read	integer|null	$userID
+ * @property-read	string		$username
+ * @property-read	string		$message
+ * @property-read	integer		$time
+ * @property-read	integer		$attachments
+ * @property-read	integer		$enableHtml
+ * @property-read	string		$ipAddress
+ * @property-read	integer		$lastEditTime
+ * @property-read	integer		$editCount
+ * @property-read	integer		$hasEmbeddedObjects
  */
 class ConversationMessage extends DatabaseObject implements IMessage {
-	/**
-	 * @see	\wcf\data\DatabaseObject::$databaseTableName
-	 */
-	protected static $databaseTableName = 'conversation_message';
-	
-	/**
-	 * @see	\wcf\data\DatabaseObject::$databaseIndexName
-	 */
-	protected static $databaseTableIndexName = 'messageID';
+	use TUserContent;
 	
 	/**
 	 * conversation object
-	 * @var	\wcf\data\conversation\Conversation
+	 * @var	Conversation
 	 */
-	protected $conversation = null;
+	protected $conversation;
 	
 	/**
-	 * @see	\wcf\data\IMessage::getFormattedMessage()
+	 * @inheritDoc
 	 */
 	public function getFormattedMessage() {
-		// assign embedded objects
-		MessageEmbeddedObjectManager::getInstance()->setActiveMessage('com.woltlab.wcf.conversation.message', $this->messageID);
+		$processor = new HtmlOutputProcessor();
+		$processor->process($this->message, 'com.woltlab.wcf.conversation.message', $this->messageID);
 		
-		// parse and return message
-		MessageParser::getInstance()->setOutputType('text/html');
-		return MessageParser::getInstance()->parse($this->message, $this->enableSmilies, $this->enableHtml, $this->enableBBCodes);
+		return $processor->getHtml();
 	}
 	
 	/**
@@ -55,25 +56,28 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	 * @return	string
 	 */
 	public function getSimplifiedFormattedMessage() {
-		MessageParser::getInstance()->setOutputType('text/simplified-html');
-		return MessageParser::getInstance()->parse($this->message, $this->enableSmilies, $this->enableHtml, $this->enableBBCodes);
+		$processor = new HtmlOutputProcessor();
+		$processor->setOutputType('text/simplified-html');
+		$processor->process($this->message, 'com.woltlab.wcf.conversation.message', $this->messageID);
+		
+		return $processor->getHtml();
 	}
 	
 	/**
 	 * Assigns and returns the embedded attachments.
 	 * 
 	 * @param	boolean		$ignoreCache
-	 * @return	\wcf\data\attachment\GroupedAttachmentList
+	 * @return	GroupedAttachmentList
 	 */
 	public function getAttachments($ignoreCache = false) {
 		if (MODULE_ATTACHMENT == 1 && ($this->attachments || $ignoreCache)) {
 			$attachmentList = new GroupedAttachmentList('com.woltlab.wcf.conversation.message');
-			$attachmentList->getConditionBuilder()->add('attachment.objectID IN (?)', array($this->messageID));
+			$attachmentList->getConditionBuilder()->add('attachment.objectID IN (?)', [$this->messageID]);
 			$attachmentList->readObjects();
-			$attachmentList->setPermissions(array(
+			$attachmentList->setPermissions([
 				'canDownload' => true,
 				'canViewPreview' => true
-			));
+			]);
 			
 			if ($ignoreCache && !count($attachmentList)) {
 				return null;
@@ -86,31 +90,37 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	}
 	
 	/**
-	 * Returns an excerpt of this message.
-	 * 
-	 * @param	string		$maxLength
-	 * @return	string
+	 * @inheritDoc
 	 */
 	public function getExcerpt($maxLength = 255) {
 		return StringUtil::truncateHTML($this->getSimplifiedFormattedMessage(), $maxLength);
 	}
 	
 	/**
-	 * Returns a text-only version of this message.
+	 * Returns a version of this message optimized for use in emails.
 	 * 
+	 * @param	string	$mimeType	Either 'text/plain' or 'text/html'
 	 * @return	string
 	 */
-	public function getMailText() {
-		MessageParser::getInstance()->setOutputType('text/simplified-html');
-		$message = MessageParser::getInstance()->parse($this->message, $this->enableSmilies, $this->enableHtml, $this->enableBBCodes);
+	public function getMailText($mimeType = 'text/plain') {
+		switch ($mimeType) {
+			case 'text/plain':
+				$processor = new HtmlOutputProcessor();
+				$processor->setOutputType('text/plain');
+				$processor->process($this->message, 'com.woltlab.wcf.conversation.message', $this->messageID);
+				
+				return $processor->getHtml();
+			case 'text/html':
+				return $this->getSimplifiedFormattedMessage();
+		}
 		
-		return MessageParser::getInstance()->stripHTML($message);
+		throw new \LogicException('Unreachable');
 	}
 	
 	/**
 	 * Returns the conversation of this message.
 	 * 
-	 * @return	\wcf\data\conversation\Conversation
+	 * @return	Conversation
 	 */
 	public function getConversation() {
 		if ($this->conversation === null) {
@@ -123,7 +133,7 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	/**
 	 * Sets the conversation of this message.
 	 * 
-	 * @param	\wcf\data\conversation\Conversation	$conversation
+	 * @param	Conversation	$conversation
 	 */
 	public function setConversation(Conversation $conversation) {
 		if ($this->conversationID == $conversation->conversationID) {
@@ -141,31 +151,24 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessage::getMessage()
+	 * @inheritDoc
 	 */
 	public function getMessage() {
 		return $this->message;
 	}
 	
 	/**
-	 * @see	\wcf\data\ILinkableObject::getLink()
+	 * @inheritDoc
 	 */
 	public function getLink() {
-		return LinkHandler::getInstance()->getLink('Conversation', array(
+		return LinkHandler::getInstance()->getLink('Conversation', [
 			'object' => $this->getConversation(),
 			'messageID' => $this->messageID
-		), '#message'.$this->messageID);
+		], '#message'.$this->messageID);
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessage::getTime()
-	 */
-	public function getTime() {
-		return $this->time;
-	}
-	
-	/**
-	 * @see	\wcf\data\ITitledObject::getTitle()
+	 * @inheritDoc
 	 */
 	public function getTitle() {
 		if ($this->messageID == $this->getConversation()->firstMessageID) {
@@ -176,28 +179,14 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessage::getUserID()
-	 */
-	public function getUserID() {
-		return $this->userID;
-	}
-	
-	/**
-	 * @see	\wcf\data\IMessage::getUsername()
-	 */
-	public function getUsername() {
-		return $this->username;
-	}
-	
-	/**
-	 * @see	\wcf\data\IMessage::isVisible()
+	 * @inheritDoc
 	 */
 	public function isVisible() {
 		return true;
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessage::__toString()
+	 * @inheritDoc
 	 */
 	public function __toString() {
 		return $this->getFormattedMessage();

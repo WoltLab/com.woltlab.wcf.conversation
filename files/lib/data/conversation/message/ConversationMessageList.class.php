@@ -6,15 +6,18 @@ use wcf\data\DatabaseObjectList;
  * Represents a list of conversation messages.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package	com.woltlab.wcf.conversation
- * @subpackage	data.conversation.message
- * @category	Community Framework
+ * @package	WoltLabSuite\Core\Data\Conversation\Message
+ *
+ * @method	ConversationMessage		current()
+ * @method	ConversationMessage[]		getObjects()
+ * @method	ConversationMessage|null	search($objectID)
+ * @property	ConversationMessage[]		$objects
  */
 class ConversationMessageList extends DatabaseObjectList {
 	/**
-	 * @see	\wcf\data\DatabaseObjectList::$className
+	 * @inheritDoc
 	 */
-	public $className = 'wcf\data\conversation\message\ConversationMessage';
+	public $className = ConversationMessage::class;
 }

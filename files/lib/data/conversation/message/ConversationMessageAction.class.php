@@ -11,10 +11,9 @@ use wcf\data\IMessageInlineEditorAction;
 use wcf\data\IMessageQuoteAction;
 use wcf\system\attachment\AttachmentHandler;
 use wcf\system\bbcode\BBCodeHandler;
-use wcf\system\bbcode\BBCodeParser;
-use wcf\system\bbcode\PreParser;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
+use wcf\system\html\input\HtmlInputProcessor;
 use wcf\system\message\censorship\Censorship;
 use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
 use wcf\system\message\quote\MessageQuoteManager;
@@ -26,41 +25,49 @@ use wcf\system\user\notification\object\ConversationMessageUserNotificationObjec
 use wcf\system\user\notification\UserNotificationHandler;
 use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\WCF;
-use wcf\util\MessageUtil;
 use wcf\util\StringUtil;
 
 /**
  * Executes conversation message-related actions.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package	com.woltlab.wcf.conversation
- * @subpackage	data.conversation.message
- * @category	Community Framework
+ * @package	WoltLabSuite\Core\Data\Conversation\Message
+ * 
+ * @method	ConversationMessageEditor[]	getObjects()
+ * @method	ConversationMessageEditor	getSingleObject()
  */
 class ConversationMessageAction extends AbstractDatabaseObjectAction implements IAttachmentMessageQuickReplyAction, IMessageInlineEditorAction, IMessageQuoteAction {
 	/**
-	 * @see	\wcf\data\AbstractDatabaseObjectAction::$className
+	 * @inheritDoc
 	 */
-	protected $className = 'wcf\data\conversation\message\ConversationMessageEditor';
+	protected $className = ConversationMessageEditor::class;
 	
 	/**
 	 * conversation object
-	 * @var	\wcf\data\conversation\Conversation
+	 * @var	Conversation
 	 */
-	public $conversation = null;
+	public $conversation;
+	
+	/**
+	 * @var HtmlInputProcessor
+	 */
+	public $htmlInputProcessor;
 	
 	/**
 	 * conversation message object
-	 * @var	\wcf\data\conversation\message\ConversationMessage
+	 * @var	ConversationMessage
 	 */
-	public $message = null;
+	public $message;
 	
 	/**
-	 * @see	\wcf\data\AbstractDatabaseObjectAction::create()
+	 * @inheritDoc
+	 * @return	ConversationMessage
 	 */
 	public function create() {
+		if (!isset($this->parameters['data']['enableHtml'])) $this->parameters['data']['enableHtml'] = 1;
+		
 		// count attachments
 		if (isset($this->parameters['attachmentHandler']) && $this->parameters['attachmentHandler'] !== null) {
 			$this->parameters['data']['attachments'] = count($this->parameters['attachmentHandler']);
@@ -79,12 +86,18 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			}
 		}
 		
+		if (!empty($this->parameters['htmlInputProcessor'])) {
+			/** @noinspection PhpUndefinedMethodInspection */
+			$this->parameters['data']['message'] = $this->parameters['htmlInputProcessor']->getHtml();
+		}
+		
 		// create message
+		/** @var ConversationMessage $message */
 		$message = parent::create();
 		$messageEditor = new ConversationMessageEditor($message);
 		
 		// get conversation
-		$conversation = (isset($this->parameters['converation']) ? $this->parameters['converation'] : new Conversation($message->conversationID));
+		$conversation = (isset($this->parameters['conversation']) ? $this->parameters['conversation'] : new Conversation($message->conversationID));
 		$conversationEditor = new ConversationEditor($conversation);
 		
 		if (empty($this->parameters['isFirstPost'])) {
@@ -93,9 +106,14 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			
 			// fire notification event
 			if (!$conversation->isDraft) {
-				$notificationRecipients = array_diff($conversation->getParticipantIDs(true), array($message->userID)); // don't notify message author
+				$notificationRecipients = array_diff($conversation->getParticipantIDs(true), [$message->userID]); // don't notify message author
 				if (!empty($notificationRecipients)) {
-					UserNotificationHandler::getInstance()->fireEvent('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', new ConversationMessageUserNotificationObject($message), $notificationRecipients);
+					UserNotificationHandler::getInstance()->fireEvent(
+						'conversationMessage',
+						'com.woltlab.wcf.conversation.message.notification',
+						new ConversationMessageUserNotificationObject($message),
+						$notificationRecipients
+					);
 				}
 			}
 			
@@ -107,7 +125,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 					WHERE	participantID = ?
 						AND conversationID = ?";
 				$statement = WCF::getDB()->prepareStatement($sql);
-				$statement->execute(array($message->userID, $conversation->conversationID));
+				$statement->execute([$message->userID, $conversation->conversationID]);
 				
 				$conversationEditor->updateParticipantSummary();
 				$conversationEditor->updateParticipantCount();
@@ -119,29 +137,41 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 				WHERE	conversationID = ?
 					AND hideConversation = ?";
 			$statement = WCF::getDB()->prepareStatement($sql);
-			$statement->execute(array(
+			$statement->execute([
 				Conversation::STATE_DEFAULT,
 				$conversation->conversationID,
 				Conversation::STATE_HIDDEN
-			));
+			]);
 		}
 		
 		// reset storage
 		UserStorageHandler::getInstance()->reset($conversation->getParticipantIDs(), 'unreadConversationCount');
 		
 		// update search index
-		SearchIndexManager::getInstance()->add('com.woltlab.wcf.conversation.message', $message->messageID, $message->message, (!empty($this->parameters['isFirstPost']) ? $conversation->subject : ''), $message->time, $message->userID, $message->username);
+		SearchIndexManager::getInstance()->set(
+			'com.woltlab.wcf.conversation.message',
+			$message->messageID,
+			$message->message,
+			!empty($this->parameters['isFirstPost']) ? $conversation->subject : '',
+			$message->time,
+			$message->userID,
+			$message->username
+		);
 		
 		// update attachments
 		if (isset($this->parameters['attachmentHandler']) && $this->parameters['attachmentHandler'] !== null) {
+			/** @noinspection PhpUndefinedMethodInspection */
 			$this->parameters['attachmentHandler']->updateObjectID($message->messageID);
 		}
 		
 		// save embedded objects
-		if (MessageEmbeddedObjectManager::getInstance()->registerObjects('com.woltlab.wcf.conversation.message', $message->messageID, $message->message)) {
-			$messageEditor->update(array(
-				'hasEmbeddedObjects' => 1
-			));
+		if (!empty($this->parameters['htmlInputProcessor'])) {
+			/** @noinspection PhpUndefinedMethodInspection */
+			$this->parameters['htmlInputProcessor']->setObjectID($message->messageID);
+			
+			if (MessageEmbeddedObjectManager::getInstance()->registerObjects($this->parameters['htmlInputProcessor'])) {
+				$messageEditor->update(['hasEmbeddedObjects' => 1]);
+			}
 		}
 		
 		// clear quotes
@@ -155,7 +185,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	\wcf\data\AbstractDatabaseObjectAction::update()
+	 * @inheritDoc
 	 */
 	public function update() {
 		// count attachments
@@ -163,31 +193,47 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			$this->parameters['data']['attachments'] = count($this->parameters['attachmentHandler']);
 		}
 		
+		if (!empty($this->parameters['htmlInputProcessor'])) {
+			/** @noinspection PhpUndefinedMethodInspection */
+			$this->parameters['data']['message'] = $this->parameters['htmlInputProcessor']->getHtml();
+		}
+		
 		parent::update();
 		
 		// update search index / embedded objects
 		if (isset($this->parameters['data']) && isset($this->parameters['data']['message'])) {
-			foreach ($this->objects as $message) {
+			foreach ($this->getObjects() as $message) {
 				$conversation = $message->getConversation();
-				SearchIndexManager::getInstance()->update('com.woltlab.wcf.conversation.message', $message->messageID, $this->parameters['data']['message'], ($conversation->firstMessageID == $message->messageID ? $conversation->subject : ''), $message->time, $message->userID, $message->username);
+				SearchIndexManager::getInstance()->set(
+					'com.woltlab.wcf.conversation.message',
+					$message->messageID,
+					$this->parameters['data']['message'],
+					$conversation->firstMessageID == $message->messageID ? $conversation->subject : '',
+					$message->time,
+					$message->userID,
+					$message->username
+				);
 				
-				if ($message->hasEmbeddedObjects != MessageEmbeddedObjectManager::getInstance()->registerObjects('com.woltlab.wcf.conversation.message', $message->messageID, $this->parameters['data']['message'])) {
-					$message->update(array(
-						'hasEmbeddedObjects' => ($message->hasEmbeddedObjects ? 0 : 1)
-					));
+				if (!empty($this->parameters['htmlInputProcessor'])) {
+					/** @noinspection PhpUndefinedMethodInspection */
+					$this->parameters['htmlInputProcessor']->setObjectID($message->messageID);
+					
+					if ($message->hasEmbeddedObjects != MessageEmbeddedObjectManager::getInstance()->registerObjects($this->parameters['htmlInputProcessor'])) {
+						$message->update(['hasEmbeddedObjects' => $message->hasEmbeddedObjects ? 0 : 1]);
+					}
 				}
 			}
 		}
 	}
 	
 	/**
-	 * @see	\wcf\data\AbstractDatabaseObjectAction::delete()
+	 * @inheritDoc
 	 */
 	public function delete() {
 		$count = parent::delete();
 		
-		$attachmentMessageIDs = $conversationIDs = array();
-		foreach ($this->objects as $message) {
+		$attachmentMessageIDs = $conversationIDs = [];
+		foreach ($this->getObjects() as $message) {
 			if (!in_array($message->conversationID, $conversationIDs)) {
 				$conversationIDs[] = $message->conversationID;
 			}
@@ -205,7 +251,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		
 		if (!empty($this->objectIDs)) {
 			// delete notifications
-			UserNotificationHandler::getInstance()->deleteNotifications('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', array(), $this->objectIDs);
+			UserNotificationHandler::getInstance()->removeNotifications('com.woltlab.wcf.conversation.message.notification', $this->objectIDs);
 			
 			// update search index
 			SearchIndexManager::getInstance()->delete('com.woltlab.wcf.conversation.message', $this->objectIDs);
@@ -226,28 +272,28 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessageQuickReply::validateQuickReply()
+	 * @inheritDoc
 	 */
 	public function validateQuickReply() {
-		QuickReplyManager::getInstance()->setAllowedBBCodes(explode(',', WCF::getSession()->getPermission('user.message.allowedBBCodes')));
-		QuickReplyManager::getInstance()->validateParameters($this, $this->parameters, 'wcf\data\conversation\Conversation');
+		QuickReplyManager::getInstance()->setDisallowedBBCodes(explode(',', WCF::getSession()->getPermission('user.message.disallowedBBCodes')));
+		QuickReplyManager::getInstance()->validateParameters($this, $this->parameters, Conversation::class);
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessageQuickReply::quickReply()
+	 * @inheritDoc
 	 */
 	public function quickReply() {
 		return QuickReplyManager::getInstance()->createMessage(
 			$this,
 			$this->parameters,
-			'wcf\data\conversation\ConversationAction',
+			ConversationAction::class,
 			CONVERSATION_LIST_DEFAULT_SORT_ORDER,
 			'conversationMessageList'
 		);
 	}
 	
 	/**
-	 * @see	\wcf\data\IExtendedMessageQuickReplyAction::validateJumpToExtended()
+	 * @inheritDoc
 	 */
 	public function validateJumpToExtended() {
 		$this->readInteger('containerID');
@@ -258,7 +304,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		if (!$this->conversation->conversationID) {
 			throw new UserInputException('containerID');
 		}
-		else if ($this->conversation->isClosed || !Conversation::isParticipant(array($this->conversation->conversationID))) {
+		else if ($this->conversation->isClosed || !Conversation::isParticipant([$this->conversation->conversationID])) {
 			throw new PermissionDeniedException();
 		}
 		
@@ -276,18 +322,18 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	\wcf\data\IExtendedMessageQuickReplyAction::jumpToExtended()
+	 * @inheritDoc
 	 */
 	public function jumpToExtended() {
 		// quick reply
 		if ($this->message === null) {
 			QuickReplyManager::getInstance()->setMessage('conversation', $this->conversation->conversationID, $this->parameters['message']);
-			$url = LinkHandler::getInstance()->getLink('ConversationMessageAdd', array('id' => $this->conversation->conversationID));
+			$url = LinkHandler::getInstance()->getLink('ConversationMessageAdd', ['id' => $this->conversation->conversationID]);
 		}
 		else {
 			// editing message
 			QuickReplyManager::getInstance()->setMessage('conversationMessage', $this->message->messageID, $this->parameters['message']);
-			$url = LinkHandler::getInstance()->getLink('ConversationMessageEdit', array('id' => $this->message->messageID));
+			$url = LinkHandler::getInstance()->getLink('ConversationMessageEdit', ['id' => $this->message->messageID]);
 		}
 		
 		if (!empty($this->parameters['tmpHash'])) {
@@ -295,13 +341,13 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		}
 		
 		// redirect
-		return array(
+		return [
 			'url' => $url
-		);
+		];
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessageInlineEditorAction::validateBeginEdit()
+	 * @inheritDoc
 	 */
 	public function validateBeginEdit() {
 		$this->readInteger('containerID');
@@ -312,7 +358,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			throw new UserInputException('containerID');
 		}
 		
-		if ($this->conversation->isClosed || !Conversation::isParticipant(array($this->conversation->conversationID))) {
+		if ($this->conversation->isClosed || !Conversation::isParticipant([$this->conversation->conversationID])) {
 			throw new PermissionDeniedException();
 		}
 		
@@ -324,84 +370,88 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		if (!$this->message->canEdit()) {
 			throw new PermissionDeniedException();
 		}
+		
+		BBCodeHandler::getInstance()->setDisallowedBBCodes(explode(',', WCF::getSession()->getPermission('user.message.disallowedBBCodes')));
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessageInlineEditorAction::beginEdit()
+	 * @inheritDoc
 	 */
 	public function beginEdit() {
-		BBCodeHandler::getInstance()->setAllowedBBCodes(explode(',', WCF::getSession()->getPermission('user.message.allowedBBCodes')));
-		
-		WCF::getTPL()->assign(array(
+		WCF::getTPL()->assign([
 			'defaultSmilies' => SmileyCache::getInstance()->getCategorySmilies(),
 			'message' => $this->message,
 			'permissionCanUseSmilies' => 'user.message.canUseSmilies',
 			'wysiwygSelector' => 'messageEditor'.$this->message->messageID
-		));
+		]);
 		
 		if (MODULE_ATTACHMENT) {
 			$tmpHash = StringUtil::getRandomID();
 			$attachmentHandler = new AttachmentHandler('com.woltlab.wcf.conversation.message', $this->message->messageID, $tmpHash);
 			$attachmentList = $attachmentHandler->getAttachmentList();
 				
-			WCF::getTPL()->assign(array(
+			WCF::getTPL()->assign([
 				'attachmentHandler' => $attachmentHandler,
 				'attachmentList' => $attachmentList->getObjects(),
 				'attachmentObjectID' => $this->message->messageID,
 				'attachmentObjectType' => 'com.woltlab.wcf.conversation.message',
 				'attachmentParentObjectID' => 0,
 				'tmpHash' => $tmpHash
-			));
+			]);
 		}
 		
-		return array(
+		return [
 			'actionName' => 'beginEdit',
 			'template' => WCF::getTPL()->fetch('conversationMessageInlineEditor')
-		);
+		];
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessageInlineEditorAction::validateSave()
+	 * @inheritDoc
 	 */
 	public function validateSave() {
 		$this->readString('message', true, 'data');
 		
 		if (empty($this->parameters['data']['message'])) {
-			throw new UserInputException('message', WCF::getLanguage()->get('wcf.global.form.error.empty'));
+			throw new UserInputException('message', WCF::getLanguage()->getDynamicVariable('wcf.global.form.error.empty'));
 		}
 		
 		$this->validateBeginEdit();
-		$this->validateMessage($this->conversation, $this->parameters['data']['message']);
+		
+		$this->validateMessage($this->conversation, $this->getHtmlInputProcessor($this->parameters['data']['message'], $this->message->messageID));
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessageInlineEditorAction::save()
+	 * @inheritDoc
 	 */
 	public function save() {
-		$data = array(
-			'message' => PreParser::getInstance()->parse(MessageUtil::stripCrap($this->parameters['data']['message']), explode(',', WCF::getSession()->getPermission('user.message.allowedBBCodes')))
-		);
+		$data = [];
+		
 		if (!$this->message->getConversation()->isDraft) {
 			$data['lastEditTime'] = TIME_NOW;
 			$data['editCount'] = $this->message->editCount + 1;
 		}
 		// execute update action
-		$action = new ConversationMessageAction(array($this->message), 'update', array('data' => $data));
+		$action = new ConversationMessageAction([$this->message], 'update', [
+			'data' => $data,
+			'htmlInputProcessor' => $this->getHtmlInputProcessor()
+		]);
 		$action->executeAction();
 		
 		// load new message
 		$this->message = new ConversationMessage($this->message->messageID);
 		$this->message->getAttachments();
 		
+		$attachmentList = null;
 		if (MODULE_ATTACHMENT) {
 			$attachmentList = $this->message->getAttachments(true);
 			$count = 0;
 			if ($attachmentList !== null) {
-				// set permisions
-				$attachmentList->setPermissions(array(
+				// set permissions
+				$attachmentList->setPermissions([
 					'canDownload' => true,
 					'canViewPreview' => true
-				));
+				]);
 				
 				$count = count($attachmentList);
 			}
@@ -409,23 +459,23 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			// update count to reflect number of attachments after edit
 			if ($count != $this->message->attachments) {
 				$messageEditor = new ConversationMessageEditor($this->message);
-				$messageEditor->update(array('attachments' => $count));
+				$messageEditor->update(['attachments' => $count]);
 			}
 		}
 		
 		// load embedded objects
-		MessageEmbeddedObjectManager::getInstance()->loadObjects('com.woltlab.wcf.conversation.message', array($this->message->messageID));
+		MessageEmbeddedObjectManager::getInstance()->loadObjects('com.woltlab.wcf.conversation.message', [$this->message->messageID]);
 		
-		$data = array(
+		$data = [
 			'actionName' => 'save',
 			'message' => $this->message->getFormattedMessage()
-		);
+		];
 		
 		if (MODULE_ATTACHMENT) {
-			WCF::getTPL()->assign(array(
+			WCF::getTPL()->assign([
 				'attachmentList' => $attachmentList,
 				'objectID' => $this->message->messageID
-			));
+			]);
 			$data['attachmentList'] = WCF::getTPL()->fetch('attachments');
 		}
 		
@@ -433,9 +483,11 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessageQuickReply::validateContainer()
+	 * @inheritDoc
 	 */
 	public function validateContainer(DatabaseObject $conversation) {
+		/** @var Conversation $conversation */
+		
 		if (!$conversation->conversationID) {
 			throw new UserInputException('objectID');
 		}
@@ -449,36 +501,39 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessageQuickReplyAction::validateMessage()
+	 * @inheritDoc
 	 */
-	public function validateMessage(DatabaseObject $container, $message) {
+	public function validateMessage(DatabaseObject $container, HtmlInputProcessor $htmlInputProcessor) {
+		$message = $htmlInputProcessor->getTextContent();
 		if (mb_strlen($message) > WCF::getSession()->getPermission('user.conversation.maxLength')) {
-			throw new UserInputException('message', WCF::getLanguage()->getDynamicVariable('wcf.message.error.tooLong', array('maxTextLength' => WCF::getSession()->getPermission('user.conversation.maxLength'))));
+			throw new UserInputException('message', WCF::getLanguage()->getDynamicVariable('wcf.message.error.tooLong', ['maxTextLength' => WCF::getSession()->getPermission('user.conversation.maxLength')]));
 		}
 		
 		// search for disallowed bbcodes
-		$disallowedBBCodes = BBCodeParser::getInstance()->validateBBCodes($message, explode(',', WCF::getSession()->getPermission('user.message.allowedBBCodes')));
+		$disallowedBBCodes = $htmlInputProcessor->validate();
 		if (!empty($disallowedBBCodes)) {
-			throw new UserInputException('text', WCF::getLanguage()->getDynamicVariable('wcf.message.error.disallowedBBCodes', array('disallowedBBCodes' => $disallowedBBCodes)));
+			throw new UserInputException('text', WCF::getLanguage()->getDynamicVariable('wcf.message.error.disallowedBBCodes', ['disallowedBBCodes' => $disallowedBBCodes]));
 		}
 		
 		// search for censored words
 		if (ENABLE_CENSORSHIP) {
 			$result = Censorship::getInstance()->test($message);
 			if ($result) {
-				throw new UserInputException('message', WCF::getLanguage()->getDynamicVariable('wcf.message.error.censoredWordsFound', array('censoredWords' => $result)));
+				throw new UserInputException('message', WCF::getLanguage()->getDynamicVariable('wcf.message.error.censoredWordsFound', ['censoredWords' => $result]));
 			}
 		}
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessageQuickReplyAction::getMessageList()
+	 * @inheritDoc
 	 */
 	public function getMessageList(DatabaseObject $conversation, $lastMessageTime) {
+		/** @var Conversation $conversation */
+		
 		$messageList = new ViewableConversationMessageList();
 		$messageList->setConversation($conversation);
-		$messageList->getConditionBuilder()->add("conversation_message.conversationID = ?", array($conversation->conversationID));
-		$messageList->getConditionBuilder()->add("conversation_message.time > ?", array($lastMessageTime));
+		$messageList->getConditionBuilder()->add("conversation_message.conversationID = ?", [$conversation->conversationID]);
+		$messageList->getConditionBuilder()->add("conversation_message.time > ?", [$lastMessageTime]);
 		$messageList->sqlOrderBy = "conversation_message.time ".CONVERSATION_LIST_DEFAULT_SORT_ORDER;
 		$messageList->readObjects();
 		
@@ -486,42 +541,45 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessageQuickReply::getPageNo()
+	 * @inheritDoc
 	 */
 	public function getPageNo(DatabaseObject $conversation) {
+		/** @var Conversation $conversation */
+		
 		$sql = "SELECT	COUNT(*) AS count
 			FROM	wcf".WCF_N."_conversation_message
 			WHERE	conversationID = ?";
 		$statement = WCF::getDB()->prepareStatement($sql);
-		$statement->execute(array($conversation->conversationID));
+		$statement->execute([$conversation->conversationID]);
 		$count = $statement->fetchArray();
 		
-		return array(intval(ceil($count['count'] / CONVERSATION_MESSAGES_PER_PAGE)), $count['count']);
+		return [intval(ceil($count['count'] / CONVERSATION_MESSAGES_PER_PAGE)), $count['count']];
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessageQuickReply::getRedirectUrl()
+	 * @inheritDoc
 	 */
 	public function getRedirectUrl(DatabaseObject $conversation, DatabaseObject $message) {
-		return LinkHandler::getInstance()->getLink('Conversation', array(
+		/** @var ConversationMessage $message */
+		return LinkHandler::getInstance()->getLink('Conversation', [
 			'object' => $conversation,
 			'messageID' => $message->messageID
-		)).'#message'.$message->messageID;
+		]).'#message'.$message->messageID;
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessageQuoteAction::validateSaveFullQuote()
+	 * @inheritDoc
 	 */
 	public function validateSaveFullQuote() {
 		$this->message = $this->getSingleObject();
 		
-		if (!Conversation::isParticipant(array($this->message->conversationID))) {
+		if (!Conversation::isParticipant([$this->message->conversationID])) {
 			throw new PermissionDeniedException();
 		}
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessageQuoteAction::saveFullQuote()
+	 * @inheritDoc
 	 */
 	public function saveFullQuote() {
 		$quoteID = MessageQuoteManager::getInstance()->addQuote(
@@ -533,14 +591,19 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		);
 		
 		if ($quoteID === false) {
-			$removeQuoteID = MessageQuoteManager::getInstance()->getQuoteID('com.woltlab.wcf.conversation.message', $this->message->messageID, $this->message->getExcerpt(), $this->message->getMessage());
+			$removeQuoteID = MessageQuoteManager::getInstance()->getQuoteID(
+				'com.woltlab.wcf.conversation.message',
+				$this->message->messageID,
+				$this->message->getExcerpt(),
+				$this->message->getMessage()
+			);
 			MessageQuoteManager::getInstance()->removeQuote($removeQuoteID);
 		}
 		
-		$returnValues = array(
+		$returnValues = [
 			'count' => MessageQuoteManager::getInstance()->countQuotes(),
-			'fullQuoteMessageIDs' => MessageQuoteManager::getInstance()->getFullQuoteObjectIDs(array('com.woltlab.wcf.conversation.message'))
-		);
+			'fullQuoteMessageIDs' => MessageQuoteManager::getInstance()->getFullQuoteObjectIDs(['com.woltlab.wcf.conversation.message'])
+		];
 		
 		if ($quoteID) {
 			$returnValues['renderedQuote'] = MessageQuoteManager::getInstance()->getQuoteComponents($quoteID);
@@ -550,28 +613,34 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessageQuoteAction::validateSaveQuote()
+	 * @inheritDoc
 	 */
 	public function validateSaveQuote() {
 		$this->readString('message');
 		$this->readBoolean('renderQuote', true);
 		$this->message = $this->getSingleObject();
 		
-		if (!Conversation::isParticipant(array($this->message->conversationID))) {
+		if (!Conversation::isParticipant([$this->message->conversationID])) {
 			throw new PermissionDeniedException();
 		}
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessageQuoteAction::saveQuote()
+	 * @inheritDoc
 	 */
 	public function saveQuote() {
-		$quoteID = MessageQuoteManager::getInstance()->addQuote('com.woltlab.wcf.conversation.message', $this->message->conversationID, $this->message->messageID, $this->parameters['message'], false);
-		
-		$returnValues = array(
-			'count' => MessageQuoteManager::getInstance()->countQuotes(),
-			'fullQuoteMessageIDs' => MessageQuoteManager::getInstance()->getFullQuoteObjectIDs(array('com.woltlab.wcf.conversation.message'))
+		$quoteID = MessageQuoteManager::getInstance()->addQuote(
+			'com.woltlab.wcf.conversation.message',
+			$this->message->conversationID,
+			$this->message->messageID,
+			$this->parameters['message'],
+			false
 		);
+		
+		$returnValues = [
+			'count' => MessageQuoteManager::getInstance()->countQuotes(),
+			'fullQuoteMessageIDs' => MessageQuoteManager::getInstance()->getFullQuoteObjectIDs(['com.woltlab.wcf.conversation.message'])
+		];
 		
 		if ($this->parameters['renderQuote']) {
 			$returnValues['renderedQuote'] = MessageQuoteManager::getInstance()->getQuoteComponents($quoteID);
@@ -581,7 +650,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessageQuoteAction::validateGetRenderedQuotes()
+	 * @inheritDoc
 	 */
 	public function validateGetRenderedQuotes() {
 		$this->readInteger('parentObjectID');
@@ -593,20 +662,34 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	}
 	
 	/**
-	 * @see	\wcf\data\IMessageQuoteAction::getRenderedQuotes()
+	 * @inheritDoc
 	 */
 	public function getRenderedQuotes() {
 		$quotes = MessageQuoteManager::getInstance()->getQuotesByParentObjectID('com.woltlab.wcf.conversation.message', $this->conversation->conversationID);
 		
-		return array(
+		return [
 			'template' => implode("\n\n", $quotes)
-		);
+		];
 	}
 	
 	/**
-	 * @see	\wcf\data\IAttachmentMessageQuickReplyAction::getAttachmentHandler()
+	 * @inheritDoc
 	 */
 	public function getAttachmentHandler(DatabaseObject $conversation) {
 		return new AttachmentHandler('com.woltlab.wcf.conversation.message', 0, $this->parameters['tmpHash']);
+	}
+	
+	/**
+	 * @inheritDoc
+	 */
+	public function getHtmlInputProcessor($message = null, $objectID = 0) {
+		if ($message === null) {
+			return $this->htmlInputProcessor;
+		}
+		
+		$this->htmlInputProcessor = new HtmlInputProcessor();
+		$this->htmlInputProcessor->process($message, 'com.woltlab.wcf.conversation.message', $objectID);
+		
+		return $this->htmlInputProcessor;
 	}
 }

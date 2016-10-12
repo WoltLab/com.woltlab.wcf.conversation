@@ -1,29 +1,30 @@
 <?php
 namespace wcf\system\user\notification\object\type;
+use wcf\data\conversation\message\ConversationMessage;
+use wcf\data\conversation\message\ConversationMessageList;
+use wcf\system\user\notification\object\ConversationMessageUserNotificationObject;
 
 /**
  * Represents a conversation message notification object type.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package	com.woltlab.wcf.conversation
- * @subpackage	system.user.notification.object.type
- * @category	Community Framework
+ * @package	WoltLabSuite\Core\System\User\Notification\Object\Type
  */
 class ConversationMessageNotificationObjectType extends AbstractUserNotificationObjectType {
 	/**
-	 * @see	\wcf\system\user\notification\object\type\AbstractUserNotificationObjectType::$decoratorClassName
+	 * @inheritDoc
 	 */
-	protected static $decoratorClassName = 'wcf\system\user\notification\object\ConversationMessageUserNotificationObject';
+	protected static $decoratorClassName = ConversationMessageUserNotificationObject::class;
 	
 	/**
-	 * @see	\wcf\system\user\notification\object\type\AbstractUserNotificationObjectType::$objectClassName
+	 * @inheritDoc
 	 */
-	protected static $objectClassName = 'wcf\data\conversation\message\ConversationMessage';
+	protected static $objectClassName = ConversationMessage::class;
 	
 	/**
-	 * @see	\wcf\system\user\notification\object\type\AbstractUserNotificationObjectType::$objectListClassName
+	 * @inheritDoc
 	 */
-	protected static $objectListClassName = 'wcf\data\conversation\message\ConversationMessageList';
+	protected static $objectListClassName = ConversationMessageList::class;
 }

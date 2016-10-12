@@ -7,34 +7,32 @@ use wcf\data\conversation\ConversationList;
  * IMessageQuoteHandler implementation for conversation messages.
  * 
  * @author	Alexander Ebert
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package	com.woltlab.wcf.conversation
- * @subpackage	system.message.quote
- * @category	Community Framework
+ * @package	WoltLabSuite\Core\System\Message\Quote
  */
 class ConversationMessageQuoteHandler extends AbstractMessageQuoteHandler {
 	/**
-	 * @see	\wcf\system\message\quote\AbstractMessageQuoteHandler::getMessages()
+	 * @inheritDoc
 	 */
 	protected function getMessages(array $data) {
 		// read messages
 		$messageList = new ConversationMessageList();
-		$messageList->getConditionBuilder()->add("conversation_message.messageID IN (?)", array(array_keys($data)));
+		$messageList->setObjectIDs(array_keys($data));
 		$messageList->readObjects();
 		$messages = $messageList->getObjects();
 		
 		// read conversations
-		$conversationIDs = $validMessageIDs = array();
+		$conversationIDs = $validMessageIDs = [];
 		foreach ($messages as $message) {
 			$conversationIDs[] = $message->conversationID;
 			$validMessageIDs[] = $message->messageID;
 		}
 		
-		$quotedMessages = array();
+		$quotedMessages = [];
 		if (!empty($conversationIDs)) {
 			$conversationList = new ConversationList();
-			$conversationList->getConditionBuilder()->add("conversation.conversationID IN (?)", array($conversationIDs));
+			$conversationList->setObjectIDs($conversationIDs);
 			$conversationList->readObjects();
 			$conversations = $conversationList->getObjects();
 			
@@ -57,7 +55,7 @@ class ConversationMessageQuoteHandler extends AbstractMessageQuoteHandler {
 		
 		// check for orphaned quotes
 		if (count($validMessageIDs) != count($data)) {
-			$orphanedQuoteIDs = array();
+			$orphanedQuoteIDs = [];
 			foreach ($data as $messageID => $quoteIDs) {
 				if (!in_array($messageID, $validMessageIDs)) {
 					foreach (array_keys($quoteIDs) as $quoteID) {

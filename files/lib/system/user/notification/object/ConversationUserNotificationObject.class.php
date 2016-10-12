@@ -1,5 +1,6 @@
 <?php
 namespace wcf\system\user\notification\object;
+use wcf\data\conversation\Conversation;
 use wcf\data\DatabaseObjectDecorator;
 use wcf\system\request\LinkHandler;
 
@@ -7,36 +8,37 @@ use wcf\system\request\LinkHandler;
  * Notification object for conversations.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package	com.woltlab.wcf.conversation
- * @subpackage	system.user.notification.object
- * @category	Community Framework
+ * @package	WoltLabSuite\Core\System\User\Notification\Object
+ * 
+ * @method	Conversation	getDecoratedObject()
+ * @mixin	Conversation
  */
 class ConversationUserNotificationObject extends DatabaseObjectDecorator implements IUserNotificationObject {
 	/**
-	 * @see	\wcf\data\DatabaseObjectDecorator::$baseClass
+	 * @inheritDoc
 	 */
-	protected static $baseClass = 'wcf\data\conversation\Conversation';
+	protected static $baseClass = Conversation::class;
 	
 	/**
-	 * @see	\wcf\system\user\notification\object\IUserNotificationObject::getTitle()
+	 * @inheritDoc
 	 */
 	public function getTitle() {
 		return $this->subject;
 	}
 	
 	/**
-	 * @see	\wcf\system\user\notification\object\IUserNotificationObject::getURL()
+	 * @inheritDoc
 	 */
 	public function getURL() {
-		return LinkHandler::getInstance()->getLink('Conversation', array(
+		return LinkHandler::getInstance()->getLink('Conversation', [
 			'object' => $this->getDecoratedObject()
-		));
+		]);
 	}
 	
 	/**
-	 * @see	\wcf\system\user\notification\object\IUserNotificationObject::getAuthorID()
+	 * @inheritDoc
 	 */
 	public function getAuthorID() {
 		return $this->userID;

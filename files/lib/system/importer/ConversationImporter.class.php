@@ -7,22 +7,20 @@ use wcf\data\conversation\ConversationEditor;
  * Imports conversations.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package	com.woltlab.wcf.conversation
- * @subpackage	system.importer
- * @category	Community Framework
+ * @package	WoltLabSuite\Core\System\Importer
  */
 class ConversationImporter extends AbstractImporter {
 	/**
-	 * @see	\wcf\system\importer\AbstractImporter::$className
+	 * @inheritDoc
 	 */
-	protected $className = 'wcf\data\conversation\Conversation';
+	protected $className = Conversation::class;
 	
 	/**
-	 * @see	\wcf\system\importer\IImporter::import()
+	 * @inheritDoc
 	 */
-	public function import($oldID, array $data, array $additionalData = array()) {
+	public function import($oldID, array $data, array $additionalData = []) {
 		$oldUserID = $data['userID'];
 		$data['userID'] = ImportHandler::getInstance()->getNewID('com.woltlab.wcf.user', $data['userID']);
 		
@@ -38,14 +36,14 @@ class ConversationImporter extends AbstractImporter {
 		
 		// add author
 		if (empty($data['isDraft'])) {
-			ImportHandler::getInstance()->getImporter('com.woltlab.wcf.conversation.user')->import(0, array(
+			ImportHandler::getInstance()->getImporter('com.woltlab.wcf.conversation.user')->import(0, [
 				'conversationID' => $oldID,
 				'participantID' => $oldUserID,
 				'username' => $data['username'],
 				'hideConversation' => 0,
 				'isInvisible' => 0,
 				'lastVisitTime' => $data['time']
-			), array('labelIDs' => array()));
+			], ['labelIDs' => []]);
 		}
 		
 		return $conversation->conversationID;

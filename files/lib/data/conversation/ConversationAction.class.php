@@ -23,32 +23,35 @@ use wcf\system\WCF;
  * Executes conversation-related actions.
  * 
  * @author	Marcel Werk
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package	com.woltlab.wcf.conversation
- * @subpackage	data.conversation
- * @category	Community Framework
+ * @package	WoltLabSuite\Core\Data\Conversation
+ * 
+ * @method	ConversationEditor[]	getObjects()
+ * @method	ConversationEditor	getSingleObject()
  */
 class ConversationAction extends AbstractDatabaseObjectAction implements IClipboardAction, IVisitableObjectAction {
 	/**
-	 * @see	\wcf\data\AbstractDatabaseObjectAction::$className
+	 * @inheritDoc
 	 */
-	protected $className = 'wcf\data\conversation\ConversationEditor';
+	protected $className = ConversationEditor::class;
 	
 	/**
 	 * conversation object
-	 * @var	\wcf\data\conversation\ConversationEditor
+	 * @var	ConversationEditor
 	 */
-	protected $conversation = null;
+	protected $conversation;
 	
 	/**
 	 * list of conversation data modifications
-	 * @var	array<array>
+	 * @var	mixed[][]
 	 */
-	protected $conversationData = array();
+	protected $conversationData = [];
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
-	 * @see	\wcf\data\AbstractDatabaseObjectAction::create()
+	 * @inheritDoc
+	 * @return	Conversation
 	 */
 	public function create() {
 		// create conversation
@@ -64,15 +67,15 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		if (isset($this->parameters['attachmentHandler']) && $this->parameters['attachmentHandler'] !== null) {
 			$data['attachments'] = count($this->parameters['attachmentHandler']);
 		}
-		$conversation = call_user_func(array($this->className, 'create'), $data);
+		$conversation = call_user_func([$this->className, 'create'], $data);
 		$conversationEditor = new ConversationEditor($conversation);
 		
 		if (!$conversation->isDraft) {
 			// save participants
-			$conversationEditor->updateParticipants((!empty($this->parameters['participants']) ? $this->parameters['participants'] : array()), (!empty($this->parameters['invisibleParticipants']) ? $this->parameters['invisibleParticipants'] : array()));
+			$conversationEditor->updateParticipants((!empty($this->parameters['participants']) ? $this->parameters['participants'] : []), (!empty($this->parameters['invisibleParticipants']) ? $this->parameters['invisibleParticipants'] : []));
 			
 			// add author
-			$conversationEditor->updateParticipants(array($data['userID']));
+			$conversationEditor->updateParticipants([$data['userID']]);
 			
 			// update conversation count
 			UserStorageHandler::getInstance()->reset($conversation->getParticipantIDs(), 'conversationCount');
@@ -83,11 +86,11 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 				WHERE	participantID = ?
 					AND conversationID = ?";
 			$statement = WCF::getDB()->prepareStatement($sql);
-			$statement->execute(array($data['time'], $data['userID'], $conversation->conversationID));
+			$statement->execute([$data['time'], $data['userID'], $conversation->conversationID]);
 		}
 		else {
 			// update conversation count
-			UserStorageHandler::getInstance()->reset(array($data['userID']), 'conversationCount');
+			UserStorageHandler::getInstance()->reset([$data['userID']], 'conversationCount');
 		}
 		
 		// update participant summary
@@ -100,36 +103,42 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		$messageData['userID'] = $this->parameters['data']['userID'];
 		$messageData['username'] = $this->parameters['data']['username'];
 		
-		$messageAction = new ConversationMessageAction(array(), 'create', array(
+		$messageAction = new ConversationMessageAction([], 'create', [
 			'data' => $messageData,
 			'conversation' => $conversation,
 			'isFirstPost' => true,
-			'attachmentHandler' => (isset($this->parameters['attachmentHandler']) ? $this->parameters['attachmentHandler'] : null) 
-		));
+			'attachmentHandler' => isset($this->parameters['attachmentHandler']) ? $this->parameters['attachmentHandler'] : null,
+			'htmlInputProcessor' => isset($this->parameters['htmlInputProcessor']) ? $this->parameters['htmlInputProcessor'] : null
+		]);
 		$resultValues = $messageAction->executeAction();
 		
 		// update first message id
-		$conversationEditor->update(array(
+		$conversationEditor->update([
 			'firstMessageID' => $resultValues['returnValues']->messageID
-		));
+		]);
 		
 		$conversation->setFirstMessage($resultValues['returnValues']);
 		if (!$conversation->isDraft) {
 			// fire notification event
-			$notificationRecipients = array_merge((!empty($this->parameters['participants']) ? $this->parameters['participants'] : array()), (!empty($this->parameters['invisibleParticipants']) ? $this->parameters['invisibleParticipants'] : array()));
-			UserNotificationHandler::getInstance()->fireEvent('conversation', 'com.woltlab.wcf.conversation.notification', new ConversationUserNotificationObject($conversation), $notificationRecipients);
+			$notificationRecipients = array_merge((!empty($this->parameters['participants']) ? $this->parameters['participants'] : []), (!empty($this->parameters['invisibleParticipants']) ? $this->parameters['invisibleParticipants'] : []));
+			UserNotificationHandler::getInstance()->fireEvent(
+				'conversation',
+				'com.woltlab.wcf.conversation.notification',
+				new ConversationUserNotificationObject($conversation),
+				$notificationRecipients
+			);
 		}
 		
 		return $conversation;
 	}
 	
 	/**
-	 * @see	\wcf\data\IDeleteAction::delete()
+	 * @inheritDoc
 	 */
 	public function delete() {
 		// deletes messages
 		$messageList = new ConversationMessageList();
-		$messageList->getConditionBuilder()->add('conversation_message.conversationID IN (?)', array($this->objectIDs));
+		$messageList->getConditionBuilder()->add('conversation_message.conversationID IN (?)', [$this->objectIDs]);
 		$messageList->readObjectIDs();
 		$action = new ConversationMessageAction($messageList->getObjectIDs(), 'delete');
 		$action->executeAction();
@@ -139,19 +148,19 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		
 		if (!empty($this->objectIDs)) {
 			// delete notifications
-			UserNotificationHandler::getInstance()->deleteNotifications('conversation', 'com.woltlab.wcf.conversation.notification', array(), $this->objectIDs);
+			UserNotificationHandler::getInstance()->removeNotifications('com.woltlab.wcf.conversation.notification', $this->objectIDs);
 			
 			// remove modification logs
-			ConversationModificationLogHandler::getInstance()->remove($this->objectIDs);
+			ConversationModificationLogHandler::getInstance()->deleteLogs($this->objectIDs);
 		}
 	}
 	
 	/**
-	 * @see	\wcf\data\AbstractDatabaseObjectAction::update()
+	 * @inheritDoc
 	 */
 	public function update() {
-		if (!isset($this->parameters['participants'])) $this->parameters['participants'] = array();
-		if (!isset($this->parameters['invisibleParticipants'])) $this->parameters['invisibleParticipants'] = array();
+		if (!isset($this->parameters['participants'])) $this->parameters['participants'] = [];
+		if (!isset($this->parameters['invisibleParticipants'])) $this->parameters['invisibleParticipants'] = [];
 		
 		// count participants
 		if (!empty($this->parameters['participants'])) {
@@ -160,13 +169,13 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		
 		parent::update();
 		
-		foreach ($this->objects as $conversation) {
-			// partipants
+		foreach ($this->getObjects() as $conversation) {
+			// participants
 			if (!empty($this->parameters['participants']) || !empty($this->parameters['invisibleParticipants'])) {
 				// get current participants
 				$participantIDs = $conversation->getParticipantIDs();
 				
-				$conversation->updateParticipants((!empty($this->parameters['participants']) ? $this->parameters['participants'] : array()), (!empty($this->parameters['invisibleParticipants']) ? $this->parameters['invisibleParticipants'] : array()));
+				$conversation->updateParticipants((!empty($this->parameters['participants']) ? $this->parameters['participants'] : []), (!empty($this->parameters['invisibleParticipants']) ? $this->parameters['invisibleParticipants'] : []));
 				$conversation->updateParticipantSummary();
 				
 				// check if new participants have been added
@@ -177,7 +186,12 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 					UserStorageHandler::getInstance()->reset($newParticipantIDs, 'conversationCount');
 					
 					// fire notification event
-					UserNotificationHandler::getInstance()->fireEvent('conversation', 'com.woltlab.wcf.conversation.notification', new ConversationUserNotificationObject($conversation->getDecoratedObject()), $newParticipantIDs);
+					UserNotificationHandler::getInstance()->fireEvent(
+						'conversation',
+						'com.woltlab.wcf.conversation.notification',
+						new ConversationUserNotificationObject($conversation->getDecoratedObject()),
+						$newParticipantIDs
+					);
 				}
 			}
 			
@@ -185,7 +199,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			if (isset($this->parameters['data']['isDraft'])) {
 				if ($conversation->isDraft && !$this->parameters['data']['isDraft']) {
 					// add author
-					$conversation->updateParticipants(array($conversation->userID));
+					$conversation->updateParticipants([$conversation->userID]);
 					
 					// update conversation count
 					UserStorageHandler::getInstance()->reset($conversation->getParticipantIDs(), 'unreadConversationCount');
@@ -196,7 +210,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	}
 	
 	/**
-	 * @see	\wcf\data\IVisitableObjectAction::markAsRead()
+	 * @inheritDoc
 	 */
 	public function markAsRead() {
 		if (empty($this->parameters['visitTime'])) {
@@ -207,35 +221,35 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			$this->readObjects();
 		}
 		
-		$conversationIDs = array();
+		$conversationIDs = [];
 		$sql = "UPDATE	wcf".WCF_N."_conversation_to_user
 			SET	lastVisitTime = ?
 			WHERE	participantID = ?
 				AND conversationID = ?";
 		$statement = WCF::getDB()->prepareStatement($sql);
 		WCF::getDB()->beginTransaction();
-		foreach ($this->objects as $conversation) {
-			$statement->execute(array(
+		foreach ($this->getObjects() as $conversation) {
+			$statement->execute([
 				$this->parameters['visitTime'],
 				WCF::getUser()->userID,
 				$conversation->conversationID
-			));
+			]);
 			$conversationIDs[] = $conversation->conversationID;
 		}
 		WCF::getDB()->commitTransaction();
 		
 		// reset storage
-		UserStorageHandler::getInstance()->reset(array(WCF::getUser()->userID), 'unreadConversationCount');
+		UserStorageHandler::getInstance()->reset([WCF::getUser()->userID], 'unreadConversationCount');
 		
 		// mark notifications as confirmed
 		if (!empty($conversationIDs)) {
 			// conversation start notification
 			$conditionBuilder = new PreparedStatementConditionBuilder();
-			$conditionBuilder->add('notification.eventID = ?', array(UserNotificationHandler::getInstance()->getEvent('com.woltlab.wcf.conversation.notification', 'conversation')->eventID));
+			$conditionBuilder->add('notification.eventID = ?', [UserNotificationHandler::getInstance()->getEvent('com.woltlab.wcf.conversation.notification', 'conversation')->eventID]);
 			$conditionBuilder->add('notification.objectID = conversation.conversationID');
-			$conditionBuilder->add('notification.userID = ?', array(WCF::getUser()->userID));
-			$conditionBuilder->add('conversation.conversationID IN (?)', array($conversationIDs));
-			$conditionBuilder->add('conversation.time <= ?', array($this->parameters['visitTime']));
+			$conditionBuilder->add('notification.userID = ?', [WCF::getUser()->userID]);
+			$conditionBuilder->add('conversation.conversationID IN (?)', [$conversationIDs]);
+			$conditionBuilder->add('conversation.time <= ?', [$this->parameters['visitTime']]);
 			
 			$sql = "SELECT		conversation.conversationID
 				FROM		wcf".WCF_N."_conversation conversation,
@@ -243,22 +257,19 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 				".$conditionBuilder;
 			$statement = WCF::getDB()->prepareStatement($sql);
 			$statement->execute($conditionBuilder->getParameters());
-			$notificationObjectIDs = array();
-			while ($row = $statement->fetchArray()) {
-				$notificationObjectIDs[] = $row['conversationID'];
-			}
+			$notificationObjectIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
 			
 			if (!empty($notificationObjectIDs)) {
-				UserNotificationHandler::getInstance()->markAsConfirmed('conversation', 'com.woltlab.wcf.conversation.notification', array(WCF::getUser()->userID), $notificationObjectIDs);
+				UserNotificationHandler::getInstance()->markAsConfirmed('conversation', 'com.woltlab.wcf.conversation.notification', [WCF::getUser()->userID], $notificationObjectIDs);
 			}
 			
 			// conversation reply notification
 			$conditionBuilder = new PreparedStatementConditionBuilder();
-			$conditionBuilder->add('notification.eventID = ?', array(UserNotificationHandler::getInstance()->getEvent('com.woltlab.wcf.conversation.message.notification', 'conversationMessage')->eventID));
+			$conditionBuilder->add('notification.eventID = ?', [UserNotificationHandler::getInstance()->getEvent('com.woltlab.wcf.conversation.message.notification', 'conversationMessage')->eventID]);
 			$conditionBuilder->add('notification.objectID = conversation_message.messageID');
-			$conditionBuilder->add('notification.userID = ?', array(WCF::getUser()->userID));
-			$conditionBuilder->add('conversation_message.conversationID IN (?)', array($conversationIDs));
-			$conditionBuilder->add('conversation_message.time <= ?', array($this->parameters['visitTime']));
+			$conditionBuilder->add('notification.userID = ?', [WCF::getUser()->userID]);
+			$conditionBuilder->add('conversation_message.conversationID IN (?)', [$conversationIDs]);
+			$conditionBuilder->add('conversation_message.time <= ?', [$this->parameters['visitTime']]);
 			
 			$sql = "SELECT		conversation_message.messageID
 				FROM		wcf".WCF_N."_conversation_message conversation_message,
@@ -266,13 +277,10 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 				".$conditionBuilder;
 			$statement = WCF::getDB()->prepareStatement($sql);
 			$statement->execute($conditionBuilder->getParameters());
-			$notificationObjectIDs = array();
-			while ($row = $statement->fetchArray()) {
-				$notificationObjectIDs[] = $row['messageID'];
-			}
+			$notificationObjectIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
 			
 			if (!empty($notificationObjectIDs)) {
-				UserNotificationHandler::getInstance()->markAsConfirmed('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', array(WCF::getUser()->userID), $notificationObjectIDs);
+				UserNotificationHandler::getInstance()->markAsConfirmed('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', [WCF::getUser()->userID], $notificationObjectIDs);
 			}
 		}
 		
@@ -280,9 +288,9 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			$this->unmarkItems($conversationIDs);
 		}
 		
-		$returnValues = array(
+		$returnValues = [
 			'totalCount' => ConversationHandler::getInstance()->getUnreadConversationCount(null, true)
-		);
+		];
 		
 		if (count($conversationIDs) == 1) {
 			$returnValues['markAsRead'] = reset($conversationIDs);
@@ -292,7 +300,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	}
 	
 	/**
-	 * @see	\wcf\data\IVisitableObjectAction::validateMarkAsRead()
+	 * @inheritDoc
 	 */
 	public function validateMarkAsRead() {
 		// visitTime might not be in the future
@@ -308,8 +316,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		}
 		
 		// check participation
-		$conversationIDs = array();
-		foreach ($this->objects as $conversation) {
+		$conversationIDs = [];
+		foreach ($this->getObjects() as $conversation) {
 			$conversationIDs[] = $conversation->conversationID;
 		}
 		
@@ -330,32 +338,34 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			SET	lastVisitTime = ?
 			WHERE	participantID = ?";
 		$statement = WCF::getDB()->prepareStatement($sql);
-		$statement->execute(array(
+		$statement->execute([
 			TIME_NOW,
 			WCF::getUser()->userID
-		));
+		]);
 		
 		// reset storage
-		UserStorageHandler::getInstance()->reset(array(WCF::getUser()->userID), 'unreadConversationCount');
+		UserStorageHandler::getInstance()->reset([WCF::getUser()->userID], 'unreadConversationCount');
 		
-		// delete obsolete notifications
-		UserNotificationHandler::getInstance()->deleteNotifications('conversation', 'com.woltlab.wcf.conversation.notification', array(WCF::getUser()->userID));
-		UserNotificationHandler::getInstance()->deleteNotifications('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', array(WCF::getUser()->userID));
+		// confirm obsolete notifications
+		UserNotificationHandler::getInstance()->markAsConfirmed('conversation', 'com.woltlab.wcf.conversation.notification', [WCF::getUser()->userID]);
+		UserNotificationHandler::getInstance()->markAsConfirmed('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', [WCF::getUser()->userID]);
 		
-		return array(
+		return [
 			'markAllAsRead' => true
-		);
+		];
 	}
 	
 	/**
 	 * Validates the markAllAsRead action.
 	 */
-	public function validateMarkAllAsRead() {}
+	public function validateMarkAllAsRead() {
+		// does nothing
+	}
 	
 	/**
 	 * Validates user access for label management.
 	 */
-	public function validateGetLabelmanagement() {
+	public function validateGetLabelManagement() {
 		if (!WCF::getSession()->getPermission('user.conversation.canUseConversation')) {
 			throw new PermissionDeniedException();
 		}
@@ -367,17 +377,17 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 * @return	array
 	 */
 	public function getLabelManagement() {
-		WCF::getTPL()->assign(array(
+		WCF::getTPL()->assign([
 			'cssClassNames' => ConversationLabel::getLabelCssClassNames(),
 			'labelList' => ConversationLabel::getLabelsByUser()
-		));
+		]);
 		
-		return array(
+		return [
 			'actionName' => 'getLabelManagement',
 			'template' => WCF::getTPL()->fetch('conversationLabelManagement'),
 			'maxLabels' => WCF::getSession()->getPermission('user.conversation.maxLabels'),
 			'labelCount' => count(ConversationLabel::getLabelsByUser())
-		);
+		];
 	}
 	
 	/**
@@ -385,7 +395,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 */
 	public function validateGetMessagePreview() {
 		$this->conversation = $this->getSingleObject();
-		if (!Conversation::isParticipant(array($this->conversation->conversationID))) {
+		if (!Conversation::isParticipant([$this->conversation->conversationID])) {
 			throw new PermissionDeniedException();
 		}
 	}
@@ -393,21 +403,21 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	/**
 	 * Returns a preview of a message in a specific conversation.
 	 * 
-	 * @return	array
+	 * @return	string[]
 	 */
 	public function getMessagePreview() {
 		$messageList = new SimplifiedViewableConversationMessageList();
 		
-		$messageList->getConditionBuilder()->add("conversation_message.messageID = ?", array($this->conversation->firstMessageID));
+		$messageList->getConditionBuilder()->add("conversation_message.messageID = ?", [$this->conversation->firstMessageID]);
 		$messageList->readObjects();
 		$messages = $messageList->getObjects();
 		
-		WCF::getTPL()->assign(array(
+		WCF::getTPL()->assign([
 			'message' => reset($messages)
-		));
-		return array(
+		]);
+		return [
 			'template' => WCF::getTPL()->fetch('conversationMessagePreview')
-		);
+		];
 	}
 	
 	/**
@@ -424,7 +434,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		}
 		
 		// validate ownership
-		foreach ($this->objects as $conversation) {
+		foreach ($this->getObjects() as $conversation) {
 			if ($conversation->isClosed || ($conversation->userID != WCF::getUser()->userID)) {
 				throw new PermissionDeniedException();
 			}
@@ -434,11 +444,11 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	/**
 	 * Closes conversations.
 	 * 
-	 * @return	array<array>
+	 * @return	mixed[][]
 	 */
 	public function close() {
-		foreach ($this->objects as $conversation) {
-			$conversation->update(array('isClosed' => 1));
+		foreach ($this->getObjects() as $conversation) {
+			$conversation->update(['isClosed' => 1]);
 			$this->addConversationData($conversation->getDecoratedObject(), 'isClosed', 1);
 			
 			ConversationModificationLogHandler::getInstance()->close($conversation->getDecoratedObject());
@@ -463,7 +473,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		}
 		
 		// validate ownership
-		foreach ($this->objects as $conversation) {
+		foreach ($this->getObjects() as $conversation) {
 			if (!$conversation->isClosed || ($conversation->userID != WCF::getUser()->userID)) {
 				throw new PermissionDeniedException();
 			}
@@ -473,11 +483,11 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	/**
 	 * Opens conversations.
 	 * 
-	 * @return	array<array>
+	 * @return	mixed[][]
 	 */
 	public function open() {
-		foreach ($this->objects as $conversation) {
-			$conversation->update(array('isClosed' => 0));
+		foreach ($this->getObjects() as $conversation) {
+			$conversation->update(['isClosed' => 0]);
 			$this->addConversationData($conversation->getDecoratedObject(), 'isClosed', 0);
 			
 			ConversationModificationLogHandler::getInstance()->open($conversation->getDecoratedObject());
@@ -514,26 +524,26 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			WHERE	conversationID = ?
 				AND participantID = ?";
 		$statement = WCF::getDB()->prepareStatement($sql);
-		$statement->execute(array(
+		$statement->execute([
 			current($this->objectIDs),
 			WCF::getUser()->userID
-		));
+		]);
 		$row = $statement->fetchArray();
 		
 		WCF::getTPL()->assign('hideConversation', $row['hideConversation']);
 		
-		return array(
+		return [
 			'actionName' => 'getLeaveForm',
 			'template' => WCF::getTPL()->fetch('conversationLeave')
-		);
+		];
 	}
 	
 	/**
 	 * Validates parameters to hide conversations.
 	 */
 	public function validateHideConversation() {
-		$this->parameters['hideConversation'] = (isset($this->parameters['hideConversation'])) ? intval($this->parameters['hideConversation']) : null;
-		if ($this->parameters['hideConversation'] === null || !in_array($this->parameters['hideConversation'], array(Conversation::STATE_DEFAULT, Conversation::STATE_HIDDEN, Conversation::STATE_LEFT))) {
+		$this->parameters['hideConversation'] = isset($this->parameters['hideConversation']) ? intval($this->parameters['hideConversation']) : null;
+		if ($this->parameters['hideConversation'] === null || !in_array($this->parameters['hideConversation'], [Conversation::STATE_DEFAULT, Conversation::STATE_HIDDEN, Conversation::STATE_LEFT])) {
 			throw new UserInputException('hideConversation');
 		}
 		
@@ -550,7 +560,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	/**
 	 * Hides or restores conversations.
 	 * 
-	 * @return	array
+	 * @return	string[]
 	 */
 	public function hideConversation() {
 		$sql = "UPDATE	wcf".WCF_N."_conversation_to_user
@@ -561,26 +571,26 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		
 		WCF::getDB()->beginTransaction();
 		foreach ($this->objectIDs as $conversationID) {
-			$statement->execute(array(
+			$statement->execute([
 				$this->parameters['hideConversation'],
 				$conversationID,
 				WCF::getUser()->userID
-			));
+			]);
 		}
 		WCF::getDB()->commitTransaction();
 		
 		// reset user's conversation counters if user leaves conversation
 		// permanently
 		if ($this->parameters['hideConversation'] == Conversation::STATE_LEFT) {
-			UserStorageHandler::getInstance()->reset(array(WCF::getUser()->userID), 'conversationCount');
-			UserStorageHandler::getInstance()->reset(array(WCF::getUser()->userID), 'unreadConversationCount');
+			UserStorageHandler::getInstance()->reset([WCF::getUser()->userID], 'conversationCount');
+			UserStorageHandler::getInstance()->reset([WCF::getUser()->userID], 'unreadConversationCount');
 		}
 		
 		// add modification log entry
 		if ($this->parameters['hideConversation'] == Conversation::STATE_LEFT) {
 			if (empty($this->objects)) $this->readObjects();
 			
-			foreach ($this->objects as $conversation) {
+			foreach ($this->getObjects() as $conversation) {
 				ConversationModificationLogHandler::getInstance()->leave($conversation->getDecoratedObject());
 			}
 		}
@@ -595,9 +605,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			
 			// delete conversation if all users have left it
 			$conditionBuilder = new PreparedStatementConditionBuilder();
-			$conditionBuilder->add('conversation.conversationID IN (?)', array($this->objectIDs));
+			$conditionBuilder->add('conversation.conversationID IN (?)', [$this->objectIDs]);
 			$conditionBuilder->add('conversation_to_user.conversationID IS NULL');
-			$conversationIDs = array();
 			$sql = "SELECT		DISTINCT conversation.conversationID
 				FROM		wcf".WCF_N."_conversation conversation
 				LEFT JOIN	wcf".WCF_N."_conversation_to_user conversation_to_user
@@ -607,19 +616,18 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 				".$conditionBuilder;
 			$statement = WCF::getDB()->prepareStatement($sql);
 			$statement->execute($conditionBuilder->getParameters());
-			while ($row = $statement->fetchArray()) {
-				$conversationIDs[] = $row['conversationID'];
-			}
+			$conversationIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
+			
 			if (!empty($conversationIDs)) {
 				$action = new ConversationAction($conversationIDs, 'delete');
 				$action->executeAction();
 			}
 		}
 		
-		return array(
+		return [
 			'actionName' => 'hideConversation',
 			'redirectURL' => LinkHandler::getInstance()->getLink('ConversationList')
-		);
+		];
 	}
 	
 	/**
@@ -630,28 +638,33 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	}
 	
 	/**
-	 * Returns a mixed conversation list with up to 5 unread conversations.
+	 * Returns a mixed conversation list with up to 10 unread conversations.
 	 * 
-	 * @return	array<mixed>
+	 * @return	mixed[][]
 	 */
 	public function getMixedConversationList() {
+		$sqlSelect = '  , (SELECT participantID FROM wcf'.WCF_N.'_conversation_to_user WHERE conversationID = conversation.conversationID AND participantID <> conversation.userID AND isInvisible = 0 ORDER BY username, participantID LIMIT 1) AS otherParticipantID
+				, (SELECT username FROM wcf'.WCF_N.'_conversation_to_user WHERE conversationID = conversation.conversationID AND participantID <> conversation.userID AND isInvisible = 0 ORDER BY username, participantID LIMIT 1) AS otherParticipant';
+		
 		$unreadConversationList = new UserConversationList(WCF::getUser()->userID);
+		$unreadConversationList->sqlSelects .= $sqlSelect;
 		$unreadConversationList->getConditionBuilder()->add('conversation_to_user.lastVisitTime < conversation.lastPostTime');
-		$unreadConversationList->sqlLimit = 5;
+		$unreadConversationList->sqlLimit = 10;
 		$unreadConversationList->sqlOrderBy = 'conversation.lastPostTime DESC';
 		$unreadConversationList->readObjects();
 		
-		$conversations = array();
+		$conversations = [];
 		$count = 0;
 		foreach ($unreadConversationList as $conversation) {
 			$conversations[] = $conversation;
 			$count++;
 		}
 		
-		if ($count < 5) {
+		if ($count < 10) {
 			$conversationList = new UserConversationList(WCF::getUser()->userID);
+			$conversationList->sqlSelects .= $sqlSelect;
 			$conversationList->getConditionBuilder()->add('conversation_to_user.lastVisitTime >= conversation.lastPostTime');
-			$conversationList->sqlLimit = (5 - $count);
+			$conversationList->sqlLimit = (10 - $count);
 			$conversationList->sqlOrderBy = 'conversation.lastPostTime DESC';
 			$conversationList->readObjects();
 			
@@ -660,19 +673,19 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			}
 		}
 		
-		WCF::getTPL()->assign(array(
+		WCF::getTPL()->assign([
 			'conversations' => $conversations
-		));
+		]);
 		
 		$totalCount = ConversationHandler::getInstance()->getUnreadConversationCount();
-		if ($count < 5 && $count < $totalCount) {
-			UserStorageHandler::getInstance()->reset(array(WCF::getUser()->userID), 'unreadConversationCount');
+		if ($count < 10 && $count < $totalCount) {
+			UserStorageHandler::getInstance()->reset([WCF::getUser()->userID], 'unreadConversationCount');
 		}
 		
-		return array(
+		return [
 			'template' => WCF::getTPL()->fetch('conversationListUserPanel'),
 			'totalCount' => $totalCount
-		);
+		];
 	}
 	
 	/**
@@ -694,7 +707,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 */
 	public function validateGetAddParticipantsForm() {
 		$this->conversation = $this->getSingleObject();
-		if (!Conversation::isParticipant(array($this->conversation->conversationID)) || !$this->conversation->canAddParticipants()) {
+		if (!Conversation::isParticipant([$this->conversation->conversationID]) || !$this->conversation->canAddParticipants()) {
 			throw new PermissionDeniedException();
 		}
 	}
@@ -705,11 +718,11 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 * @return	array
 	 */
 	public function getAddParticipantsForm() {
-		return array(
-			'actionName' => 'getAddParticipantsForm',
-			'excludeSearchValues' => $this->conversation->getParticipantNames(),
+		return [
+			'excludedSearchValues' => $this->conversation->getParticipantNames(),
+			'maxItems' => WCF::getSession()->getPermission('user.conversation.maxParticipants') - $this->conversation->participants,
 			'template' => WCF::getTPL()->fetch('conversationAddParticipants')
-		);
+		];
 	}
 	
 	/**
@@ -719,7 +732,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		$this->validateGetAddParticipantsForm();
 		
 		// validate participants
-		$this->readString('participants');
+		$this->readStringArray('participants');
 	}
 	
 	/**
@@ -735,43 +748,42 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			$errorMessage = '';
 			foreach ($e->getType() as $type) {
 				if (!empty($errorMessage)) $errorMessage .= ' ';
-				$errorMessage .= WCF::getLanguage()->getDynamicVariable('wcf.conversation.participants.error.'.$type['type'], array('errorData' => array('username' => $type['username'])));
+				$errorMessage .= WCF::getLanguage()->getDynamicVariable('wcf.conversation.participants.error.'.$type['type'], ['errorData' => ['username' => $type['username']]]);
 			}
 			
-			return array(
+			return [
 				'actionName' => 'addParticipants',
 				'errorMessage' => $errorMessage
-			);
+			];
 		}
 		
 		// validate limit
 		$newCount = $this->conversation->participants + count($participantIDs);
 		if ($newCount > WCF::getSession()->getPermission('user.conversation.maxParticipants')) {
-			return array(
+			return [
 				'actionName' => 'addParticipants',
 				'errorMessage' => WCF::getLanguage()->getDynamicVariable('wcf.conversation.participants.error.tooManyParticipants')
-			);
+			];
 		}
 		
 		$count = 0;
 		$successMessage = '';
 		if (!empty($participantIDs)) {
 			// check for already added participants
-			$data = array();
 			if ($this->conversation->isDraft) {
 				$draftData = unserialize($this->conversation->draftData);
 				$draftData['participants'] = array_merge($draftData['participants'], $participantIDs);
-				$data = array('data' => array('draftData' => serialize($draftData)));
+				$data = ['data' => ['draftData' => serialize($draftData)]];
 			}
 			else {
-				$data = array('participants' => $participantIDs);
+				$data = ['participants' => $participantIDs];
 			}
 			
-			$conversationAction = new ConversationAction(array($this->conversation), 'update', $data);
+			$conversationAction = new ConversationAction([$this->conversation], 'update', $data);
 			$conversationAction->executeAction();
 			
 			$count = count($participantIDs);
-			$successMessage = WCF::getLanguage()->getDynamicVariable('wcf.conversation.edit.addParticipants.success', array('count' => $count));
+			$successMessage = WCF::getLanguage()->getDynamicVariable('wcf.conversation.edit.addParticipants.success', ['count' => $count]);
 			
 			ConversationModificationLogHandler::getInstance()->addParticipants($this->conversation->getDecoratedObject(), $participantIDs);
 			
@@ -781,11 +793,10 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			}
 		}
 		
-		return array(
-			'actionName' => 'addParticipants',
+		return [
 			'count' => $count,
 			'successMessage' => $successMessage
-		);
+		];
 	}
 	
 	/**
@@ -806,7 +817,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		}
 		
 		// validate participants
-		if ($this->parameters['userID'] == WCF::getUser()->userID || !Conversation::isParticipant(array($this->conversation->conversationID)) || !Conversation::isParticipant(array($this->conversation->conversationID), $this->parameters['userID'])) {
+		if ($this->parameters['userID'] == WCF::getUser()->userID || !Conversation::isParticipant([$this->conversation->conversationID]) || !Conversation::isParticipant([$this->conversation->conversationID], $this->parameters['userID'])) {
 			throw new PermissionDeniedException();
 		}
 		
@@ -822,11 +833,11 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		ConversationModificationLogHandler::getInstance()->removeParticipant($this->conversation->getDecoratedObject(), $this->parameters['userID']);
 		
 		// reset storage
-		UserStorageHandler::getInstance()->reset(array($this->parameters['userID']), 'unreadConversationCount');
+		UserStorageHandler::getInstance()->reset([$this->parameters['userID']], 'unreadConversationCount');
 		
-		return array(
+		return [
 			'userID' => $this->parameters['userID']
-		);
+		];
 	}
 	
 	/**
@@ -839,7 +850,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		
 		// collect number of messages for each conversation
 		$conditionBuilder = new PreparedStatementConditionBuilder();
-		$conditionBuilder->add('conversation_message.conversationID IN (?)', array($this->objectIDs));
+		$conditionBuilder->add('conversation_message.conversationID IN (?)', [$this->objectIDs]);
 		$sql = "SELECT		conversationID, COUNT(messageID) AS messages, SUM(attachments) AS attachments
 			FROM		wcf".WCF_N."_conversation_message conversation_message
 			".$conditionBuilder."
@@ -847,20 +858,20 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute($conditionBuilder->getParameters());
 		
-		$objectIDs = array();
+		$objectIDs = [];
 		while ($row = $statement->fetchArray()) {
 			if (!$row['messages']) {
 				continue;
 			}
 			$objectIDs[] = $row['conversationID'];
 			
-			$conversationEditor = new ConversationEditor(new Conversation(null, array(
+			$conversationEditor = new ConversationEditor(new Conversation(null, [
 				'conversationID' => $row['conversationID']
-			)));
-			$conversationEditor->update(array(
+			]));
+			$conversationEditor->update([
 				'attachments' => $row['attachments'],
 				'replies' => $row['messages'] - 1
-			));
+			]);
 			$conversationEditor->updateFirstMessage();
 			$conversationEditor->updateLastMessage();
 		}
@@ -876,13 +887,13 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	/**
 	 * Adds conversation modification data.
 	 * 
-	 * @param	\wcf\data\conversation\Conversation	$conversation
-	 * @param	string					$key
-	 * @param	mixed					$value
+	 * @param	Conversation	$conversation
+	 * @param	string		$key
+	 * @param	mixed		$value
 	 */
 	protected function addConversationData(Conversation $conversation, $key, $value) {
 		if (!isset($this->conversationData[$conversation->conversationID])) {
-			$this->conversationData[$conversation->conversationID] = array();
+			$this->conversationData[$conversation->conversationID] = [];
 		}
 		
 		$this->conversationData[$conversation->conversationID][$key] = $value;
@@ -891,20 +902,20 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	/**
 	 * Returns conversation data.
 	 * 
-	 * @return	array<array>
+	 * @return	mixed[][]
 	 */
 	protected function getConversationData() {
-		return array(
+		return [
 			'conversationData' => $this->conversationData
-		);
+		];
 	}
 	
 	/**
 	 * Unmarks conversations.
 	 * 
-	 * @param	array<integer>		$conversationIDs
+	 * @param	integer[]		$conversationIDs
 	 */
-	protected function unmarkItems(array $conversationIDs = array()) {
+	protected function unmarkItems(array $conversationIDs = []) {
 		if (empty($conversationIDs)) {
 			$conversationIDs = $this->objectIDs;
 		}

@@ -1,6 +1,6 @@
 <?php
 namespace wcf\data\modification\log;
-use wcf\data\conversation\Conversation;
+use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\log\modification\ConversationModificationLogHandler;
 use wcf\system\WCF;
 
@@ -8,34 +8,34 @@ use wcf\system\WCF;
  * Represents a list of modification logs for conversation log page.
  * 
  * @author	Alexander Ebert
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package	com.woltlab.wcf.conversation
- * @subpackage	data.modification.log
- * @category	Community Framework
+ * @package	WoltLabSuite\Core\Data\Modification\Log
+ *
+ * @method	ViewableConversationModificationLog		current()
+ * @method	ViewableConversationModificationLog[]		getObjects()
+ * @method	ViewableConversationModificationLog|null	search($objectID)
+ * @property	ViewableConversationModificationLog[]		$objects
  */
 class ConversationLogModificationLogList extends ModificationLogList {
 	/**
-	 * @see	\wbb\data\DatabaseObjectList::__construct()
+	 * @inheritDoc
 	 */
 	public function __construct($conversationID) {
 		parent::__construct();
 		
 		// set conditions
-		$this->getConditionBuilder()->add('modification_log.objectTypeID = ?', array(ConversationModificationLogHandler::getInstance()->getObjectType('com.woltlab.wcf.conversation.conversation')->objectTypeID));
-		$this->getConditionBuilder()->add('modification_log.objectID = ?', array($conversationID));
+		$this->getConditionBuilder()->add('modification_log.objectTypeID = ?', [ConversationModificationLogHandler::getInstance()->getObjectType('com.woltlab.wcf.conversation.conversation')->objectTypeID]);
+		$this->getConditionBuilder()->add('modification_log.objectID = ?', [$conversationID]);
 	}
-		
+	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
-	 * @see	\wcf\data\DatabaseObjectList::readObjects()
+	 * @inheritDoc
 	 */
 	public function readObjects() {
-		$sql = "SELECT		user_avatar.*,
-					user_table.email, user_table.enableGravatar, user_table.disableAvatar, user_table.gravatarFileExtension,
-					modification_log.*
-			FROM		wcf".WCF_N."_modification_log modification_log
-			LEFT JOIN	wcf".WCF_N."_user user_table ON (user_table.userID = modification_log.userID)
-			LEFT JOIN	wcf".WCF_N."_user_avatar user_avatar ON (user_avatar.avatarID = user_table.avatarID)		
+		$sql = "SELECT	modification_log.*
+			FROM	wcf".WCF_N."_modification_log modification_log
 			".$this->getConditionBuilder()."
 			".(!empty($this->sqlOrderBy) ? "ORDER BY ".$this->sqlOrderBy : '');
 		$statement = WCF::getDB()->prepareStatement($sql, $this->sqlLimit, $this->sqlOffset);
@@ -43,15 +43,23 @@ class ConversationLogModificationLogList extends ModificationLogList {
 		$this->objects = $statement->fetchObjects(($this->objectClassName ?: $this->className));
 		
 		// use table index as array index
-		$objects = array();
+		$objects = $userIDs = [];
 		foreach ($this->objects as $object) {
 			$objectID = $object->{$this->getDatabaseTableIndexName()};
 			$objects[$objectID] = $object;
 			
 			$this->indexToObject[] = $objectID;
+			
+			if ($object->userID) {
+				$userIDs[] = $object->userID;
+			}
 		}
 		$this->objectIDs = $this->indexToObject;
 		$this->objects = $objects;
+		
+		if (!empty($userIDs)) {
+			UserProfileRuntimeCache::getInstance()->cacheObjectIDs($userIDs);
+		}
 		
 		foreach ($this->objects as &$object) {
 			$object = new ViewableConversationModificationLog($object);
@@ -64,10 +72,10 @@ class ConversationLogModificationLogList extends ModificationLogList {
 	 * will be returned and removed from collection.
 	 * 
 	 * @param	integer		$time
-	 * @return	array<\wcf\data\modification\log\ViewableConversationModificationLog>
+	 * @return	ViewableConversationModificationLog[]
 	 */
 	public function getEntriesUntil($time) {
-		$entries = array();
+		$entries = [];
 		foreach ($this->objects as $index => $entry) {
 			if ($entry->time < $time) {
 				$entries[] = $entry;

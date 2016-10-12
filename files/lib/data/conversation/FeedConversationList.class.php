@@ -6,28 +6,31 @@ use wcf\system\WCF;
  * Represents a list of conversations for RSS feeds.
  * 
  * @author	Alexander Ebert
- * @copyright	2001-2015 WoltLab GmbH
+ * @copyright	2001-2016 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package	com.woltlab.wcf.conversation
- * @subpackage	data.conversation
- * @category	Community Framework
+ * @package	WoltLabSuite\Core\Data\Conversation
+ *
+ * @method	FeedConversation	current()
+ * @method	FeedConversation[]	getObjects()
+ * @method	FeedConversation|null	search($objectID)
+ * @property	FeedConversation[]	$objects
  */
 class FeedConversationList extends ConversationList {
 	/**
-	 * @see	\wcf\data\DatabaseObjectList::$decoratorClassName
+	 * @inheritDoc
 	 */
-	public $decoratorClassName = 'wcf\data\conversation\FeedConversation';
+	public $decoratorClassName = FeedConversation::class;
 	
 	/**
-	 * @see	\wcf\data\DatabaseObjectList::$sqlOrderBy
+	 * @inheritDoc
 	 */
 	public $sqlOrderBy = 'conversation.lastPostTime DESC';
 	
+	/** @noinspection PhpMissingParentCallCommonInspection */
 	/**
-	 * @see	\wcf\data\DatabaseObjectList::readObjectIDs()
+	 * @inheritDoc
 	 */
 	public function readObjectIDs() {
-		$this->objectIDs = array();
 		$sql = "SELECT	conversation_to_user.conversationID AS objectID
 			FROM	wcf".WCF_N."_conversation_to_user conversation_to_user
 				".$this->sqlConditionJoins."
@@ -35,13 +38,11 @@ class FeedConversationList extends ConversationList {
 				".(!empty($this->sqlOrderBy) ? "ORDER BY ".$this->sqlOrderBy : '');
 		$statement = WCF::getDB()->prepareStatement($sql, $this->sqlLimit, $this->sqlOffset);
 		$statement->execute($this->getConditionBuilder()->getParameters());
-		while ($row = $statement->fetchArray()) {
-			$this->objectIDs[] = $row['objectID'];
-		}
+		$this->objectIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
 	}
 	
 	/**
-	 * @see	\wcf\data\DatabaseObjectList::readObjects()
+	 * @inheritDoc
 	 */
 	public function readObjects() {
 		if ($this->objectIDs === null) {
