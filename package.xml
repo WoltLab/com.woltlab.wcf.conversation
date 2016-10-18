@@ -3,8 +3,8 @@
 	<packageinformation>
 		<packagename>User Conversation System</packagename>
 		<packagedescription>Private conversations between multiple users.</packagedescription>
-		<version>2.1.6</version>
-		<date>2016-06-01</date>
+		<version>2.1.7</version>
+		<date>2016-10-18</date>
 	</packageinformation>
 	
 	<authorinformation>
@@ -13,11 +13,11 @@
 	</authorinformation>
 	
 	<requiredpackages>
-		<requiredpackage minversion="2.1.11">com.woltlab.wcf</requiredpackage>
+		<requiredpackage minversion="2.1.12">com.woltlab.wcf</requiredpackage>
 	</requiredpackages>
 	
 	<excludedpackages>
-		<excludedpackage version="2.2.0 Alpha 1">com.woltlab.wcf</excludedpackage>
+		<excludedpackage version="3.0.0 Alpha 1">com.woltlab.wcf</excludedpackage>
 	</excludedpackages>
 	
 	<instructions type="install">
@@ -37,7 +37,7 @@
 		<instruction type="script">acp/install_com.woltlab.wcf.conversation_2.0.0.php</instruction>
 	</instructions>
 	
-	<instructions type="update" fromversion="2.0.10">
+	<instructions type="update" fromversion="2.0.11">
 		<instruction type="file" run="standalone">files.tar</instruction>
 		<instruction type="template" run="standalone">templates.tar</instruction>
 		
@@ -55,9 +55,8 @@
 		<instruction type="userOption">userOption.xml</instruction>
 	</instructions>
 	
-	<instructions type="update" fromversion="2.1.5">
+	<instructions type="update" fromversion="2.1.6">
 		<instruction type="file">files_update.tar</instruction>
-		<instruction type="template">templates_update.tar</instruction>
 		
 		<instruction type="language">language/*.xml</instruction>
 	</instructions>
