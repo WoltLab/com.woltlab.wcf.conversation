@@ -188,12 +188,6 @@
 		<item name="wcf.user.notification.conversation.message.message.stacked"><![CDATA[{if $count < 4}{@$authors[0]->getAnchorTag()}{if $count == 2} and {else}, {/if}{@$authors[1]->getAnchorTag()}{if $count == 3} and {@$authors[2]->getAnchorTag()}{/if}{else}{@$authors[0]->getAnchorTag()} and {#$count} others{/if} replied to the conversation <a href="{link controller='Conversation' object=$message->getConversation()}{/link}">{$message->getConversation()->getTitle()}</a>.]]></item>
 		<item name="wcf.user.notification.conversation.message.title"><![CDATA[New Reply to a Conversation]]></item>
 		<item name="wcf.user.notification.conversation.message.title.stacked"><![CDATA[{#$count} participants replied to a conversation]]></item>
-		<item name="wcf.user.notification.conversation.message.mail"><![CDATA[{@$author->username} replied to the conversation "{@$message->getTitle()}":
-{if $notificationType == 'instant'}
----------------------------------
-{@$message->getMailText()} 
----------------------------------
-{/if}{link controller='Conversation' object=$message->getConversation() isEmail=true}messageID={@$message->messageID}{/link}#message{@$message->messageID}]]></item>
 		<item name="wcf.user.notification.conversation.message.mail.plaintext"><![CDATA[{@$authorList} replied to the conversation “{$event->getUserNotificationObject()->getConversation()->subject}” [URL:{link controller='Conversation' object=$event->getUserNotificationObject()->getConversation() isEmail=true}{/link}]{if $count == 1 && !$guestTimesTriggered}:{else}.{/if}]]></item>
 		<item name="wcf.user.notification.conversation.message.mail.html"><![CDATA[<p>{@$authorList} replied to the conversation <a href="{link controller='Conversation' object=$event->getUserNotificationObject()->getConversation() isEmail=true}{/link}">{$event->getUserNotificationObject()->getConversation()->subject}</a>:</p>]]></item>
 		<item name="wcf.user.notification.conversation.message"><![CDATA[{@$author->getAnchorTag()} started the conversation <a href="{link controller='Conversation' object=$conversation}{/link}">{$conversation->subject}</a>.]]></item>

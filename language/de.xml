@@ -19,6 +19,7 @@
 		<item name="wcf.acp.group.option.user.conversation.allowedAttachmentExtensions"><![CDATA[Erlaubte Dateiendungen]]></item>
 		<item name="wcf.acp.group.option.user.conversation.allowedAttachmentExtensions.description"><![CDATA[Eine Dateiendung pro Zeile]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxAttachmentCount"><![CDATA[Maximale Dateianhänge pro Nachricht]]></item>
+		<item name="wcf.acp.group.option.user.conversation.maxAttachmentCount.description"><![CDATA[]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canEditMessage"><![CDATA[Kann eigene Nachrichten bearbeiten]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canEditMessage.description"><![CDATA[Mitglieder dieser Benutzergruppe können eigene Nachrichten in Konversationen nachträglich verändern, auch wenn diese bereits vom Empfänger gelesen wurden.]]></item>
 	</category>
@@ -26,7 +27,9 @@
 	<category name="wcf.acp.option">
 		<item name="wcf.acp.option.category.message.conversation"><![CDATA[Konversationen]]></item>
 		<item name="wcf.acp.option.conversation_list_default_sort_field"><![CDATA[Sortierung]]></item>
+		<item name="wcf.acp.option.conversation_list_default_sort_field.description"><![CDATA[]]></item>
 		<item name="wcf.acp.option.conversation_list_default_sort_order"><![CDATA[Reihenfolge]]></item>
+		<item name="wcf.acp.option.conversation_list_default_sort_order.description"><![CDATA[]]></item>
 		<item name="wcf.acp.option.conversation_messages_per_page"><![CDATA[Nachrichten pro Seite]]></item>
 		<item name="wcf.acp.option.conversations_per_page"><![CDATA[Konversationen pro Seite]]></item>
 		<item name="wcf.acp.option.module_conversation"><![CDATA[Konversationen]]></item>
