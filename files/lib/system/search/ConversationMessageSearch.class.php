@@ -118,7 +118,7 @@ class ConversationMessageSearch extends AbstractSearchableObjectType {
 	 * @inheritDoc
 	 */
 	public function isAccessible() {
-		return (WCF::getUser()->userID ? true : false);
+		return (WCF::getUser()->userID ? true : false) && MODULE_CONVERSATION;
 	}
 	
 	/** @noinspection PhpMissingParentCallCommonInspection */
