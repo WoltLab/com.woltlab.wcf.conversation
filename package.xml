@@ -39,6 +39,6 @@
 	</instructions>
 	
 	<instructions type="update" fromversion="3.0.0 Beta 3">
-		<instruction type="file" />
+		<instruction type="file">files_update.tar</instruction>
 	</instructions>
 </package>
