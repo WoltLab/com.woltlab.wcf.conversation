@@ -45,6 +45,13 @@
 	</import>
 	
 	<delete>
+		<templatelistener name="userPanel">
+			<environment>user</environment>
+			<templatename>userPanel</templatename>
+			<eventname>menuItems</eventname>
+			<templatecode><![CDATA[{include file='__userPanelConversationDropdown'}]]></templatecode>
+		</templatelistener>
+		 
 		<templatelistener name="searchAreaConversationSettings">
 			<environment>user</environment>
 			<templatename>searchArea</templatename>
