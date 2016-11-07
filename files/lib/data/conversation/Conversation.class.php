@@ -263,17 +263,22 @@ class Conversation extends DatabaseObject implements IRouteController, ITitledLi
 	
 	/**
 	 * Returns a list of the usernames of all participants.
-	 * 
+	 *
+	 * @param	boolean		$excludeSelf
 	 * @return	string[]
 	 */
-	public function getParticipantNames() {
+	public function getParticipantNames($excludeSelf = false) {
+		$conditions = new PreparedStatementConditionBuilder();
+		$conditions->add("conversationID = ?", [$this->conversationID]);
+		if ($excludeSelf) $conditions->add("conversation_to_user.participantID <> ?", [WCF::getUser()->userID]);
+
 		$sql = "SELECT		user_table.username
 			FROM		wcf".WCF_N."_conversation_to_user conversation_to_user
 			LEFT JOIN	wcf".WCF_N."_user user_table
 			ON		(user_table.userID = conversation_to_user.participantID)
-			WHERE		conversationID = ?";
+			".$conditions;
 		$statement = WCF::getDB()->prepareStatement($sql);
-		$statement->execute([$this->conversationID]);
+		$statement->execute($conditions->getParameters());
 		
 		return $statement->fetchAll(\PDO::FETCH_COLUMN);
 	}
