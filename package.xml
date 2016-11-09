@@ -48,6 +48,5 @@
 		<instruction type="sql">update.sql</instruction>
 		<instruction type="templateListener">templateListener.xml</instruction>
 		<instruction type="language">language/*.xml</instruction>
-		<instruction type="page" />
 	</instructions>
 </package>
