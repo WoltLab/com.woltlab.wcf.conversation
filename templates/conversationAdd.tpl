@@ -2,7 +2,7 @@
 
 {include file='formError'}
 
-<form id="messageContainer" class="jsFormGuard" method="post" action="{link controller='ConversationAdd'}{/link}">
+<form id="messageContainer" class="jsFormGuard" method="post" action="{if $action == 'edit'}{link controller='ConversationDraftEdit' id=$conversationID}{/link}{else}{link controller='ConversationAdd'}{/link}{/if}">
 	<section class="section">
 		<h2 class="sectionTitle">{lang}wcf.conversation.information{/lang}</h2>
 		

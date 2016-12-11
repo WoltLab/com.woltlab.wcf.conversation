@@ -242,7 +242,8 @@ class ConversationAddForm extends MessageForm {
 		WCF::getTPL()->assign([
 			'participantCanInvite' => $this->participantCanInvite,
 			'participants' => $this->participants,
-			'invisibleParticipants' => $this->invisibleParticipants
+			'invisibleParticipants' => $this->invisibleParticipants,
+			'action' => 'add'
 		]);
 	}
 }

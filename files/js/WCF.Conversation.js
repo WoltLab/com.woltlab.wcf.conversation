@@ -394,7 +394,10 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
 			{ label: WCF.Language.get('wcf.conversation.edit.addParticipants'), optionName: 'addParticipants' },
 			
 			// leave conversation
-			{ label: WCF.Language.get('wcf.conversation.edit.leave'), optionName: 'leave' }
+			{ label: WCF.Language.get('wcf.conversation.edit.leave'), optionName: 'leave' },
+			
+			// edit draft
+			{ label: WCF.Language.get('wcf.global.button.edit'), optionName: 'edit', isQuickOption: true }
 		];
 	},
 	
@@ -444,6 +447,10 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
 			case 'leave':
 				return true;
 			break;
+			
+			case 'edit':
+				return ($('#' + elementID).data('isDraft') ? true : false);
+			break;
 		}
 		
 		return false;
@@ -476,6 +483,10 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
 			
 			case 'leave':
 				new WCF.Conversation.Leave([ $('#' + elementID).data('conversationID') ], this._environment);
+			break;
+			
+			case 'edit':
+				window.location = this._getTriggerElement($('#' + elementID)).prop('href');
 			break;
 		}
 	},

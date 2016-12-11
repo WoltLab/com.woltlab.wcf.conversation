@@ -40,5 +40,21 @@
 				<title>Konversation starten</title>
 			</content>
 		</page>
+		<page identifier="com.woltlab.wcf.conversation.ConversationDraftEdit">
+			<controller>wcf\form\ConversationDraftEditForm</controller>
+			<name language="de">Konversations-Entwurf bearbeiten</name>
+			<name language="en">Edit Conversation Draft</name>
+			<pageType>system</pageType>
+			<requireObjectID>1</requireObjectID>
+			<hasFixedParent>1</hasFixedParent>
+			<parent>com.woltlab.wcf.conversation.ConversationList</parent>
+			
+			<content language="en">
+				<title>Edit Conversation Draft</title>
+			</content>
+			<content language="de">
+				<title>Entwurf bearbeiten</title>
+			</content>
+		</page>
 	</import>
 </data>
