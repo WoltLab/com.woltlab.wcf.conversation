@@ -4,7 +4,7 @@
 		<packagename>WoltLab Suite Core: Conversations</packagename>
 		<packagedescription>Private conversations between multiple users</packagedescription>
 		<version>3.0.0 RC 1</version>
-		<date>2016-12-07</date>
+		<date>2016-12-15</date>
 	</packageinformation>
 	
 	<authorinformation>
@@ -50,7 +50,9 @@
 	</instructions>
 	
 	<instructions type="update" fromversion="3.0.0 Beta 5">
-		<!-- dummy instruction -->
-		<instruction type="language" />
+		<instruction type="file">files_update.tar</instruction>
+		<instruction type="template">templates_update.tar</instruction>
+		
+		<instruction type="page" />
 	</instructions>
 </package>
