@@ -1,8 +1,8 @@
 <?php
 namespace wcf\form;
+use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationAction;
-use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\data\user\UserProfile;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\message\quote\MessageQuoteManager;
