@@ -135,10 +135,20 @@
 		
 		new WCF.Conversation.Message.InlineEditor({@$conversation->conversationID}, $quoteManager);
 		new WCF.Conversation.Message.QuoteHandler($quoteManager);
-		{* if !$conversation->isClosed}new WCF.Conversation.QuickReply($quoteManager);{/if *}
+		
+		{if !$conversation->isClosed}
+			require(['WoltLabSuite/Core/Ui/Message/Reply'], function(UiMessageReply) {
+				new UiMessageReply({
+					ajax: {
+						className: 'wcf\\data\\conversation\\message\\ConversationMessageAction'
+					},
+					quoteManager: $quoteManager
+				});
+			});
+		{/if}
 		
 		{if $__wcf->session->getPermission('user.profile.canReportContent')}
-		new WCF.Moderation.Report.Content('com.woltlab.wcf.conversation.message', '.jsReportConversationMessage');
+			new WCF.Moderation.Report.Content('com.woltlab.wcf.conversation.message', '.jsReportConversationMessage');
 		{/if}
 		new WCF.Conversation.RemoveParticipant({@$conversation->conversationID});
 		new WCF.Message.BBCode.CodeViewer();

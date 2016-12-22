@@ -24,14 +24,5 @@
 		</div>
 	</article>
 	
-	<script data-relocate="true">
-		require(['WoltLabSuite/Core/Ui/Message/Reply'], function(UiMessageReply) {
-			new UiMessageReply({
-				ajax: {
-					className: 'wcf\\data\\conversation\\message\\ConversationMessageAction'
-				}
-			});
-		});
-	</script>
 	{include file='wysiwyg'}
 </li>
