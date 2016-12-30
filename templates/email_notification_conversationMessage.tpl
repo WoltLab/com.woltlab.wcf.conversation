@@ -26,7 +26,7 @@
 							{$message->username}
 						{/if}
 						&#xb7;
-						<small>{$message->time|plainTime}</small>
+						<a href="{$message->getLink()}"><small>{$message->time|plainTime}</small></a>
 					</h3>
 				</div>
 				<div>
