@@ -8,5 +8,5 @@ use wcf\system\WCF;
 // Using a single `ALTER TABLE` to drop multiple columns
 // results in the same runtime, because copying the table
 // is what actually takes ages.
-$statement = WCF::getDB()->prepareStatement("ALTER TABLE wcf1_conversation_message DROP COLUMN enableSmilies, DROP COLUMN enableBBCodes, DROP COLUMN showSignature;");
+$statement = WCF::getDB()->prepareStatement("ALTER TABLE wcf". WCF_N ."_conversation_message DROP COLUMN enableSmilies, DROP COLUMN enableBBCodes, DROP COLUMN showSignature;");
 $statement->execute();
