@@ -217,7 +217,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			$this->parameters['visitTime'] = TIME_NOW;
 		}
 
-		if (!isset($this->parameters['userID'])) {
+		// userID cannot be set during an AJAX request, but only when calling this method within PHP
+		if (!array_key_exists('userID', $this->parameters)) {
 			$this->parameters['userID'] = WCF::getUser()->userID;
 		}
 		
@@ -314,6 +315,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 				$this->parameters['visitTime'] = TIME_NOW;
 			}
 		}
+
+		unset($this->parameters['userID']);
 		
 		if (empty($this->objects)) {
 			$this->readObjects();
