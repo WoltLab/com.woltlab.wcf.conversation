@@ -292,7 +292,7 @@ class Conversation extends DatabaseObject implements IRouteController, ITitledLi
 	public function getParticipants($excludeSelf = false) {
 		$conditions = new PreparedStatementConditionBuilder();
 		$conditions->add("conversationID = ?", [$this->conversationID]);
-		if ($excludeSelf) $conditions->add("conversation_to_user.participantID <> ?", [WCF::getUser()->userID]);
+		if ($excludeSelf) $conditions->add("participantID <> ?", [WCF::getUser()->userID]);
 		
 		$sql = "SELECT		participantID
 			FROM		wcf".WCF_N."_conversation_to_user
