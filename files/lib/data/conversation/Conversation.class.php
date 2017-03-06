@@ -282,6 +282,28 @@ class Conversation extends DatabaseObject implements IRouteController, ITitledLi
 		
 		return $statement->fetchAll(\PDO::FETCH_COLUMN);
 	}
+
+	/**
+	 * Returns a list of the user profiles of all participants.
+	 *
+	 * @param	boolean		$excludeSelf
+	 * @return	UserProfile[]
+	 */
+	public function getParticipants($excludeSelf = false) {
+		$conditions = new PreparedStatementConditionBuilder();
+		$conditions->add("conversationID = ?", [$this->conversationID]);
+		if ($excludeSelf) $conditions->add("conversation_to_user.participantID <> ?", [WCF::getUser()->userID]);
+		
+		$sql = "SELECT		participantID
+			FROM		wcf".WCF_N."_conversation_to_user
+			".$conditions;
+		$statement = WCF::getDB()->prepareStatement($sql);
+		$statement->execute($conditions->getParameters());
+		
+		$userIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
+
+		return UserProfile::getUserProfiles($userIDs);
+	}
 	
 	/**
 	 * Returns false if the active user is the last participant of this conversation.
