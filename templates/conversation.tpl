@@ -1,5 +1,7 @@
 {capture assign='pageTitle'}{$conversation->subject} {if $pageNo > 1} - {lang}wcf.page.pageNo{/lang}{/if}{/capture}
 
+{assign var='__pageCssClassName' value='mobileShowPaginationTop'}
+
 {capture assign='contentHeader'}
 	<header class="contentHeader">
 		<div class="contentHeaderIcon">
