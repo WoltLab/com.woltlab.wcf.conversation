@@ -4,6 +4,7 @@ use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\user\UserProfile;
 use wcf\data\DatabaseObject;
 use wcf\data\ITitledLinkObject;
+use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\conversation\ConversationHandler;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\exception\UserInputException;
@@ -301,7 +302,7 @@ class Conversation extends DatabaseObject implements IRouteController, ITitledLi
 		$statement->execute($conditions->getParameters());
 		
 		$userIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
-		return UserProfile::getUserProfiles($userIDs);
+		return UserProfileRuntimeCache::getObjects($userIDs);
 	}
 	
 	/**
