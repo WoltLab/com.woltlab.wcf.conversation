@@ -302,7 +302,7 @@ class Conversation extends DatabaseObject implements IRouteController, ITitledLi
 		$statement->execute($conditions->getParameters());
 		
 		$userIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
-		return UserProfileRuntimeCache::getObjects($userIDs);
+		return UserProfileRuntimeCache::getInstance()->getObjects($userIDs);
 	}
 	
 	/**
