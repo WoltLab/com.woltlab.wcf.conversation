@@ -188,7 +188,6 @@
 							</h3>
 							
 							<aside class="statusDisplay">
-								{smallpages pages=$conversation->getPages() controller='Conversation' object=$conversation link='pageNo=%d'}
 								<ul class="statusIcons">
 									{if $conversation->isClosed}<li><span class="icon icon16 fa-lock jsIconLock jsTooltip" title="{lang}wcf.global.state.closed{/lang}"></span></li>{/if}
 									{if $conversation->attachments}<li><span class="icon icon16 fa-paperclip jsIconAttachment jsTooltip" title="{lang}wcf.conversation.attachments{/lang}"></span></li>{/if}
