@@ -216,6 +216,11 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		if (empty($this->parameters['visitTime'])) {
 			$this->parameters['visitTime'] = TIME_NOW;
 		}
+
+		// in case this is a call via PHP and the userID parameter is missing, set it to the userID of the current user
+		if (!array_key_exists('userID', $this->parameters)) {
+			$this->parameters['userID'] = WCF::getUser()->userID;
+		}
 		
 		if (empty($this->objects)) {
 			$this->readObjects();
@@ -231,7 +236,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		foreach ($this->getObjects() as $conversation) {
 			$statement->execute([
 				$this->parameters['visitTime'],
-				WCF::getUser()->userID,
+				$this->parameters['userID'],
 				$conversation->conversationID
 			]);
 			$conversationIDs[] = $conversation->conversationID;
@@ -239,7 +244,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		WCF::getDB()->commitTransaction();
 		
 		// reset storage
-		UserStorageHandler::getInstance()->reset([WCF::getUser()->userID], 'unreadConversationCount');
+		UserStorageHandler::getInstance()->reset([$this->parameters['userID']], 'unreadConversationCount');
 		
 		// mark notifications as confirmed
 		if (!empty($conversationIDs)) {
@@ -247,7 +252,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			$conditionBuilder = new PreparedStatementConditionBuilder();
 			$conditionBuilder->add('notification.eventID = ?', [UserNotificationHandler::getInstance()->getEvent('com.woltlab.wcf.conversation.notification', 'conversation')->eventID]);
 			$conditionBuilder->add('notification.objectID = conversation.conversationID');
-			$conditionBuilder->add('notification.userID = ?', [WCF::getUser()->userID]);
+			$conditionBuilder->add('notification.userID = ?', [$this->parameters['userID']]);
 			$conditionBuilder->add('conversation.conversationID IN (?)', [$conversationIDs]);
 			$conditionBuilder->add('conversation.time <= ?', [$this->parameters['visitTime']]);
 			
@@ -260,14 +265,14 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			$notificationObjectIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
 			
 			if (!empty($notificationObjectIDs)) {
-				UserNotificationHandler::getInstance()->markAsConfirmed('conversation', 'com.woltlab.wcf.conversation.notification', [WCF::getUser()->userID], $notificationObjectIDs);
+				UserNotificationHandler::getInstance()->markAsConfirmed('conversation', 'com.woltlab.wcf.conversation.notification', [$this->parameters['userID']], $notificationObjectIDs);
 			}
 			
 			// conversation reply notification
 			$conditionBuilder = new PreparedStatementConditionBuilder();
 			$conditionBuilder->add('notification.eventID = ?', [UserNotificationHandler::getInstance()->getEvent('com.woltlab.wcf.conversation.message.notification', 'conversationMessage')->eventID]);
 			$conditionBuilder->add('notification.objectID = conversation_message.messageID');
-			$conditionBuilder->add('notification.userID = ?', [WCF::getUser()->userID]);
+			$conditionBuilder->add('notification.userID = ?', [$this->parameters['userID']]);
 			$conditionBuilder->add('conversation_message.conversationID IN (?)', [$conversationIDs]);
 			$conditionBuilder->add('conversation_message.time <= ?', [$this->parameters['visitTime']]);
 			
@@ -280,7 +285,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			$notificationObjectIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
 			
 			if (!empty($notificationObjectIDs)) {
-				UserNotificationHandler::getInstance()->markAsConfirmed('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', [WCF::getUser()->userID], $notificationObjectIDs);
+				UserNotificationHandler::getInstance()->markAsConfirmed('conversationMessage', 'com.woltlab.wcf.conversation.message.notification', [$this->parameters['userID']], $notificationObjectIDs);
 			}
 		}
 		
@@ -310,6 +315,9 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 				$this->parameters['visitTime'] = TIME_NOW;
 			}
 		}
+
+		// userID should always be equal to the userID of the current user when called via AJAX
+		$this->parameters['userID'] = WCF::getUser()->userID;
 		
 		if (empty($this->objects)) {
 			$this->readObjects();
