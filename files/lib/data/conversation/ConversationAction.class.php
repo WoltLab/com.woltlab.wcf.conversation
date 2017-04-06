@@ -218,7 +218,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		}
 
 		// in case this is a call via PHP and the userID parameter is missing, set it to the userID of the current user
-		if (!array_key_exists('userID', $this->parameters)) {
+		if (!isset($this->parameters['userID'])) {
 			$this->parameters['userID'] = WCF::getUser()->userID;
 		}
 		
