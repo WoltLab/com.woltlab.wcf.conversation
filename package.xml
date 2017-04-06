@@ -50,6 +50,7 @@
 	</instructions>
 	
 	<instructions type="update" fromversion="3.0.3">
+		<instruction type="file">files_update.tar</instruction>
 		<instruction type="template">templates_update.tar</instruction>
 	</instructions>
 </package>
