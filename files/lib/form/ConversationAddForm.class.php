@@ -90,8 +90,6 @@ class ConversationAddForm extends MessageForm {
 	public function readParameters() {
 		parent::readParameters();
 		
-		if (!WCF::getUser()->userID) return;
-		
 		// check max pc permission
 		if (ConversationHandler::getInstance()->getConversationCount() >= WCF::getSession()->getPermission('user.conversation.maxConversations')) {
 			throw new NamedUserException(WCF::getLanguage()->getDynamicVariable('wcf.conversation.error.mailboxIsFull'));
