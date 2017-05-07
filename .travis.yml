@@ -1,10 +1,10 @@
 language: php
 sudo: false
 php:
-  - 5.6
+  - 7.1
   - 5.5
 before_install:
-  - pyrus install pear/PHP_CodeSniffer
+  - pear install pear/PHP_CodeSniffer
   - phpenv rehash
 before_script:
   - git clone --branch=master --depth=1 --quiet git://github.com/WoltLab/WCF.git WCF
