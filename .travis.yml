@@ -1,13 +1,13 @@
 language: php
 sudo: false
 php:
-  - 5.4
+  - 7.1
   - 5.3
 before_install:
-  - pear install pear/PHP_CodeSniffer
+  - pyrus install pear/PHP_CodeSniffer-2.9.0
   - phpenv rehash
 before_script:
-  - git clone --branch=master --depth=1 --quiet git://github.com/WoltLab/WCF.git WCF
+  - git clone --branch=2.0 --depth=1 --quiet git://github.com/WoltLab/WCF.git WCF
 script:
   - find files -type f -name '*.php' |xargs -I file php -l file
   - phpcs -p --extensions=php --standard="`pwd`/WCF/CodeSniff/WCF" files
