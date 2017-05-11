@@ -3,8 +3,8 @@
 	<packageinformation>
 		<packagename>User Conversation System</packagename>
 		<packagedescription>Private conversations between multiple users.</packagedescription>
-		<version>2.1.7</version>
-		<date>2016-10-18</date>
+		<version>2.1.8</version>
+		<date>2017-05-11</date>
 	</packageinformation>
 	
 	<authorinformation>
@@ -55,9 +55,7 @@
 		<instruction type="userOption">userOption.xml</instruction>
 	</instructions>
 	
-	<instructions type="update" fromversion="2.1.6">
-		<instruction type="file">files_update.tar</instruction>
-		
+	<instructions type="update" fromversion="2.1.7">
 		<instruction type="language">language/*.xml</instruction>
 	</instructions>
 </package>
