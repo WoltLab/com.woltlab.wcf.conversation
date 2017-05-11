@@ -6,7 +6,26 @@
 		useStrict: true,
 		preserveLicenseComments: false,
 		optimize: 'uglify2',
-		uglify2: {},
+		uglify2: {
+			compress: {
+				sequences: true,
+				properties: true,
+				dead_code: true,
+				conditionals: true,
+				comparisons: true,
+				booleans: true,
+				loops: true,
+				hoist_funs: true,
+				hoist_vars: true,
+				if_return: true,
+				join_vars: true,
+				cascade: true,
+				/* this is basically the `--define` argument */
+				global_defs: {
+					COMPILER_TARGET_DEFAULT: true
+				}
+			}
+		},
 		excludeShallow: [
 			'WoltLabSuite/_Meta'
 		],
