@@ -13,7 +13,7 @@
 	</authorinformation>
 	
 	<requiredpackages>
-		<requiredpackage minversion="2.1.12">com.woltlab.wcf</requiredpackage>
+		<requiredpackage minversion="2.1.15">com.woltlab.wcf</requiredpackage>
 	</requiredpackages>
 	
 	<excludedpackages>
