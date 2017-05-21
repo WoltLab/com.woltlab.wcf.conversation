@@ -156,7 +156,7 @@ class ConversationPage extends MultipleLinkPage {
 		
 		// handle visibility filter
 		if ($this->conversation->joinedAt > 0) $this->objectList->getConditionBuilder()->add('conversation_message.time >= ?', [$this->conversation->joinedAt]);
-		if ($this->conversation->leftAt > 0) $this->objectList->getConditionBuilder()->add('conversation_message.time <= ?',[$this->conversation->leftAt]);
+		if ($this->conversation->leftAt > 0) $this->objectList->getConditionBuilder()->add('conversation_message.time <= ?', [$this->conversation->leftAt]);
 		
 		// handle jump to
 		if ($this->action == 'lastPost') $this->goToLastPost();
