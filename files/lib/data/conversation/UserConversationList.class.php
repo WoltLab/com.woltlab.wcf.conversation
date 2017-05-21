@@ -148,6 +148,38 @@ class UserConversationList extends ConversationList {
 		parent::readObjects();
 		
 		if (!empty($this->objects)) {
+			$messageIDs = [];
+			foreach ($this->objects as $conversation) {
+				if ($conversation->lastMessageID) {
+					$messageIDs[] = $conversation->lastMessageID;
+				}
+			}
+			if (!empty($messageIDs)) {
+				$conditions = new PreparedStatementConditionBuilder();
+				$conditions->add("messageID IN (?)", [$messageIDs]);
+				$sql = "SELECT  messageID, userID, username, time
+					FROM    wcf".WCF_N."_conversation_message
+					".$conditions;
+				$statement = WCF::getDB()->prepareStatement($sql);
+				$statement->execute($conditions->getParameters());
+				$messageData = [];
+				while ($row = $statement->fetchArray()) {
+					$messageData[$row['messageID']] = $row;
+				}
+				
+				foreach ($this->objects as $conversation) {
+					if ($conversation->lastMessageID) {
+						$data = (isset($messageData[$conversation->lastMessageID])) ? $messageData[$conversation->lastMessageID] : null;
+						if ($data !== null) {
+							$conversation->setLastMessage($data['userID'], $data['username'], $data['time']);
+						}
+						else {
+							$conversation->setLastMessage(null, '', 0);
+						}
+					}
+				}
+			}
+			
 			$labels = $this->loadLabelAssignments();
 			
 			$userIDs = [];

@@ -229,7 +229,7 @@
 							<div class="messageGroupListStatsSimple">{@$conversation->replies|shortUnit}</div>
 						</li>
 						<li class="columnLastPost">
-							{if $conversation->replies != 0}
+							{if $conversation->replies != 0 && $conversation->lastPostTime}
 								<div class="box32">
 									<a href="{link controller='Conversation' object=$conversation}action=lastPost{/link}" class="jsTooltip" title="{lang}wcf.conversation.gotoLastPost{/lang}">{@$conversation->getLastPosterProfile()->getAvatar()->getImageTag(32)}</a>
 									

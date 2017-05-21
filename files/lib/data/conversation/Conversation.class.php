@@ -43,7 +43,8 @@ use wcf\util\ArrayUtil;
  * @property-read	integer|null	$isInvisible
  * @property-read	integer|null	$lastVisitTime
  * @property-read	integer|null	$joinedAt
- ** @property-read	integer|null	$leftAt 
+ * @property-read	integer|null	$leftAt
+ * @property-read	integer|null	$lastMessageID 
  */
 class Conversation extends DatabaseObject implements IRouteController, ITitledLinkObject {
 	/**
@@ -118,6 +119,19 @@ class Conversation extends DatabaseObject implements IRouteController, ITitledLi
 	 */
 	public function canReply() {
 		return !$this->isClosed && !$this->leftAt;
+	}
+	
+	/**
+	 * Overrides the last message data, used when `leftAt < lastPostTime`.
+	 * 
+	 * @param       integer         $userID
+	 * @param       string          $username
+	 * @param       integer         $time
+	 */
+	public function setLastMessage($userID, $username, $time) {
+		$this->data['lastPostTime'] = $time;
+		$this->data['lastPosterID'] = $userID;
+		$this->data['lastPoster'] = $username;
 	}
 	
 	/**
