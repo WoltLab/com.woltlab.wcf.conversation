@@ -7,12 +7,12 @@
 </dl>
 {if !$conversation->isDraft}
 	<dl class="jsRestrictVisibility">
-		<dt>{lang}wcf.conversation.participants.visibility{/lang}</dt>
+		<dt>{lang}wcf.conversation.visibility{/lang}</dt>
 		<dd>
-			<label><input type="radio" name="messageVisibility" value="all" checked> {lang}wcf.conversation.participants.visibility.all{/lang}</label>
-			<small>{lang}wcf.conversation.participants.visibility.all.description{/lang}</small>
-			<label><input type="radio" name="messageVisibility" value="new"> {lang}wcf.conversation.participants.visibility.new{/lang}</label>
-			<small>{lang}wcf.conversation.participants.visibility.new.description{/lang}</small>
+			<label><input type="radio" name="messageVisibility" value="all" checked> {lang}wcf.conversation.visibility.all{/lang}</label>
+			<small>{lang}wcf.conversation.visibility.all.description{/lang}</small>
+			<label><input type="radio" name="messageVisibility" value="new"> {lang}wcf.conversation.visibility.new{/lang}</label>
+			<small>{lang}wcf.conversation.visibility.new.description{/lang}</small>
 		</dd>
 	</dl>
 {/if}

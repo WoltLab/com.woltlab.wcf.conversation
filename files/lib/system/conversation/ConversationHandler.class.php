@@ -52,11 +52,12 @@ class ConversationHandler extends SingletonFactory {
 				$conditionBuilder->add('conversation_to_user.participantID = ?', [$userID]);
 				$conditionBuilder->add('conversation_to_user.hideConversation = 0');
 				$conditionBuilder->add('conversation_to_user.lastVisitTime < conversation.lastPostTime');
+				$conditionBuilder->add('conversation_to_user.leftAt = 0');
 				
 				$sql = "SELECT	COUNT(*) AS count
 					FROM	wcf".WCF_N."_conversation_to_user conversation_to_user,
 						wcf".WCF_N."_conversation conversation
-					".$conditionBuilder->__toString();
+					".$conditionBuilder;
 				$statement = WCF::getDB()->prepareStatement($sql);
 				$statement->execute($conditionBuilder->getParameters());
 				$row = $statement->fetchArray();

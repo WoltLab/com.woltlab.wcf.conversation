@@ -124,6 +124,13 @@
 		<item name="wcf.conversation.noParticipantsWarning"><![CDATA[You are about to reply to a conversation without other participants, nobody is going to read your message!]]></item>
 		<item name="wcf.conversation.message.permalink"><![CDATA[Permalink to {#$startIndex}. message]]></item>
 		<item name="wcf.conversation.markAsRead.doubleClick"><![CDATA[Double-Click to Mark This Conversation Read]]></item>
+		<item name="wcf.conversation.visibility"><![CDATA[Read Access]]></item>
+		<item name="wcf.conversation.visibility.all"><![CDATA[All messages]]></item>
+		<item name="wcf.conversation.visibility.all.description"><![CDATA[All messages will be shown, including those written before they were added to this conversation.]]></item>
+		<item name="wcf.conversation.visibility.nextMessages"><![CDATA[You have been removed from this conversation, you may only read messages up to this point.]]></item>
+		<item name="wcf.conversation.visibility.new"><![CDATA[New messages only]]></item>
+		<item name="wcf.conversation.visibility.new.description"><![CDATA[The new participants will see new messages only, older messages will be hidden from them.]]></item>
+		<item name="wcf.conversation.visibility.previousMessages"><![CDATA[You have been added to an existing conversation, previously written messages are hidden.]]></item>
 	</category>
 	
 	<category name="wcf.conversation.edit">
