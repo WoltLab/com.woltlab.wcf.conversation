@@ -29,6 +29,8 @@ CREATE TABLE wcf1_conversation_to_user (
 	hideConversation TINYINT(1) NOT NULL DEFAULT 0,
 	isInvisible TINYINT(1) NOT NULL DEFAULT 0,
 	lastVisitTime INT(10) NOT NULL DEFAULT 0,
+	joinedAt INT(10) NOT NULL DEFAULT 0,
+	leftAt INT(10) NOT NULL DEFAULT 0,
 	
 	UNIQUE KEY (participantID, conversationID),
 	KEY (participantID, hideConversation)

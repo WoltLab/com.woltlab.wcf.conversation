@@ -154,6 +154,10 @@ class ConversationPage extends MultipleLinkPage {
 		$this->objectList->getConditionBuilder()->add('conversation_message.conversationID = ?', [$this->conversation->conversationID]);
 		$this->objectList->setConversation($this->conversation->getDecoratedObject());
 		
+		// handle visibility filter
+		if ($this->conversation->joinedAt > 0) $this->objectList->getConditionBuilder()->add('conversation_message.time >= ?', [$this->conversation->joinedAt]);
+		if ($this->conversation->leftAt > 0) $this->objectList->getConditionBuilder()->add('conversation_message.time <= ?',[$this->conversation->leftAt]);
+		
 		// handle jump to
 		if ($this->action == 'lastPost') $this->goToLastPost();
 		if ($this->action == 'firstNew') $this->goToFirstNewPost();
@@ -205,8 +209,8 @@ class ConversationPage extends MultipleLinkPage {
 		
 		// get timeframe for modifications
 		$this->objectList->rewind();
-		$startTime = $this->objectList->current()->time;
-		$endTime = TIME_NOW;
+		$startTime = ($this->conversation->joinedAt ?: $this->objectList->current()->time);
+		$endTime = ($this->conversation->leftAt ?: TIME_NOW);
 		
 		$count = count($this->objectList);
 		if ($count > 1) {
