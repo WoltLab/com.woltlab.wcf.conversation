@@ -4,6 +4,7 @@ use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\user\UserProfile;
 use wcf\data\DatabaseObject;
 use wcf\data\ITitledLinkObject;
+use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\conversation\ConversationHandler;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\exception\UserInputException;
@@ -281,6 +282,27 @@ class Conversation extends DatabaseObject implements IRouteController, ITitledLi
 		$statement->execute($conditions->getParameters());
 		
 		return $statement->fetchAll(\PDO::FETCH_COLUMN);
+	}
+
+	/**
+	 * Returns a list of the user profiles of all participants.
+	 *
+	 * @param	boolean		$excludeSelf
+	 * @return	UserProfile[]
+	 */
+	public function getParticipants($excludeSelf = false) {
+		$conditions = new PreparedStatementConditionBuilder();
+		$conditions->add("conversationID = ?", [$this->conversationID]);
+		if ($excludeSelf) $conditions->add("participantID <> ?", [WCF::getUser()->userID]);
+		
+		$sql = "SELECT		participantID
+			FROM		wcf".WCF_N."_conversation_to_user
+			".$conditions;
+		$statement = WCF::getDB()->prepareStatement($sql);
+		$statement->execute($conditions->getParameters());
+		
+		$userIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
+		return UserProfileRuntimeCache::getInstance()->getObjects($userIDs);
 	}
 	
 	/**
