@@ -200,7 +200,7 @@ class ConversationListPage extends SortablePage {
 		}
 		
 		if ($this->filter != '' || $this->labelID || !empty($this->participants)) {
-			$conversationList = new UserConversationList(WCF::getUser()->userID, '');
+			$conversationList = new UserConversationList(WCF::getUser()->userID);
 			$this->conversationCount = $conversationList->countObjects();
 		}
 		if ($this->filter != 'draft' || $this->labelID || !empty($this->participants)) {
