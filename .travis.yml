@@ -4,7 +4,8 @@ php:
   - 7.1
   - 5.5
 before_install:
-  - pear install pear/PHP_CodeSniffer
+  - export PATH="$PATH:$(composer global config bin-dir --absolute)"
+  - composer global require "squizlabs/php_codesniffer=3.*"
   - phpenv rehash
 before_script:
   - git clone --branch=master --depth=1 --quiet git://github.com/WoltLab/WCF.git WCF
