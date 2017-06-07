@@ -6,19 +6,31 @@
 				<parent>user</parent>
 				<options>module_conversation</options>
 			</category>
+			<category name="mod.conversation">
+				<parent>mod.general</parent>
+				<options>module_conversation</options>
+			</category>
 		</categories>
 		
 		<options>
-			<!-- mod.general -->
+			<!-- mod.conversation -->
 			<option name="mod.conversation.canModerateConversation">
-				<categoryname>mod.general</categoryname>
+				<categoryname>mod.conversation</categoryname>
 				<optiontype>boolean</optiontype>
 				<defaultvalue>0</defaultvalue>
 				<admindefaultvalue>1</admindefaultvalue>
 				<options>module_conversation</options>
 				<usersonly>1</usersonly>
 			</option>
-			<!-- /mod.general -->
+			<option name="mod.conversation.canAlwaysInviteUsers">
+				<categoryname>mod.conversation</categoryname>
+				<optiontype>boolean</optiontype>
+				<defaultvalue>0</defaultvalue>
+				<admindefaultvalue>1</admindefaultvalue>
+				<options>module_conversation</options>
+				<usersonly>1</usersonly>
+			</option>
+			<!-- /mod.conversation -->
 			
 			<!-- user.conversation -->
 			<option name="user.conversation.canUseConversation">

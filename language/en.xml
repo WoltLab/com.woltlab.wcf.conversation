@@ -2,7 +2,9 @@
 <language xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/vortex/language.xsd" languagecode="en">
 	<category name="wcf.acp.group">
 		<item name="wcf.acp.group.option.category.user.conversation"><![CDATA[Conversations]]></item>
+		<item name="wcf.acp.group.option.category.mod.conversation"><![CDATA[Conversations]]></item>
 		<item name="wcf.acp.group.option.mod.conversation.canModerateConversation"><![CDATA[Can moderate conversations]]></item>
+		<item name="wcf.acp.group.option.mod.conversation.canAlwaysInviteUsers"><![CDATA[Can always invite participants to conversations]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canUseConversation"><![CDATA[Can use conversations]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canSetCanInvite"><![CDATA[Can grant permissions]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canSetCanInvite.description"><![CDATA[Users can grant added participants the permission to add new participants while creating conversations. Changes do not affect existing conversations.]]></item>

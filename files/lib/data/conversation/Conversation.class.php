@@ -231,8 +231,10 @@ class Conversation extends DatabaseObject implements IRouteController, ITitledLi
 		}
 		
 		// check permissions
-		if (WCF::getUser()->userID != $this->userID && !$this->participantCanInvite) {
-			return false;
+		if (WCF::getUser()->userID != $this->userID) {
+			if (!$this->participantCanInvite && !WCF::getSession()->getPermission('mod.conversation.canAlwaysInviteUsers')) {
+				return false;
+			}
 		}
 		
 		// check for maximum number of participants
