@@ -65,8 +65,8 @@
 	</category>
 	
 	<category name="wcf.conversation">
-		<item name="wcf.conversation.add"><![CDATA[New Conversation]]></item>
-		<item name="wcf.conversation.button.add"><![CDATA[New Conversation]]></item>
+		<item name="wcf.conversation.add"><![CDATA[Create Conversation]]></item>
+		<item name="wcf.conversation.button.add"><![CDATA[Create Conversation]]></item>
 		<item name="wcf.conversation.button.saveAsDraft"><![CDATA[Save Draft]]></item>
 		<item name="wcf.conversation.conversations"><![CDATA[Conversations]]></item>
 		<item name="wcf.conversation.filter.participants"><![CDATA[Filter by Participants]]></item>
@@ -83,7 +83,7 @@
 		<item name="wcf.conversation.information"><![CDATA[Details]]></item>
 		<item name="wcf.conversation.invisible"><![CDATA[invisible]]></item>
 		<item name="wcf.conversation.invisibleParticipants"><![CDATA[Invisible Participants]]></item>
-		<item name="wcf.conversation.invisibleParticipants.description"><![CDATA[Invisible participants remain invisible to other participants until they write a message.]]></item>
+		<item name="wcf.conversation.invisibleParticipants.description"><![CDATA[Invisible participants remain invisible to the other participants until they write a message. Separate multiple users with a comma.]]></item>
 		<item name="wcf.conversation.lastPostTime"><![CDATA[Last Reply]]></item>
 		<item name="wcf.conversation.lastVisitTime"><![CDATA[Conversation Read]]></item>
 		<item name="wcf.conversation.leave.title"><![CDATA[Manage Participation]]></item>
@@ -96,6 +96,7 @@
 		<item name="wcf.conversation.participantCanInvite"><![CDATA[Participants can add new participants]]></item>
 		<item name="wcf.conversation.participants"><![CDATA[Participants]]></item>
 		<item name="wcf.conversation.participants.description"><![CDATA[]]></item>
+		<item name="wcf.conversation.participants.description"><![CDATA[Separate multiple users with a comma.]]></item>
 		<item name="wcf.conversation.participants.error.mailboxIsFull"><![CDATA[{$errorData[username]} is already participating in too many conversations and cannot be added.]]></item>
 		<item name="wcf.conversation.participants.error.notFound"><![CDATA[The username “{$errorData[username]}” does not exist.]]></item>
 		<item name="wcf.conversation.participants.error.isAuthor"><![CDATA[You are already a participant of this conversation.]]></item>
@@ -120,7 +121,7 @@
 		<item name="wcf.conversation.searchedConversation"><![CDATA[Only search conversation <a href="{link controller='Conversation' object=$searchedConversation}{/link}">{$searchedConversation->getTitle()}</a>]]></item>
 		<item name="wcf.conversation.participants.other"><![CDATA[and {if $conversation->participants - $participantSummaryCount == 1}one other{else}{#$conversation->participants-$participantSummaryCount} others{/if}]]></item>
 		<item name="wcf.conversation.attachments"><![CDATA[Conversation contains {#$conversation->attachments} attachment{if $conversation->attachments != 1}s{/if}]]></item>
-		<item name="wcf.conversation.error.mailboxIsFull"><![CDATA[You have reached your maximum conversations limit and cannot start new conversations.]]></item>
+		<item name="wcf.conversation.error.mailboxIsFull"><![CDATA[You have reached your maximum conversations limit and cannot create new conversations.]]></item>
 		<item name="wcf.conversation.markAllAsRead"><![CDATA[Mark All Conversations Read]]></item>
 		<item name="wcf.conversation.message.editNote"><![CDATA[{$message->username} edited this message {#$message->editCount} times, last: {@$message->lastEditTime|time}.]]></item>
 		<item name="wcf.conversation.noParticipantsWarning"><![CDATA[You are about to reply to a conversation without other participants, nobody is going to read your message!]]></item>
@@ -152,7 +153,7 @@
 		<item name="wcf.conversation.label.labelName"><![CDATA[Title]]></item>
 		<item name="wcf.conversation.label.management"><![CDATA[Manage Labels]]></item>
 		<item name="wcf.conversation.label.management.addLabel"><![CDATA[Add Label]]></item>
-		<item name="wcf.conversation.label.management.addLabel.success"><![CDATA[Label was added]]></item>
+		<item name="wcf.conversation.label.management.addLabel.success"><![CDATA[The label has been added.]]></item>
 		<item name="wcf.conversation.label.management.deleteLabel"><![CDATA[Delete Label]]></item>
 		<item name="wcf.conversation.label.management.deleteLabel.confirmMessage"><![CDATA[Do you really want to delete the label <span class="confirmationObject">#labelName#</span>?]]></item>
 		<item name="wcf.conversation.label.management.edit.description"><![CDATA[Click on a label to edit or delete it.]]></item>
