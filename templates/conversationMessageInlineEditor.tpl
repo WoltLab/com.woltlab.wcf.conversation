@@ -8,7 +8,7 @@
 	{include file='messageFormTabsInline' inConversationInlineEdit=true wysiwygContainerID=$wysiwygContainerID}
 	
 	<div class="formSubmit">
-		<button class="buttonPrimary" data-type="save">{lang}wcf.global.button.submit{/lang}</button>
+		<button class="buttonPrimary" data-type="save">{lang}wcf.global.button.save{/lang}</button>
 		
 		{include file='messageFormPreviewButton' previewMessageFieldID=$wysiwygSelector previewButtonID=$wysiwygSelector|concat:'_PreviewButton' previewMessageObjectType='com.woltlab.wcf.conversation.message' previewMessageObjectID=$message->messageID}
 		

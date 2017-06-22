@@ -1,5 +1,7 @@
 {capture assign='pageTitle'}{$conversation->subject} {if $pageNo > 1} - {lang}wcf.page.pageNo{/lang}{/if}{/capture}
 
+{assign var='__pageCssClassName' value='mobileShowPaginationTop'}
+
 {capture assign='contentHeader'}
 	<header class="contentHeader">
 		<div class="contentHeaderIcon">
@@ -49,7 +51,7 @@
 		<nav class="contentHeaderNavigation">
 			<ul class="conversation jsConversationInlineEditorContainer" data-conversation-id="{@$conversation->conversationID}" data-label-ids="[ {implode from=$conversation->getAssignedLabels() item=label}{@$label->labelID}{/implode} ]" data-is-closed="{@$conversation->isClosed}" data-can-close-conversation="{if $conversation->userID == $__wcf->getUser()->userID}1{else}0{/if}" data-can-add-participants="{if $conversation->canAddParticipants()}1{else}0{/if}" data-is-draft="{if $conversation->isDraft}1{else}0{/if}">
 				<li class="jsOnly"><a href="{if $conversation->isDraft}{link controller='ConversationDraftEdit' id=$conversation->conversationID}{/link}{else}#{/if}" class="button jsConversationInlineEditor"><span class="icon icon16 fa-pencil"></span> <span>{lang}wcf.global.button.edit{/lang}</span></a></li>
-				{if !$conversation->isClosed}<li class="jsOnly"><a href="#" class="button buttonPrimary jsQuickReply"><span class="icon icon16 fa-plus"></span> <span>{lang}wcf.conversation.message.button.add{/lang}</span></a></li>{/if}
+				{if $conversation->canReply()}<li class="jsOnly"><a href="#" class="button buttonPrimary jsQuickReply"><span class="icon icon16 fa-plus"></span> <span>{lang}wcf.conversation.message.button.add{/lang}</span></a></li>{/if}
 				{event name='contentHeaderNavigation'}
 			</ul>
 		</nav>
@@ -64,7 +66,7 @@
 		
 		<ul class="containerBoxList tripleColumned conversationParticipantList">
 			{foreach from=$participants item=participant}
-				<li class="jsParticipant{if !$participant->userID || $participant->hideConversation == 2} conversationLeft{/if}">
+				<li class="jsParticipant{if !$participant->userID || $participant->hideConversation == 2 || $participant->leftAt > 0} conversationLeft{/if}">
 					<div class="box24">
 						{if $participant->userID}<a href="{link controller='User' object=$participant}{/link}">{@$participant->getAvatar()->getImageTag(24)}</a>{else}<span>{@$participant->getAvatar()->getImageTag(24)}</span>{/if}
 						<div>
@@ -95,13 +97,15 @@
 
 <div class="section">
 	<ul class="messageList">
+		{if $pageNo == 1 && !$conversation->joinedAt|empty}<p class="info">{lang}wcf.conversation.visibility.previousMessages{/lang}</p>{/if}
 		{include file='conversationMessageList'}
 		{hascontent}
 			<li class="messageListPagination">
 				{content}{@$pagesLinks}{/content}
 			</li>
 		{/hascontent}
-		{if !$conversation->isClosed}{include file='conversationQuickReply'}{/if}
+		{if $conversation->canReply()}{include file='conversationQuickReply'}{/if}
+		{if $pageNo == $pages && !$conversation->leftAt|empty}<p class="info">{lang}wcf.conversation.visibility.nextMessages{/lang}</p>{/if}
 	</ul>
 </div>
 
@@ -130,13 +134,13 @@
 		$inlineEditor.setEditorHandler($editorHandler);
 		
 		{assign var=__supportPaste value=true}
-		{if $conversation->isClosed}{assign var=__supportPaste value=false}{/if}
+		{if !$conversation->canReply()}{assign var=__supportPaste value=false}{/if}
 		{include file='__messageQuoteManager' wysiwygSelector='text' supportPaste=$__supportPaste}
 		
 		new WCF.Conversation.Message.InlineEditor({@$conversation->conversationID}, $quoteManager);
 		new WCF.Conversation.Message.QuoteHandler($quoteManager);
 		
-		{if !$conversation->isClosed}
+		{if $conversation->canReply()}
 			require(['WoltLabSuite/Core/Ui/Message/Reply'], function(UiMessageReply) {
 				new UiMessageReply({
 					ajax: {

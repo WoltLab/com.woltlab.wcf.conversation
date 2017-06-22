@@ -56,7 +56,7 @@ class UserConversationList extends ConversationList {
 		$this->filter = $filter;
 		
 		// apply filter
-		if ($this->filter == 'draft') {
+		if ($this->filter === 'draft') {
 			$this->getConditionBuilder()->add('conversation.userID = ?', [$userID]);
 			$this->getConditionBuilder()->add('conversation.isDraft = 1');
 		}
@@ -84,6 +84,12 @@ class UserConversationList extends ConversationList {
 		if (!empty($this->sqlSelects)) $this->sqlSelects .= ',';
 		$this->sqlSelects .= "conversation_to_user.*";
 		$this->sqlJoins .= "LEFT JOIN wcf".WCF_N."_conversation_to_user conversation_to_user ON (conversation_to_user.participantID = ".$userID." AND conversation_to_user.conversationID = conversation.conversationID)";
+		
+		if ($this->filter !== 'draft') {
+			$this->sqlSelects .= ", conversation.*, CASE WHEN conversation_to_user.leftAt <> 0 THEN conversation_to_user.leftAt ELSE conversation.lastPostTime END AS lastPostTime";
+			// this avoids appending `conversation.*` to the SELECT list
+			$this->useQualifiedShorthand = false;
+		}
 	}
 	
 	/**
@@ -115,7 +121,7 @@ class UserConversationList extends ConversationList {
 	 * @inheritDoc
 	 */
 	public function readObjectIDs() {
-		if ($this->filter == 'draft') {
+		if ($this->filter === 'draft') {
 			parent::readObjectIDs();
 			
 			return;
@@ -142,6 +148,38 @@ class UserConversationList extends ConversationList {
 		parent::readObjects();
 		
 		if (!empty($this->objects)) {
+			$messageIDs = [];
+			foreach ($this->objects as $conversation) {
+				if ($conversation->lastMessageID) {
+					$messageIDs[] = $conversation->lastMessageID;
+				}
+			}
+			if (!empty($messageIDs)) {
+				$conditions = new PreparedStatementConditionBuilder();
+				$conditions->add("messageID IN (?)", [$messageIDs]);
+				$sql = "SELECT  messageID, userID, username, time
+					FROM    wcf".WCF_N."_conversation_message
+					".$conditions;
+				$statement = WCF::getDB()->prepareStatement($sql);
+				$statement->execute($conditions->getParameters());
+				$messageData = [];
+				while ($row = $statement->fetchArray()) {
+					$messageData[$row['messageID']] = $row;
+				}
+				
+				foreach ($this->objects as $conversation) {
+					if ($conversation->lastMessageID) {
+						$data = (isset($messageData[$conversation->lastMessageID])) ? $messageData[$conversation->lastMessageID] : null;
+						if ($data !== null) {
+							$conversation->setLastMessage($data['userID'], $data['username'], $data['time']);
+						}
+						else {
+							$conversation->setLastMessage(null, '', 0);
+						}
+					}
+				}
+			}
+			
 			$labels = $this->loadLabelAssignments();
 			
 			$userIDs = [];

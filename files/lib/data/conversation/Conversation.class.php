@@ -42,6 +42,9 @@ use wcf\util\ArrayUtil;
  * @property-read	integer|null	$hideConversation
  * @property-read	integer|null	$isInvisible
  * @property-read	integer|null	$lastVisitTime
+ * @property-read	integer|null	$joinedAt
+ * @property-read	integer|null	$leftAt
+ * @property-read	integer|null	$lastMessageID 
  */
 class Conversation extends DatabaseObject implements IRouteController, ITitledLinkObject {
 	/**
@@ -107,6 +110,28 @@ class Conversation extends DatabaseObject implements IRouteController, ITitledLi
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * Returns true if the conversation is not closed or the user was not removed.
+	 * 
+	 * @return      boolean
+	 */
+	public function canReply() {
+		return !$this->isClosed && !$this->leftAt;
+	}
+	
+	/**
+	 * Overrides the last message data, used when `leftAt < lastPostTime`.
+	 * 
+	 * @param       integer         $userID
+	 * @param       string          $username
+	 * @param       integer         $time
+	 */
+	public function setLastMessage($userID, $username, $time) {
+		$this->data['lastPostTime'] = $time;
+		$this->data['lastPosterID'] = $userID;
+		$this->data['lastPoster'] = $username;
 	}
 	
 	/**
@@ -206,8 +231,10 @@ class Conversation extends DatabaseObject implements IRouteController, ITitledLi
 		}
 		
 		// check permissions
-		if (WCF::getUser()->userID != $this->userID && !$this->participantCanInvite) {
-			return false;
+		if (WCF::getUser()->userID != $this->userID) {
+			if (!$this->participantCanInvite && !WCF::getSession()->getPermission('mod.conversation.canAlwaysInviteUsers')) {
+				return false;
+			}
 		}
 		
 		// check for maximum number of participants
@@ -250,7 +277,7 @@ class Conversation extends DatabaseObject implements IRouteController, ITitledLi
 	public function getParticipantIDs($excludeLeftParticipants = false) {
 		$conditions = new PreparedStatementConditionBuilder();
 		$conditions->add("conversationID = ?", [$this->conversationID]);
-		if ($excludeLeftParticipants) $conditions->add("hideConversation <> ?", [self::STATE_LEFT]);
+		if ($excludeLeftParticipants) $conditions->add("(hideConversation <> ? AND leftAt = ?)", [self::STATE_LEFT, 0]);
 		
 		$sql = "SELECT		participantID
 			FROM		wcf".WCF_N."_conversation_to_user

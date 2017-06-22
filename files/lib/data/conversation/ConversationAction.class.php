@@ -72,10 +72,14 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		
 		if (!$conversation->isDraft) {
 			// save participants
-			$conversationEditor->updateParticipants((!empty($this->parameters['participants']) ? $this->parameters['participants'] : []), (!empty($this->parameters['invisibleParticipants']) ? $this->parameters['invisibleParticipants'] : []));
+			$conversationEditor->updateParticipants(
+				(!empty($this->parameters['participants']) ? $this->parameters['participants'] : []),
+				(!empty($this->parameters['invisibleParticipants']) ? $this->parameters['invisibleParticipants'] : []),
+				'all'
+			);
 			
 			// add author
-			$conversationEditor->updateParticipants([$data['userID']]);
+			$conversationEditor->updateParticipants([$data['userID']], [], 'all');
 			
 			// update conversation count
 			UserStorageHandler::getInstance()->reset($conversation->getParticipantIDs(), 'conversationCount');
@@ -175,7 +179,11 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 				// get current participants
 				$participantIDs = $conversation->getParticipantIDs();
 				
-				$conversation->updateParticipants((!empty($this->parameters['participants']) ? $this->parameters['participants'] : []), (!empty($this->parameters['invisibleParticipants']) ? $this->parameters['invisibleParticipants'] : []));
+				$conversation->updateParticipants(
+					(!empty($this->parameters['participants']) ? $this->parameters['participants'] : []),
+					(!empty($this->parameters['invisibleParticipants']) ? $this->parameters['invisibleParticipants'] : []),
+					(!empty($this->parameters['visibility']) ? $this->parameters['visibility'] : 'all')
+				);
 				$conversation->updateParticipantSummary();
 				
 				// check if new participants have been added
@@ -199,7 +207,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			if (isset($this->parameters['data']['isDraft'])) {
 				if ($conversation->isDraft && !$this->parameters['data']['isDraft']) {
 					// add author
-					$conversation->updateParticipants([$conversation->userID]);
+					$conversation->updateParticipants([$conversation->userID], [], 'all');
 					
 					// update conversation count
 					UserStorageHandler::getInstance()->reset($conversation->getParticipantIDs(), 'unreadConversationCount');
@@ -656,9 +664,9 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		
 		$unreadConversationList = new UserConversationList(WCF::getUser()->userID);
 		$unreadConversationList->sqlSelects .= $sqlSelect;
-		$unreadConversationList->getConditionBuilder()->add('conversation_to_user.lastVisitTime < conversation.lastPostTime');
+		$unreadConversationList->getConditionBuilder()->add('conversation_to_user.lastVisitTime < lastPostTime');
 		$unreadConversationList->sqlLimit = 10;
-		$unreadConversationList->sqlOrderBy = 'conversation.lastPostTime DESC';
+		$unreadConversationList->sqlOrderBy = 'lastPostTime DESC';
 		$unreadConversationList->readObjects();
 		
 		$conversations = [];
@@ -671,9 +679,9 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		if ($count < 10) {
 			$conversationList = new UserConversationList(WCF::getUser()->userID);
 			$conversationList->sqlSelects .= $sqlSelect;
-			$conversationList->getConditionBuilder()->add('conversation_to_user.lastVisitTime >= conversation.lastPostTime');
+			$conversationList->getConditionBuilder()->add('conversation_to_user.lastVisitTime >= lastPostTime');
 			$conversationList->sqlLimit = (10 - $count);
-			$conversationList->sqlOrderBy = 'conversation.lastPostTime DESC';
+			$conversationList->sqlOrderBy = 'lastPostTime DESC';
 			$conversationList->readObjects();
 			
 			foreach ($conversationList as $conversation) {
@@ -729,7 +737,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		return [
 			'excludedSearchValues' => $this->conversation->getParticipantNames(),
 			'maxItems' => WCF::getSession()->getPermission('user.conversation.maxParticipants') - $this->conversation->participants,
-			'template' => WCF::getTPL()->fetch('conversationAddParticipants')
+			'template' => WCF::getTPL()->fetch('conversationAddParticipants', 'wcf', ['conversation' => $this->conversation])
 		];
 	}
 	
@@ -741,6 +749,13 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		
 		// validate participants
 		$this->readStringArray('participants');
+		
+		if (!$this->conversation->getDecoratedObject()->isDraft) {
+			$this->readString('visibility');
+			if (!in_array($this->parameters['visibility'], ['all', 'new'])) {
+				throw new UserInputException('visibility');
+			}
+		}
 	}
 	
 	/**
@@ -784,7 +799,10 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 				$data = ['data' => ['draftData' => serialize($draftData)]];
 			}
 			else {
-				$data = ['participants' => $participantIDs];
+				$data = [
+					'participants' => $participantIDs,
+					'visibility' => (isset($this->parameters['visibility'])) ? $this->parameters['visibility'] : 'all'
+				];
 			}
 			
 			$conversationAction = new ConversationAction([$this->conversation], 'update', $data);

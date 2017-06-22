@@ -78,7 +78,7 @@ define(['Ajax', 'Language', 'Ui/Dialog', 'Ui/Notification', 'WoltLabSuite/Core/U
 			//noinspection JSUnresolvedVariable
 			UiDialog.open(this, data.returnValues.template);
 			
-			var buttonSubmit = document.getElementById('addParticipants');
+			var buttonSubmit = elById('addParticipants');
 			buttonSubmit.disabled = true;
 			
 			//noinspection JSUnresolvedVariable
@@ -100,11 +100,16 @@ define(['Ajax', 'Language', 'Ui/Dialog', 'Ui/Notification', 'WoltLabSuite/Core/U
 				participants.push(values[i].value);
 			}
 			
+			var parameters = {
+				participants: participants
+			};
+			
+			var visibility = elBySel('input[name="messageVisibility"]:checked', UiDialog.getDialog(this).content);
+			if (visibility) parameters.visibility = visibility.value;
+			
 			Ajax.api(this, {
 				actionName: 'addParticipants',
-				parameters: {
-					participants: participants
-				}
+				parameters: parameters
 			});
 		},
 		

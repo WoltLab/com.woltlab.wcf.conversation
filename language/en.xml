@@ -2,7 +2,9 @@
 <language xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/vortex/language.xsd" languagecode="en">
 	<category name="wcf.acp.group">
 		<item name="wcf.acp.group.option.category.user.conversation"><![CDATA[Conversations]]></item>
+		<item name="wcf.acp.group.option.category.mod.conversation"><![CDATA[Conversations]]></item>
 		<item name="wcf.acp.group.option.mod.conversation.canModerateConversation"><![CDATA[Can moderate conversations]]></item>
+		<item name="wcf.acp.group.option.mod.conversation.canAlwaysInviteUsers"><![CDATA[Can always invite participants to conversations]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canUseConversation"><![CDATA[Can use conversations]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canSetCanInvite"><![CDATA[Can grant permissions]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canSetCanInvite.description"><![CDATA[Users can grant added participants the permission to add new participants while creating conversations. Changes do not affect existing conversations.]]></item>
@@ -125,6 +127,13 @@
 		<item name="wcf.conversation.noParticipantsWarning"><![CDATA[You are about to reply to a conversation without other participants, nobody is going to read your message!]]></item>
 		<item name="wcf.conversation.message.permalink"><![CDATA[Permalink to {#$startIndex}. message]]></item>
 		<item name="wcf.conversation.markAsRead.doubleClick"><![CDATA[Double-Click to Mark This Conversation Read]]></item>
+		<item name="wcf.conversation.visibility"><![CDATA[Read Access]]></item>
+		<item name="wcf.conversation.visibility.all"><![CDATA[All messages]]></item>
+		<item name="wcf.conversation.visibility.all.description"><![CDATA[All messages will be shown, including those written before they were added to this conversation.]]></item>
+		<item name="wcf.conversation.visibility.nextMessages"><![CDATA[You have been removed from this conversation, you may only read messages up to this point.]]></item>
+		<item name="wcf.conversation.visibility.new"><![CDATA[New messages only]]></item>
+		<item name="wcf.conversation.visibility.new.description"><![CDATA[The new participants will see new messages only, older messages will be hidden from them.]]></item>
+		<item name="wcf.conversation.visibility.previousMessages"><![CDATA[You have been added to an existing conversation, previously written messages are hidden.]]></item>
 	</category>
 	
 	<category name="wcf.conversation.edit">

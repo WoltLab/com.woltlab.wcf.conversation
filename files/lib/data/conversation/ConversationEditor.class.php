@@ -54,8 +54,9 @@ class ConversationEditor extends DatabaseObjectEditor {
 	 * 
 	 * @param	integer[]	$participantIDs
 	 * @param	integer[]	$invisibleParticipantIDs
+	 * @param       string          $visibility
 	 */
-	public function updateParticipants(array $participantIDs, array $invisibleParticipantIDs = []) {
+	public function updateParticipants(array $participantIDs, array $invisibleParticipantIDs = [], $visibility = 'all') {
 		$usernames = [];
 		if (!empty($participantIDs) || !empty($invisibleParticipantIDs)) {
 			$conditions = new PreparedStatementConditionBuilder();
@@ -74,8 +75,8 @@ class ConversationEditor extends DatabaseObjectEditor {
 		if (!empty($participantIDs)) {
 			WCF::getDB()->beginTransaction();
 			$sql = "INSERT INTO		wcf".WCF_N."_conversation_to_user
-							(conversationID, participantID, username, isInvisible)
-				VALUES			(?, ?, ?, ?)
+							(conversationID, participantID, username, isInvisible, joinedAt)
+				VALUES			(?, ?, ?, ?, ?)
 				ON DUPLICATE KEY
 				UPDATE			hideConversation = 0";
 			$statement = WCF::getDB()->prepareStatement($sql);
@@ -85,7 +86,8 @@ class ConversationEditor extends DatabaseObjectEditor {
 					$this->conversationID,
 					$userID,
 					$usernames[$userID],
-					0
+					0,
+					($visibility === 'all') ? 0 : TIME_NOW
 				]);
 			}
 			WCF::getDB()->commitTransaction();
@@ -157,13 +159,36 @@ class ConversationEditor extends DatabaseObjectEditor {
 	 * @param	integer		$userID
 	 */
 	public function removeParticipant($userID) {
+		$sql = "SELECT  joinedAt
+			FROM    wcf".WCF_N."_conversation_to_user
+			WHERE   conversationID = ?
+				AND participantID = ?";
+		$statement = WCF::getDB()->prepareStatement($sql, 1);
+		$statement->execute([$this->conversationID, $userID]);
+		$joinedAt = $statement->fetchSingleColumn();
+		
+		$sql = "SELECT  messageID
+			FROM    wcf".WCF_N."_conversation_message
+			WHERE   conversationID = ?
+				AND time >= ?
+				AND time <= ?";
+		$statement = WCF::getDB()->prepareStatement($sql, 1);
+		$statement->execute([
+			$this->conversationID,
+			$joinedAt,
+			TIME_NOW
+		]);
+		$lastMessageID = $statement->fetchSingleColumn();
+		
 		$sql = "UPDATE	wcf".WCF_N."_conversation_to_user
-			SET	hideConversation = ?
+			SET	leftAt = ?,
+				lastMessageID = ?
 			WHERE	conversationID = ?
 				AND participantID = ?";
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute([
-			2,
+			TIME_NOW,
+			$lastMessageID ?: null,
 			$this->conversationID,
 			$userID
 		]);

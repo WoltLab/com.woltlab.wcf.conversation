@@ -29,6 +29,9 @@ CREATE TABLE wcf1_conversation_to_user (
 	hideConversation TINYINT(1) NOT NULL DEFAULT 0,
 	isInvisible TINYINT(1) NOT NULL DEFAULT 0,
 	lastVisitTime INT(10) NOT NULL DEFAULT 0,
+	joinedAt INT(10) NOT NULL DEFAULT 0,
+	leftAt INT(10) NOT NULL DEFAULT 0,
+	lastMessageID INT(10) NULL,
 	
 	UNIQUE KEY (participantID, conversationID),
 	KEY (participantID, hideConversation)
@@ -76,6 +79,7 @@ ALTER TABLE wcf1_conversation ADD FOREIGN KEY (firstMessageID) REFERENCES wcf1_c
 
 ALTER TABLE wcf1_conversation_to_user ADD FOREIGN KEY (conversationID) REFERENCES wcf1_conversation (conversationID) ON DELETE CASCADE;
 ALTER TABLE wcf1_conversation_to_user ADD FOREIGN KEY (participantID) REFERENCES wcf1_user (userID) ON DELETE SET NULL;
+ALTER TABLE wcf1_conversation_to_user ADD FOREIGN KEY (lastMessageID) REFERENCES wcf1_conversation_message (messageID) ON DELETE SET NULL;
 
 ALTER TABLE wcf1_conversation_message ADD FOREIGN KEY (conversationID) REFERENCES wcf1_conversation (conversationID) ON DELETE CASCADE;
 ALTER TABLE wcf1_conversation_message ADD FOREIGN KEY (userID) REFERENCES wcf1_user (userID) ON DELETE SET NULL;

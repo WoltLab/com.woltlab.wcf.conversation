@@ -1,6 +1,6 @@
 <li id="messageQuickReply" class="jsOnly{if $conversation->userID == $__wcf->getUser()->userID} messageGroupStarter{/if}{if $pageNo < $pages} messageQuickReplyCollapsed{/if}" data-object-id="{@$conversation->conversationID}" data-last-post-time="{@$conversation->lastPostTime}" data-page-no="{@$pageNo}">
 	<article class="message messageSidebarOrientation{@$__wcf->getStyleHandler()->getStyle()->getVariable('messageSidebarOrientation')|ucfirst}{if $__wcf->getUserProfileHandler()->userOnlineGroupID} userOnlineGroupMarking{@$__wcf->getUserProfileHandler()->userOnlineGroupID}{/if}">
-		{include file='messageSidebar' userProfile=$__wcf->getUserProfileHandler()->getUserProfile()}
+		{include file='messageSidebar' userProfile=$__wcf->getUserProfileHandler()->getUserProfile() isReply=true enableMicrodata=false}
 		
 		<div class="messageContent messageQuickReplyContent"{if $pageNo < $pages} data-placeholder="{lang}wcf.conversation.reply{/lang}"{/if}>
 			<div class="messageBody">
@@ -17,7 +17,7 @@
 			
 			<footer class="messageFooter">
 				<div class="formSubmit">
-					<button class="buttonPrimary" data-type="save" accesskey="s">{lang}wcf.global.button.submit{/lang}</button>
+					<button class="buttonPrimary" data-type="save" accesskey="s">{lang}wcf.global.button.reply{/lang}</button>
 					{include file='messageFormPreviewButton' previewMessageObjectType='com.woltlab.wcf.conversation.message' previewMessageObjectID=0}
 				</div>
 			</footer>
