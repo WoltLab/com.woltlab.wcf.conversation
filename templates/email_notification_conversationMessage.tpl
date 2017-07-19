@@ -11,8 +11,8 @@
 	{assign var='message' value=$event->getUserNotificationObject()}
 	{assign var='conversation' value=$message->getConversation()}
 	
-	{if $notificationType == 'instant'}{assign var='avatarSize' value=128}
-	{else}{assign var='avatarSize' value=64}{/if}
+	{if $notificationType == 'instant'}{assign var='avatarSize' value=48}
+	{else}{assign var='avatarSize' value=32}{/if}
 	{capture assign='messageContent'}
 	<table cellpadding="0" cellspacing="0" border="0">
 		<tr>
