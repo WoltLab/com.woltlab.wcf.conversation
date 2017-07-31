@@ -1,13 +1,20 @@
 <?php
 namespace wcf\system\user\notification\event;
-use wcf\data\conversation\Conversation;
-use wcf\data\conversation\ConversationAction;
 use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\conversation\message\ConversationMessageAction;
+use wcf\data\conversation\Conversation;
+use wcf\data\conversation\ConversationAction;
 use wcf\data\user\UserProfile;
 
 /**
- * TODO
+ * Provides methods to create conversations and conversation messages for testing
+ * user notification events.
+ *
+ * @author	Matthias Schmidt
+ * @copyright	2001-2017 WoltLab GmbH
+ * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
+ * @package	WoltLabSuite\Core\System\User\Notification\Event
+ * @since	3.1
  */
 trait TTestableConversationRelatedUserNotificationEvent {
 	/**
