@@ -1,5 +1,6 @@
 <?php
 namespace wcf\system\user\notification\event;
+use wcf\data\user\UserProfile;
 use wcf\system\email\Email;
 use wcf\system\request\LinkHandler;
 use wcf\system\user\notification\object\ConversationMessageUserNotificationObject;
@@ -14,7 +15,10 @@ use wcf\system\user\notification\object\ConversationMessageUserNotificationObjec
  * 
  * @method	ConversationMessageUserNotificationObject	getUserNotificationObject()
  */
-class ConversationMessageUserNotificationEvent extends AbstractUserNotificationEvent {
+class ConversationMessageUserNotificationEvent extends AbstractUserNotificationEvent implements ITestableUserNotificationEvent {
+	use TTestableConversationRelatedUserNotificationEvent;
+	use TTestableUserNotificationEvent;
+	
 	/**
 	 * @inheritDoc
 	 */
@@ -94,5 +98,12 @@ class ConversationMessageUserNotificationEvent extends AbstractUserNotificationE
 	 */
 	public function checkAccess() {
 		return $this->getUserNotificationObject()->getConversation()->canRead();
+	}
+	
+	/**
+	 * @inheritDoc
+	 */
+	public static function getTestObjects(UserProfile $recipient, UserProfile $author) {
+		return [new ConversationMessageUserNotificationObject(self::createTestConversationMessage($recipient, $author))];
 	}
 }
