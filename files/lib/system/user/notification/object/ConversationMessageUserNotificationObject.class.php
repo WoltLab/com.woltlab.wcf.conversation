@@ -15,7 +15,7 @@ use wcf\system\request\LinkHandler;
  * @method	ConversationMessage	getDecoratedObject()
  * @mixin	ConversationMessage
  */
-class ConversationMessageUserNotificationObject extends DatabaseObjectDecorator {
+class ConversationMessageUserNotificationObject extends DatabaseObjectDecorator implements IUserNotificationObject {
 	/**
 	 * @inheritDoc
 	 */
