@@ -911,6 +911,33 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	}
 	
 	/**
+	 * Validates the parameters to edit a conversation's subject.
+	 * 
+	 * @throws      PermissionDeniedException
+	 */
+	public function validateEditSubject() {
+		$this->readString('subject');
+		
+		$this->conversation = $this->getSingleObject();
+		if ($this->conversation->userID != WCF::getUser()->userID) {
+			throw new PermissionDeniedException();
+		}
+	}
+	
+	/**
+	 * Edits a conversation's subject.
+	 * 
+	 * @return      string[]
+	 */
+	public function editSubject() {
+		$this->conversation->update(['subject' => $this->parameters['subject']]);
+		
+		return [
+			'subject' => $this->parameters['subject']
+		];
+	}
+	
+	/**
 	 * Adds conversation modification data.
 	 * 
 	 * @param	Conversation	$conversation
