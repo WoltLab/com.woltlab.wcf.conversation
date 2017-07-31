@@ -279,6 +279,7 @@
 			'wcf.conversation.edit.close': '{lang}wcf.conversation.edit.close{/lang}',
 			'wcf.conversation.edit.leave': '{lang}wcf.conversation.edit.leave{/lang}',
 			'wcf.conversation.edit.open': '{lang}wcf.conversation.edit.open{/lang}',
+			'wcf.conversation.edit.subject': '{lang}wcf.conversation.edit.subject{/lang}',
 			'wcf.conversation.label.management': '{lang}wcf.conversation.label.management{/lang}',
 			'wcf.conversation.label.management.addLabel.success': '{lang}wcf.conversation.label.management.addLabel.success{/lang}',
 			'wcf.conversation.label.management.deleteLabel.confirmMessage': '{lang}wcf.conversation.label.management.deleteLabel.confirmMessage{/lang}',

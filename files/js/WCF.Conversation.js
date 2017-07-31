@@ -380,6 +380,9 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
 	 */
 	_setOptions: function() {
 		this._options = [
+			// edit title
+			{ label: WCF.Language.get('wcf.conversation.edit.subject'), optionName: 'editSubject' },
+			
 			// isClosed
 			{ label: WCF.Language.get('wcf.conversation.edit.close'), optionName: 'close' },
 			{ label: WCF.Language.get('wcf.conversation.edit.open'), optionName: 'open' },
@@ -434,6 +437,10 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
 				return (this._editorHandler.countAvailableLabels()) ? true : false;
 			break;
 			
+			case 'editSubject':
+				return (!!this._editorHandler.getPermission($conversationID, 'canCloseConversation'));
+			break;
+			
 			case 'close':
 			case 'open':
 				if (!this._editorHandler.getPermission($conversationID, 'canCloseConversation')) {
@@ -468,12 +475,18 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
 		switch (optionName) {
 			case 'addParticipants':
 				require(['WoltLabSuite/Core/Conversation/Ui/Participant/Add'], function(UiParticipantAdd) {
-					new UiParticipantAdd(document.getElementById(elementID).getAttribute('data-conversation-id'));
+					new UiParticipantAdd(elData(elById(elementID), 'conversation-id'));
 				});
 			break;
 			
 			case 'assignLabel':
 				new WCF.Conversation.Label.Editor(this._editorHandler, elementID);
+			break;
+			
+			case 'editSubject':
+				require(['WoltLabSuite/Core/Conversation/Ui/Subject/Editor'], function (UiSubjectEditor) {
+					UiSubjectEditor.beginEdit(elData(elById(elementID), 'conversation-id'));
+				});
 			break;
 			
 			case 'close':
@@ -503,6 +516,7 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
 		
 		switch (optionName) {
 			case 'close':
+			case 'editSubject':
 			case 'open':
 				this._updateData.push({
 					elementID: elementID,
@@ -530,11 +544,9 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
 			
 			switch ($data.optionName) {
 				case 'close':
-					this._editorHandler.update($conversationID, 'close', $data.data);
-				break;
-				
+				case 'editSubject':
 				case 'open':
-					this._editorHandler.update($conversationID, 'open', $data.data);
+					this._editorHandler.update($conversationID, $data.optionName, $data.data);
 				break;
 			}
 		}

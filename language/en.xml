@@ -134,6 +134,7 @@
 		<item name="wcf.conversation.edit.close"><![CDATA[Close]]></item>
 		<item name="wcf.conversation.edit.leave"><![CDATA[Manage Participation]]></item>
 		<item name="wcf.conversation.edit.open"><![CDATA[Open]]></item>
+		<item name="wcf.conversation.edit.subject"><![CDATA[Edit Subject]]></item>
 	</category>
 	
 	<category name="wcf.conversation.label">

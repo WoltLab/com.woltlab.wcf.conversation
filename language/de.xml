@@ -133,6 +133,7 @@
 		<item name="wcf.conversation.edit.close"><![CDATA[Schließen]]></item>
 		<item name="wcf.conversation.edit.leave"><![CDATA[Teilnahme verwalten]]></item>
 		<item name="wcf.conversation.edit.open"><![CDATA[Öffnen]]></item>
+		<item name="wcf.conversation.edit.subject"><![CDATA[Betreff bearbeiten]]></item>
 	</category>
 	
 	<category name="wcf.conversation.label">

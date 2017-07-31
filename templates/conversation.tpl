@@ -7,7 +7,7 @@
 		</div>
 		
 		<div class="contentHeaderTitle">
-			<h1 class="contentTitle">{$conversation->subject}</h1>
+			<h1 class="contentTitle jsConversationSubject" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</h1>
 			
 			<ul class="inlineList contentHeaderMetaData">
 				{hascontent}
@@ -115,8 +115,10 @@
 			'wcf.conversation.edit.close': '{lang}wcf.conversation.edit.close{/lang}',
 			'wcf.conversation.edit.leave': '{lang}wcf.conversation.edit.leave{/lang}',
 			'wcf.conversation.edit.open': '{lang}wcf.conversation.edit.open{/lang}',
+			'wcf.conversation.edit.subject': '{lang}wcf.conversation.edit.subject{/lang}',
 			'wcf.conversation.leave.title': '{lang}wcf.conversation.leave.title{/lang}',
 			'wcf.global.state.closed': '{lang}wcf.global.state.closed{/lang}',
+			'wcf.global.subject': '{lang}wcf.global.subject{/lang}',
 			'wcf.message.bbcode.code.copy': '{lang}wcf.message.bbcode.code.copy{/lang}',
 			'wcf.message.error.editorAlreadyInUse': '{lang}wcf.message.error.editorAlreadyInUse{/lang}',
 			'wcf.moderation.report.reportContent': '{lang}wcf.moderation.report.reportContent{/lang}',
