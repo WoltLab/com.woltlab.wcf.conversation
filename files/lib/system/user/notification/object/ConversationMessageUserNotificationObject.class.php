@@ -15,7 +15,7 @@ use wcf\system\request\LinkHandler;
  * @method	ConversationMessage	getDecoratedObject()
  * @mixin	ConversationMessage
  */
-class ConversationMessageUserNotificationObject extends DatabaseObjectDecorator implements IStackableUserNotificationObject {
+class ConversationMessageUserNotificationObject extends DatabaseObjectDecorator {
 	/**
 	 * @inheritDoc
 	 */
@@ -43,12 +43,5 @@ class ConversationMessageUserNotificationObject extends DatabaseObjectDecorator 
 	 */
 	public function getAuthorID() {
 		return $this->userID;
-	}
-	
-	/**
-	 * @inheritDoc
-	 */
-	public function getRelatedObjectID() {
-		return $this->conversationID;
 	}
 }
