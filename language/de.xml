@@ -6,6 +6,7 @@
 		<item name="wcf.acp.group.option.mod.conversation.canModerateConversation"><![CDATA[Kann Konversationen moderieren]]></item>
 		<item name="wcf.acp.group.option.mod.conversation.canAlwaysInviteUsers"><![CDATA[Kann immer Teilnehmer zu Konversationen hinzufügen]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canUseConversation"><![CDATA[Kann Konversationen benutzen]]></item>
+		<item name="wcf.acp.group.option.user.conversation.canStartConversation"><![CDATA[Kann neue Konversationen starten]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canSetCanInvite"><![CDATA[Kann Rechte erteilen]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canSetCanInvite.description"><![CDATA[Mitglieder dieser Benutzergruppe können beim Start einer neuen Konversation hinzugefügten Teilnehmern das Recht erteilen, weitere Teilnehmer zur Konversation hinzufügen zu können. Änderungen wirken sich nicht auf bestehende Konversation aus.]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canAddInvisibleParticipants"><![CDATA[Kann unsichtbare Teilnehmer hinzufügen]]></item>

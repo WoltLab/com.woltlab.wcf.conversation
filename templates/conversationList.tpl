@@ -6,12 +6,16 @@
 			<h1 class="contentTitle">{if $filter}{lang}wcf.conversation.folder.{$filter}{/lang}{else}{$__wcf->getActivePage()->getTitle()}{/if}</h1>
 		</div>
 		
-		<nav class="contentHeaderNavigation">
-			<ul>
-				<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button"><span class="icon icon16 fa-plus"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>
-				{event name='contentHeaderNavigation'}
-			</ul>
-		</nav>
+		{hascontent}
+			<nav class="contentHeaderNavigation">
+				<ul>
+					{content}
+						{if $__wcf->session->getPermission('user.conversation.canStartConversation')}<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button"><span class="icon icon16 fa-plus"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>{/if}
+						{event name='contentHeaderNavigation'}
+					{/content}
+				</ul>
+			</nav>
+		{/hascontent}
 	</header>
 {/capture}
 
@@ -262,12 +266,16 @@
 		</div>
 	{/hascontent}
 	
-	<nav class="contentFooterNavigation">
-		<ul>
-			<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button"><span class="icon icon16 fa-plus"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>
-			{event name='contentFooterNavigation'}
-		</ul>
-	</nav>
+	{hascontent}
+		<nav class="contentFooterNavigation">
+			<ul>
+				{content}
+					{if $__wcf->session->getPermission('user.conversation.canStartConversation')}<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button"><span class="icon icon16 fa-plus"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>{/if}
+					{event name='contentFooterNavigation'}
+				{/content}
+			</ul>
+		</nav>
+	{/hascontent}
 </footer>
 
 <script data-relocate="true" src="{@$__wcf->getPath()}js/WCF.Conversation{if !ENABLE_DEBUG_MODE}.min{/if}.js?v={@LAST_UPDATE_TIME}"></script>

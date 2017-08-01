@@ -6,6 +6,7 @@ use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\conversation\ConversationHandler;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\NamedUserException;
+use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
 use wcf\system\message\quote\MessageQuoteManager;
 use wcf\system\page\PageLocationManager;
@@ -245,5 +246,16 @@ class ConversationAddForm extends MessageForm {
 			'invisibleParticipants' => $this->invisibleParticipants,
 			'action' => 'add'
 		]);
+	}
+	
+	/**
+	 * @inheritDoc
+	 */
+	public function show() {
+		if (!WCF::getSession()->getPermission('user.conversation.canStartConversation')) {
+			throw new PermissionDeniedException();
+		}
+		
+		parent::show();
 	}
 }

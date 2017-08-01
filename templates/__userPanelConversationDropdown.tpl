@@ -11,7 +11,8 @@
 						newConversationLink: '{link controller='ConversationAdd' encode=false}{/link}',
 						noItems: '{lang}wcf.conversation.noMoreItems{/lang}',
 						showAllLink: '{link controller='ConversationList' encode=false}{/link}',
-						title: '{lang}wcf.conversation.conversations{/lang}'
+						title: '{lang}wcf.conversation.conversations{/lang}',
+						canStartConversation: {if $__wcf->session->getPermission('user.conversation.canStartConversation')}true{else}false{/if}
 					});
 				});
 			</script>
