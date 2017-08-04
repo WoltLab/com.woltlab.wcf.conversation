@@ -4,7 +4,7 @@
 		<packagename>WoltLab Suite Core: Conversations</packagename>
 		<packagedescription>Private conversations between multiple users</packagedescription>
 		<version>3.1.0 Alpha 1</version>
-		<date>2017-02-21</date>
+		<date>2017-03-08</date>
 	</packageinformation>
 	
 	<authorinformation>
@@ -36,5 +36,16 @@
 		<instruction type="eventListener" />
 		<instruction type="script">acp/install_com.woltlab.wcf.conversation.php</instruction>
 		<instruction type="page" />
+	</instructions>
+	
+	<instructions type="update" fromversion="3.0.5">
+		<instruction type="file" />
+		<instruction type="template" />
+		
+		<instruction type="sql" run="standalone">update_3.1.sql</instruction>
+		
+		<instruction type="language" />
+		
+		<instruction type="userGroupOption" />
 	</instructions>
 </package>
