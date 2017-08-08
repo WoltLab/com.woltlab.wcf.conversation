@@ -39,8 +39,10 @@
 	</instructions>
 	
 	<instructions type="update" fromversion="3.0.8">
-		<instruction type="file" />
+		<instruction type="file" run="standalone" />
 		<instruction type="template" />
+		
+		<instruction type="script" run="standalone" flushCache="false">acp/update_com.woltlab.wcf.conversation_3.1_addColumn.php</instruction>
 		
 		<instruction type="sql" run="standalone">update_3.1.sql</instruction>
 		
