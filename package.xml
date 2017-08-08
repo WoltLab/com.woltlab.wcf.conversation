@@ -38,7 +38,7 @@
 		<instruction type="page" />
 	</instructions>
 	
-	<instructions type="update" fromversion="3.0.5">
+	<instructions type="update" fromversion="3.0.8">
 		<instruction type="file" />
 		<instruction type="template" />
 		
