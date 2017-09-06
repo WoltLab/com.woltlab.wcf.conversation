@@ -85,7 +85,7 @@
 				<optiontype>integer</optiontype>
 				<defaultvalue>5</defaultvalue>
 				<minvalue>1</minvalue>
-				<maxvalue>10</maxvalue>
+				<maxvalue>25</maxvalue>
 				<usersonly>1</usersonly>
 			</option>
 			<option name="user.conversation.maxLength">
