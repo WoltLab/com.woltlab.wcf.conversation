@@ -23,7 +23,7 @@
 	<instructions type="install">
 		<instruction type="file" />
 		<instruction type="userGroupOption" />
-		<instruction type="sql" />
+		<instruction type="sql" run="standalone" />
 		<instruction type="template" />
 		<instruction type="option" />
 		<instruction type="templateListener" />
