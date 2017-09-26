@@ -930,7 +930,9 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 * @return      string[]
 	 */
 	public function editSubject() {
-		$this->conversation->update(['subject' => $this->parameters['subject']]);
+		$this->conversation->update([
+			'subject' => mb_substr($this->parameters['subject'], 0, 255)
+		]);
 		
 		return [
 			'subject' => $this->parameters['subject']
