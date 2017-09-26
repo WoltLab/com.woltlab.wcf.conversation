@@ -66,10 +66,22 @@ class Conversation extends DatabaseObject implements IRouteController, ITitledLi
 	const STATE_LEFT/*4DEAD*/ = 2;
 	
 	/**
+	 * true if the current user can add users without limitations
+	 * @var boolean
+	 */
+	protected $canAddUnrestricted;
+	
+	/**
 	 * first message object
 	 * @var	ConversationMessage
 	 */
 	protected $firstMessage;
+	
+	/**
+	 * true if the current user is an active participant of this conversation
+	 * @var boolean
+	 */
+	protected $isActiveParticipant;
 	
 	/**
 	 * @inheritDoc
@@ -221,7 +233,7 @@ class Conversation extends DatabaseObject implements IRouteController, ITitledLi
 	}
 	
 	/**
-	 * Returns true if current user can add new participants to this conversation.
+	 * Returns true if the current user can add new participants to this conversation.
 	 * 
 	 * @return	boolean
 	 */
@@ -243,7 +255,40 @@ class Conversation extends DatabaseObject implements IRouteController, ITitledLi
 			return false;
 		}
 		
+		if (!$this->isActiveParticipant()) {
+			return false;
+		}
+		
 		return true;
+	}
+	
+	/**
+	 * Returns true if the current user can add participants without limitations.
+	 * 
+	 * @return      boolean
+	 */
+	public function canAddParticipantsUnrestricted() {
+		if ($this->canAddUnrestricted === null) {
+			$this->canAddUnrestricted = false;
+			if ($this->isActiveParticipant()) {
+				$sql = "SELECT  joinedAt
+					FROM    wcf".WCF_N."_conversation_to_user
+					WHERE   conversationID = ?
+						AND participantID = ?";
+				$statement = WCF::getDB()->prepareStatement($sql);
+				$statement->execute([
+					$this->conversationID,
+					WCF::getUser()->userID
+				]);
+				$joinedAt = $statement->fetchSingleColumn();
+				
+				if ($joinedAt !== false && $joinedAt == 0) {
+					$this->canAddUnrestricted = true;
+				}
+			}
+		}
+		
+		return $this->canAddUnrestricted;
 	}
 	
 	/**
@@ -344,7 +389,31 @@ class Conversation extends DatabaseObject implements IRouteController, ITitledLi
 	}
 	
 	/**
-	 * Returns true if given user id (default: current user) is participant
+	 * Returns true if the current user is an active participant of this conversation.
+	 * 
+	 * @return      boolean
+	 */
+	public function isActiveParticipant() {
+		if ($this->isActiveParticipant === null) {
+			$sql = "SELECT  leftAt
+				FROM    wcf" . WCF_N . "_conversation_to_user
+				WHERE   conversationID = ?
+					AND participantID = ?";
+			$statement = WCF::getDB()->prepareStatement($sql);
+			$statement->execute([
+				$this->conversationID,
+				WCF::getUser()->userID
+			]);
+			$leftAt = $statement->fetchSingleColumn();
+			
+			$this->isActiveParticipant = ($leftAt !== false && $leftAt == 0);
+		}
+		
+		return $this->isActiveParticipant;
+	}
+	
+	/**
+	 * Returns true if the given user id (default: current user) is participant
 	 * of all given conversation ids.
 	 * 
 	 * @param	integer[]	$conversationIDs

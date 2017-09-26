@@ -755,6 +755,10 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			if (!in_array($this->parameters['visibility'], ['all', 'new'])) {
 				throw new UserInputException('visibility');
 			}
+			
+			if ($this->parameters['visibility'] === 'all' && !$this->conversation->canAddParticipantsUnrestricted()) {
+				throw new UserInputException('visibility');
+			}
 		}
 	}
 	
