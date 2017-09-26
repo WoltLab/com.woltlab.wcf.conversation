@@ -61,6 +61,24 @@ define(['Ajax', 'Language', 'Ui/Dialog', 'Ui/Notification', 'WoltLabSuite/Core/U
 		 */
 		_handleResponse: function(data) {
 			//noinspection JSUnresolvedVariable
+			if (data.returnValues.errorMessage) {
+				var innerError = elCreate('small');
+				innerError.className = 'innerError';
+				//noinspection JSUnresolvedVariable
+				innerError.textContent = data.returnValues.errorMessage;
+				
+				var itemList = elById('participantsInput').closest('.inputItemList');
+				itemList.parentNode.insertBefore(innerError, itemList.nextSibling);
+				
+				var oldError = innerError.nextElementSibling;
+				if (oldError && oldError.classList.contains('innerError')) {
+					elRemove(oldError);
+				}
+				
+				return;
+			}
+			
+			//noinspection JSUnresolvedVariable
 			if (data.returnValues.count) {
 				//noinspection JSUnresolvedVariable
 				UiNotification.show(data.returnValues.successMessage, window.location.reload.bind(window.location));
@@ -104,7 +122,7 @@ define(['Ajax', 'Language', 'Ui/Dialog', 'Ui/Notification', 'WoltLabSuite/Core/U
 				participants: participants
 			};
 			
-			var visibility = elBySel('input[name="messageVisibility"]:checked', UiDialog.getDialog(this).content);
+			var visibility = elBySel('input[name="messageVisibility"]:checked, input[name="messageVisibility"][type="hidden"]', UiDialog.getDialog(this).content);
 			if (visibility) parameters.visibility = visibility.value;
 			
 			Ajax.api(this, {
