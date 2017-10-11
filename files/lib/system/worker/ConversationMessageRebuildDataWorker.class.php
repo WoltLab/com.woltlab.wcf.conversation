@@ -103,7 +103,8 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker {
 				$data['enableHtml'] = 1;
 			}
 			else {
-				$this->getHtmlInputProcessor()->processEmbeddedContent($message->message, 'com.woltlab.wcf.conversation.message', $message->messageID);
+				$this->getHtmlInputProcessor()->reprocess($message->message, 'com.woltlab.wcf.conversation.message', $message->messageID);
+				$data['message'] = $this->getHtmlInputProcessor()->getHtml();
 			}
 			
 			if (MessageEmbeddedObjectManager::getInstance()->registerObjects($this->getHtmlInputProcessor())) {
