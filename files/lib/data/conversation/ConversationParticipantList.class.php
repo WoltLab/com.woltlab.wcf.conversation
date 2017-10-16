@@ -38,7 +38,7 @@ class ConversationParticipantList extends UserProfileList {
 		$this->getConditionBuilder()->add('conversation_to_user.conversationID = ?', [$conversationID]);
 		if (!$isAuthor) {
 			if ($userID) {
-				$this->getConditionBuilder()->add('conversation_to_user.isInvisible = 0 OR conversation_to_user.participantID = ?', [$userID]);
+				$this->getConditionBuilder()->add('(conversation_to_user.isInvisible = 0 OR conversation_to_user.participantID = ?)', [$userID]);
 			}
 			else {
 				$this->getConditionBuilder()->add('conversation_to_user.isInvisible = 0');
