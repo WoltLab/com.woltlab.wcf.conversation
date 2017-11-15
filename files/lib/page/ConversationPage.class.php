@@ -228,9 +228,24 @@ class ConversationPage extends MultipleLinkPage {
 		}
 		$this->objectList->rewind();
 		
+		// get invisible participants
+		$invisibleParticipantIDs = [];
+		if (WCF::getUser()->userID != $this->conversation->userID) {
+			foreach ($this->participantList as $participant) {
+				if ($participant->isInvisible) {
+					$invisibleParticipantIDs[] = $participant->userID;
+				}
+			}
+		}
+		
 		// load modification log entries
 		$this->modificationLogList = new ConversationLogModificationLogList($this->conversation->conversationID);
 		$this->modificationLogList->getConditionBuilder()->add("modification_log.time BETWEEN ? AND ?", [$startTime, $endTime]);
+		
+		if (!empty($invisibleParticipantIDs)) {
+			$this->modificationLogList->getConditionBuilder()->add("(modification_log.action <> ? OR modification_log.userID NOT IN (?))", ['leave', $invisibleParticipantIDs]);
+		}
+		
 		$this->modificationLogList->readObjects();
 	}
 	
