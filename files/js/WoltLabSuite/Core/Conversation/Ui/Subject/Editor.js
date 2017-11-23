@@ -106,7 +106,7 @@ define(['Ajax', 'EventKey', 'Language', 'Ui/Dialog', 'Ui/Notification'], functio
 					+ '<dt><label for="jsConversationSubject">' + Language.get('wcf.global.subject') + '</label></dt>'
 					+ '<dd><input type="text" id="jsConversationSubject" class="long" maxlength="255"></dd>'
 				+ '</dl>'
-				+ '<div class="formSubmit"><button class="jsButtonSave">' + Language.get('wcf.global.button.save') + '</button></div>'
+				+ '<div class="formSubmit"><button class="buttonPrimary jsButtonSave">' + Language.get('wcf.global.button.save') + '</button></div>'
 			};
 		},
 		
