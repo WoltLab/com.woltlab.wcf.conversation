@@ -36,8 +36,6 @@
 		<item name="wcf.acp.option.conversation_messages_per_page"><![CDATA[Messages per Page]]></item>
 		<item name="wcf.acp.option.conversations_per_page"><![CDATA[Conversations per Page]]></item>
 		<item name="wcf.acp.option.module_conversation"><![CDATA[Conversations]]></item>
-		<item name="wcf.acp.option.conversation_reply_show_messages_max"><![CDATA[Previous Messages]]></item>
-		<item name="wcf.acp.option.conversation_reply_show_messages_max.description"><![CDATA[The number of previous messages displayed on the reply form.]]></item>
 	</category>
 	
 	<category name="wcf.acp.rebuildData">
