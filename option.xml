@@ -30,14 +30,6 @@
 				<maxvalue>40</maxvalue>
 			</option>
 			
-			<option name="conversation_reply_show_messages_max">
-				<categoryname>message.conversation</categoryname>
-				<optiontype>integer</optiontype>
-				<defaultvalue>10</defaultvalue>
-				<minvalue>5</minvalue>
-				<maxvalue>40</maxvalue>
-			</option>
-			
 			<option name="conversation_list_default_sort_field">
 				<categoryname>message.conversation</categoryname>
 				<optiontype>select</optiontype>
