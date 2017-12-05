@@ -161,7 +161,7 @@ class ConversationListPage extends SortablePage {
 	 */
 	public function readData() {
 		// if sort field is `username`, `conversation.` has to prepended because `username`
-		// alone is ambiguous 
+		// alone is ambiguous
 		if ($this->sortField === 'username') {
 			$this->sortField = 'conversation.username';
 		}

@@ -224,7 +224,7 @@ class ConversationPage extends MultipleLinkPage {
 				$statement = WCF::getDB()->prepareStatement($sql, 1);
 				$statement->execute([$this->conversationID, $this->objectList->current()->time]);
 				$endTime = $statement->fetchSingleColumn() - 1;
-			}	
+			}
 		}
 		$this->objectList->rewind();
 		

@@ -44,7 +44,7 @@ use wcf\util\ArrayUtil;
  * @property-read	integer|null	$lastVisitTime
  * @property-read	integer|null	$joinedAt
  * @property-read	integer|null	$leftAt
- * @property-read	integer|null	$lastMessageID 
+ * @property-read	integer|null	$lastMessageID
  */
 class Conversation extends DatabaseObject implements IRouteController, ITitledLinkObject {
 	/**

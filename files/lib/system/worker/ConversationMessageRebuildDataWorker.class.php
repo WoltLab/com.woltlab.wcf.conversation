@@ -81,7 +81,7 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker {
 			SearchIndexManager::getInstance()->set(
 				'com.woltlab.wcf.conversation.message',
 				$message->messageID,
-				$message->message, 
+				$message->message,
 				$message->subject ?: '',
 				$message->time,
 				$message->userID,

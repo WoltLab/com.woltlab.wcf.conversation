@@ -7,7 +7,7 @@
 						<span class="icon icon48 fa-users"></span>
 					{else}
 						{@$conversation->getOtherParticipantProfile()->getAvatar()->getImageTag(48)}
-					{/if}	
+					{/if}
 				{else}
 					{@$conversation->getUserProfile()->getAvatar()->getImageTag(48)}
 				{/if}
