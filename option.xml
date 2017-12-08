@@ -46,4 +46,8 @@ DESC:wcf.global.sortOrder.descending</selectoptions>
 			</option>
 		</options>
 	</import>
+	
+	<delete>
+		<option name="conversation_reply_show_messages_max" />
+	</delete>
 </data>
