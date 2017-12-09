@@ -380,6 +380,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	
 	/**
 	 * Validates user access for label management.
+	 * 
+	 * @throws	PermissionDeniedException
 	 */
 	public function validateGetLabelManagement() {
 		if (!WCF::getSession()->getPermission('user.conversation.canUseConversation')) {
@@ -408,6 +410,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	
 	/**
 	 * Validates the get message preview action.
+	 * 
+	 * @throws	PermissionDeniedException
 	 */
 	public function validateGetMessagePreview() {
 		$this->conversation = $this->getSingleObject();
@@ -438,6 +442,9 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	
 	/**
 	 * Validates parameters to close conversations.
+	 * 
+	 * @throws	PermissionDeniedException
+	 * @throws	UserInputException
 	 */
 	public function validateClose() {
 		// read objects
@@ -477,6 +484,9 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	
 	/**
 	 * Validates parameters to open conversations.
+	 * 
+	 * @throws	PermissionDeniedException
+	 * @throws	UserInputException
 	 */
 	public function validateOpen() {
 		// read objects
@@ -516,6 +526,9 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	
 	/**
 	 * Validates conversations for leave form.
+	 * 
+	 * @throws	PermissionDeniedException
+	 * @throws	UserInputException
 	 */
 	public function validateGetLeaveForm() {
 		if (empty($this->objectIDs)) {
@@ -556,6 +569,9 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	
 	/**
 	 * Validates parameters to hide conversations.
+	 * 
+	 * @throws	PermissionDeniedException
+	 * @throws	UserInputException
 	 */
 	public function validateHideConversation() {
 		$this->parameters['hideConversation'] = isset($this->parameters['hideConversation']) ? intval($this->parameters['hideConversation']) : null;
@@ -720,6 +736,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	
 	/**
 	 * Validates parameters to display the 'add participants' form.
+	 * 
+	 * @throws	PermissionDeniedException
 	 */
 	public function validateGetAddParticipantsForm() {
 		$this->conversation = $this->getSingleObject();
@@ -831,6 +849,9 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	
 	/**
 	 * Validates parameters to remove a participant from a conversation.
+	 * 
+	 * @throws	PermissionDeniedException
+	 * @throws	UserInputException
 	 */
 	public function validateRemoveParticipant() {
 		$this->readInteger('userID');

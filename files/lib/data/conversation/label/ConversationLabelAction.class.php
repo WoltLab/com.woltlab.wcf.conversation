@@ -85,6 +85,9 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 	
 	/**
 	 * Validates parameters to add a new label.
+	 * 
+	 * @throws	PermissionDeniedException
+	 * @throws	UserInputException
 	 */
 	public function validateAdd() {
 		if (!WCF::getSession()->getPermission('user.conversation.canUseConversation')) {
@@ -128,6 +131,10 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 	
 	/**
 	 * Validates parameters for label assignment form.
+	 * 
+	 * @throws	IllegalLinkException
+	 * @throws	PermissionDeniedException
+	 * @throws	UserInputException
 	 */
 	public function validateGetLabelForm() {
 		if (!WCF::getSession()->getPermission('user.conversation.canUseConversation')) {
@@ -194,6 +201,8 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction {
 	
 	/**
 	 * Validates parameters to assign labels for a conversation.
+	 * 
+	 * @throws	UserInputException
 	 */
 	public function validateAssignLabel() {
 		$this->validateGetLabelForm();
