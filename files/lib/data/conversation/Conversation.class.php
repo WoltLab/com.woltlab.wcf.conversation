@@ -21,30 +21,30 @@ use wcf\util\ArrayUtil;
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	WoltLabSuite\Core\Data\Conversation
  * 
- * @property-read	integer		$conversationID
- * @property-read	string		$subject
- * @property-read	integer		$time
- * @property-read	integer		$firstMessageID
- * @property-read	integer|null	$userID
- * @property-read	string		$username
- * @property-read	integer		$lastPostTime
- * @property-read	integer|null	$lastPosterID
- * @property-read	string		$lastPoster
- * @property-read	integer		$replies
- * @property-read	integer		$attachments
- * @property-read	integer		$participants
- * @property-read	string		$participantSummary
- * @property-read	integer		$participantCanInvite
- * @property-read	integer		$isClosed
- * @property-read	integer		$isDraft
- * @property-read	string		$draftData
- * @property-read	integer|null	$participantID
- * @property-read	integer|null	$hideConversation
- * @property-read	integer|null	$isInvisible
- * @property-read	integer|null	$lastVisitTime
- * @property-read	integer|null	$joinedAt
- * @property-read	integer|null	$leftAt
- * @property-read	integer|null	$lastMessageID
+ * @property-read	integer		$conversationID		unique id of the conversation
+ * @property-read	string		$subject		subject of the conversation
+ * @property-read	integer		$time			timestamp at which the conversation has been started
+ * @property-read	integer		$firstMessageID		id of the first conversation message
+ * @property-read	integer|null	$userID			id of the user who started the conversation or `null` if the user does not exist anymore
+ * @property-read	string		$username		name of the user who started the conversation
+ * @property-read	integer		$lastPostTime		timestamp at which the conversation's last message has been written
+ * @property-read	integer|null	$lastPosterID		id of the user who wrote the conversation's last message or `null` if the user does not exist anymore
+ * @property-read	string		$lastPoster		name of the user who wrote the conversation's last message
+ * @property-read	integer		$replies		number of replies on the conversation
+ * @property-read	integer		$attachments		total number of attachments in all messages of the conversation
+ * @property-read	integer		$participants		number of participants of the conversations
+ * @property-read	string		$participantSummary	serialized data of five of the conversation participants (sorted by username)
+ * @property-read	integer		$participantCanInvite	is `1` if participants can invite other users to join the conversation, otherwise `0`
+ * @property-read	integer		$isClosed		is `1` if the conversation is closed for new messages, otherwise `0`
+ * @property-read	integer		$isDraft		is `1` if the conversation is a draft only, thus not sent to any participant, otherwise `0`
+ * @property-read	string		$draftData		serialized ids of the participants and invisible participants if conversation is a draft, otherwise `0`
+ * @property-read	integer|null	$participantID		id of the user whose conversations are fetched via `UserConversationList`, otherwise `null` 
+ * @property-read	integer|null	$hideConversation	is `1` if the user has hidden conversation, otherwise `0`; is `null` if the conversation has not been fetched via `UserConversationList`
+ * @property-read	integer|null	$isInvisible		is `1` if the user is invisible in conversation, otherwise `0`; is `null` if the conversation has not been fetched via `UserConversationList`
+ * @property-read	integer|null	$lastVisitTime		timestamp at which the user last visited the conversation after a new messsage had been written or `0` if they have not visited it at all; is `null` if the conversation has not been fetched via `UserConversationList`
+ * @property-read	integer|null	$joinedAt		timestamp at which the user joined the conversation; is `null` if the conversation has not been fetched via `UserConversationList`
+ * @property-read	integer|null	$leftAt			timestamp at which the user left the conversation or `0` if they did not leave the conversation; is `null` if the conversation has not been fetched via `UserConversationList`
+ * @property-read	integer|null	$lastMessageID		id of the last message written before the user left the conversation or `0` if they did not leave the conversation; is `null` if the conversation has not been fetched via `UserConversationList`
  */
 class Conversation extends DatabaseObject implements IRouteController, ITitledLinkObject {
 	/**

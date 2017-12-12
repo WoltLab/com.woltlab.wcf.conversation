@@ -18,18 +18,18 @@ use wcf\util\StringUtil;
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	WoltLabSuite\Core\Data\Conversation\Message
  *
- * @property-read	integer		$messageID
- * @property-read	integer		$conversationID
- * @property-read	integer|null	$userID
- * @property-read	string		$username
- * @property-read	string		$message
- * @property-read	integer		$time
- * @property-read	integer		$attachments
- * @property-read	integer		$enableHtml
- * @property-read	string		$ipAddress
- * @property-read	integer		$lastEditTime
- * @property-read	integer		$editCount
- * @property-read	integer		$hasEmbeddedObjects
+ * @property-read	integer		$messageID		unique id of the conversation message
+ * @property-read	integer		$conversationID		id of the conversation the conversation message belongs to
+ * @property-read	integer|null	$userID			id of the user who wrote the conversation message or `null` if the user does not exist anymore
+ * @property-read	string		$username		name of the user who wrote the conversation message
+ * @property-read	string		$message		text of the conversation message
+ * @property-read	integer		$time			timestamp at which the conversation message has been written
+ * @property-read	integer		$attachments		number of attachments
+ * @property-read	integer		$enableHtml		is `1` if the conversation message's format has been converted to html, otherwise `0`
+ * @property-read	string		$ipAddress		ip address of the user who wrote the conversation message at time of writing or empty if no ip addresses are logged
+ * @property-read	integer		$lastEditTime		timestamp at which the conversation message has been edited the last time
+ * @property-read	integer		$editCount		number of times the conversation message has been edited
+ * @property-read	integer		$hasEmbeddedObjects	number of embedded objects in the conversation message
  */
 class ConversationMessage extends DatabaseObject implements IMessage {
 	use TUserContent;
