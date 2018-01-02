@@ -143,6 +143,22 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		$action = new ConversationMessageAction($messageList->getObjectIDs(), 'delete');
 		$action->executeAction();
 		
+		// get the list of participants in order to reset the 'unread conversation'-counter
+		$participantIDs = [];
+		if (!empty($this->objectIDs)) {
+			$conditions = new PreparedStatementConditionBuilder();
+			$conditions->add("conversationID IN (?)", [$this->objectIDs]);
+			$sql = "SELECT  DISTINCT participantID
+			FROM    wcf" . WCF_N . "_conversation_to_user
+			" . $conditions;
+			$statement = WCF::getDB()->prepareStatement($sql);
+			$statement->execute($conditions->getParameters());
+			
+			while ($participantID = $statement->fetchColumn()) {
+				$participantIDs[] = $participantID;
+			}
+		}
+		
 		// delete conversations
 		parent::delete();
 		
@@ -152,6 +168,11 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			
 			// remove modification logs
 			ConversationModificationLogHandler::getInstance()->deleteLogs($this->objectIDs);
+			
+			// reset the number of unread conversations
+			if (!empty($participantIDs)) {
+				UserStorageHandler::getInstance()->reset($participantIDs, 'unreadConversationCount');
+			}
 		}
 	}
 	
