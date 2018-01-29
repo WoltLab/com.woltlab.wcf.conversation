@@ -3,6 +3,7 @@ namespace wcf\system\worker;
 use wcf\data\conversation\message\ConversationMessageEditor;
 use wcf\data\conversation\message\ConversationMessageList;
 use wcf\data\object\type\ObjectTypeCache;
+use wcf\system\bbcode\BBCodeHandler;
 use wcf\system\html\input\HtmlInputProcessor;
 use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
 use wcf\system\search\SearchIndexManager;
@@ -77,6 +78,13 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker {
 					AND objectID = ?";
 		$attachmentStatement = WCF::getDB()->prepareStatement($sql);
 		
+		// retrieve permissions
+		$userIDs = [];
+		foreach ($this->objectList as $object) {
+			$userIDs[] = $object->userID;
+		}
+		$userPermissions = $this->getBulkUserPermissions($userIDs, ['user.message.disallowedBBCodes']);
+		
 		foreach ($this->objectList as $message) {
 			SearchIndexManager::getInstance()->set(
 				'com.woltlab.wcf.conversation.message',
@@ -95,6 +103,8 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker {
 			$attachmentStatement->execute([$attachmentObjectType->objectTypeID, $message->messageID]);
 			$row = $attachmentStatement->fetchSingleRow();
 			$data['attachments'] = $row['attachments'];
+			
+			BBCodeHandler::getInstance()->setDisallowedBBCodes(explode(',', $this->getBulkUserPermissionValue($userPermissions, $message->userID, 'user.message.disallowedBBCodes')));
 			
 			// update message
 			if (!$message->enableHtml) {
