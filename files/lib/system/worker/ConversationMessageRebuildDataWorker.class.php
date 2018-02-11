@@ -81,7 +81,8 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker {
 		// retrieve permissions
 		$userIDs = [];
 		foreach ($this->objectList as $object) {
-			$userIDs[] = $object->userID;
+			// passing `0` is actually valid, because it won't yield any results when querying the group membership
+			$userIDs[] = ($object->userID ?: 0);
 		}
 		$userPermissions = $this->getBulkUserPermissions($userIDs, ['user.message.disallowedBBCodes']);
 		
