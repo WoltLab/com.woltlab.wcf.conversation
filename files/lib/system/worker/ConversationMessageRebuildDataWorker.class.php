@@ -70,6 +70,10 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker {
 			SearchIndexManager::getInstance()->reset('com.woltlab.wcf.conversation.message');
 		}
 		
+		if (!count($this->objectList)) {
+			return;
+		}
+		
 		// prepare statements
 		$attachmentObjectType = ObjectTypeCache::getInstance()->getObjectTypeByName('com.woltlab.wcf.attachment.objectType', 'com.woltlab.wcf.conversation.message');
 		$sql = "SELECT		COUNT(*) AS attachments
