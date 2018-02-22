@@ -74,8 +74,10 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 			// save participants
 			$conversationEditor->updateParticipants((!empty($this->parameters['participants']) ? $this->parameters['participants'] : []), (!empty($this->parameters['invisibleParticipants']) ? $this->parameters['invisibleParticipants'] : []));
 			
-			// add author
-			$conversationEditor->updateParticipants([$data['userID']]);
+			if ($data['userID'] !== null) {
+				// add author
+				$conversationEditor->updateParticipants([$data['userID']]);
+			}
 			
 			// update conversation count
 			UserStorageHandler::getInstance()->reset($conversation->getParticipantIDs(), 'conversationCount');
