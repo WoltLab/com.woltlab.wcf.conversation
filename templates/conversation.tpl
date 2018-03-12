@@ -24,7 +24,7 @@
 				'wcf.conversation.label.assignLabels': '{lang}wcf.conversation.label.assignLabels{/lang}'
 			});
 			
-			var $availableLabels = [ {implode from=$labelList item=label}{ cssClassName: '{if $label->cssClassName}{@$label->cssClassName}{/if}', labelID: {@$label->labelID}, label: '{$label->label}' }{/implode} ];
+			var $availableLabels = [ {implode from=$labelList item=label}{ cssClassName: '{if $label->cssClassName}{@$label->cssClassName}{/if}', labelID: {@$label->labelID}, label: '{$label->label|encodeJS}' }{/implode} ];
 			var $editorHandler = new WCF.Conversation.EditorHandlerConversation($availableLabels);
 			var $inlineEditor = new WCF.Conversation.InlineEditor('.conversation');
 			$inlineEditor.setEditorHandler($editorHandler);
