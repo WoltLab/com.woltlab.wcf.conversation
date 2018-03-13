@@ -38,7 +38,7 @@
 		<instruction type="page" />
 	</instructions>
 	
-	<instructions type="update" fromversion="2.1.9">
+	<instructions type="update" fromversion="2.1.10">
 		<instruction type="file">files.tar</instruction>
 		
 		<instruction type="script" run="standalone" flushCache="false">acp/update_com.woltlab.wcf.conversation_3.0_dropColumns.php</instruction>
