@@ -3,8 +3,8 @@
 	<packageinformation>
 		<packagename>WoltLab Suite Core: Conversations</packagename>
 		<packagedescription>Private conversations between multiple users</packagedescription>
-		<version>3.1.0</version>
-		<date>2018-02-28</date>
+		<version>3.1.1</version>
+		<date>2018-03-14</date>
 	</packageinformation>
 	
 	<authorinformation>
@@ -13,7 +13,7 @@
 	</authorinformation>
 	
 	<requiredpackages>
-		<requiredpackage minversion="3.1.0">com.woltlab.wcf</requiredpackage>
+		<requiredpackage minversion="3.1.1">com.woltlab.wcf</requiredpackage>
 	</requiredpackages>
 	
 	<excludedpackages>
@@ -57,12 +57,7 @@
 		<instruction type="userGroupOption" />
 	</instructions>
 	
-	<instructions type="update" fromversion="3.1.0 RC 3">
-		<instruction type="file" />
-		<instruction type="template" />
-		
-		<instruction type="language" />
-		
-		<instruction type="page" />
+	<instructions type="update" fromversion="3.1.0">
+		<instruction type="template">templates_update.tar</instruction>
 	</instructions>
 </package>
