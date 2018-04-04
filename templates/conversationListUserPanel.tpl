@@ -22,10 +22,10 @@
 								{implode from=$conversation->getParticipantSummary() item=participant}<a href="{link controller='User' object=$participant}{/link}" class="userLink{if $participant->hideConversation == 2} conversationLeft{/if}" data-user-id="{@$participant->userID}">{$participant->username}</a>{/implode}
 								{if $participantSummaryCount < $conversation->participants}{lang}wcf.conversation.participants.other{/lang}{/if}
 							{else}
-								{if $conversation->getOtherParticipantProfile()->userID}<a href="{link controller='User' id=$conversation->getOtherParticipantProfile()->userID title=$conversation->getOtherParticipantProfile()->username}{/link}">{$conversation->getOtherParticipantProfile()->username}</a>{else}{$conversation->getOtherParticipantProfile()->username}{/if}
+								{if $conversation->getOtherParticipantProfile()->userID}<a href="{link controller='User' id=$conversation->getOtherParticipantProfile()->userID title=$conversation->getOtherParticipantProfile()->username}{/link}" class="userLink" data-user-id="{@$conversation->getOtherParticipantProfile()->userID}">{$conversation->getOtherParticipantProfile()->username}</a>{else}{$conversation->getOtherParticipantProfile()->username}{/if}
 							{/if}
 						{else}
-							{if $conversation->userID}<a href="{link controller='User' id=$conversation->userID title=$conversation->username}{/link}">{$conversation->username}</a>{else}{$conversation->username}{/if}
+							{if $conversation->userID}<a href="{link controller='User' id=$conversation->userID title=$conversation->username}{/link}" class="userLink" data-user-id="{@$conversation->userID}">{$conversation->username}</a>{else}{$conversation->username}{/if}
 						{/if}
 					</span>
 					
