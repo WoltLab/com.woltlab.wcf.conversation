@@ -1336,7 +1336,7 @@ WCF.Conversation.MarkAsRead = Class.extend({
 		this._proxy.setOption('data', {
 			actionName: 'markAsRead',
 			className: 'wcf\\data\\conversation\\ConversationAction',
-			objectIDs: [ $(event.currentTarget).parents('tr:eq(0)').data('conversationID') ]
+			objectIDs: [ $(event.currentTarget).parents('ol:eq(0)').data('conversationID') ]
 		});
 		this._proxy.sendRequest();
 	},
