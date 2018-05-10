@@ -95,9 +95,9 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 		$existingParticipantStatement = WCF::getDB()->prepareStatement($sql, 5);
 		
 		$obsoleteConversations = [];
+		$updateData = [];
+		/** @var Conversation $conversation */
 		foreach ($this->objectList as $conversation) {
-			$editor = new ConversationEditor($conversation);
-			
 			// check for obsolete conversations
 			$obsolete = false;
 			if ($conversation->isDraft) {
@@ -109,12 +109,19 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 				if (!$row['participants']) $obsolete = true;
 			}
 			if ($obsolete) {
-				$obsoleteConversations[] = $editor;
+				$obsoleteConversations[] = new ConversationEditor($conversation);
 				continue;
 			}
 			
 			// update data
-			$data = [];
+			$data = [
+				'firstMessageID' => $conversation->firstMessageID,
+				'lastPostTime' => $conversation->lastPostTime,
+				'lastPosterID' => $conversation->lastPosterID,
+				'lastPoster' => $conversation->lastPoster,
+				'userID' => $conversation->userID,
+				'username' => $conversation->username
+			];
 			
 			// get first post
 			$firstMessageStatement->execute([$conversation->conversationID]);
@@ -141,8 +148,7 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 			
 			// get number of participants
 			$participantCounterStatement->execute([$conversation->conversationID, Conversation::STATE_LEFT, $conversation->userID, 0]);
-			$row = $participantCounterStatement->fetchSingleRow();
-			$data['participants'] = $row['participants'];
+			$data['participants'] = $participantCounterStatement->fetchSingleColumn();
 			
 			// get participant summary
 			$participantStatement->execute([$conversation->conversationID, $conversation->userID, 0]);
@@ -152,8 +158,40 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 			}
 			$data['participantSummary'] = serialize($users);
 			
-			$editor->update($data);
+			$updateData[$conversation->conversationID] = $data;
 		}
+		
+		$sql = "UPDATE  wcf".WCF_N."_conversation
+			SET     firstMessageID = ?,
+				lastPostTime = ?,
+				lastPosterID = ?,
+				lastPoster = ?,
+				userID = ?,
+				username = ?,
+				replies = ?,
+				attachments = ?,
+				participants = ?,
+				participantSummary = ?
+			WHERE   conversationID = ?";
+		$statement = WCF::getDB()->prepareStatement($sql);
+		
+		WCF::getDB()->beginTransaction();
+		foreach ($updateData as $conversationID => $data) {
+			$statement->execute([
+				$data['firstMessageID'],
+				$data['lastPostTime'],
+				$data['lastPosterID'],
+				$data['lastPoster'],
+				$data['userID'],
+				$data['username'],
+				$data['replies'],
+				$data['attachments'],
+				$data['participants'],
+				$data['participantSummary'],
+				$conversationID
+			]);
+		}
+		WCF::getDB()->commitTransaction();
 		
 		// delete obsolete conversations
 		if (!empty($obsoleteConversations)) {
