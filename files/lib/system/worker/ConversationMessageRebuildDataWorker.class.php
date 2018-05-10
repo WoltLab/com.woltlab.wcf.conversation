@@ -1,6 +1,6 @@
 <?php
 namespace wcf\system\worker;
-use wcf\data\conversation\message\ConversationMessageEditor;
+use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\conversation\message\ConversationMessageList;
 use wcf\data\object\type\ObjectTypeCache;
 use wcf\system\bbcode\BBCodeHandler;
@@ -90,6 +90,8 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker {
 		}
 		$userPermissions = $this->getBulkUserPermissions($userIDs, ['user.message.disallowedBBCodes']);
 		
+		$updateData = [];
+		/** @var ConversationMessage $message */
 		foreach ($this->objectList as $message) {
 			SearchIndexManager::getInstance()->set(
 				'com.woltlab.wcf.conversation.message',
@@ -101,36 +103,56 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker {
 				$message->username
 			);
 			
-			$editor = new ConversationMessageEditor($message);
 			$data = [];
 			
 			// count attachments
 			$attachmentStatement->execute([$attachmentObjectType->objectTypeID, $message->messageID]);
-			$row = $attachmentStatement->fetchSingleRow();
-			$data['attachments'] = $row['attachments'];
+			$data['attachments'] = $attachmentStatement->fetchSingleColumn();
 			
 			BBCodeHandler::getInstance()->setDisallowedBBCodes(explode(',', $this->getBulkUserPermissionValue($userPermissions, $message->userID, 'user.message.disallowedBBCodes')));
 			
 			// update message
+			$data['enableHtml'] = 1;
 			if (!$message->enableHtml) {
 				$this->getHtmlInputProcessor()->process($message->message, 'com.woltlab.wcf.conversation.message', $message->messageID, true);
 				$data['message'] = $this->getHtmlInputProcessor()->getHtml();
-				$data['enableHtml'] = 1;
 			}
 			else {
 				$this->getHtmlInputProcessor()->reprocess($message->message, 'com.woltlab.wcf.conversation.message', $message->messageID);
 				$data['message'] = $this->getHtmlInputProcessor()->getHtml();
 			}
 			
-			if (MessageEmbeddedObjectManager::getInstance()->registerObjects($this->getHtmlInputProcessor())) {
+			if (MessageEmbeddedObjectManager::getInstance()->registerObjects($this->getHtmlInputProcessor(), true)) {
 				$data['hasEmbeddedObjects'] = 1;
 			}
 			else {
 				$data['hasEmbeddedObjects'] = 0;
 			}
 			
-			$editor->update($data);
+			$updateData[$message->messageID] = $data;
 		}
+		
+		$sql = "UPDATE  wcf".WCF_N."_conversation_message
+			SET     attachments = ?,
+				message = ?,
+				enableHtml = ?,
+				hasEmbeddedObjects = ?
+			WHERE   messageID = ?";
+		$statement = WCF::getDB()->prepareStatement($sql);
+		
+		WCF::getDB()->beginTransaction();
+		foreach ($updateData as $messageID => $data) {
+			$statement->execute([
+				$data['attachments'],
+				$data['message'],
+				$data['enableHtml'],
+				$data['hasEmbeddedObjects'],
+				$messageID
+			]);
+		}
+		WCF::getDB()->commitTransaction();
+		
+		MessageEmbeddedObjectManager::getInstance()->commitBulkOperation();
 	}
 	
 	/**
