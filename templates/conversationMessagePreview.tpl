@@ -1,6 +1,6 @@
 <div class="box48">
 	{if $message->getUserProfile()->getAvatar()}
-		<a href="{link controller='User' object=$message->getUserProfile()->getDecoratedObject()}{/link}">{@$message->getUserProfile()->getAvatar()->getImageTag(48)}</a>
+		<a href="{link controller='User' object=$message->getUserProfile()->getDecoratedObject()}{/link}" aria-hidden="true">{@$message->getUserProfile()->getAvatar()->getImageTag(48)}</a>
 	{/if}
 
 	<div>

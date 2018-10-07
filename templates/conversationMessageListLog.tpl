@@ -6,7 +6,7 @@
 				<div class="messageContent">
 					<div class="messageHeader">
 						<div class="box32 messageHeaderWrapper">
-							<a href="{link controller='User' object=$modificationLogEntry->getUserProfile()}{/link}">{@$modificationLogEntry->getUserProfile()->getAvatar()->getImageTag(32)}</a>
+							<a href="{link controller='User' object=$modificationLogEntry->getUserProfile()}{/link}" aria-hidden="true">{@$modificationLogEntry->getUserProfile()->getAvatar()->getImageTag(32)}</a>
 							
 							<div class="messageHeaderBox">
 								<h2 class="messageTitle">
