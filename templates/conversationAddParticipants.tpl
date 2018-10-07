@@ -7,8 +7,8 @@
 </dl>
 {if !$conversation->isDraft}
 	{if $conversation->canAddParticipantsUnrestricted()}
-		<dl class="jsRestrictVisibility">
-			<dt>{lang}wcf.conversation.visibility{/lang}</dt>
+		<dl role="group" aria-labelledby="messageVisibilityLabel" class="jsRestrictVisibility">
+			<dt><label id="messageVisibilityLabel">{lang}wcf.conversation.visibility{/lang}</label></dt>
 			<dd>
 				<label><input type="radio" name="messageVisibility" value="all" checked> {lang}wcf.conversation.visibility.all{/lang}</label>
 				<small>{lang}wcf.conversation.visibility.all.description{/lang}</small>

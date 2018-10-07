@@ -24,7 +24,7 @@
 	<dl>
 		<dt>{lang}wcf.conversation.label.cssClassName{/lang}</dt>
 		<dd>
-			<ul id="labelManagementList">
+			<ul role="group" aria-label="{lang}wcf.conversation.label.cssClassName{/lang}" id="labelManagementList">
 				{foreach from=$cssClassNames item=cssClassName}
 					<li><label>
 						<input type="radio" name="cssClassName" value="{@$cssClassName}"{if $cssClassName == 'none'} checked{/if}>

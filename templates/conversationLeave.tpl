@@ -1,4 +1,4 @@
-<dl class="wide">
+<dl role="group" aria-label="{lang}wcf.conversation.hideConversation{/lang}" class="wide">
 	{if $hideConversation == 1}
 		<dd>
 			<label><input type="radio" name="hideConversation" value="0"> {lang}wcf.conversation.hideConversation.restore{/lang}</label>
