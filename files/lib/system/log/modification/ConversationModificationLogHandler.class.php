@@ -12,7 +12,7 @@ use wcf\data\user\UserList;
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	WoltLabSuite\Core\System\Log\Modification
  */
-class ConversationModificationLogHandler extends AbstractModificationLogHandler {
+class ConversationModificationLogHandler extends TVoidExtendedModificationLogHandler {
 	/**
 	 * @inheritDoc
 	 */

@@ -55,6 +55,7 @@
 		<type>
 			<name>com.woltlab.wcf.conversation.conversation</name>
 			<definitionname>com.woltlab.wcf.modifiableContent</definitionname>
+			<classname>wcf\system\log\modification\ConversationModificationLogHandler</classname>
 		</type>
 		<!-- /Modification Log -->
 		
