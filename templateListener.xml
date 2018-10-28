@@ -43,18 +43,4 @@
 			<templatecode><![CDATA[{include file='__mobileMenuConversation'}]]></templatecode>
 		</templatelistener>
 	</import>
-	
-	<delete>
-		<templatelistener name="userPanel">
-			<environment>user</environment>
-			<templatename>userPanel</templatename>
-			<eventname>menuItems</eventname>
-		</templatelistener>
-		 
-		<templatelistener name="searchAreaConversationSettings">
-			<environment>user</environment>
-			<templatename>searchArea</templatename>
-			<eventname>settings</eventname>
-		</templatelistener>
-	</delete>
 </data>
