@@ -22,35 +22,31 @@
 		<item name="wcf.acp.group.option.user.conversation.allowedAttachmentExtensions"><![CDATA[Erlaubte Dateiendungen]]></item>
 		<item name="wcf.acp.group.option.user.conversation.allowedAttachmentExtensions.description"><![CDATA[Eine Dateiendung pro Zeile]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxAttachmentCount"><![CDATA[Maximale Dateianhänge pro Nachricht]]></item>
-		<item name="wcf.acp.group.option.user.conversation.maxAttachmentCount.description"><![CDATA[]]></item>
+		<item name="wcf.acp.group.option.user.conversation.maxAttachmentCount.description"/>
 		<item name="wcf.acp.group.option.user.conversation.canEditMessage"><![CDATA[Kann eigene Nachrichten bearbeiten]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canEditMessage.description"><![CDATA[Mitglieder dieser Benutzergruppe können eigene Nachrichten in Konversationen nachträglich verändern, auch wenn diese bereits vom Empfänger gelesen wurden.]]></item>
 	</category>
-	
 	<category name="wcf.acp.option">
 		<item name="wcf.acp.option.category.message.conversation"><![CDATA[Konversationen]]></item>
 		<item name="wcf.acp.option.conversation_list_default_sort_field"><![CDATA[Sortierung]]></item>
-		<item name="wcf.acp.option.conversation_list_default_sort_field.description"><![CDATA[]]></item>
+		<item name="wcf.acp.option.conversation_list_default_sort_field.description"/>
 		<item name="wcf.acp.option.conversation_list_default_sort_order"><![CDATA[Reihenfolge]]></item>
-		<item name="wcf.acp.option.conversation_list_default_sort_order.description"><![CDATA[]]></item>
+		<item name="wcf.acp.option.conversation_list_default_sort_order.description"/>
 		<item name="wcf.acp.option.conversation_messages_per_page"><![CDATA[Nachrichten pro Seite]]></item>
 		<item name="wcf.acp.option.conversations_per_page"><![CDATA[Konversationen pro Seite]]></item>
 		<item name="wcf.acp.option.module_conversation"><![CDATA[Konversationen]]></item>
 	</category>
-	
 	<category name="wcf.acp.rebuildData">
 		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation"><![CDATA[Konversationen aktualisieren]]></item>
 		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.description"><![CDATA[Aktualisiert Zähler der Konversationen]]></item>
 		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message"><![CDATA[Konversationsnachrichten aktualisieren]]></item>
 		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message.description"><![CDATA[Aktualisiert den Suchindex für Konversationsnachrichten]]></item>
 	</category>
-	
 	<category name="wcf.acp.stat">
 		<item name="wcf.acp.stat.com.woltlab.wcf.conversation"><![CDATA[Konversationen]]></item>
 		<item name="wcf.acp.stat.com.woltlab.wcf.conversation.message"><![CDATA[Konversations-Nachrichten]]></item>
 		<item name="wcf.acp.stat.category.com.woltlab.wcf.conversation"><![CDATA[Konversationen]]></item>
 	</category>
-	
 	<category name="wcf.clipboard">
 		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.assignLabel"><![CDATA[Label zuweisen ({#$count})]]></item>
 		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.close"><![CDATA[Schließen ({#$count})]]></item>
@@ -62,7 +58,6 @@
 		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.restore"><![CDATA[Als aktiv markieren ({#$count})]]></item>
 		<item name="wcf.clipboard.label.com.woltlab.wcf.conversation.conversation.marked"><![CDATA[{if $count == 1}Eine Konversation{else}{#$count} Konversationen{/if}]]></item>
 	</category>
-	
 	<category name="wcf.conversation">
 		<item name="wcf.conversation.add"><![CDATA[Neue Konversation starten]]></item>
 		<item name="wcf.conversation.button.add"><![CDATA[Konversation starten]]></item>
@@ -94,7 +89,7 @@
 		<item name="wcf.conversation.noMoreItems"><![CDATA[Keine aktuellen Konversationen]]></item>
 		<item name="wcf.conversation.participantCanInvite"><![CDATA[Teilnehmer können weitere Teilnehmer hinzufügen]]></item>
 		<item name="wcf.conversation.participants"><![CDATA[Teilnehmer]]></item>
-		<item name="wcf.conversation.participants.description"><![CDATA[]]></item>
+		<item name="wcf.conversation.participants.description"/>
 		<item name="wcf.conversation.participants.error.mailboxIsFull"><![CDATA[{$errorData[username]} hat das zulässige Limit für Konversationen bereits erreicht und kann an keinen neuen Konversationen teilnehmen.]]></item>
 		<item name="wcf.conversation.participants.error.notFound"><![CDATA[Der Benutzername {$errorData[username]} konnte nicht gefunden werden.]]></item>
 		<item name="wcf.conversation.participants.error.isAuthor"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Du bist{else}Sie sind{/if} bereits Teilnehmer dieser Konversation.]]></item>
@@ -133,7 +128,6 @@
 		<item name="wcf.conversation.visibility.new.description"><![CDATA[Die neuen Teilnehmer sehen nur neue Nachrichten, alle vorherigen Nachrichten werden nicht angezeigt.]]></item>
 		<item name="wcf.conversation.visibility.previousMessages"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Du wurdest{else}Sie wurden{/if} einer laufenden Konversation hinzugefügt, vorherige Nachrichten werden {if LANGUAGE_USE_INFORMAL_VARIANT}dir{else}Ihnen{/if} nicht angezeigt.]]></item>
 	</category>
-	
 	<category name="wcf.conversation.edit">
 		<item name="wcf.conversation.edit.addParticipants"><![CDATA[Teilnehmer hinzufügen]]></item>
 		<item name="wcf.conversation.edit.addParticipants.success"><![CDATA[{if $count == 1}Ein{else}{#$count}{/if} Teilnehmer erfolgreich hinzugefügt]]></item>
@@ -143,7 +137,6 @@
 		<item name="wcf.conversation.edit.open"><![CDATA[Öffnen]]></item>
 		<item name="wcf.conversation.edit.subject"><![CDATA[Betreff bearbeiten]]></item>
 	</category>
-	
 	<category name="wcf.conversation.label">
 		<item name="wcf.conversation.label"><![CDATA[Filter nach Label]]></item>
 		<item name="wcf.conversation.label.cssClassName"><![CDATA[Aussehen]]></item>
@@ -161,7 +154,6 @@
 		<item name="wcf.conversation.label.placeholder"><![CDATA[Label]]></item>
 		<item name="wcf.conversation.label.assignLabels"><![CDATA[Label zuweisen]]></item>
 	</category>
-	
 	<category name="wcf.conversation.log">
 		<item name="wcf.conversation.log.conversation.open"><![CDATA[Hat die Konversation wieder geöffnet.]]></item>
 		<item name="wcf.conversation.log.conversation.close"><![CDATA[Hat die Konversation für neue Nachrichten geschlossen.]]></item>
@@ -169,7 +161,6 @@
 		<item name="wcf.conversation.log.conversation.addParticipants"><![CDATA[Hat folgende Teilnehmer hinzugefügt: {implode from=$additionalData[participants] item=participant}<a href="{link controller='User' id=$participant[userID] title=$participant[username]}{/link}" class="userLink" data-user-id="{@$participant[userID]}">{$participant[username]}</a>{/implode}]]></item>
 		<item name="wcf.conversation.log.conversation.removeParticipant"><![CDATA[Hat folgende Teilnehmer entfernt: <a href="{link controller='User' id=$additionalData[userID] title=$additionalData[username]}{/link}" class="userLink" data-user-id="{@$additionalData[userID]}">{$additionalData[username]}</a>]]></item>
 	</category>
-	
 	<category name="wcf.acp.dataImport">
 		<item name="wcf.acp.dataImport.data.com.woltlab.wcf.conversation"><![CDATA[Konversationen]]></item>
 		<item name="wcf.acp.dataImport.data.com.woltlab.wcf.conversation.label"><![CDATA[Labels]]></item>
@@ -177,21 +168,17 @@
 		<item name="wcf.acp.dataImport.data.com.woltlab.wcf.conversation.user"><![CDATA[Teilnehmer]]></item>
 		<item name="wcf.acp.dataImport.data.com.woltlab.wcf.conversation.attachment"><![CDATA[Dateianhänge]]></item>
 	</category>
-	
 	<category name="wcf.moderation">
 		<item name="wcf.moderation.type.com.woltlab.wcf.conversation.message"><![CDATA[Konversation]]></item>
 	</category>
-	
 	<category name="wcf.page">
 		<item name="wcf.page.onlineLocation.com.woltlab.wcf.conversation.Conversation"><![CDATA[Konversation <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>]]></item>
 	</category>
-	
 	<category name="wcf.search">
 		<item name="wcf.search.type.com.woltlab.wcf.conversation"><![CDATA[Diese Konversation]]></item>
 		<item name="wcf.search.type.com.woltlab.wcf.conversation.message"><![CDATA[Konversationen]]></item>
 		<item name="wcf.search.object.com.woltlab.wcf.conversation.message"><![CDATA[Konversation]]></item>
 	</category>
-	
 	<category name="wcf.user.notification">
 		<item name="wcf.user.notification.conversation.message.message"><![CDATA[{@$author->getAnchorTag()} hat auf die Konversation <a href="{link controller='Conversation' object=$message->getConversation()}{/link}">{$message->getConversation()->getTitle()}</a> geantwortet.]]></item>
 		<item name="wcf.user.notification.conversation.message.message.stacked"><![CDATA[{if $count < 4}{@$authors[0]->getAnchorTag()}{if $count == 2} und {else}, {/if}{@$authors[1]->getAnchorTag()}{if $count == 3} und {@$authors[2]->getAnchorTag()}{/if}{else}{@$authors[0]->getAnchorTag()} und {#$count} weitere{/if} haben auf die Konversation <a href="{link controller='Conversation' object=$message->getConversation()}{/link}">{$message->getConversation()->getTitle()}</a> geantwortet.]]></item>
@@ -207,7 +194,6 @@
 		<item name="wcf.user.notification.com.woltlab.wcf.conversation.notification.conversation"><![CDATA[Neue Konversation]]></item>
 		<item name="wcf.user.notification.com.woltlab.wcf.conversation.message.notification.conversationMessage"><![CDATA[Antwort auf bestehende Konversation]]></item>
 	</category>
-	
 	<category name="wcf.user.option">
 		<item name="wcf.user.option.conversationMessagesPerPage"><![CDATA[Nachrichten pro Seite]]></item>
 		<item name="wcf.user.option.conversationsPerPage"><![CDATA[Konversationen pro Seite]]></item>

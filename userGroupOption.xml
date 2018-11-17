@@ -11,27 +11,25 @@
 				<options>module_conversation</options>
 			</category>
 		</categories>
-		
 		<options>
 			<!-- mod.conversation -->
 			<option name="mod.conversation.canModerateConversation">
 				<categoryname>mod.conversation</categoryname>
 				<optiontype>boolean</optiontype>
 				<defaultvalue>0</defaultvalue>
-				<admindefaultvalue>1</admindefaultvalue>
 				<options>module_conversation</options>
+				<admindefaultvalue>1</admindefaultvalue>
 				<usersonly>1</usersonly>
 			</option>
 			<option name="mod.conversation.canAlwaysInviteUsers">
 				<categoryname>mod.conversation</categoryname>
 				<optiontype>boolean</optiontype>
 				<defaultvalue>0</defaultvalue>
-				<admindefaultvalue>1</admindefaultvalue>
 				<options>module_conversation</options>
+				<admindefaultvalue>1</admindefaultvalue>
 				<usersonly>1</usersonly>
 			</option>
 			<!-- /mod.conversation -->
-			
 			<!-- user.conversation -->
 			<option name="user.conversation.canUseConversation">
 				<categoryname>user.conversation</categoryname>
@@ -92,11 +90,10 @@
 				<categoryname>user.conversation</categoryname>
 				<optiontype>integer</optiontype>
 				<defaultvalue>10000</defaultvalue>
-				<admindefaultvalue>100000</admindefaultvalue>
 				<minvalue>1000</minvalue>
+				<admindefaultvalue>100000</admindefaultvalue>
 				<usersonly>1</usersonly>
 			</option>
-			
 			<option name="user.conversation.canUploadAttachment">
 				<categoryname>user.conversation</categoryname>
 				<optiontype>boolean</optiontype>
@@ -124,8 +121,8 @@ zip
 txt
 pdf</defaultvalue>
 				<options>module_attachment</options>
-				<wildcard>*</wildcard>
 				<usersonly>1</usersonly>
+				<wildcard>*</wildcard>
 			</option>
 			<option name="user.conversation.maxAttachmentCount">
 				<categoryname>user.conversation</categoryname>
@@ -136,8 +133,6 @@ pdf</defaultvalue>
 				<maxvalue>100</maxvalue>
 				<usersonly>1</usersonly>
 			</option>
-			<!-- /user.conversation -->
 		</options>
 	</import>
 </data>
-

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/vortex/option.xsd">
 	<import>
 		<categories>
@@ -7,14 +7,12 @@
 				<options>module_conversation</options>
 			</category>
 		</categories>
-		
 		<options>
 			<option name="module_conversation">
 				<categoryname>module.community</categoryname>
 				<optiontype>boolean</optiontype>
 				<defaultvalue>1</defaultvalue>
 			</option>
-			
 			<option name="conversations_per_page">
 				<categoryname>message.conversation</categoryname>
 				<optiontype>integer</optiontype>
@@ -29,7 +27,6 @@
 				<minvalue>5</minvalue>
 				<maxvalue>40</maxvalue>
 			</option>
-			
 			<option name="conversation_list_default_sort_field">
 				<categoryname>message.conversation</categoryname>
 				<optiontype>select</optiontype>

@@ -7,25 +7,21 @@
 			<classname>wcf\system\search\ConversationMessageSearch</classname>
 			<searchindex>wcf1_conversation_message_search_index</searchindex>
 		</type>
-		
 		<type>
 			<name>com.woltlab.wcf.conversation.message</name>
 			<definitionname>com.woltlab.wcf.attachment.objectType</definitionname>
 			<classname>wcf\system\attachment\ConversationMessageAttachmentObjectType</classname>
 			<private>1</private>
 		</type>
-		
 		<type>
 			<name>com.woltlab.wcf.conversation.message</name>
 			<definitionname>com.woltlab.wcf.message</definitionname>
 		</type>
-		
 		<type>
 			<name>com.woltlab.wcf.conversation.conversation</name>
 			<definitionname>com.woltlab.wcf.clipboardItem</definitionname>
 			<listclassname>wcf\data\conversation\ConversationList</listclassname>
 		</type>
-		
 		<type>
 			<name>com.woltlab.wcf.conversation.notification</name>
 			<definitionname>com.woltlab.wcf.notification.objectType</definitionname>
@@ -38,19 +34,16 @@
 			<classname>wcf\system\user\notification\object\type\ConversationMessageNotificationObjectType</classname>
 			<category>com.woltlab.wcf.conversation</category>
 		</type>
-		
 		<type>
 			<name>com.woltlab.wcf.conversation.message</name>
 			<definitionname>com.woltlab.wcf.message.quote</definitionname>
 			<classname>wcf\system\message\quote\ConversationMessageQuoteHandler</classname>
 		</type>
-		
 		<type>
 			<name>com.woltlab.wcf.conversation.message</name>
 			<definitionname>com.woltlab.wcf.moderation.report</definitionname>
 			<classname>wcf\system\moderation\queue\report\ConversationMessageModerationQueueReportHandler</classname>
 		</type>
-		
 		<!-- Modification Log -->
 		<type>
 			<name>com.woltlab.wcf.conversation.conversation</name>
@@ -58,7 +51,6 @@
 			<classname>wcf\system\log\modification\ConversationModificationLogHandler</classname>
 		</type>
 		<!-- /Modification Log -->
-		
 		<!-- importers -->
 		<type>
 			<name>com.woltlab.wcf.conversation</name>
@@ -86,7 +78,6 @@
 			<classname>wcf\system\importer\ConversationAttachmentImporter</classname>
 		</type>
 		<!-- /importers -->
-		
 		<!-- rebuild data workers -->
 		<type>
 			<name>com.woltlab.wcf.conversation</name>
@@ -100,7 +91,6 @@
 			<nicevalue>-5</nicevalue>
 		</type>
 		<!-- /rebuild data workers -->
-		
 		<!-- stat handlers -->
 		<type>
 			<name>com.woltlab.wcf.conversation</name>
@@ -114,6 +104,5 @@
 			<classname>wcf\system\stat\ConversationMessageStatDailyHandler</classname>
 			<categoryname>com.woltlab.wcf.conversation</categoryname>
 		</type>
-		<!-- /stat handlers -->
 	</import>
 </data>

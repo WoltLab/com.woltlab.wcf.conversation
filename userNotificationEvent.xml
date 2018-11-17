@@ -7,7 +7,6 @@
 			<classname>wcf\system\user\notification\event\ConversationUserNotificationEvent</classname>
 			<options>module_conversation</options>
 		</event>
-		
 		<event>
 			<name>conversationMessage</name>
 			<objecttype>com.woltlab.wcf.conversation.message.notification</objecttype>

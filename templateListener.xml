@@ -7,35 +7,30 @@
 			<eventname>menuItems</eventname>
 			<templatecode><![CDATA[{include file='__userPanelConversationDropdown'}]]></templatecode>
 		</templatelistener>
-		
 		<templatelistener name="userInformationButtons">
 			<environment>user</environment>
 			<templatename>userInformationButtons</templatename>
 			<eventname>buttons</eventname>
 			<templatecode><![CDATA[{include file='__userInformationStartConversation'}]]></templatecode>
 		</templatelistener>
-		
 		<templatelistener name="userButtons">
 			<environment>user</environment>
 			<templatename>user</templatename>
 			<eventname>buttons</eventname>
 			<templatecode><![CDATA[{include file='__userStartConversation'}]]></templatecode>
 		</templatelistener>
-		
 		<templatelistener name="searchAreaConversationSettings">
 			<environment>user</environment>
 			<templatename>pageHeaderSearch</templatename>
 			<eventname>settings</eventname>
 			<templatecode><![CDATA[{include file='__searchAreaConversationSettings'}]]></templatecode>
 		</templatelistener>
-		
 		<templatelistener name="userProfileStartConversation">
 			<environment>user</environment>
 			<templatename>user</templatename>
 			<eventname>menuInteraction</eventname>
 			<templatecode><![CDATA[{include file='__userProfileStartConversation'}]]></templatecode>
 		</templatelistener>
-		
 		<templatelistener name="mobileMenuConversation">
 			<environment>user</environment>
 			<templatename>pageMenuMobile</templatename>

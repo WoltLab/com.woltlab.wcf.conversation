@@ -51,6 +51,5 @@
 				<page>wcf\page\ConversationListPage</page>
 			</pages>
 		</action>
-		<!-- /conversation -->
 	</import>
 </data>
