@@ -81,7 +81,6 @@
 		<item name="wcf.conversation.lastPostTime"><![CDATA[Letzte Antwort]]></item>
 		<item name="wcf.conversation.lastVisitTime"><![CDATA[Konversation gelesen]]></item>
 		<item name="wcf.conversation.leave.title"><![CDATA[Teilnahme verwalten]]></item>
-		<item name="wcf.conversation.markAllAsRead.confirmMessage"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Willst du{else}Wollen Sie{/if} wirklich alle Konversationen als gelesen markieren?]]></item>
 		<item name="wcf.conversation.message"><![CDATA[Nachricht]]></item>
 		<item name="wcf.conversation.message.button.add"><![CDATA[Antworten]]></item>
 		<item name="wcf.conversation.message.edit"><![CDATA[Nachricht bearbeiten]]></item>

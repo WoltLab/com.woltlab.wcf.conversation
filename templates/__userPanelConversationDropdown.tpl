@@ -6,7 +6,6 @@
 			<script data-relocate="true">
 				$(function() {
 					new WCF.User.Panel.Conversation({
-						markAllAsReadConfirmMessage: '{lang}wcf.conversation.markAllAsRead.confirmMessage{/lang}',
 						newConversation: '{lang}wcf.conversation.add{/lang}',
 						newConversationLink: '{link controller='ConversationAdd' encode=false}{/link}',
 						noItems: '{lang}wcf.conversation.noMoreItems{/lang}',
