@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/vortex/language.xsd" languagecode="de">
+	<category name="wcf.acp.content">
+		<item name="wcf.acp.content.provider.com.woltlab.wcf.conversation"><![CDATA[Konversationen]]></item>
+	</category>
 	<category name="wcf.acp.group">
 		<item name="wcf.acp.group.option.category.user.conversation"><![CDATA[Konversationen]]></item>
 		<item name="wcf.acp.group.option.category.mod.conversation"><![CDATA[Konversationen]]></item>

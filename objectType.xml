@@ -104,5 +104,13 @@
 			<classname>wcf\system\stat\ConversationMessageStatDailyHandler</classname>
 			<categoryname>com.woltlab.wcf.conversation</categoryname>
 		</type>
+		<!-- /stat handlers -->
+		<!-- user content provider -->
+		<type>
+			<name>com.woltlab.wcf.conversation</name>
+			<definitionname>com.woltlab.wcf.content.userContentProvider</definitionname>
+			<classname>wcf\system\user\content\provider\ConversationUserContentProvider</classname>
+		</type>
+		<!-- /user content provider -->
 	</import>
 </data>
