@@ -111,6 +111,11 @@
 			<definitionname>com.woltlab.wcf.content.userContentProvider</definitionname>
 			<classname>wcf\system\user\content\provider\ConversationUserContentProvider</classname>
 		</type>
+		<type>
+			<name>com.woltlab.wcf.conversation.message</name>
+			<definitionname>com.woltlab.wcf.content.userContentProvider</definitionname>
+			<classname>wcf\system\user\content\provider\ConversationMessageUserContentProvider</classname>
+		</type>
 		<!-- /user content provider -->
 	</import>
 </data>
