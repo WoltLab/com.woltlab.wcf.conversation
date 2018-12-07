@@ -10,6 +10,7 @@ use wcf\data\conversation\ConversationParticipantList;
 use wcf\data\conversation\ViewableConversation;
 use wcf\data\modification\log\ConversationLogModificationLogList;
 use wcf\data\smiley\SmileyCache;
+use wcf\data\user\UserProfile;
 use wcf\system\attachment\AttachmentHandler;
 use wcf\system\bbcode\BBCodeHandler;
 use wcf\system\exception\IllegalLinkException;
@@ -198,6 +199,20 @@ class ConversationPage extends MultipleLinkPage {
 			$messageIDs[] = $message->messageID;
 		}
 		MessageQuoteManager::getInstance()->initObjects('com.woltlab.wcf.conversation.message', $messageIDs);
+		
+		// fetch special trophies
+		if (MODULE_TROPHY) {
+			$userIDs = [];
+			foreach ($this->objectList as $message) {
+				if ($message->userID) {
+					$userIDs[] = $message->userID;
+				}
+			}
+			
+			if (!empty($userIDs)) {
+				UserProfile::prepareSpecialTrophies(array_unique($userIDs));
+			}
+		}
 		
 		// set attachment permissions
 		if ($this->objectList->getAttachmentList() !== null) {
