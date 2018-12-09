@@ -42,21 +42,6 @@
 		<instruction type="page" />
 	</instructions>
 	
-	<instructions type="update" fromversion="3.0.*">
-		<instruction type="file" />
-		<instruction type="template" />
-		
-		<instruction type="script" run="standalone">acp/update_com.woltlab.wcf.conversation_3.1_addColumn.php</instruction>
-		
-		<instruction type="sql">update_3.1.sql</instruction>
-		
-		<instruction type="language" />
-		
-		<instruction type="option" />
-		<instruction type="page" />
-		<instruction type="userGroupOption" />
-	</instructions>
-	
 	<instructions type="update" fromversion="3.1.5">
 		<instruction type="template">templates_update.tar</instruction>
 	</instructions>
