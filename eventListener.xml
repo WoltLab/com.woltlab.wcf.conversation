@@ -18,5 +18,17 @@
 			<listenerclassname>wcf\system\event\listener\ConversationUserActionRenameListener</listenerclassname>
 			<environment>admin</environment>
 		</eventlistener>
+		<eventlistener name="pruneIpAddresses">
+			<eventclassname>wcf\system\cronjob\PruneIpAddressesCronjob</eventclassname>
+			<eventname>execute</eventname>
+			<listenerclassname>wcf\system\event\listener\ConversationPruneIpAddressesCronjobListener</listenerclassname>
+			<environment>user</environment>
+		</eventlistener>
+		<eventlistener name="pruneIpAddressesAdmin">
+			<eventclassname>wcf\system\cronjob\PruneIpAddressesCronjob</eventclassname>
+			<eventname>execute</eventname>
+			<listenerclassname>wcf\system\event\listener\ConversationPruneIpAddressesCronjobListener</listenerclassname>
+			<environment>admin</environment>
+		</eventlistener>
 	</import>
 </data>
