@@ -13,12 +13,7 @@
 			<eventname>buttons</eventname>
 			<templatecode><![CDATA[{include file='__userInformationStartConversation'}]]></templatecode>
 		</templatelistener>
-		<templatelistener name="userButtons">
-			<environment>user</environment>
-			<templatename>user</templatename>
-			<eventname>buttons</eventname>
-			<templatecode><![CDATA[{include file='__userStartConversation'}]]></templatecode>
-		</templatelistener>
+		
 		<templatelistener name="searchAreaConversationSettings">
 			<environment>user</environment>
 			<templatename>pageHeaderSearch</templatename>
@@ -38,4 +33,11 @@
 			<templatecode><![CDATA[{include file='__mobileMenuConversation'}]]></templatecode>
 		</templatelistener>
 	</import>
+	<delete>
+		<templatelistener name="userButtons">
+			<environment>user</environment>
+			<templatename>user</templatename>
+			<eventname>buttons</eventname>
+		</templatelistener>
+	</delete>
 </data>
