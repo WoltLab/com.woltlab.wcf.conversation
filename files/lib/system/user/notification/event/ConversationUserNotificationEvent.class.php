@@ -49,6 +49,17 @@ class ConversationUserNotificationEvent extends AbstractUserNotificationEvent im
 	
 	/**
 	 * @inheritDoc
+	 * @since	3.2
+	 */
+	public function getEmailTitle() {
+		return $this->getLanguage()->getDynamicVariable('wcf.user.notification.conversation.mail.title', [
+			'author' => $this->author,
+			'conversation' => $this->userNotificationObject
+		]);
+	}
+	
+	/**
+	 * @inheritDoc
 	 */
 	public function getLink() {
 		return LinkHandler::getInstance()->getLink('Conversation', ['object' => $this->userNotificationObject]);

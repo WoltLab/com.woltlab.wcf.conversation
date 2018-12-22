@@ -76,6 +76,21 @@ class ConversationMessageUserNotificationEvent extends AbstractUserNotificationE
 	
 	/**
 	 * @inheritDoc
+	 * @since	3.2
+	 */
+	public function getEmailTitle() {
+		if (count($this->getAuthors()) > 1) {
+			return parent::getEmailTitle();
+		}
+		
+		return $this->getLanguage()->getDynamicVariable('wcf.user.notification.conversation.message.mail.title', [
+			'author' => $this->author,
+			'message' => $this->userNotificationObject
+		]);
+	}
+	
+	/**
+	 * @inheritDoc
 	 */
 	public function getLink() {
 		return LinkHandler::getInstance()->getLink('Conversation', [
