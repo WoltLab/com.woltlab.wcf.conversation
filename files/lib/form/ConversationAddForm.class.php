@@ -2,6 +2,8 @@
 namespace wcf\form;
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationAction;
+use wcf\data\user\group\UserGroup;
+use wcf\system\cache\builder\UserGroupCacheBuilder;
 use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\conversation\ConversationHandler;
 use wcf\system\exception\IllegalLinkException;
@@ -12,6 +14,7 @@ use wcf\system\message\quote\MessageQuoteManager;
 use wcf\system\page\PageLocationManager;
 use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
+use wcf\util\ArrayUtil;
 use wcf\util\HeaderUtil;
 use wcf\util\StringUtil;
 
@@ -60,6 +63,18 @@ class ConversationAddForm extends MessageForm {
 	 * @var	string
 	 */
 	public $invisibleParticipants = '';
+	
+	/**
+	 * user group participants (comma separated ids)
+	 * @var	string
+	 */
+	public $participantsGroupIDs = '';
+	
+	/**
+	 * invisible user group participants (comma separated ids)
+	 * @var	string
+	 */
+	public $invisibleParticipantsGroupIDs = '';
 	
 	/**
 	 * draft status
@@ -133,6 +148,10 @@ class ConversationAddForm extends MessageForm {
 		if (isset($_POST['participantCanInvite'])) $this->participantCanInvite = (bool) $_POST['participantCanInvite'];
 		if (isset($_POST['participants'])) $this->participants = StringUtil::trim($_POST['participants']);
 		if (isset($_POST['invisibleParticipants'])) $this->invisibleParticipants = StringUtil::trim($_POST['invisibleParticipants']);
+		if (WCF::getSession()->getPermission('user.conversation.canAddGroupParticipants')) {
+			if (isset($_POST['participantsGroupIDs'])) $this->participantsGroupIDs = StringUtil::trim($_POST['participantsGroupIDs']);
+			if (isset($_POST['invisibleParticipantsGroupIDs'])) $this->invisibleParticipantsGroupIDs = StringUtil::trim($_POST['invisibleParticipantsGroupIDs']);
+		}
 		
 		// quotes
 		MessageQuoteManager::getInstance()->readFormParameters();
@@ -142,12 +161,12 @@ class ConversationAddForm extends MessageForm {
 	 * @inheritDoc
 	 */
 	public function validate() {
-		if (empty($this->participants) && empty($this->invisibleParticipants) && !$this->draft) {
+		if (empty($this->participants) && empty($this->invisibleParticipants) && empty($this->participantsGroupIDs) && empty($this->invisibleParticipantsGroupIDs) && !$this->draft) {
 			throw new UserInputException('participants');
 		}
 		
 		// check, if user is allowed to set invisible participants
-		if (!WCF::getSession()->getPermission('user.conversation.canAddInvisibleParticipants') && !empty($this->invisibleParticipants)) {
+		if (!WCF::getSession()->getPermission('user.conversation.canAddInvisibleParticipants') && (!empty($this->invisibleParticipants) || !empty($this->invisibleParticipantsGroupIDs))) {
 			throw new UserInputException('participants', 'invisibleParticipantsNoPermission');
 		}
 		
@@ -158,6 +177,14 @@ class ConversationAddForm extends MessageForm {
 		
 		$this->participantIDs = Conversation::validateParticipants($this->participants);
 		$this->invisibleParticipantIDs = Conversation::validateParticipants($this->invisibleParticipants, 'invisibleParticipants');
+		if (!empty($this->participantsGroupIDs)) {
+			$this->participantIDs = array_merge($this->participantIDs, Conversation::validateGroupParticipants($this->participantsGroupIDs));
+			$this->participantIDs = array_unique($this->participantIDs);
+		}
+		if (!empty($this->invisibleParticipantsGroupIDs)) {
+			$this->invisibleParticipantIDs = array_merge($this->invisibleParticipantIDs, Conversation::validateGroupParticipants($this->invisibleParticipantsGroupIDs, 'invisibleParticipants'));
+			$this->invisibleParticipantIDs = array_unique($this->invisibleParticipantIDs);
+		}
 		
 		// remove duplicates
 		$intersection = array_intersect($this->participantIDs, $this->invisibleParticipantIDs);
@@ -240,11 +267,19 @@ class ConversationAddForm extends MessageForm {
 		
 		MessageQuoteManager::getInstance()->assignVariables();
 		
+		$allowedUserGroupIDs = [];
+		foreach (UserGroupCacheBuilder::getInstance()->getData([],'groups') as $group) {
+			if ($group->canBeAddedAsParticipant) $allowedUserGroupIDs[] = $group->groupID;
+		}
+		
 		WCF::getTPL()->assign([
 			'participantCanInvite' => $this->participantCanInvite,
 			'participants' => $this->participants,
+			'participantsData' => $this->getParticipantsData(),
 			'invisibleParticipants' => $this->invisibleParticipants,
-			'action' => 'add'
+			'invisibleParticipantsData' => $this->getParticipantsData(true),
+			'action' => 'add',
+			'allowedUserGroupIDs' => $allowedUserGroupIDs
 		]);
 	}
 	
@@ -257,5 +292,30 @@ class ConversationAddForm extends MessageForm {
 		}
 		
 		parent::show();
+	}
+	
+	private function getParticipantsData($invisible = false) {
+		$result = [];
+		$participants = ArrayUtil::trim(explode(',', ($invisible ? $this->invisibleParticipants : $this->participants)));
+		foreach ($participants as $username) {
+			$result[] = [
+				'objectId' => 0,
+				'value' => $username,
+				'type' => 'user'
+			];
+		}
+		
+		$participants = ArrayUtil::toIntegerArray(explode(',', ($invisible ?$this->invisibleParticipantsGroupIDs : $this->participantsGroupIDs)));
+		foreach ($participants as $groupID) {
+			$group = UserGroup::getGroupByID($groupID);
+			if (!$group) continue;
+			$result[] = [
+				'objectId' => $groupID,
+				'value' => $group->getName(),
+				'type' => 'group'
+			];
+		}
+		
+		return $result;
 	}
 }

@@ -32,6 +32,12 @@
 			<eventname>userMenuItems</eventname>
 			<templatecode><![CDATA[{include file='__mobileMenuConversation'}]]></templatecode>
 		</templatelistener>
+		<templatelistener name="userGroupAddCanBeAddedAsParticipant">
+			<environment>admin</environment>
+			<templatename>userGroupAdd</templatename>
+			<eventname>dataFields</eventname>
+			<templatecode><![CDATA[{include file='__userGroupAddCanBeAddedAsParticipant'}]]></templatecode>
+		</templatelistener>
 	</import>
 	<delete>
 		<templatelistener name="userButtons">

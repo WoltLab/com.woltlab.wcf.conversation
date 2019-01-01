@@ -103,7 +103,10 @@ define(['Ajax', 'Language', 'Ui/Dialog', 'Ui/Notification', 'WoltLabSuite/Core/U
 			UiItemListUser.init('participantsInput', {
 				callbackChange: function(elementId, values) { buttonSubmit.disabled = (values.length === 0); },
 				excludedSearchValues: data.returnValues.excludedSearchValues,
-				maxItems: data.returnValues.maxItems
+				maxItems: data.returnValues.maxItems,
+				includeUserGroups: data.returnValues.canAddGroupParticipants,
+				restrictUserGroupIDs: data.returnValues.restrictUserGroupIDs,
+				csvPerType: true
 			});
 			
 			buttonSubmit.addEventListener('click', this._submit.bind(this));
@@ -113,13 +116,15 @@ define(['Ajax', 'Language', 'Ui/Dialog', 'Ui/Notification', 'WoltLabSuite/Core/U
 		 * Sends a request to add participants.
 		 */
 		_submit: function() {
-			var values = UiItemListUser.getValues('participantsInput'), participants = [];
+			var values = UiItemListUser.getValues('participantsInput'), participants = [], participantsGroupIDs = [];
 			for (var i = 0, length = values.length; i < length; i++) {
-				participants.push(values[i].value);
+				if (values[i].type === 'group') participantsGroupIDs.push(values[i].objectId);
+				else participants.push(values[i].value);
 			}
 			
 			var parameters = {
-				participants: participants
+				participants: participants,
+				participantsGroupIDs: participantsGroupIDs
 			};
 			
 			var visibility = elBySel('input[name="messageVisibility"]:checked, input[name="messageVisibility"][type="hidden"]', UiDialog.getDialog(this).content);

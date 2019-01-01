@@ -778,6 +778,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		return [
 			'excludedSearchValues' => $this->conversation->getParticipantNames(),
 			'maxItems' => WCF::getSession()->getPermission('user.conversation.maxParticipants') - $this->conversation->participants,
+			'canAddGroupParticipants' => WCF::getSession()->getPermission('user.conversation.canAddGroupParticipants'),
 			'template' => WCF::getTPL()->fetch('conversationAddParticipants', 'wcf', ['conversation' => $this->conversation])
 		];
 	}
@@ -789,7 +790,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		$this->validateGetAddParticipantsForm();
 		
 		// validate participants
-		$this->readStringArray('participants');
+		$this->readStringArray('participants', true);
+		$this->readIntegerArray('participantsGroupIDs', true);
 		
 		if (!$this->conversation->getDecoratedObject()->isDraft) {
 			$this->readString('visibility');
@@ -811,6 +813,10 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	public function addParticipants() {
 		try {
 			$participantIDs = Conversation::validateParticipants($this->parameters['participants'], 'participants', $this->conversation->getParticipantIDs(true));
+			if (!empty($this->parameters['participantsGroupIDs']) && WCF::getSession()->getPermission('user.conversation.canAddGroupParticipants')) {
+				$participantIDs = array_merge($participantIDs, Conversation::validateGroupParticipants($this->parameters['participantsGroupIDs'],'participants', $this->conversation->getParticipantIDs(true)));
+				$participantIDs = array_unique($participantIDs);
+			}
 		}
 		catch (UserInputException $e) {
 			$errorMessage = '';

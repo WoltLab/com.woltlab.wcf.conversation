@@ -29,6 +29,8 @@
 		<item name="wcf.acp.group.option.user.conversation.maxAttachmentCount.description"><![CDATA[The maximum number of attachments allowed per message.]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canEditMessage"><![CDATA[Can edit their messages]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canEditMessage.description"><![CDATA[Users can edit their messages, regardless if they have been read by one or more recipients.]]></item>
+		<item name="wcf.acp.group.option.user.conversation.canAddGroupParticipants"><![CDATA[Can add user groups as participants]]></item>
+		<item name="wcf.acp.group.canBeAddedAsParticipant"><![CDATA[User group can be added as participant in conversations]]></item>
 	</category>
 	<category name="wcf.acp.option">
 		<item name="wcf.acp.option.category.message.conversation"><![CDATA[Conversations]]></item>

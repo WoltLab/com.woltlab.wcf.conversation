@@ -33,7 +33,7 @@
 		<dl{if $errorField == 'participants'} class="formError"{/if}>
 			<dt><label for="participants">{lang}wcf.conversation.participants{/lang}</label></dt>
 			<dd>
-				<input type="text" id="participants" name="participants" class="long" value="{$participants}">
+				<input type="text" id="participants" name="participants" class="long" value="">
 				{if $errorField == 'participants'}
 					<small class="innerError">
 						{if $errorType == 'empty'}
@@ -55,7 +55,7 @@
 			<dl{if $errorField == 'invisibleParticipants'} class="formError"{/if}>
 				<dt><label for="invisibleParticipants">{lang}wcf.conversation.invisibleParticipants{/lang}</label></dt>
 				<dd>
-					<input type="text" id="invisibleParticipants" name="invisibleParticipants" class="long" value="{$invisibleParticipants}">
+					<input type="text" id="invisibleParticipants" name="invisibleParticipants" class="long" value="">
 					{if $errorField == 'invisibleParticipants'}
 						<small class="innerError">
 							{if $errorType == 'empty'}
@@ -133,11 +133,31 @@
 <script data-relocate="true">
 	require(['WoltLabSuite/Core/Ui/ItemList/User'], function(UiItemListUser) {
 		UiItemListUser.init('participants', {
-			maxItems: {@$__wcf->getSession()->getPermission('user.conversation.maxParticipants')}
+			maxItems: {@$__wcf->getSession()->getPermission('user.conversation.maxParticipants')},
+			includeUserGroups: {if $__wcf->getSession()->getPermission('user.conversation.canAddGroupParticipants')}true{else}false{/if},
+			restrictUserGroupIDs: [{implode from=$allowedUserGroupIDs item=allowedUserGroupID}{@$allowedUserGroupID}{/implode}],
+			csvPerType: true,
+			callbackSetupValues: function() {
+				return [
+					{implode from=$participantsData item=participant}
+						{ objectId: {@$participant['objectId']}, value: "{$participant['value']|encodeJS}", type: "{@$participant['type']}" }
+					{/implode}
+				];
+			}
 		});
 		
 		UiItemListUser.init('invisibleParticipants', {
-			maxItems: {@$__wcf->getSession()->getPermission('user.conversation.maxParticipants')}
+			maxItems: {@$__wcf->getSession()->getPermission('user.conversation.maxParticipants')},
+			includeUserGroups: {if $__wcf->getSession()->getPermission('user.conversation.canAddGroupParticipants')}true{else}false{/if},
+			restrictUserGroupIDs: [{implode from=$allowedUserGroupIDs item=allowedUserGroupID}{@$allowedUserGroupID}{/implode}],
+			csvPerType: true,
+			callbackSetupValues: function() {
+				return [
+					{implode from=$invisibleParticipantsData item=participant}
+						{ objectId: {@$participant['objectId']}, value: "{$participant['value']|encodeJS}", type: "{@$participant['type']}" }
+					{/implode}
+				];
+			}
 		});
 	});
 	

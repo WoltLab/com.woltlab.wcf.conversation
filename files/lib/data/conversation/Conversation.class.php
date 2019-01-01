@@ -1,9 +1,11 @@
 <?php
 namespace wcf\data\conversation;
 use wcf\data\conversation\message\ConversationMessage;
+use wcf\data\user\group\UserGroup;
 use wcf\data\user\UserProfile;
 use wcf\data\DatabaseObject;
 use wcf\data\ITitledLinkObject;
+use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\conversation\ConversationHandler;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\exception\UserInputException;
@@ -515,6 +517,66 @@ class Conversation extends DatabaseObject implements IRouteController, ITitledLi
 		
 		if (!empty($error)) {
 			throw new UserInputException($field, $error);
+		}
+		
+		return $result;
+	}
+	
+	/**
+	 * Validates the group participants.
+	 *
+	 * @param	mixed		$participants
+	 * @param	string		$field
+	 * @param	integer[]	$existingParticipants
+	 * @return	array		$result
+	 */
+	public static function validateGroupParticipants($participants, $field = 'participants', array $existingParticipants = []) {
+		$groupIDs = is_array($participants) ? $participants : ArrayUtil::toIntegerArray(explode(',', $participants));
+		$validGroupIDs = [];
+		$result = [];
+		
+		foreach ($groupIDs as $groupID) {
+			$group = UserGroup::getGroupByID($groupID);
+			/** @noinspection PhpUndefinedFieldInspection */
+			if ($group !== null && $group->canBeAddedAsParticipant) {
+				$validGroupIDs[] = $groupID;
+			}
+		}
+		
+		if (!empty($validGroupIDs)) {
+			$userIDs = [];
+			$conditionBuilder = new PreparedStatementConditionBuilder();
+			$conditionBuilder->add('groupID IN (?)', [$validGroupIDs]);
+			$sql = "SELECT  DISTINCT userID
+				FROM    wcf".WCF_N."_user_to_group
+				".$conditionBuilder;
+			$statement = WCF::getDB()->prepareStatement($sql);
+			$statement->execute($conditionBuilder->getParameters());
+			while ($userID = $statement->fetchColumn()) $userIDs[] = $userID;
+			
+			if (!empty($userIDs)) {
+				$users = UserProfileRuntimeCache::getInstance()->getObjects($userIDs);
+				UserStorageHandler::getInstance()->loadStorage($userIDs);
+				
+				foreach ($users as $user) {
+					// user is author
+					if ($user->userID == WCF::getUser()->userID) {
+						continue;
+					}
+					else if (in_array($user->userID, $existingParticipants)) {
+						continue;
+					}
+					
+					try {
+						// validate user
+						self::validateParticipant($user, $field);
+						
+						// no error
+						$result[] = $user->userID;
+					}
+					catch (UserInputException $e) {}
+				}
+			}
 		}
 		
 		return $result;
