@@ -30,7 +30,7 @@
 		<item name="wcf.acp.group.option.user.conversation.canEditMessage"><![CDATA[Kann eigene Nachrichten bearbeiten]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canEditMessage.description"><![CDATA[Mitglieder dieser Benutzergruppe können eigene Nachrichten in Konversationen nachträglich verändern, auch wenn diese bereits vom Empfänger gelesen wurden.]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canAddGroupParticipants"><![CDATA[Kann Benutzergruppen als Teilnehmer hinzufügen]]></item>
-		<item name="wcf.acp.group.canBeAddedAsParticipant"><![CDATA[Benutzergruppe kann als Teilnehmer in Konversationen hinzufügt werden]]></item>
+		<item name="wcf.acp.group.canBeAddedAsConversationParticipant"><![CDATA[Benutzergruppe kann als Teilnehmer in Konversationen hinzufügt werden]]></item>
 	</category>
 	<category name="wcf.acp.option">
 		<item name="wcf.acp.option.category.message.conversation"><![CDATA[Konversationen]]></item>

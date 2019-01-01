@@ -30,17 +30,17 @@
 			<listenerclassname>wcf\system\event\listener\ConversationPruneIpAddressesCronjobListener</listenerclassname>
 			<environment>admin</environment>
 		</eventlistener>
-		<eventlistener name="userGroupAddCanBeAddedAsParticipant">
+		<eventlistener name="userGroupAddCanBeAddedAsConversationParticipant">
 			<eventclassname>wcf\acp\form\UserGroupAddForm</eventclassname>
 			<eventname>assignVariables,readFormParameters,save</eventname>
-			<listenerclassname>wcf\system\event\listener\UserGroupAddCanBeAddedAsParticipantListener</listenerclassname>
+			<listenerclassname>wcf\system\event\listener\UserGroupAddCanBeAddedAsConversationParticipantListener</listenerclassname>
 			<environment>admin</environment>
 			<inherit>1</inherit>
 		</eventlistener>
-		<eventlistener name="userGroupEditCanBeAddedAsParticipant">
+		<eventlistener name="userGroupEditCanBeAddedAsConversationParticipant">
 			<eventclassname>wcf\acp\form\UserGroupEditForm</eventclassname>
 			<eventname>readData</eventname>
-			<listenerclassname>wcf\system\event\listener\UserGroupAddCanBeAddedAsParticipantListener</listenerclassname>
+			<listenerclassname>wcf\system\event\listener\UserGroupAddCanBeAddedAsConversationParticipantListener</listenerclassname>
 			<environment>admin</environment>
 		</eventlistener>
 	</import>

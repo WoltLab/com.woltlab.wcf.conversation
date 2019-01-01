@@ -6,14 +6,14 @@ use wcf\data\user\group\UserGroup;
 use wcf\system\WCF;
 
 /**
- * Handles 'canBeAddedAsParticipant' setting.
+ * Handles 'canBeAddedAsConversationParticipant' setting.
  *
  * @author	Marcel Werk
  * @copyright	2001-2019 WoltLab GmbH
  * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package	WoltLabSuite\Core\System\Event\Listener
  */
-class UserGroupAddCanBeAddedAsParticipantListener implements IParameterizedEventListener {
+class UserGroupAddCanBeAddedAsConversationParticipantListener implements IParameterizedEventListener {
 	/**
 	 * instance of UserGroupAddForm
 	 * @var	UserGroupAddForm|UserGroupEditForm
@@ -24,7 +24,7 @@ class UserGroupAddCanBeAddedAsParticipantListener implements IParameterizedEvent
 	 * true if group can be added as participant
 	 * @var	boolean
 	 */
-	protected $canBeAddedAsParticipant = 0;
+	protected $canBeAddedAsConversationParticipant = 0;
 	
 	/**
 	 * @inheritDoc
@@ -49,7 +49,7 @@ class UserGroupAddCanBeAddedAsParticipantListener implements IParameterizedEvent
 	 */
 	protected function assignVariables() {
 		WCF::getTPL()->assign([
-			'canBeAddedAsParticipant' => $this->canBeAddedAsParticipant
+			'canBeAddedAsConversationParticipant' => $this->canBeAddedAsConversationParticipant
 		]);
 	}
 	
@@ -59,7 +59,7 @@ class UserGroupAddCanBeAddedAsParticipantListener implements IParameterizedEvent
 	 */
 	protected function readData() {
 		if (empty($_POST)) {
-			$this->canBeAddedAsParticipant = $this->eventObj->group->canBeAddedAsParticipant;
+			$this->canBeAddedAsConversationParticipant = $this->eventObj->group->canBeAddedAsConversationParticipant;
 		}
 	}
 	
@@ -67,7 +67,7 @@ class UserGroupAddCanBeAddedAsParticipantListener implements IParameterizedEvent
 	 * Handles the readFormParameters event.
 	 */
 	protected function readFormParameters() {
-		if (isset($_POST['canBeAddedAsParticipant'])) $this->canBeAddedAsParticipant = intval($_POST['canBeAddedAsParticipant']);
+		if (isset($_POST['canBeAddedAsConversationParticipant'])) $this->canBeAddedAsConversationParticipant = intval($_POST['canBeAddedAsConversationParticipant']);
 	}
 	
 	/**
@@ -75,7 +75,7 @@ class UserGroupAddCanBeAddedAsParticipantListener implements IParameterizedEvent
 	 */
 	protected function save() {
 		$this->eventObj->additionalFields = array_merge($this->eventObj->additionalFields, [
-			'canBeAddedAsParticipant' => $this->canBeAddedAsParticipant
+			'canBeAddedAsConversationParticipant' => $this->canBeAddedAsConversationParticipant
 		]);
 	}
 }

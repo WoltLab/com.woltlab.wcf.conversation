@@ -538,7 +538,7 @@ class Conversation extends DatabaseObject implements IRouteController, ITitledLi
 		foreach ($groupIDs as $groupID) {
 			$group = UserGroup::getGroupByID($groupID);
 			/** @noinspection PhpUndefinedFieldInspection */
-			if ($group !== null && $group->canBeAddedAsParticipant) {
+			if ($group !== null && $group->canBeAddedAsConversationParticipant) {
 				$validGroupIDs[] = $groupID;
 			}
 		}

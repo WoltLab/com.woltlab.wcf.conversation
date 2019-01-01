@@ -73,7 +73,7 @@ CREATE TABLE wcf1_conversation_label_to_object (
 	UNIQUE KEY (labelID, conversationID)
 );
 
-ALTER TABLE wcf1_user_group ADD canBeAddedAsParticipant TINYINT(1) NOT NULL DEFAULT 0;
+ALTER TABLE wcf1_user_group ADD canBeAddedAsConversationParticipant TINYINT(1) NOT NULL DEFAULT 0;
 
 ALTER TABLE wcf1_conversation ADD FOREIGN KEY (userID) REFERENCES wcf1_user (userID) ON DELETE SET NULL;
 ALTER TABLE wcf1_conversation ADD FOREIGN KEY (lastPosterID) REFERENCES wcf1_user (userID) ON DELETE SET NULL;

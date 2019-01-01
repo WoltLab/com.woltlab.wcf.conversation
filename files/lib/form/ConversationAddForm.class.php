@@ -269,7 +269,7 @@ class ConversationAddForm extends MessageForm {
 		
 		$allowedUserGroupIDs = [];
 		foreach (UserGroupCacheBuilder::getInstance()->getData([],'groups') as $group) {
-			if ($group->canBeAddedAsParticipant) $allowedUserGroupIDs[] = $group->groupID;
+			if ($group->canBeAddedAsConversationParticipant) $allowedUserGroupIDs[] = $group->groupID;
 		}
 		
 		WCF::getTPL()->assign([
