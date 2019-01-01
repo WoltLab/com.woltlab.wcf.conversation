@@ -268,7 +268,7 @@ class ConversationAddForm extends MessageForm {
 		MessageQuoteManager::getInstance()->assignVariables();
 		
 		$allowedUserGroupIDs = [];
-		foreach (UserGroupCacheBuilder::getInstance()->getData([],'groups') as $group) {
+		foreach (UserGroupCacheBuilder::getInstance()->getData([], 'groups') as $group) {
 			if ($group->canBeAddedAsConversationParticipant) $allowedUserGroupIDs[] = $group->groupID;
 		}
 		
@@ -305,7 +305,7 @@ class ConversationAddForm extends MessageForm {
 			];
 		}
 		
-		$participants = ArrayUtil::toIntegerArray(explode(',', ($invisible ?$this->invisibleParticipantsGroupIDs : $this->participantsGroupIDs)));
+		$participants = ArrayUtil::toIntegerArray(explode(',', ($invisible ? $this->invisibleParticipantsGroupIDs : $this->participantsGroupIDs)));
 		foreach ($participants as $groupID) {
 			$group = UserGroup::getGroupByID($groupID);
 			if (!$group) continue;

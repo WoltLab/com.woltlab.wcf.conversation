@@ -814,7 +814,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		try {
 			$participantIDs = Conversation::validateParticipants($this->parameters['participants'], 'participants', $this->conversation->getParticipantIDs(true));
 			if (!empty($this->parameters['participantsGroupIDs']) && WCF::getSession()->getPermission('user.conversation.canAddGroupParticipants')) {
-				$participantIDs = array_merge($participantIDs, Conversation::validateGroupParticipants($this->parameters['participantsGroupIDs'],'participants', $this->conversation->getParticipantIDs(true)));
+				$participantIDs = array_merge($participantIDs, Conversation::validateGroupParticipants($this->parameters['participantsGroupIDs'], 'participants', $this->conversation->getParticipantIDs(true)));
 				$participantIDs = array_unique($participantIDs);
 			}
 		}
