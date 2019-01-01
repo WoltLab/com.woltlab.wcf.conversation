@@ -4,7 +4,7 @@
 		<packagename>WoltLab Suite Core: Conversations</packagename>
 		<packagedescription>Private conversations between multiple users</packagedescription>
 		<version>3.1.7</version>
-		<date>2018-12-21</date>
+		<date>2019-01-01</date>
 	</packageinformation>
 	
 	<authorinformation>
@@ -17,7 +17,7 @@
 	</requiredpackages>
 	
 	<excludedpackages>
-		<excludedpackage version="3.2.0 Alpha 1">com.woltlab.wcf</excludedpackage>
+		<excludedpackage version="5.2.0 Alpha 1">com.woltlab.wcf</excludedpackage>
 	</excludedpackages>
 	
 	<compatibility>
