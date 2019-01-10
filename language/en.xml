@@ -93,7 +93,6 @@
 		<item name="wcf.conversation.noMoreItems"><![CDATA[You have no recent conversations.]]></item>
 		<item name="wcf.conversation.participantCanInvite"><![CDATA[Participants can add new participants]]></item>
 		<item name="wcf.conversation.participants"><![CDATA[Participants]]></item>
-		<item name="wcf.conversation.participants.description"><![CDATA[]]></item>
 		<item name="wcf.conversation.participants.description"><![CDATA[Separate multiple users with a comma.]]></item>
 		<item name="wcf.conversation.participants.error.mailboxIsFull"><![CDATA[{$errorData[username]} is already participating in too many conversations and cannot be added.]]></item>
 		<item name="wcf.conversation.participants.error.notFound"><![CDATA[The username “{$errorData[username]}” does not exist.]]></item>
