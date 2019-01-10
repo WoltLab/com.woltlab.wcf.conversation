@@ -76,7 +76,7 @@ class ConversationMessageUserNotificationEvent extends AbstractUserNotificationE
 	
 	/**
 	 * @inheritDoc
-	 * @since	3.2
+	 * @since	5.2
 	 */
 	public function getEmailTitle() {
 		if (count($this->getAuthors()) > 1) {

@@ -49,7 +49,7 @@ class ConversationUserNotificationEvent extends AbstractUserNotificationEvent im
 	
 	/**
 	 * @inheritDoc
-	 * @since	3.2
+	 * @since	5.2
 	 */
 	public function getEmailTitle() {
 		return $this->getLanguage()->getDynamicVariable('wcf.user.notification.conversation.mail.title', [
