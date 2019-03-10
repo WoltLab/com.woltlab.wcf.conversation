@@ -5,7 +5,7 @@
 		<div class="messageContent messageQuickReplyContent"{if $pageNo < $pages} data-placeholder="{lang}wcf.conversation.reply{/lang}"{/if}>
 			<div class="messageBody">
 				{if !$conversation->isDraft && !$conversation->hasOtherParticipants()}
-					<p class="warning" style="margin-bottom: 14px">{lang}wcf.conversation.noParticipantsWarning{/lang}</p>
+					<p class="warning"  role="status" style="margin-bottom: 14px">{lang}wcf.conversation.noParticipantsWarning{/lang}</p>
 				{/if}
 				
 				<textarea id="text" name="text" class="wysiwygTextarea"

@@ -97,7 +97,7 @@
 
 <div class="section">
 	<ul class="messageList">
-		{if $pageNo == 1 && !$conversation->joinedAt|empty}<li><p class="info">{lang}wcf.conversation.visibility.previousMessages{/lang}</p></li>{/if}
+		{if $pageNo == 1 && !$conversation->joinedAt|empty}<li><p class="info" role="status">{lang}wcf.conversation.visibility.previousMessages{/lang}</p></li>{/if}
 		{include file='conversationMessageList'}
 		{hascontent}
 			<li class="messageListPagination">
@@ -105,7 +105,7 @@
 			</li>
 		{/hascontent}
 		{if $conversation->canReply()}{include file='conversationQuickReply'}{/if}
-		{if $pageNo == $pages && !$conversation->leftAt|empty}<li><p class="info">{lang}wcf.conversation.visibility.nextMessages{/lang}</p></li>{/if}
+		{if $pageNo == $pages && !$conversation->leftAt|empty}<li><p class="info" role="status">{lang}wcf.conversation.visibility.nextMessages{/lang}</p></li>{/if}
 	</ul>
 </div>
 

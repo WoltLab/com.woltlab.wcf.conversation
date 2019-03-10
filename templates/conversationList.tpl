@@ -139,7 +139,7 @@
 {/hascontent}
 
 {if !$items}
-	<p class="info">{lang}wcf.conversation.noConversations{/lang}</p>
+	<p class="info" role="status">{lang}wcf.conversation.noConversations{/lang}</p>
 {else}
 	<div class="section tabularBox messageGroupList conversationList jsClipboardContainer" data-type="com.woltlab.wcf.conversation.conversation">
 		<ol class="tabularList">
