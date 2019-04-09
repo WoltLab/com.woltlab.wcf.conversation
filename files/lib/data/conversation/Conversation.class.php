@@ -339,12 +339,14 @@ class Conversation extends DatabaseObject implements IRouteController, ITitledLi
 	 * Returns a list of the usernames of all participants.
 	 *
 	 * @param	boolean		$excludeSelf
+	 * @param	boolean		$leftByOwnChoice                           
 	 * @return	string[]
 	 */
-	public function getParticipantNames($excludeSelf = false) {
+	public function getParticipantNames($excludeSelf = false, $leftByOwnChoice = false) {
 		$conditions = new PreparedStatementConditionBuilder();
 		$conditions->add("conversationID = ?", [$this->conversationID]);
 		if ($excludeSelf) $conditions->add("conversation_to_user.participantID <> ?", [WCF::getUser()->userID]);
+		if ($leftByOwnChoice) $conditions->add("conversation_to_user.leftByOwnChoice = ?", [1]);
 
 		$sql = "SELECT		user_table.username
 			FROM		wcf".WCF_N."_conversation_to_user conversation_to_user

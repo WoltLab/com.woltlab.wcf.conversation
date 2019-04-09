@@ -78,7 +78,7 @@ class ConversationEditor extends DatabaseObjectEditor {
 							(conversationID, participantID, username, isInvisible, joinedAt)
 				VALUES			(?, ?, ?, ?, ?)
 				ON DUPLICATE KEY
-				UPDATE			hideConversation = 0";
+				UPDATE			hideConversation = 0, leftAt = 0, leftByOwnChoice = 1";
 			$statement = WCF::getDB()->prepareStatement($sql);
 			
 			foreach ($participantIDs as $userID) {
@@ -182,13 +182,15 @@ class ConversationEditor extends DatabaseObjectEditor {
 		
 		$sql = "UPDATE	wcf".WCF_N."_conversation_to_user
 			SET	leftAt = ?,
-				lastMessageID = ?
+				lastMessageID = ?,
+				leftByOwnChoice = ?
 			WHERE	conversationID = ?
 				AND participantID = ?";
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute([
 			TIME_NOW,
 			$lastMessageID ?: null,
+			0,
 			$this->conversationID,
 			$userID
 		]);

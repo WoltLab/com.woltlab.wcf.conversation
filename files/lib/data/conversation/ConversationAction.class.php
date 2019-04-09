@@ -776,7 +776,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 */
 	public function getAddParticipantsForm() {
 		return [
-			'excludedSearchValues' => $this->conversation->getParticipantNames(),
+			'excludedSearchValues' => $this->conversation->getParticipantNames(false, true),
 			'maxItems' => WCF::getSession()->getPermission('user.conversation.maxParticipants') - $this->conversation->participants,
 			'canAddGroupParticipants' => WCF::getSession()->getPermission('user.conversation.canAddGroupParticipants'),
 			'template' => WCF::getTPL()->fetch('conversationAddParticipants', 'wcf', ['conversation' => $this->conversation])

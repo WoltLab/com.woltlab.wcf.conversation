@@ -32,6 +32,7 @@ CREATE TABLE wcf1_conversation_to_user (
 	joinedAt INT(10) NOT NULL DEFAULT 0,
 	leftAt INT(10) NOT NULL DEFAULT 0,
 	lastMessageID INT(10) NULL,
+	leftByOwnChoice TINYINT(1) NOT NULL DEFAULT 1,
 	
 	UNIQUE KEY (participantID, conversationID),
 	KEY (participantID, hideConversation)
