@@ -232,7 +232,8 @@ class ConversationListPage extends SortablePage {
 			'draftCount' => $this->draftCount,
 			'hiddenCount' => $this->hiddenCount,
 			'outboxCount' => $this->outboxCount,
-			'participants' => $this->participants
+			'participants' => $this->participants,
+			'validSortFields' => $this->validSortFields,
 		]);
 	}
 }

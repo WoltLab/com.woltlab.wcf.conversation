@@ -132,6 +132,8 @@
 		<item name="wcf.conversation.visibility.new"><![CDATA[Nur neue Nachrichten]]></item>
 		<item name="wcf.conversation.visibility.new.description"><![CDATA[Die neuen Teilnehmer sehen nur neue Nachrichten, alle vorherigen Nachrichten werden nicht angezeigt.]]></item>
 		<item name="wcf.conversation.visibility.previousMessages"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Du wurdest{else}Sie wurden{/if} einer laufenden Konversation hinzugefügt, vorherige Nachrichten werden {if LANGUAGE_USE_INFORMAL_VARIANT}dir{else}Ihnen{/if} nicht angezeigt.]]></item>
+		<item name="wcf.conversation.time"><![CDATA[Erstellung]]></item>
+		<item name="wcf.conversation.username"><![CDATA[Autor]]></item>
 	</category>
 	<category name="wcf.conversation.edit">
 		<item name="wcf.conversation.edit.addParticipants"><![CDATA[Teilnehmer hinzufügen]]></item>

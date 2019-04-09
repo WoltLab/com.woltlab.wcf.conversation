@@ -132,6 +132,8 @@
 		<item name="wcf.conversation.visibility.new"><![CDATA[New messages only]]></item>
 		<item name="wcf.conversation.visibility.new.description"><![CDATA[The new participants will see new messages only, older messages will be hidden from them.]]></item>
 		<item name="wcf.conversation.visibility.previousMessages"><![CDATA[You have been added to an existing conversation, previously written messages are hidden.]]></item>
+		<item name="wcf.conversation.time"><![CDATA[Creation]]></item>
+		<item name="wcf.conversation.username"><![CDATA[Author]]></item>
 	</category>
 	<category name="wcf.conversation.edit">
 		<item name="wcf.conversation.edit.addParticipants"><![CDATA[Add Participants]]></item>

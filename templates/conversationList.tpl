@@ -146,11 +146,27 @@
 			<li class="tabularListRow tabularListRowHead">
 				<ol class="tabularListColumns">
 					<li class="columnMark jsOnly"><label><input type="checkbox" class="jsClipboardMarkAll"></label></li>
-					<li class="columnSubject{if $sortField === 'subject'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}pageNo={@$pageNo}&sortField=subject&sortOrder={if $sortField == 'subject' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.global.subject{/lang}</a></li>
-					<li class="columnStats{if $sortField == 'replies'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}pageNo={@$pageNo}&sortField=replies&sortOrder={if $sortField == 'replies' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.conversation.replies{/lang}</a></li>
-					<li class="columnLastPost{if $sortField === 'lastPostTime'} active {@$sortOrder}{/if}"><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}pageNo={@$pageNo}&sortField=lastPostTime&sortOrder={if $sortField == 'lastPostTime' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{lang}wcf.conversation.lastPostTime{/lang}</a></li>
 					
-					{event name='columnHeads'}
+					<li class="columnSort">
+						<ul class="inlineList">
+							<li>
+								<a rel="nofollow" href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}pageNo={@$pageNo}&sortField={$sortField}&sortOrder={if $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">
+									<span class="icon icon16 fa-sort-amount-{$sortOrder|strtolower} jsTooltip" title="{lang}wcf.global.sorting{/lang} ({lang}wcf.global.sortOrder.{if $sortOrder === 'ASC'}ascending{else}descending{/if}{/lang})"></span>
+								</a>
+							</li>
+							<li>
+								<div class="dropdown">
+									<span class="dropdownToggle">{if $sortField == 'subject'}{lang}wcf.global.subject{/lang}{else}{lang}wcf.conversation.{$sortField}{/lang}{/if}</span>
+									
+									<ul class="dropdownMenu">
+										{foreach from=$validSortFields item=_sortField}
+											<li{if $_sortField === $sortField} class="active"{/if}><a rel="nofollow" href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}pageNo={@$pageNo}&sortField={$_sortField}&sortOrder={if $sortField === $_sortField}{if $sortOrder === 'DESC'}ASC{else}DESC{/if}{else}{$sortOrder}{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{if $_sortField == 'subject'}{lang}wcf.global.subject{/lang}{else}{lang}wcf.conversation.{$_sortField}{/lang}{/if}</a></li>
+										{/foreach}
+									</ul>
+								</div>
+							</li>
+						</ul>
+					</li>
 				</ol>
 			</li>
 			
