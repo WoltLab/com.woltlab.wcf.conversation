@@ -19,6 +19,7 @@ use wcf\system\message\quote\MessageQuoteManager;
 use wcf\system\page\PageLocationManager;
 use wcf\system\page\ParentPageLocation;
 use wcf\system\request\LinkHandler;
+use wcf\system\user\signature\SignatureCache;
 use wcf\system\WCF;
 use wcf\util\HeaderUtil;
 use wcf\util\StringUtil;
@@ -200,17 +201,23 @@ class ConversationPage extends MultipleLinkPage {
 		}
 		MessageQuoteManager::getInstance()->initObjects('com.woltlab.wcf.conversation.message', $messageIDs);
 		
+		$userIDs = [];
+		foreach ($this->objectList as $message) {
+			if ($message->userID) {
+				$userIDs[] = $message->userID;
+			}
+		}
+		
 		// fetch special trophies
 		if (MODULE_TROPHY) {
-			$userIDs = [];
-			foreach ($this->objectList as $message) {
-				if ($message->userID) {
-					$userIDs[] = $message->userID;
-				}
-			}
-			
 			if (!empty($userIDs)) {
 				UserProfile::prepareSpecialTrophies(array_unique($userIDs));
+			}
+		}
+		
+		if (MODULE_USER_SIGNATURE) {
+			if (!empty($userIDs)) {
+				SignatureCache::getInstance()->cacheUserSignature($userIDs);
 			}
 		}
 		
