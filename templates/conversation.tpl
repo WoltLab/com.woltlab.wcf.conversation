@@ -16,7 +16,7 @@
 						<ul class="labelList">
 							{content}
 								{foreach from=$conversation->getAssignedLabels() item=label}
-									<li><span class="label badge{if $label->cssClassName} {$label->cssClassName}{/if}">{lang}{$label->label}{/lang}</span></li>
+									<li><span class="label badge{if $label->cssClassName} {$label->cssClassName}{/if}">{$label->label}</span></li>
 								{/foreach}
 							{/content}
 						</ul>
