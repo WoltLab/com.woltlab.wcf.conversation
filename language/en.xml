@@ -90,7 +90,7 @@
 		<item name="wcf.conversation.message"><![CDATA[Message]]></item>
 		<item name="wcf.conversation.message.button.add"><![CDATA[Reply]]></item>
 		<item name="wcf.conversation.message.edit"><![CDATA[Edit Message]]></item>
-		<item name="wcf.conversation.noConversations"><![CDATA[There are not any conversations at the moment.]]></item>
+		<item name="wcf.conversation.noConversations"><![CDATA[There are no conversations at the moment.]]></item>
 		<item name="wcf.conversation.noMoreItems"><![CDATA[You have no recent conversations.]]></item>
 		<item name="wcf.conversation.participantCanInvite"><![CDATA[Participants can add new participants]]></item>
 		<item name="wcf.conversation.participants"><![CDATA[Participants]]></item>
