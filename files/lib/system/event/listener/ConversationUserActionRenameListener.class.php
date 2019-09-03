@@ -20,6 +20,10 @@ class ConversationUserActionRenameListener extends AbstractUserActionRenameListe
 			'name' => 'wcf{WCF_N}_conversation',
 			'userID' => 'lastPosterID',
 			'username' => 'lastPoster'
+		],
+		[
+			'name' => 'wcf{WCF_N}_conversation_to_user',
+			'userID' => 'participantID'
 		]
 	];
 }
