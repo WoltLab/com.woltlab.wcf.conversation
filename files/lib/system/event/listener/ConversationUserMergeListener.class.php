@@ -23,7 +23,6 @@ class ConversationUserMergeListener extends AbstractUserMergeListener {
 		[
 			'name' => 'wcf{WCF_N}_conversation_to_user',
 			'userID' => 'participantID',
-			'username' => null,
 			'ignore' => true
 		]
 	];
