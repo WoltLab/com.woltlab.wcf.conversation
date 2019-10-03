@@ -16,12 +16,12 @@
 	{capture assign='messageContent'}
 	<table cellpadding="0" cellspacing="0" border="0">
 		<tr>
-			<td><a href="{link controller='User' object=$user isEmail=true}{/link}" title="{$message->username}">{@$user->getAvatar()->getImageTag($avatarSize)}</a></td>
+			<td><a href="{link controller='User' object=$user isHtmlEmail=true}{/link}" title="{$message->username}">{@$user->getAvatar()->getImageTag($avatarSize)}</a></td>
 			<td class="boxContent">
 				<div class="containerHeadline">
 					<h3>
 						{if $message->userID}
-							<a href="{link controller='User' object=$user isEmail=true}{/link}">{$message->username}</a>
+							<a href="{link controller='User' object=$user isHtmlEmail=true}{/link}">{$message->username}</a>
 						{else}
 							{$message->username}
 						{/if}

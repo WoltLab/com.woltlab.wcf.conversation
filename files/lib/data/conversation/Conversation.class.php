@@ -96,7 +96,10 @@ class Conversation extends DatabaseObject implements IRouteController, ITitledLi
 	 * @inheritDoc
 	 */
 	public function getLink() {
-		return LinkHandler::getInstance()->getLink('Conversation', ['object' => $this]);
+		return LinkHandler::getInstance()->getLink('Conversation', [
+			'object' => $this,
+			'forceFrontend' => true
+		]);
 	}
 	
 	/**
