@@ -53,8 +53,7 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker {
 	protected function initObjectList() {
 		$this->objectList = new ConversationMessageList();
 		$this->objectList->sqlOrderBy = 'conversation_message.messageID';
-		$this->objectList->sqlSelects = 'conversation.subject';
-		$this->objectList->sqlJoins = 'LEFT JOIN wcf'.WCF_N.'_conversation conversation ON (conversation.firstMessageID = conversation_message.messageID)';
+		$this->objectList->sqlSelects = '(SELECT subject FROM wcf'.WCF_N.'_conversation WHERE conversationID = conversation_message.conversationID) AS subject';
 	}
 	
 	/**
