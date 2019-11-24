@@ -183,7 +183,13 @@ class ConversationPage extends MultipleLinkPage {
 		PageLocationManager::getInstance()->addParentLocation('com.woltlab.wcf.conversation.ConversationList');
 		
 		// update last visit time count
-		if ($this->conversation->isNew() && $this->objectList->getMaxPostTime() > $this->conversation->lastVisitTime) {
+		if (
+			$this->conversation->isNew()
+			&& (
+				$this->objectList->getMaxPostTime() > $this->conversation->lastVisitTime
+				|| ($this->conversation->joinedAt && !count($this->objectList))
+			)
+		) {
 			$visitTime = $this->objectList->getMaxPostTime();
 			if ($visitTime == $this->conversation->lastPostTime) $visitTime = TIME_NOW;
 			$conversationAction = new ConversationAction([$this->conversation->getDecoratedObject()], 'markAsRead', ['visitTime' => $visitTime]);
