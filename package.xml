@@ -3,7 +3,7 @@
 	<packageinformation>
 		<packagename>WoltLab Suite Core: Conversations</packagename>
 		<packagedescription>Private conversations between multiple users</packagedescription>
-		<version>5.2.0 Beta 4</version>
+		<version>5.2.0 RC 1</version>
 		<date>2019-12-01</date>
 	</packageinformation>
 	
@@ -13,7 +13,7 @@
 	</authorinformation>
 	
 	<requiredpackages>
-		<requiredpackage minversion="5.2.0 Beta 4">com.woltlab.wcf</requiredpackage>
+		<requiredpackage minversion="5.2.0 RC 1">com.woltlab.wcf</requiredpackage>
 	</requiredpackages>
 	
 	<excludedpackages>
@@ -45,5 +45,25 @@
 	
 	<instructions type="update" fromversion="5.2.0 Beta 3">
 		<instruction type="file">files_update.tar</instruction>
+	</instructions>
+	
+	<instructions type="update" fromversion="3.1.*">
+		<instruction type="file" run="standalone">files_update.tar</instruction>
+		<instruction type="template">templates_update.tar</instruction>
+		
+		<instruction type="script">acp/update_com.woltlab.wcf.conversation_5.2.php</instruction>
+		
+		<instruction type="language" />
+		
+		<instruction type="clipboardAction" />
+		<instruction type="coreObject" />
+		<instruction type="eventListener" />
+		<instruction type="objectType" />
+		<instruction type="option" />
+		<instruction type="page" />
+		<instruction type="templateListener" />
+		<instruction type="userGroupOption" />
+		<instruction type="userNotificationEvent" />
+		<instruction type="userOption" />
 	</instructions>
 </package>
