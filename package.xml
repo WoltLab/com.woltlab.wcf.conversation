@@ -48,8 +48,8 @@
 	</instructions>
 	
 	<instructions type="update" fromversion="3.1.*">
-		<instruction type="file" run="standalone">files_update.tar</instruction>
-		<instruction type="template">templates_update.tar</instruction>
+		<instruction type="file" run="standalone" />
+		<instruction type="template" run="standalone" />
 		
 		<instruction type="script">acp/update_com.woltlab.wcf.conversation_5.2.php</instruction>
 		
