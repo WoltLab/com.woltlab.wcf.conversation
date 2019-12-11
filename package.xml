@@ -2,9 +2,11 @@
 <package name="com.woltlab.wcf.conversation" xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/2019/package.xsd">
 	<packageinformation>
 		<packagename>WoltLab Suite Core: Conversations</packagename>
+		<packagename language="de">WoltLab Suite Core: Konversationen</packagename>
 		<packagedescription>Private conversations between multiple users</packagedescription>
+		<packagedescription language="de">Private Konversationen zwischen mehreren Benutzern</packagedescription>
 		<version>5.2.0 RC 1</version>
-		<date>2019-12-01</date>
+		<date>2019-12-12</date>
 	</packageinformation>
 	
 	<authorinformation>
@@ -43,10 +45,6 @@
 		<instruction type="page" />
 	</instructions>
 	
-	<instructions type="update" fromversion="5.2.0 Beta 3">
-		<instruction type="file">files_update.tar</instruction>
-	</instructions>
-	
 	<instructions type="update" fromversion="3.1.*">
 		<instruction type="acpTemplate" run="standalone" />
 		<instruction type="file" run="standalone" />
@@ -66,5 +64,10 @@
 		<instruction type="userGroupOption" />
 		<instruction type="userNotificationEvent" />
 		<instruction type="userOption" />
+	</instructions>
+	
+	<instructions type="update" fromversion="5.2.0 Beta 4">
+		<!-- fake update -->
+		<instruction type="language" />
 	</instructions>
 </package>
