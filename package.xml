@@ -22,10 +22,6 @@
 		<excludedpackage version="5.3.0 Alpha 1">com.woltlab.wcf</excludedpackage>
 	</excludedpackages>
 	
-	<compatibility>
-		<api version="2019" />
-	</compatibility>
-	
 	<instructions type="install">
 		<instruction type="file" />
 		<instruction type="userGroupOption" />
