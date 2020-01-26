@@ -10,6 +10,7 @@ use wcf\data\IVisitableObjectAction;
 use wcf\system\clipboard\ClipboardHandler;
 use wcf\system\conversation\ConversationHandler;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
+use wcf\system\event\EventHandler;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
 use wcf\system\log\modification\ConversationModificationLogHandler;
@@ -40,7 +41,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 * conversation object
 	 * @var	ConversationEditor
 	 */
-	protected $conversation;
+	public $conversation;
 	
 	/**
 	 * list of conversation data modifications
@@ -817,6 +818,12 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 				$participantIDs = array_merge($participantIDs, Conversation::validateGroupParticipants($this->parameters['participantsGroupIDs'], 'participants', $this->conversation->getParticipantIDs(true)));
 				$participantIDs = array_unique($participantIDs);
 			}
+			
+			$parameters = [
+				'participantIDs' => $participantIDs,
+			];
+			EventHandler::getInstance()->fireAction($this, 'addParticipants_validateParticipants', $parameters);
+			$participantIDs = $parameters['participantIDs'];
 		}
 		catch (UserInputException $e) {
 			$errorMessage = '';
