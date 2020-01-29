@@ -326,7 +326,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		}
 		
 		$returnValues = [
-			'totalCount' => ConversationHandler::getInstance()->getUnreadConversationCount(null, true)
+			'totalCount' => ConversationHandler::getInstance()->getUnreadConversationCount($this->parameters['userID'], true)
 		];
 		
 		if (count($conversationIDs) == 1) {
