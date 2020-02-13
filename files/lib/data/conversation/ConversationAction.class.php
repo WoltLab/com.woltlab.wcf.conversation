@@ -582,7 +582,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		]);
 		$row = $statement->fetchArray();
 		
-		WCF::getTPL()->assign('hideConversation', $row['hideConversation']);
+		WCF::getTPL()->assign('hideConversation', ($row !== false ? $row['hideConversation'] : 0));
 		
 		return [
 			'actionName' => 'getLeaveForm',
