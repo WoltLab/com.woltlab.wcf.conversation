@@ -7,6 +7,7 @@
 			<name language="de">Konversationenliste</name>
 			<name language="en">Conversation List</name>
 			<handler>wcf\system\page\handler\ConversationListPageHandler</handler>
+			<excludeFromLandingPage>1</excludeFromLandingPage>
 			<content language="en">
 				<title>Conversations</title>
 			</content>
@@ -31,6 +32,7 @@
 			<name language="en">New Conversation</name>
 			<hasFixedParent>1</hasFixedParent>
 			<parent>com.woltlab.wcf.conversation.ConversationList</parent>
+			<excludeFromLandingPage>1</excludeFromLandingPage>
 			<content language="en">
 				<title>New Conversation</title>
 			</content>
