@@ -250,6 +250,7 @@ class Conversation extends DatabaseObject implements IRouteController, ITitledLi
 	public function getParticipantIDs($excludeLeftParticipants = false) {
 		$conditions = new PreparedStatementConditionBuilder();
 		$conditions->add("conversationID = ?", [$this->conversationID]);
+		$conditions->add("participantID IS NOT NULL");
 		if ($excludeLeftParticipants) $conditions->add("hideConversation <> ?", [self::STATE_LEFT]);
 		
 		$sql = "SELECT		participantID
