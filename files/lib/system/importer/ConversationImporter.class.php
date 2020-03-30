@@ -25,7 +25,7 @@ class ConversationImporter extends AbstractImporter {
 		$data['userID'] = ImportHandler::getInstance()->getNewID('com.woltlab.wcf.user', $data['userID']);
 		
 		// check existing conversation
-		if (is_numeric($oldID)) {
+		if (ctype_digit((string)$oldID)) {
 			$existingConversation = new Conversation($oldID);
 			if (!$existingConversation->conversationID) $data['conversationID'] = $oldID;
 		}
