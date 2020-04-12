@@ -113,6 +113,8 @@ class ConversationAddForm extends MessageForm {
 			throw new NamedUserException(WCF::getLanguage()->getDynamicVariable('wcf.conversation.error.mailboxIsFull'));
 		}
 		
+		ConversationHandler::getInstance()->enforceFloodControl();
+		
 		if (isset($_REQUEST['userID'])) {
 			$userID = intval($_REQUEST['userID']);
 			$user = UserProfileRuntimeCache::getInstance()->getObject($userID);

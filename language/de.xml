@@ -31,6 +31,8 @@
 		<item name="wcf.acp.group.option.user.conversation.canEditMessage.description"><![CDATA[Mitglieder dieser Benutzergruppe können eigene Nachrichten in Konversationen nachträglich verändern, auch wenn diese bereits vom Empfänger gelesen wurden.]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canAddGroupParticipants"><![CDATA[Kann Benutzergruppen als Teilnehmer hinzufügen]]></item>
 		<item name="wcf.acp.group.canBeAddedAsConversationParticipant"><![CDATA[Benutzergruppe kann als Teilnehmer in Konversationen hinzufügt werden]]></item>
+		<item name="wcf.acp.group.option.user.conversation.maxStartedConversationsPer24Hours"><![CDATA[Maximale Anzahl gestarteter Konversation innerhalb von 24 Stunden]]></item>
+		<item name="wcf.acp.group.option.user.conversation.maxStartedConversationsPer24Hours.description"><![CDATA[Beschränkt die Anzahl der Konversationen die ein Benutzer innerhalb von 24 Stunden starten darf. [-1 für unbegrenzt]]]></item>
 	</category>
 	<category name="wcf.acp.option">
 		<item name="wcf.acp.option.category.message.conversation"><![CDATA[Konversationen]]></item>
@@ -134,6 +136,7 @@
 		<item name="wcf.conversation.visibility.previousMessages"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Du wurdest{else}Sie wurden{/if} einer laufenden Konversation hinzugefügt, vorherige Nachrichten werden {if LANGUAGE_USE_INFORMAL_VARIANT}dir{else}Ihnen{/if} nicht angezeigt.]]></item>
 		<item name="wcf.conversation.time"><![CDATA[Erstellung]]></item>
 		<item name="wcf.conversation.username"><![CDATA[Autor]]></item>
+		<item name="wcf.conversation.error.floodControl"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Du hast{else}Sie haben{/if} innerhalb der letzten 24 Stunden bereits {if $limit == 1}eine Konversation{else}{#$limit} Konversationen{/if} gestartet. Bitte {if LANGUAGE_USE_INFORMAL_VARIANT}warte{else}warten Sie{/if} bis zum <strong>{@$notBefore|time}</strong>, bevor {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} eine neue Konversation {if LANGUAGE_USE_INFORMAL_VARIANT}startest{else}starten{/if}.]]></item>
 	</category>
 	<category name="wcf.conversation.edit">
 		<item name="wcf.conversation.edit.addParticipants"><![CDATA[Teilnehmer hinzufügen]]></item>
