@@ -25,6 +25,8 @@
 		<item name="wcf.acp.group.option.user.conversation.maxAttachmentCount.description"><![CDATA[]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canEditMessage"><![CDATA[Kann eigene Nachrichten bearbeiten]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canEditMessage.description"><![CDATA[Mitglieder dieser Benutzergruppe können eigene Nachrichten in Konversationen nachträglich verändern, auch wenn diese bereits vom Empfänger gelesen wurden.]]></item>
+		<item name="wcf.acp.group.option.user.conversation.maxStartedConversationsPer24Hours"><![CDATA[Maximale Anzahl gestarteter Konversation innerhalb von 24 Stunden]]></item>
+		<item name="wcf.acp.group.option.user.conversation.maxStartedConversationsPer24Hours.description"><![CDATA[Beschränkt die Anzahl der Konversationen die ein Benutzer innerhalb von 24 Stunden starten darf. [-1 für unbegrenzt]]]></item>
 	</category>
 	
 	<category name="wcf.acp.option">
@@ -132,6 +134,7 @@
 		<item name="wcf.conversation.visibility.new"><![CDATA[Nur neue Nachrichten]]></item>
 		<item name="wcf.conversation.visibility.new.description"><![CDATA[Die neuen Teilnehmer sehen nur neue Nachrichten, alle vorherigen Nachrichten werden nicht angezeigt.]]></item>
 		<item name="wcf.conversation.visibility.previousMessages"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Du wurdest{else}Sie wurden{/if} einer laufenden Konversation hinzugefügt, vorherige Nachrichten werden {if LANGUAGE_USE_INFORMAL_VARIANT}dir{else}Ihnen{/if} nicht angezeigt.]]></item>
+		<item name="wcf.conversation.error.floodControl"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Du hast{else}Sie haben{/if} innerhalb der letzten 24 Stunden bereits {if $limit == 1}eine Konversation{else}{#$limit} Konversationen{/if} gestartet. Bitte {if LANGUAGE_USE_INFORMAL_VARIANT}warte{else}warten Sie{/if} bis zum <strong>{@$notBefore|time}</strong>, bevor {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} eine neue Konversation {if LANGUAGE_USE_INFORMAL_VARIANT}startest{else}starten{/if}.]]></item>
 	</category>
 	
 	<category name="wcf.conversation.edit">
