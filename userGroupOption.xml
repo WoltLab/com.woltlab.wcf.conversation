@@ -62,6 +62,14 @@
 				<maxvalue>100000</maxvalue>
 				<usersonly>1</usersonly>
 			</option>
+			<option name="user.conversation.maxStartedConversationsPer24Hours">
+				<categoryname>user.conversation</categoryname>
+				<optiontype>infiniteInteger</optiontype>
+				<defaultvalue>10</defaultvalue>
+				<admindefaultvalue>-1</admindefaultvalue>
+				<minvalue>-1</minvalue>
+				<usersonly>1</usersonly>
+			</option>
 			<option name="user.conversation.maxLabels">
 				<categoryname>user.conversation</categoryname>
 				<optiontype>integer</optiontype>
