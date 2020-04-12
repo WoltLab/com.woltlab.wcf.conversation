@@ -2,6 +2,7 @@
 namespace wcf\system\conversation;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\exception\NamedUserException;
+use wcf\system\exception\PermissionDeniedException;
 use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\SingletonFactory;
 use wcf\system\WCF;
@@ -132,12 +133,17 @@ class ConversationHandler extends SingletonFactory {
 		if ($limit == -1) {
 			return;
 		}
+		else if ($limit == 0) {
+			// `0` is not a valid value, but the interface logic does not permit and exclusion
+			// while also allowing the special value `-1`. Therefore, `0` behaves like the
+			// 'canStartConversation' permission added in WoltLab Suite 5.2.
+			throw new PermissionDeniedException();
+		}
 		
-		$sql = "SELECT          COUNT(*) AS count, MIN(time) AS oldestDate
-			FROM            wcf" . WCF_N . "_conversation
-			WHERE           userID = ?
-					AND time > ?
-			GROUP BY        userID";
+		$sql = "SELECT  COUNT(*) AS count, MIN(time) AS oldestDate
+			FROM    wcf" . WCF_N . "_conversation
+			WHERE   userID = ?
+				AND time > ?";
 		$statement = WCF::getDB()->prepareStatement($sql);
 		$statement->execute([
 			WCF::getUser()->userID,
@@ -145,7 +151,7 @@ class ConversationHandler extends SingletonFactory {
 		]);
 		$row = $statement->fetchSingleRow();
 		
-		if ($row !== false && $row['count'] >= $limit) {
+		if ($row['count'] >= $limit) {
 			throw new NamedUserException(WCF::getLanguage()->getDynamicVariable('wcf.conversation.error.floodControl', [
 				'limit' => $limit,
 				'notBefore' => $row['oldestDate'] + 86400,
