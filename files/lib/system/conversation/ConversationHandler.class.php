@@ -129,7 +129,7 @@ class ConversationHandler extends SingletonFactory {
 	 */
 	public function enforceFloodControl() {
 		$limit = WCF::getSession()->getPermission('user.conversation.maxStartedConversationsPer24Hours');
-		if ($limit < 1) {
+		if ($limit == -1) {
 			return;
 		}
 		
