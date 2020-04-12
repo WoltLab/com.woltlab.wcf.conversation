@@ -1,6 +1,7 @@
 <?php
 namespace wcf\system\conversation;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
+use wcf\system\exception\NamedUserException;
 use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\SingletonFactory;
 use wcf\system\WCF;
@@ -121,5 +122,34 @@ class ConversationHandler extends SingletonFactory {
 		}
 		
 		return $this->conversationCount[$userID];
+	}
+	
+	/**
+	 * Enforces the flood control.
+	 */
+	public function enforceFloodControl() {
+		$limit = WCF::getSession()->getPermission('user.conversation.maxStartedConversationsPer24Hours');
+		if ($limit < 1) {
+			return;
+		}
+		
+		$sql = "SELECT          COUNT(*) AS count, MIN(time) AS oldestDate
+			FROM            wcf" . WCF_N . "_conversation
+			WHERE           userID = ?
+					AND time > ?
+			GROUP BY        userID";
+		$statement = WCF::getDB()->prepareStatement($sql);
+		$statement->execute([
+			WCF::getUser()->userID,
+			TIME_NOW - 86400,
+		]);
+		$row = $statement->fetchSingleRow();
+		
+		if ($row !== false && $row['count'] >= $limit) {
+			throw new NamedUserException(WCF::getLanguage()->getDynamicVariable('wcf.conversation.error.floodControl', [
+				'limit' => $limit,
+				'notBefore' => $row['oldestDate'] + 86400,
+			]));
+		}
 	}
 }
