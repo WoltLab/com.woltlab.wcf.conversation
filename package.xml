@@ -3,8 +3,8 @@
 	<packageinformation>
 		<packagename>WoltLab Suite Core: Conversations</packagename>
 		<packagedescription>Private conversations between multiple users</packagedescription>
-		<version>3.0.24</version>
-		<date>2020-04-08</date>
+		<version>3.0.25</version>
+		<date>2020-04-13</date>
 	</packageinformation>
 	
 	<authorinformation>
@@ -49,7 +49,12 @@
 		<instruction type="page">page.xml</instruction>
 	</instructions>
 	
-	<instructions type="update" fromversion="3.0.23">
+	<instructions type="update" fromversion="3.0.24">
 		<instruction type="file">files_update.tar</instruction>
+		<instruction type="template">templates_update.tar</instruction>
+		
+		<instruction type="language" />
+		
+		<instruction type="userGroupOption" />
 	</instructions>
 </package>
