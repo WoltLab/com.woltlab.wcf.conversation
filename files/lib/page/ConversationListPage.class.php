@@ -149,9 +149,52 @@ class ConversationListPage extends SortablePage {
 		$this->objectList->setLabelList($this->labelList);
 		
 		if (!empty($this->participants)) {
-			$this->objectList->getConditionBuilder()->add('conversation.conversationID IN (SELECT conversationID FROM wcf'.WCF_N.'_conversation_to_user WHERE username IN (?) GROUP BY conversationID HAVING COUNT(conversationID) = ?)', [
+			// The condition is split into two branches in order to account for invisible participants.
+			// Invisible participants are only visible to the conversation starter and remain invisible
+			// until the write their first message.
+			//
+			// We need to protect these users from being exposed as participants by including them for
+			// any conversation that the current user has started. For all other conversations, users
+			// flagged with `isInvisible = 0` must be excluded.
+			//
+			// See https://github.com/WoltLab/com.woltlab.wcf.conversation/issues/131
+			$this->objectList->getConditionBuilder()->add('
+				(
+					(
+						conversation.userID = ?
+						AND
+						conversation.conversationID IN (
+							SELECT          conversationID
+							FROM            wcf'.WCF_N.'_conversation_to_user
+							WHERE           username IN (?)
+							GROUP BY        conversationID
+							HAVING          COUNT(conversationID) = ?
+						)
+					)
+					OR
+					(
+						conversation.userID <> ?
+						AND
+						conversation.conversationID IN (
+							SELECT          conversationID
+							FROM            wcf'.WCF_N.'_conversation_to_user
+							WHERE           username IN (?)
+									AND isInvisible = ?
+							GROUP BY        conversationID
+							HAVING          COUNT(conversationID) = ?
+						)
+					)
+				)', [
+				// Parameters for the first condition.
+				WCF::getUser()->userID,
 				$this->participants,
-				count($this->participants)
+				count($this->participants),
+				
+				// Parameters for the second condition.
+				WCF::getUser()->userID,
+				$this->participants,
+				0,
+				count($this->participants),
 			]);
 		}
 	}
