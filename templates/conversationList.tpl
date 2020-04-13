@@ -332,7 +332,8 @@
 		}
 		
 		UiItemListUser.init('participants', {
-			excludedSearchValues: ['{$__wcf->user->username|encodeJS}']
+			excludedSearchValues: ['{$__wcf->user->username|encodeJS}'],
+			maxItems: 20
 		});
 	});
 </script>
