@@ -4,6 +4,7 @@ use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\label\ConversationLabelList;
 use wcf\data\conversation\UserConversationList;
 use wcf\system\clipboard\ClipboardHandler;
+use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\page\PageLocationManager;
 use wcf\system\WCF;
@@ -137,7 +138,7 @@ class ConversationListPage extends SortablePage {
 			}
 		}
 		
-		if (isset($_REQUEST['participants'])) $this->participants = ArrayUtil::trim(explode(',', $_REQUEST['participants']));
+		if (isset($_REQUEST['participants'])) $this->participants = array_slice(ArrayUtil::trim(explode(',', $_REQUEST['participants'])), 0, 20);
 	}
 	
 	/** @noinspection PhpMissingParentCallCommonInspection */
@@ -149,53 +150,69 @@ class ConversationListPage extends SortablePage {
 		$this->objectList->setLabelList($this->labelList);
 		
 		if (!empty($this->participants)) {
-			// The condition is split into two branches in order to account for invisible participants.
-			// Invisible participants are only visible to the conversation starter and remain invisible
-			// until the write their first message.
-			//
-			// We need to protect these users from being exposed as participants by including them for
-			// any conversation that the current user has started. For all other conversations, users
-			// flagged with `isInvisible = 0` must be excluded.
-			//
-			// See https://github.com/WoltLab/com.woltlab.wcf.conversation/issues/131
-			$this->objectList->getConditionBuilder()->add('
-				(
+			// The column `conversation_to_user.username` has no index, causing full table scans when
+			// trying to filter by it, therefore we'll read the user ids in advance.
+			$conditions = new PreparedStatementConditionBuilder();
+			$conditions->add('username IN (?)', [$this->participants]);
+			$sql = "SELECT  userID
+				FROM    wcf".WCF_N."_user
+				".$conditions;
+			$statement = WCF::getDB()->prepareStatement($sql);
+			$statement->execute($conditions->getParameters());
+			$userIDs = [];
+			while ($userID = $statement->fetchColumn()) {
+				$userIDs[] = $userID;
+			}
+			
+			if (!empty($userIDs)) {
+				// The condition is split into two branches in order to account for invisible participants.
+				// Invisible participants are only visible to the conversation starter and remain invisible
+				// until the write their first message.
+				//
+				// We need to protect these users from being exposed as participants by including them for
+				// any conversation that the current user has started. For all other conversations, users
+				// flagged with `isInvisible = 0` must be excluded.
+				//
+				// See https://github.com/WoltLab/com.woltlab.wcf.conversation/issues/131
+				$this->objectList->getConditionBuilder()->add('
 					(
-						conversation.userID = ?
-						AND
-						conversation.conversationID IN (
-							SELECT          conversationID
-							FROM            wcf'.WCF_N.'_conversation_to_user
-							WHERE           username IN (?)
-							GROUP BY        conversationID
-							HAVING          COUNT(conversationID) = ?
+						(
+							conversation.userID = ?
+							AND
+							conversation.conversationID IN (
+								SELECT          conversationID
+								FROM            wcf'.WCF_N.'_conversation_to_user
+								WHERE           participantID IN (?)
+								GROUP BY        conversationID
+								HAVING          COUNT(conversationID) = ?
+							)
 						)
-					)
-					OR
-					(
-						conversation.userID <> ?
-						AND
-						conversation.conversationID IN (
-							SELECT          conversationID
-							FROM            wcf'.WCF_N.'_conversation_to_user
-							WHERE           username IN (?)
-									AND isInvisible = ?
-							GROUP BY        conversationID
-							HAVING          COUNT(conversationID) = ?
+						OR
+						(
+							conversation.userID <> ?
+							AND
+							conversation.conversationID IN (
+								SELECT          conversationID
+								FROM            wcf'.WCF_N.'_conversation_to_user
+								WHERE           participantID IN (?)
+										AND isInvisible = ?
+								GROUP BY        conversationID
+								HAVING          COUNT(conversationID) = ?
+							)
 						)
-					)
-				)', [
-				// Parameters for the first condition.
-				WCF::getUser()->userID,
-				$this->participants,
-				count($this->participants),
-				
-				// Parameters for the second condition.
-				WCF::getUser()->userID,
-				$this->participants,
-				0,
-				count($this->participants),
-			]);
+					)', [
+					// Parameters for the first condition.
+					WCF::getUser()->userID,
+					$userIDs,
+					count($userIDs),
+					
+					// Parameters for the second condition.
+					WCF::getUser()->userID,
+					$userIDs,
+					0,
+					count($userIDs),
+				]);
+			}
 		}
 	}
 	
