@@ -91,8 +91,9 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 		$sql = "SELECT	COUNT(*) AS participants
 			FROM	wcf".WCF_N."_conversation_to_user
 			WHERE	conversationID = ?
+				AND hideConversation <> ?
 				AND participantID IS NOT NULL";
-		$existingParticipantStatement = WCF::getDB()->prepareStatement($sql, 5);
+		$existingParticipantStatement = WCF::getDB()->prepareStatement($sql);
 		
 		$obsoleteConversations = [];
 		foreach ($this->objectList as $conversation) {
@@ -104,7 +105,7 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker {
 				if (!$conversation->userID) $obsolete = true;
 			}
 			else {
-				$existingParticipantStatement->execute([$conversation->conversationID]);
+				$existingParticipantStatement->execute([$conversation->conversationID, Conversation::STATE_LEFT]);
 				$row = $existingParticipantStatement->fetchSingleRow();
 				if (!$row['participants']) $obsolete = true;
 			}
