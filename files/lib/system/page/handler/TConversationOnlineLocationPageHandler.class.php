@@ -1,5 +1,6 @@
 <?php
 namespace wcf\system\page\handler;
+use wcf\data\conversation\Conversation;
 use wcf\data\page\Page;
 use wcf\data\user\online\UserOnline;
 use wcf\system\cache\runtime\UserConversationRuntimeCache;
@@ -34,6 +35,15 @@ trait TConversationOnlineLocationPageHandler {
 		$conversation = UserConversationRuntimeCache::getInstance()->getObject($user->pageObjectID);
 		if ($conversation === null || !$conversation->canRead()) {
 			return '';
+		}
+		
+		if ($conversation->userID != WCF::getUser()->userID && $user->userID != WCF::getUser()->userID) {
+			// Make sure that requests from invisible participants are not listed
+			// if the active user is not the author of the conversation.
+			$userConversation = Conversation::getUserConversation($conversation->conversationID, $user->userID);
+			if ($userConversation !== null && $userConversation->isInvisible) {
+				return '';
+			}
 		}
 		
 		return WCF::getLanguage()->getDynamicVariable('wcf.page.onlineLocation.'.$page->identifier, ['conversation' => $conversation]);
