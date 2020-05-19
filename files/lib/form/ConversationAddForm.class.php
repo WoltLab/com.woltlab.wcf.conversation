@@ -12,7 +12,6 @@ use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
 use wcf\system\message\quote\MessageQuoteManager;
 use wcf\system\page\PageLocationManager;
-use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
 use wcf\util\ArrayUtil;
 use wcf\util\HeaderUtil;
@@ -238,16 +237,15 @@ class ConversationAddForm extends MessageForm {
 		}
 		
 		$this->objectAction = new ConversationAction([], 'create', $conversationData);
-		$resultValues = $this->objectAction->executeAction();
+		/** @var Conversation $conversation */
+		$conversation = $this->objectAction->executeAction()['returnValues'];
 		
 		MessageQuoteManager::getInstance()->saved();
 		
 		$this->saved();
 		
 		// forward
-		HeaderUtil::redirect(LinkHandler::getInstance()->getLink('Conversation', [
-			'object' => $resultValues['returnValues']
-		]));
+		HeaderUtil::redirect($conversation->getLink());
 		exit;
 	}
 	

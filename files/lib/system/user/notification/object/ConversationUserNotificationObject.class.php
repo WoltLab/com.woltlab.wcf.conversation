@@ -32,9 +32,7 @@ class ConversationUserNotificationObject extends DatabaseObjectDecorator impleme
 	 * @inheritDoc
 	 */
 	public function getURL() {
-		return LinkHandler::getInstance()->getLink('Conversation', [
-			'object' => $this->getDecoratedObject()
-		]);
+		return $this->getLink();
 	}
 	
 	/**

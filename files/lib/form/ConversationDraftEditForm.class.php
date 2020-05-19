@@ -6,7 +6,6 @@ use wcf\data\conversation\ConversationAction;
 use wcf\data\user\UserProfile;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\message\quote\MessageQuoteManager;
-use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
 use wcf\util\HeaderUtil;
 
@@ -98,9 +97,7 @@ class ConversationDraftEditForm extends ConversationAddForm {
 		$this->saved();
 		
 		// forward
-		HeaderUtil::redirect(LinkHandler::getInstance()->getLink('Conversation', [
-			'object' => $this->conversation
-		]));
+		HeaderUtil::redirect($this->conversation->getLink());
 		exit;
 	}
 	

@@ -2,7 +2,6 @@
 namespace wcf\system\user\notification\object;
 use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\DatabaseObjectDecorator;
-use wcf\system\request\LinkHandler;
 
 /**
  * Notification object for conversations.
@@ -32,10 +31,7 @@ class ConversationMessageUserNotificationObject extends DatabaseObjectDecorator 
 	 * @inheritDoc
 	 */
 	public function getURL() {
-		return LinkHandler::getInstance()->getLink('Conversation', [
-			'object' => $this->getConversation(),
-			'messageID' => $this->messageID
-		]).'#message'.$this->messageID;
+		return $this->getLink();
 	}
 	
 	/**

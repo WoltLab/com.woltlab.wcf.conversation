@@ -561,10 +561,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 	 */
 	public function getRedirectUrl(DatabaseObject $conversation, DatabaseObject $message) {
 		/** @var ConversationMessage $message */
-		return LinkHandler::getInstance()->getLink('Conversation', [
-			'object' => $conversation,
-			'messageID' => $message->messageID
-		]).'#message'.$message->messageID;
+		return $message->getLink();
 	}
 	
 	/**

@@ -1,7 +1,6 @@
 <?php
 namespace wcf\system\user\notification\event;
 use wcf\data\user\UserProfile;
-use wcf\system\request\LinkHandler;
 use wcf\system\user\notification\object\ConversationUserNotificationObject;
 
 /**
@@ -62,7 +61,7 @@ class ConversationUserNotificationEvent extends AbstractUserNotificationEvent im
 	 * @inheritDoc
 	 */
 	public function getLink() {
-		return LinkHandler::getInstance()->getLink('Conversation', ['object' => $this->userNotificationObject]);
+		return $this->getUserNotificationObject()->getLink();
 	}
 	
 	/** @noinspection PhpMissingParentCallCommonInspection */
