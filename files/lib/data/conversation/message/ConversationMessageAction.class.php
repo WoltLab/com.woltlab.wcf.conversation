@@ -382,27 +382,25 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			'defaultSmilies' => SmileyCache::getInstance()->getCategorySmilies(),
 			'message' => $this->message,
 			'permissionCanUseSmilies' => 'user.message.canUseSmilies',
-			'wysiwygSelector' => 'messageEditor'.$this->message->messageID
+			'wysiwygSelector' => 'messageEditor'.$this->message->messageID,
 		]);
 		
-		if (MODULE_ATTACHMENT) {
-			$tmpHash = StringUtil::getRandomID();
-			$attachmentHandler = new AttachmentHandler('com.woltlab.wcf.conversation.message', $this->message->messageID, $tmpHash);
-			$attachmentList = $attachmentHandler->getAttachmentList();
-				
-			WCF::getTPL()->assign([
-				'attachmentHandler' => $attachmentHandler,
-				'attachmentList' => $attachmentList->getObjects(),
-				'attachmentObjectID' => $this->message->messageID,
-				'attachmentObjectType' => 'com.woltlab.wcf.conversation.message',
-				'attachmentParentObjectID' => 0,
-				'tmpHash' => $tmpHash
-			]);
-		}
+		$tmpHash = StringUtil::getRandomID();
+		$attachmentHandler = new AttachmentHandler('com.woltlab.wcf.conversation.message', $this->message->messageID, $tmpHash);
+		$attachmentList = $attachmentHandler->getAttachmentList();
+		
+		WCF::getTPL()->assign([
+			'attachmentHandler' => $attachmentHandler,
+			'attachmentList' => $attachmentList->getObjects(),
+			'attachmentObjectID' => $this->message->messageID,
+			'attachmentObjectType' => 'com.woltlab.wcf.conversation.message',
+			'attachmentParentObjectID' => 0,
+			'tmpHash' => $tmpHash,
+		]);
 		
 		return [
 			'actionName' => 'beginEdit',
-			'template' => WCF::getTPL()->fetch('conversationMessageInlineEditor')
+			'template' => WCF::getTPL()->fetch('conversationMessageInlineEditor'),
 		];
 	}
 	
@@ -442,25 +440,22 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 		$this->message = new ConversationMessage($this->message->messageID);
 		$this->message->getAttachments();
 		
-		$attachmentList = null;
-		if (MODULE_ATTACHMENT) {
-			$attachmentList = $this->message->getAttachments(true);
-			$count = 0;
-			if ($attachmentList !== null) {
-				// set permissions
-				$attachmentList->setPermissions([
-					'canDownload' => true,
-					'canViewPreview' => true
-				]);
-				
-				$count = count($attachmentList);
-			}
+		$attachmentList = $this->message->getAttachments(true);
+		$count = 0;
+		if ($attachmentList !== null) {
+			// set permissions
+			$attachmentList->setPermissions([
+				'canDownload' => true,
+				'canViewPreview' => true,
+			]);
 			
-			// update count to reflect number of attachments after edit
-			if ($count != $this->message->attachments) {
-				$messageEditor = new ConversationMessageEditor($this->message);
-				$messageEditor->update(['attachments' => $count]);
-			}
+			$count = count($attachmentList);
+		}
+		
+		// update count to reflect number of attachments after edit
+		if ($count != $this->message->attachments) {
+			$messageEditor = new ConversationMessageEditor($this->message);
+			$messageEditor->update(['attachments' => $count]);
 		}
 		
 		// load embedded objects
@@ -471,13 +466,11 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			'message' => $this->message->getFormattedMessage()
 		];
 		
-		if (MODULE_ATTACHMENT) {
-			WCF::getTPL()->assign([
-				'attachmentList' => $attachmentList,
-				'objectID' => $this->message->messageID
-			]);
-			$data['attachmentList'] = WCF::getTPL()->fetch('attachments');
-		}
+		WCF::getTPL()->assign([
+			'attachmentList' => $attachmentList,
+			'objectID' => $this->message->messageID
+		]);
+		$data['attachmentList'] = WCF::getTPL()->fetch('attachments');
 		
 		return $data;
 	}

@@ -132,7 +132,7 @@ class ViewableConversationMessageList extends ConversationMessageList {
 	 * Reads the list of attachments.
 	 */
 	public function readAttachments() {
-		if (MODULE_ATTACHMENT == 1 && !empty($this->attachmentObjectIDs)) {
+		if (!empty($this->attachmentObjectIDs)) {
 			$this->attachmentList = new GroupedAttachmentList('com.woltlab.wcf.conversation.message');
 			$this->attachmentList->getConditionBuilder()->add('attachment.objectID IN (?)', [$this->attachmentObjectIDs]);
 			$this->attachmentList->readObjects();

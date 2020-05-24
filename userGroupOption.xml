@@ -114,14 +114,12 @@
 				<categoryname>user.conversation</categoryname>
 				<optiontype>boolean</optiontype>
 				<defaultvalue>1</defaultvalue>
-				<options>module_attachment</options>
 				<usersonly>1</usersonly>
 			</option>
 			<option name="user.conversation.maxAttachmentSize">
 				<categoryname>user.conversation</categoryname>
 				<optiontype>fileSize</optiontype>
 				<defaultvalue>1000000</defaultvalue>
-				<options>module_attachment</options>
 				<minvalue>10000</minvalue>
 				<usersonly>1</usersonly>
 			</option>
@@ -136,7 +134,6 @@ bmp
 zip
 txt
 pdf</defaultvalue>
-				<options>module_attachment</options>
 				<usersonly>1</usersonly>
 				<wildcard>*</wildcard>
 			</option>
@@ -144,7 +141,6 @@ pdf</defaultvalue>
 				<categoryname>user.conversation</categoryname>
 				<optiontype>integer</optiontype>
 				<defaultvalue>5</defaultvalue>
-				<options>module_attachment</options>
 				<minvalue>1</minvalue>
 				<maxvalue>100</maxvalue>
 				<usersonly>1</usersonly>

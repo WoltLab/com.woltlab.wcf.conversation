@@ -70,7 +70,7 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	 * @return	GroupedAttachmentList
 	 */
 	public function getAttachments($ignoreCache = false) {
-		if (MODULE_ATTACHMENT == 1 && ($this->attachments || $ignoreCache)) {
+		if ($this->attachments || $ignoreCache) {
 			$attachmentList = new GroupedAttachmentList('com.woltlab.wcf.conversation.message');
 			$attachmentList->getConditionBuilder()->add('attachment.objectID IN (?)', [$this->messageID]);
 			$attachmentList->readObjects();
