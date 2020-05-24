@@ -182,7 +182,7 @@
 		<item name="wcf.moderation.type.com.woltlab.wcf.conversation.message"><![CDATA[Conversation]]></item>
 	</category>
 	<category name="wcf.page">
-		<item name="wcf.page.onlineLocation.com.woltlab.wcf.conversation.Conversation"><![CDATA[Conversation <a href="{link controller='Conversation' object=$conversation}{/link}" class="conversationLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>]]></item>
+		<item name="wcf.page.onlineLocation.com.woltlab.wcf.conversation.Conversation"><![CDATA[Conversation {anchor object=$conversation class='conversationLink'}]]></item>
 	</category>
 	<category name="wcf.search">
 		<item name="wcf.search.type.com.woltlab.wcf.conversation"><![CDATA[This Conversation]]></item>

@@ -1186,6 +1186,7 @@ WCF.Conversation.Label.Manager = Class.extend({
  * Provides a flexible conversation preview.
  * 
  * @see	WCF.Popover
+ * @deprecated  5.3     handled via `WoltLabSuite/Core/Controller/Popover`
  */
 WCF.Conversation.Preview = WCF.Popover.extend({
 	/**

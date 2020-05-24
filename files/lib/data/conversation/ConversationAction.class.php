@@ -6,6 +6,7 @@ use wcf\data\conversation\message\ConversationMessageList;
 use wcf\data\conversation\message\SimplifiedViewableConversationMessageList;
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\IClipboardAction;
+use wcf\data\IPopoverAction;
 use wcf\data\IVisitableObjectAction;
 use wcf\system\clipboard\ClipboardHandler;
 use wcf\system\conversation\ConversationHandler;
@@ -31,7 +32,7 @@ use wcf\system\WCF;
  * @method	ConversationEditor[]	getObjects()
  * @method	ConversationEditor	getSingleObject()
  */
-class ConversationAction extends AbstractDatabaseObjectAction implements IClipboardAction, IVisitableObjectAction {
+class ConversationAction extends AbstractDatabaseObjectAction implements IClipboardAction, IPopoverAction, IVisitableObjectAction {
 	/**
 	 * @inheritDoc
 	 */
@@ -433,11 +434,9 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	}
 	
 	/**
-	 * Validates the get message preview action.
-	 * 
-	 * @throws	PermissionDeniedException
+	 * @inheritDoc
 	 */
-	public function validateGetMessagePreview() {
+	public function validateGetPopover() {
 		$this->conversation = $this->getSingleObject();
 		if (!Conversation::isParticipant([$this->conversation->conversationID])) {
 			throw new PermissionDeniedException();
@@ -445,23 +444,38 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	}
 	
 	/**
+	 * @inheritDoc
+	 */
+	public function getPopover() {
+		$messageList = new SimplifiedViewableConversationMessageList();
+		$messageList->getConditionBuilder()->add("conversation_message.messageID = ?", [$this->conversation->firstMessageID]);
+		$messageList->readObjects();
+		
+		return [
+			'template' => WCF::getTPL()->fetch('conversationMessagePreview', 'wcf', [
+				'message' => $messageList->getSingleObject(),
+			]),
+		];
+	}
+	
+	/**
+	 * Validates the get message preview action.
+	 * 
+	 * @throws	PermissionDeniedException
+	 * @deprecated  5.3     Use `validateGetPopover()` instead.
+	 */
+	public function validateGetMessagePreview() {
+		$this->validateGetPopover();
+	}
+	
+	/**
 	 * Returns a preview of a message in a specific conversation.
 	 * 
 	 * @return	string[]
+	 * @deprecated  5.3     Use `getPopover()` instead.
 	 */
 	public function getMessagePreview() {
-		$messageList = new SimplifiedViewableConversationMessageList();
-		
-		$messageList->getConditionBuilder()->add("conversation_message.messageID = ?", [$this->conversation->firstMessageID]);
-		$messageList->readObjects();
-		$messages = $messageList->getObjects();
-		
-		WCF::getTPL()->assign([
-			'message' => reset($messages)
-		]);
-		return [
-			'template' => WCF::getTPL()->fetch('conversationMessagePreview')
-		];
+		return $this->getPopover();
 	}
 	
 	/**

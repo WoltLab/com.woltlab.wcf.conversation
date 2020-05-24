@@ -66,7 +66,7 @@ define(['Ajax', 'EventKey', 'Language', 'Ui/Dialog', 'Ui/Notification'], functio
 		 */
 		_getCurrentValue: function () {
 			var value = '';
-			elBySelAll('.jsConversationSubject[data-conversation-id="' + _objectId + '"], .conversationLink[data-conversation-id="' + _objectId + '"]', undefined, function (subject) {
+			elBySelAll('.jsConversationSubject[data-conversation-id="' + _objectId + '"], .conversationLink[data-object-id="' + _objectId + '"]', undefined, function (subject) {
 				value = subject.textContent;
 			});
 			
@@ -76,7 +76,7 @@ define(['Ajax', 'EventKey', 'Language', 'Ui/Dialog', 'Ui/Notification'], functio
 		_ajaxSuccess: function (data) {
 			UiDialog.close(this);
 			
-			elBySelAll('.jsConversationSubject[data-conversation-id="' + _objectId + '"], .conversationLink[data-conversation-id="' + _objectId + '"]', undefined, function (subject) {
+			elBySelAll('.jsConversationSubject[data-conversation-id="' + _objectId + '"], .conversationLink[data-object-id="' + _objectId + '"]', undefined, function (subject) {
 				subject.textContent = data.returnValues.subject;
 			});
 			

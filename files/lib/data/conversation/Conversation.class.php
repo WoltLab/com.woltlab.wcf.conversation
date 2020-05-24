@@ -1,10 +1,10 @@
 <?php
 namespace wcf\data\conversation;
 use wcf\data\conversation\message\ConversationMessage;
+use wcf\data\IPopoverObject;
 use wcf\data\user\group\UserGroup;
 use wcf\data\user\UserProfile;
 use wcf\data\DatabaseObject;
-use wcf\data\ITitledLinkObject;
 use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\conversation\ConversationHandler;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
@@ -48,7 +48,7 @@ use wcf\util\ArrayUtil;
  * @property-read	integer|null	$leftAt			timestamp at which the user left the conversation or `0` if they did not leave the conversation; is `null` if the conversation has not been fetched via `UserConversationList`
  * @property-read	integer|null	$lastMessageID		id of the last message written before the user left the conversation or `0` if they did not leave the conversation; is `null` if the conversation has not been fetched via `UserConversationList`
  */
-class Conversation extends DatabaseObject implements IRouteController, ITitledLinkObject {
+class Conversation extends DatabaseObject implements IPopoverObject, IRouteController {
 	/**
 	 * default participation state
 	 * @var	integer
@@ -418,6 +418,13 @@ class Conversation extends DatabaseObject implements IRouteController, ITitledLi
 		}
 		
 		return $this->isActiveParticipant;
+	}
+	
+	/**
+	 * @inheritDoc
+	 */
+	public function getPopoverLinkClass() {
+		return 'conversationLink';
 	}
 	
 	/**

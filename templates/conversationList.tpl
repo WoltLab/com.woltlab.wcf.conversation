@@ -201,7 +201,7 @@
 							{/hascontent}
 								
 							<h3>
-								<a href="{if $conversation->isNew()}{link controller='Conversation' object=$conversation}action=firstNew{/link}{else}{link controller='Conversation' object=$conversation}{/link}{/if}" class="conversationLink messageGroupLink" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</a>
+								<a href="{if $conversation->isNew()}{link controller='Conversation' object=$conversation}action=firstNew{/link}{else}{$conversation->getLink()}{/if}" class="conversationLink messageGroupLink" data-object-id="{@$conversation->conversationID}">{$conversation->subject}</a>
 								{if $conversation->replies}
 									<span class="badge messageGroupCounterMobile">{@$conversation->replies|shortUnit}</span>
 								{/if}
@@ -296,7 +296,7 @@
 
 <script data-relocate="true" src="{@$__wcf->getPath()}js/WCF.Conversation{if !ENABLE_DEBUG_MODE}.min{/if}.js?v={@LAST_UPDATE_TIME}"></script>
 <script data-relocate="true">
-	require(['Language', 'WoltLabSuite/Core/Ui/ItemList/User'], function(Language, UiItemListUser) {
+	require(['Language', 'WoltLabSuite/Core/Controller/Popover', 'WoltLabSuite/Core/Ui/ItemList/User'], function(Language, ControllerPopover, UiItemListUser) {
 		Language.addObject({
 			'wcf.conversation.edit.addParticipants': '{lang}wcf.conversation.edit.addParticipants{/lang}',
 			'wcf.conversation.edit.assignLabel': '{lang}wcf.conversation.edit.assignLabel{/lang}',
@@ -322,7 +322,6 @@
 		
 		new WCF.Conversation.Clipboard($editorHandler);
 		new WCF.Conversation.Label.Manager('{link controller='ConversationList' encode=false}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}');
-		new WCF.Conversation.Preview();
 		new WCF.Conversation.MarkAsRead();
 		new WCF.Conversation.MarkAllAsRead();
 		
@@ -334,6 +333,12 @@
 		UiItemListUser.init('participants', {
 			excludedSearchValues: ['{$__wcf->user->username|encodeJS}'],
 			maxItems: 20
+		});
+		
+		ControllerPopover.init({
+			className: 'conversationLink',
+			dboAction: 'wcf\\data\\conversation\\ConversationAction',
+			identifier: 'com.woltlab.wcf.conversation'
 		});
 	});
 </script>
