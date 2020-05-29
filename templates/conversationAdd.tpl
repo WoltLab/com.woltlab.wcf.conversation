@@ -140,7 +140,7 @@
 			callbackSetupValues: function() {
 				return [
 					{implode from=$participantsData item=participant}
-						{ objectId: {@$participant['objectId']}, value: '{$participant['value']|encodeJS}', type: '{@$participant['type']}' }
+						{ objectId: {@$participant['objectId']}, value: '{@$participant['value']|encodeJS}', type: '{@$participant['type']}' }
 					{/implode}
 				];
 			}
@@ -154,7 +154,7 @@
 			callbackSetupValues: function() {
 				return [
 					{implode from=$invisibleParticipantsData item=participant}
-						{ objectId: {@$participant['objectId']}, value: '{$participant['value']|encodeJS}', type: '{@$participant['type']}' }
+						{ objectId: {@$participant['objectId']}, value: '{@$participant['value']|encodeJS}', type: '{@$participant['type']}' }
 					{/implode}
 				];
 			}
