@@ -215,7 +215,13 @@
 							</aside>
 							
 							<ul class="inlineList dotSeparated small messageGroupInfo">
-								<li class="messageGroupAuthor">{if $conversation->userID}<a href="{link controller='User' object=$conversation->getUserProfile()->getDecoratedObject()}{/link}" class="userLink" data-user-id="{@$conversation->userID}">{$conversation->username}</a>{else}{$conversation->username}{/if}</li>
+								<li class="messageGroupAuthor">
+									{if $conversation->userID}
+										{user object=$conversation->getUserProfile()}
+									{else}
+										{$conversation->username}
+									{/if}
+								</li>
 								<li class="messageGroupTime">{@$conversation->time|time}</li>
 								<li class="messageGroupEditLink jsOnly"><a class="jsConversationInlineEditor">{lang}wcf.global.button.edit{/lang}</a></li>
 								{event name='messageGroupInfo'}
@@ -229,7 +235,7 @@
 							{if $conversation->getParticipantSummary()|count}
 								<small class="conversationParticipantSummary">
 									{assign var='participantSummaryCount' value=$conversation->getParticipantSummary()|count}
-									{lang}wcf.conversation.participants{/lang}: {implode from=$conversation->getParticipantSummary() item=participant}<a href="{link controller='User' object=$participant}{/link}" class="userLink{if $participant->hideConversation == 2} conversationLeft{/if}" data-user-id="{@$participant->userID}">{$participant->username}</a>{/implode}
+									{lang}wcf.conversation.participants{/lang}: {implode from=$conversation->getParticipantSummary() item=participant}<a href="{$participant->getLink()}" class="userLink{if $participant->hideConversation == 2} conversationLeft{/if}" data-object-id="{@$participant->userID}">{$participant->username}</a>{/implode}
 									{if $participantSummaryCount < $conversation->participants}{lang}wcf.conversation.participants.other{/lang}{/if}
 								</small>
 							{/if}
@@ -256,7 +262,7 @@
 									<div>
 										<p>
 											{if $conversation->lastPosterID}
-												<a href="{link controller='User' object=$conversation->getLastPosterProfile()->getDecoratedObject()}{/link}" class="userLink" data-user-id="{@$conversation->getLastPosterProfile()->userID}">{$conversation->lastPoster}</a>
+												{user object=$conversation->getLastPosterProfile()}
 											{else}
 												{$conversation->lastPoster}
 											{/if}

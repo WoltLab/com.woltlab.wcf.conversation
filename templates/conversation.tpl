@@ -28,7 +28,7 @@
 				<li>
 					<span class="icon icon16 fa-user"></span>
 					{if $conversation->userID}
-						<a href="{link controller='User' object=$conversation->getUserProfile()->getDecoratedObject()}{/link}" class="userLink" data-user-id="{@$conversation->userID}">{$conversation->username}</a>
+						{user object=$conversation->getUserProfile()}
 					{else}
 						{$conversation->username}
 					{/if}
@@ -68,10 +68,18 @@
 			{foreach from=$participants item=participant}
 				<li class="jsParticipant{if !$participant->userID || $participant->hideConversation == 2 || $participant->leftAt > 0} conversationLeft{/if}">
 					<div class="box24">
-						{if $participant->userID}<a href="{link controller='User' object=$participant}{/link}">{@$participant->getAvatar()->getImageTag(24)}</a>{else}<span>{@$participant->getAvatar()->getImageTag(24)}</span>{/if}
+						{if $participant->userID}
+							{user object=$participant type='avatar24'}
+						{else}
+							<span>{@$participant->getAvatar()->getImageTag(24)}</span>
+						{/if}
 						<div>
 							<p>
-								{if $participant->userID}<a href="{link controller='User' object=$participant}{/link}" class="userLink" data-user-id="{@$participant->userID}">{$participant->username}</a>{else}<span>{$participant->username}</span>{/if}
+								{if $participant->userID}
+									{user object=$participant}
+								{else}
+									<span>{$participant->username}</span>
+								{/if}
 								{if $participant->isInvisible}<small>({lang}wcf.conversation.invisible{/lang})</small>{/if}
 								{if $participant->userID && ($conversation->userID == $__wcf->getUser()->userID) && ($participant->userID != $__wcf->getUser()->userID) && $participant->hideConversation != 2 && $participant->leftAt == 0}
 									<a href="#" class="jsDeleteButton jsTooltip jsOnly" title="{lang}wcf.conversation.participants.removeParticipant{/lang}" data-confirm-message-html="{lang __encode=true}wcf.conversation.participants.removeParticipant.confirmMessage{/lang}" data-object-id="{@$participant->userID}"><span class="icon icon16 fa-times"></span></a>

@@ -1,11 +1,11 @@
 <div class="box48">
 	{if $message->getUserProfile()->getAvatar()}
-		<a href="{link controller='User' object=$message->getUserProfile()->getDecoratedObject()}{/link}" aria-hidden="true">{@$message->getUserProfile()->getAvatar()->getImageTag(48)}</a>
+		{user object=$message->getUserProfile() type='avatar48' ariaHidden='true'}
 	{/if}
-
+	
 	<div>
 		<div class="containerHeadline">
-			<h3><a href="{link controller='User' object=$message->getUserProfile()->getDecoratedObject()}{/link}">{$message->username}</a> <small class="separatorLeft">{@$message->time|time}</small></h3>
+			<h3>{user object=$message->getUserProfile()} <small class="separatorLeft">{@$message->time|time}</small></h3>
 		</div>
 		
 		<div>{@$message->getExcerpt()}</div>

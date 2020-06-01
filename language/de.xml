@@ -168,8 +168,8 @@
 		<item name="wcf.conversation.log.conversation.open"><![CDATA[Hat die Konversation wieder geöffnet.]]></item>
 		<item name="wcf.conversation.log.conversation.close"><![CDATA[Hat die Konversation für neue Nachrichten geschlossen.]]></item>
 		<item name="wcf.conversation.log.conversation.leave"><![CDATA[Hat die Konversation verlassen.]]></item>
-		<item name="wcf.conversation.log.conversation.addParticipants"><![CDATA[Hat folgende Teilnehmer hinzugefügt: {implode from=$additionalData[participants] item=participant}<a href="{link controller='User' id=$participant[userID] title=$participant[username]}{/link}" class="userLink" data-user-id="{@$participant[userID]}">{$participant[username]}</a>{/implode}]]></item>
-		<item name="wcf.conversation.log.conversation.removeParticipant"><![CDATA[Hat folgenden Teilnehmer entfernt: <a href="{link controller='User' id=$additionalData[userID] title=$additionalData[username]}{/link}" class="userLink" data-user-id="{@$additionalData[userID]}">{$additionalData[username]}</a>]]></item>
+		<item name="wcf.conversation.log.conversation.addParticipants"><![CDATA[Hat folgende Teilnehmer hinzugefügt: {implode from=$additionalData[participants] item=participant}<a href="{link controller='User' id=$participant[userID] title=$participant[username]}{/link}" class="userLink" data-object-id="{@$participant[userID]}">{$participant[username]}</a>{/implode}]]></item>
+		<item name="wcf.conversation.log.conversation.removeParticipant"><![CDATA[Hat folgenden Teilnehmer entfernt: <a href="{link controller='User' id=$additionalData[userID] title=$additionalData[username]}{/link}" class="userLink" data-object-id="{@$additionalData[userID]}">{$additionalData[username]}</a>]]></item>
 	</category>
 	<category name="wcf.acp.dataImport">
 		<item name="wcf.acp.dataImport.data.com.woltlab.wcf.conversation"><![CDATA[Konversationen]]></item>
