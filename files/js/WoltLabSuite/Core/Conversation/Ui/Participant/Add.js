@@ -104,7 +104,7 @@ define(['Ajax', 'Language', 'Ui/Dialog', 'Ui/Notification', 'WoltLabSuite/Core/U
 				callbackChange: function(elementId, values) { buttonSubmit.disabled = (values.length === 0); },
 				excludedSearchValues: data.returnValues.excludedSearchValues,
 				maxItems: data.returnValues.maxItems,
-				includeUserGroups: data.returnValues.canAddGroupParticipants,
+				includeUserGroups: data.returnValues.canAddGroupParticipants && data.returnValues.restrictUserGroupIDs.length > 0,
 				restrictUserGroupIDs: data.returnValues.restrictUserGroupIDs,
 				csvPerType: true
 			});
