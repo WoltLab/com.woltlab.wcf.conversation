@@ -8,6 +8,7 @@ use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\IClipboardAction;
 use wcf\data\IPopoverAction;
 use wcf\data\IVisitableObjectAction;
+use wcf\data\user\group\UserGroup;
 use wcf\system\clipboard\ClipboardHandler;
 use wcf\system\conversation\ConversationHandler;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
@@ -790,11 +791,19 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 * @return	array
 	 */
 	public function getAddParticipantsForm() {
+		$restrictUserGroupIDs = [];
+		foreach (UserGroup::getAllGroups() as $group) {
+			if ($group->canBeAddedAsConversationParticipant) {
+				$restrictUserGroupIDs[] = $group->groupID;
+			}
+		}
+		
 		return [
 			'excludedSearchValues' => $this->conversation->getParticipantNames(false, true),
 			'maxItems' => WCF::getSession()->getPermission('user.conversation.maxParticipants') - $this->conversation->participants,
 			'canAddGroupParticipants' => WCF::getSession()->getPermission('user.conversation.canAddGroupParticipants'),
-			'template' => WCF::getTPL()->fetch('conversationAddParticipants', 'wcf', ['conversation' => $this->conversation])
+			'template' => WCF::getTPL()->fetch('conversationAddParticipants', 'wcf', ['conversation' => $this->conversation]),
+			'restrictUserGroupIDs' => $restrictUserGroupIDs,
 		];
 	}
 	
