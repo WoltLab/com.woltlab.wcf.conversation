@@ -836,10 +836,15 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 */
 	public function addParticipants() {
 		try {
-			$participantIDs = Conversation::validateParticipants($this->parameters['participants'], 'participants', $this->conversation->getParticipantIDs(true));
+			$existingParticipants = $this->conversation->getParticipantIDs(true);
+			$participantIDs = Conversation::validateParticipants($this->parameters['participants'], 'participants', $existingParticipants);
 			if (!empty($this->parameters['participantsGroupIDs']) && WCF::getSession()->getPermission('user.conversation.canAddGroupParticipants')) {
-				$participantIDs = array_merge($participantIDs, Conversation::validateGroupParticipants($this->parameters['participantsGroupIDs'], 'participants', $this->conversation->getParticipantIDs(true)));
-				$participantIDs = array_unique($participantIDs);
+				$validGroupParticipants = Conversation::validateGroupParticipants($this->parameters['participantsGroupIDs'], 'participants', $existingParticipants);
+				$validGroupParticipants = array_diff($validGroupParticipants, $participantIDs);
+				if (empty($validGroupParticipants)) {
+					throw new UserInputException('participants', 'emptyGroup');
+				}
+				$participantIDs = array_merge($participantIDs, $validGroupParticipants);
 			}
 			
 			$parameters = [
@@ -850,9 +855,10 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 		}
 		catch (UserInputException $e) {
 			$errorMessage = '';
-			foreach ($e->getType() as $type) {
+			$errors = is_array($e->getType()) ? $e->getType() : [['type' => $e->getType()]];
+			foreach ($errors as $type) {
 				if (!empty($errorMessage)) $errorMessage .= ' ';
-				$errorMessage .= WCF::getLanguage()->getDynamicVariable('wcf.conversation.participants.error.'.$type['type'], ['errorData' => ['username' => $type['username']]]);
+				$errorMessage .= WCF::getLanguage()->getDynamicVariable('wcf.conversation.participants.error.'.$type['type'], ['errorData' => $type]);
 			}
 			
 			return [
