@@ -104,6 +104,7 @@
 		<item name="wcf.conversation.participants.error.canNotUseConversation"><![CDATA[{$errorData[username]} besitzt nicht die notwendigen Berechtigungen, um an einer Konversation teilnehmen zu dürfen.]]></item>
 		<item name="wcf.conversation.participants.error.doesNotAcceptConversation"><![CDATA[{$errorData[username]} möchte nicht an Konversationen teilnehmen.]]></item>
 		<item name="wcf.conversation.participants.error.emptyGroup"><![CDATA[Die Mitglieder aller angegebener Gruppen sind bereits Teilnehmer dieser Konversation.]]></item>
+		<item name="wcf.conversation.participants.error.intersects"><![CDATA[{$errorData[username]} ist ebenfalls als sichtbarer Teilnehmer eingetragen.]]></item>
 		<item name="wcf.conversation.participants.error.ignoresYou"><![CDATA[{$errorData[username]} hat {if LANGUAGE_USE_INFORMAL_VARIANT}dich{else}Sie{/if} blockiert.]]></item>
 		<item name="wcf.conversation.participants.error.tooManyParticipants"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Du hast{else}Sie haben{/if} zu viele Teilnehmer angegeben. Das Maximum liegt bei {#$__wcf->getSession()->getPermission('user.conversation.maxParticipants')} Teilnehmern.]]></item>
 		<item name="wcf.conversation.participants.error.invisibleParticipantsNoPermission"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Du hast{else}Sie haben{/if} keine Berechtigung, unsichtbare Teilnehmer hinzuzufügen.]]></item>

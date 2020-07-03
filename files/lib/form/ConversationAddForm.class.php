@@ -197,7 +197,15 @@ class ConversationAddForm extends MessageForm {
 		
 		// remove duplicates
 		$intersection = array_intersect($this->participantIDs, $this->invisibleParticipantIDs);
-		if (!empty($intersection)) $this->invisibleParticipantIDs = array_diff($this->invisibleParticipantIDs, $intersection);
+		if (!empty($intersection)) {
+			$users = UserProfileRuntimeCache::getInstance()->getObjects(array_slice($intersection, 0, 10));
+			throw new UserInputException('invisibleParticipants', array_map(function ($user) {
+				return [
+					'type' => 'intersects',
+					'username' => $user->username,
+				];
+			}, $users));
+		}
 		
 		if (empty($this->participantIDs) && empty($this->invisibleParticipantIDs) && !$this->draft) {
 			throw new UserInputException('participants');
