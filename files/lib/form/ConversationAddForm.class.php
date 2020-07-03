@@ -179,12 +179,20 @@ class ConversationAddForm extends MessageForm {
 		$this->participantIDs = Conversation::validateParticipants($this->participants);
 		$this->invisibleParticipantIDs = Conversation::validateParticipants($this->invisibleParticipants, 'invisibleParticipants');
 		if (!empty($this->participantsGroupIDs)) {
-			$this->participantIDs = array_merge($this->participantIDs, Conversation::validateGroupParticipants($this->participantsGroupIDs));
-			$this->participantIDs = array_unique($this->participantIDs);
+			$validGroupParticipants = Conversation::validateGroupParticipants($this->participantsGroupIDs);
+			$validGroupParticipants = array_diff($validGroupParticipants, $this->participantIDs);
+			if (empty($validGroupParticipants)) {
+				throw new UserInputException('participants', 'emptyGroup');
+			}
+			$this->participantIDs = array_merge($this->participantIDs, $validGroupParticipants);
 		}
 		if (!empty($this->invisibleParticipantsGroupIDs)) {
-			$this->invisibleParticipantIDs = array_merge($this->invisibleParticipantIDs, Conversation::validateGroupParticipants($this->invisibleParticipantsGroupIDs, 'invisibleParticipants'));
-			$this->invisibleParticipantIDs = array_unique($this->invisibleParticipantIDs);
+			$validGroupParticipants = Conversation::validateGroupParticipants($this->invisibleParticipantsGroupIDs, 'invisibleParticipants');
+			$validGroupParticipants = array_diff($validGroupParticipants, $this->invisibleParticipantIDs);
+			if (empty($validGroupParticipants)) {
+				throw new UserInputException('invisibleParticipants', 'emptyGroup');
+			}
+			$this->invisibleParticipantIDs = array_merge($this->invisibleParticipantIDs, $validGroupParticipants);
 		}
 		
 		// remove duplicates
