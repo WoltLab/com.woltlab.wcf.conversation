@@ -147,7 +147,9 @@ class ConversationMessage extends DatabaseObject implements IMessage {
 	 * @return	boolean
 	 */
 	public function canEdit() {
-		return (WCF::getUser()->userID == $this->userID && ($this->getConversation()->isDraft || WCF::getSession()->getPermission('user.conversation.canEditMessage')));
+		return  (WCF::getUser()->userID == $this->userID && 
+			($this->getConversation()->isDraft || WCF::getSession()->getPermission('user.conversation.canEditMessage')) 
+			&& $this->getConversation()->canReply());
 	}
 	
 	/**
