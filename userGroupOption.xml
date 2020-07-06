@@ -35,8 +35,15 @@
 				<categoryname>user.conversation</categoryname>
 				<optiontype>boolean</optiontype>
 				<defaultvalue>1</defaultvalue>
-				<enableoptions>user.conversation.canStartConversation,user.conversation.canSetCanInvite,user.conversation.canEditMessage,user.conversation.canAddInvisibleParticipants,user.conversation.maxParticipants,user.conversation.maxConversations,user.conversation.maxLabels,user.conversation.maxLength,user.conversation.canUploadAttachment,user.conversation.maxAttachmentSize,user.conversation.allowedAttachmentExtensions,user.conversation.maxAttachmentCount</enableoptions>
+				<enableoptions>user.conversation.canReplyToConversation,user.conversation.canSetCanInvite,user.conversation.canEditMessage,user.conversation.canAddInvisibleParticipants,user.conversation.maxParticipants,user.conversation.maxConversations,user.conversation.maxLabels,user.conversation.maxLength,user.conversation.canUploadAttachment,user.conversation.maxAttachmentSize,user.conversation.allowedAttachmentExtensions,user.conversation.maxAttachmentCount</enableoptions>
 				<usersonly>1</usersonly>
+			</option>
+			<option name="user.conversation.canReplyToConversation">
+				<categoryname>user.conversation</categoryname>
+				<optiontype>boolean</optiontype>
+				<defaultvalue>1</defaultvalue>
+				<usersonly>1</usersonly>
+				<enableoptions>user.conversation.canStartConversation</enableoptions>
 			</option>
 			<option name="user.conversation.canStartConversation">
 				<categoryname>user.conversation</categoryname>

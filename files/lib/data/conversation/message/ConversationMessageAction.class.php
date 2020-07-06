@@ -488,7 +488,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements 
 			throw new PermissionDeniedException();
 		}
 		$conversation->loadUserParticipation();
-		if (!$conversation->canRead()) {
+		if (!$conversation->canRead() || !$conversation->canReply()) {
 			throw new PermissionDeniedException();
 		}
 	}
