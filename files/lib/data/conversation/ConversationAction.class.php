@@ -14,6 +14,7 @@ use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
 use wcf\system\log\modification\ConversationModificationLogHandler;
 use wcf\system\request\LinkHandler;
+use wcf\system\search\SearchIndexManager;
 use wcf\system\user\notification\object\ConversationUserNotificationObject;
 use wcf\system\user\notification\UserNotificationHandler;
 use wcf\system\user\storage\UserStorageHandler;
@@ -978,12 +979,26 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IClipbo
 	 * @return      string[]
 	 */
 	public function editSubject() {
+		$subject = mb_substr($this->parameters['subject'], 0, 255);
+		
 		$this->conversation->update([
-			'subject' => mb_substr($this->parameters['subject'], 0, 255)
+			'subject' => $subject
 		]);
 		
+		$message = $this->conversation->getFirstMessage();
+		
+		SearchIndexManager::getInstance()->set(
+			'com.woltlab.wcf.conversation.message',
+			$message->messageID,
+			$message->message,
+			$subject,
+			$message->time,
+			$message->userID,
+			$message->username
+		);
+		
 		return [
-			'subject' => $this->parameters['subject']
+			'subject' => $subject
 		];
 	}
 	
