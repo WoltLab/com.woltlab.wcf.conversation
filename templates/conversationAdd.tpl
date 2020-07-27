@@ -135,7 +135,7 @@
 		UiItemListUser.init('participants', {
 			maxItems: {@$__wcf->getSession()->getPermission('user.conversation.maxParticipants')},
 			includeUserGroups: {if $__wcf->getSession()->getPermission('user.conversation.canAddGroupParticipants')}true{else}false{/if},
-			restrictUserGroupIDs: [{implode from=$allowedUserGroupIDs item=allowedUserGroupID}{@$allowedUserGroupID}{/implode}],
+			restrictUserGroupIDs: [-1, {implode from=$allowedUserGroupIDs item=allowedUserGroupID}{@$allowedUserGroupID}{/implode}],
 			csvPerType: true,
 			callbackSetupValues: function() {
 				return [
@@ -149,7 +149,7 @@
 		UiItemListUser.init('invisibleParticipants', {
 			maxItems: {@$__wcf->getSession()->getPermission('user.conversation.maxParticipants')},
 			includeUserGroups: {if $__wcf->getSession()->getPermission('user.conversation.canAddGroupParticipants')}true{else}false{/if},
-			restrictUserGroupIDs: [{implode from=$allowedUserGroupIDs item=allowedUserGroupID}{@$allowedUserGroupID}{/implode}],
+			restrictUserGroupIDs: [-1, {implode from=$allowedUserGroupIDs item=allowedUserGroupID}{@$allowedUserGroupID}{/implode}],
 			csvPerType: true,
 			callbackSetupValues: function() {
 				return [
