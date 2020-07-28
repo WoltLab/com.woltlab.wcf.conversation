@@ -103,8 +103,8 @@
 		<item name="wcf.conversation.participants.error.duplicate"><![CDATA[{$errorData[username]} is already a participant of this conversation.]]></item>
 		<item name="wcf.conversation.participants.error.canNotUseConversation"><![CDATA[{$errorData[username]} is not allowed to participate in a conversation.]]></item>
 		<item name="wcf.conversation.participants.error.doesNotAcceptConversation"><![CDATA[{$errorData[username]} does not want to be added in conversations.]]></item>
-		<item name="wcf.conversation.participants.error.emptyGroup"><![CDATA[Every member within the given user groups already participates in this conversation.]]></item>
-		<item name="wcf.conversation.participants.error.intersects"><![CDATA[{$errorData[username]} was also added as a visible participant.]]></item>
+		<item name="wcf.conversation.participants.error.emptyGroup"><![CDATA[All members of the given user groups already participate in this conversation.]]></item>
+		<item name="wcf.conversation.participants.error.intersects"><![CDATA[{$errorData[username]} was already added as a visible participant.]]></item>
 		<item name="wcf.conversation.participants.error.ignoresYou"><![CDATA[{$errorData[username]} is blocking you.]]></item>
 		<item name="wcf.conversation.participants.error.tooManyParticipants"><![CDATA[You have added too many participants, you can add up to {#$__wcf->getSession()->getPermission('user.conversation.maxParticipants')} participants.]]></item>
 		<item name="wcf.conversation.participants.error.invisibleParticipantsNoPermission"><![CDATA[You do not have the permission to add invisible participants.]]></item>
