@@ -126,7 +126,7 @@
 			<option name="user.conversation.maxAttachmentSize">
 				<categoryname>user.conversation</categoryname>
 				<optiontype>fileSize</optiontype>
-				<defaultvalue>1000000</defaultvalue>
+				<defaultvalue>2000000</defaultvalue>
 				<minvalue>10000</minvalue>
 				<usersonly>1</usersonly>
 			</option>
