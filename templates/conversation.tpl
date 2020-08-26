@@ -122,20 +122,20 @@
 <script data-relocate="true">
 	$(function() {
 		WCF.Language.addObject({
-			'wcf.conversation.edit.addParticipants': '{lang}wcf.conversation.edit.addParticipants{/lang}',
-			'wcf.conversation.edit.assignLabel': '{lang}wcf.conversation.edit.assignLabel{/lang}',
-			'wcf.conversation.edit.close': '{lang}wcf.conversation.edit.close{/lang}',
-			'wcf.conversation.edit.leave': '{lang}wcf.conversation.edit.leave{/lang}',
-			'wcf.conversation.edit.open': '{lang}wcf.conversation.edit.open{/lang}',
-			'wcf.conversation.edit.subject': '{lang}wcf.conversation.edit.subject{/lang}',
-			'wcf.conversation.leave.title': '{lang}wcf.conversation.leave.title{/lang}',
-			'wcf.global.state.closed': '{lang}wcf.global.state.closed{/lang}',
-			'wcf.global.subject': '{lang}wcf.global.subject{/lang}',
-			'wcf.message.bbcode.code.copy': '{lang}wcf.message.bbcode.code.copy{/lang}',
-			'wcf.message.error.editorAlreadyInUse': '{lang}wcf.message.error.editorAlreadyInUse{/lang}',
-			'wcf.moderation.report.reportContent': '{lang}wcf.moderation.report.reportContent{/lang}',
-			'wcf.moderation.report.success': '{lang}wcf.moderation.report.success{/lang}',
-			'wcf.conversation.label.assignLabels': '{lang}wcf.conversation.label.assignLabels{/lang}'
+			'wcf.conversation.edit.addParticipants': '{jslang}wcf.conversation.edit.addParticipants{/jslang}',
+			'wcf.conversation.edit.assignLabel': '{jslang}wcf.conversation.edit.assignLabel{/jslang}',
+			'wcf.conversation.edit.close': '{jslang}wcf.conversation.edit.close{/jslang}',
+			'wcf.conversation.edit.leave': '{jslang}wcf.conversation.edit.leave{/jslang}',
+			'wcf.conversation.edit.open': '{jslang}wcf.conversation.edit.open{/jslang}',
+			'wcf.conversation.edit.subject': '{jslang}wcf.conversation.edit.subject{/jslang}',
+			'wcf.conversation.leave.title': '{jslang}wcf.conversation.leave.title{/jslang}',
+			'wcf.global.state.closed': '{jslang}wcf.global.state.closed{/jslang}',
+			'wcf.global.subject': '{jslang}wcf.global.subject{/jslang}',
+			'wcf.message.bbcode.code.copy': '{jslang}wcf.message.bbcode.code.copy{/jslang}',
+			'wcf.message.error.editorAlreadyInUse': '{jslang}wcf.message.error.editorAlreadyInUse{/jslang}',
+			'wcf.moderation.report.reportContent': '{jslang}wcf.moderation.report.reportContent{/jslang}',
+			'wcf.moderation.report.success': '{jslang}wcf.moderation.report.success{/jslang}',
+			'wcf.conversation.label.assignLabels': '{jslang}wcf.conversation.label.assignLabels{/jslang}'
 		});
 		
 		var $availableLabels = [ {implode from=$labelList item=label}{ cssClassName: '{if $label->cssClassName}{@$label->cssClassName}{/if}', labelID: {@$label->labelID}, label: '{$label->label|encodeJS}' }{/implode} ];

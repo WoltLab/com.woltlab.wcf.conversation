@@ -304,21 +304,21 @@
 <script data-relocate="true">
 	require(['Language', 'WoltLabSuite/Core/Controller/Popover', 'WoltLabSuite/Core/Ui/ItemList/User'], function(Language, ControllerPopover, UiItemListUser) {
 		Language.addObject({
-			'wcf.conversation.edit.addParticipants': '{lang}wcf.conversation.edit.addParticipants{/lang}',
-			'wcf.conversation.edit.assignLabel': '{lang}wcf.conversation.edit.assignLabel{/lang}',
-			'wcf.conversation.edit.close': '{lang}wcf.conversation.edit.close{/lang}',
-			'wcf.conversation.edit.leave': '{lang}wcf.conversation.edit.leave{/lang}',
-			'wcf.conversation.edit.open': '{lang}wcf.conversation.edit.open{/lang}',
-			'wcf.conversation.edit.subject': '{lang}wcf.conversation.edit.subject{/lang}',
-			'wcf.conversation.label.management': '{lang}wcf.conversation.label.management{/lang}',
-			'wcf.conversation.label.management.addLabel.success': '{lang}wcf.conversation.label.management.addLabel.success{/lang}',
-			'wcf.conversation.label.management.deleteLabel.confirmMessage': '{lang}wcf.conversation.label.management.deleteLabel.confirmMessage{/lang}',
-			'wcf.conversation.label.management.editLabel': '{lang}wcf.conversation.label.management.editLabel{/lang}',
-			'wcf.conversation.label.placeholder': '{lang}wcf.conversation.label.placeholder{/lang}',
-			'wcf.conversation.leave.title': '{lang}wcf.conversation.leave.title{/lang}',
-			'wcf.global.state.closed': '{lang}wcf.global.state.closed{/lang}',
-			'wcf.global.subject': '{lang}wcf.global.subject{/lang}',
-			'wcf.conversation.label.assignLabels': '{lang}wcf.conversation.label.assignLabels{/lang}'
+			'wcf.conversation.edit.addParticipants': '{jslang}wcf.conversation.edit.addParticipants{/jslang}',
+			'wcf.conversation.edit.assignLabel': '{jslang}wcf.conversation.edit.assignLabel{/jslang}',
+			'wcf.conversation.edit.close': '{jslang}wcf.conversation.edit.close{/jslang}',
+			'wcf.conversation.edit.leave': '{jslang}wcf.conversation.edit.leave{/jslang}',
+			'wcf.conversation.edit.open': '{jslang}wcf.conversation.edit.open{/jslang}',
+			'wcf.conversation.edit.subject': '{jslang}wcf.conversation.edit.subject{/jslang}',
+			'wcf.conversation.label.management': '{jslang}wcf.conversation.label.management{/jslang}',
+			'wcf.conversation.label.management.addLabel.success': '{jslang}wcf.conversation.label.management.addLabel.success{/jslang}',
+			'wcf.conversation.label.management.deleteLabel.confirmMessage': '{jslang}wcf.conversation.label.management.deleteLabel.confirmMessage{/jslang}',
+			'wcf.conversation.label.management.editLabel': '{jslang}wcf.conversation.label.management.editLabel{/jslang}',
+			'wcf.conversation.label.placeholder': '{jslang}wcf.conversation.label.placeholder{/jslang}',
+			'wcf.conversation.leave.title': '{jslang}wcf.conversation.leave.title{/jslang}',
+			'wcf.global.state.closed': '{jslang}wcf.global.state.closed{/jslang}',
+			'wcf.global.subject': '{jslang}wcf.global.subject{/jslang}',
+			'wcf.conversation.label.assignLabels': '{jslang}wcf.conversation.label.assignLabels{/jslang}'
 		});
 		
 		WCF.Clipboard.init('wcf\\page\\ConversationListPage', {@$hasMarkedItems}, { });
