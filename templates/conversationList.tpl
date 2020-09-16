@@ -252,7 +252,7 @@
 								<dd>{@$conversation->participants|shortUnit}</dd>
 							</dl>
 							
-							<div class="messageGroupListStatsSimple" aria-label="{lang}wcf.conversation.replies{/lang}">{@$conversation->replies|shortUnit}</div>
+							<div class="messageGroupListStatsSimple">{if $conversation->replies}<span class="icon icon16 fa-comment-o" aria-label="{lang}wcf.conversation.replies{/lang}"></span> {@$conversation->replies|shortUnit}{/if}</div>
 						</li>
 						<li class="columnLastPost">
 							{if $conversation->replies != 0 && $conversation->lastPostTime}
