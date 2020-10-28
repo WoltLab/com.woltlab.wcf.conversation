@@ -117,5 +117,9 @@
 			<classname>wcf\system\user\content\provider\ConversationMessageUserContentProvider</classname>
 		</type>
 		<!-- /user content provider -->
+		<type>
+			<name>com.woltlab.wcf.conversation</name>
+			<definitionname>com.woltlab.wcf.floodControl</definitionname>
+		</type>
 	</import>
 </data>

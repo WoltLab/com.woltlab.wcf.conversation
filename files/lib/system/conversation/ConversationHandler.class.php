@@ -3,6 +3,7 @@ namespace wcf\system\conversation;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\exception\NamedUserException;
 use wcf\system\exception\PermissionDeniedException;
+use wcf\system\flood\FloodControl;
 use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\SingletonFactory;
 use wcf\system\WCF;
@@ -141,21 +142,11 @@ class ConversationHandler extends SingletonFactory {
 			throw new PermissionDeniedException();
 		}
 		
-		$sql = "SELECT  COUNT(*) AS count, MIN(time) AS oldestDate
-			FROM    wcf" . WCF_N . "_conversation
-			WHERE   userID = ?
-				AND time > ?";
-		$statement = WCF::getDB()->prepareStatement($sql);
-		$statement->execute([
-			WCF::getUser()->userID,
-			TIME_NOW - 86400,
-		]);
-		$row = $statement->fetchSingleRow();
-		
-		if ($row['count'] >= $limit) {
+		$count = FloodControl::getInstance()->countContent('com.woltlab.wcf.conversation', new \DateInterval('P1D'));
+		if ($count['count'] >= $limit) {
 			throw new NamedUserException(WCF::getLanguage()->getDynamicVariable('wcf.conversation.error.floodControl', [
-				'limit' => $limit,
-				'notBefore' => $row['oldestDate'] + 86400,
+				'limit' => $count['count'],
+				'notBefore' => $count['earliestTime'] + 86400,
 			]));
 		}
 	}

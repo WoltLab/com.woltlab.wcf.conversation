@@ -10,6 +10,7 @@ use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\NamedUserException;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
+use wcf\system\flood\FloodControl;
 use wcf\system\message\quote\MessageQuoteManager;
 use wcf\system\page\PageLocationManager;
 use wcf\system\WCF;
@@ -257,6 +258,8 @@ class ConversationAddForm extends MessageForm {
 		$conversation = $this->objectAction->executeAction()['returnValues'];
 		
 		MessageQuoteManager::getInstance()->saved();
+		
+		FloodControl::getInstance()->registerContent('com.woltlab.wcf.conversation');
 		
 		$this->saved();
 		
