@@ -95,7 +95,7 @@ define(['Ajax', 'EventKey', 'Language', 'Ui/Dialog', 'Ui/Notification'], functio
 							}
 						}).bind(this));
 						
-						elBySel('.jsButtonSave', content).addEventListener(WCF_CLICK_EVENT, this._saveEdit.bind(this));
+						elBySel('.jsButtonSave', content).addEventListener('click', this._saveEdit.bind(this));
 					}).bind(this),
 					onShow: (function () {
 						_subject.value = this._getCurrentValue();
