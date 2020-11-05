@@ -6,11 +6,11 @@
 			<script data-relocate="true">
 				$(function() {
 					new WCF.User.Panel.Conversation({
-						newConversation: '{lang}wcf.conversation.add{/lang}',
+						newConversation: '{jslang}wcf.conversation.add{/jslang}',
 						newConversationLink: '{link controller='ConversationAdd' encode=false}{/link}',
-						noItems: '{lang}wcf.conversation.noMoreItems{/lang}',
+						noItems: '{jslang}wcf.conversation.noMoreItems{/jslang}',
 						showAllLink: '{link controller='ConversationList' encode=false}{/link}',
-						title: '{lang}wcf.conversation.conversations{/lang}',
+						title: '{jslang}wcf.conversation.conversations{/jslang}',
 						canStartConversation: {if $__wcf->session->getPermission('user.conversation.canStartConversation')}true{else}false{/if}
 					});
 				});
