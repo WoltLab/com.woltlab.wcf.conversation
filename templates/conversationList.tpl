@@ -217,7 +217,7 @@
 							<ul class="inlineList dotSeparated small messageGroupInfo">
 								<li class="messageGroupAuthor">{if $conversation->userID}<a href="{link controller='User' object=$conversation->getUserProfile()->getDecoratedObject()}{/link}" class="userLink" data-user-id="{@$conversation->userID}">{$conversation->username}</a>{else}{$conversation->username}{/if}</li>
 								<li class="messageGroupTime">{@$conversation->time|time}</li>
-								<li class="messageGroupEditLink jsOnly"><a class="jsConversationInlineEditor">{lang}wcf.global.button.edit{/lang}</a></li>
+								<li class="messageGroupEditLink jsOnly"><a href="#" class="jsConversationInlineEditor">{lang}wcf.global.button.edit{/lang}</a></li>
 								{event name='messageGroupInfo'}
 							</ul>
 							
