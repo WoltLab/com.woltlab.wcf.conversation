@@ -217,7 +217,7 @@
 							<ul class="inlineList dotSeparated small messageGroupInfo">
 								<li class="messageGroupAuthor">{if $conversation->userID}{user object=$conversation->getUserProfile()}{else}{$conversation->username}{/if}</li>
 								<li class="messageGroupTime">{@$conversation->time|time}</li>
-								<li class="messageGroupEditLink jsOnly"><a class="jsConversationInlineEditor">{lang}wcf.global.button.edit{/lang}</a></li>
+								<li class="messageGroupEditLink jsOnly"><a href="#" class="jsConversationInlineEditor">{lang}wcf.global.button.edit{/lang}</a></li>
 								{event name='messageGroupInfo'}
 							</ul>
 							
