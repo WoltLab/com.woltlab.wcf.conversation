@@ -165,7 +165,6 @@
 			new WCF.Moderation.Report.Content('com.woltlab.wcf.conversation.message', '.jsReportConversationMessage');
 		{/if}
 		new WCF.Conversation.RemoveParticipant({@$conversation->conversationID});
-		new WCF.Message.BBCode.CodeViewer();
 	});
 </script>
 
