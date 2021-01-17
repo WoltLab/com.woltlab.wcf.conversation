@@ -16,9 +16,4 @@
 	</div>
 	
 	{include file='wysiwyg' wysiwygEnableUpload=true}
-	<script data-relocate="true">
-		$(function() {
-			WCF.System.Dependency.Manager.register('Redactor_messageEditor{@$message->messageID}', function() { new WCF.Message.UserMention('messageEditor{@$message->messageID}'); });
-		});
-	</script>
 </div>
