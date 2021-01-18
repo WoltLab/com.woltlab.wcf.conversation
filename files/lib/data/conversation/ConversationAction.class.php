@@ -683,8 +683,10 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
         $this->parameters['hideConversation'] = isset($this->parameters['hideConversation']) ? \intval($this->parameters['hideConversation']) : null;
         if (
             $this->parameters['hideConversation'] === null
-            || !\in_array($this->parameters['hideConversation'],
-                [Conversation::STATE_DEFAULT, Conversation::STATE_HIDDEN, Conversation::STATE_LEFT])
+            || !\in_array(
+                $this->parameters['hideConversation'],
+                [Conversation::STATE_DEFAULT, Conversation::STATE_HIDDEN, Conversation::STATE_LEFT]
+            )
         ) {
             throw new UserInputException('hideConversation');
         }

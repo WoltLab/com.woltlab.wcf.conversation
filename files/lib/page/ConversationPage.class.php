@@ -381,11 +381,16 @@ class ConversationPage extends MultipleLinkPage
         $statement = WCF::getDB()->prepareStatement($sql, 1);
         $statement->execute($this->objectList->getConditionBuilder()->getParameters());
         $row = $statement->fetchArray();
-        HeaderUtil::redirect(LinkHandler::getInstance()->getLink('Conversation', [
-                'encodeTitle' => true,
-                'object' => $this->conversation,
-                'messageID' => $row['messageID'],
-            ]) . '#message' . $row['messageID']);
+        HeaderUtil::redirect(
+            LinkHandler::getInstance()->getLink(
+                'Conversation',
+                [
+                    'encodeTitle' => true,
+                    'object' => $this->conversation,
+                    'messageID' => $row['messageID'],
+                ]
+            ) . '#message' . $row['messageID']
+        );
 
         exit;
     }
@@ -406,11 +411,16 @@ class ConversationPage extends MultipleLinkPage
         $statement->execute($conditionBuilder->getParameters());
         $row = $statement->fetchArray();
         if ($row !== false) {
-            HeaderUtil::redirect(LinkHandler::getInstance()->getLink('Conversation', [
-                    'encodeTitle' => true,
-                    'object' => $this->conversation,
-                    'messageID' => $row['messageID'],
-                ]) . '#message' . $row['messageID']);
+            HeaderUtil::redirect(
+                LinkHandler::getInstance()->getLink(
+                    'Conversation',
+                    [
+                        'encodeTitle' => true,
+                        'object' => $this->conversation,
+                        'messageID' => $row['messageID'],
+                    ]
+                ) . '#message' . $row['messageID']
+            );
 
             exit;
         } else {
