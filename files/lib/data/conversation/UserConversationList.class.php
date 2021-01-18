@@ -19,7 +19,7 @@ use wcf\system\WCF;
  * @method  ViewableConversation        current()
  * @method  ViewableConversation[]      getObjects()
  * @method  ViewableConversation|null   search($objectID)
- * @property    ViewableConversation[]      $objects
+ * @property    ViewableConversation[] $objects
  */
 class UserConversationList extends ConversationList
 {
@@ -49,9 +49,9 @@ class UserConversationList extends ConversationList
     /**
      * Creates a new UserConversationList
      *
-     * @param   integer     $userID
-     * @param   string      $filter
-     * @param   integer     $labelID
+     * @param integer $userID
+     * @param string $filter
+     * @param integer $labelID
      */
     public function __construct($userID, $filter = '', $labelID = 0)
     {
@@ -103,7 +103,7 @@ class UserConversationList extends ConversationList
     /**
      * Sets the label list of the user the conversations belong to.
      *
-     * @param   ConversationLabelList   $labelList
+     * @param ConversationLabelList $labelList
      */
     public function setLabelList(ConversationLabelList $labelList)
     {

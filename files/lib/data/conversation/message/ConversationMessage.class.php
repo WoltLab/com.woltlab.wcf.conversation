@@ -20,18 +20,18 @@ use wcf\util\StringUtil;
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package WoltLabSuite\Core\Data\Conversation\Message
  *
- * @property-read   integer     $messageID      unique id of the conversation message
- * @property-read   integer     $conversationID     id of the conversation the conversation message belongs to
- * @property-read   integer|null    $userID         id of the user who wrote the conversation message or `null` if the user does not exist anymore
- * @property-read   string      $username       name of the user who wrote the conversation message
- * @property-read   string      $message        text of the conversation message
- * @property-read   integer     $time           timestamp at which the conversation message has been written
- * @property-read   integer     $attachments        number of attachments
- * @property-read   integer     $enableHtml     is `1` if the conversation message's format has been converted to html, otherwise `0`
- * @property-read   string      $ipAddress      ip address of the user who wrote the conversation message at time of writing or empty if no ip addresses are logged
- * @property-read   integer     $lastEditTime       timestamp at which the conversation message has been edited the last time
- * @property-read   integer     $editCount      number of times the conversation message has been edited
- * @property-read   integer     $hasEmbeddedObjects number of embedded objects in the conversation message
+ * @property-read   integer $messageID      unique id of the conversation message
+ * @property-read   integer $conversationID     id of the conversation the conversation message belongs to
+ * @property-read   integer|null $userID         id of the user who wrote the conversation message or `null` if the user does not exist anymore
+ * @property-read   string $username       name of the user who wrote the conversation message
+ * @property-read   string $message        text of the conversation message
+ * @property-read   integer $time           timestamp at which the conversation message has been written
+ * @property-read   integer $attachments        number of attachments
+ * @property-read   integer $enableHtml     is `1` if the conversation message's format has been converted to html, otherwise `0`
+ * @property-read   string $ipAddress      ip address of the user who wrote the conversation message at time of writing or empty if no ip addresses are logged
+ * @property-read   integer $lastEditTime       timestamp at which the conversation message has been edited the last time
+ * @property-read   integer $editCount      number of times the conversation message has been edited
+ * @property-read   integer $hasEmbeddedObjects number of embedded objects in the conversation message
  */
 class ConversationMessage extends DatabaseObject implements IMessage
 {
@@ -71,7 +71,7 @@ class ConversationMessage extends DatabaseObject implements IMessage
     /**
      * Assigns and returns the embedded attachments.
      *
-     * @param   boolean     $ignoreCache
+     * @param boolean $ignoreCache
      * @return  GroupedAttachmentList
      */
     public function getAttachments($ignoreCache = false)
@@ -104,7 +104,7 @@ class ConversationMessage extends DatabaseObject implements IMessage
     /**
      * Returns a version of this message optimized for use in emails.
      *
-     * @param   string  $mimeType   Either 'text/plain' or 'text/html'
+     * @param string $mimeType Either 'text/plain' or 'text/html'
      * @return  string
      */
     public function getMailText($mimeType = 'text/plain')
@@ -140,7 +140,7 @@ class ConversationMessage extends DatabaseObject implements IMessage
     /**
      * Sets the conversation of this message.
      *
-     * @param   Conversation    $conversation
+     * @param Conversation $conversation
      */
     public function setConversation(Conversation $conversation)
     {
@@ -156,7 +156,7 @@ class ConversationMessage extends DatabaseObject implements IMessage
      */
     public function canEdit()
     {
-        return  WCF::getUser()->userID == $this->userID
+        return WCF::getUser()->userID == $this->userID
             && (
                 $this->getConversation()->isDraft
                 || WCF::getSession()->getPermission('user.conversation.canEditMessage')

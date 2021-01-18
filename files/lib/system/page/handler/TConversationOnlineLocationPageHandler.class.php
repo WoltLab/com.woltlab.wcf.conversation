@@ -24,11 +24,11 @@ trait TConversationOnlineLocationPageHandler
     /**
      * Returns the textual description if a user is currently online viewing this page.
      *
+     * @param Page $page visited page
+     * @param UserOnline $user user online object with request data
+     * @return  string
      * @see IOnlineLocationPageHandler::getOnlineLocation()
      *
-     * @param   Page        $page       visited page
-     * @param   UserOnline  $user       user online object with request data
-     * @return  string
      */
     public function getOnlineLocation(Page $page, UserOnline $user)
     {
@@ -60,13 +60,15 @@ trait TConversationOnlineLocationPageHandler
      * Prepares fetching all necessary data for the textual description if a user is currently online
      * viewing this page.
      *
+     * @param Page $page visited page
+     * @param UserOnline $user user online object with request data
      * @see IOnlineLocationPageHandler::prepareOnlineLocation()
      *
-     * @param   Page        $page       visited page
-     * @param   UserOnline  $user       user online object with request data
      */
-    public function prepareOnlineLocation(/** @noinspection PhpUnusedParameterInspection */Page $page, UserOnline $user)
-    {
+    public function prepareOnlineLocation(
+        /** @noinspection PhpUnusedParameterInspection */ Page $page,
+        UserOnline $user
+    ) {
         if ($user->pageObjectID !== null) {
             UserConversationRuntimeCache::getInstance()->cacheObjectID($user->pageObjectID);
         }

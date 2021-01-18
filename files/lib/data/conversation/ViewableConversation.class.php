@@ -22,7 +22,7 @@ use wcf\system\WCF;
  *
  * @method  Conversation    getDecoratedObject()
  * @mixin   Conversation
- * @property-read   integer|null    $otherParticipantID
+ * @property-read   integer|null $otherParticipantID
  * @property-read   string|null $otherParticipant
  */
 class ViewableConversation extends DatabaseObjectDecorator
@@ -210,7 +210,7 @@ class ViewableConversation extends DatabaseObjectDecorator
     /**
      * Assigns a label.
      *
-     * @param   ConversationLabel   $label
+     * @param ConversationLabel $label
      */
     public function assignLabel(ConversationLabel $label)
     {
@@ -230,8 +230,8 @@ class ViewableConversation extends DatabaseObjectDecorator
     /**
      * Converts a conversation into a viewable conversation.
      *
-     * @param   Conversation        $conversation
-     * @param   ConversationLabelList   $labelList
+     * @param Conversation $conversation
+     * @param ConversationLabelList $labelList
      * @return  ViewableConversation
      */
     public static function getViewableConversation(Conversation $conversation, ?ConversationLabelList $labelList = null)

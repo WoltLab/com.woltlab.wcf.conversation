@@ -17,7 +17,7 @@ use wcf\system\WCF;
  * @method  ViewableConversationModificationLog     current()
  * @method  ViewableConversationModificationLog[]       getObjects()
  * @method  ViewableConversationModificationLog|null    search($objectID)
- * @property    ViewableConversationModificationLog[]       $objects
+ * @property    ViewableConversationModificationLog[] $objects
  */
 class ConversationLogModificationLogList extends ModificationLogList
 {
@@ -83,7 +83,7 @@ class ConversationLogModificationLogList extends ModificationLogList
      * Returns all log entries created before given point of time. Applicable entries
      * will be returned and removed from collection.
      *
-     * @param   integer     $time
+     * @param integer $time
      * @return  ViewableConversationModificationLog[]
      */
     public function getEntriesUntil($time)

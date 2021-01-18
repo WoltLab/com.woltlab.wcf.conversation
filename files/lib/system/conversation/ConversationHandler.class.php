@@ -35,8 +35,8 @@ class ConversationHandler extends SingletonFactory
     /**
      * Returns the number of unread conversations for given user.
      *
-     * @param   integer     $userID
-     * @param   boolean     $skipCache
+     * @param integer $userID
+     * @param boolean $skipCache
      * @return  integer
      */
     public function getUnreadConversationCount($userID = null, $skipCache = false)
@@ -89,7 +89,7 @@ class ConversationHandler extends SingletonFactory
     /**
      * Returns the number of conversations for given user.
      *
-     * @param   integer     $userID
+     * @param integer $userID
      * @return  integer
      */
     public function getConversationCount($userID = null)

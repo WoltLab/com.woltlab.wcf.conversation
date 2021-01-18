@@ -12,7 +12,7 @@ use wcf\data\DatabaseObjectEditor;
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package WoltLabSuite\Core\Data\Conversation\Message
  *
- * @method static   ConversationMessage create(array $parameters = [])
+ * @method static ConversationMessage create(array $parameters = [])
  * @method      ConversationMessage getDecoratedObject()
  * @mixin       ConversationMessage
  */

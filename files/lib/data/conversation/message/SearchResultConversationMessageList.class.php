@@ -13,7 +13,7 @@ namespace wcf\data\conversation\message;
  * @method  SearchResultConversationMessage     current()
  * @method  SearchResultConversationMessage[]   getObjects()
  * @method  SearchResultConversationMessage|null    search($objectID)
- * @property    SearchResultConversationMessage[]   $objects
+ * @property    SearchResultConversationMessage[] $objects
  */
 class SearchResultConversationMessageList extends SimplifiedViewableConversationMessageList
 {

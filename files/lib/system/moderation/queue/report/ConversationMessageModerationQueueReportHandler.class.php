@@ -131,7 +131,7 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
     /**
      * Returns a conversation message object by message id or null if message id is invalid.
      *
-     * @param   integer     $objectID
+     * @param integer $objectID
      * @return  ConversationMessage
      */
     protected function getMessage($objectID)

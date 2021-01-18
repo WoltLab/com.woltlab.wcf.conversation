@@ -20,7 +20,7 @@ use wcf\util\ArrayUtil;
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package WoltLabSuite\Core\Page
  *
- * @property    UserConversationList    $objectList
+ * @property    UserConversationList $objectList
  */
 class ConversationListPage extends SortablePage
 {

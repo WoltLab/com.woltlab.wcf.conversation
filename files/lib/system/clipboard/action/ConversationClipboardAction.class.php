@@ -136,7 +136,7 @@ class ConversationClipboardAction extends AbstractClipboardAction
     /**
      * Returns a list of conversations with user participation.
      *
-     * @param   Conversation[]      $conversations
+     * @param Conversation[] $conversations
      */
     protected function validateParticipation(array $conversations)
     {

@@ -15,7 +15,7 @@ use wcf\system\WCF;
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package WoltLabSuite\Core\Data\Conversation
  *
- * @method static   Conversation    create(array $parameters = [])
+ * @method static Conversation    create(array $parameters = [])
  * @method      Conversation    getDecoratedObject()
  * @mixin       Conversation
  */
@@ -29,7 +29,7 @@ class ConversationEditor extends DatabaseObjectEditor
     /**
      * Adds a new message to this conversation.
      *
-     * @param   ConversationMessage $message
+     * @param ConversationMessage $message
      */
     public function addMessage(ConversationMessage $message)
     {
@@ -57,9 +57,9 @@ class ConversationEditor extends DatabaseObjectEditor
     /**
      * Updates the participants of this conversation.
      *
-     * @param   integer[]   $participantIDs
-     * @param   integer[]   $invisibleParticipantIDs
-     * @param       string          $visibility
+     * @param integer[] $participantIDs
+     * @param integer[] $invisibleParticipantIDs
+     * @param string $visibility
      */
     public function updateParticipants(array $participantIDs, array $invisibleParticipantIDs = [], $visibility = 'all')
     {
@@ -164,7 +164,7 @@ class ConversationEditor extends DatabaseObjectEditor
     /**
      * Removes a participant from this conversation.
      *
-     * @param   integer     $userID
+     * @param integer $userID
      */
     public function removeParticipant($userID)
     {
@@ -256,7 +256,7 @@ class ConversationEditor extends DatabaseObjectEditor
     /**
      * Updates the participant summary of the given conversations.
      *
-     * @param   integer[]       $conversationIDs
+     * @param integer[] $conversationIDs
      */
     public static function updateParticipantSummaries(array $conversationIDs)
     {
@@ -273,7 +273,7 @@ class ConversationEditor extends DatabaseObjectEditor
     /**
      * Updates the participant counts of the given conversations.
      *
-     * @param   integer[]       $conversationIDs
+     * @param integer[] $conversationIDs
      */
     public static function updateParticipantCounts(array $conversationIDs)
     {

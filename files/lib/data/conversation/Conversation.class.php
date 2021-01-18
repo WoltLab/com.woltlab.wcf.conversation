@@ -25,30 +25,30 @@ use wcf\util\ArrayUtil;
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package WoltLabSuite\Core\Data\Conversation
  *
- * @property-read   integer     $conversationID     unique id of the conversation
- * @property-read   string      $subject        subject of the conversation
- * @property-read   integer     $time           timestamp at which the conversation has been started
- * @property-read   integer     $firstMessageID     id of the first conversation message
- * @property-read   integer|null    $userID         id of the user who started the conversation or `null` if the user does not exist anymore
- * @property-read   string      $username       name of the user who started the conversation
- * @property-read   integer     $lastPostTime       timestamp at which the conversation's last message has been written
- * @property-read   integer|null    $lastPosterID       id of the user who wrote the conversation's last message or `null` if the user does not exist anymore
- * @property-read   string      $lastPoster     name of the user who wrote the conversation's last message
- * @property-read   integer     $replies        number of replies on the conversation
- * @property-read   integer     $attachments        total number of attachments in all messages of the conversation
- * @property-read   integer     $participants       number of participants of the conversations
- * @property-read   string      $participantSummary serialized data of five of the conversation participants (sorted by username)
- * @property-read   integer     $participantCanInvite   is `1` if participants can invite other users to join the conversation, otherwise `0`
- * @property-read   integer     $isClosed       is `1` if the conversation is closed for new messages, otherwise `0`
- * @property-read   integer     $isDraft        is `1` if the conversation is a draft only, thus not sent to any participant, otherwise `0`
- * @property-read   string      $draftData      serialized ids of the participants and invisible participants if conversation is a draft, otherwise `0`
- * @property-read   integer|null    $participantID      id of the user whose conversations are fetched via `UserConversationList`, otherwise `null`
- * @property-read   integer|null    $hideConversation   is `1` if the user has hidden conversation, otherwise `0`; is `null` if the conversation has not been fetched via `UserConversationList`
- * @property-read   integer|null    $isInvisible        is `1` if the user is invisible in conversation, otherwise `0`; is `null` if the conversation has not been fetched via `UserConversationList`
- * @property-read   integer|null    $lastVisitTime      timestamp at which the user last visited the conversation after a new messsage had been written or `0` if they have not visited it at all; is `null` if the conversation has not been fetched via `UserConversationList`
- * @property-read   integer|null    $joinedAt       timestamp at which the user joined the conversation; is `null` if the conversation has not been fetched via `UserConversationList`
- * @property-read   integer|null    $leftAt         timestamp at which the user left the conversation or `0` if they did not leave the conversation; is `null` if the conversation has not been fetched via `UserConversationList`
- * @property-read   integer|null    $lastMessageID      id of the last message written before the user left the conversation or `0` if they did not leave the conversation; is `null` if the conversation has not been fetched via `UserConversationList`
+ * @property-read   integer $conversationID     unique id of the conversation
+ * @property-read   string $subject        subject of the conversation
+ * @property-read   integer $time           timestamp at which the conversation has been started
+ * @property-read   integer $firstMessageID     id of the first conversation message
+ * @property-read   integer|null $userID         id of the user who started the conversation or `null` if the user does not exist anymore
+ * @property-read   string $username       name of the user who started the conversation
+ * @property-read   integer $lastPostTime       timestamp at which the conversation's last message has been written
+ * @property-read   integer|null $lastPosterID       id of the user who wrote the conversation's last message or `null` if the user does not exist anymore
+ * @property-read   string $lastPoster     name of the user who wrote the conversation's last message
+ * @property-read   integer $replies        number of replies on the conversation
+ * @property-read   integer $attachments        total number of attachments in all messages of the conversation
+ * @property-read   integer $participants       number of participants of the conversations
+ * @property-read   string $participantSummary serialized data of five of the conversation participants (sorted by username)
+ * @property-read   integer $participantCanInvite   is `1` if participants can invite other users to join the conversation, otherwise `0`
+ * @property-read   integer $isClosed       is `1` if the conversation is closed for new messages, otherwise `0`
+ * @property-read   integer $isDraft        is `1` if the conversation is a draft only, thus not sent to any participant, otherwise `0`
+ * @property-read   string $draftData      serialized ids of the participants and invisible participants if conversation is a draft, otherwise `0`
+ * @property-read   integer|null $participantID      id of the user whose conversations are fetched via `UserConversationList`, otherwise `null`
+ * @property-read   integer|null $hideConversation   is `1` if the user has hidden conversation, otherwise `0`; is `null` if the conversation has not been fetched via `UserConversationList`
+ * @property-read   integer|null $isInvisible        is `1` if the user is invisible in conversation, otherwise `0`; is `null` if the conversation has not been fetched via `UserConversationList`
+ * @property-read   integer|null $lastVisitTime      timestamp at which the user last visited the conversation after a new messsage had been written or `0` if they have not visited it at all; is `null` if the conversation has not been fetched via `UserConversationList`
+ * @property-read   integer|null $joinedAt       timestamp at which the user joined the conversation; is `null` if the conversation has not been fetched via `UserConversationList`
+ * @property-read   integer|null $leftAt         timestamp at which the user left the conversation or `0` if they did not leave the conversation; is `null` if the conversation has not been fetched via `UserConversationList`
+ * @property-read   integer|null $lastMessageID      id of the last message written before the user left the conversation or `0` if they did not leave the conversation; is `null` if the conversation has not been fetched via `UserConversationList`
  */
 class Conversation extends DatabaseObject implements IPopoverObject, IRouteController
 {
@@ -124,7 +124,7 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     /**
      * Returns true if the active user doesn't have read the given message.
      *
-     * @param   ConversationMessage $message
+     * @param ConversationMessage $message
      * @return  boolean
      */
     public function isNewMessage(ConversationMessage $message)
@@ -149,9 +149,9 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     /**
      * Overrides the last message data, used when `leftAt < lastPostTime`.
      *
-     * @param       integer         $userID
-     * @param       string          $username
-     * @param       integer         $time
+     * @param integer $userID
+     * @param string $username
+     * @param integer $time
      */
     public function setLastMessage($userID, $username, $time)
     {
@@ -164,7 +164,7 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
      * Loads participation data for given user id (default: current user) on runtime.
      * You should use Conversation::getUserConversation() instead if possible.
      *
-     * @param   integer     $userID
+     * @param integer $userID
      */
     public function loadUserParticipation($userID = null)
     {
@@ -187,8 +187,8 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     /**
      * Returns a specific user conversation.
      *
-     * @param   integer     $conversationID
-     * @param   integer     $userID
+     * @param integer $conversationID
+     * @param integer $userID
      * @return  Conversation
      */
     public static function getUserConversation($conversationID, $userID)
@@ -209,8 +209,8 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     /**
      * Returns a list of user conversations.
      *
-     * @param   integer[]       $conversationIDs
-     * @param   integer         $userID
+     * @param integer[] $conversationIDs
+     * @param integer $userID
      * @return  Conversation[]
      */
     public static function getUserConversations(array $conversationIDs, $userID)
@@ -335,7 +335,7 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     /**
      * Sets the first message.
      *
-     * @param   ConversationMessage $message
+     * @param ConversationMessage $message
      */
     public function setFirstMessage(ConversationMessage $message)
     {
@@ -345,7 +345,7 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     /**
      * Returns a list of the ids of all participants.
      *
-     * @param   boolean     $excludeLeftParticipants
+     * @param boolean $excludeLeftParticipants
      * @return  integer[]
      */
     public function getParticipantIDs($excludeLeftParticipants = false)
@@ -369,8 +369,8 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     /**
      * Returns a list of the usernames of all participants.
      *
-     * @param   boolean     $excludeSelf
-     * @param   boolean     $leftByOwnChoice
+     * @param boolean $excludeSelf
+     * @param boolean $leftByOwnChoice
      * @return  string[]
      */
     public function getParticipantNames($excludeSelf = false, $leftByOwnChoice = false)
@@ -474,8 +474,8 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
      * Returns true if the given user id (default: current user) is participant
      * of all given conversation ids.
      *
-     * @param   integer[]   $conversationIDs
-     * @param   integer     $userID
+     * @param integer[] $conversationIDs
+     * @param integer $userID
      * @return  boolean
      */
     public static function isParticipant(array $conversationIDs, $userID = null)
@@ -527,9 +527,9 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     /**
      * Validates the participants.
      *
-     * @param   mixed       $participants
-     * @param   string      $field
-     * @param   integer[]   $existingParticipants
+     * @param mixed $participants
+     * @param string $field
+     * @param integer[] $existingParticipants
      * @return  array       $result
      * @throws  UserInputException
      */
@@ -588,9 +588,9 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     /**
      * Validates the group participants.
      *
-     * @param   mixed       $participants
-     * @param   string      $field
-     * @param   integer[]   $existingParticipants
+     * @param mixed $participants
+     * @param string $field
+     * @param integer[] $existingParticipants
      * @return  array       $result
      */
     public static function validateGroupParticipants(
@@ -653,8 +653,8 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     /**
      * Validates the given participant.
      *
-     * @param   UserProfile $user
-     * @param   string      $field
+     * @param UserProfile $user
+     * @param string $field
      * @throws  UserInputException
      */
     public static function validateParticipant(UserProfile $user, $field = 'participants')

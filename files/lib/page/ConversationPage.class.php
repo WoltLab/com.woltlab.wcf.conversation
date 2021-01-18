@@ -34,7 +34,7 @@ use wcf\util\StringUtil;
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package WoltLabSuite\Core\Page
  *
- * @property    ViewableConversationMessageList     $objectList
+ * @property    ViewableConversationMessageList $objectList
  */
 class ConversationPage extends MultipleLinkPage
 {
@@ -382,10 +382,10 @@ class ConversationPage extends MultipleLinkPage
         $statement->execute($this->objectList->getConditionBuilder()->getParameters());
         $row = $statement->fetchArray();
         HeaderUtil::redirect(LinkHandler::getInstance()->getLink('Conversation', [
-            'encodeTitle' => true,
-            'object' => $this->conversation,
-            'messageID' => $row['messageID'],
-        ]) . '#message' . $row['messageID']);
+                'encodeTitle' => true,
+                'object' => $this->conversation,
+                'messageID' => $row['messageID'],
+            ]) . '#message' . $row['messageID']);
 
         exit;
     }
@@ -407,10 +407,10 @@ class ConversationPage extends MultipleLinkPage
         $row = $statement->fetchArray();
         if ($row !== false) {
             HeaderUtil::redirect(LinkHandler::getInstance()->getLink('Conversation', [
-                'encodeTitle' => true,
-                'object' => $this->conversation,
-                'messageID' => $row['messageID'],
-            ]) . '#message' . $row['messageID']);
+                    'encodeTitle' => true,
+                    'object' => $this->conversation,
+                    'messageID' => $row['messageID'],
+                ]) . '#message' . $row['messageID']);
 
             exit;
         } else {

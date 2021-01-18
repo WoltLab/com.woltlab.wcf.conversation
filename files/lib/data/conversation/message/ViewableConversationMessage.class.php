@@ -54,7 +54,7 @@ class ViewableConversationMessage extends DatabaseObjectDecorator
     /**
      * Returns the viewable conversation message with the given id.
      *
-     * @param   integer     $messageID
+     * @param integer $messageID
      * @return  ViewableConversationMessage
      */
     public static function getViewableConversationMessage($messageID)

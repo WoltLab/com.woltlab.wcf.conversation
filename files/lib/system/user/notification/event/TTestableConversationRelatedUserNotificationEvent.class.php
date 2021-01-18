@@ -23,8 +23,8 @@ trait TTestableConversationRelatedUserNotificationEvent
     /**
      * Creates a conversation for testing.
      *
-     * @param   UserProfile $conversationAuthor
-     * @param   UserProfile $participant
+     * @param UserProfile $conversationAuthor
+     * @param UserProfile $participant
      * @return  Conversation
      */
     public static function createTestConversation(UserProfile $conversationAuthor, UserProfile $participant)
@@ -46,8 +46,8 @@ trait TTestableConversationRelatedUserNotificationEvent
     /**
      * Creates a conversation message for testing.
      *
-     * @param   UserProfile $conversationAuthor
-     * @param   UserProfile $messageAuthor
+     * @param UserProfile $conversationAuthor
+     * @param UserProfile $messageAuthor
      * @return  ConversationMessage
      */
     public static function createTestConversationMessage(UserProfile $conversationAuthor, UserProfile $messageAuthor)

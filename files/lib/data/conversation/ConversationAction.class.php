@@ -683,7 +683,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
         $this->parameters['hideConversation'] = isset($this->parameters['hideConversation']) ? \intval($this->parameters['hideConversation']) : null;
         if (
             $this->parameters['hideConversation'] === null
-            || !\in_array($this->parameters['hideConversation'], [Conversation::STATE_DEFAULT, Conversation::STATE_HIDDEN, Conversation::STATE_LEFT])
+            || !\in_array($this->parameters['hideConversation'],
+                [Conversation::STATE_DEFAULT, Conversation::STATE_HIDDEN, Conversation::STATE_LEFT])
         ) {
             throw new UserInputException('hideConversation');
         }
@@ -1163,9 +1164,9 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
     /**
      * Adds conversation modification data.
      *
-     * @param   Conversation    $conversation
-     * @param   string      $key
-     * @param   mixed       $value
+     * @param Conversation $conversation
+     * @param string $key
+     * @param mixed $value
      */
     protected function addConversationData(Conversation $conversation, $key, $value)
     {
@@ -1191,7 +1192,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
     /**
      * Unmarks conversations.
      *
-     * @param   integer[]       $conversationIDs
+     * @param integer[] $conversationIDs
      */
     protected function unmarkItems(array $conversationIDs = [])
     {

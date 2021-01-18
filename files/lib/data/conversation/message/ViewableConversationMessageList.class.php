@@ -19,7 +19,7 @@ use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
  * @method  ViewableConversationMessage     current()
  * @method  ViewableConversationMessage[]       getObjects()
  * @method  ViewableConversationMessage|null    search($objectID)
- * @property    ViewableConversationMessage[]       $objects
+ * @property    ViewableConversationMessage[] $objects
  */
 class ViewableConversationMessageList extends ConversationMessageList
 {
@@ -173,7 +173,7 @@ class ViewableConversationMessageList extends ConversationMessageList
     /**
      * Enables/disables the loading of attachments.
      *
-     * @param   boolean     $enable
+     * @param boolean $enable
      */
     public function enableAttachmentLoading($enable = true)
     {
@@ -183,7 +183,7 @@ class ViewableConversationMessageList extends ConversationMessageList
     /**
      * Enables/disables the loading of embedded objects.
      *
-     * @param   boolean     $enable
+     * @param boolean $enable
      */
     public function enableEmbeddedObjectLoading($enable = true)
     {
@@ -193,7 +193,7 @@ class ViewableConversationMessageList extends ConversationMessageList
     /**
      * Sets active conversation.
      *
-     * @param   Conversation        $conversation
+     * @param Conversation $conversation
      */
     public function setConversation(Conversation $conversation)
     {
