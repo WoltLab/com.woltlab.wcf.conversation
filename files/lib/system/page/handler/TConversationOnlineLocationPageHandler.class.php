@@ -63,7 +63,6 @@ trait TConversationOnlineLocationPageHandler
      * @param Page $page visited page
      * @param UserOnline $user user online object with request data
      * @see IOnlineLocationPageHandler::prepareOnlineLocation()
-     * @noinspection PhpUnusedParameterInspection
      */
     public function prepareOnlineLocation(
         Page $page,
