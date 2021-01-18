@@ -1,108 +1,104 @@
-/**
- * Provides the editor for conversation subjects.
- *
- * @author	Alexander Ebert
- * @copyright	2001-2019 WoltLab GmbH
- * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @module	WoltLabSuite/Core/Conversation/Ui/Subject/Editor
- */
-define(['Ajax', 'EventKey', 'Language', 'Ui/Dialog', 'Ui/Notification'], function (Ajax, EventKey, Language, UiDialog, UiNotification) {
+define(["require", "exports", "tslib", "WoltLabSuite/Core/Ui/Dialog", "WoltLabSuite/Core/Dom/Util", "WoltLabSuite/Core/Ajax", "WoltLabSuite/Core/Language", "WoltLabSuite/Core/Ui/Notification"], function (require, exports, tslib_1, Dialog_1, Util_1, Ajax, Language, UiNotification) {
     "use strict";
-    var _objectId = 0;
-    var _subject = null;
-    /**
-     * @exports     WoltLabSuite/Core/Conversation/Ui/Subject/Editor
-     */
-    return {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.beginEdit = void 0;
+    Dialog_1 = tslib_1.__importDefault(Dialog_1);
+    Util_1 = tslib_1.__importDefault(Util_1);
+    Ajax = tslib_1.__importStar(Ajax);
+    Language = tslib_1.__importStar(Language);
+    UiNotification = tslib_1.__importStar(UiNotification);
+    class UiSubjectEditor {
+        constructor(objectId) {
+            this.objectId = objectId;
+        }
         /**
-         * Shows the edit dialog for the selected conversation's subject.
-         *
-         * @param       {int}           objectId
+         * Shows the subject editor dialog.
          */
-        beginEdit: function (objectId) {
-            _objectId = objectId;
-            UiDialog.open(this);
-        },
+        show() {
+            Dialog_1.default.open(this);
+        }
         /**
          * Validates and saves the new subject.
-         *
-         * @param       {Event}         event
-         * @protected
          */
-        _saveEdit: function (event) {
+        saveEdit(event) {
             event.preventDefault();
-            var innerError = _subject.nextElementSibling;
-            if (innerError && innerError.classList.contains('innerError')) {
-                elRemove(innerError);
-            }
-            var value = _subject.value.trim();
-            if (value === '') {
-                innerError = elCreate('small');
-                innerError.className = 'innerError';
-                innerError.textContent = Language.get('wcf.global.form.error.empty');
-                _subject.parentNode.insertBefore(innerError, _subject.nextElementSibling);
+            const value = this.subject.value.trim();
+            if (value === "") {
+                Util_1.default.innerError(this.subject, Language.get("wcf.global.form.error.empty"));
             }
             else {
+                Util_1.default.innerError(this.subject, "");
                 Ajax.api(this, {
                     parameters: {
-                        subject: value
+                        subject: value,
                     },
-                    objectIDs: [_objectId]
+                    objectIDs: [this.objectId],
                 });
             }
-        },
+        }
         /**
-         * Retrieves the current conversation subject.
-         *
-         * @return      {string}
-         * @protected
+         * Returns the current conversation subject.
          */
-        _getCurrentValue: function () {
-            var value = '';
-            elBySelAll('.jsConversationSubject[data-conversation-id="' + _objectId + '"], .conversationLink[data-object-id="' + _objectId + '"]', undefined, function (subject) {
-                value = subject.textContent;
-            });
-            return value;
-        },
-        _ajaxSuccess: function (data) {
-            UiDialog.close(this);
-            elBySelAll('.jsConversationSubject[data-conversation-id="' + _objectId + '"], .conversationLink[data-object-id="' + _objectId + '"]', undefined, function (subject) {
+        getCurrentValue() {
+            return Array.from(document.querySelectorAll(`.jsConversationSubject[data-conversation-id="${this.objectId}"], .conversationLink[data-object-id="${this.objectId}"]`))
+                .map((subject) => subject.textContent)
+                .slice(-1)[0];
+        }
+        _ajaxSuccess(data) {
+            Dialog_1.default.close(this);
+            document
+                .querySelectorAll(`.jsConversationSubject[data-conversation-id="${this.objectId}"], .conversationLink[data-object-id="${this.objectId}"]`)
+                .forEach((subject) => {
                 subject.textContent = data.returnValues.subject;
             });
             UiNotification.show();
-        },
-        _dialogSetup: function () {
+        }
+        _dialogSetup() {
             return {
-                id: 'dialogConversationSubjectEditor',
+                id: "dialogConversationSubjectEditor",
                 options: {
-                    onSetup: (function (content) {
-                        _subject = elById('jsConversationSubject');
-                        _subject.addEventListener('keyup', (function (event) {
-                            if (EventKey.Enter(event)) {
-                                this._saveEdit(event);
+                    onSetup: (content) => {
+                        this.subject = document.getElementById("jsConversationSubject");
+                        this.subject.addEventListener("keyup", (ev) => {
+                            if (ev.key === "Enter") {
+                                this.saveEdit(ev);
                             }
-                        }).bind(this));
-                        elBySel('.jsButtonSave', content).addEventListener('click', this._saveEdit.bind(this));
-                    }).bind(this),
-                    onShow: (function () {
-                        _subject.value = this._getCurrentValue();
-                    }).bind(this),
-                    title: Language.get('wcf.conversation.edit.subject')
+                        });
+                        content.querySelector(".jsButtonSave").addEventListener("click", (ev) => this.saveEdit(ev));
+                    },
+                    onShow: () => {
+                        this.subject.value = this.getCurrentValue();
+                    },
+                    title: Language.get("wcf.conversation.edit.subject"),
                 },
-                source: '<dl>'
-                    + '<dt><label for="jsConversationSubject">' + Language.get('wcf.global.subject') + '</label></dt>'
-                    + '<dd><input type="text" id="jsConversationSubject" class="long" maxlength="255"></dd>'
-                    + '</dl>'
-                    + '<div class="formSubmit"><button class="buttonPrimary jsButtonSave">' + Language.get('wcf.global.button.save') + '</button></div>'
-            };
-        },
-        _ajaxSetup: function () {
-            return {
-                data: {
-                    actionName: 'editSubject',
-                    className: 'wcf\\data\\conversation\\ConversationAction'
-                }
+                source: `
+        <dl>
+          <dt>
+            <label for="jsConversationSubject">${Language.get("wcf.global.subject")}</label>
+          </dt>
+          <dd>
+            <input type="text" id="jsConversationSubject" class="long" maxlength="255">
+          </dd>
+        </dl>
+        <div class="formSubmit">
+          <button class="buttonPrimary jsButtonSave">${Language.get("wcf.global.button.save")}</button>
+        </div>
+      `,
             };
         }
-    };
+        _ajaxSetup() {
+            return {
+                data: {
+                    actionName: "editSubject",
+                    className: "wcf\\data\\conversation\\ConversationAction",
+                },
+            };
+        }
+    }
+    let editor;
+    function beginEdit(objectId) {
+        editor = new UiSubjectEditor(objectId);
+        editor.show();
+    }
+    exports.beginEdit = beginEdit;
 });

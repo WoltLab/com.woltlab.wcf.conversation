@@ -1,133 +1,114 @@
 /**
  * Adds participants to an existing conversation.
  *
- * @author	Alexander Ebert
- * @copyright	2001-2019 WoltLab GmbH
- * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @module	WoltLabSuite/Core/Conversation/Ui/Participant/Add
+ * @author  Alexander Ebert
+ * @copyright   2001-2021 WoltLab GmbH
+ * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
+ * @module  WoltLabSuite/Core/Conversation/Ui/Participant/Add
  */
-define(['Ajax', 'Language', 'Ui/Dialog', 'Ui/Notification', 'WoltLabSuite/Core/Ui/ItemList/User'], function (Ajax, Language, UiDialog, UiNotification, UiItemListUser) {
+define(["require", "exports", "tslib", "WoltLabSuite/Core/Ajax", "WoltLabSuite/Core/Dom/Util", "WoltLabSuite/Core/Ui/Dialog", "WoltLabSuite/Core/Ui/Notification", "WoltLabSuite/Core/Ui/ItemList/User", "WoltLabSuite/Core/Language"], function (require, exports, tslib_1, Ajax, Util_1, Dialog_1, UiNotification, UiItemListUser, Language) {
     "use strict";
-    /**
-     * @constructor
-     * @param	{int}   conversationId		conversation id
-     */
-    function UiParticipantAdd(conversationId) { this.init(conversationId); }
-    UiParticipantAdd.prototype = {
-        /**
-         * Manages the form to add one or more participants to an existing conversation.
-         *
-         * @param	{int}   conversationId          conversation id
-         */
-        init: function (conversationId) {
-            this._conversationId = conversationId;
+    Ajax = tslib_1.__importStar(Ajax);
+    Util_1 = tslib_1.__importDefault(Util_1);
+    Dialog_1 = tslib_1.__importDefault(Dialog_1);
+    UiNotification = tslib_1.__importStar(UiNotification);
+    UiItemListUser = tslib_1.__importStar(UiItemListUser);
+    Language = tslib_1.__importStar(Language);
+    class UiParticipantAdd {
+        constructor(conversationId) {
+            this.conversationId = conversationId;
             Ajax.api(this, {
-                actionName: 'getAddParticipantsForm'
+                actionName: "getAddParticipantsForm",
             });
-        },
-        _ajaxSetup: function () {
+        }
+        _ajaxSetup() {
             return {
                 data: {
-                    className: 'wcf\\data\\conversation\\ConversationAction',
-                    objectIDs: [this._conversationId]
-                }
+                    className: "wcf\\data\\conversation\\ConversationAction",
+                    objectIDs: [this.conversationId],
+                },
             };
-        },
-        /**
-         * Handles successful Ajax requests.
-         *
-         * @param	{Object}	data		response data
-         */
-        _ajaxSuccess: function (data) {
+        }
+        _ajaxSuccess(data) {
             switch (data.actionName) {
-                case 'addParticipants':
-                    this._handleResponse(data);
+                case "addParticipants":
+                    this.handleResponse(data);
                     break;
-                case 'getAddParticipantsForm':
-                    this._render(data);
+                case "getAddParticipantsForm":
+                    this.render(data);
                     break;
             }
-        },
+        }
         /**
          * Shows the success message and closes the dialog overlay.
-         *
-         * @param	{Object}	data		response data
          */
-        _handleResponse: function (data) {
-            //noinspection JSUnresolvedVariable
+        handleResponse(data) {
             if (data.returnValues.errorMessage) {
-                var innerError = elCreate('small');
-                innerError.className = 'innerError';
-                //noinspection JSUnresolvedVariable
-                innerError.textContent = data.returnValues.errorMessage;
-                var itemList = elById('participantsInput').closest('.inputItemList');
-                itemList.parentNode.insertBefore(innerError, itemList.nextSibling);
-                var oldError = innerError.nextElementSibling;
-                if (oldError && oldError.classList.contains('innerError')) {
-                    elRemove(oldError);
-                }
+                Util_1.default.innerError(document.getElementById("participantsInput").closest(".inputItemList"), data.returnValues.errorMessage);
                 return;
             }
-            //noinspection JSUnresolvedVariable
             if (data.returnValues.count) {
-                //noinspection JSUnresolvedVariable
-                UiNotification.show(data.returnValues.successMessage, window.location.reload.bind(window.location));
+                UiNotification.show(data.returnValues.successMessage, () => window.location.reload());
             }
-            UiDialog.close(this);
-        },
+            Dialog_1.default.close(this);
+        }
         /**
          * Renders the dialog to add participants.
-         *
-         * @param	{object}	data		response data
+         * @protected
          */
-        _render: function (data) {
-            //noinspection JSUnresolvedVariable
-            UiDialog.open(this, data.returnValues.template);
-            var buttonSubmit = elById('addParticipants');
+        render(data) {
+            Dialog_1.default.open(this, data.returnValues.template);
+            const buttonSubmit = document.getElementById("addParticipants");
             buttonSubmit.disabled = true;
-            //noinspection JSUnresolvedVariable
-            UiItemListUser.init('participantsInput', {
-                callbackChange: function (elementId, values) { buttonSubmit.disabled = (values.length === 0); },
+            UiItemListUser.init("participantsInput", {
+                callbackChange: (elementId, values) => {
+                    buttonSubmit.disabled = values.length === 0;
+                },
                 excludedSearchValues: data.returnValues.excludedSearchValues,
                 maxItems: data.returnValues.maxItems,
                 includeUserGroups: data.returnValues.canAddGroupParticipants && data.returnValues.restrictUserGroupIDs.length > 0,
                 restrictUserGroupIDs: data.returnValues.restrictUserGroupIDs,
-                csvPerType: true
+                csvPerType: true,
             });
-            buttonSubmit.addEventListener('click', this._submit.bind(this));
-        },
+            buttonSubmit.addEventListener("click", () => this.submit());
+        }
         /**
          * Sends a request to add participants.
          */
-        _submit: function () {
-            var values = UiItemListUser.getValues('participantsInput'), participants = [], participantsGroupIDs = [];
-            for (var i = 0, length = values.length; i < length; i++) {
-                if (values[i].type === 'group')
-                    participantsGroupIDs.push(values[i].objectId);
-                else
-                    participants.push(values[i].value);
-            }
-            var parameters = {
-                participants: participants,
-                participantsGroupIDs: participantsGroupIDs
-            };
-            var visibility = elBySel('input[name="messageVisibility"]:checked, input[name="messageVisibility"][type="hidden"]', UiDialog.getDialog(this).content);
-            if (visibility)
-                parameters.visibility = visibility.value;
-            Ajax.api(this, {
-                actionName: 'addParticipants',
-                parameters: parameters
+        submit() {
+            const participants = [];
+            const participantsGroupIDs = [];
+            UiItemListUser.getValues("participantsInput").forEach((value) => {
+                if (value.type === "group") {
+                    participantsGroupIDs.push(value.objectId);
+                }
+                else {
+                    participants.push(value.value);
+                }
             });
-        },
-        _dialogSetup: function () {
+            const parameters = {
+                participants: participants,
+                participantsGroupIDs: participantsGroupIDs,
+                visibility: null,
+            };
+            const visibility = Dialog_1.default.getDialog(this).content.querySelector('input[name="messageVisibility"]:checked, input[name="messageVisibility"][type="hidden"]');
+            if (visibility) {
+                parameters.visibility = visibility.value;
+            }
+            Ajax.api(this, {
+                actionName: "addParticipants",
+                parameters: parameters,
+            });
+        }
+        _dialogSetup() {
             return {
-                id: 'conversationAddParticipants',
+                id: "conversationAddParticipants",
                 options: {
-                    title: Language.get('wcf.conversation.edit.addParticipants')
+                    title: Language.get("wcf.conversation.edit.addParticipants"),
                 },
-                source: null
+                source: null,
             };
         }
-    };
+    }
     return UiParticipantAdd;
 });
