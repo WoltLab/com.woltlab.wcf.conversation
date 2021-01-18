@@ -58,8 +58,6 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
      */
     protected $conversationData = [];
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
-
     /**
      * @inheritDoc
      * @return  Conversation

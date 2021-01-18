@@ -39,8 +39,6 @@ class ConversationLogModificationLogList extends ModificationLogList
         );
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
-
     /**
      * @inheritDoc
      */

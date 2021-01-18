@@ -151,8 +151,6 @@ class ConversationListPage extends SortablePage
         }
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
-
     /**
      * @inheritDoc
      */

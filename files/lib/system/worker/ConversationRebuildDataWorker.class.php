@@ -25,8 +25,6 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker
      */
     protected $limit = 100;
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
-
     /**
      * @inheritDoc
      */
@@ -44,8 +42,6 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker
             }
         }
     }
-
-    /** @noinspection PhpMissingParentCallCommonInspection */
 
     /**
      * @inheritDoc

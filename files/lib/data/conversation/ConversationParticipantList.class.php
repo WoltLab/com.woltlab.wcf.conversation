@@ -61,8 +61,6 @@ class ConversationParticipantList extends UserProfileList
         $this->sqlJoins .= " LEFT JOIN wcf" . WCF_N . "_conversation_to_user conversation_to_user ON (conversation_to_user.participantID = user_table.userID AND conversation_to_user.conversationID = " . $conversationID . ")";
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
-
     /**
      * @inheritDoc
      */
@@ -78,8 +76,6 @@ class ConversationParticipantList extends UserProfileList
 
         return $row['count'];
     }
-
-    /** @noinspection PhpMissingParentCallCommonInspection */
 
     /**
      * @inheritDoc

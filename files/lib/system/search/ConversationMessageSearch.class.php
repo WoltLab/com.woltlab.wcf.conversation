@@ -51,8 +51,6 @@ class ConversationMessageSearch extends AbstractSearchableObjectType
         }
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
-
     /**
      * @inheritDoc
      */
@@ -72,8 +70,6 @@ class ConversationMessageSearch extends AbstractSearchableObjectType
             return $this->messageCache[$objectID];
         }
     }
-
-    /** @noinspection PhpMissingParentCallCommonInspection */
 
     /**
      * @inheritDoc
@@ -100,8 +96,6 @@ class ConversationMessageSearch extends AbstractSearchableObjectType
         return $this->getTableName() . '.messageID';
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
-
     /**
      * @inheritDoc
      */
@@ -109,8 +103,6 @@ class ConversationMessageSearch extends AbstractSearchableObjectType
     {
         return 'conversation.subject';
     }
-
-    /** @noinspection PhpMissingParentCallCommonInspection */
 
     /**
      * @inheritDoc
@@ -129,8 +121,6 @@ class ConversationMessageSearch extends AbstractSearchableObjectType
         return $conditionBuilder;
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
-
     /**
      * @inheritDoc
      */
@@ -145,8 +135,6 @@ class ConversationMessageSearch extends AbstractSearchableObjectType
 
         return WCF::getSession()->getPermission('user.conversation.canUseConversation');
     }
-
-    /** @noinspection PhpMissingParentCallCommonInspection */
 
     /**
      * @inheritDoc

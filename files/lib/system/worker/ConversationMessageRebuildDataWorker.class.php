@@ -33,8 +33,6 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker
      */
     protected $htmlInputProcessor;
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
-
     /**
      * @inheritDoc
      */
@@ -52,8 +50,6 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker
             }
         }
     }
-
-    /** @noinspection PhpMissingParentCallCommonInspection */
 
     /**
      * @inheritDoc
