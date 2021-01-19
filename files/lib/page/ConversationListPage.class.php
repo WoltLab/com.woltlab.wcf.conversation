@@ -67,7 +67,7 @@ class ConversationListPage extends SortablePage
 
     /**
      * label id
-     * @var integer
+     * @var int
      */
     public $labelID = 0;
 
@@ -79,25 +79,25 @@ class ConversationListPage extends SortablePage
 
     /**
      * number of conversations (no filter)
-     * @var integer
+     * @var int
      */
     public $conversationCount = 0;
 
     /**
      * number of drafts
-     * @var integer
+     * @var int
      */
     public $draftCount = 0;
 
     /**
      * number of hidden conversations
-     * @var integer
+     * @var int
      */
     public $hiddenCount = 0;
 
     /**
      * number of sent conversations
-     * @var integer
+     * @var int
      */
     public $outboxCount = 0;
 

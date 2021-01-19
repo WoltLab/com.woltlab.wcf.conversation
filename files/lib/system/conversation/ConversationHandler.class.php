@@ -22,22 +22,22 @@ class ConversationHandler extends SingletonFactory
 {
     /**
      * number of unread conversations
-     * @var integer[]
+     * @var int[]
      */
     protected $unreadConversationCount = [];
 
     /**
      * number of conversations
-     * @var integer[]
+     * @var int[]
      */
     protected $conversationCount = [];
 
     /**
      * Returns the number of unread conversations for given user.
      *
-     * @param integer $userID
+     * @param int $userID
      * @param boolean $skipCache
-     * @return  integer
+     * @return  int
      */
     public function getUnreadConversationCount($userID = null, $skipCache = false)
     {
@@ -89,8 +89,8 @@ class ConversationHandler extends SingletonFactory
     /**
      * Returns the number of conversations for given user.
      *
-     * @param integer $userID
-     * @return  integer
+     * @param int $userID
+     * @return  int
      */
     public function getConversationCount($userID = null)
     {

@@ -22,7 +22,7 @@ use wcf\system\WCF;
  *
  * @method  Conversation    getDecoratedObject()
  * @mixin   Conversation
- * @property-read   integer|null $otherParticipantID
+ * @property-read   int|null $otherParticipantID
  * @property-read   string|null $otherParticipant
  */
 class ViewableConversation extends DatabaseObjectDecorator
@@ -146,7 +146,7 @@ class ViewableConversation extends DatabaseObjectDecorator
     /**
      * Returns the number of pages in this conversation.
      *
-     * @return  integer
+     * @return  int
      */
     public function getPages()
     {

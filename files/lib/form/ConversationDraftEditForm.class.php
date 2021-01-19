@@ -28,7 +28,7 @@ class ConversationDraftEditForm extends ConversationAddForm
 
     /**
      * conversation id
-     * @var integer
+     * @var int
      */
     public $conversationID = 0;
 

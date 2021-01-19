@@ -18,7 +18,7 @@ class ConversationParticipantList extends UserProfileList
 {
     /**
      * conversation id
-     * @var integer
+     * @var int
      */
     public $conversationID = 0;
 
@@ -30,8 +30,8 @@ class ConversationParticipantList extends UserProfileList
     /**
      * Creates a new ConversationParticipantList object.
      *
-     * @param integer $conversationID
-     * @param integer $userID
+     * @param int $conversationID
+     * @param int $userID
      * @param boolean $isAuthor true if given user is the author of this conversation
      */
     public function __construct($conversationID, $userID = 0, $isAuthor = false)

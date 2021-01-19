@@ -22,7 +22,7 @@ class ConversationMessageSearch extends AbstractSearchableObjectType
 {
     /**
      * id of the searched conversation
-     * @var integer
+     * @var int
      */
     public $conversationID = 0;
 

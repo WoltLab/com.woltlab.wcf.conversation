@@ -57,8 +57,8 @@ class ConversationEditor extends DatabaseObjectEditor
     /**
      * Updates the participants of this conversation.
      *
-     * @param integer[] $participantIDs
-     * @param integer[] $invisibleParticipantIDs
+     * @param int[] $participantIDs
+     * @param int[] $invisibleParticipantIDs
      * @param string $visibility
      */
     public function updateParticipants(array $participantIDs, array $invisibleParticipantIDs = [], $visibility = 'all')
@@ -166,7 +166,7 @@ class ConversationEditor extends DatabaseObjectEditor
     /**
      * Removes a participant from this conversation.
      *
-     * @param integer $userID
+     * @param int $userID
      */
     public function removeParticipant($userID)
     {
@@ -258,7 +258,7 @@ class ConversationEditor extends DatabaseObjectEditor
     /**
      * Updates the participant summary of the given conversations.
      *
-     * @param integer[] $conversationIDs
+     * @param int[] $conversationIDs
      */
     public static function updateParticipantSummaries(array $conversationIDs)
     {
@@ -275,7 +275,7 @@ class ConversationEditor extends DatabaseObjectEditor
     /**
      * Updates the participant counts of the given conversations.
      *
-     * @param integer[] $conversationIDs
+     * @param int[] $conversationIDs
      */
     public static function updateParticipantCounts(array $conversationIDs)
     {

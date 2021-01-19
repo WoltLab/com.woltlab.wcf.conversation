@@ -81,7 +81,7 @@ class ConversationLogModificationLogList extends ModificationLogList
      * Returns all log entries created before given point of time. Applicable entries
      * will be returned and removed from collection.
      *
-     * @param integer $time
+     * @param int $time
      * @return  ViewableConversationModificationLog[]
      */
     public function getEntriesUntil($time)

@@ -81,25 +81,25 @@ class ConversationAddForm extends MessageForm
 
     /**
      * draft status
-     * @var integer
+     * @var int
      */
     public $draft = 0;
 
     /**
      * true, if participants can add new participants
-     * @var integer
+     * @var int
      */
     public $participantCanInvite = 0;
 
     /**
      * participants (user ids)
-     * @var integer[]
+     * @var int[]
      */
     public $participantIDs = [];
 
     /**
      * invisible participants (user ids)
-     * @var integer[]
+     * @var int[]
      */
     public $invisibleParticipantIDs = [];
 

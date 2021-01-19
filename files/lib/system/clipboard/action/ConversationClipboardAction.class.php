@@ -183,7 +183,7 @@ class ConversationClipboardAction extends AbstractClipboardAction
     /**
      * Validates if user may close the given conversations.
      *
-     * @return  integer[]
+     * @return  int[]
      */
     protected function validateClose()
     {
@@ -201,7 +201,7 @@ class ConversationClipboardAction extends AbstractClipboardAction
     /**
      * Validates conversations available for leaving.
      *
-     * @return  integer[]
+     * @return  int[]
      */
     public function validateLeave()
     {
@@ -227,7 +227,7 @@ class ConversationClipboardAction extends AbstractClipboardAction
     /**
      * Validates conversations applicable for mark as read.
      *
-     * @return  integer[]
+     * @return  int[]
      */
     public function validateMarkAsRead()
     {
@@ -262,7 +262,7 @@ class ConversationClipboardAction extends AbstractClipboardAction
     /**
      * Validates if user may open the given conversations.
      *
-     * @return  integer[]
+     * @return  int[]
      */
     protected function validateOpen()
     {
@@ -280,7 +280,7 @@ class ConversationClipboardAction extends AbstractClipboardAction
     /**
      * Validates conversations available for restore.
      *
-     * @return  integer[]
+     * @return  int[]
      */
     public function validateRestore()
     {

@@ -49,9 +49,9 @@ class UserConversationList extends ConversationList
     /**
      * Creates a new UserConversationList
      *
-     * @param integer $userID
+     * @param int $userID
      * @param string $filter
-     * @param integer $labelID
+     * @param int $labelID
      */
     public function __construct($userID, $filter = '', $labelID = 0)
     {

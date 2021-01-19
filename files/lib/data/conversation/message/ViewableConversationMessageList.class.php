@@ -35,13 +35,13 @@ class ViewableConversationMessageList extends ConversationMessageList
 
     /**
      * attachment object ids
-     * @var integer[]
+     * @var int[]
      */
     public $attachmentObjectIDs = [];
 
     /**
      * ids of the messages with embedded objects
-     * @var integer[]
+     * @var int[]
      */
     public $embeddedObjectMessageIDs = [];
 
@@ -53,7 +53,7 @@ class ViewableConversationMessageList extends ConversationMessageList
 
     /**
      * max post time
-     * @var integer
+     * @var int
      */
     protected $maxPostTime = 0;
 
@@ -153,7 +153,7 @@ class ViewableConversationMessageList extends ConversationMessageList
     /**
      * Returns the max post time.
      *
-     * @return  integer
+     * @return  int
      */
     public function getMaxPostTime()
     {

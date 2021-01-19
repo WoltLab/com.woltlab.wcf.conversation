@@ -70,7 +70,7 @@ class ConversationPage extends MultipleLinkPage
 
     /**
      * conversation id
-     * @var integer
+     * @var int
      */
     public $conversationID = 0;
 
@@ -88,7 +88,7 @@ class ConversationPage extends MultipleLinkPage
 
     /**
      * message id
-     * @var integer
+     * @var int
      */
     public $messageID = 0;
 

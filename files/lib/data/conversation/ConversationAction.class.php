@@ -1210,7 +1210,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
     /**
      * Unmarks conversations.
      *
-     * @param integer[] $conversationIDs
+     * @param int[] $conversationIDs
      */
     protected function unmarkItems(array $conversationIDs = [])
     {

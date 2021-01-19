@@ -13,8 +13,8 @@ use wcf\system\WCF;
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package WoltLabSuite\Core\Data\Conversation\Label
  *
- * @property-read   integer $labelID    unique id of the conversation label
- * @property-read   integer $userID     id of the user who created the conversation label
+ * @property-read   int $labelID    unique id of the conversation label
+ * @property-read   int $userID     id of the user who created the conversation label
  * @property-read   string $label      name of the conversation label
  * @property-read   string $cssClassName   CSS class name of the conversation label handeling its appearance (color)
  */
@@ -41,7 +41,7 @@ class ConversationLabel extends DatabaseObject
     /**
      * Returns a list of conversation labels for given user id.
      *
-     * @param integer $userID
+     * @param int $userID
      * @return  ConversationLabelList
      */
     public static function getLabelsByUser($userID = null)
