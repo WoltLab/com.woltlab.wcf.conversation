@@ -5,7 +5,7 @@ namespace wcf\form;
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationAction;
 use wcf\data\conversation\message\ConversationMessageAction;
-use wcf\data\user\UserProfile;
+use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\message\quote\MessageQuoteManager;
 use wcf\system\WCF;
@@ -127,20 +127,22 @@ class ConversationDraftEditForm extends ConversationAddForm
 
             if ($this->conversation->draftData) {
                 $draftData = @\unserialize($this->conversation->draftData);
-                if (!empty($draftData['participants'])) {
-                    foreach (UserProfile::getUserProfiles($draftData['participants']) as $user) {
-                        if (!empty($this->participants)) {
-                            $this->participants .= ', ';
+
+                foreach (['participants', 'invisibleParticipants'] as $participantType) {
+                    if (!empty($draftData[$participantType])) {
+                        $condition = new PreparedStatementConditionBuilder();
+                        $condition->add('userID IN (?)', [$draftData[$participantType]]);
+
+                        $sql = "SELECT  username
+                                FROM    wcf" . WCF_N . "_user
+                                " . $condition;
+                        $statement = WCF::getDB()->prepareStatement($sql);
+                        $statement->execute($condition->getParameters());
+
+                        if (!empty($this->{$participantType})) {
+                            $this->{$participantType} .= ', ';
                         }
-                        $this->participants .= $user->username;
-                    }
-                }
-                if (!empty($draftData['invisibleParticipants'])) {
-                    foreach (UserProfile::getUserProfiles($draftData['invisibleParticipants']) as $user) {
-                        if (!empty($this->invisibleParticipants)) {
-                            $this->invisibleParticipants .= ', ';
-                        }
-                        $this->invisibleParticipants .= $user->username;
+                        $this->{$participantType} .= \implode(', ', $statement->fetchAll(\PDO::FETCH_COLUMN));
                     }
                 }
             }
