@@ -127,35 +127,23 @@ class ConversationDraftEditForm extends ConversationAddForm
 
             if ($this->conversation->draftData) {
                 $draftData = @\unserialize($this->conversation->draftData);
-                if (!empty($draftData['participants'])) {
-                    $condition = new PreparedStatementConditionBuilder();
-                    $condition->add('userID IN (?)', [$draftData['participants']]);
 
-                    $sql = "SELECT  username
-                            FROM    wcf" . WCF_N . "_user
-                            " . $condition;
-                    $statement = WCF::getDB()->prepareStatement($sql);
-                    $statement->execute($condition->getParameters());
+                foreach (['participants', 'invisibleParticipants'] as $participantType) {
+                    if (!empty($draftData[$participantType])) {
+                        $condition = new PreparedStatementConditionBuilder();
+                        $condition->add('userID IN (?)', [$draftData[$participantType]]);
 
-                    if (!empty($this->participants)) {
-                        $this->participants .= ', ';
+                        $sql = "SELECT  username
+                                FROM    wcf" . WCF_N . "_user
+                                " . $condition;
+                        $statement = WCF::getDB()->prepareStatement($sql);
+                        $statement->execute($condition->getParameters());
+
+                        if (!empty($this->{$participantType})) {
+                            $this->{$participantType} .= ', ';
+                        }
+                        $this->{$participantType} .= \implode(', ', $statement->fetchAll(\PDO::FETCH_COLUMN));
                     }
-                    $this->participants .= \implode(', ', $statement->fetchAll(\PDO::FETCH_COLUMN));
-                }
-                if (!empty($draftData['invisibleParticipants'])) {
-                    $condition = new PreparedStatementConditionBuilder();
-                    $condition->add('userID IN (?)', [$draftData['invisibleParticipants']]);
-
-                    $sql = "SELECT  username
-                            FROM    wcf" . WCF_N . "_user
-                            " . $condition;
-                    $statement = WCF::getDB()->prepareStatement($sql);
-                    $statement->execute($condition->getParameters());
-
-                    if (!empty($this->invisibleParticipants)) {
-                        $this->invisibleParticipants .= ', ';
-                    }
-                    $this->invisibleParticipants .= \implode(', ', $statement->fetchAll(\PDO::FETCH_COLUMN));
                 }
             }
         }
