@@ -71,7 +71,7 @@ class ConversationMessage extends DatabaseObject implements IMessage
     /**
      * Assigns and returns the embedded attachments.
      *
-     * @param boolean $ignoreCache
+     * @param bool $ignoreCache
      * @return  GroupedAttachmentList
      */
     public function getAttachments($ignoreCache = false)
@@ -152,7 +152,7 @@ class ConversationMessage extends DatabaseObject implements IMessage
     /**
      * Returns true if current user may edit this message.
      *
-     * @return  boolean
+     * @return  bool
      */
     public function canEdit()
     {

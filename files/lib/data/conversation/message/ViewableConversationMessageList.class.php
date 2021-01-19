@@ -59,13 +59,13 @@ class ViewableConversationMessageList extends ConversationMessageList
 
     /**
      * enables/disables the loading of attachments
-     * @var boolean
+     * @var bool
      */
     protected $attachmentLoading = true;
 
     /**
      * enables/disables the loading of embedded objects
-     * @var boolean
+     * @var bool
      */
     protected $embeddedObjectLoading = true;
 
@@ -173,7 +173,7 @@ class ViewableConversationMessageList extends ConversationMessageList
     /**
      * Enables/disables the loading of attachments.
      *
-     * @param boolean $enable
+     * @param bool $enable
      */
     public function enableAttachmentLoading($enable = true)
     {
@@ -183,7 +183,7 @@ class ViewableConversationMessageList extends ConversationMessageList
     /**
      * Enables/disables the loading of embedded objects.
      *
-     * @param boolean $enable
+     * @param bool $enable
      */
     public function enableEmbeddedObjectLoading($enable = true)
     {

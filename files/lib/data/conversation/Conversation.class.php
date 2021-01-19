@@ -72,7 +72,7 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
 
     /**
      * true if the current user can add users without limitations
-     * @var boolean
+     * @var bool
      */
     protected $canAddUnrestricted;
 
@@ -84,7 +84,7 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
 
     /**
      * true if the current user is an active participant of this conversation
-     * @var boolean
+     * @var bool
      */
     protected $isActiveParticipant;
 
@@ -110,7 +110,7 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     /**
      * Returns true if this conversation is new for the active user.
      *
-     * @return  boolean
+     * @return  bool
      */
     public function isNew()
     {
@@ -125,7 +125,7 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
      * Returns true if the active user doesn't have read the given message.
      *
      * @param ConversationMessage $message
-     * @return  boolean
+     * @return  bool
      */
     public function isNewMessage(ConversationMessage $message)
     {
@@ -139,7 +139,7 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     /**
      * Returns true if the conversation is not closed or the user was not removed.
      *
-     * @return      boolean
+     * @return      bool
      */
     public function canReply()
     {
@@ -241,7 +241,7 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     /**
      * Returns true if the active user has the permission to read this conversation.
      *
-     * @return  boolean
+     * @return  bool
      */
     public function canRead()
     {
@@ -263,7 +263,7 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     /**
      * Returns true if the current user can add new participants to this conversation.
      *
-     * @return  boolean
+     * @return  bool
      */
     public function canAddParticipants()
     {
@@ -297,7 +297,7 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     /**
      * Returns true if the current user can add participants without limitations.
      *
-     * @return      boolean
+     * @return      bool
      */
     public function canAddParticipantsUnrestricted()
     {
@@ -351,7 +351,7 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     /**
      * Returns a list of the ids of all participants.
      *
-     * @param boolean $excludeLeftParticipants
+     * @param bool $excludeLeftParticipants
      * @return  int[]
      */
     public function getParticipantIDs($excludeLeftParticipants = false)
@@ -375,8 +375,8 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     /**
      * Returns a list of the usernames of all participants.
      *
-     * @param boolean $excludeSelf
-     * @param boolean $leftByOwnChoice
+     * @param bool $excludeSelf
+     * @param bool $leftByOwnChoice
      * @return  string[]
      */
     public function getParticipantNames($excludeSelf = false, $leftByOwnChoice = false)
@@ -404,7 +404,7 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     /**
      * Returns false if the active user is the last participant of this conversation.
      *
-     * @return  boolean
+     * @return  bool
      */
     public function hasOtherParticipants()
     {
@@ -446,7 +446,7 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     /**
      * Returns true if the current user is an active participant of this conversation.
      *
-     * @return      boolean
+     * @return      bool
      */
     public function isActiveParticipant()
     {
@@ -482,7 +482,7 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
      *
      * @param int[] $conversationIDs
      * @param int $userID
-     * @return  boolean
+     * @return  bool
      */
     public static function isParticipant(array $conversationIDs, $userID = null)
     {

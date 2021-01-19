@@ -25,7 +25,7 @@ class UserGroupAddCanBeAddedAsConversationParticipantListener implements IParame
 
     /**
      * true if group can be added as participant
-     * @var boolean
+     * @var bool
      */
     protected $canBeAddedAsConversationParticipant = 0;
 
