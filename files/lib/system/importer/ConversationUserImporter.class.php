@@ -26,12 +26,12 @@ class ConversationUserImporter extends AbstractImporter
         }
         $data['participantID'] = ImportHandler::getInstance()->getNewID('com.woltlab.wcf.user', $data['participantID']);
 
-        $sql = "INSERT INTO			wcf" . WCF_N . "_conversation_to_user
-							(conversationID, participantID, username, hideConversation, isInvisible, lastVisitTime)
-			VALUES				(?, ?, ?, ?, ?, ?)
-			ON DUPLICATE KEY UPDATE		hideConversation = IF(hideConversation > 0 AND hideConversation = VALUES(hideConversation),hideConversation,0),
-							isInvisible = IF(isInvisible AND VALUES(isInvisible),1,0),
-							lastVisitTime = GREATEST(lastVisitTime,VALUES(lastVisitTime))";
+        $sql = "INSERT INTO             wcf" . WCF_N . "_conversation_to_user
+                                        (conversationID, participantID, username, hideConversation, isInvisible, lastVisitTime)
+                VALUES                  (?, ?, ?, ?, ?, ?)
+                ON DUPLICATE KEY UPDATE hideConversation = IF(hideConversation > 0 AND hideConversation = VALUES(hideConversation),hideConversation,0),
+                                        isInvisible = IF(isInvisible AND VALUES(isInvisible),1,0),
+                                        lastVisitTime = GREATEST(lastVisitTime,VALUES(lastVisitTime))";
         $statement = WCF::getDB()->prepareStatement($sql);
         $statement->execute([
             $data['conversationID'],
@@ -44,9 +44,9 @@ class ConversationUserImporter extends AbstractImporter
 
         // save labels
         if ($data['participantID'] && !empty($additionalData['labelIDs'])) {
-            $sql = "INSERT IGNORE INTO		wcf" . WCF_N . "_conversation_label_to_object
-								(labelID, conversationID)
-				VALUES				(?, ?)";
+            $sql = "INSERT IGNORE INTO  wcf" . WCF_N . "_conversation_label_to_object
+                                        (labelID, conversationID)
+                    VALUES              (?, ?)";
             $statement = WCF::getDB()->prepareStatement($sql);
             foreach ($additionalData['labelIDs'] as $labelID) {
                 $labelID = ImportHandler::getInstance()->getNewID('com.woltlab.wcf.conversation.label', $labelID);

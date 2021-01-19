@@ -34,11 +34,11 @@ class FeedConversationList extends ConversationList
      */
     public function readObjectIDs()
     {
-        $sql = "SELECT	conversation_to_user.conversationID AS objectID
-			FROM	wcf" . WCF_N . "_conversation_to_user conversation_to_user
-				" . $this->sqlConditionJoins . "
-				" . $this->getConditionBuilder() . "
-				" . (!empty($this->sqlOrderBy) ? "ORDER BY " . $this->sqlOrderBy : '');
+        $sql = "SELECT  conversation_to_user.conversationID AS objectID
+                FROM    wcf" . WCF_N . "_conversation_to_user conversation_to_user
+                " . $this->sqlConditionJoins . "
+                " . $this->getConditionBuilder() . "
+                " . (!empty($this->sqlOrderBy) ? "ORDER BY " . $this->sqlOrderBy : '');
         $statement = WCF::getDB()->prepareStatement($sql, $this->sqlLimit, $this->sqlOffset);
         $statement->execute($this->getConditionBuilder()->getParameters());
         $this->objectIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);

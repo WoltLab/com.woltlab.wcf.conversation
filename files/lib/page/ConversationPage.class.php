@@ -281,11 +281,11 @@ class ConversationPage extends MultipleLinkPage
         if ($count > 1) {
             $this->objectList->seek($count - 1);
             if ($this->objectList->current()->time < $this->conversation->lastPostTime) {
-                $sql = "SELECT          time
-					FROM            wcf" . WCF_N . "_conversation_message
-					WHERE           conversationID = ?
-							AND time > ?
-					ORDER BY        time";
+                $sql = "SELECT      time
+                        FROM        wcf" . WCF_N . "_conversation_message
+                        WHERE       conversationID = ?
+                                AND time > ?
+                        ORDER BY    time";
                 $statement = WCF::getDB()->prepareStatement($sql, 1);
                 $statement->execute([$this->conversationID, $this->objectList->current()->time]);
                 $endTime = $statement->fetchSingleColumn() - 1;
@@ -360,9 +360,9 @@ class ConversationPage extends MultipleLinkPage
         $conditionBuilder = clone $this->objectList->getConditionBuilder();
         $conditionBuilder->add('time ' . ($this->sortOrder == 'ASC' ? '<=' : '>=') . ' ?', [$this->message->time]);
 
-        $sql = "SELECT	COUNT(*) AS messages
-			FROM	wcf" . WCF_N . "_conversation_message conversation_message
-			" . $conditionBuilder;
+        $sql = "SELECT  COUNT(*) AS messages
+                FROM    wcf" . WCF_N . "_conversation_message conversation_message
+                " . $conditionBuilder;
         $statement = WCF::getDB()->prepareStatement($sql);
         $statement->execute($conditionBuilder->getParameters());
         $row = $statement->fetchArray();
@@ -374,10 +374,10 @@ class ConversationPage extends MultipleLinkPage
      */
     protected function goToLastPost()
     {
-        $sql = "SELECT		conversation_message.messageID
-			FROM		wcf" . WCF_N . "_conversation_message conversation_message
-			" . $this->objectList->getConditionBuilder() . "
-			ORDER BY	time " . ($this->sortOrder == 'ASC' ? 'DESC' : 'ASC');
+        $sql = "SELECT      conversation_message.messageID
+                FROM        wcf" . WCF_N . "_conversation_message conversation_message
+                " . $this->objectList->getConditionBuilder() . "
+                ORDER BY    time " . ($this->sortOrder == 'ASC' ? 'DESC' : 'ASC');
         $statement = WCF::getDB()->prepareStatement($sql, 1);
         $statement->execute($this->objectList->getConditionBuilder()->getParameters());
         $row = $statement->fetchArray();
@@ -403,10 +403,10 @@ class ConversationPage extends MultipleLinkPage
         $conditionBuilder = clone $this->objectList->getConditionBuilder();
         $conditionBuilder->add('time > ?', [$this->conversation->lastVisitTime]);
 
-        $sql = "SELECT		conversation_message.messageID
-			FROM		wcf" . WCF_N . "_conversation_message conversation_message
-			" . $conditionBuilder . "
-			ORDER BY	time ASC";
+        $sql = "SELECT      conversation_message.messageID
+                FROM        wcf" . WCF_N . "_conversation_message conversation_message
+                " . $conditionBuilder . "
+                ORDER BY    time ASC";
         $statement = WCF::getDB()->prepareStatement($sql, 1);
         $statement->execute($conditionBuilder->getParameters());
         $row = $statement->fetchArray();

@@ -165,8 +165,8 @@ class ConversationListPage extends SortablePage
             $conditions = new PreparedStatementConditionBuilder();
             $conditions->add('username IN (?)', [$this->participants]);
             $sql = "SELECT  userID
-				FROM    wcf" . WCF_N . "_user
-				" . $conditions;
+                    FROM    wcf" . WCF_N . "_user
+                    " . $conditions;
             $statement = WCF::getDB()->prepareStatement($sql);
             $statement->execute($conditions->getParameters());
             $userIDs = [];
@@ -185,32 +185,30 @@ class ConversationListPage extends SortablePage
                 //
                 // See https://github.com/WoltLab/com.woltlab.wcf.conversation/issues/131
                 $this->objectList->getConditionBuilder()->add('
-					(
-						(
-							conversation.userID = ?
-							AND
-							conversation.conversationID IN (
-								SELECT          conversationID
-								FROM            wcf' . WCF_N . '_conversation_to_user
-								WHERE           participantID IN (?)
-								GROUP BY        conversationID
-								HAVING          COUNT(conversationID) = ?
-							)
-						)
-						OR
-						(
-							conversation.userID <> ?
-							AND
-							conversation.conversationID IN (
-								SELECT          conversationID
-								FROM            wcf' . WCF_N . '_conversation_to_user
-								WHERE           participantID IN (?)
-										AND isInvisible = ?
-								GROUP BY        conversationID
-								HAVING          COUNT(conversationID) = ?
-							)
-						)
-					)', [
+                    (
+                        (
+                            conversation.userID = ?
+                            AND conversation.conversationID IN (
+                                SELECT      conversationID
+                                FROM        wcf' . WCF_N . '_conversation_to_user
+                                WHERE       participantID IN (?)
+                                GROUP BY    conversationID
+                                HAVING      COUNT(conversationID) = ?
+                            )
+                        )
+                        OR
+                        (
+                            conversation.userID <> ?
+                            AND conversation.conversationID IN (
+                                SELECT      conversationID
+                                FROM        wcf' . WCF_N . '_conversation_to_user
+                                WHERE       participantID IN (?)
+                                        AND isInvisible = ?
+                                GROUP BY    conversationID
+                                HAVING      COUNT(conversationID) = ?
+                            )
+                        )
+                    )', [
                     // Parameters for the first condition.
                     WCF::getUser()->userID,
                     $userIDs,

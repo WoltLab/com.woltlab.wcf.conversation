@@ -129,10 +129,10 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
             $userConversation = Conversation::getUserConversation($conversation->conversationID, $message->userID);
             if ($userConversation !== null && $userConversation->isInvisible) {
                 // make invisible participant visible
-                $sql = "UPDATE	wcf" . WCF_N . "_conversation_to_user
-					SET	isInvisible = 0
-					WHERE	participantID = ?
-						AND conversationID = ?";
+                $sql = "UPDATE  wcf" . WCF_N . "_conversation_to_user
+                        SET     isInvisible = 0
+                        WHERE   participantID = ?
+                            AND conversationID = ?";
                 $statement = WCF::getDB()->prepareStatement($sql);
                 $statement->execute([$message->userID, $conversation->conversationID]);
 
@@ -141,10 +141,10 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
             }
 
             // reset visibility if it was hidden but not left
-            $sql = "UPDATE	wcf" . WCF_N . "_conversation_to_user
-				SET	hideConversation = ?
-				WHERE	conversationID = ?
-					AND hideConversation = ?";
+            $sql = "UPDATE  wcf" . WCF_N . "_conversation_to_user
+                    SET     hideConversation = ?
+                    WHERE   conversationID = ?
+                        AND hideConversation = ?";
             $statement = WCF::getDB()->prepareStatement($sql);
             $statement->execute([
                 Conversation::STATE_DEFAULT,
@@ -611,9 +611,9 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
     {
         /** @var Conversation $conversation */
 
-        $sql = "SELECT	COUNT(*) AS count
-			FROM	wcf" . WCF_N . "_conversation_message
-			WHERE	conversationID = ?";
+        $sql = "SELECT  COUNT(*) AS count
+                FROM    wcf" . WCF_N . "_conversation_message
+                WHERE   conversationID = ?";
         $statement = WCF::getDB()->prepareStatement($sql);
         $statement->execute([$conversation->conversationID]);
         $count = $statement->fetchArray();

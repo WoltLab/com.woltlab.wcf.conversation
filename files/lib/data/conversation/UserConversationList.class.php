@@ -76,10 +76,10 @@ class UserConversationList extends ConversationList
         // filter by label id
         if ($labelID) {
             $this->getConditionBuilder()->add("conversation.conversationID IN (
-				SELECT	conversationID
-				FROM	wcf" . WCF_N . "_conversation_label_to_object
-				WHERE	labelID = ?
-			)", [$labelID]);
+                SELECT  conversationID
+                FROM    wcf" . WCF_N . "_conversation_label_to_object
+                WHERE   labelID = ?
+            )", [$labelID]);
         }
 
         // own posts
@@ -119,10 +119,10 @@ class UserConversationList extends ConversationList
             return parent::countObjects();
         }
 
-        $sql = "SELECT	COUNT(*) AS count
-			FROM	wcf" . WCF_N . "_conversation_to_user conversation_to_user
-			" . $this->sqlConditionJoins . "
-			" . $this->getConditionBuilder()->__toString();
+        $sql = "SELECT  COUNT(*) AS count
+                FROM    wcf" . WCF_N . "_conversation_to_user conversation_to_user
+                " . $this->sqlConditionJoins . "
+                " . $this->getConditionBuilder()->__toString();
         $statement = WCF::getDB()->prepareStatement($sql);
         $statement->execute($this->getConditionBuilder()->getParameters());
         $row = $statement->fetchArray();
@@ -141,11 +141,11 @@ class UserConversationList extends ConversationList
             return;
         }
 
-        $sql = "SELECT	conversation_to_user.conversationID AS objectID
-			FROM	wcf" . WCF_N . "_conversation_to_user conversation_to_user
-				" . $this->sqlConditionJoins . "
-				" . $this->getConditionBuilder()->__toString() . "
-				" . (!empty($this->sqlOrderBy) ? "ORDER BY " . $this->sqlOrderBy : '');
+        $sql = "SELECT  conversation_to_user.conversationID AS objectID
+                FROM    wcf" . WCF_N . "_conversation_to_user conversation_to_user
+                    " . $this->sqlConditionJoins . "
+                    " . $this->getConditionBuilder()->__toString() . "
+                    " . (!empty($this->sqlOrderBy) ? "ORDER BY " . $this->sqlOrderBy : '');
         $statement = WCF::getDB()->prepareStatement($sql, $this->sqlLimit, $this->sqlOffset);
         $statement->execute($this->getConditionBuilder()->getParameters());
         $this->objectIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
@@ -173,8 +173,8 @@ class UserConversationList extends ConversationList
                 $conditions = new PreparedStatementConditionBuilder();
                 $conditions->add("messageID IN (?)", [$messageIDs]);
                 $sql = "SELECT  messageID, userID, username, time
-					FROM    wcf" . WCF_N . "_conversation_message
-					" . $conditions;
+                        FROM    wcf" . WCF_N . "_conversation_message
+                        " . $conditions;
                 $statement = WCF::getDB()->prepareStatement($sql);
                 $statement->execute($conditions->getParameters());
                 $messageData = [];
@@ -248,9 +248,9 @@ class UserConversationList extends ConversationList
         $conditions->add("conversationID IN (?)", [\array_keys($this->objects)]);
         $conditions->add("labelID IN (?)", [\array_keys($labels)]);
 
-        $sql = "SELECT	labelID, conversationID
-			FROM	wcf" . WCF_N . "_conversation_label_to_object
-			" . $conditions;
+        $sql = "SELECT  labelID, conversationID
+                FROM    wcf" . WCF_N . "_conversation_label_to_object
+                " . $conditions;
         $statement = WCF::getDB()->prepareStatement($sql);
         $statement->execute($conditions->getParameters());
         $data = [];

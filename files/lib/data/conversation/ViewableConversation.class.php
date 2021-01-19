@@ -248,9 +248,9 @@ class ViewableConversation extends DatabaseObjectDecorator
             $conditions->add("conversationID = ?", [$conversation->conversationID]);
             $conditions->add("labelID IN (?)", [\array_keys($labels)]);
 
-            $sql = "SELECT	labelID
-				FROM	wcf" . WCF_N . "_conversation_label_to_object
-				" . $conditions;
+            $sql = "SELECT  labelID
+                    FROM    wcf" . WCF_N . "_conversation_label_to_object
+                    " . $conditions;
             $statement = WCF::getDB()->prepareStatement($sql);
             $statement->execute($conditions->getParameters());
             while ($row = $statement->fetchArray()) {

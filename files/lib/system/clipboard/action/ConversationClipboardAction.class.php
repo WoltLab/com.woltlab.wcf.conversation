@@ -66,9 +66,9 @@ class ConversationClipboardAction extends AbstractClipboardAction
         switch ($action->actionName) {
             case 'assignLabel':
                 // check if user has labels
-                $sql = "SELECT	COUNT(*) AS count
-					FROM	wcf" . WCF_N . "_conversation_label
-					WHERE	userID = ?";
+                $sql = "SELECT  COUNT(*) AS count
+                        FROM    wcf" . WCF_N . "_conversation_label
+                        WHERE   userID = ?";
                 $statement = WCF::getDB()->prepareStatement($sql);
                 $statement->execute([WCF::getUser()->userID]);
                 $row = $statement->fetchArray();
@@ -155,9 +155,9 @@ class ConversationClipboardAction extends AbstractClipboardAction
             $conditions->add("conversationID IN (?)", [$conversationIDs]);
             $conditions->add("participantID = ?", [WCF::getUser()->userID]);
 
-            $sql = "SELECT	conversationID
-				FROM	wcf" . WCF_N . "_conversation_to_user
-				" . $conditions;
+            $sql = "SELECT  conversationID
+                    FROM    wcf" . WCF_N . "_conversation_to_user
+                    " . $conditions;
             $statement = WCF::getDB()->prepareStatement($sql);
             $statement->execute($conditions->getParameters());
             while ($row = $statement->fetchArray()) {
@@ -215,9 +215,9 @@ class ConversationClipboardAction extends AbstractClipboardAction
         $conditions->add("participantID = ?", [WCF::getUser()->userID]);
         $conditions->add("hideConversation <> ?", [1]);
 
-        $sql = "SELECT	conversationID
-			FROM	wcf" . WCF_N . "_conversation_to_user
-			" . $conditions;
+        $sql = "SELECT  conversationID
+                FROM    wcf" . WCF_N . "_conversation_to_user
+                " . $conditions;
         $statement = WCF::getDB()->prepareStatement($sql);
         $statement->execute($conditions->getParameters());
 
@@ -237,9 +237,9 @@ class ConversationClipboardAction extends AbstractClipboardAction
         $conditions->add("conversationID IN (?)", [\array_keys($this->conversations)]);
         $conditions->add("participantID = ?", [WCF::getUser()->userID]);
 
-        $sql = "SELECT	conversationID, lastVisitTime
-			FROM	wcf" . WCF_N . "_conversation_to_user
-			" . $conditions;
+        $sql = "SELECT  conversationID, lastVisitTime
+                FROM    wcf" . WCF_N . "_conversation_to_user
+                " . $conditions;
         $statement = WCF::getDB()->prepareStatement($sql);
         $statement->execute($conditions->getParameters());
         $lastVisitTime = [];
@@ -294,9 +294,9 @@ class ConversationClipboardAction extends AbstractClipboardAction
         $conditions->add("participantID = ?", [WCF::getUser()->userID]);
         $conditions->add("hideConversation <> ?", [0]);
 
-        $sql = "SELECT	conversationID
-			FROM	wcf" . WCF_N . "_conversation_to_user
-			" . $conditions;
+        $sql = "SELECT  conversationID
+                FROM    wcf" . WCF_N . "_conversation_to_user
+                " . $conditions;
         $statement = WCF::getDB()->prepareStatement($sql);
         $statement->execute($conditions->getParameters());
 

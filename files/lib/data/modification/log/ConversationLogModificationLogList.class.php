@@ -44,10 +44,10 @@ class ConversationLogModificationLogList extends ModificationLogList
      */
     public function readObjects()
     {
-        $sql = "SELECT	modification_log.*
-			FROM	wcf" . WCF_N . "_modification_log modification_log
-			" . $this->getConditionBuilder() . "
-			" . (!empty($this->sqlOrderBy) ? "ORDER BY " . $this->sqlOrderBy : '');
+        $sql = "SELECT  modification_log.*
+                FROM    wcf" . WCF_N . "_modification_log modification_log
+                " . $this->getConditionBuilder() . "
+                " . (!empty($this->sqlOrderBy) ? "ORDER BY " . $this->sqlOrderBy : '');
         $statement = WCF::getDB()->prepareStatement($sql, $this->sqlLimit, $this->sqlOffset);
         $statement->execute($this->getConditionBuilder()->getParameters());
         $this->objects = $statement->fetchObjects(($this->objectClassName ?: $this->className));

@@ -32,8 +32,8 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker
     {
         if ($this->count === null) {
             $this->count = 0;
-            $sql = "SELECT	MAX(conversationID) AS conversationID
-				FROM	wcf" . WCF_N . "_conversation";
+            $sql = "SELECT  MAX(conversationID) AS conversationID
+                    FROM    wcf" . WCF_N . "_conversation";
             $statement = WCF::getDB()->prepareStatement($sql);
             $statement->execute();
             $row = $statement->fetchArray();
@@ -65,43 +65,43 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker
         parent::execute();
 
         // prepare statements
-        $sql = "SELECT		messageID, time, userID, username
-			FROM		wcf" . WCF_N . "_conversation_message
-			WHERE		conversationID = ?
-			ORDER BY	time";
+        $sql = "SELECT      messageID, time, userID, username
+                FROM        wcf" . WCF_N . "_conversation_message
+                WHERE       conversationID = ?
+                ORDER BY    time";
         $firstMessageStatement = WCF::getDB()->prepareStatement($sql, 1);
-        $sql = "SELECT		time, userID, username
-			FROM		wcf" . WCF_N . "_conversation_message
-			WHERE		conversationID = ?
-			ORDER BY	time DESC";
+        $sql = "SELECT      time, userID, username
+                FROM        wcf" . WCF_N . "_conversation_message
+                WHERE       conversationID = ?
+                ORDER BY    time DESC";
         $lastMessageStatement = WCF::getDB()->prepareStatement($sql, 1);
-        $sql = "SELECT	COUNT(*) AS messages,
-				SUM(attachments) AS attachments
-			FROM	wcf" . WCF_N . "_conversation_message
-			WHERE	conversationID = ?";
+        $sql = "SELECT  COUNT(*) AS messages,
+                        SUM(attachments) AS attachments
+                FROM    wcf" . WCF_N . "_conversation_message
+                WHERE   conversationID = ?";
         $statsStatement = WCF::getDB()->prepareStatement($sql);
-        $sql = "SELECT	COUNT(*) AS participants
-			FROM	wcf" . WCF_N . "_conversation_to_user conversation_to_user
-			WHERE	conversation_to_user.conversationID = ?
-				AND conversation_to_user.hideConversation <> ?
-				AND conversation_to_user.participantID <> ?
-				AND conversation_to_user.isInvisible = ?";
+        $sql = "SELECT  COUNT(*) AS participants
+                FROM    wcf" . WCF_N . "_conversation_to_user conversation_to_user
+                WHERE   conversation_to_user.conversationID = ?
+                    AND conversation_to_user.hideConversation <> ?
+                    AND conversation_to_user.participantID <> ?
+                    AND conversation_to_user.isInvisible = ?";
         $participantCounterStatement = WCF::getDB()->prepareStatement($sql);
-        $sql = "SELECT		conversation_to_user.participantID AS userID, conversation_to_user.hideConversation, user_table.username
-			FROM		wcf" . WCF_N . "_conversation_to_user conversation_to_user
-			LEFT JOIN	wcf" . WCF_N . "_user user_table
-			ON		(user_table.userID = conversation_to_user.participantID)
-			WHERE		conversation_to_user.conversationID = ?
-					AND conversation_to_user.participantID <> ?
-					AND conversation_to_user.isInvisible = ?
-			ORDER BY	user_table.username";
+        $sql = "SELECT      conversation_to_user.participantID AS userID, conversation_to_user.hideConversation, user_table.username
+                FROM        wcf" . WCF_N . "_conversation_to_user conversation_to_user
+                LEFT JOIN   wcf" . WCF_N . "_user user_table
+                ON          (user_table.userID = conversation_to_user.participantID)
+                WHERE       conversation_to_user.conversationID = ?
+                        AND conversation_to_user.participantID <> ?
+                        AND conversation_to_user.isInvisible = ?
+                ORDER BY    user_table.username";
         $participantStatement = WCF::getDB()->prepareStatement($sql, 5);
 
-        $sql = "SELECT	COUNT(*) AS participants
-			FROM	wcf" . WCF_N . "_conversation_to_user
-			WHERE	conversationID = ?
-				AND hideConversation <> ?
-				AND participantID IS NOT NULL";
+        $sql = "SELECT  COUNT(*) AS participants
+                FROM    wcf" . WCF_N . "_conversation_to_user
+                WHERE   conversationID = ?
+                    AND hideConversation <> ?
+                    AND participantID IS NOT NULL";
         $existingParticipantStatement = WCF::getDB()->prepareStatement($sql);
 
         $obsoleteConversations = [];
@@ -180,17 +180,17 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker
         }
 
         $sql = "UPDATE  wcf" . WCF_N . "_conversation
-			SET     firstMessageID = ?,
-				lastPostTime = ?,
-				lastPosterID = ?,
-				lastPoster = ?,
-				userID = ?,
-				username = ?,
-				replies = ?,
-				attachments = ?,
-				participants = ?,
-				participantSummary = ?
-			WHERE   conversationID = ?";
+                SET     firstMessageID = ?,
+                        lastPostTime = ?,
+                        lastPosterID = ?,
+                        lastPoster = ?,
+                        userID = ?,
+                        username = ?,
+                        replies = ?,
+                        attachments = ?,
+                        participants = ?,
+                        participantSummary = ?
+                WHERE   conversationID = ?";
         $statement = WCF::getDB()->prepareStatement($sql);
 
         WCF::getDB()->beginTransaction();

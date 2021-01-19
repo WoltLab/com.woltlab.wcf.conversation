@@ -63,10 +63,10 @@ class ConversationHandler extends SingletonFactory
                 $conditionBuilder->add('conversation_to_user.lastVisitTime < conversation.lastPostTime');
                 $conditionBuilder->add('conversation_to_user.leftAt = 0');
 
-                $sql = "SELECT	COUNT(*) AS count
-					FROM	wcf" . WCF_N . "_conversation_to_user conversation_to_user,
-						wcf" . WCF_N . "_conversation conversation
-					" . $conditionBuilder;
+                $sql = "SELECT  COUNT(*) AS count
+                        FROM    wcf" . WCF_N . "_conversation_to_user conversation_to_user,
+                                wcf" . WCF_N . "_conversation conversation
+                        " . $conditionBuilder;
                 $statement = WCF::getDB()->prepareStatement($sql);
                 $statement->execute($conditionBuilder->getParameters());
                 $row = $statement->fetchArray();
@@ -116,13 +116,15 @@ class ConversationHandler extends SingletonFactory
                 $conditionBuilder2->add('conversation.userID = ?', [$userID]);
                 $conditionBuilder2->add('conversation.isDraft = 1');
 
-                $sql = "SELECT (SELECT	COUNT(*)
-						FROM	wcf" . WCF_N . "_conversation_to_user conversation_to_user
-						" . $conditionBuilder1->__toString() . ")
-						+
-						(SELECT	COUNT(*)
-						FROM	wcf" . WCF_N . "_conversation conversation
-						" . $conditionBuilder2->__toString() . ") AS count";
+                $sql = "SELECT (
+                            SELECT  COUNT(*)
+                            FROM    wcf" . WCF_N . "_conversation_to_user conversation_to_user
+                            " . $conditionBuilder1->__toString() . "
+                        ) + (
+                            SELECT  COUNT(*)
+                            FROM    wcf" . WCF_N . "_conversation conversation
+                            " . $conditionBuilder2->__toString() . "
+                        ) AS count";
                 $statement = WCF::getDB()->prepareStatement($sql);
                 $statement->execute(\array_merge(
                     $conditionBuilder1->getParameters(),
