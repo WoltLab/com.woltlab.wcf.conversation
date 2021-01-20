@@ -119,11 +119,11 @@ class ConversationHandler extends SingletonFactory
                 $sql = "SELECT (
                             SELECT  COUNT(*)
                             FROM    wcf" . WCF_N . "_conversation_to_user conversation_to_user
-                            " . $conditionBuilder1->__toString() . "
+                            " . $conditionBuilder1 . "
                         ) + (
                             SELECT  COUNT(*)
                             FROM    wcf" . WCF_N . "_conversation conversation
-                            " . $conditionBuilder2->__toString() . "
+                            " . $conditionBuilder2 . "
                         ) AS count";
                 $statement = WCF::getDB()->prepareStatement($sql);
                 $statement->execute(\array_merge(
