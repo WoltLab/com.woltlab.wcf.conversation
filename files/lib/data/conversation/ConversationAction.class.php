@@ -137,7 +137,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
             // fire notification event
             $notificationRecipients = \array_merge(
                 !empty($this->parameters['participants']) ? $this->parameters['participants'] : [],
-                !empty($this->parameters['invisibleParticipants']) ? $this->parameters['invisibleParticipants'] : [],
+                !empty($this->parameters['invisibleParticipants']) ? $this->parameters['invisibleParticipants'] : []
             );
             UserNotificationHandler::getInstance()->fireEvent(
                 'conversation',
