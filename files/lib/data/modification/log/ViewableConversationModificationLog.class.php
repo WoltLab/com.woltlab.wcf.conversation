@@ -3,7 +3,6 @@
 namespace wcf\data\modification\log;
 
 use wcf\data\DatabaseObjectDecorator;
-use wcf\data\TLegacyUserPropertyAccess;
 use wcf\data\user\UserProfile;
 use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\WCF;
@@ -21,8 +20,6 @@ use wcf\system\WCF;
  */
 class ViewableConversationModificationLog extends DatabaseObjectDecorator
 {
-    use TLegacyUserPropertyAccess;
-
     /**
      * @inheritDoc
      */
