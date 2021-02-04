@@ -67,7 +67,9 @@ class UserConversationList extends ConversationList
             $this->getConditionBuilder()->add('conversation_to_user.participantID = ?', [$userID]);
             $this->getConditionBuilder()
                 ->add('conversation_to_user.hideConversation = ?', [$this->filter == 'hidden' ? 1 : 0]);
-            $this->sqlConditionJoins = "LEFT JOIN wcf" . WCF_N . "_conversation conversation ON conversation.conversationID = conversation_to_user.conversationID";
+            $this->sqlConditionJoins = "
+                LEFT JOIN   wcf" . WCF_N . "_conversation conversation
+                ON          conversation.conversationID = conversation_to_user.conversationID";
             if ($this->filter == 'outbox') {
                 $this->getConditionBuilder()->add('conversation.userID = ?', [$userID]);
             }
@@ -84,14 +86,20 @@ class UserConversationList extends ConversationList
 
         // own posts
         $this->sqlSelects = "DISTINCT conversation_message.userID AS ownPosts";
-        $this->sqlJoins = "LEFT JOIN wcf" . WCF_N . "_conversation_message conversation_message ON conversation_message.conversationID = conversation.conversationID AND conversation_message.userID = " . $userID;
+        $this->sqlJoins = "
+            LEFT JOIN   wcf" . WCF_N . "_conversation_message conversation_message
+            ON          conversation_message.conversationID = conversation.conversationID
+                    AND conversation_message.userID = " . $userID;
 
         // user info
         if (!empty($this->sqlSelects)) {
             $this->sqlSelects .= ',';
         }
         $this->sqlSelects .= "conversation_to_user.*";
-        $this->sqlJoins .= "LEFT JOIN wcf" . WCF_N . "_conversation_to_user conversation_to_user ON conversation_to_user.participantID = " . $userID . " AND conversation_to_user.conversationID = conversation.conversationID";
+        $this->sqlJoins .= "
+            LEFT JOIN   wcf" . WCF_N . "_conversation_to_user conversation_to_user
+            ON          conversation_to_user.participantID = " . $userID . "
+                    AND conversation_to_user.conversationID = conversation.conversationID";
 
         if ($this->filter !== 'draft') {
             $this->sqlSelects .= ", conversation.*, CASE WHEN conversation_to_user.leftAt <> 0 THEN conversation_to_user.leftAt ELSE conversation.lastPostTime END AS lastPostTime";
