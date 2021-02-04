@@ -79,7 +79,7 @@ class UiParticipantAdd implements AjaxCallbackObject, DialogCallbackObject {
     if (data.returnValues.errorMessage) {
       DomUtil.innerError(
         document.getElementById("participantsInput")!.closest(".inputItemList") as HTMLElement,
-        data.returnValues.errorMessage
+        data.returnValues.errorMessage,
       );
       return;
     }
@@ -134,7 +134,7 @@ class UiParticipantAdd implements AjaxCallbackObject, DialogCallbackObject {
       visibility: null as null | string,
     };
     const visibility = UiDialog.getDialog(this)!.content.querySelector(
-      'input[name="messageVisibility"]:checked, input[name="messageVisibility"][type="hidden"]'
+      'input[name="messageVisibility"]:checked, input[name="messageVisibility"][type="hidden"]',
     ) as HTMLInputElement;
 
     if (visibility) {

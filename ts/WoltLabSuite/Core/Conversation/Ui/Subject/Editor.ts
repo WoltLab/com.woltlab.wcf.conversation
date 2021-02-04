@@ -64,8 +64,8 @@ class UiSubjectEditor implements AjaxCallbackObject, DialogCallbackObject {
   protected getCurrentValue(): string {
     return Array.from(
       document.querySelectorAll(
-        `.jsConversationSubject[data-conversation-id="${this.objectId}"], .conversationLink[data-object-id="${this.objectId}"]`
-      )
+        `.jsConversationSubject[data-conversation-id="${this.objectId}"], .conversationLink[data-object-id="${this.objectId}"]`,
+      ),
     )
       .map((subject: HTMLElement) => subject.textContent!)
       .slice(-1)[0];
@@ -76,7 +76,7 @@ class UiSubjectEditor implements AjaxCallbackObject, DialogCallbackObject {
 
     document
       .querySelectorAll(
-        `.jsConversationSubject[data-conversation-id="${this.objectId}"], .conversationLink[data-object-id="${this.objectId}"]`
+        `.jsConversationSubject[data-conversation-id="${this.objectId}"], .conversationLink[data-object-id="${this.objectId}"]`,
       )
       .forEach((subject) => {
         subject.textContent = data.returnValues.subject;
