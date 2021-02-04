@@ -90,7 +90,7 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker
         $sql = "SELECT      conversation_to_user.participantID AS userID, conversation_to_user.hideConversation, user_table.username
                 FROM        wcf" . WCF_N . "_conversation_to_user conversation_to_user
                 LEFT JOIN   wcf" . WCF_N . "_user user_table
-                ON          (user_table.userID = conversation_to_user.participantID)
+                ON          user_table.userID = conversation_to_user.participantID
                 WHERE       conversation_to_user.conversationID = ?
                         AND conversation_to_user.participantID <> ?
                         AND conversation_to_user.isInvisible = ?

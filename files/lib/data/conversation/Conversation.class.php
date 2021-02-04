@@ -196,10 +196,8 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
         $sql = "SELECT      conversation_to_user.*, conversation.*
                 FROM        wcf" . WCF_N . "_conversation conversation
                 LEFT JOIN   wcf" . WCF_N . "_conversation_to_user conversation_to_user
-                ON          (
-                                conversation_to_user.participantID = ?
-                                AND conversation_to_user.conversationID = conversation.conversationID
-                            )
+                ON          conversation_to_user.participantID = ?
+                        AND conversation_to_user.conversationID = conversation.conversationID
                 WHERE       conversation.conversationID = ?";
         $statement = WCF::getDB()->prepareStatement($sql);
         $statement->execute([$userID, $conversationID]);
@@ -223,10 +221,8 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
         $sql = "SELECT      conversation_to_user.*, conversation.*
                 FROM        wcf" . WCF_N . "_conversation conversation
                 LEFT JOIN   wcf" . WCF_N . "_conversation_to_user conversation_to_user
-                ON          (
-                                conversation_to_user.participantID = " . $userID . "
-                                AND conversation_to_user.conversationID = conversation.conversationID
-                            )
+                ON          conversation_to_user.participantID = " . $userID . "
+                        AND conversation_to_user.conversationID = conversation.conversationID
                 " . $conditionBuilder;
         $statement = WCF::getDB()->prepareStatement($sql);
         $statement->execute($conditionBuilder->getParameters());
@@ -393,7 +389,7 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
         $sql = "SELECT      user_table.username
                 FROM        wcf" . WCF_N . "_conversation_to_user conversation_to_user
                 LEFT JOIN   wcf" . WCF_N . "_user user_table
-                ON          (user_table.userID = conversation_to_user.participantID)
+                ON          user_table.userID = conversation_to_user.participantID
                 " . $conditions;
         $statement = WCF::getDB()->prepareStatement($sql);
         $statement->execute($conditions->getParameters());

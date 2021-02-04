@@ -52,13 +52,18 @@ class ConversationParticipantList extends UserProfileList
                 );
             }
         }
-        $this->sqlConditionJoins .= " LEFT JOIN wcf" . WCF_N . "_user user_table ON (user_table.userID = conversation_to_user.participantID)";
+        $this->sqlConditionJoins .= "
+            LEFT JOIN   wcf" . WCF_N . "_user user_table
+            ON          user_table.userID = conversation_to_user.participantID";
 
         if (!empty($this->sqlSelects)) {
             $this->sqlSelects .= ',';
         }
         $this->sqlSelects = 'conversation_to_user.*';
-        $this->sqlJoins .= " LEFT JOIN wcf" . WCF_N . "_conversation_to_user conversation_to_user ON (conversation_to_user.participantID = user_table.userID AND conversation_to_user.conversationID = " . $conversationID . ")";
+        $this->sqlJoins .= "
+            LEFT JOIN   wcf" . WCF_N . "_conversation_to_user conversation_to_user
+            ON          conversation_to_user.participantID = user_table.userID
+                    AND conversation_to_user.conversationID = " . $conversationID;
     }
 
     /**
