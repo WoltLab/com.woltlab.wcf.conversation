@@ -77,12 +77,10 @@ class ConversationMessageSearch extends AbstractSearchableObjectType
     public function getJoins()
     {
         return "    JOIN        wcf" . WCF_N . "_conversation_to_user conversation_to_user
-                    ON          (
-                                    conversation_to_user.participantID = " . WCF::getUser()->userID . "
-                                    AND conversation_to_user.conversationID = " . $this->getTableName() . ".conversationID
-                                )
+                    ON          conversation_to_user.participantID = " . WCF::getUser()->userID . "
+                            AND conversation_to_user.conversationID = " . $this->getTableName() . ".conversationID
                     LEFT JOIN   wcf" . WCF_N . "_conversation conversation
-                    ON          (conversation.conversationID = " . $this->getTableName() . ".conversationID)";
+                    ON          conversation.conversationID = " . $this->getTableName() . ".conversationID";
     }
 
     /**

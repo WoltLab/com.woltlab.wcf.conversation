@@ -33,6 +33,6 @@ class SearchResultConversationMessageList extends SimplifiedViewableConversation
             $this->sqlSelects .= ',';
         }
         $this->sqlSelects .= 'conversation.subject';
-        $this->sqlJoins .= " LEFT JOIN wcf" . WCF_N . "_conversation conversation ON (conversation.conversationID = conversation_message.conversationID)";
+        $this->sqlJoins .= " LEFT JOIN wcf" . WCF_N . "_conversation conversation ON conversation.conversationID = conversation_message.conversationID";
     }
 }
