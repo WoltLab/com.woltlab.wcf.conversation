@@ -7,6 +7,8 @@
 				{if !$conversation->isDraft && !$conversation->hasOtherParticipants()}
 					<p class="warning"  role="status" style="margin-bottom: 14px">{lang}wcf.conversation.noParticipantsWarning{/lang}</p>
 				{/if}
+
+				{event name='beforeWysiwyg'}
 				
 				<textarea id="text" name="text" class="wysiwygTextarea"
 				          data-autosave="com.woltlab.wcf.conversation.messageAdd-{@$conversation->conversationID}"
