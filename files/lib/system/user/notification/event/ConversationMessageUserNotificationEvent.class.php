@@ -82,6 +82,11 @@ class ConversationMessageUserNotificationEvent extends AbstractUserNotificationE
             'application' => 'wcf',
             'in-reply-to' => [$messageID],
             'references' => [$messageID],
+            'variables' => [
+                'author' => $this->author,
+                'message' => $this->userNotificationObject,
+                'conversation' => $this->userNotificationObject->getConversation(),
+            ],
         ];
     }
 
