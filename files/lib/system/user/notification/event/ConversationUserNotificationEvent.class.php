@@ -48,6 +48,10 @@ class ConversationUserNotificationEvent extends AbstractUserNotificationEvent im
             'message-id' => 'com.woltlab.wcf.conversation.notification/' . $this->getUserNotificationObject()->conversationID,
             'template' => 'email_notification_conversation',
             'application' => 'wcf',
+            'variables' => [
+                'author' => $this->author,
+                'conversation' => $this->userNotificationObject,
+            ],
         ];
     }
 
