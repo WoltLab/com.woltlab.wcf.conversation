@@ -215,7 +215,7 @@
 							</aside>
 							
 							<ul class="inlineList dotSeparated small messageGroupInfo">
-								<li class="messageGroupAuthor">{if $conversation->userID}{user object=$conversation->getUserProfile()}{else}{$conversation->username}{/if}</li>
+								<li class="messageGroupAuthor">{user object=$conversation->getUserProfile()}</li>
 								<li class="messageGroupTime">{@$conversation->time|time}</li>
 								<li class="messageGroupEditLink jsOnly"><a href="#" class="jsConversationInlineEditor">{lang}wcf.global.button.edit{/lang}</a></li>
 								{event name='messageGroupInfo'}
@@ -255,11 +255,7 @@
 									
 									<div>
 										<p>
-											{if $conversation->lastPosterID}
-												{user object=$conversation->getLastPosterProfile()}
-											{else}
-												{$conversation->lastPoster}
-											{/if}
+											{user object=$conversation->getLastPosterProfile()}
 										</p>
 										<small>{@$conversation->lastPostTime|time}</small>
 									</div>

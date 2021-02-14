@@ -22,18 +22,10 @@
 								{implode from=$conversation->getParticipantSummary() item=participant}<a href="{$participant->getLink()}" class="userLink{if $participant->hideConversation == 2} conversationLeft{/if}" data-object-id="{@$participant->userID}">{$participant->username}</a>{/implode}
 								{if $participantSummaryCount < $conversation->participants}{lang}wcf.conversation.participants.other{/lang}{/if}
 							{else}
-								{if $conversation->getOtherParticipantProfile()->userID}
-									{user object=$conversation->getOtherParticipantProfile()}
-								{else}
-									{$conversation->getOtherParticipantProfile()->username}
-								{/if}
+								{user object=$conversation->getOtherParticipantProfile()}
 							{/if}
 						{else}
-							{if $conversation->userID}
-								{user object=$conversation->getUserProfile()}
-							{else}
-								{$conversation->username}
-							{/if}
+							{user object=$conversation->getUserProfile()}
 						{/if}
 					</span>
 					
