@@ -1,6 +1,6 @@
 <div class="box48">
 	{if $message->getUserProfile()->getAvatar()}
-		{user object=$message->getUserProfile() type='avatar48' ariaHidden='true'}
+		{user object=$message->getUserProfile() type='avatar48' ariaHidden='true' tabindex='-1'}
 	{/if}
 	
 	<div>

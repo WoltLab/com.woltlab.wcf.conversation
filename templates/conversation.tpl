@@ -64,7 +64,7 @@
 			{foreach from=$participants item=participant}
 				<li class="jsParticipant{if !$participant->userID || $participant->hideConversation == 2 || $participant->leftAt > 0} conversationLeft{/if}">
 					<div class="box24">
-						{user object=$participant type='avatar24'}
+						{user object=$participant type='avatar24' ariaHidden='true' tabindex='-1'}
 						<div>
 							<p>
 								{user object=$participant}
