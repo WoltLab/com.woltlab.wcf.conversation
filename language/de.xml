@@ -199,7 +199,7 @@
 		<item name="wcf.user.notification.conversation.message.title.stacked"><![CDATA[{#$count} Teilnehmer haben auf eine Konversation geantwortet]]></item>
 		<item name="wcf.user.notification.conversation.message.mail.plaintext"><![CDATA[{@$authorList} {if $count == 1 && !$guestTimesTriggered}hat{else}haben{/if} auf die Konversation „{@$conversation->getTitle()}“ [URL:{@$message->getLink()}] geantwortet{if $count == 1 && !$guestTimesTriggered}:{else}.{/if}]]></item>
 		<item name="wcf.user.notification.conversation.message.mail.html"><![CDATA[<p>{@$authorList} {if $count == 1 && !$guestTimesTriggered}hat{else}haben{/if} auf die Konversation <a href="{$message->getLink()}">{$conversation->getTitle()}</a> geantwortet:</p>]]></item>
-		<item name="wcf.user.notification.conversation.message.mail.title"><![CDATA["{@$author->username}" hat auf die Konversation "{$message->getConversation()->subject}" geantwortet]]></item>
+		<item name="wcf.user.notification.conversation.message.mail.title"><![CDATA["{@$author}" hat auf die Konversation "{@$conversation->getTitle()}" geantwortet]]></item>
 		<item name="wcf.user.notification.conversation.message"><![CDATA[<strong>{$author}</strong> hat die Konversation <strong>{$conversation->getTitle()}</strong> gestartet.]]></item>
 		<item name="wcf.user.notification.conversation.title"><![CDATA[Neue Konversation]]></item>
 		<item name="wcf.user.notification.conversation.mail.plaintext"><![CDATA[{@$author} hat die Konversation „{@$conversation->getTitle()}“ [URL:{@$conversation->getLink()}] gestartet:]]></item>

@@ -103,6 +103,7 @@ class ConversationMessageUserNotificationEvent extends AbstractUserNotificationE
         return $this->getLanguage()->getDynamicVariable('wcf.user.notification.conversation.message.mail.title', [
             'author' => $this->author,
             'message' => $this->userNotificationObject,
+            'conversation' => $this->userNotificationObject->getConversation(),
         ]);
     }
 
