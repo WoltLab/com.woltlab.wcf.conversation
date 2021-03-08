@@ -76,7 +76,6 @@
 				<usersonly>1</usersonly>
 				<admindefaultvalue>1</admindefaultvalue>
 			</option>
-			
 			<option name="user.conversation.maxParticipants">
 				<categoryname>user.conversation</categoryname>
 				<optiontype>integer</optiontype>
@@ -91,6 +90,15 @@
 				<defaultvalue>100</defaultvalue>
 				<minvalue>1</minvalue>
 				<maxvalue>100000</maxvalue>
+				<usersonly>1</usersonly>
+			</option>
+			<option name="user.conversation.floodControlTime">
+				<categoryname>user.conversation</categoryname>
+				<optiontype>inverseInteger</optiontype>
+				<defaultvalue>60</defaultvalue>
+				<minvalue>0</minvalue>
+				<suffix>seconds</suffix>
+				<admindefaultvalue>0</admindefaultvalue>
 				<usersonly>1</usersonly>
 			</option>
 			<option name="user.conversation.maxStartedConversationsPer24Hours">
