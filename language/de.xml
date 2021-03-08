@@ -142,6 +142,7 @@
 		<item name="wcf.conversation.time"><![CDATA[Erstellung]]></item>
 		<item name="wcf.conversation.username"><![CDATA[Autor]]></item>
 		<item name="wcf.conversation.error.floodControl"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Du hast{else}Sie haben{/if} innerhalb der letzten 24 Stunden bereits {if $limit == 1}eine Konversation{else}{#$limit} Konversationen{/if} gestartet. Bitte {if LANGUAGE_USE_INFORMAL_VARIANT}warte{else}warten Sie{/if} bis zum <strong>{@$notBefore|time}</strong>, bevor {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} eine neue Konversation {if LANGUAGE_USE_INFORMAL_VARIANT}startest{else}starten{/if}.]]></item>
+		<item name="wcf.conversation.message.error.floodControl"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Du hast{else}Sie haben{/if} bereits eine Nachricht innerhalb der letzten {plural value=$__wcf->getSession()->getPermission('user.conversation.floodControlTime') 1='Sekunde' other='# Sekunden'} versendet. {if LANGUAGE_USE_INFORMAL_VARIANT}Du kannst{else}Sie können{/if} erst in {plural value=$waitTime 1='Sekunde' other='# Sekunden'} eine neue Nachricht verfassen.]]></item>
 	</category>
 	<category name="wcf.conversation.edit">
 		<item name="wcf.conversation.edit.addParticipants"><![CDATA[Teilnehmer hinzufügen]]></item>

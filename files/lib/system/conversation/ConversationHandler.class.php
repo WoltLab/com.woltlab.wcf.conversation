@@ -150,24 +150,44 @@ class ConversationHandler extends SingletonFactory
     /**
      * Enforces the flood control.
      */
-    public function enforceFloodControl()
-    {
-        $limit = WCF::getSession()->getPermission('user.conversation.maxStartedConversationsPer24Hours');
-        if ($limit == -1) {
-            return;
-        } elseif ($limit == 0) {
-            // `0` is not a valid value, but the interface logic does not permit and exclusion
-            // while also allowing the special value `-1`. Therefore, `0` behaves like the
-            // 'canStartConversation' permission added in WoltLab Suite 5.2.
-            throw new PermissionDeniedException();
+    public function enforceFloodControl(
+        bool $isReply = false
+    ) {
+        if (!$isReply) {
+            // 1. Check for the maximum conversations per 24 hours.
+            $limit = WCF::getSession()->getPermission('user.conversation.maxStartedConversationsPer24Hours');
+            if ($limit == 0) {
+                // `0` is not a valid value, but the interface logic does not permit and exclusion
+                // while also allowing the special value `-1`. Therefore, `0` behaves like the
+                // 'canStartConversation' permission added in WoltLab Suite 5.2.
+                throw new PermissionDeniedException();
+            }
+
+            if ($limit != -1) {
+                $count = FloodControl::getInstance()->countContent('com.woltlab.wcf.conversation', new \DateInterval('P1D'));
+                if ($count['count'] >= $limit) {
+                    throw new NamedUserException(WCF::getLanguage()->getDynamicVariable(
+                        'wcf.conversation.error.floodControl',
+                        [
+                            'limit' => $count['count'],
+                            'notBefore' => $count['earliestTime'] + 86400,
+                        ]
+                    ));
+                }
+            }
         }
 
-        $count = FloodControl::getInstance()->countContent('com.woltlab.wcf.conversation', new \DateInterval('P1D'));
-        if ($count['count'] >= $limit) {
-            throw new NamedUserException(WCF::getLanguage()->getDynamicVariable('wcf.conversation.error.floodControl', [
-                'limit' => $count['count'],
-                'notBefore' => $count['earliestTime'] + 86400,
-            ]));
+        // 2. Check the time between conversation messages.
+        $floodControlTime = WCF::getSession()->getPermission('user.conversation.floodControlTime');
+        $lastTime = FloodControl::getInstance()->getLastTime('com.woltlab.wcf.conversation.message');
+        if ($lastTime !== null && $lastTime > TIME_NOW - $floodControlTime) {
+            throw new NamedUserException(WCF::getLanguage()->getDynamicVariable(
+                'wcf.conversation.message.error.floodControl',
+                [
+                    'lastMessageTime' => $lastTime,
+                    'waitTime' => $lastTime + $floodControlTime - TIME_NOW,
+                ]
+            ));
         }
     }
 }

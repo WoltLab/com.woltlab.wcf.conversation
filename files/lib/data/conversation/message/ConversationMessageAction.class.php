@@ -13,8 +13,11 @@ use wcf\data\IMessageQuoteAction;
 use wcf\data\smiley\SmileyCache;
 use wcf\system\attachment\AttachmentHandler;
 use wcf\system\bbcode\BBCodeHandler;
+use wcf\system\conversation\ConversationHandler;
+use wcf\system\exception\NamedUserException;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
+use wcf\system\flood\FloodControl;
 use wcf\system\html\input\HtmlInputProcessor;
 use wcf\system\message\censorship\Censorship;
 use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
@@ -290,6 +293,12 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
      */
     public function validateQuickReply()
     {
+        try {
+            ConversationHandler::getInstance()->enforceFloodControl(true);
+        } catch (NamedUserException $e) {
+            throw new UserInputException('message', $e->getMessage());
+        }
+
         QuickReplyManager::getInstance()->setDisallowedBBCodes(\explode(
             ',',
             WCF::getSession()->getPermission('user.message.disallowedBBCodes')
@@ -302,13 +311,17 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
      */
     public function quickReply()
     {
-        return QuickReplyManager::getInstance()->createMessage(
+        $returnValues = QuickReplyManager::getInstance()->createMessage(
             $this,
             $this->parameters,
             ConversationAction::class,
             CONVERSATION_LIST_DEFAULT_SORT_ORDER,
             'conversationMessageList'
         );
+
+        FloodControl::getInstance()->registerContent('com.woltlab.wcf.conversation.message');
+
+        return $returnValues;
     }
 
     /**

@@ -142,6 +142,7 @@
 		<item name="wcf.conversation.time"><![CDATA[Creation]]></item>
 		<item name="wcf.conversation.username"><![CDATA[Author]]></item>
 		<item name="wcf.conversation.error.floodControl"><![CDATA[You have already started {if $limit == 1}one conversation{else}{#$limit} conversations{/if} in the past 24 hours. Please wait until <strong>{@$notBefore|time}</strong> before you start a new conversation.]]></item>
+		<item name="wcf.conversation.message.error.floodControl"><![CDATA[You have already sent a message within the last {plural value=$__wcf->getSession()->getPermission('user.conversation.floodControlTime') 1='second' other='# seconds'}. You must wait at least {plural value=$waitTime 1='second' other='# seconds'} before attempting to write a new message.]]></item>
 	</category>
 	<category name="wcf.conversation.edit">
 		<item name="wcf.conversation.edit.addParticipants"><![CDATA[Add Participants]]></item>
