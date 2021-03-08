@@ -34,6 +34,8 @@
 		<item name="wcf.acp.group.canBeAddedAsConversationParticipant"><![CDATA[Benutzergruppe kann als Teilnehmer in Konversationen hinzufügt werden]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxStartedConversationsPer24Hours"><![CDATA[Maximale Anzahl gestarteter Konversation innerhalb von 24 Stunden]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxStartedConversationsPer24Hours.description"><![CDATA[Beschränkt die Anzahl der Konversationen die ein Benutzer innerhalb von 24 Stunden starten darf. [-1 für unbegrenzt]]]></item>
+		<item name="wcf.acp.group.option.user.conversation.floodControlTime"><![CDATA[Mindestzeit zwischen zwei Nachrichten]]></item>
+		<item name="wcf.acp.group.option.user.conversation.floodControlTime.description"><![CDATA[Mindestzeit, die zwischen zwei hintereinander folgenden Konversationsnachrichten vergehen muss. [0 für unbeschränkt]]]></item>
 	</category>
 	<category name="wcf.acp.option">
 		<item name="wcf.acp.option.category.message.conversation"><![CDATA[Konversationen]]></item>
@@ -140,6 +142,7 @@
 		<item name="wcf.conversation.time"><![CDATA[Erstellung]]></item>
 		<item name="wcf.conversation.username"><![CDATA[Autor]]></item>
 		<item name="wcf.conversation.error.floodControl"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Du hast{else}Sie haben{/if} innerhalb der letzten 24 Stunden bereits {if $limit == 1}eine Konversation{else}{#$limit} Konversationen{/if} gestartet. Bitte {if LANGUAGE_USE_INFORMAL_VARIANT}warte{else}warten Sie{/if} bis zum <strong>{@$notBefore|time}</strong>, bevor {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} eine neue Konversation {if LANGUAGE_USE_INFORMAL_VARIANT}startest{else}starten{/if}.]]></item>
+		<item name="wcf.conversation.message.error.floodControl"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Du hast{else}Sie haben{/if} bereits eine Nachricht innerhalb der letzten {plural value=$__wcf->getSession()->getPermission('user.conversation.floodControlTime') 1='Sekunde' other='# Sekunden'} versendet. {if LANGUAGE_USE_INFORMAL_VARIANT}Du kannst{else}Sie können{/if} erst in {plural value=$waitTime 1='einer Sekunde' other='# Sekunden'} eine neue Nachricht verfassen.]]></item>
 	</category>
 	<category name="wcf.conversation.edit">
 		<item name="wcf.conversation.edit.addParticipants"><![CDATA[Teilnehmer hinzufügen]]></item>
