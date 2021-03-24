@@ -1046,7 +1046,14 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
      */
     public function validateRemoveParticipant()
     {
-        $this->readInteger('userID');
+        // The previous request from `WCF.Action.Delete` used `userID`, while the new `Ui/Object/Action`
+        // module passes `userId`.
+        try {
+            $this->readInteger('userID');
+        } catch (UserInputException $e) {
+            $this->readInteger('userId');
+            $this->parameters['userID'] = $this->parameters['userId'];
+        }
 
         // validate conversation
         $this->conversation = $this->getSingleObject();

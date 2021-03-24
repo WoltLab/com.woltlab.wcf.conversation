@@ -685,6 +685,7 @@ WCF.Conversation.Leave = Class.extend({
  * Provides methods to remove participants from conversations.
  * 
  * @see	WCF.Action.Delete
+ * @deprecated	5.4 Handled via `WoltLabSuite/Core/Ui/Object/Action`.
  */
 WCF.Conversation.RemoveParticipant = WCF.Action.Delete.extend({
 	/**

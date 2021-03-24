@@ -60,9 +60,9 @@
 	<section class="section">
 		<h2 class="sectionTitle">{lang}wcf.conversation.participants{/lang}</h2>
 		
-		<ul class="containerBoxList tripleColumned conversationParticipantList">
+		<ul class="containerBoxList tripleColumned conversationParticipantList jsObjectActionContainer" data-object-action-class-name="wcf\data\conversation\ConversationAction">
 			{foreach from=$participants item=participant}
-				<li class="jsParticipant{if !$participant->userID || $participant->hideConversation == 2 || $participant->leftAt > 0} conversationLeft{/if}">
+				<li class="jsParticipant jsObjectActionObject{if !$participant->userID || $participant->hideConversation == 2 || $participant->leftAt > 0} conversationLeft{/if}" data-object-id="{@$conversation->getObjectID()}">
 					<div class="box24">
 						{user object=$participant type='avatar24' ariaHidden='true' tabindex='-1'}
 						<div>
@@ -70,7 +70,7 @@
 								{user object=$participant}
 								{if $participant->isInvisible}<small>({lang}wcf.conversation.invisible{/lang})</small>{/if}
 								{if $participant->userID && ($conversation->userID == $__wcf->getUser()->userID) && ($participant->userID != $__wcf->getUser()->userID) && $participant->hideConversation != 2 && $participant->leftAt == 0}
-									<a href="#" class="jsDeleteButton jsTooltip jsOnly" title="{lang}wcf.conversation.participants.removeParticipant{/lang}" data-confirm-message-html="{lang __encode=true}wcf.conversation.participants.removeParticipant.confirmMessage{/lang}" data-object-id="{@$participant->userID}"><span class="icon icon16 fa-times"></span></a>
+									<a href="#" class="jsObjectAction jsTooltip jsOnly" data-object-action="removeParticipant" title="{lang}wcf.conversation.participants.removeParticipant{/lang}" data-confirm-message="{lang __encode=true}wcf.conversation.participants.removeParticipant.confirmMessage{/lang}" data-object-action-parameter-user-id="{@$participant->getObjectID()}"><span class="icon icon16 fa-times"></span></a>
 								{/if}
 							</p>
 							<dl class="plain inlineDataList small">
@@ -152,7 +152,10 @@
 		{if $__wcf->session->getPermission('user.profile.canReportContent')}
 			new WCF.Moderation.Report.Content('com.woltlab.wcf.conversation.message', '.jsReportConversationMessage');
 		{/if}
-		new WCF.Conversation.RemoveParticipant({@$conversation->conversationID});
+	});
+	
+	require(['WoltLabSuite/Core/Conversation/Ui/Object/Action/RemoveParticipant'], (UiObjectActionRemoveParticipant) => {
+		UiObjectActionRemoveParticipant.setup();
 	});
 </script>
 
