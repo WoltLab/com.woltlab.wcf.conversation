@@ -1,10 +1,10 @@
 /**
- * Reacts to objects being toggled.
+ * Reacts to participants being removed from a conversation.
  *
  * @author  Matthias Schmidt
  * @copyright  2001-2021 WoltLab GmbH
  * @license  GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @module  WoltLabSuite/Core/Ui/Object/Action/Toggle
+ * @module  WoltLabSuite/Core/Conversation/Ui/Object/Action/RemoveParticipant
  */
 define(["require", "exports", "tslib", "WoltLabSuite/Core/Ui/Object/Action/Handler"], function (require, exports, tslib_1, Handler_1) {
     "use strict";
