@@ -8,11 +8,11 @@
  */
 
 import UiObjectActionHandler from "WoltLabSuite/Core/Ui/Object/Action/Handler";
-import { DatabaseObjectActionResponse } from "WoltLabSuite/Core/Ajax/Data";
+import { ObjectActionData } from "WoltLabSuite/Core/Ui/Object/Data";
 
-function removeParticipant(data: DatabaseObjectActionResponse, objectElement: HTMLElement): void {
-  objectElement.querySelector(".userLink")!.classList.add("conversationLeft");
-  objectElement.querySelector(".jsObjectAction[data-object-action='removeParticipant']")!.remove();
+function removeParticipant(data: ObjectActionData): void {
+  data.objectElement.querySelector(".userLink")!.classList.add("conversationLeft");
+  data.objectElement.querySelector(".jsObjectAction[data-object-action='removeParticipant']")!.remove();
 }
 
 export function setup(): void {
