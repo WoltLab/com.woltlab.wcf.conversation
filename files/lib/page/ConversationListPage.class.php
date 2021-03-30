@@ -7,8 +7,10 @@ use wcf\system\clipboard\ClipboardHandler;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\page\PageLocationManager;
+use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
 use wcf\util\ArrayUtil;
+use wcf\util\HeaderUtil;
 
 /**
  * Shows a list of conversations.
@@ -122,7 +124,7 @@ class ConversationListPage extends SortablePage {
 		
 		// labels
 		$this->labelList = ConversationLabel::getLabelsByUser();
-		if (isset($_REQUEST['labelID'])) {
+		if (!empty($_REQUEST['labelID'])) {
 			$this->labelID = intval($_REQUEST['labelID']);
 			
 			$validLabel = false;
@@ -139,6 +141,20 @@ class ConversationListPage extends SortablePage {
 		}
 		
 		if (isset($_REQUEST['participants'])) $this->participants = array_slice(ArrayUtil::trim(explode(',', $_REQUEST['participants'])), 0, 20);
+
+		if (!empty($_POST)) {
+			$participantsParameter = '';
+			foreach ($this->participants as $participant) {
+				if (!empty($participantsParameter)) $participantsParameter .= ',';
+				$participantsParameter .= \rawurlencode($participant);
+			}
+			if (!empty($participantsParameter)) {
+				$participantsParameter = '&participants=' . $participantsParameter;
+			}
+
+			HeaderUtil::redirect(LinkHandler::getInstance()->getLink('ConversationList', [], 'sortField='.$this->sortField.'&sortOrder='.$this->sortOrder.'&filter='.$this->filter.'&labelID='.$this->labelID.'&pageNo='.$this->pageNo.$participantsParameter));
+			exit;
+		}
 	}
 	
 	/** @noinspection PhpMissingParentCallCommonInspection */
