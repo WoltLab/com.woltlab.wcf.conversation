@@ -34,7 +34,7 @@
 		<item name="wcf.acp.group.canBeAddedAsConversationParticipant"><![CDATA[User group can be added as participant in conversations]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxStartedConversationsPer24Hours"><![CDATA[Maximum Number of Started Conversations per 24 Hours]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxStartedConversationsPer24Hours.description"><![CDATA[Limits the number of conversations that a user can start within 24 hours. Use -1 for infinite.]]></item>
-		<item name="wcf.acp.group.option.user.conversation.floodControlTime"><![CDATA[Delay for Messages]]></item>
+		<item name="wcf.acp.group.option.user.conversation.floodControlTime"><![CDATA[Delay between Messages]]></item>
 		<item name="wcf.acp.group.option.user.conversation.floodControlTime.description"><![CDATA[Seconds required between creating two conversation messages. Use 0 to disable.]]></item>
 	</category>
 	<category name="wcf.acp.option">
