@@ -25,7 +25,6 @@
 		<item name="wcf.acp.group.option.user.conversation.canUploadAttachment"><![CDATA[Can upload attachments]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxAttachmentSize"><![CDATA[Maximum Attachment File Size]]></item>
 		<item name="wcf.acp.group.option.user.conversation.allowedAttachmentExtensions"><![CDATA[Allowed Attachment File Extensions]]></item>
-		<item name="wcf.acp.group.option.user.conversation.allowedAttachmentExtensions.description"><![CDATA[Enter one extension per line.]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxAttachmentCount"><![CDATA[Maximum Attachments per Message]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxAttachmentCount.description"><![CDATA[The maximum number of attachments allowed per message.]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canEditMessage"><![CDATA[Can edit their messages]]></item>

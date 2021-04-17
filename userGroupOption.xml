@@ -140,7 +140,7 @@
 			</option>
 			<option name="user.conversation.allowedAttachmentExtensions">
 				<categoryname>user.conversation</categoryname>
-				<optiontype>textarea</optiontype>
+				<optiontype>lineBreakSeparatedText</optiontype>
 				<defaultvalue>gif
 jpg
 jpeg
