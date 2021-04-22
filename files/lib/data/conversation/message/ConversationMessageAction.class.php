@@ -31,6 +31,7 @@ use wcf\system\user\notification\UserNotificationHandler;
 use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\WCF;
 use wcf\util\StringUtil;
+use wcf\util\UserUtil;
 
 /**
  * Executes conversation message-related actions.
@@ -88,7 +89,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         if (LOG_IP_ADDRESS) {
             // add ip address
             if (!isset($this->parameters['data']['ipAddress'])) {
-                $this->parameters['data']['ipAddress'] = WCF::getSession()->ipAddress;
+                $this->parameters['data']['ipAddress'] = UserUtil::getIpAddress();
             }
         } else {
             // do not track ip address
