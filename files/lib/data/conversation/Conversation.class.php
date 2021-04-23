@@ -6,6 +6,7 @@ use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\DatabaseObject;
 use wcf\data\IPopoverObject;
 use wcf\data\user\group\UserGroup;
+use wcf\data\user\ignore\UserIgnore;
 use wcf\data\user\UserProfile;
 use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\conversation\ConversationHandler;
@@ -682,7 +683,7 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
             }
 
             // active user is ignored by participant
-            if ($user->isIgnoredUser(WCF::getUser()->userID)) {
+            if ($user->isIgnoredUser(WCF::getUser()->userID, UserIgnore::TYPE_BLOCK_DIRECT_CONTACT)) {
                 throw new UserInputException($field, 'ignoresYou');
             }
 
