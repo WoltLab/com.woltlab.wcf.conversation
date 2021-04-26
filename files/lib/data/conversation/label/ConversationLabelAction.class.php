@@ -61,11 +61,7 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction
     {
         parent::validateUpdate();
 
-        if (\count($this->objects) != 1) {
-            throw new UserInputException('objectID');
-        }
-
-        $label = \current($this->objects);
+        $label = $this->getSingleObject();
         if ($label->userID != WCF::getUser()->userID) {
             throw new PermissionDeniedException();
         }
@@ -78,11 +74,7 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction
     {
         parent::validateDelete();
 
-        if (\count($this->objects) != 1) {
-            throw new UserInputException('objectID');
-        }
-
-        $label = \current($this->objects);
+        $label = $this->getSingleObject();
         if ($label->userID != WCF::getUser()->userID) {
             throw new PermissionDeniedException();
         }

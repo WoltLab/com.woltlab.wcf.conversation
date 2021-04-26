@@ -297,6 +297,7 @@ class ConversationPage extends MultipleLinkPage
         $invisibleParticipantIDs = [];
         if (WCF::getUser()->userID != $this->conversation->userID) {
             foreach ($this->participantList as $participant) {
+                /** @noinspection PhpUndefinedFieldInspection */
                 if ($participant->isInvisible) {
                     $invisibleParticipantIDs[] = $participant->userID;
                 }

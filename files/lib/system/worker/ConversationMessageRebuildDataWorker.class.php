@@ -97,15 +97,14 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker
 
         // retrieve permissions
         $userIDs = [];
-        foreach ($this->objectList as $object) {
+        foreach ($this->getObjectList() as $object) {
             // passing `0` is actually valid, because it won't yield any results when querying the group membership
             $userIDs[] = ($object->userID ?: 0);
         }
         $userPermissions = $this->getBulkUserPermissions($userIDs, ['user.message.disallowedBBCodes']);
 
         $updateData = [];
-        /** @var ConversationMessage $message */
-        foreach ($this->objectList as $message) {
+        foreach ($this->getObjectList() as $message) {
             SearchIndexManager::getInstance()->set(
                 'com.woltlab.wcf.conversation.message',
                 $message->messageID,
