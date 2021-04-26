@@ -1084,7 +1084,7 @@ WCF.Conversation.Label.Manager = Class.extend({
 		
 		// replace legends
 		var $legend = WCF.Language.get('wcf.conversation.label.management.editLabel').replace(/#labelName#/, WCF.String.escapeHTML($label.text()));
-		$('#conversationLabelManagementForm').data('labelID', $label.data('labelID')).children('legend').html($legend);
+		$('#conversationLabelManagementForm').data('labelID', $label.data('labelID')).children('.sectionTitle').html($legend);
 		
 		// update text input
 		$('#labelName').val($label.text()).trigger('keyup');
