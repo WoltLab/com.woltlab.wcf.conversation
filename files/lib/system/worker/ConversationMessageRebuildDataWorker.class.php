@@ -2,7 +2,6 @@
 
 namespace wcf\system\worker;
 
-use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\conversation\message\ConversationMessageList;
 use wcf\data\object\type\ObjectTypeCache;
 use wcf\system\bbcode\BBCodeHandler;
