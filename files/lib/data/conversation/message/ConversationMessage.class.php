@@ -72,7 +72,7 @@ class ConversationMessage extends DatabaseObject implements IMessage
      * Assigns and returns the embedded attachments.
      *
      * @param bool $ignoreCache
-     * @return  GroupedAttachmentList
+     * @return  null|GroupedAttachmentList
      */
     public function getAttachments($ignoreCache = false)
     {
@@ -91,6 +91,8 @@ class ConversationMessage extends DatabaseObject implements IMessage
 
             return $attachmentList;
         }
+
+        return null;
     }
 
     /**

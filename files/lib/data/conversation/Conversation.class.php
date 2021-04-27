@@ -190,7 +190,7 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
      *
      * @param int $conversationID
      * @param int $userID
-     * @return  Conversation
+     * @return  null|Conversation
      */
     public static function getUserConversation($conversationID, $userID)
     {
@@ -206,6 +206,8 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
         if ($row !== false) {
             return new self(null, $row);
         }
+
+        return null;
     }
 
     /**

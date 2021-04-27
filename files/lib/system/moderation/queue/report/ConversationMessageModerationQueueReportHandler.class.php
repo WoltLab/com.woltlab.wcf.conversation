@@ -114,6 +114,8 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
         if ($this->isValid($objectID)) {
             return $this->getMessage($objectID);
         }
+
+        return null;
     }
 
     /**
