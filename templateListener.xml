@@ -39,11 +39,4 @@
 			<templatecode><![CDATA[{include file='__userGroupAddCanBeAddedAsConversationParticipant'}]]></templatecode>
 		</templatelistener>
 	</import>
-	<delete>
-		<templatelistener name="userButtons">
-			<environment>user</environment>
-			<templatename>user</templatename>
-			<eventname>buttons</eventname>
-		</templatelistener>
-	</delete>
 </data>
