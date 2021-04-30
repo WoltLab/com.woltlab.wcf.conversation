@@ -48,6 +48,7 @@
 		<instruction type="objectType" />
 		<instruction type="userGroupOption" />
 		<instruction type="language" />
+		<instruction type="templateListener" />
 		
 		<instruction type="script">acp/update_com.woltlab.wcf.conversation_5.4_deleteLanguageItems.php</instruction>
 	</instructions>
