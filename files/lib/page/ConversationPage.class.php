@@ -250,11 +250,12 @@ class ConversationPage extends MultipleLinkPage
                 $userIDs[] = $message->userID;
             }
         }
+        $userIDs = \array_unique($userIDs);
 
         // fetch special trophies
         if (MODULE_TROPHY) {
             if (!empty($userIDs)) {
-                UserProfile::prepareSpecialTrophies(\array_unique($userIDs));
+                UserProfile::prepareSpecialTrophies($userIDs);
             }
         }
 
