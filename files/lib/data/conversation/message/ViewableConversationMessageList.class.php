@@ -19,7 +19,7 @@ use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
  * @method  ViewableConversationMessage     current()
  * @method  ViewableConversationMessage[]       getObjects()
  * @method  ViewableConversationMessage|null    getSingleObject()
- * @method  ViewableConversationMessage|null    seach($objectID)
+ * @method  ViewableConversationMessage|null    search($objectID)
  * @property    ViewableConversationMessage[] $objects
  */
 class ViewableConversationMessageList extends ConversationMessageList

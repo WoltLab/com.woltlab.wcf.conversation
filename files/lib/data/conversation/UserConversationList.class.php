@@ -19,7 +19,7 @@ use wcf\system\WCF;
  * @method  ViewableConversation        current()
  * @method  ViewableConversation[]      getObjects()
  * @method  ViewableConversation|null   getSingleObject()
- * @method  ViewableConversation|null   seach($objectID)
+ * @method  ViewableConversation|null   search($objectID)
  * @property    ViewableConversation[] $objects
  */
 class UserConversationList extends ConversationList
