@@ -14,7 +14,8 @@ use wcf\data\DatabaseObjectList;
  *
  * @method  ConversationMessage     current()
  * @method  ConversationMessage[]       getObjects()
- * @method  ConversationMessage|null    search($objectID)
+ * @method  ConversationMessage|null    getSingleObject()
+ * @method  ConversationMessage|null    seach($objectID)
  * @property    ConversationMessage[] $objects
  */
 class ConversationMessageList extends DatabaseObjectList
