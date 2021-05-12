@@ -86,7 +86,7 @@ class ConversationMessage extends DatabaseObject implements IMessage
             ]);
 
             if ($ignoreCache && !\count($attachmentList)) {
-                return;
+                return null;
             }
 
             return $attachmentList;

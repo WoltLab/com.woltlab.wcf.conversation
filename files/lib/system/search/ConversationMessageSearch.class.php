@@ -145,6 +145,8 @@ class ConversationMessageSearch extends AbstractSearchableObjectType
         if ($this->conversation) {
             return 'searchConversationMessage';
         }
+
+        return null;
     }
 
     /**

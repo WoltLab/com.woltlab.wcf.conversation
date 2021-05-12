@@ -54,13 +54,13 @@ class ConversationClipboardAction extends AbstractClipboardAction
 
         // check if no conversation was accessible
         if (empty($this->conversations)) {
-            return;
+            return null;
         }
 
         $item = parent::execute($objects, $action);
 
         if ($item === null) {
-            return;
+            return null;
         }
 
         switch ($action->actionName) {
@@ -73,7 +73,7 @@ class ConversationClipboardAction extends AbstractClipboardAction
                 $statement->execute([WCF::getUser()->userID]);
                 $row = $statement->fetchArray();
                 if ($row['count'] == 0) {
-                    return;
+                    return null;
                 }
 
                 $item->addParameter('objectIDs', \array_keys($this->conversations));
