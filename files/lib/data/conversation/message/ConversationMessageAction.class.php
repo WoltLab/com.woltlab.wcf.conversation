@@ -540,18 +540,18 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
     /**
      * @inheritDoc
      */
-    public function validateContainer(DatabaseObject $conversation)
+    public function validateContainer(DatabaseObject $container)
     {
-        /** @var Conversation $conversation */
+        /** @var Conversation $container */
 
-        if (!$conversation->conversationID) {
+        if (!$container->conversationID) {
             throw new UserInputException('objectID');
         }
-        if ($conversation->isClosed) {
+        if ($container->isClosed) {
             throw new PermissionDeniedException();
         }
-        $conversation->loadUserParticipation();
-        if (!$conversation->canRead() || !$conversation->canReply()) {
+        $container->loadUserParticipation();
+        if (!$container->canRead() || !$container->canReply()) {
             throw new PermissionDeniedException();
         }
     }
@@ -602,14 +602,14 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
     /**
      * @inheritDoc
      */
-    public function getMessageList(DatabaseObject $conversation, $lastMessageTime)
+    public function getMessageList(DatabaseObject $container, $lastMessageTime)
     {
-        /** @var Conversation $conversation */
+        /** @var Conversation $container */
 
         $messageList = new ViewableConversationMessageList();
-        $messageList->setConversation($conversation);
+        $messageList->setConversation($container);
         $messageList->getConditionBuilder()
-            ->add("conversation_message.conversationID = ?", [$conversation->conversationID]);
+            ->add("conversation_message.conversationID = ?", [$container->conversationID]);
         $messageList->getConditionBuilder()
             ->add("conversation_message.time > ?", [$lastMessageTime]);
         $messageList->sqlOrderBy = "conversation_message.time " . CONVERSATION_LIST_DEFAULT_SORT_ORDER;
@@ -621,15 +621,15 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
     /**
      * @inheritDoc
      */
-    public function getPageNo(DatabaseObject $conversation)
+    public function getPageNo(DatabaseObject $container)
     {
-        /** @var Conversation $conversation */
+        /** @var Conversation $container */
 
         $sql = "SELECT  COUNT(*) AS count
                 FROM    wcf" . WCF_N . "_conversation_message
                 WHERE   conversationID = ?";
         $statement = WCF::getDB()->prepareStatement($sql);
-        $statement->execute([$conversation->conversationID]);
+        $statement->execute([$container->conversationID]);
         $count = $statement->fetchArray();
 
         return [\intval(\ceil($count['count'] / CONVERSATION_MESSAGES_PER_PAGE)), $count['count']];
@@ -638,7 +638,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
     /**
      * @inheritDoc
      */
-    public function getRedirectUrl(DatabaseObject $conversation, DatabaseObject $message)
+    public function getRedirectUrl(DatabaseObject $container, DatabaseObject $message)
     {
         /** @var ConversationMessage $message */
         return $message->getLink();
@@ -763,7 +763,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
     /**
      * @inheritDoc
      */
-    public function getAttachmentHandler(DatabaseObject $conversation)
+    public function getAttachmentHandler(DatabaseObject $container)
     {
         return new AttachmentHandler('com.woltlab.wcf.conversation.message', 0, $this->parameters['tmpHash']);
     }
