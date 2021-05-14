@@ -108,33 +108,42 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker
         $updateData = [];
         /** @var Conversation $conversation */
         foreach ($this->objectList as $conversation) {
-            // check for obsolete conversations
-            $obsolete = false;
-            if ($conversation->isDraft) {
-                if (!$conversation->userID) {
-                    $obsolete = true;
-                }
-            } else {
-                $existingParticipantStatement->execute([$conversation->conversationID, Conversation::STATE_LEFT]);
-                $row = $existingParticipantStatement->fetchSingleRow();
-                if (!$row['participants']) {
-                    $obsolete = true;
-                }
-            }
-            if ($obsolete) {
-                $obsoleteConversations[] = new ConversationEditor($conversation);
-                continue;
-            }
+            // get stats
+            $statsStatement->execute([$conversation->conversationID]);
+            $row = $statsStatement->fetchSingleRow();
 
             // update data
             $data = [
+                'attachments' => $row['attachments'] ?: 0,
                 'firstMessageID' => $conversation->firstMessageID,
                 'lastPostTime' => $conversation->lastPostTime,
                 'lastPosterID' => $conversation->lastPosterID,
                 'lastPoster' => $conversation->lastPoster,
+                'replies' => $row['messages'] ? $row['messages'] - 1 : 0,
                 'userID' => $conversation->userID,
                 'username' => $conversation->username,
             ];
+
+            // check for obsolete conversations
+            $obsolete = $row['messages'] == 0;
+            if (!$obsolete) {
+                if ($conversation->isDraft) {
+                    if (!$conversation->userID) {
+                        $obsolete = true;
+                    }
+                } else {
+                    $existingParticipantStatement->execute([$conversation->conversationID, Conversation::STATE_LEFT]);
+                    $row = $existingParticipantStatement->fetchSingleRow();
+                    if (!$row['participants']) {
+                        $obsolete = true;
+                    }
+                }
+            }
+            
+            if ($obsolete) {
+                $obsoleteConversations[] = new ConversationEditor($conversation);
+                continue;
+            }
 
             // get first post
             $firstMessageStatement->execute([$conversation->conversationID]);
@@ -152,12 +161,6 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker
                 $data['lastPosterID'] = $row['userID'];
                 $data['lastPoster'] = $row['username'];
             }
-
-            // get stats
-            $statsStatement->execute([$conversation->conversationID]);
-            $row = $statsStatement->fetchSingleRow();
-            $data['replies'] = ($row['messages'] ? $row['messages'] - 1 : 0);
-            $data['attachments'] = ($row['attachments'] ?: 0);
 
             // get number of participants
             $participantCounterStatement->execute([
