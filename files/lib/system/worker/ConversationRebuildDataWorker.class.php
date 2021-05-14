@@ -139,7 +139,7 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker
                     }
                 }
             }
-            
+
             if ($obsolete) {
                 $obsoleteConversations[] = new ConversationEditor($conversation);
                 continue;
