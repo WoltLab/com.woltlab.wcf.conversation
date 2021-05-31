@@ -42,6 +42,6 @@
 	</instructions>
 	
 	<instructions type="update" fromversion="5.4.0 Alpha 3">
-		<instruction type="void"/>
+		<void/>
 	</instructions>
 </package>
