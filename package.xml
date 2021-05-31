@@ -41,18 +41,6 @@
 		<instruction type="page" />
 	</instructions>
 	
-	<instructions type="update" fromversion="5.3.*">
-		<instruction type="file" />
-		<instruction type="template" />
-		
-		<instruction type="objectType" />
-		<instruction type="userGroupOption" />
-		<instruction type="language" />
-		<instruction type="templateListener" />
-		
-		<instruction type="script">acp/update_com.woltlab.wcf.conversation_5.4_deleteLanguageItems.php</instruction>
-	</instructions>
-
 	<instructions type="update" fromversion="5.4.0 Alpha 2">
 		<instruction type="file">files_update.tar</instruction>
 	</instructions>
