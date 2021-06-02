@@ -40,8 +40,4 @@
 		<instruction type="script">acp/install_com.woltlab.wcf.conversation.php</instruction>
 		<instruction type="page" />
 	</instructions>
-	
-	<instructions type="update" fromversion="5.4.0 Alpha 3">
-		<void/>
-	</instructions>
 </package>
