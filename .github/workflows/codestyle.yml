@@ -39,3 +39,18 @@ jobs:
       run: |
         git checkout -- package-lock.json
         git diff --exit-code
+  scss:
+    name: SCSS Prettier
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: npm install
+      - name: Run prettier
+        run: |
+          shopt -s globstar
+          npx prettier -w files/style/*.scss
+      - run: echo "::add-matcher::.github/diff.json"
+      - name: Show diff
+        run: |
+          git checkout -- package-lock.json
+          git diff --exit-code
