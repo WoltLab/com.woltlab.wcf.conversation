@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/2019/language.xsd" languagecode="en">
+<import>
 	<category name="wcf.acp.content">
 		<item name="wcf.acp.content.provider.com.woltlab.wcf.conversation"><![CDATA[Conversations]]></item>
 		<item name="wcf.acp.content.provider.com.woltlab.wcf.conversation.message"><![CDATA[Conversation Messages]]></item>
@@ -216,4 +217,5 @@
 		<item name="wcf.user.option.conversationsPerPage"><![CDATA[Conversations per Page]]></item>
 		<item name="wcf.user.option.canSendConversation"><![CDATA[Can Add Me to Conversations]]></item>
 	</category>
+</import>
 </language>
