@@ -10,7 +10,7 @@
 			<nav class="contentHeaderNavigation">
 				<ul>
 					{content}
-						{if $__wcf->session->getPermission('user.conversation.canStartConversation')}<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button"><span class="icon icon16 fa-plus"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>{/if}
+						{if $__wcf->session->getPermission('user.conversation.canStartConversation')}<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button buttonPrimary"><span class="icon icon16 fa-plus"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>{/if}
 						{event name='contentHeaderNavigation'}
 					{/content}
 				</ul>
@@ -119,24 +119,20 @@
 	{event name='boxes'}
 {/capture}
 
-{capture assign='headerNavigation'}
-	<li><a rel="alternate" href="{link controller='ConversationFeed'}at={@$__wcf->getUser()->userID}-{@$__wcf->getUser()->accessToken}{/link}" title="{lang}wcf.global.button.rss{/lang}" class="rssFeed jsTooltip"><span class="icon icon16 fa-rss"></span> <span class="invisible">{lang}wcf.global.button.rss{/lang}</span></a></li>
-	<li class="jsOnly"><a href="#" title="{lang}wcf.conversation.markAllAsRead{/lang}" class="markAllAsReadButton jsTooltip"><span class="icon icon16 fa-check"></span> <span class="invisible">{lang}wcf.conversation.markAllAsRead{/lang}</span></a></li>
+{capture assign='contentInteractionPagination'}
+	{assign var='participantsParameter' value=''}
+	{if $participants}{capture assign='participantsParameter'}&participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}{/capture}{/if}
+	{assign var='labelIDParameter' value=''}
+	{if $labelID}{assign var='labelIDParameter' value="&labelID=$labelID"}{/if}
+	{pages print=true assign=pagesLinks controller='ConversationList' link="filter=$filter$participantsParameter&pageNo=%d&sortField=$sortField&sortOrder=$sortOrder$labelIDParameter"}
+{/capture}
+
+{capture assign='contentInteractionDropdownItems'}
+	<li><a rel="alternate" href="{link controller='ConversationFeed'}at={@$__wcf->getUser()->userID}-{@$__wcf->getUser()->accessToken}{/link}" class="rssFeed">{lang}wcf.global.button.rss{/lang}</a></li>
+	<li class="jsOnly"><a href="#" class="markAllAsReadButton">{lang}wcf.conversation.markAllAsRead{/lang}</a></li>
 {/capture}
 
 {include file='header'}
-
-{hascontent}
-	<div class="paginationTop">
-		{content}
-			{assign var='participantsParameter' value=''}
-			{if $participants}{capture assign='participantsParameter'}&participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}{/capture}{/if}
-			{assign var='labelIDParameter' value=''}
-			{if $labelID}{assign var='labelIDParameter' value="&labelID=$labelID"}{/if}
-			{pages print=true assign=pagesLinks controller='ConversationList' link="filter=$filter$participantsParameter&pageNo=%d&sortField=$sortField&sortOrder=$sortOrder$labelIDParameter"}
-		{/content}
-	</div>
-{/hascontent}
 
 {if !$items}
 	<p class="info" role="status">{lang}wcf.conversation.noConversations{/lang}</p>
