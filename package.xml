@@ -64,4 +64,5 @@
 
 	<instructions type="update" fromversion="5.4.0 Beta 2">
 		<void/>
+	</instructions>
 </package>
