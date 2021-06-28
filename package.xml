@@ -5,8 +5,8 @@
 		<packagename language="de">WoltLab Suite Core: Konversationen</packagename>
 		<packagedescription>Private conversations between multiple users</packagedescription>
 		<packagedescription language="de">Private Konversationen zwischen mehreren Benutzern</packagedescription>
-		<version>5.4.0 Beta 2</version>
-		<date>2021-06-18</date>
+		<version>5.4.0 RC 1</version>
+		<date>2021-06-30</date>
 	</packageinformation>
 	
 	<authorinformation>
@@ -15,7 +15,7 @@
 	</authorinformation>
 	
 	<requiredpackages>
-		<requiredpackage minversion="5.4.0 Beta 2">com.woltlab.wcf</requiredpackage>
+		<requiredpackage minversion="5.4.0 RC 1">com.woltlab.wcf</requiredpackage>
 	</requiredpackages>
 	
 	<excludedpackages>
@@ -40,8 +40,29 @@
 		<instruction type="script">acp/install_com.woltlab.wcf.conversation.php</instruction>
 		<instruction type="page" />
 	</instructions>
+	
+	<instructions type="update" fromversion="5.3.*">
+		<instruction type="file" />
+		<instruction type="template" />
+		
+		<instruction type="objectType" />
+		<instruction type="userGroupOption" />
+		<instruction type="language" />
+		<instruction type="templateListener" />
 
-	<instructions type="update" fromversion="5.4.0 Beta 1">
-		<instruction type="file">files_update.tar</instruction>
+		<!-- Just XSD adjustments. -->
+		<instruction type="clipboardAction" />
+		<instruction type="coreObject" />
+		<instruction type="eventListener" />
+		<instruction type="option" />
+		<instruction type="page" />
+		<instruction type="userNotificationEvent" />
+		<instruction type="userOption" />
+		
+		<instruction type="script">acp/update_com.woltlab.wcf.conversation_5.4_deleteLanguageItems.php</instruction>
+	</instructions>
+
+	<instructions type="update" fromversion="5.4.0 Beta 2">
+		<void/>
 	</instructions>
 </package>
