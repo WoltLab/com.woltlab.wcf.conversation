@@ -288,7 +288,17 @@
 
 <script data-relocate="true" src="{@$__wcf->getPath()}js/WCF.Conversation{if !ENABLE_DEBUG_MODE}.min{/if}.js?v={@LAST_UPDATE_TIME}"></script>
 <script data-relocate="true">
-	require(['Language', 'WoltLabSuite/Core/Controller/Popover', 'WoltLabSuite/Core/Ui/ItemList/User'], function(Language, ControllerPopover, UiItemListUser) {
+	require([
+		'WoltLabSuite/Core/Language',
+		'WoltLabSuite/Core/Controller/Popover',
+		'WoltLabSuite/Core/Ui/ItemList/User',
+		'WoltLabSuite/Core/Controller/Clipboard',
+	], (
+		Language,
+		ControllerPopover,
+		UiItemListUser,
+		ControllerClipboard
+	) => {
 		Language.addObject({
 			'wcf.conversation.edit.addParticipants': '{jslang}wcf.conversation.edit.addParticipants{/jslang}',
 			'wcf.conversation.edit.assignLabel': '{jslang}wcf.conversation.edit.assignLabel{/jslang}',
@@ -307,7 +317,10 @@
 			'wcf.conversation.label.assignLabels': '{jslang}wcf.conversation.label.assignLabels{/jslang}'
 		});
 		
-		WCF.Clipboard.init('wcf\\page\\ConversationListPage', {@$hasMarkedItems}, { });
+		ControllerClipboard.setup({
+			pageClassName: 'wcf\\page\\ConversationListPage',
+			hasMarkedItems: {if $hasMarkedItems}true{else}false{/if},
+		});
 		
 		var $editorHandler = new WCF.Conversation.EditorHandler();
 		var $inlineEditor = new WCF.Conversation.InlineEditor('.conversation');
