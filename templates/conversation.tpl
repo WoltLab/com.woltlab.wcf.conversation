@@ -143,7 +143,10 @@
 		{include file='__messageQuoteManager' wysiwygSelector='text' supportPaste=$__supportPaste}
 		
 		new WCF.Conversation.Message.InlineEditor({@$conversation->conversationID}, $quoteManager);
-		new WCF.Conversation.Message.QuoteHandler($quoteManager);
+		
+		require(["WoltLabSuite/Core/Conversation/Ui/Message/Quote"], ({ UiConversationMessageQuote }) => {
+			new UiConversationMessageQuote($quoteManager);
+		});
 		
 		{if $conversation->canReply()}
 			require(['WoltLabSuite/Core/Ui/Message/Reply'], function(UiMessageReply) {
