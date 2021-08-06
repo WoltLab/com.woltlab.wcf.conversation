@@ -87,7 +87,7 @@
 		<item name="wcf.conversation.information"><![CDATA[Details]]></item>
 		<item name="wcf.conversation.invisible"><![CDATA[invisible]]></item>
 		<item name="wcf.conversation.invisibleParticipants"><![CDATA[Invisible Participants]]></item>
-		<item name="wcf.conversation.invisibleParticipants.description"><![CDATA[Invisible participants remain invisible to the other participants until they write a message. Separate multiple users with a comma.]]></item>
+		<item name="wcf.conversation.invisibleParticipants.description"><![CDATA[Invisible participants remain invisible to the other participants until they write a message.]]></item>
 		<item name="wcf.conversation.lastPostTime"><![CDATA[Last Reply]]></item>
 		<item name="wcf.conversation.lastVisitTime"><![CDATA[Conversation Read]]></item>
 		<item name="wcf.conversation.leave.title"><![CDATA[Manage Participation]]></item>
@@ -98,7 +98,7 @@
 		<item name="wcf.conversation.noMoreItems"><![CDATA[You have no recent conversations.]]></item>
 		<item name="wcf.conversation.participantCanInvite"><![CDATA[Participants can add new participants]]></item>
 		<item name="wcf.conversation.participants"><![CDATA[Participants]]></item>
-		<item name="wcf.conversation.participants.description"><![CDATA[Separate multiple users with a comma.]]></item>
+		<item name="wcf.conversation.participants.description"><![CDATA[Multiple users must be entered separately.]]></item>
 		<item name="wcf.conversation.participants.error.mailboxIsFull"><![CDATA[{$errorData[username]} is already participating in too many conversations and cannot be added.]]></item>
 		<item name="wcf.conversation.participants.error.notFound"><![CDATA[The username “{$errorData[username]}” does not exist.]]></item>
 		<item name="wcf.conversation.participants.error.isAuthor"><![CDATA[You are already a participant of this conversation.]]></item>
