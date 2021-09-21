@@ -2,11 +2,11 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Ui/Dialog", "WoltLabSu
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.beginEdit = void 0;
-    Dialog_1 = tslib_1.__importDefault(Dialog_1);
-    Util_1 = tslib_1.__importDefault(Util_1);
-    Ajax = tslib_1.__importStar(Ajax);
-    Language = tslib_1.__importStar(Language);
-    UiNotification = tslib_1.__importStar(UiNotification);
+    Dialog_1 = (0, tslib_1.__importDefault)(Dialog_1);
+    Util_1 = (0, tslib_1.__importDefault)(Util_1);
+    Ajax = (0, tslib_1.__importStar)(Ajax);
+    Language = (0, tslib_1.__importStar)(Language);
+    UiNotification = (0, tslib_1.__importStar)(UiNotification);
     class UiSubjectEditor {
         constructor(objectId) {
             this.objectId = objectId;

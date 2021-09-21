@@ -10,7 +10,7 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Ui/Object/Action/Handl
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.setup = void 0;
-    Handler_1 = tslib_1.__importDefault(Handler_1);
+    Handler_1 = (0, tslib_1.__importDefault)(Handler_1);
     function removeParticipant(data) {
         data.objectElement.querySelector(".userLink").classList.add("conversationLeft");
         data.objectElement.querySelector(".jsObjectAction[data-object-action='removeParticipant']").remove();
