@@ -146,19 +146,21 @@
 			}
 		});
 		
-		UiItemListUser.init('invisibleParticipants', {
-			maxItems: {@$__wcf->getSession()->getPermission('user.conversation.maxParticipants')},
-			includeUserGroups: {if $__wcf->getSession()->getPermission('user.conversation.canAddGroupParticipants')}true{else}false{/if},
-			restrictUserGroupIDs: [-1, {implode from=$allowedUserGroupIDs item=allowedUserGroupID}{@$allowedUserGroupID}{/implode}],
-			csvPerType: true,
-			callbackSetupValues: function() {
-				return [
-					{implode from=$invisibleParticipantsData item=participant}
-						{ objectId: {@$participant['objectId']}, value: '{@$participant['value']|encodeJS}', type: '{@$participant['type']}' }
-					{/implode}
-				];
-			}
-		});
+		{if $__wcf->session->getPermission('user.conversation.canAddInvisibleParticipants')}
+			UiItemListUser.init('invisibleParticipants', {
+				maxItems: {@$__wcf->getSession()->getPermission('user.conversation.maxParticipants')},
+				includeUserGroups: {if $__wcf->getSession()->getPermission('user.conversation.canAddGroupParticipants')}true{else}false{/if},
+				restrictUserGroupIDs: [-1, {implode from=$allowedUserGroupIDs item=allowedUserGroupID}{@$allowedUserGroupID}{/implode}],
+				csvPerType: true,
+				callbackSetupValues: function() {
+					return [
+						{implode from=$invisibleParticipantsData item=participant}
+							{ objectId: {@$participant['objectId']}, value: '{@$participant['value']|encodeJS}', type: '{@$participant['type']}' }
+						{/implode}
+					];
+				}
+			});
+		{/if}
 	});
 	
 	$(function() {

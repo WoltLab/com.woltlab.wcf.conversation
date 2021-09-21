@@ -8,12 +8,12 @@
  */
 define(["require", "exports", "tslib", "WoltLabSuite/Core/Ajax", "WoltLabSuite/Core/Dom/Util", "WoltLabSuite/Core/Ui/Dialog", "WoltLabSuite/Core/Ui/Notification", "WoltLabSuite/Core/Ui/ItemList/User", "WoltLabSuite/Core/Language"], function (require, exports, tslib_1, Ajax, Util_1, Dialog_1, UiNotification, UiItemListUser, Language) {
     "use strict";
-    Ajax = tslib_1.__importStar(Ajax);
-    Util_1 = tslib_1.__importDefault(Util_1);
-    Dialog_1 = tslib_1.__importDefault(Dialog_1);
-    UiNotification = tslib_1.__importStar(UiNotification);
-    UiItemListUser = tslib_1.__importStar(UiItemListUser);
-    Language = tslib_1.__importStar(Language);
+    Ajax = (0, tslib_1.__importStar)(Ajax);
+    Util_1 = (0, tslib_1.__importDefault)(Util_1);
+    Dialog_1 = (0, tslib_1.__importDefault)(Dialog_1);
+    UiNotification = (0, tslib_1.__importStar)(UiNotification);
+    UiItemListUser = (0, tslib_1.__importStar)(UiItemListUser);
+    Language = (0, tslib_1.__importStar)(Language);
     class UiParticipantAdd {
         constructor(conversationId) {
             this.conversationId = conversationId;

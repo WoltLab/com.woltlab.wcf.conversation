@@ -50,7 +50,7 @@
 				<footer class="messageFooter">
 					{include file='attachments'}
 					
-					{if $message->showSignature && $message->getUserProfile()->showSignature()}
+					{if $message->getUserProfile()->showSignature()}
 						<div class="messageSignature">
 							<div>{@$message->getUserProfile()->getSignature()}</div>
 						</div>
