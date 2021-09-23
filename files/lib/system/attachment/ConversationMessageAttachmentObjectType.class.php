@@ -55,7 +55,7 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
         if ($objectID) {
             $message = new ConversationMessage($objectID);
             $conversation = Conversation::getUserConversation($message->conversationID, WCF::getUser()->userID);
-            if ($conversation->canRead()) {
+            if ($conversation !== null && $conversation->canRead()) {
                 return true;
             }
         }
