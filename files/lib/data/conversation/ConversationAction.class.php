@@ -304,63 +304,42 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
 
         // mark notifications as confirmed
         if (!empty($conversationIDs)) {
-            // conversation start notification
-            $conditionBuilder = new PreparedStatementConditionBuilder();
-            $conditionBuilder->add('notification.eventID = ?', [
-                UserNotificationHandler::getInstance()
-                    ->getEvent('com.woltlab.wcf.conversation.notification', 'conversation')
-                    ->eventID,
+            // 1) Mark notifications about new conversations as read.
+            UserNotificationHandler::getInstance()->markAsConfirmed(
+                'conversation',
+                'com.woltlab.wcf.conversation.notification',
+                [$this->parameters['userID']],
+                $conversationIDs
+            );
+
+            // 2) Mark notifications about new replies as read.
+            $eventID = UserNotificationHandler::getInstance()
+                ->getEvent('com.woltlab.wcf.conversation.message.notification', 'conversationMessage')
+                ->eventID;
+
+            $condition = new PreparedStatementConditionBuilder();
+            $condition->add('notification.userID = ?', [$this->parameters['userID']]);
+            $condition->add('notification.confirmTime = ?', [0]);
+            $condition->add('notification.eventID = ?', [$eventID]);
+            $condition->add("notification.objectID IN (
+                SELECT  messageID
+                FROM    wcf" . WCF_N . "_conversation_message
+                WHERE   conversationID IN (?)
+                    AND time <= ?
+            )", [
+                $conversationIDs,
+                $this->parameters['visitTime'],
             ]);
-            $conditionBuilder->add('notification.objectID = conversation.conversationID');
-            $conditionBuilder->add('notification.userID = ?', [$this->parameters['userID']]);
-            $conditionBuilder->add('conversation.conversationID IN (?)', [$conversationIDs]);
-            $conditionBuilder->add('conversation.time <= ?', [$this->parameters['visitTime']]);
 
-            $sql = "SELECT  conversation.conversationID
-                    FROM    wcf" . WCF_N . "_conversation conversation,
-                            wcf" . WCF_N . "_user_notification notification
-                    " . $conditionBuilder;
+            $sql = "SELECT  notificationID
+                    FROM    wcf" . WCF_N . "_user_notification notification
+                    {$condition}";
             $statement = WCF::getDB()->prepareStatement($sql);
-            $statement->execute($conditionBuilder->getParameters());
-            $notificationObjectIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
+            $statement->execute($condition->getParameters());
 
-            if (!empty($notificationObjectIDs)) {
-                UserNotificationHandler::getInstance()->markAsConfirmed(
-                    'conversation',
-                    'com.woltlab.wcf.conversation.notification',
-                    [$this->parameters['userID']],
-                    $notificationObjectIDs
-                );
-            }
-
-            // conversation reply notification
-            $conditionBuilder = new PreparedStatementConditionBuilder();
-            $conditionBuilder->add('notification.eventID = ?', [
-                UserNotificationHandler::getInstance()
-                    ->getEvent('com.woltlab.wcf.conversation.message.notification', 'conversationMessage')
-                    ->eventID,
-            ]);
-            $conditionBuilder->add('notification.objectID = conversation_message.messageID');
-            $conditionBuilder->add('notification.userID = ?', [$this->parameters['userID']]);
-            $conditionBuilder->add('conversation_message.conversationID IN (?)', [$conversationIDs]);
-            $conditionBuilder->add('conversation_message.time <= ?', [$this->parameters['visitTime']]);
-
-            $sql = "SELECT  conversation_message.messageID
-                    FROM    wcf" . WCF_N . "_conversation_message conversation_message,
-                            wcf" . WCF_N . "_user_notification notification
-                    " . $conditionBuilder;
-            $statement = WCF::getDB()->prepareStatement($sql);
-            $statement->execute($conditionBuilder->getParameters());
-            $notificationObjectIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
-
-            if (!empty($notificationObjectIDs)) {
-                UserNotificationHandler::getInstance()->markAsConfirmed(
-                    'conversationMessage',
-                    'com.woltlab.wcf.conversation.message.notification',
-                    [$this->parameters['userID']],
-                    $notificationObjectIDs
-                );
-            }
+            UserNotificationHandler::getInstance()->markAsConfirmedByIDs(
+                $statement->fetchAll(\PDO::FETCH_COLUMN)
+            );
         }
 
         if (!empty($conversationIDs)) {
