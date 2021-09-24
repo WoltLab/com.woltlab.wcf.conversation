@@ -41,27 +41,6 @@
 		<instruction type="page" />
 	</instructions>
 	
-	<instructions type="update" fromversion="5.3.*">
-		<instruction type="file" />
-		<instruction type="template" />
-		
-		<instruction type="objectType" />
-		<instruction type="userGroupOption" />
-		<instruction type="language" />
-		<instruction type="templateListener" />
-
-		<!-- Just XSD adjustments. -->
-		<instruction type="clipboardAction" />
-		<instruction type="coreObject" />
-		<instruction type="eventListener" />
-		<instruction type="option" />
-		<instruction type="page" />
-		<instruction type="userNotificationEvent" />
-		<instruction type="userOption" />
-		
-		<instruction type="script">acp/update_com.woltlab.wcf.conversation_5.4_deleteLanguageItems.php</instruction>
-	</instructions>
-
 	<instructions type="update" fromversion="5.4.3">
 		<instruction type="file">files_update.tar</instruction>
 		<instruction type="template">templates_update.tar</instruction>
