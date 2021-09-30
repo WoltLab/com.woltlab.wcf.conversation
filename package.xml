@@ -24,8 +24,8 @@
 	
 	<instructions type="install">
 		<instruction type="file" />
+		<instruction type="database">acp/database/install_com.woltlab.wcf.conversation.php</instruction>
 		<instruction type="userGroupOption" />
-		<instruction type="sql" run="standalone" />
 		<instruction type="template" />
 		<instruction type="acpTemplate" />
 		<instruction type="option" />
