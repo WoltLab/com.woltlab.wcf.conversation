@@ -32,7 +32,7 @@
 				
 				<li>
 					<span class="icon icon16 fa-clock-o"></span>
-					{@$conversation->time|time}
+					<a href="{$conversation->getLink()}">{@$conversation->time|time}</a>
 				</li>
 				
 				{if $conversation->isClosed}
