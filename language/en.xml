@@ -51,7 +51,9 @@
 		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation"><![CDATA[Rebuild Conversations]]></item>
 		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.description"><![CDATA[Rebuilds the conversation counters.]]></item>
 		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message"><![CDATA[Rebuild Conversation Messages]]></item>
-		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message.description"><![CDATA[Rebuilds the search index for the conversation messages.]]></item>
+		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message.description"><![CDATA[Rebuilds the conversation message counters.]]></item>
+		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message.search.index"><![CDATA[Rebuild Conversation Message Search Index]]></item>
+		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message.search.index.description"><![CDATA[Warning: This action can take a while to complete on large forums.]]></item>
 	</category>
 	<category name="wcf.acp.stat">
 		<item name="wcf.acp.stat.com.woltlab.wcf.conversation"><![CDATA[Conversations]]></item>

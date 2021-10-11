@@ -51,7 +51,9 @@
 		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation"><![CDATA[Konversationen aktualisieren]]></item>
 		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.description"><![CDATA[Aktualisiert Zähler der Konversationen]]></item>
 		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message"><![CDATA[Konversationsnachrichten aktualisieren]]></item>
-		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message.description"><![CDATA[Aktualisiert den Suchindex für Konversationsnachrichten]]></item>
+		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message.description"><![CDATA[Aktualisiert Zähler der Konversationsnachrichten]]></item>
+		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message.search.index"><![CDATA[Suchindex für Konversationsnachrichten aktualisieren]]></item>
+		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message.search.index.description"><![CDATA[Warnung: Die Ausführung dieser Aktion kann bei größeren Foren sehr lange dauern.]]></item>
 	</category>
 	<category name="wcf.acp.stat">
 		<item name="wcf.acp.stat.com.woltlab.wcf.conversation"><![CDATA[Konversationen]]></item>
