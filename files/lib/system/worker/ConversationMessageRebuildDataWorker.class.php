@@ -7,7 +7,6 @@ use wcf\data\object\type\ObjectTypeCache;
 use wcf\system\bbcode\BBCodeHandler;
 use wcf\system\html\input\HtmlInputProcessor;
 use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
-use wcf\system\search\SearchIndexManager;
 use wcf\system\WCF;
 
 /**
@@ -76,11 +75,6 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker
 
         parent::execute();
 
-        if (!$this->loopCount) {
-            // reset search index
-            SearchIndexManager::getInstance()->reset('com.woltlab.wcf.conversation.message');
-        }
-
         if (!\count($this->objectList)) {
             return;
         }
@@ -104,16 +98,6 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker
 
         $updateData = [];
         foreach ($this->getObjectList() as $message) {
-            SearchIndexManager::getInstance()->set(
-                'com.woltlab.wcf.conversation.message',
-                $message->messageID,
-                $message->message,
-                $message->subject ?: '',
-                $message->time,
-                $message->userID,
-                $message->username
-            );
-
             $data = [];
 
             // count attachments
