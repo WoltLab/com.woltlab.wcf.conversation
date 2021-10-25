@@ -584,18 +584,15 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
             );
         }
 
-        // search for censored words
-        if (ENABLE_CENSORSHIP) {
-            $result = Censorship::getInstance()->test($message);
-            if ($result) {
-                throw new UserInputException(
-                    'message',
-                    WCF::getLanguage()->getDynamicVariable(
-                        'wcf.message.error.censoredWordsFound',
-                        ['censoredWords' => $result]
-                    )
-                );
-            }
+        $censoredWords = Censorship::getInstance()->test($message);
+        if ($censoredWords) {
+            throw new UserInputException(
+                'message',
+                WCF::getLanguage()->getDynamicVariable(
+                    'wcf.message.error.censoredWordsFound',
+                    ['censoredWords' => $censoredWords]
+                )
+            );
         }
     }
 
