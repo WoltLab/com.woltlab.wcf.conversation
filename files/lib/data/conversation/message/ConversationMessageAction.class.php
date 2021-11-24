@@ -24,7 +24,6 @@ use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
 use wcf\system\message\QuickReplyManager;
 use wcf\system\message\quote\MessageQuoteManager;
 use wcf\system\moderation\queue\ModerationQueueManager;
-use wcf\system\request\LinkHandler;
 use wcf\system\search\SearchIndexManager;
 use wcf\system\user\notification\object\ConversationMessageUserNotificationObject;
 use wcf\system\user\notification\UserNotificationHandler;
