@@ -62,7 +62,7 @@
 	</category>
 	<category name="wcf.clipboard">
 		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.assignLabel"><![CDATA[Assign Label ({#$count})]]></item>
-		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.close"><![CDATA[Close ({#$count})]]></item>
+		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.close"><![CDATA[Close for Replies ({#$count})]]></item>
 		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.leave"><![CDATA[Hide ({#$count})]]></item>
 		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.leavePermanently"><![CDATA[Leave ({#$count})]]></item>
 		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.markAsRead"><![CDATA[Mark as Read ({#$count})]]></item>
@@ -150,7 +150,7 @@
 		<item name="wcf.conversation.edit.addParticipants"><![CDATA[Add Participants]]></item>
 		<item name="wcf.conversation.edit.addParticipants.success"><![CDATA[Added {#$count} participant{if $count != 1}s{/if}]]></item>
 		<item name="wcf.conversation.edit.assignLabel"><![CDATA[Assign Label]]></item>
-		<item name="wcf.conversation.edit.close"><![CDATA[Close]]></item>
+		<item name="wcf.conversation.edit.close"><![CDATA[Close for Replies]]></item>
 		<item name="wcf.conversation.edit.leave"><![CDATA[Manage Participation]]></item>
 		<item name="wcf.conversation.edit.open"><![CDATA[Open]]></item>
 		<item name="wcf.conversation.edit.subject"><![CDATA[Edit Subject]]></item>
@@ -174,7 +174,7 @@
 	</category>
 	<category name="wcf.conversation.log">
 		<item name="wcf.conversation.log.conversation.open"><![CDATA[Opened the conversation again.]]></item>
-		<item name="wcf.conversation.log.conversation.close"><![CDATA[Closed the conversation.]]></item>
+		<item name="wcf.conversation.log.conversation.close"><![CDATA[Closed the conversation for new replies.]]></item>
 		<item name="wcf.conversation.log.conversation.leave"><![CDATA[Left the conversation.]]></item>
 		<item name="wcf.conversation.log.conversation.addParticipants"><![CDATA[Added the following participants: {implode from=$additionalData[participants] item=participant}<a href="{link controller='User' id=$participant[userID] title=$participant[username]}{/link}" class="userLink" data-object-id="{@$participant[userID]}">{$participant[username]}</a>{/implode}.]]></item>
 		<item name="wcf.conversation.log.conversation.removeParticipant"><![CDATA[Removed a participant: <a href="{link controller='User' id=$additionalData[userID] title=$additionalData[username]}{/link}" class="userLink" data-object-id="{@$additionalData[userID]}">{$additionalData[username]}</a>.]]></item>
