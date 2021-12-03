@@ -299,8 +299,10 @@ class ConversationAddForm extends MessageForm
 
         MessageQuoteManager::getInstance()->saved();
 
-        FloodControl::getInstance()->registerContent('com.woltlab.wcf.conversation');
-        FloodControl::getInstance()->registerContent('com.woltlab.wcf.conversation.message');
+        if (!$this->draft) {
+            FloodControl::getInstance()->registerContent('com.woltlab.wcf.conversation');
+            FloodControl::getInstance()->registerContent('com.woltlab.wcf.conversation.message');
+        }
 
         $this->saved();
 
