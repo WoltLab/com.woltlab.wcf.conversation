@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/2019/fileDelete.xsd">
 	<delete>
+		<file>acp/install_com.woltlab.wcf.conversation_2.0.0.php</file>
 		<file>acp/update_com.woltlab.wcf.conversation_3.0_dropColumns.php</file>
 		<file>acp/update_com.woltlab.wcf.conversation_3.1_addColumn.php</file>
 		<file>acp/update_com.woltlab.wcf.conversation_5.2.php</file>
 		<file>js/require.build.min.js</file>
+		<file>js/WoltLab/Conversation/Ui/Participant/Add.js</file>
+		<file>js/WoltLab/Conversation/UI/Participant/Add.js</file>
 		<file>lib/form/ConversationMessageAddForm.class.php</file>
 		<file>lib/form/ConversationMessageEditForm.class.php</file>
 		<file>lib/page/ConversationLogPage.class.php</file>
+		<file>lib/system/event/listener/UserGroupAddCanBeAddedAsParticipantListener.class.php</file>
 		<file>lib/system/user/online/location/ConversationLocation.class.php</file>
+		<file>style/conversation.less</file>
 	</delete>
 </data>
