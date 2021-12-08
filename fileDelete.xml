@@ -5,6 +5,7 @@
 		<file>acp/update_com.woltlab.wcf.conversation_3.0_dropColumns.php</file>
 		<file>acp/update_com.woltlab.wcf.conversation_3.1_addColumn.php</file>
 		<file>acp/update_com.woltlab.wcf.conversation_5.2.php</file>
+		<file>acp/update_com.woltlab.wcf.conversation_5.4_deleteLanguageItems.php</file>
 		<file>js/require.build.min.js</file>
 		<file>js/WoltLab/Conversation/Ui/Participant/Add.js</file>
 		<file>js/WoltLab/Conversation/UI/Participant/Add.js</file>
