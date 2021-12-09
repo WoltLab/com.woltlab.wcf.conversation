@@ -7,6 +7,7 @@ use wcf\data\conversation\ConversationAction;
 use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\exception\IllegalLinkException;
+use wcf\system\flood\FloodControl;
 use wcf\system\message\quote\MessageQuoteManager;
 use wcf\system\WCF;
 use wcf\util\HeaderUtil;
@@ -105,6 +106,12 @@ class ConversationDraftEditForm extends ConversationAddForm
         $this->objectAction->executeAction();
 
         MessageQuoteManager::getInstance()->saved();
+
+        if (!$this->draft) {
+            FloodControl::getInstance()->registerContent('com.woltlab.wcf.conversation');
+            FloodControl::getInstance()->registerContent('com.woltlab.wcf.conversation.message');
+        }
+
         $this->saved();
 
         // forward
