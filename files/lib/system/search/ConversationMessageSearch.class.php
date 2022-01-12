@@ -17,23 +17,23 @@ use wcf\system\WCF;
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package WoltLabSuite\Core\System\Search
  */
-class ConversationMessageSearch extends AbstractSearchProvider
+final class ConversationMessageSearch extends AbstractSearchProvider
 {
     /**
      * @var int
      */
-    public $conversationID = 0;
+    private $conversationID = 0;
 
     /**
      * searched conversation
      * @var Conversation
      */
-    public $conversation;
+    private $conversation;
 
     /**
      * @var SearchResultConversationMessage[]
      */
-    public $messageCache = [];
+    private $messageCache = [];
 
     /**
      * @inheritDoc
