@@ -278,7 +278,7 @@
 		<nav class="contentFooterNavigation">
 			<ul>
 				{content}
-					{if $__wcf->session->getPermission('user.conversation.canStartConversation')}<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button"><span class="icon icon16 fa-plus"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>{/if}
+					{if $__wcf->session->getPermission('user.conversation.canStartConversation')}<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button buttonPrimary"><span class="icon icon16 fa-plus"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>{/if}
 					{event name='contentFooterNavigation'}
 				{/content}
 			</ul>
