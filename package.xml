@@ -53,5 +53,7 @@
 
 		<instruction type="language" />
 		<instruction type="objectType" />
+
+		<instruction type="script">acp/update_com.woltlab.wcf.conversation_5.5_cleanup_orphaned_attachments.php</instruction>
 	</instructions>
 </package>
