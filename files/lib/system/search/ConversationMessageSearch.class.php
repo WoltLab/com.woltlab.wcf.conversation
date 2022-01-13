@@ -5,43 +5,40 @@ namespace wcf\system\search;
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\message\SearchResultConversationMessage;
 use wcf\data\conversation\message\SearchResultConversationMessageList;
-use wcf\form\IForm;
-use wcf\form\SearchForm;
+use wcf\data\search\ISearchResultObject;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\WCF;
 
 /**
- * An implementation of ISearchableObjectType for searching in conversations.
+ * An implementation of ISearchProvider for searching in conversations.
  *
  * @author  Marcel Werk
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package WoltLabSuite\Core\System\Search
  */
-class ConversationMessageSearch extends AbstractSearchableObjectType
+final class ConversationMessageSearch extends AbstractSearchProvider
 {
     /**
-     * id of the searched conversation
      * @var int
      */
-    public $conversationID = 0;
+    private $conversationID = 0;
 
     /**
      * searched conversation
      * @var Conversation
      */
-    public $conversation;
+    private $conversation;
 
     /**
-     * message data cache
      * @var SearchResultConversationMessage[]
      */
-    public $messageCache = [];
+    private $messageCache = [];
 
     /**
      * @inheritDoc
      */
-    public function cacheObjects(array $objectIDs, ?array $additionalData = null)
+    public function cacheObjects(array $objectIDs, ?array $additionalData = null): void
     {
         $messageList = new SearchResultConversationMessageList();
         $messageList->setObjectIDs($objectIDs);
@@ -54,7 +51,7 @@ class ConversationMessageSearch extends AbstractSearchableObjectType
     /**
      * @inheritDoc
      */
-    public function getAdditionalData()
+    public function getAdditionalData(): ?array
     {
         return [
             'conversationID' => $this->conversationID,
@@ -64,7 +61,7 @@ class ConversationMessageSearch extends AbstractSearchableObjectType
     /**
      * @inheritDoc
      */
-    public function getObject($objectID)
+    public function getObject(int $objectID): ?ISearchResultObject
     {
         return $this->messageCache[$objectID] ?? null;
     }
@@ -72,7 +69,7 @@ class ConversationMessageSearch extends AbstractSearchableObjectType
     /**
      * @inheritDoc
      */
-    public function getJoins()
+    public function getJoins(): string
     {
         return "    JOIN        wcf" . WCF_N . "_conversation_to_user conversation_to_user
                     ON          conversation_to_user.participantID = " . WCF::getUser()->userID . "
@@ -84,7 +81,7 @@ class ConversationMessageSearch extends AbstractSearchableObjectType
     /**
      * @inheritDoc
      */
-    public function getTableName()
+    public function getTableName(): string
     {
         return 'wcf' . WCF_N . '_conversation_message';
     }
@@ -92,7 +89,7 @@ class ConversationMessageSearch extends AbstractSearchableObjectType
     /**
      * @inheritDoc
      */
-    public function getIDFieldName()
+    public function getIDFieldName(): string
     {
         return $this->getTableName() . '.messageID';
     }
@@ -100,7 +97,7 @@ class ConversationMessageSearch extends AbstractSearchableObjectType
     /**
      * @inheritDoc
      */
-    public function getSubjectFieldName()
+    public function getSubjectFieldName(): string
     {
         return 'conversation.subject';
     }
@@ -108,14 +105,13 @@ class ConversationMessageSearch extends AbstractSearchableObjectType
     /**
      * @inheritDoc
      */
-    public function getConditions(?IForm $form = null)
+    public function getConditionBuilder(array $parameters): ?PreparedStatementConditionBuilder
     {
+        $this->readParameters($parameters);
+
         $conditionBuilder = new PreparedStatementConditionBuilder();
         $conditionBuilder->add('conversation_to_user.hideConversation IN (0,1)');
-
-        if (isset($_POST['conversationID'])) {
-            $this->conversationID = \intval($_POST['conversationID']);
-
+        if ($this->conversationID) {
             $conditionBuilder->add('conversation.conversationID = ?', [$this->conversationID]);
         }
 
@@ -125,7 +121,7 @@ class ConversationMessageSearch extends AbstractSearchableObjectType
     /**
      * @inheritDoc
      */
-    public function isAccessible()
+    public function isAccessible(): bool
     {
         if (!WCF::getUser()->userID) {
             return false;
@@ -140,39 +136,36 @@ class ConversationMessageSearch extends AbstractSearchableObjectType
     /**
      * @inheritDoc
      */
-    public function getFormTemplateName()
+    public function getFormTemplateName(): string
     {
         if ($this->conversation) {
             return 'searchConversationMessage';
         }
 
-        return null;
+        return '';
     }
 
     /**
      * @inheritDoc
      */
-    public function show(?IForm $form = null)
+    public function assignVariables(): void
     {
-        /** @var SearchForm $form */
-
-        // get existing values
-        if (
-            $form !== null
-            && isset($form->searchData['additionalData']['com.woltlab.wcf.conversation.message']['conversationID'])
-        ) {
-            $this->conversationID = $form->searchData['additionalData']['com.woltlab.wcf.conversation.message']['conversationID'];
-
-            if ($this->conversationID) {
-                $this->conversation = Conversation::getUserConversation($this->conversationID, WCF::getUser()->userID);
-
-                if ($this->conversation === null || !$this->conversation->canRead()) {
-                    $this->conversationID = 0;
-                    $this->conversation = null;
-                }
+        if (!empty($_REQUEST['conversationID'])) {
+            $conversation = Conversation::getUserConversation(\intval($_REQUEST['conversationID']), WCF::getUser()->userID);
+            if ($conversation !== null && $conversation->canRead()) {
+                $this->conversation = $conversation;
+                WCF::getTPL()->assign('searchedConversation', $conversation);
             }
         }
+    }
 
-        WCF::getTPL()->assign('searchedConversation', $this->conversation);
+    /**
+     * @inheritDoc
+     */
+    private function readParameters(array $parameters): void
+    {
+        if (!empty($parameters['conversationID'])) {
+            $this->conversationID = \intval($parameters['conversationID']);
+        }
     }
 }
