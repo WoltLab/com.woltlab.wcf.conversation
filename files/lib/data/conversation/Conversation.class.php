@@ -144,6 +144,10 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
      */
     public function canReply()
     {
+        if (!$this->canRead()) {
+            return false;
+        }
+
         return !$this->isClosed && !$this->leftAt && WCF::getSession()->getPermission('user.conversation.canReplyToConversation');
     }
 
