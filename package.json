@@ -9,6 +9,6 @@
     "typescript": "^4.5.4"
   },
   "dependencies": {
-    "@woltlab/wcf": "https://github.com/WoltLab/WCF.git#ff42f851236d5b190184a4d0a51ed3b78c45f46a"
+    "@woltlab/wcf": "https://github.com/WoltLab/WCF.git#6107d2d75703380c136b3efbb771082826c306ef"
   }
 }
