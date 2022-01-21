@@ -11,10 +11,13 @@ use wcf\data\IClipboardAction;
 use wcf\data\IPopoverAction;
 use wcf\data\IVisitableObjectAction;
 use wcf\data\user\group\UserGroup;
+use wcf\data\user\User;
+use wcf\page\ConversationPage;
 use wcf\system\clipboard\ClipboardHandler;
 use wcf\system\conversation\ConversationHandler;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\event\EventHandler;
+use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
 use wcf\system\log\modification\ConversationModificationLogHandler;
@@ -757,6 +760,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
 
     /**
      * Validates parameters to return the mixed conversation list.
+     *
+     * @deprecated 5.5
      */
     public function validateGetMixedConversationList()
     {
@@ -767,6 +772,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
      * Returns a mixed conversation list with up to 10 unread conversations.
      *
      * @return  mixed[][]
+     * @deprecated 5.5 This method provided the data for the legacy user panel implementation.
      */
     public function getMixedConversationList()
     {
@@ -829,6 +835,105 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
             'template' => WCF::getTPL()->fetch('conversationListUserPanel'),
             'totalCount' => $totalCount,
         ];
+    }
+
+    /**
+     * @since 5.5
+     */
+    public function validateGetConversations(): void
+    {
+        if (!\MODULE_CONVERSATION) {
+            throw new IllegalLinkException();
+        }
+
+        if (!WCF::getSession()->getPermission('user.conversation.canUseConversation')) {
+            throw new PermissionDeniedException();
+        }
+    }
+
+    /**
+     * @since 5.5
+     */
+    public function getConversations(): array
+    {
+        $sqlSelect = '  , (
+            SELECT      participantID
+            FROM        wcf' . WCF_N . '_conversation_to_user
+            WHERE       conversationID = conversation.conversationID
+                    AND participantID <> conversation.userID
+                    AND isInvisible = 0
+            ORDER BY    username, participantID
+            LIMIT 1
+        ) AS otherParticipantID
+        , (
+            SELECT      username
+            FROM        wcf' . WCF_N . '_conversation_to_user
+            WHERE       conversationID = conversation.conversationID
+                    AND participantID <> conversation.userID
+                    AND isInvisible = 0
+            ORDER BY    username, participantID
+            LIMIT       1
+        ) AS otherParticipant';
+
+        $unreadConversationList = new UserConversationList(WCF::getUser()->userID);
+        $unreadConversationList->sqlSelects .= $sqlSelect;
+        $unreadConversationList->getConditionBuilder()->add('conversation_to_user.lastVisitTime < lastPostTime');
+        $unreadConversationList->sqlLimit = 10;
+        $unreadConversationList->sqlOrderBy = 'lastPostTime DESC';
+        $unreadConversationList->readObjects();
+
+        $conversations = [];
+        $count = 0;
+        foreach ($unreadConversationList as $conversation) {
+            $conversations[] = $conversation;
+            $count++;
+        }
+
+        if ($count < 10) {
+            $conversationList = new UserConversationList(WCF::getUser()->userID);
+            $conversationList->sqlSelects .= $sqlSelect;
+            $conversationList->getConditionBuilder()->add('conversation_to_user.lastVisitTime >= lastPostTime');
+            $conversationList->sqlLimit = (10 - $count);
+            $conversationList->sqlOrderBy = 'lastPostTime DESC';
+            $conversationList->readObjects();
+
+            foreach ($conversationList as $conversation) {
+                $conversations[] = $conversation;
+            }
+        }
+
+        $totalCount = ConversationHandler::getInstance()->getUnreadConversationCount();
+        if ($count < 10 && $count < $totalCount) {
+            UserStorageHandler::getInstance()->reset([WCF::getUser()->userID], 'unreadConversationCount');
+        }
+
+        return \array_map(static function (ViewableConversation $conversation) {
+            if ($conversation->participants > 1) {
+                $image = '<span class="icon icon48 fa-users"></span>';
+            } else {
+                $image = $conversation->getOtherParticipantProfile()->getAvatar()->getImageTag(48);
+            }
+
+            $link = LinkHandler::getInstance()->getControllerLink(
+                ConversationPage::class,
+                [
+                    'object' => $conversation,
+                    'action' => 'firstNew',
+                ]
+            );
+
+            $usernames = \array_column($conversation->getParticipantSummary(), 'username');
+
+            return [
+                'content' => $conversation->getTitle(),
+                'image' => $image,
+                'isUnread' => $conversation->isNew(),
+                'link' => $link,
+                'objectId' => $conversation->conversationID,
+                'time' => $conversation->lastPostTime,
+                'usernames' => $usernames,
+            ];
+        }, $conversations);
     }
 
     /**
