@@ -17,6 +17,7 @@ use wcf\system\clipboard\ClipboardHandler;
 use wcf\system\conversation\ConversationHandler;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\event\EventHandler;
+use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
 use wcf\system\log\modification\ConversationModificationLogHandler;
@@ -841,6 +842,13 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
      */
     public function validateGetConversations(): void
     {
+        if (!\MODULE_CONVERSATION) {
+            throw new IllegalLinkException();
+        }
+
+        if (!WCF::getSession()->getPermission('user.conversation.canUseConversation')) {
+            throw new PermissionDeniedException();
+        }
     }
 
     /**
@@ -914,9 +922,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
                 ]
             );
 
-            $usernames = \array_map(static function (User $user) {
-                return $user->username;
-            }, $conversation->getParticipantSummary());
+            $usernames = \array_column($conversation->getParticipantSummary(), 'username');
 
             return [
                 'content' => $conversation->getTitle(),
