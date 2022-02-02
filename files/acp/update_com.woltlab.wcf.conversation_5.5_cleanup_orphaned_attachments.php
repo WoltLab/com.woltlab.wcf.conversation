@@ -32,7 +32,7 @@ if (empty($attachmentIDs)) {
     return;
 }
 
-(new AttachmentAction([$attachmentIDs], 'delete'))->executeAction();
+(new AttachmentAction($attachmentIDs, 'delete'))->executeAction();
 
 // If we reached this location we processed at least one attachment.
 // If this was the final attachment the next iteration will abort this
