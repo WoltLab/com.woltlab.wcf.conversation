@@ -25,6 +25,7 @@ $sql = "SELECT  attachmentID
                 FROM    wcf1_conversation_message
             )";
 $statement = WCF::getDB()->prepare($sql, 100);
+$statement->execute([$objectType->objectTypeID]);
 $attachmentIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
 
 if (empty($attachmentIDs)) {
