@@ -11,7 +11,6 @@ use wcf\data\IClipboardAction;
 use wcf\data\IPopoverAction;
 use wcf\data\IVisitableObjectAction;
 use wcf\data\user\group\UserGroup;
-use wcf\data\user\User;
 use wcf\page\ConversationPage;
 use wcf\system\clipboard\ClipboardHandler;
 use wcf\system\conversation\ConversationHandler;
@@ -908,10 +907,14 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
         }
 
         return \array_map(static function (ViewableConversation $conversation) {
-            if ($conversation->participants > 1) {
-                $image = '<span class="icon icon48 fa-users"></span>';
+            if ($conversation->userID === WCF::getUser()->userID) {
+                if ($conversation->participants > 1) {
+                    $image = '<span class="icon icon48 fa-users"></span>';
+                } else {
+                    $image = $conversation->getOtherParticipantProfile()->getAvatar()->getImageTag(48);
+                }
             } else {
-                $image = $conversation->getOtherParticipantProfile()->getAvatar()->getImageTag(48);
+                $image = $conversation->getUserProfile()->getAvatar()->getImageTag(48);
             }
 
             $link = LinkHandler::getInstance()->getControllerLink(
