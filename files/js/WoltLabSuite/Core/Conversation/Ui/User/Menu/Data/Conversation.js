@@ -74,6 +74,9 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Ajax", "WoltLabSuite/C
         getEmptyViewMessage() {
             return this.options.noItems;
         }
+        hasPlainTitle() {
+            return true;
+        }
         hasUnreadContent() {
             return this.counter > 0;
         }

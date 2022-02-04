@@ -118,6 +118,10 @@ class UserMenuDataConversation implements UserMenuProvider {
     return this.options.noItems;
   }
 
+  hasPlainTitle(): boolean {
+    return true;
+  }
+
   hasUnreadContent(): boolean {
     return this.counter > 0;
   }
