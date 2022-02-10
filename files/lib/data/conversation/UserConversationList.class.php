@@ -103,7 +103,13 @@ class UserConversationList extends ConversationList
                     AND conversation_to_user.conversationID = conversation.conversationID";
 
         if ($this->filter !== 'draft') {
-            $this->sqlSelects .= ", conversation.*, CASE WHEN conversation_to_user.leftAt <> 0 THEN conversation_to_user.leftAt ELSE conversation.lastPostTime END AS lastPostTime";
+            $this->sqlSelects .= ",
+            conversation.*,
+            (CASE
+                WHEN    conversation_to_user.leftAt <> 0
+                THEN    conversation_to_user.leftAt
+                ELSE    conversation.lastPostTime
+            END) AS lastPostTime";
             // this avoids appending `conversation.*` to the SELECT list
             $this->useQualifiedShorthand = false;
         }
@@ -151,7 +157,11 @@ class UserConversationList extends ConversationList
         }
 
         $sql = "SELECT  conversation_to_user.conversationID AS objectID,
-                        CASE WHEN conversation_to_user.leftAt <> 0 THEN conversation_to_user.leftAt ELSE conversation.lastPostTime END AS lastPostTime
+                        (CASE
+                            WHEN    conversation_to_user.leftAt <> 0
+                            THEN    conversation_to_user.leftAt
+                            ELSE    conversation.lastPostTime
+                        END) AS lastPostTime
                 FROM    wcf" . WCF_N . "_conversation_to_user conversation_to_user
                     " . $this->sqlConditionJoins . "
                     " . $this->getConditionBuilder() . "
