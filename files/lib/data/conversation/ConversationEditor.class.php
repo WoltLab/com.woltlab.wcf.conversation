@@ -171,20 +171,20 @@ class ConversationEditor extends DatabaseObjectEditor
     public function removeParticipant($userID)
     {
         $sql = "SELECT  joinedAt
-                FROM    wcf" . WCF_N . "_conversation_to_user
+                FROM    wcf1_conversation_to_user
                 WHERE   conversationID = ?
                     AND participantID = ?";
-        $statement = WCF::getDB()->prepareStatement($sql, 1);
+        $statement = WCF::getDB()->prepare($sql, 1);
         $statement->execute([$this->conversationID, $userID]);
         $joinedAt = $statement->fetchSingleColumn();
 
         $sql = "SELECT      messageID
-                FROM        wcf" . WCF_N . "_conversation_message
+                FROM        wcf1_conversation_message
                 WHERE       conversationID = ?
                         AND time >= ?
                         AND time <= ?
                 ORDER BY    time DESC";
-        $statement = WCF::getDB()->prepareStatement($sql, 1);
+        $statement = WCF::getDB()->prepare($sql, 1);
         $statement->execute([
             $this->conversationID,
             $joinedAt,
@@ -192,13 +192,13 @@ class ConversationEditor extends DatabaseObjectEditor
         ]);
         $lastMessageID = $statement->fetchSingleColumn();
 
-        $sql = "UPDATE  wcf" . WCF_N . "_conversation_to_user
+        $sql = "UPDATE  wcf1_conversation_to_user
                 SET     leftAt = ?,
                         lastMessageID = ?,
                         leftByOwnChoice = ?
                 WHERE   conversationID = ?
                     AND participantID = ?";
-        $statement = WCF::getDB()->prepareStatement($sql);
+        $statement = WCF::getDB()->prepare($sql);
         $statement->execute([
             TIME_NOW,
             $lastMessageID ?: null,
