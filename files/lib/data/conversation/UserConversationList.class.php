@@ -150,7 +150,8 @@ class UserConversationList extends ConversationList
             return;
         }
 
-        $sql = "SELECT  conversation_to_user.conversationID AS objectID
+        $sql = "SELECT  conversation_to_user.conversationID AS objectID,
+                        CASE WHEN conversation_to_user.leftAt <> 0 THEN conversation_to_user.leftAt ELSE conversation.lastPostTime END AS lastPostTime
                 FROM    wcf" . WCF_N . "_conversation_to_user conversation_to_user
                     " . $this->sqlConditionJoins . "
                     " . $this->getConditionBuilder() . "
