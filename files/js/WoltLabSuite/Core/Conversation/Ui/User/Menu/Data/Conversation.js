@@ -100,6 +100,7 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Ajax", "WoltLabSuite/C
         }
         async markAllAsRead() {
             await (0, Ajax_1.dboAction)("markAllAsRead", "wcf\\data\\conversation\\ConversationAction").dispatch();
+            this.updateCounter(0);
         }
         updateCounter(counter) {
             let badge = this.button.querySelector(".badge");

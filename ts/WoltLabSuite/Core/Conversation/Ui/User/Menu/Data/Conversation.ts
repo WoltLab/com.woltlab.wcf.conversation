@@ -151,6 +151,8 @@ class UserMenuDataConversation implements UserMenuProvider {
 
   async markAllAsRead(): Promise<void> {
     await dboAction("markAllAsRead", "wcf\\data\\conversation\\ConversationAction").dispatch();
+
+    this.updateCounter(0);
   }
 
   private updateCounter(counter: number): void {
