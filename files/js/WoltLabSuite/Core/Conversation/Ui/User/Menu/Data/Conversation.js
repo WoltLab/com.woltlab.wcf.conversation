@@ -11,7 +11,7 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Ajax", "WoltLabSuite/C
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.setup = void 0;
-    View_1 = (0, tslib_1.__importDefault)(View_1);
+    View_1 = tslib_1.__importDefault(View_1);
     class UserMenuDataConversation {
         constructor(button, options) {
             this.counter = 0;
