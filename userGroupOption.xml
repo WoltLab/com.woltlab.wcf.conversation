@@ -18,6 +18,7 @@
 				<optiontype>boolean</optiontype>
 				<defaultvalue>0</defaultvalue>
 				<options>module_conversation</options>
+				<moddefaultvalue>1</moddefaultvalue>
 				<admindefaultvalue>1</admindefaultvalue>
 				<usersonly>1</usersonly>
 			</option>
@@ -26,6 +27,7 @@
 				<optiontype>boolean</optiontype>
 				<defaultvalue>0</defaultvalue>
 				<options>module_conversation</options>
+				<moddefaultvalue>1</moddefaultvalue>
 				<admindefaultvalue>1</admindefaultvalue>
 				<usersonly>1</usersonly>
 			</option>
