@@ -5,6 +5,7 @@ namespace wcf\form;
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationAction;
 use wcf\data\conversation\message\ConversationMessageAction;
+use wcf\data\conversation\message\ConversationMessageList;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\flood\FloodControl;
@@ -80,6 +81,26 @@ class ConversationDraftEditForm extends ConversationAddForm
             $messageData
         );
         $messageAction->executeAction();
+
+        // Update timestamp of other messages in this draft.
+        if (!$this->draft) {
+            $list = new ConversationMessageList();
+            $list->getConditionBuilder()->add('conversationID = ?', [$this->conversation->conversationID]);
+            $list->getConditionBuilder()->add('messageID <> ?', [$this->conversation->getFirstMessage()->messageID]);
+            $list->readObjectIDs();
+            if (\count($list->getObjectIDs())) {
+                $messageAction = new ConversationMessageAction(
+                    $list->getObjectIDs(),
+                    'update',
+                    [
+                        'data' => [
+                            'time' => TIME_NOW,
+                        ],
+                    ]
+                );
+                $messageAction->executeAction();
+            }
+        }
 
         // save conversation
         $data = \array_merge($this->additionalFields, [
