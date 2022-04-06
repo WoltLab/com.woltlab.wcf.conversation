@@ -83,21 +83,23 @@ class ConversationDraftEditForm extends ConversationAddForm
         $messageAction->executeAction();
 
         // Update timestamp of other messages in this draft.
-        $list = new ConversationMessageList();
-        $list->getConditionBuilder()->add('conversationID = ?', [$this->conversation->conversationID]);
-        $list->getConditionBuilder()->add('messageID <> ?', [$this->conversation->getFirstMessage()->messageID]);
-        $list->readObjectIDs();
-        if (\count($list->getObjectIDs())) {
-            $messageAction = new ConversationMessageAction(
-                $list->getObjectIDs(),
-                'update',
-                [
-                    'data' => [
-                        'time' => TIME_NOW,
-                    ],
-                ]
-            );
-            $messageAction->executeAction();
+        if (!$this->draft) {
+            $list = new ConversationMessageList();
+            $list->getConditionBuilder()->add('conversationID = ?', [$this->conversation->conversationID]);
+            $list->getConditionBuilder()->add('messageID <> ?', [$this->conversation->getFirstMessage()->messageID]);
+            $list->readObjectIDs();
+            if (\count($list->getObjectIDs())) {
+                $messageAction = new ConversationMessageAction(
+                    $list->getObjectIDs(),
+                    'update',
+                    [
+                        'data' => [
+                            'time' => TIME_NOW,
+                        ],
+                    ]
+                );
+                $messageAction->executeAction();
+            }
         }
 
         // save conversation
