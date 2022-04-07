@@ -106,7 +106,7 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Ajax", "WoltLabSuite/C
             let badge = this.button.querySelector(".badge");
             if (badge === null && counter > 0) {
                 badge = document.createElement("span");
-                badge.classList.add("badge badgeUpdate");
+                badge.classList.add("badge", "badgeUpdate");
                 this.button.querySelector("a").append(badge);
             }
             if (badge) {
