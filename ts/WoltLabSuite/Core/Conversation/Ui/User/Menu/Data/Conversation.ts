@@ -51,12 +51,6 @@ class UserMenuDataConversation implements UserMenuProvider {
         this.counter = counter;
       }
     }
-
-    window.WCF.System.PushNotification.addCallback("userNotificationCount", (counter: number) => {
-      this.updateCounter(counter);
-
-      this.stale = true;
-    });
   }
 
   getPanelButton(): HTMLElement {

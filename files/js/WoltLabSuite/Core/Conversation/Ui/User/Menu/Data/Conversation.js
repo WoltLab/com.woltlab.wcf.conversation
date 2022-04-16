@@ -26,10 +26,6 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Ajax", "WoltLabSuite/C
                     this.counter = counter;
                 }
             }
-            window.WCF.System.PushNotification.addCallback("userNotificationCount", (counter) => {
-                this.updateCounter(counter);
-                this.stale = true;
-            });
         }
         getPanelButton() {
             return this.button;
