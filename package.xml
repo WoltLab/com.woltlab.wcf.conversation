@@ -53,6 +53,9 @@
 		<instruction type="language" />
 		<instruction type="objectType" />
 
+		<!-- Updates to <moddefaultvalue> only -->
+		<instruction type="userGroupOption" />
+
 		<instruction type="script">acp/update_com.woltlab.wcf.conversation_5.5_cleanup_orphaned_attachments.php</instruction>
 	</instructions>
 </package>
