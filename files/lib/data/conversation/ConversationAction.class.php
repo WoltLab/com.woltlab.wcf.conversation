@@ -910,11 +910,14 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
             if ($conversation->userID === WCF::getUser()->userID) {
                 if ($conversation->participants > 1) {
                     $image = '<span class="icon icon48 fa-users"></span>';
+                    $usernames = \array_column($conversation->getParticipantSummary(), 'username');
                 } else {
                     $image = $conversation->getOtherParticipantProfile()->getAvatar()->getImageTag(48);
+                    $usernames = [$conversation->getOtherParticipantProfile()->username];
                 }
             } else {
                 $image = $conversation->getUserProfile()->getAvatar()->getImageTag(48);
+                $usernames = [$conversation->getUserProfile()->username];
             }
 
             $link = LinkHandler::getInstance()->getControllerLink(
@@ -924,8 +927,6 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
                     'action' => 'firstNew',
                 ]
             );
-
-            $usernames = \array_column($conversation->getParticipantSummary(), 'username');
 
             return [
                 'content' => $conversation->getTitle(),
