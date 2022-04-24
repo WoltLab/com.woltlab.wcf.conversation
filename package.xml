@@ -5,8 +5,8 @@
 		<packagename language="de">WoltLab Suite Core: Konversationen</packagename>
 		<packagedescription>Private conversations between multiple users</packagedescription>
 		<packagedescription language="de">Private Konversationen zwischen mehreren Benutzern</packagedescription>
-		<version>5.5.0 Alpha 1</version>
-		<date>2022-03-17</date>
+		<version>5.5.0 Alpha 3</version>
+		<date>2022-04-24</date>
 	</packageinformation>
 	
 	<authorinformation>
@@ -15,7 +15,7 @@
 	</authorinformation>
 	
 	<requiredpackages>
-		<requiredpackage minversion="5.5.0 Alpha 1">com.woltlab.wcf</requiredpackage>
+		<requiredpackage minversion="5.5.0 Alpha 3">com.woltlab.wcf</requiredpackage>
 	</requiredpackages>
 	
 	<excludedpackages>
@@ -57,5 +57,11 @@
 		<instruction type="userGroupOption" />
 
 		<instruction type="script">acp/update_com.woltlab.wcf.conversation_5.5_cleanup_orphaned_attachments.php</instruction>
+	</instructions>
+
+	<instructions type="update" fromversion="5.5.0 Alpha 1">
+		<instruction type="file">files_update.tar</instruction>
+		
+		<instruction type="fileDelete"/>
 	</instructions>
 </package>
