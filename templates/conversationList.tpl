@@ -132,7 +132,7 @@
 {/capture}
 
 {capture assign='contentInteractionDropdownItems'}
-	<li><a rel="alternate" href="{link controller='ConversationFeed'}at={@$__wcf->getUser()->userID}-{@$__wcf->getUser()->accessToken}{/link}" class="rssFeed">{lang}wcf.global.button.rss{/lang}</a></li>
+	<li><a rel="alternate" href="{link controller='ConversationFeed'}at={@$__wcf->getUser()->userID}-{@$__wcf->getUser()->accessToken}{/link}">{lang}wcf.global.button.rss{/lang}</a></li>
 {/capture}
 
 {include file='header'}
