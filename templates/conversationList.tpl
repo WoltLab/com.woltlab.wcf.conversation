@@ -127,9 +127,12 @@
 	{pages print=true assign=pagesLinks controller='ConversationList' link="filter=$filter$participantsParameter&pageNo=%d&sortField=$sortField&sortOrder=$sortOrder$labelIDParameter"}
 {/capture}
 
+{capture assign='contentInteractionButtons'}
+	<a href="#" class="markAllAsReadButton contentInteractionButton button small jsOnly">{lang}wcf.global.button.markAllAsRead{/lang}</a>
+{/capture}
+
 {capture assign='contentInteractionDropdownItems'}
 	<li><a rel="alternate" href="{link controller='ConversationFeed'}at={@$__wcf->getUser()->userID}-{@$__wcf->getUser()->accessToken}{/link}" class="rssFeed">{lang}wcf.global.button.rss{/lang}</a></li>
-	<li class="jsOnly"><a href="#" class="markAllAsReadButton">{lang}wcf.conversation.markAllAsRead{/lang}</a></li>
 {/capture}
 
 {include file='header'}
