@@ -919,7 +919,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
             } else {
                 if ($conversation->participants > 1) {
                     $image = '<span class="icon icon48 fa-users"></span>';
-                    $usernames = \array_filter($conversation->getParticipantSummary(), function (User $user) {
+                    $usernames = \array_filter($conversation->getParticipantSummary(), static function (User $user) {
                         return $user->userID !== WCF::getUser()->userID;
                     });
                 } else {
