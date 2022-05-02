@@ -918,7 +918,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
             } else {
                 if ($conversation->participants > 1) {
                     $image = '<span class="icon icon48 fa-users"></span>';
-                    $usernames = \array_filter($conversation->getParticipantNames(), function ($username) use ($conversation) {
+                    $usernames = \array_filter($conversation->getParticipantNames(), static function ($username) use ($conversation) {
                         return $username !== $conversation->getUserProfile()->username;
                     });
                 } else {
