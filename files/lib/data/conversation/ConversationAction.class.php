@@ -11,7 +11,6 @@ use wcf\data\IClipboardAction;
 use wcf\data\IPopoverAction;
 use wcf\data\IVisitableObjectAction;
 use wcf\data\user\group\UserGroup;
-use wcf\data\user\User;
 use wcf\page\ConversationPage;
 use wcf\system\clipboard\ClipboardHandler;
 use wcf\system\conversation\ConversationHandler;
@@ -919,8 +918,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
             } else {
                 if ($conversation->participants > 1) {
                     $image = '<span class="icon icon48 fa-users"></span>';
-                    $usernames = \array_filter($conversation->getParticipantSummary(), static function (User $user) {
-                        return $user->userID !== WCF::getUser()->userID;
+                    $usernames = \array_filter($conversation->getParticipantNames(), function ($username) use ($conversation) {
+                        return $username !== $conversation->getUserProfile()->username;
                     });
                 } else {
                     $image = $conversation->getUserProfile()->getAvatar()->getImageTag(48);
