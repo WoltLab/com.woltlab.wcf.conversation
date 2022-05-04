@@ -1341,6 +1341,8 @@ WCF.Conversation.MarkAllAsRead = Class.extend({
 		var $conversationList = $('.conversationList');
 		$conversationList.find('.new').removeClass('new');
 		$conversationList.find('.columnAvatar').off('dblclick');
+
+		new WCF.System.Notification().show();
 	}
 });
 
