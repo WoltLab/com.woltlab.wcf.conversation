@@ -76,10 +76,9 @@ class UserMenuDataConversation implements UserMenuProvider {
   }
 
   async getData(): Promise<UserMenuData[]> {
-    const data = (await dboAction(
-      "getConversations",
-      "wcf\\data\\conversation\\ConversationAction",
-    ).dispatch()) as UserMenuData[];
+    const data = (await dboAction("getConversations", "wcf\\data\\conversation\\ConversationAction")
+      .disableLoadingIndicator()
+      .dispatch()) as UserMenuData[];
 
     const counter = data.filter((item) => item.isUnread).length;
     this.updateCounter(counter);

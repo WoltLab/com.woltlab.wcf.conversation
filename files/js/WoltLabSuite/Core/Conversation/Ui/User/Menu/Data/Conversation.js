@@ -46,7 +46,9 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Ajax", "WoltLabSuite/C
             return "com.woltlab.wcf.conversation.conversations";
         }
         async getData() {
-            const data = (await (0, Ajax_1.dboAction)("getConversations", "wcf\\data\\conversation\\ConversationAction").dispatch());
+            const data = (await (0, Ajax_1.dboAction)("getConversations", "wcf\\data\\conversation\\ConversationAction")
+                .disableLoadingIndicator()
+                .dispatch());
             const counter = data.filter((item) => item.isUnread).length;
             this.updateCounter(counter);
             this.stale = false;
