@@ -97,7 +97,7 @@
 		</div>
 		
 		<div class="boxContent">
-			<button id="manageLabel">{lang}wcf.conversation.label.management{/lang}</button>
+			<button class="button" id="manageLabel">{lang}wcf.conversation.label.management{/lang}</button>
 		</div>
 	</section>
 	

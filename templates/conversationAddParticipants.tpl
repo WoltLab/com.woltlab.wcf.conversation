@@ -22,5 +22,5 @@
 {/if}
 
 <div class="formSubmit">
-	<button id="addParticipants" class="buttonPrimary">{lang}wcf.global.button.submit{/lang}</button>
+	<button id="addParticipants" class="button buttonPrimary">{lang}wcf.global.button.submit{/lang}</button>
 </div>

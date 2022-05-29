@@ -10,5 +10,5 @@
 </ul>
 
 <div class="formSubmit">
-	<button class="buttonPrimary" id="assignLabels">{lang}wcf.global.button.save{/lang}</button>
+	<button class="button buttonPrimary" id="assignLabels">{lang}wcf.global.button.save{/lang}</button>
 </div>
