@@ -901,12 +901,6 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
             }
         }
 
-        // Being removed from a conversation might show a different time
-        // for the last message, requiring the items to be sorted again.
-        \usort($conversations, static function (ViewableConversation $a, ViewableConversation $b) {
-            return $b->lastPostTime <=> $a->lastPostTime;
-        });
-
         $totalCount = ConversationHandler::getInstance()->getUnreadConversationCount();
         if ($count < 10 && $count < $totalCount) {
             UserStorageHandler::getInstance()->reset([WCF::getUser()->userID], 'unreadConversationCount');
