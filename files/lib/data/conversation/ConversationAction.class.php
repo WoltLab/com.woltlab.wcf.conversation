@@ -490,6 +490,12 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
             ->add("conversation_message.messageID = ?", [$this->conversation->firstMessageID]);
         $messageList->readObjects();
 
+        if (!\count($messageList)) {
+            return [
+                'template' => '',
+            ];
+        }
+
         return [
             'template' => WCF::getTPL()->fetch('conversationMessagePreview', 'wcf', [
                 'message' => $messageList->getSingleObject(),

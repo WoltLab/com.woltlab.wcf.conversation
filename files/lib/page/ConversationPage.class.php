@@ -275,10 +275,10 @@ class ConversationPage extends MultipleLinkPage
 
         // get timeframe for modifications
         $this->objectList->rewind();
-        $startTime = ($this->conversation->joinedAt ?: $this->objectList->current()->time);
+        $count = \count($this->objectList);
+        $startTime = ($this->conversation->joinedAt ?: ($count ? $this->objectList->current()->time : $this->conversation->time));
         $endTime = ($this->conversation->leftAt ?: TIME_NOW);
 
-        $count = \count($this->objectList);
         if ($count > 1) {
             $this->objectList->seek($count - 1);
             if ($this->objectList->current()->time < $this->conversation->lastPostTime) {
