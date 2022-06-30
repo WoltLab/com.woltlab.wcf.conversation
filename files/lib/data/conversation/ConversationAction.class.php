@@ -906,7 +906,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
             UserStorageHandler::getInstance()->reset([WCF::getUser()->userID], 'unreadConversationCount');
         }
 
-        return \array_map(static function (ViewableConversation $conversation) {
+        $conversations = \array_map(static function (ViewableConversation $conversation) {
             if ($conversation->userID === WCF::getUser()->userID) {
                 if ($conversation->participants > 1) {
                     $image = '<span class="icon icon48 fa-users"></span>';
@@ -945,6 +945,11 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
                 'usernames' => $usernames,
             ];
         }, $conversations);
+
+        return [
+            'items' => $conversations,
+            'totalCount' => $totalCount,
+        ];
     }
 
     /**
