@@ -5,8 +5,8 @@
 		<packagename language="de">WoltLab Suite Core: Konversationen</packagename>
 		<packagedescription>Private conversations between multiple users</packagedescription>
 		<packagedescription language="de">Private Konversationen zwischen mehreren Benutzern</packagedescription>
-		<version>5.4.15</version>
-		<date>2022-03-17</date>
+		<version>5.4.21</version>
+		<date>2022-07-20</date>
 	</packageinformation>
 	
 	<authorinformation>
@@ -15,7 +15,7 @@
 	</authorinformation>
 	
 	<requiredpackages>
-		<requiredpackage minversion="5.4.15">com.woltlab.wcf</requiredpackage>
+		<requiredpackage minversion="5.4.21">com.woltlab.wcf</requiredpackage>
 	</requiredpackages>
 	
 	<excludedpackages>
@@ -41,11 +41,7 @@
 		<instruction type="page" />
 	</instructions>
 	
-	<instructions type="update" fromversion="5.4.14">
+	<instructions type="update" fromversion="5.4.15">
 		<instruction type="file">files_update.tar</instruction>
-	</instructions>
-
-	<instructions type="update" fromversion="5.4.15 dev 1">
-		<void/>
 	</instructions>
 </package>
