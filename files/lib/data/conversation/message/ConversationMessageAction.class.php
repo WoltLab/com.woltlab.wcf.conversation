@@ -14,6 +14,7 @@ use wcf\data\smiley\SmileyCache;
 use wcf\system\attachment\AttachmentHandler;
 use wcf\system\bbcode\BBCodeHandler;
 use wcf\system\conversation\ConversationHandler;
+use wcf\system\event\EventHandler;
 use wcf\system\exception\NamedUserException;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
@@ -318,6 +319,8 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
             CONVERSATION_LIST_DEFAULT_SORT_ORDER,
             'conversationMessageList'
         );
+
+        EventHandler::getInstance()->fireAction($this, 'afterQuickReply', $returnValues);
 
         FloodControl::getInstance()->registerContent('com.woltlab.wcf.conversation.message');
 
