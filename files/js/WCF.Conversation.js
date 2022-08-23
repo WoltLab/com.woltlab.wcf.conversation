@@ -682,59 +682,6 @@ WCF.Conversation.Leave = Class.extend({
 });
 
 /**
- * Provides methods to remove participants from conversations.
- * 
- * @see	WCF.Action.Delete
- * @deprecated	5.4 Handled via `WoltLabSuite/Core/Ui/Object/Action`.
- */
-WCF.Conversation.RemoveParticipant = WCF.Action.Delete.extend({
-	/**
-	 * conversation id
-	 * @var	integer
-	 */
-	_conversationID: 0,
-	
-	/**
-	 * @see	WCF.Action.Delete.init()
-	 */
-	init: function(conversationID) {
-		this._conversationID = conversationID;
-		this._super('wcf\\data\\conversation\\ConversationAction', '.jsParticipant');
-	},
-	
-	/**
-	 * @see	WCF.Action.Delete._sendRequest()
-	 */
-	_sendRequest: function(object) {
-		this.proxy.setOption('data', {
-			actionName: 'removeParticipant',
-			className: this._className,
-			objectIDs: [ this._conversationID ],
-			parameters: {
-				userID: $(object).data('objectID')
-			}
-		});
-		
-		this.proxy.sendRequest();
-	},
-	
-	/**
-	 * @see	WCF.Action.Delete._success()
-	 */
-	_success: function(data, textStatus, jqXHR) {
-		var $userID = data.returnValues.userID;
-		
-		for (var $index in this._containers) {
-			var $container = $('#' + this._containers[$index]);
-			if ($container.find('.jsDeleteButton').data('objectID') == $userID) {
-				$container.find('.userLink').addClass('conversationLeft');
-				$container.find('.jsDeleteButton').remove();
-			}
-		}
-	}
-});
-
-/**
  * Namespace for label-related classes.
  */
 WCF.Conversation.Label = { };
