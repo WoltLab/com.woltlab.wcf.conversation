@@ -61,7 +61,11 @@
 
 {capture assign='contentInteractionButtons'}
 	<div class="conversation jsConversationInlineEditorContainer contentInteractionButton" data-conversation-id="{@$conversation->conversationID}" data-label-ids="[ {implode from=$conversation->getAssignedLabels() item=label}{@$label->labelID}{/implode} ]" data-is-closed="{@$conversation->isClosed}" data-can-close-conversation="{if $conversation->userID == $__wcf->getUser()->userID}1{else}0{/if}" data-can-add-participants="{if $conversation->canAddParticipants()}1{else}0{/if}" data-is-draft="{if $conversation->isDraft}1{else}0{/if}">
-		<a href="{if $conversation->isDraft}{link controller='ConversationDraftEdit' id=$conversation->conversationID}{/link}{else}#{/if}" class="button small jsConversationInlineEditor"><span class="icon icon16 fa-pencil"></span> <span>{lang}wcf.global.button.edit{/lang}</span></a>
+		{if $conversation->isDraft}
+			<a href="{link controller='ConversationDraftEdit' id=$conversation->conversationID}{/link}" class="button small jsConversationInlineEditor"><span class="icon icon16 fa-pencil"></span> <span>{lang}wcf.global.button.edit{/lang}</span></a>
+		{else}
+			<button class="button small jsConversationInlineEditor"><span class="icon icon16 fa-pencil"></span> <span>{lang}wcf.global.button.edit{/lang}</span></button>
+		{/if}
 	</div>
 {/capture}
 
