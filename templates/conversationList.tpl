@@ -331,8 +331,6 @@
 		
 		new WCF.Conversation.Clipboard($editorHandler);
 		new WCF.Conversation.Label.Manager('{link controller='ConversationList' encode=false}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}');
-		new WCF.Conversation.MarkAsRead();
-		new WCF.Conversation.MarkAllAsRead();
 		
 		// mobile safari hover workaround
 		if ($(window).width() <= 800) {
@@ -349,6 +347,15 @@
 			dboAction: 'wcf\\data\\conversation\\ConversationAction',
 			identifier: 'com.woltlab.wcf.conversation'
 		});
+	});
+</script>
+
+<script data-relocate="true">
+	require(['WoltLabSuite/Core/Conversation/Ui/MarkAsRead'], (MarkAsRead) => {
+		MarkAsRead.setup();
+	});
+	require(['WoltLabSuite/Core/Conversation/Ui/MarkAllAsRead'], (MarkAllAsRead) => {
+		MarkAllAsRead.setup();
 	});
 </script>
 
