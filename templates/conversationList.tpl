@@ -10,7 +10,14 @@
 			<nav class="contentHeaderNavigation">
 				<ul>
 					{content}
-						{if $__wcf->session->getPermission('user.conversation.canStartConversation')}<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button buttonPrimary"><span class="icon icon16 fa-plus"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>{/if}
+						{if $__wcf->session->getPermission('user.conversation.canStartConversation')}
+							<li>
+								<a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button buttonPrimary">
+									{icon size=16 name='plus'}
+									<span>{lang}wcf.conversation.button.add{/lang}</span>
+								</a>
+							</li>
+						{/if}
 						{event name='contentHeaderNavigation'}
 					{/content}
 				</ul>
@@ -128,7 +135,10 @@
 {/capture}
 
 {capture assign='contentInteractionButtons'}
-	<button class="markAllAsReadButton contentInteractionButton button small jsOnly"><span class="icon icon16 fa-check"></span> <span>{lang}wcf.global.button.markAllAsRead{/lang}</span></button>
+	<button class="markAllAsReadButton contentInteractionButton button small jsOnly">
+		{icon size=16 name='check'}
+		<span>{lang}wcf.global.button.markAllAsRead{/lang}</span>
+	</button>
 {/capture}
 
 {capture assign='contentInteractionDropdownItems'}
@@ -150,7 +160,15 @@
 						<ul class="inlineList">
 							<li>
 								<a rel="nofollow" href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}pageNo={@$pageNo}&sortField={$sortField}&sortOrder={if $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">
-									<span class="icon icon16 fa-sort-amount-{$sortOrder|strtolower} jsTooltip" title="{lang}wcf.global.sorting{/lang} ({lang}wcf.global.sortOrder.{if $sortOrder === 'ASC'}ascending{else}descending{/if}{/lang})"></span>
+									{if $sortOrder === 'ASC'}
+										<span class="jsTooltip" title="{lang}wcf.global.sorting{/lang} ({lang}wcf.global.sortOrder.ascending{/lang})">
+											{icon size=16 name='arrow-down-wide-short'}
+										</span>
+									{else}
+										<span class="jsTooltip" title="{lang}wcf.global.sorting{/lang} ({lang}wcf.global.sortOrder.descending{/lang})">
+											{icon size=16 name='arrow-down-short-wide'}
+										</span>
+									{/if}
 								</a>
 							</li>
 							<li>
@@ -208,8 +226,20 @@
 							
 							<aside class="statusDisplay" role="presentation">
 								<ul class="statusIcons">
-									{if $conversation->isClosed}<li><span class="icon icon16 fa-lock jsIconLock jsTooltip" title="{lang}wcf.global.state.closed{/lang}"></span></li>{/if}
-									{if $conversation->attachments}<li><span class="icon icon16 fa-paperclip jsIconAttachment jsTooltip" title="{lang}wcf.conversation.attachments{/lang}"></span></li>{/if}
+									{if $conversation->isClosed}
+										<li>
+											<span class="jsIconLock jsTooltip" title="{lang}wcf.global.state.closed{/lang}">
+												{icon size=16 name='lock'}
+											</span>
+										</li>
+									{/if}
+									{if $conversation->attachments}
+										<li>
+											<span class="jsIconAttachment jsTooltip" title="{lang}wcf.conversation.attachments{/lang}">
+												{icon size=16 name='paperclip'}
+											</span>
+										</li>
+									{/if}
 								</ul>
 							</aside>
 							
@@ -245,7 +275,14 @@
 								<dd>{@$conversation->participants|shortUnit}</dd>
 							</dl>
 							
-							<div class="messageGroupListStatsSimple">{if $conversation->replies}<span class="icon icon16 fa-comment-o" aria-label="{lang}wcf.conversation.replies{/lang}"></span> {@$conversation->replies|shortUnit}{/if}</div>
+							<div class="messageGroupListStatsSimple">
+								{if $conversation->replies}
+									<span aria-label="{lang}wcf.conversation.replies{/lang}">
+										{icon size=16 name='comment'}
+									</span>
+									{@$conversation->replies|shortUnit}
+								{/if}
+							</div>
 						</li>
 						<li class="columnLastPost">
 							{if $conversation->replies != 0 && $conversation->lastPostTime}
@@ -281,7 +318,14 @@
 		<nav class="contentFooterNavigation">
 			<ul>
 				{content}
-					{if $__wcf->session->getPermission('user.conversation.canStartConversation')}<li><a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button buttonPrimary"><span class="icon icon16 fa-plus"></span> <span>{lang}wcf.conversation.button.add{/lang}</span></a></li>{/if}
+					{if $__wcf->session->getPermission('user.conversation.canStartConversation')}
+						<li>
+							<a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button buttonPrimary">
+								{icon size=16 name='plus'}
+								<span>{lang}wcf.conversation.button.add{/lang}</span>
+							</a>
+						</li>
+					{/if}
 					{event name='contentFooterNavigation'}
 				{/content}
 			</ul>

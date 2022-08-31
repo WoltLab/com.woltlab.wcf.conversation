@@ -9,7 +9,11 @@
 			aria-haspopup="true"
 			aria-expanded="false"
 		>
-			<span class="icon icon32 fa-comments"></span> <span>{lang}wcf.conversation.conversations{/lang}</span> {if $__wcf->getConversationHandler()->getUnreadConversationCount()}<span class="badge badgeUpdate">{#$__wcf->getConversationHandler()->getUnreadConversationCount()}</span>{/if}
+			{icon size=32 name='comments' type='solid'}
+			<span>{lang}wcf.conversation.conversations{/lang}</span>
+			{if $__wcf->getConversationHandler()->getUnreadConversationCount()}
+				<span class="badge badgeUpdate">{#$__wcf->getConversationHandler()->getUnreadConversationCount()}</span>
+			{/if}
 		</a>
 		{if !OFFLINE || $__wcf->session->getPermission('admin.general.canViewPageDuringOfflineMode')}
 			<script data-relocate="true" src="{@$__wcf->getPath()}js/WCF.Conversation{if !ENABLE_DEBUG_MODE}.min{/if}.js?v={@LAST_UPDATE_TIME}"></script>
