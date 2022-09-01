@@ -12,7 +12,7 @@
 			<ul class="inlineList contentHeaderMetaData">
 				{hascontent}
 					<li>
-						<span class="icon icon16 fa-tags"></span>
+						{icon size=16 name='tags'}
 						<ul class="labelList">
 							{content}
 								{foreach from=$conversation->getAssignedLabels() item=label}
@@ -24,18 +24,20 @@
 				{/hascontent}
 				
 				<li>
-					<span class="icon icon16 fa-user"></span>
+					{icon size=16 name='user'}
 					{user object=$conversation->getUserProfile()}
 				</li>
 				
 				<li>
-					<span class="icon icon16 fa-clock-o"></span>
+					{icon size=16 name='clock'}
 					<a href="{$conversation->getLink()}">{@$conversation->time|time}</a>
 				</li>
 				
 				{if $conversation->isClosed}
 					<li>
-						<span class="icon icon16 fa-lock jsIconLock"></span>
+						<span class="jsIconLock">
+							{icon size=16 name='lock'}
+						</span>
 						{lang}wcf.global.state.closed{/lang}
 					</li>
 				{/if}
@@ -46,7 +48,14 @@
 			<nav class="contentHeaderNavigation">
 				<ul>
 					{content}
-						{if $conversation->canReply()}<li class="jsOnly"><a href="#" class="button buttonPrimary jsQuickReply"><span class="icon icon16 fa-reply"></span> <span>{lang}wcf.conversation.message.button.add{/lang}</span></a></li>{/if}
+						{if $conversation->canReply()}
+							<li class="jsOnly">
+								<button class="button buttonPrimary jsQuickReply">
+									{icon size=16 name='reply'}
+									<span>{lang}wcf.conversation.message.button.add{/lang}</span>
+								</button>
+							</li>
+						{/if}
 						{event name='contentHeaderNavigation'}
 					{/content}
 				</ul>
@@ -62,9 +71,15 @@
 {capture assign='contentInteractionButtons'}
 	<div class="conversation jsConversationInlineEditorContainer contentInteractionButton" data-conversation-id="{@$conversation->conversationID}" data-label-ids="[ {implode from=$conversation->getAssignedLabels() item=label}{@$label->labelID}{/implode} ]" data-is-closed="{@$conversation->isClosed}" data-can-close-conversation="{if $conversation->userID == $__wcf->getUser()->userID}1{else}0{/if}" data-can-add-participants="{if $conversation->canAddParticipants()}1{else}0{/if}" data-is-draft="{if $conversation->isDraft}1{else}0{/if}">
 		{if $conversation->isDraft}
-			<a href="{link controller='ConversationDraftEdit' id=$conversation->conversationID}{/link}" class="button small jsConversationInlineEditor"><span class="icon icon16 fa-pencil"></span> <span>{lang}wcf.global.button.edit{/lang}</span></a>
+			<a href="{link controller='ConversationDraftEdit' id=$conversation->conversationID}{/link}" class="button small jsConversationInlineEditor">
+				{icon size=16 name='pencil'}
+				<span>{lang}wcf.global.button.edit{/lang}</span>
+			</a>
 		{else}
-			<button class="button small jsConversationInlineEditor"><span class="icon icon16 fa-pencil"></span> <span>{lang}wcf.global.button.edit{/lang}</span></button>
+			<button class="button small jsConversationInlineEditor">
+				{icon size=16 name='pencil'}
+				<span>{lang}wcf.global.button.edit{/lang}</span>
+			</button>
 		{/if}
 	</div>
 {/capture}
@@ -85,7 +100,15 @@
 								{user object=$participant}
 								{if $participant->isInvisible}<small>({lang}wcf.conversation.invisible{/lang})</small>{/if}
 								{if $participant->userID && ($conversation->userID == $__wcf->getUser()->userID) && ($participant->userID != $__wcf->getUser()->userID) && $participant->hideConversation != 2 && $participant->leftAt == 0}
-									<a href="#" class="jsObjectAction jsTooltip jsOnly" data-object-action="removeParticipant" title="{lang}wcf.conversation.participants.removeParticipant{/lang}" data-confirm-message="{lang __encode=true}wcf.conversation.participants.removeParticipant.confirmMessage{/lang}" data-object-action-parameter-user-id="{@$participant->getObjectID()}"><span class="icon icon16 fa-times"></span></a>
+									<button
+										class="jsObjectAction jsTooltip jsOnly"
+										data-object-action="removeParticipant"
+										title="{lang}wcf.conversation.participants.removeParticipant{/lang}"
+										data-confirm-message="{lang __encode=true}wcf.conversation.participants.removeParticipant.confirmMessage{/lang}"
+										data-object-action-parameter-user-id="{@$participant->getObjectID()}"
+									>
+										{icon size=16 name='xmark'}
+									</button>
 								{/if}
 							</p>
 							<dl class="plain inlineDataList small">

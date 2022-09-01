@@ -66,7 +66,7 @@ class UserMenuDataConversation implements UserMenuProvider {
     const buttons: UserMenuButton[] = [];
     if (this.options.canStartConversation) {
       buttons.push({
-        icon: '<span class="icon icon24 fa-plus"></span>',
+        icon: '<fa-icon size="24" name="plus"></fa-icon>',
         link: this.options.newConversationLink,
         name: "newConversation",
         title: this.options.newConversationTitle,

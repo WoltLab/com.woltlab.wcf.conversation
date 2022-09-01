@@ -22,6 +22,7 @@ use wcf\system\exception\UserInputException;
 use wcf\system\log\modification\ConversationModificationLogHandler;
 use wcf\system\request\LinkHandler;
 use wcf\system\search\SearchIndexManager;
+use wcf\system\style\FontAwesomeIcon;
 use wcf\system\user\notification\object\ConversationUserNotificationObject;
 use wcf\system\user\notification\UserNotificationHandler;
 use wcf\system\user\storage\UserStorageHandler;
@@ -830,7 +831,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
         $conversations = \array_map(static function (ViewableConversation $conversation) {
             if ($conversation->userID === WCF::getUser()->userID) {
                 if ($conversation->participants > 1) {
-                    $image = '<span class="icon icon48 fa-users"></span>';
+                    $image = FontAwesomeIcon::fromValues('users')->toHtml(48);
                     $usernames = \array_column($conversation->getParticipantSummary(), 'username');
                 } else {
                     $image = $conversation->getOtherParticipantProfile()->getAvatar()->getImageTag(48);
@@ -838,7 +839,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
                 }
             } else {
                 if ($conversation->participants > 1) {
-                    $image = '<span class="icon icon48 fa-users"></span>';
+                    $image = FontAwesomeIcon::fromValues('users')->toHtml(48);
                     $usernames = \array_filter($conversation->getParticipantNames(), static function ($username) use ($conversation) {
                         return $username !== $conversation->getUserProfile()->username;
                     });

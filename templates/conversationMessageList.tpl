@@ -68,9 +68,41 @@
 					
 					<div class="messageFooterGroup">
 						<ul class="messageFooterButtons buttonList smallButtons jsMobileNavigation">
-							{if $message->canEdit()}<li class="jsOnly"><a href="{if $conversation->isDraft && $message->messageID == $conversation->firstMessageID}{link controller='ConversationDraftEdit' id=$conversation->conversationID}{/link}{else}#{/if}" title="{lang}wcf.conversation.message.edit{/lang}" class="button{if !$conversation->isDraft || $message->messageID != $conversation->firstMessageID} jsMessageEditButton{/if}"><span class="icon icon16 fa-pencil"></span> <span>{lang}wcf.global.button.edit{/lang}</span></a></li>{/if}
-							<li class="jsQuoteMessage" data-object-id="{@$message->messageID}" data-is-quoted="{if $__quoteFullQuote|isset && $message->messageID|in_array:$__quoteFullQuote}1{else}0{/if}"><a rel="nofollow" href="{link controller='ConversationMessageAdd' id=$conversation->conversationID quoteMessageID=$message->messageID}{/link}" title="{lang}wcf.message.quote.quoteMessage{/lang}" class="button jsTooltip{if $__quoteFullQuote|isset && $message->messageID|in_array:$__quoteFullQuote} active{/if}"><span class="icon icon16 fa-quote-left"></span> <span class="invisible">{lang}wcf.message.quote.quoteMessage{/lang}</span></a></li>
-							{if $message->userID != $__wcf->getUser()->userID && $__wcf->session->getPermission('user.profile.canReportContent')}<li class="jsReportConversationMessage jsOnly" data-object-id="{@$message->messageID}"><a href="#" title="{lang}wcf.moderation.report.reportContent{/lang}" class="button jsTooltip"><span class="icon icon16 fa-exclamation-triangle"></span> <span class="invisible">{lang}wcf.moderation.report.reportContent{/lang}</span></a></li>{/if}
+							{if $message->canEdit()}
+								<li class="jsOnly">
+									<a
+										href="{if $conversation->isDraft && $message->messageID == $conversation->firstMessageID}{link controller='ConversationDraftEdit' id=$conversation->conversationID}{/link}{else}#{/if}"
+										title="{lang}wcf.conversation.message.edit{/lang}"
+										class="button{if !$conversation->isDraft || $message->messageID != $conversation->firstMessageID} jsMessageEditButton{/if}"
+									>
+										{icon size=16 name='pencil'}
+										<span>{lang}wcf.global.button.edit{/lang}</span>
+									</a>
+								</li>
+							{/if}
+							<li
+								class="jsQuoteMessage"
+								data-object-id="{@$message->messageID}"
+								data-is-quoted="{if $__quoteFullQuote|isset && $message->messageID|in_array:$__quoteFullQuote}1{else}0{/if}"
+							>
+								<a
+									rel="nofollow"
+									href="{link controller='ConversationMessageAdd' id=$conversation->conversationID quoteMessageID=$message->messageID}{/link}"
+									title="{lang}wcf.message.quote.quoteMessage{/lang}"
+									class="button jsTooltip{if $__quoteFullQuote|isset && $message->messageID|in_array:$__quoteFullQuote} active{/if}"
+								>
+									{icon size=16 name='quote-left' type='solid'}
+									<span class="invisible">{lang}wcf.message.quote.quoteMessage{/lang}</span>
+								</a>
+							</li>
+							{if $message->userID != $__wcf->getUser()->userID && $__wcf->session->getPermission('user.profile.canReportContent')}
+								<li class="jsReportConversationMessage jsOnly" data-object-id="{@$message->messageID}">
+									<button title="{lang}wcf.moderation.report.reportContent{/lang}" class="button jsTooltip">
+										{icon size=16 name='triangle-exclamation'}
+										<span class="invisible">{lang}wcf.moderation.report.reportContent{/lang}</span>
+									</button>
+								</li>
+							{/if}
 							{event name='messageFooterButtons'}
 						</ul>
 					</div>

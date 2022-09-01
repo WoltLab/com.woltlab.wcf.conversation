@@ -146,7 +146,11 @@ WCF.Conversation.EditorHandler = Class.extend({
 		
 		switch (key) {
 			case 'close':
-				$('<li><span class="icon icon16 fa-lock jsTooltip jsIconLock" title="' + WCF.Language.get('wcf.global.state.closed') + '" /></li>').prependTo($conversation.find('.statusIcons'));
+				$(`<li>
+					<span class="jsTooltip jsIconLock" title="${WCF.Language.get('wcf.global.state.closed')}">
+						<fa-icon size="16" name="lock"></fa-icon>
+					</span>
+				</li>`).prependTo($conversation.find('.statusIcons'));
 				
 				this._attributes[conversationID].isClosed = 1;
 			break;
@@ -245,7 +249,10 @@ WCF.Conversation.EditorHandlerConversation = WCF.Conversation.EditorHandler.exte
 		
 		switch (key) {
 			case 'close':
-				$('<li><span class="icon icon16 fa-lock jsIconLock" /> ' + WCF.Language.get('wcf.global.state.closed') + '</li>').appendTo(container);
+				$(`<li>
+					<fa-icon size="16" name="lock"></fa-icon>
+					${WCF.Language.get('wcf.global.state.closed')}
+				</li>`).appendTo(container);
 				
 				this._attributes[conversationID].isClosed = 1;
 			break;
@@ -259,7 +266,10 @@ WCF.Conversation.EditorHandlerConversation = WCF.Conversation.EditorHandler.exte
 					var availableLabels = this.getAvailableLabels();
 					
 					if (!labelList.length) {
-						labelList = $('<li><span class="icon icon16 fa-tags"></span> <ul class="labelList"></ul></li>').prependTo(container);
+						labelList = $(`<li>
+							<fa-icon size="16" name="tags"></fa-icon>
+							<ul class="labelList"></ul>
+						</li>`).prependTo(container);
 						labelList = labelList.children('ul');
 					}
 					
