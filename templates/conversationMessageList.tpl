@@ -75,7 +75,7 @@
 										title="{lang}wcf.conversation.message.edit{/lang}"
 										class="button{if !$conversation->isDraft || $message->messageID != $conversation->firstMessageID} jsMessageEditButton{/if}"
 									>
-										{icon size=16 name='pencil'}
+										{icon name='pencil'}
 										<span>{lang}wcf.global.button.edit{/lang}</span>
 									</a>
 								</li>
@@ -91,14 +91,14 @@
 									title="{lang}wcf.message.quote.quoteMessage{/lang}"
 									class="button jsTooltip{if $__quoteFullQuote|isset && $message->messageID|in_array:$__quoteFullQuote} active{/if}"
 								>
-									{icon size=16 name='quote-left' type='solid'}
+									{icon name='quote-left' type='solid'}
 									<span class="invisible">{lang}wcf.message.quote.quoteMessage{/lang}</span>
 								</a>
 							</li>
 							{if $message->userID != $__wcf->getUser()->userID && $__wcf->session->getPermission('user.profile.canReportContent')}
 								<li class="jsReportConversationMessage jsOnly" data-object-id="{@$message->messageID}">
 									<button title="{lang}wcf.moderation.report.reportContent{/lang}" class="button jsTooltip">
-										{icon size=16 name='triangle-exclamation'}
+										{icon name='triangle-exclamation'}
 										<span class="invisible">{lang}wcf.moderation.report.reportContent{/lang}</span>
 									</button>
 								</li>

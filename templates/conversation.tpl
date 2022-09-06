@@ -12,7 +12,7 @@
 			<ul class="inlineList contentHeaderMetaData">
 				{hascontent}
 					<li>
-						{icon size=16 name='tags'}
+						{icon name='tags'}
 						<ul class="labelList">
 							{content}
 								{foreach from=$conversation->getAssignedLabels() item=label}
@@ -24,19 +24,19 @@
 				{/hascontent}
 				
 				<li>
-					{icon size=16 name='user'}
+					{icon name='user'}
 					{user object=$conversation->getUserProfile()}
 				</li>
 				
 				<li>
-					{icon size=16 name='clock'}
+					{icon name='clock'}
 					<a href="{$conversation->getLink()}">{@$conversation->time|time}</a>
 				</li>
 				
 				{if $conversation->isClosed}
 					<li>
 						<span class="jsIconLock">
-							{icon size=16 name='lock'}
+							{icon name='lock'}
 						</span>
 						{lang}wcf.global.state.closed{/lang}
 					</li>
@@ -51,7 +51,7 @@
 						{if $conversation->canReply()}
 							<li class="jsOnly">
 								<button class="button buttonPrimary jsQuickReply">
-									{icon size=16 name='reply'}
+									{icon name='reply'}
 									<span>{lang}wcf.conversation.message.button.add{/lang}</span>
 								</button>
 							</li>
@@ -72,12 +72,12 @@
 	<div class="conversation jsConversationInlineEditorContainer contentInteractionButton" data-conversation-id="{@$conversation->conversationID}" data-label-ids="[ {implode from=$conversation->getAssignedLabels() item=label}{@$label->labelID}{/implode} ]" data-is-closed="{@$conversation->isClosed}" data-can-close-conversation="{if $conversation->userID == $__wcf->getUser()->userID}1{else}0{/if}" data-can-add-participants="{if $conversation->canAddParticipants()}1{else}0{/if}" data-is-draft="{if $conversation->isDraft}1{else}0{/if}">
 		{if $conversation->isDraft}
 			<a href="{link controller='ConversationDraftEdit' id=$conversation->conversationID}{/link}" class="button small jsConversationInlineEditor">
-				{icon size=16 name='pencil'}
+				{icon name='pencil'}
 				<span>{lang}wcf.global.button.edit{/lang}</span>
 			</a>
 		{else}
 			<button class="button small jsConversationInlineEditor">
-				{icon size=16 name='pencil'}
+				{icon name='pencil'}
 				<span>{lang}wcf.global.button.edit{/lang}</span>
 			</button>
 		{/if}
@@ -107,7 +107,7 @@
 										data-confirm-message="{lang __encode=true}wcf.conversation.participants.removeParticipant.confirmMessage{/lang}"
 										data-object-action-parameter-user-id="{@$participant->getObjectID()}"
 									>
-										{icon size=16 name='xmark'}
+										{icon name='xmark'}
 									</button>
 								{/if}
 							</p>

@@ -13,7 +13,7 @@
 						{if $__wcf->session->getPermission('user.conversation.canStartConversation')}
 							<li>
 								<a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button buttonPrimary">
-									{icon size=16 name='plus'}
+									{icon name='plus'}
 									<span>{lang}wcf.conversation.button.add{/lang}</span>
 								</a>
 							</li>
@@ -136,7 +136,7 @@
 
 {capture assign='contentInteractionButtons'}
 	<button class="markAllAsReadButton contentInteractionButton button small jsOnly">
-		{icon size=16 name='check'}
+		{icon name='check'}
 		<span>{lang}wcf.global.button.markAllAsRead{/lang}</span>
 	</button>
 {/capture}
@@ -162,11 +162,11 @@
 								<a rel="nofollow" href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}pageNo={@$pageNo}&sortField={$sortField}&sortOrder={if $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">
 									{if $sortOrder === 'ASC'}
 										<span class="jsTooltip" title="{lang}wcf.global.sorting{/lang} ({lang}wcf.global.sortOrder.ascending{/lang})">
-											{icon size=16 name='arrow-down-wide-short'}
+											{icon name='arrow-down-wide-short'}
 										</span>
 									{else}
 										<span class="jsTooltip" title="{lang}wcf.global.sorting{/lang} ({lang}wcf.global.sortOrder.descending{/lang})">
-											{icon size=16 name='arrow-down-short-wide'}
+											{icon name='arrow-down-short-wide'}
 										</span>
 									{/if}
 								</a>
@@ -229,14 +229,14 @@
 									{if $conversation->isClosed}
 										<li>
 											<span class="jsIconLock jsTooltip" title="{lang}wcf.global.state.closed{/lang}">
-												{icon size=16 name='lock'}
+												{icon name='lock'}
 											</span>
 										</li>
 									{/if}
 									{if $conversation->attachments}
 										<li>
 											<span class="jsIconAttachment jsTooltip" title="{lang}wcf.conversation.attachments{/lang}">
-												{icon size=16 name='paperclip'}
+												{icon name='paperclip'}
 											</span>
 										</li>
 									{/if}
@@ -278,7 +278,7 @@
 							<div class="messageGroupListStatsSimple">
 								{if $conversation->replies}
 									<span aria-label="{lang}wcf.conversation.replies{/lang}">
-										{icon size=16 name='comment'}
+										{icon name='comment'}
 									</span>
 									{@$conversation->replies|shortUnit}
 								{/if}
@@ -321,7 +321,7 @@
 					{if $__wcf->session->getPermission('user.conversation.canStartConversation')}
 						<li>
 							<a href="{link controller='ConversationAdd'}{/link}" title="{lang}wcf.conversation.add{/lang}" class="button buttonPrimary">
-								{icon size=16 name='plus'}
+								{icon name='plus'}
 								<span>{lang}wcf.conversation.button.add{/lang}</span>
 							</a>
 						</li>
