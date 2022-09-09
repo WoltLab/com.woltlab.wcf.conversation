@@ -31,7 +31,7 @@
 		<item name="wcf.acp.group.option.user.conversation.canEditMessage"><![CDATA[Kann eigene Nachrichten bearbeiten]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canEditMessage.description"><![CDATA[Mitglieder dieser Benutzergruppe können eigene Nachrichten in Konversationen nachträglich verändern, auch wenn diese bereits vom Empfänger gelesen wurden.]]></item>
 		<item name="wcf.acp.group.option.user.conversation.canAddGroupParticipants"><![CDATA[Kann Benutzergruppen als Teilnehmer hinzufügen]]></item>
-		<item name="wcf.acp.group.canBeAddedAsConversationParticipant"><![CDATA[Benutzergruppe kann als Teilnehmer in Konversationen hinzufügt werden]]></item>
+		<item name="wcf.acp.group.canBeAddedAsConversationParticipant"><![CDATA[Benutzergruppe kann als Teilnehmer in Konversationen hinzugefügt werden]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxStartedConversationsPer24Hours"><![CDATA[Maximale Anzahl gestarteter Konversation innerhalb von 24 Stunden]]></item>
 		<item name="wcf.acp.group.option.user.conversation.maxStartedConversationsPer24Hours.description"><![CDATA[Beschränkt die Anzahl der Konversationen die ein Benutzer innerhalb von 24 Stunden starten darf. [-1 für unbegrenzt]]]></item>
 		<item name="wcf.acp.group.option.user.conversation.floodControlTime"><![CDATA[Mindestzeit zwischen Nachrichten]]></item>
