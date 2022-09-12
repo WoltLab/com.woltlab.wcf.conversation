@@ -45,7 +45,6 @@
 				<optiontype>boolean</optiontype>
 				<defaultvalue>1</defaultvalue>
 				<usersonly>1</usersonly>
-				<enableoptions>user.conversation.canStartConversation</enableoptions>
 			</option>
 			<option name="user.conversation.canStartConversation">
 				<categoryname>user.conversation</categoryname>
