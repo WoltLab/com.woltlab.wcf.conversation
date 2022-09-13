@@ -15,6 +15,7 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Ajax", "WoltLabSuite/C
     UiItemListUser = tslib_1.__importStar(UiItemListUser);
     Language = tslib_1.__importStar(Language);
     class UiParticipantAdd {
+        conversationId;
         constructor(conversationId) {
             this.conversationId = conversationId;
             Ajax.api(this, {

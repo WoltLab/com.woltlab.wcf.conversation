@@ -13,10 +13,12 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Ajax", "WoltLabSuite/C
     exports.setup = void 0;
     View_1 = tslib_1.__importDefault(View_1);
     class UserMenuDataConversation {
+        button;
+        counter = 0;
+        options;
+        stale = true;
+        view = undefined;
         constructor(button, options) {
-            this.counter = 0;
-            this.stale = true;
-            this.view = undefined;
             this.button = button;
             this.options = options;
             const badge = button.querySelector(".badge");

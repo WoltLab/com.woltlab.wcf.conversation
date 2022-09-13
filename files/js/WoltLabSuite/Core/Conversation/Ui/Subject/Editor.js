@@ -8,6 +8,8 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Ui/Dialog", "WoltLabSu
     Language = tslib_1.__importStar(Language);
     UiNotification = tslib_1.__importStar(UiNotification);
     class UiSubjectEditor {
+        objectId;
+        subject;
         constructor(objectId) {
             this.objectId = objectId;
         }

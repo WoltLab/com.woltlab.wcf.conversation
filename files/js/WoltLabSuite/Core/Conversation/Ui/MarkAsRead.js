@@ -13,11 +13,10 @@ define(["require", "exports", "WoltLabSuite/Core/Ajax"], function (require, expo
     exports.setup = void 0;
     const unreadConversations = new WeakSet();
     async function markAsRead(conversation) {
-        var _a;
         const conversationId = parseInt(conversation.dataset.conversationId, 10);
         await (0, Ajax_1.dboAction)("markAsRead", "wcf\\data\\conversation\\ConversationAction").objectIds([conversationId]).dispatch();
         conversation.classList.remove("new");
-        (_a = conversation.querySelector(".columnAvatar p")) === null || _a === void 0 ? void 0 : _a.removeAttribute("title");
+        conversation.querySelector(".columnAvatar p")?.removeAttribute("title");
     }
     function setup() {
         document.querySelectorAll(".conversationList .new .columnAvatar").forEach((el) => {
