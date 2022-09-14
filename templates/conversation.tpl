@@ -50,7 +50,7 @@
 					{content}
 						{if $conversation->canReply()}
 							<li class="jsOnly">
-								<button class="button buttonPrimary jsQuickReply">
+								<button type="button" class="button buttonPrimary jsQuickReply">
 									{icon name='reply'}
 									<span>{lang}wcf.conversation.message.button.add{/lang}</span>
 								</button>
@@ -76,7 +76,7 @@
 				<span>{lang}wcf.global.button.edit{/lang}</span>
 			</a>
 		{else}
-			<button class="button small jsConversationInlineEditor">
+			<button type="button" class="button small jsConversationInlineEditor">
 				{icon name='pencil'}
 				<span>{lang}wcf.global.button.edit{/lang}</span>
 			</button>
@@ -101,6 +101,7 @@
 								{if $participant->isInvisible}<small>({lang}wcf.conversation.invisible{/lang})</small>{/if}
 								{if $participant->userID && ($conversation->userID == $__wcf->getUser()->userID) && ($participant->userID != $__wcf->getUser()->userID) && $participant->hideConversation != 2 && $participant->leftAt == 0}
 									<button
+										type="button"
 										class="jsObjectAction jsTooltip jsOnly"
 										data-object-action="removeParticipant"
 										title="{lang}wcf.conversation.participants.removeParticipant{/lang}"

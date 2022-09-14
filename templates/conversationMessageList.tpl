@@ -97,7 +97,7 @@
 							</li>
 							{if $message->userID != $__wcf->getUser()->userID && $__wcf->session->getPermission('user.profile.canReportContent')}
 								<li class="jsReportConversationMessage jsOnly" data-object-id="{@$message->messageID}">
-									<button title="{lang}wcf.moderation.report.reportContent{/lang}" class="button jsTooltip">
+									<button type="button" title="{lang}wcf.moderation.report.reportContent{/lang}" class="button jsTooltip">
 										{icon name='triangle-exclamation'}
 										<span class="invisible">{lang}wcf.moderation.report.reportContent{/lang}</span>
 									</button>

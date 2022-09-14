@@ -16,5 +16,5 @@
 </dl>
 
 <div class="formSubmit">
-	<button id="hideConversation" class="buttonPrimary">{lang}wcf.global.button.submit{/lang}</button>
+	<button type="button" id="hideConversation" class="button buttonPrimary">{lang}wcf.global.button.submit{/lang}</button>
 </div>

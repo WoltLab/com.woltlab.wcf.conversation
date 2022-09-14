@@ -114,7 +114,9 @@ class UiSubjectEditor implements AjaxCallbackObject, DialogCallbackObject {
           </dd>
         </dl>
         <div class="formSubmit">
-          <button class="buttonPrimary jsButtonSave">${Language.get("wcf.global.button.save")}</button>
+          <button type="button" class="button buttonPrimary jsButtonSave">${Language.get(
+            "wcf.global.button.save",
+          )}</button>
         </div>
       `,
     };

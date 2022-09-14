@@ -104,7 +104,7 @@
 		</div>
 		
 		<div class="boxContent">
-			<button id="manageLabel">{lang}wcf.conversation.label.management{/lang}</button>
+			<button type="button" id="manageLabel" class="button">{lang}wcf.conversation.label.management{/lang}</button>
 		</div>
 	</section>
 	
@@ -135,7 +135,7 @@
 {/capture}
 
 {capture assign='contentInteractionButtons'}
-	<button class="markAllAsReadButton contentInteractionButton button small jsOnly">
+	<button type="button" class="markAllAsReadButton contentInteractionButton button small jsOnly">
 		{icon name='check'}
 		<span>{lang}wcf.global.button.markAllAsRead{/lang}</span>
 	</button>
