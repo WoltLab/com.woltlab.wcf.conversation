@@ -57,19 +57,19 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
      * default participation state
      * @var int
      */
-    const STATE_DEFAULT = 0;
+    public const STATE_DEFAULT = 0;
 
     /**
      * conversation is hidden but returns visible upon new message
      * @var int
      */
-    const STATE_HIDDEN = 1;
+    public const STATE_HIDDEN = 1;
 
     /**
      * conversation was left permanently
      * @var int
      */
-    const STATE_LEFT/*4DEAD*/ = 2;
+    public const STATE_LEFT/*4DEAD*/ = 2;
 
     /**
      * true if the current user can add users without limitations
