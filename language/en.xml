@@ -48,12 +48,12 @@
 		<item name="wcf.acp.option.module_conversation"><![CDATA[Conversations]]></item>
 	</category>
 	<category name="wcf.acp.rebuildData">
-		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation"><![CDATA[Rebuild Conversations]]></item>
-		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.description"><![CDATA[Rebuilds the conversation counters.]]></item>
-		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message"><![CDATA[Rebuild Conversation Messages]]></item>
-		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message.description"><![CDATA[Rebuilds the conversation message counters.]]></item>
-		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message.search.index"><![CDATA[Rebuild Conversation Message Search Index]]></item>
-		<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message.search.index.description"><![CDATA[Warning: This action can take a while to complete on large forums.]]></item>
+		<item name="wcf.acp.rebuildData.wcf_system_worker_ConversationRebuildDataWorker"><![CDATA[Rebuild Conversations]]></item>
+		<item name="wcf.acp.rebuildData.wcf_system_worker_ConversationRebuildDataWorker.description"><![CDATA[Rebuilds the conversation counters.]]></item>
+		<item name="wcf.acp.rebuildData.wcf_system_worker_ConversationMessageRebuildDataWorker"><![CDATA[Rebuild Conversation Messages]]></item>
+		<item name="wcf.acp.rebuildData.wcf_system_worker_ConversationMessageRebuildDataWorker.description"><![CDATA[Rebuilds the conversation message counters.]]></item>
+		<item name="wcf.acp.rebuildData.wcf_system_worker_ConversationMessageSearchIndexRebuildDataWorker"><![CDATA[Rebuild Conversation Message Search Index]]></item>
+		<item name="wcf.acp.rebuildData.wcf_system_worker_ConversationMessageSearchIndexRebuildDataWorker.description"><![CDATA[Warning: This action can take a while to complete on large forums.]]></item>
 	</category>
 	<category name="wcf.acp.stat">
 		<item name="wcf.acp.stat.com.woltlab.wcf.conversation"><![CDATA[Conversations]]></item>
@@ -221,5 +221,11 @@
 </import>
 <delete>
 	<item name="wcf.conversation.markAllAsRead" />
+	<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation"/>
+	<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.description"/>
+	<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message"/>
+	<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message.description"/>
+	<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message.search.index"/>
+	<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message.search.index.description"/>
 </delete>
 </language>

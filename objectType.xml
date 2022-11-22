@@ -79,23 +79,7 @@
 		</type>
 		<!-- /importers -->
 		<!-- rebuild data workers -->
-		<type>
-			<name>com.woltlab.wcf.conversation</name>
-			<definitionname>com.woltlab.wcf.rebuildData</definitionname>
-			<classname>wcf\system\worker\ConversationRebuildDataWorker</classname>
-		</type>
-		<type>
-			<name>com.woltlab.wcf.conversation.message</name>
-			<definitionname>com.woltlab.wcf.rebuildData</definitionname>
-			<classname>wcf\system\worker\ConversationMessageRebuildDataWorker</classname>
-			<nicevalue>-5</nicevalue>
-		</type>
-		<type>
-			<name>com.woltlab.wcf.conversation.message.search.index</name>
-			<definitionname>com.woltlab.wcf.rebuildData</definitionname>
-			<classname>wcf\system\worker\ConversationMessageSearchIndexRebuildDataWorker</classname>
-			<nicevalue>121</nicevalue>
-		</type>
+		
 		<!-- /rebuild data workers -->
 		<!-- stat handlers -->
 		<type>
@@ -132,4 +116,20 @@
 			<definitionname>com.woltlab.wcf.floodControl</definitionname>
 		</type>
 	</import>
+	<delete>
+		<type name="com.woltlab.wcf.conversation">
+			<definitionname>com.woltlab.wcf.rebuildData</definitionname>
+			<classname>wcf\system\worker\ConversationRebuildDataWorker</classname>
+		</type>
+		<type name="com.woltlab.wcf.conversation.message">
+			<definitionname>com.woltlab.wcf.rebuildData</definitionname>
+			<classname>wcf\system\worker\ConversationMessageRebuildDataWorker</classname>
+			<nicevalue>-5</nicevalue>
+		</type>
+		<type name="com.woltlab.wcf.conversation.message.search.index">
+			<definitionname>com.woltlab.wcf.rebuildData</definitionname>
+			<classname>wcf\system\worker\ConversationMessageSearchIndexRebuildDataWorker</classname>
+			<nicevalue>121</nicevalue>
+		</type>
+	</delete>
 </data>
