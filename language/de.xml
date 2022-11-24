@@ -220,12 +220,64 @@
 	</category>
 </import>
 <delete>
-	<item name="wcf.conversation.markAllAsRead" />
+	<item name="wbb.conversation.gotoFirstNewPost"/>
+	<item name="wbb.conversation.gotoLastPost"/>
+	<item name="wcf.acp.group.canBeAddedAsParticipant"/>
+	<item name="wcf.acp.group.option.user.conversation.allowedAttachmentExtensions.description"/>
+	<item name="wcf.acp.option.conversation_reply_show_messages_max"/>
+	<item name="wcf.acp.option.conversation_reply_show_messages_max.description"/>
 	<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation"/>
 	<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.description"/>
 	<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message"/>
 	<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message.description"/>
 	<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message.search.index"/>
 	<item name="wcf.acp.rebuildData.com.woltlab.wcf.conversation.message.search.index.description"/>
+	<item name="wcf.clipboard.item.conversation.assignLabel"/>
+	<item name="wcf.clipboard.item.conversation.close"/>
+	<item name="wcf.clipboard.item.conversation.leave"/>
+	<item name="wcf.clipboard.item.conversation.leavePermanently"/>
+	<item name="wcf.clipboard.item.conversation.open"/>
+	<item name="wcf.clipboard.item.conversation.restore"/>
+	<item name="wcf.clipboard.label.conversation.marked"/>
+	<item name="wcf.conversation.gotoFirstNewPost"/>
+	<item name="wcf.conversation.log"/>
+	<item name="wcf.conversation.log.action"/>
+	<item name="wcf.conversation.log.noEntries"/>
+	<item name="wcf.conversation.log.time"/>
+	<item name="wcf.conversation.log.title"/>
+	<item name="wcf.conversation.markAllAsRead"/>
+	<item name="wcf.conversation.markAllAsRead.confirmMessage"/>
+	<item name="wcf.conversation.message.add"/>
+	<item name="wcf.conversation.message.add.previousPosts"/>
+	<item name="wcf.conversation.message.new"/>
+	<item name="wcf.conversation.subject"/>
+	<item name="wcf.page.category.com.woltlab.wcf.conversation"/>
+	<item name="wcf.page.com.woltlab.wcf.conversation.Conversation"/>
+	<item name="wcf.page.com.woltlab.wcf.conversation.ConversationAdd"/>
+	<item name="wcf.page.com.woltlab.wcf.conversation.ConversationAddForm"/>
+	<item name="wcf.page.com.woltlab.wcf.conversation.ConversationList"/>
+	<item name="wcf.page.com.woltlab.wcf.conversation.ConversationListPage"/>
+	<item name="wcf.page.com.woltlab.wcf.conversation.ConversationMessageAdd"/>
+	<item name="wcf.page.com.woltlab.wcf.conversation.ConversationMessageAddForm"/>
+	<item name="wcf.page.com.woltlab.wcf.conversation.ConversationMessageEdit"/>
+	<item name="wcf.page.com.woltlab.wcf.conversation.ConversationMessageEditForm"/>
+	<item name="wcf.page.com.woltlab.wcf.conversation.ConversationPage"/>
+	<item name="wcf.page.onlineLocation.com.woltlab.wcf.conversation.ConversationAdd"/>
+	<item name="wcf.page.onlineLocation.com.woltlab.wcf.conversation.ConversationList"/>
+	<item name="wcf.page.onlineLocation.com.woltlab.wcf.conversation.ConversationMessageAdd"/>
+	<item name="wcf.page.onlineLocation.com.woltlab.wcf.conversation.ConversationMessageEdit"/>
+	<item name="wcf.user.notification.com.woltlab.wcf.conversation.conversation"/>
+	<item name="wcf.user.notification.com.woltlab.wcf.conversation.conversationMessage"/>
+	<item name="wcf.user.notification.conversation.mail"/>
+	<item name="wcf.user.notification.conversation.message.mail"/>
+	<item name="wcf.user.notification.conversation.message.output"/>
+	<item name="wcf.user.notification.conversation.message.shortOutput"/>
+	<item name="wcf.user.notification.conversation.output"/>
+	<item name="wcf.user.notification.conversation.shortOutput"/>
+	<item name="wcf.user.usersOnline.location.ConversationAddForm"/>
+	<item name="wcf.user.usersOnline.location.ConversationListPage"/>
+	<item name="wcf.user.usersOnline.location.ConversationMessageAddForm"/>
+	<item name="wcf.user.usersOnline.location.ConversationMessageEditForm"/>
+	<item name="wcf.user.usersOnline.location.ConversationPage"/>
 </delete>
 </language>
