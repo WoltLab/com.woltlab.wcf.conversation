@@ -24,7 +24,6 @@ use wcf\util\ArrayUtil;
  * @author  Marcel Werk
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package WoltLabSuite\Core\Data\Conversation
  *
  * @property-read   int $conversationID     unique id of the conversation
  * @property-read   string $subject        subject of the conversation

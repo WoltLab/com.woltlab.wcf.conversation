@@ -12,7 +12,6 @@ use wcf\system\cache\runtime\UserProfileRuntimeCache;
  * @author  Marcel Werk
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package WoltLabSuite\Core\Data\Conversation\Message
  *
  * @method  ConversationMessage getDecoratedObject()
  * @mixin   ConversationMessage
