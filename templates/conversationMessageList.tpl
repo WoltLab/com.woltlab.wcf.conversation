@@ -6,15 +6,15 @@
 	{assign var='objectID' value=$message->messageID}
 	{assign var='userProfile' value=$message->getUserProfile()}
 	
-	<li id="message{@$message->messageID}" class="anchorFixedHeader{if $conversation->userID == $message->userID} messageGroupStarter{/if}">
-		<article class="message messageSidebarOrientation{@$__wcf->getStyleHandler()->getStyle()->getVariable('messageSidebarOrientation')|ucfirst} jsMessage{if $userProfile->userOnlineGroupID} userOnlineGroupMarking{@$userProfile->userOnlineGroupID}{/if}" data-user-id="{@$message->userID}" data-can-edit="{if $message->canEdit()}1{else}0{/if}" data-object-id="{@$message->messageID}">
+	<li id="message{$message->messageID}" class="anchorFixedHeader{if $conversation->userID == $message->userID} messageGroupStarter{/if}">
+		<article class="message messageSidebarOrientation{$__wcf->getStyleHandler()->getStyle()->getVariable('messageSidebarOrientation')|ucfirst} jsMessage{if $userProfile->userOnlineGroupID} userOnlineGroupMarking{$userProfile->userOnlineGroupID}{/if}" data-user-id="{$message->userID}" data-can-edit="{if $message->canEdit()}1{else}0{/if}" data-object-id="{$message->messageID}">
 			{include file='messageSidebar'}
 			
 			<div class="messageContent">
 				<header class="messageHeader">
 					<div class="messageHeaderBox">
 						<ul class="messageHeaderMetaData">
-							<li><a href="{link controller='Conversation' object=$conversation}messageID={@$message->messageID}{/link}#message{@$message->messageID}" class="permalink messagePublicationTime">{@$message->time|time}</a></li>
+							<li><a href="{link controller='Conversation' object=$conversation}messageID={@$message->messageID}{/link}#message{$message->messageID}" class="permalink messagePublicationTime">{@$message->time|time}</a></li>
 							
 							{event name='messageHeaderMetaData'}
 						</ul>
@@ -29,7 +29,7 @@
 					</div>
 					
 					<ul class="messageQuickOptions">
-						<li><a href="{link controller='Conversation' object=$conversation}messageID={@$message->messageID}{/link}#message{@$message->messageID}" class="jsTooltip" title="{lang}wcf.conversation.message.permalink{/lang}">#{#$startIndex}</a></li>
+						<li><a href="{link controller='Conversation' object=$conversation}messageID={@$message->messageID}{/link}#message{$message->messageID}" class="jsTooltip" title="{lang}wcf.conversation.message.permalink{/lang}">#{#$startIndex}</a></li>
 						
 						{event name='messageQuickOptions'}
 					</ul>
@@ -82,7 +82,7 @@
 							{/if}
 							<li
 								class="jsQuoteMessage"
-								data-object-id="{@$message->messageID}"
+								data-object-id="{$message->messageID}"
 								data-is-quoted="{if $__quoteFullQuote|isset && $message->messageID|in_array:$__quoteFullQuote}1{else}0{/if}"
 							>
 								<a
@@ -96,7 +96,7 @@
 								</a>
 							</li>
 							{if $message->userID != $__wcf->getUser()->userID && $__wcf->session->getPermission('user.profile.canReportContent')}
-								<li class="jsReportConversationMessage jsOnly" data-object-id="{@$message->messageID}">
+								<li class="jsReportConversationMessage jsOnly" data-object-id="{$message->messageID}">
 									<button type="button" title="{lang}wcf.moderation.report.reportContent{/lang}" class="button jsTooltip">
 										{icon name='triangle-exclamation'}
 										<span class="invisible">{lang}wcf.moderation.report.reportContent{/lang}</span>

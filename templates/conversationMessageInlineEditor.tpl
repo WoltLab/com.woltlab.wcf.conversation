@@ -1,7 +1,7 @@
 {capture assign='wysiwygSelector'}messageEditor{@$message->messageID}{/capture}
 <div class="messageInlineEditor">
 	<textarea id="{$wysiwygSelector}" class="wysiwygTextarea"
-	          data-autosave="com.woltlab.wcf.conversation.messageEdit-{@$message->messageID}"
+	          data-autosave="com.woltlab.wcf.conversation.messageEdit-{$message->messageID}"
 	          data-support-mention="true"
 	>{$message->message}</textarea>
 	{capture assign=wysiwygContainerID}messageEditor{@$message->messageID}{/capture}

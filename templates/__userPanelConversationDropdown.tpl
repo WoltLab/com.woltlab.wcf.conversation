@@ -16,7 +16,7 @@
 			{/if}
 		</a>
 		{if !OFFLINE || $__wcf->session->getPermission('admin.general.canViewPageDuringOfflineMode')}
-			<script data-relocate="true" src="{@$__wcf->getPath()}js/WCF.Conversation{if !ENABLE_DEBUG_MODE}.min{/if}.js?v={@LAST_UPDATE_TIME}"></script>
+			<script data-relocate="true" src="{$__wcf->getPath()}js/WCF.Conversation{if !ENABLE_DEBUG_MODE}.min{/if}.js?v={@LAST_UPDATE_TIME}"></script>
 			<script data-relocate="true">
 				require(["WoltLabSuite/Core/Conversation/Ui/User/Menu/Data/Conversation"], ({ setup }) => {
 					setup({

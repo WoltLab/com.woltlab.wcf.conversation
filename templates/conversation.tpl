@@ -7,7 +7,7 @@
 		</div>
 		
 		<div class="contentHeaderTitle">
-			<h1 class="contentTitle jsConversationSubject" data-conversation-id="{@$conversation->conversationID}">{$conversation->subject}</h1>
+			<h1 class="contentTitle jsConversationSubject" data-conversation-id="{$conversation->conversationID}">{$conversation->subject}</h1>
 			
 			<ul class="inlineList contentHeaderMetaData">
 				{hascontent}
@@ -69,7 +69,7 @@
 {/capture}
 
 {capture assign='contentInteractionButtons'}
-	<div class="conversation jsConversationInlineEditorContainer contentInteractionButton" data-conversation-id="{@$conversation->conversationID}" data-label-ids="[ {implode from=$conversation->getAssignedLabels() item=label}{@$label->labelID}{/implode} ]" data-is-closed="{@$conversation->isClosed}" data-can-close-conversation="{if $conversation->userID == $__wcf->getUser()->userID}1{else}0{/if}" data-can-add-participants="{if $conversation->canAddParticipants()}1{else}0{/if}" data-is-draft="{if $conversation->isDraft}1{else}0{/if}">
+	<div class="conversation jsConversationInlineEditorContainer contentInteractionButton" data-conversation-id="{$conversation->conversationID}" data-label-ids="[ {implode from=$conversation->getAssignedLabels() item=label}{$label->labelID}{/implode} ]" data-is-closed="{$conversation->isClosed}" data-can-close-conversation="{if $conversation->userID == $__wcf->getUser()->userID}1{else}0{/if}" data-can-add-participants="{if $conversation->canAddParticipants()}1{else}0{/if}" data-is-draft="{if $conversation->isDraft}1{else}0{/if}">
 		{if $conversation->isDraft}
 			<a href="{link controller='ConversationDraftEdit' id=$conversation->conversationID}{/link}" class="button small jsConversationInlineEditor">
 				{icon name='pencil'}
@@ -92,7 +92,7 @@
 		
 		<ul class="containerBoxList tripleColumned conversationParticipantList jsObjectActionContainer" data-object-action-class-name="wcf\data\conversation\ConversationAction">
 			{foreach from=$participants item=participant}
-				<li class="jsParticipant jsObjectActionObject{if !$participant->userID || $participant->hideConversation == 2 || $participant->leftAt > 0} conversationLeft{/if}" data-object-id="{@$conversation->getObjectID()}">
+				<li class="jsParticipant jsObjectActionObject{if !$participant->userID || $participant->hideConversation == 2 || $participant->leftAt > 0} conversationLeft{/if}" data-object-id="{$conversation->getObjectID()}">
 					<div class="box24">
 						{user object=$participant type='avatar24' ariaHidden='true' tabindex='-1'}
 						<div>
@@ -106,7 +106,7 @@
 										data-object-action="removeParticipant"
 										title="{lang}wcf.conversation.participants.removeParticipant{/lang}"
 										data-confirm-message="{lang __encode=true}wcf.conversation.participants.removeParticipant.confirmMessage{/lang}"
-										data-object-action-parameter-user-id="{@$participant->getObjectID()}"
+										data-object-action-parameter-user-id="{$participant->getObjectID()}"
 									>
 										{icon name='xmark'}
 									</button>
@@ -138,8 +138,8 @@
 	</ul>
 </div>
 
-{if !ENABLE_DEBUG_MODE}<script src="{@$__wcf->getPath()}js/WoltLabSuite.Core.Conversation.min.js?v={@LAST_UPDATE_TIME}"></script>{/if}
-<script data-relocate="true" src="{@$__wcf->getPath()}js/WCF.Conversation{if !ENABLE_DEBUG_MODE}.min{/if}.js?v={@LAST_UPDATE_TIME}"></script>
+{if !ENABLE_DEBUG_MODE}<script src="{$__wcf->getPath()}js/WoltLabSuite.Core.Conversation.min.js?v={@LAST_UPDATE_TIME}"></script>{/if}
+<script data-relocate="true" src="{$__wcf->getPath()}js/WCF.Conversation{if !ENABLE_DEBUG_MODE}.min{/if}.js?v={@LAST_UPDATE_TIME}"></script>
 <script data-relocate="true">
 	$(function() {
 		WCF.Language.addObject({
@@ -159,7 +159,7 @@
 			'wcf.conversation.label.assignLabels': '{jslang}wcf.conversation.label.assignLabels{/jslang}'
 		});
 		
-		var $availableLabels = [ {implode from=$labelList item=label}{ cssClassName: '{if $label->cssClassName}{@$label->cssClassName}{/if}', labelID: {@$label->labelID}, label: '{$label->label|encodeJS}' }{/implode} ];
+		var $availableLabels = [ {implode from=$labelList item=label}{ cssClassName: '{if $label->cssClassName}{@$label->cssClassName|encodeJS}{/if}', labelID: {@$label->labelID}, label: '{$label->label|encodeJS}' }{/implode} ];
 		var $editorHandler = new WCF.Conversation.EditorHandlerConversation($availableLabels);
 		var $inlineEditor = new WCF.Conversation.InlineEditor('.conversation');
 		$inlineEditor.setEditorHandler($editorHandler);

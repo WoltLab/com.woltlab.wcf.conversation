@@ -81,7 +81,7 @@
 					{if $labelID}
 						{foreach from=$labelList item=label}
 							{if $label->labelID == $labelID}
-								<span class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}">{$label->label}</span>
+								<span class="badge label{if $label->cssClassName} {$label->cssClassName}{/if}">{$label->label}</span>
 							{/if}
 						{/foreach}
 					{else}
@@ -92,7 +92,7 @@
 				<div class="dropdownMenu">
 					<ul class="scrollableDropdownMenu">
 						{foreach from=$labelList item=label}
-							<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}&labelID={@$label->labelID}{/link}"><span class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}" data-css-class-name="{if $label->cssClassName}{@$label->cssClassName}{/if}" data-label-id="{@$label->labelID}">{$label->label}</span></a></li>
+							<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}&labelID={@$label->labelID}{/link}"><span class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}" data-css-class-name="{if $label->cssClassName}{@$label->cssClassName}{/if}" data-label-id="{$label->labelID}">{$label->label}</span></a></li>
 						{/foreach}
 					</ul>
 					<ul>
@@ -117,7 +117,7 @@
 			{assign var='conversationCount' value=$__wcf->getConversationHandler()->getConversationCount()}
 			{assign var='maxConversationCount' value=$__wcf->session->getPermission('user.conversation.maxConversations')}
 			<p class="conversationUsageBar{if $conversationCount/$maxConversationCount >= 1.0} red{elseif $conversationCount/$maxConversationCount > 0.9} yellow{/if}">
-				<span style="width: {if $conversationCount/$maxConversationCount < 1.0}{@$conversationCount/$maxConversationCount*100|round:0}{else}100{/if}%">{#$conversationCount/$maxConversationCount*100}%</span>
+				<span style="width: {if $conversationCount/$maxConversationCount < 1.0}{$conversationCount/$maxConversationCount*100|round:0}{else}100{/if}%">{#$conversationCount/$maxConversationCount*100}%</span>
 			</p>
 			<p><small>{lang}wcf.conversation.quota.description{/lang}</small></p>
 		</div>
@@ -189,9 +189,9 @@
 			
 			{foreach from=$objects item=conversation}
 				<li class="tabularListRow">
-					<ol class="tabularListColumns messageGroup conversation jsClipboardObject{if $conversation->isNew()} new{/if}" data-conversation-id="{@$conversation->conversationID}" data-label-ids="[ {implode from=$conversation->getAssignedLabels() item=label}{@$label->labelID}{/implode} ]" data-is-closed="{@$conversation->isClosed}" data-can-close-conversation="{if $conversation->userID == $__wcf->getUser()->userID}1{else}0{/if}" data-can-add-participants="{if $conversation->canAddParticipants()}1{else}0{/if}">
+					<ol class="tabularListColumns messageGroup conversation jsClipboardObject{if $conversation->isNew()} new{/if}" data-conversation-id="{$conversation->conversationID}" data-label-ids="[ {implode from=$conversation->getAssignedLabels() item=label}{$label->labelID}{/implode} ]" data-is-closed="{$conversation->isClosed}" data-can-close-conversation="{if $conversation->userID == $__wcf->getUser()->userID}1{else}0{/if}" data-can-add-participants="{if $conversation->canAddParticipants()}1{else}0{/if}">
 						<li class="columnMark jsOnly">
-							<label><input type="checkbox" class="jsClipboardItem" data-object-id="{@$conversation->conversationID}"></label>
+							<label><input type="checkbox" class="jsClipboardItem" data-object-id="{$conversation->conversationID}"></label>
 						</li>
 						<li class="columnIcon columnAvatar">
 							{if $conversation->getUserProfile()->getAvatar()}
@@ -218,7 +218,7 @@
 							{/hascontent}
 								
 							<h3>
-								<a href="{if $conversation->isNew()}{link controller='Conversation' object=$conversation}action=firstNew{/link}{else}{$conversation->getLink()}{/if}" class="conversationLink messageGroupLink" data-object-id="{@$conversation->conversationID}">{$conversation->subject}</a>
+								<a href="{if $conversation->isNew()}{link controller='Conversation' object=$conversation}action=firstNew{/link}{else}{$conversation->getLink()}{/if}" class="conversationLink messageGroupLink" data-object-id="{$conversation->conversationID}">{$conversation->subject}</a>
 								{if $conversation->replies}
 									<span class="badge messageGroupCounterMobile">{@$conversation->replies|shortUnit}</span>
 								{/if}
@@ -258,7 +258,7 @@
 							{if $conversation->getParticipantSummary()|count}
 								<small class="conversationParticipantSummary">
 									{assign var='participantSummaryCount' value=$conversation->getParticipantSummary()|count}
-									{lang}wcf.conversation.participants{/lang}: {implode from=$conversation->getParticipantSummary() item=participant}<a href="{$participant->getLink()}" class="userLink{if $participant->hideConversation == 2} conversationLeft{/if}" data-object-id="{@$participant->userID}">{$participant->username}</a>{/implode}
+									{lang}wcf.conversation.participants{/lang}: {implode from=$conversation->getParticipantSummary() item=participant}<a href="{$participant->getLink()}" class="userLink{if $participant->hideConversation == 2} conversationLeft{/if}" data-object-id="{$participant->userID}">{$participant->username}</a>{/implode}
 									{if $participantSummaryCount < $conversation->participants}{lang}wcf.conversation.participants.other{/lang}{/if}
 								</small>
 							{/if}
@@ -333,7 +333,7 @@
 	{/hascontent}
 </footer>
 
-<script data-relocate="true" src="{@$__wcf->getPath()}js/WCF.Conversation{if !ENABLE_DEBUG_MODE}.min{/if}.js?v={@LAST_UPDATE_TIME}"></script>
+<script data-relocate="true" src="{$__wcf->getPath()}js/WCF.Conversation{if !ENABLE_DEBUG_MODE}.min{/if}.js?v={@LAST_UPDATE_TIME}"></script>
 <script data-relocate="true">
 	require([
 		'WoltLabSuite/Core/Language',
