@@ -26,7 +26,7 @@ class FeedConversation extends DatabaseObjectDecorator implements IFeedEntry
     /**
      * @inheritDoc
      */
-    public function getLink()
+    public function getLink(): string
     {
         return LinkHandler::getInstance()->getLink('Conversation', [
             'object' => $this->getDecoratedObject(),
@@ -37,7 +37,7 @@ class FeedConversation extends DatabaseObjectDecorator implements IFeedEntry
     /**
      * @inheritDoc
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->getDecoratedObject()->getTitle();
     }
@@ -45,7 +45,7 @@ class FeedConversation extends DatabaseObjectDecorator implements IFeedEntry
     /**
      * @inheritDoc
      */
-    public function getFormattedMessage()
+    public function getFormattedMessage(): string
     {
         return '';
     }
@@ -53,7 +53,7 @@ class FeedConversation extends DatabaseObjectDecorator implements IFeedEntry
     /**
      * @inheritDoc
      */
-    public function getMessage()
+    public function getMessage(): string
     {
         return '';
     }
@@ -61,7 +61,7 @@ class FeedConversation extends DatabaseObjectDecorator implements IFeedEntry
     /**
      * @inheritDoc
      */
-    public function getExcerpt($maxLength = 255)
+    public function getExcerpt($maxLength = 255): string
     {
         return '';
     }
@@ -77,7 +77,7 @@ class FeedConversation extends DatabaseObjectDecorator implements IFeedEntry
     /**
      * @inheritDoc
      */
-    public function getUsername()
+    public function getUsername(): string
     {
         return $this->getDecoratedObject()->lastPoster;
     }
@@ -93,7 +93,7 @@ class FeedConversation extends DatabaseObjectDecorator implements IFeedEntry
     /**
      * @inheritDoc
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getFormattedMessage();
     }

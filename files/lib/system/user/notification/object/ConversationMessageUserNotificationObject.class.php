@@ -25,7 +25,7 @@ class ConversationMessageUserNotificationObject extends DatabaseObjectDecorator 
     /**
      * @inheritDoc
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->getConversation()->subject;
     }
@@ -33,7 +33,7 @@ class ConversationMessageUserNotificationObject extends DatabaseObjectDecorator 
     /**
      * @inheritDoc
      */
-    public function getURL()
+    public function getURL(): string
     {
         return $this->getLink();
     }

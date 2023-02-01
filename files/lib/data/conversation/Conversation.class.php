@@ -91,7 +91,7 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     /**
      * @inheritDoc
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->subject;
     }
@@ -99,7 +99,7 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     /**
      * @inheritDoc
      */
-    public function getLink()
+    public function getLink(): string
     {
         return LinkHandler::getInstance()->getLink('Conversation', [
             'object' => $this,
@@ -109,10 +109,8 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
 
     /**
      * Returns true if this conversation is new for the active user.
-     *
-     * @return  bool
      */
-    public function isNew()
+    public function isNew(): bool
     {
         if (!$this->isDraft && $this->lastPostTime > $this->lastVisitTime) {
             return true;
@@ -123,11 +121,8 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
 
     /**
      * Returns true if the active user doesn't have read the given message.
-     *
-     * @param ConversationMessage $message
-     * @return  bool
      */
-    public function isNewMessage(ConversationMessage $message)
+    public function isNewMessage(ConversationMessage $message): bool
     {
         if (!$this->isDraft && $message->time > $this->lastVisitTime) {
             return true;
@@ -138,10 +133,8 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
 
     /**
      * Returns true if the conversation is not closed or the user was not removed.
-     *
-     * @return      bool
      */
-    public function canReply()
+    public function canReply(): bool
     {
         if (!$this->canRead()) {
             return false;
@@ -242,10 +235,8 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
 
     /**
      * Returns true if the active user has the permission to read this conversation.
-     *
-     * @return  bool
      */
-    public function canRead()
+    public function canRead(): bool
     {
         if (!WCF::getUser()->userID) {
             return false;
@@ -264,10 +255,8 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
 
     /**
      * Returns true if the current user can add new participants to this conversation.
-     *
-     * @return  bool
      */
-    public function canAddParticipants()
+    public function canAddParticipants(): bool
     {
         if ($this->isDraft) {
             return false;
@@ -298,10 +287,8 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
 
     /**
      * Returns true if the current user can add participants without limitations.
-     *
-     * @return      bool
      */
-    public function canAddParticipantsUnrestricted()
+    public function canAddParticipantsUnrestricted(): bool
     {
         if ($this->canAddUnrestricted === null) {
             $this->canAddUnrestricted = false;
@@ -405,10 +392,8 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
 
     /**
      * Returns false if the active user is the last participant of this conversation.
-     *
-     * @return  bool
      */
-    public function hasOtherParticipants()
+    public function hasOtherParticipants(): bool
     {
         if ($this->userID == WCF::getUser()->userID) {
             // author
@@ -447,10 +432,8 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
 
     /**
      * Returns true if the current user is an active participant of this conversation.
-     *
-     * @return      bool
      */
-    public function isActiveParticipant()
+    public function isActiveParticipant(): bool
     {
         if ($this->isActiveParticipant === null) {
             $sql = "SELECT  leftAt
@@ -473,7 +456,7 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     /**
      * @inheritDoc
      */
-    public function getPopoverLinkClass()
+    public function getPopoverLinkClass(): string
     {
         return 'conversationLink';
     }
@@ -484,9 +467,8 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
      *
      * @param int[] $conversationIDs
      * @param int $userID
-     * @return  bool
      */
-    public static function isParticipant(array $conversationIDs, $userID = null)
+    public static function isParticipant(array $conversationIDs, $userID = null): bool
     {
         if ($userID === null) {
             $userID = WCF::getUser()->userID;

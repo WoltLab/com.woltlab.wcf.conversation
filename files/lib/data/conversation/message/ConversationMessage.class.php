@@ -45,7 +45,7 @@ class ConversationMessage extends DatabaseObject implements IMessage
     /**
      * @inheritDoc
      */
-    public function getFormattedMessage()
+    public function getFormattedMessage(): string
     {
         $processor = new HtmlOutputProcessor();
         $processor->process($this->message, 'com.woltlab.wcf.conversation.message', $this->messageID);
@@ -55,10 +55,8 @@ class ConversationMessage extends DatabaseObject implements IMessage
 
     /**
      * Returns a simplified version of the formatted message.
-     *
-     * @return  string
      */
-    public function getSimplifiedFormattedMessage()
+    public function getSimplifiedFormattedMessage(): string
     {
         $processor = new HtmlOutputProcessor();
         $processor->setOutputType('text/simplified-html');
@@ -97,7 +95,7 @@ class ConversationMessage extends DatabaseObject implements IMessage
     /**
      * @inheritDoc
      */
-    public function getExcerpt($maxLength = 255)
+    public function getExcerpt($maxLength = 255): string
     {
         return StringUtil::truncateHTML($this->getSimplifiedFormattedMessage(), $maxLength);
     }
@@ -106,9 +104,8 @@ class ConversationMessage extends DatabaseObject implements IMessage
      * Returns a version of this message optimized for use in emails.
      *
      * @param string $mimeType Either 'text/plain' or 'text/html'
-     * @return  string
      */
-    public function getMailText($mimeType = 'text/plain')
+    public function getMailText($mimeType = 'text/plain'): string
     {
         switch ($mimeType) {
             case 'text/plain':
@@ -152,10 +149,8 @@ class ConversationMessage extends DatabaseObject implements IMessage
 
     /**
      * Returns true if current user may edit this message.
-     *
-     * @return  bool
      */
-    public function canEdit()
+    public function canEdit(): bool
     {
         return WCF::getUser()->userID == $this->userID
             && (
@@ -168,7 +163,7 @@ class ConversationMessage extends DatabaseObject implements IMessage
     /**
      * @inheritDoc
      */
-    public function getMessage()
+    public function getMessage(): string
     {
         return $this->message;
     }
@@ -176,7 +171,7 @@ class ConversationMessage extends DatabaseObject implements IMessage
     /**
      * @inheritDoc
      */
-    public function getLink()
+    public function getLink(): string
     {
         return LinkHandler::getInstance()->getLink('Conversation', [
             'object' => $this->getConversation(),
@@ -188,7 +183,7 @@ class ConversationMessage extends DatabaseObject implements IMessage
     /**
      * @inheritDoc
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         if ($this->messageID == $this->getConversation()->firstMessageID) {
             return $this->getConversation()->subject;
@@ -200,7 +195,7 @@ class ConversationMessage extends DatabaseObject implements IMessage
     /**
      * @inheritDoc
      */
-    public function isVisible()
+    public function isVisible(): bool
     {
         return true;
     }
@@ -208,7 +203,7 @@ class ConversationMessage extends DatabaseObject implements IMessage
     /**
      * @inheritDoc
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getFormattedMessage();
     }

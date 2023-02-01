@@ -25,7 +25,7 @@ class ConversationUserNotificationObject extends DatabaseObjectDecorator impleme
     /**
      * @inheritDoc
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->subject;
     }
@@ -33,7 +33,7 @@ class ConversationUserNotificationObject extends DatabaseObjectDecorator impleme
     /**
      * @inheritDoc
      */
-    public function getURL()
+    public function getURL(): string
     {
         return $this->getLink();
     }

@@ -22,7 +22,7 @@ class ConversationUserNotificationEvent extends AbstractUserNotificationEvent im
     /**
      * @inheritDoc
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->getLanguage()->get('wcf.user.notification.conversation.title');
     }
@@ -30,7 +30,7 @@ class ConversationUserNotificationEvent extends AbstractUserNotificationEvent im
     /**
      * @inheritDoc
      */
-    public function getMessage()
+    public function getMessage(): string
     {
         return $this->getLanguage()->getDynamicVariable('wcf.user.notification.conversation.message', [
             'author' => $this->author,
@@ -58,7 +58,7 @@ class ConversationUserNotificationEvent extends AbstractUserNotificationEvent im
      * @inheritDoc
      * @since   5.2
      */
-    public function getEmailTitle()
+    public function getEmailTitle(): string
     {
         return $this->getLanguage()->getDynamicVariable('wcf.user.notification.conversation.mail.title', [
             'author' => $this->author,
@@ -69,7 +69,7 @@ class ConversationUserNotificationEvent extends AbstractUserNotificationEvent im
     /**
      * @inheritDoc
      */
-    public function getLink()
+    public function getLink(): string
     {
         return $this->getUserNotificationObject()->getLink();
     }
@@ -77,7 +77,7 @@ class ConversationUserNotificationEvent extends AbstractUserNotificationEvent im
     /**
      * @inheritDoc
      */
-    public function checkAccess()
+    public function checkAccess(): bool
     {
         return $this->getUserNotificationObject()->canRead();
     }
