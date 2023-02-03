@@ -38,8 +38,8 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker
         if ($this->count === null) {
             $this->count = 0;
             $sql = "SELECT  MAX(messageID) AS messageID
-                    FROM    wcf" . WCF_N . "_conversation_message";
-            $statement = WCF::getDB()->prepareStatement($sql);
+                    FROM    wcf1_conversation_message";
+            $statement = WCF::getDB()->prepare($sql);
             $statement->execute();
             $row = $statement->fetchArray();
             if ($row !== false) {
@@ -82,10 +82,10 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker
         $attachmentObjectType = ObjectTypeCache::getInstance()
             ->getObjectTypeByName('com.woltlab.wcf.attachment.objectType', 'com.woltlab.wcf.conversation.message');
         $sql = "SELECT  COUNT(*) AS attachments
-                FROM    wcf" . WCF_N . "_attachment
+                FROM    wcf1_attachment
                 WHERE   objectTypeID = ?
                     AND objectID = ?";
-        $attachmentStatement = WCF::getDB()->prepareStatement($sql);
+        $attachmentStatement = WCF::getDB()->prepare($sql);
 
         // retrieve permissions
         $userIDs = [];
@@ -136,13 +136,13 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker
             $updateData[$message->messageID] = $data;
         }
 
-        $sql = "UPDATE  wcf" . WCF_N . "_conversation_message
+        $sql = "UPDATE  wcf1_conversation_message
                 SET     attachments = ?,
                         message = ?,
                         enableHtml = ?,
                         hasEmbeddedObjects = ?
                 WHERE   messageID = ?";
-        $statement = WCF::getDB()->prepareStatement($sql);
+        $statement = WCF::getDB()->prepare($sql);
 
         WCF::getDB()->beginTransaction();
         foreach ($updateData as $messageID => $data) {

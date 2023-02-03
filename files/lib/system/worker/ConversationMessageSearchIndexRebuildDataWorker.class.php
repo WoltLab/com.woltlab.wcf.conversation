@@ -31,8 +31,8 @@ final class ConversationMessageSearchIndexRebuildDataWorker extends AbstractRebu
         if ($this->count === null) {
             $this->count = 0;
             $sql = "SELECT  MAX(messageID) AS messageID
-                    FROM    wcf" . WCF_N . "_conversation_message";
-            $statement = WCF::getDB()->prepareStatement($sql);
+                    FROM    wcf1_conversation_message";
+            $statement = WCF::getDB()->prepare($sql);
             $statement->execute();
             $row = $statement->fetchArray();
             if ($row !== false) {
