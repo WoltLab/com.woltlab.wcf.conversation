@@ -4,7 +4,6 @@
  * @author  Alexander Ebert
  * @copyright   2001-2021 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @module  WoltLabSuite/Core/Conversation/Ui/Participant/Add
  */
 
 import * as Ajax from "WoltLabSuite/Core/Ajax";

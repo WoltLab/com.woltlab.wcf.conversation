@@ -4,7 +4,6 @@
  * @author  Alexander Ebert
  * @copyright   2001-2021 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @module  WoltLabSuite/Core/Conversation/Ui/Participant/Add
  */
 define(["require", "exports", "tslib", "WoltLabSuite/Core/Ajax", "WoltLabSuite/Core/Dom/Util", "WoltLabSuite/Core/Ui/Dialog", "WoltLabSuite/Core/Ui/Notification", "WoltLabSuite/Core/Ui/ItemList/User", "WoltLabSuite/Core/Language"], function (require, exports, tslib_1, Ajax, Util_1, Dialog_1, UiNotification, UiItemListUser, Language) {
     "use strict";

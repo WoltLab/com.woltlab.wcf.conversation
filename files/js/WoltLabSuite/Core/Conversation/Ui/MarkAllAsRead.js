@@ -4,7 +4,6 @@
  * @author  Marcel Werk
  * @copyright  2001-2022 WoltLab GmbH
  * @license  GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @module  WoltLabSuite/Conversation/Ui/MarkAllAsRead
  * @since 6.0
  */
 define(["require", "exports", "tslib", "WoltLabSuite/Core/Ajax", "WoltLabSuite/Core/Ui/Notification"], function (require, exports, tslib_1, Ajax_1, UiNotification) {
