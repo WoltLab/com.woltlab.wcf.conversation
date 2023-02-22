@@ -1,6 +1,6 @@
 {
   "include": [
-    "node_modules/@woltlab/wcf/global.d.ts",
+    "node_modules/@woltlab/d.ts/global.d.ts",
     "ts/**/*"
   ],
   "compilerOptions": {
@@ -21,7 +21,7 @@
     "baseUrl": ".",
     "paths": {
       "*": [
-        "node_modules/@woltlab/wcf/ts/*"
+        "node_modules/@woltlab/d.ts/*"
       ]
     },
     "importHelpers": true,
