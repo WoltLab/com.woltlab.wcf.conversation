@@ -154,8 +154,6 @@
 			'wcf.global.subject': '{jslang}wcf.global.subject{/jslang}',
 			'wcf.message.bbcode.code.copy': '{jslang}wcf.message.bbcode.code.copy{/jslang}',
 			'wcf.message.error.editorAlreadyInUse': '{jslang}wcf.message.error.editorAlreadyInUse{/jslang}',
-			'wcf.moderation.report.reportContent': '{jslang}wcf.moderation.report.reportContent{/jslang}',
-			'wcf.moderation.report.success': '{jslang}wcf.moderation.report.success{/jslang}',
 			'wcf.conversation.label.assignLabels': '{jslang}wcf.conversation.label.assignLabels{/jslang}'
 		});
 		
@@ -183,10 +181,6 @@
 					quoteManager: $quoteManager
 				});
 			});
-		{/if}
-		
-		{if $__wcf->session->getPermission('user.profile.canReportContent')}
-			new WCF.Moderation.Report.Content('com.woltlab.wcf.conversation.message', '.jsReportConversationMessage');
 		{/if}
 	});
 	

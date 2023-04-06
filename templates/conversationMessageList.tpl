@@ -96,8 +96,14 @@
 								</a>
 							</li>
 							{if $message->userID != $__wcf->getUser()->userID && $__wcf->session->getPermission('user.profile.canReportContent')}
-								<li class="jsReportConversationMessage jsOnly" data-object-id="{$message->messageID}">
-									<button type="button" title="{lang}wcf.moderation.report.reportContent{/lang}" class="button jsTooltip">
+								<li>
+									<button
+										type="button"
+										title="{lang}wcf.moderation.report.reportContent{/lang}"
+										class="button jsTooltip"
+										data-report-content="com.woltlab.wcf.conversation.message"
+										data-object-id="{$message->messageID}"
+									>
 										{icon name='triangle-exclamation'}
 										<span class="invisible">{lang}wcf.moderation.report.reportContent{/lang}</span>
 									</button>
