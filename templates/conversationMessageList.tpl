@@ -86,8 +86,7 @@
 								data-is-quoted="{if $__quoteFullQuote|isset && $message->messageID|in_array:$__quoteFullQuote}1{else}0{/if}"
 							>
 								<a
-									rel="nofollow"
-									href="{link controller='ConversationMessageAdd' id=$conversation->conversationID quoteMessageID=$message->messageID}{/link}"
+									href="#"
 									title="{lang}wcf.message.quote.quoteMessage{/lang}"
 									class="button jsTooltip{if $__quoteFullQuote|isset && $message->messageID|in_array:$__quoteFullQuote} active{/if}"
 								>
