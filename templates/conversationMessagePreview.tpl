@@ -5,7 +5,7 @@
 	
 	<div>
 		<div class="containerHeadline">
-			<h3>{user object=$message->getUserProfile()} <small class="separatorLeft">{@$message->time|time}</small></h3>
+			<h3>{user object=$message->getUserProfile()} <small class="separatorLeft">{time time=$message->time}</small></h3>
 		</div>
 		
 		<div>{@$message->getExcerpt()}</div>

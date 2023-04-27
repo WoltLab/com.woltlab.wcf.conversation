@@ -11,7 +11,7 @@
 							<div class="messageHeaderBox">
 								<h2 class="messageTitle">
 									{user object=$modificationLogEntry->getUserProfile() class='username'}
-									<small class="separatorLeft">{@$modificationLogEntry->time|time}</small>
+									<small class="separatorLeft">{time time=$modificationLogEntry->time}</small>
 								</h2>
 								<div>{@$modificationLogEntry}</div>
 							</div>

@@ -14,7 +14,7 @@
 				<header class="messageHeader">
 					<div class="messageHeaderBox">
 						<ul class="messageHeaderMetaData">
-							<li><a href="{link controller='Conversation' object=$conversation}messageID={@$message->messageID}{/link}#message{$message->messageID}" class="permalink messagePublicationTime">{@$message->time|time}</a></li>
+							<li><a href="{link controller='Conversation' object=$conversation}messageID={@$message->messageID}{/link}#message{$message->messageID}" class="permalink messagePublicationTime">{time time=$message->time}</a></li>
 							
 							{event name='messageHeaderMetaData'}
 						</ul>

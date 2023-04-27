@@ -9,7 +9,7 @@
 					
 					<ul class="messageHeaderMetaData">
 						<li>{user object=$message->getUserProfile() class='username'}</li>
-						<li><span class="messagePublicationTime">{@$message->getTime()|time}</span></li>
+						<li><span class="messagePublicationTime">{time time=$message->getTime()}</span></li>
 						
 						{event name='messageHeaderMetaData'}
 					</ul>

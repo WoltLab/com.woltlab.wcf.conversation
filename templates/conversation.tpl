@@ -30,7 +30,7 @@
 				
 				<li>
 					{icon name='clock'}
-					<a href="{$conversation->getLink()}">{@$conversation->time|time}</a>
+					<a href="{$conversation->getLink()}">{time time=$conversation->time}</a>
 				</li>
 				
 				{if $conversation->isClosed}
@@ -114,7 +114,7 @@
 							</p>
 							<dl class="plain inlineDataList small">
 								<dt>{lang}wcf.conversation.lastVisitTime{/lang}</dt>
-								<dd>{if $participant->lastVisitTime}{@$participant->lastVisitTime|time}{else}-{/if}</dd>
+								<dd>{if $participant->lastVisitTime}{time time=$participant->lastVisitTime}{else}-{/if}</dd>
 							</dl>
 						</div>
 					</div>

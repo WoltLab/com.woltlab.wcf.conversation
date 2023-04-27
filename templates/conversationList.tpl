@@ -245,14 +245,14 @@
 							
 							<ul class="inlineList dotSeparated small messageGroupInfo">
 								<li class="messageGroupAuthor">{user object=$conversation->getUserProfile()}</li>
-								<li class="messageGroupTime">{@$conversation->time|time}</li>
+								<li class="messageGroupTime">{time time=$conversation->time}</li>
 								<li class="messageGroupEditLink jsOnly"><a href="#" class="jsConversationInlineEditor">{lang}wcf.global.button.edit{/lang}</a></li>
 								{event name='messageGroupInfo'}
 							</ul>
 							
 							<ul class="messageGroupInfoMobile">
 								<li class="messageGroupAuthorMobile">{$conversation->username}</li>
-								<li class="messageGroupLastPostTimeMobile">{@$conversation->lastPostTime|time}</li>
+								<li class="messageGroupLastPostTimeMobile">{time time=$conversation->lastPostTime}</li>
 							</ul>
 							
 							{if $conversation->getParticipantSummary()|count}
@@ -293,7 +293,7 @@
 										<p>
 											{user object=$conversation->getLastPosterProfile()}
 										</p>
-										<small>{@$conversation->lastPostTime|time}</small>
+										<small>{time time=$conversation->lastPostTime}</small>
 									</div>
 								</div>
 							{/if}
