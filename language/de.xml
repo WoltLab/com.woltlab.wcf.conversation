@@ -208,7 +208,7 @@
 		<item name="wcf.user.notification.conversation.title"><![CDATA[Neue Konversation]]></item>
 		<item name="wcf.user.notification.conversation.mail.plaintext"><![CDATA[{@$author} hat die Konversation „{@$conversation->getTitle()}“ [URL:{@$conversation->getLink()}] gestartet:]]></item>
 		<item name="wcf.user.notification.conversation.mail.html"><![CDATA[<p><strong>{$author}</strong> hat die Konversation <a href="{$conversation->getLink()}">{$conversation->getTitle()}</a> gestartet:</p>]]></item>
-		<item name="wcf.user.notification.conversation.mail.title"><![CDATA[Neue Konversation von "{@$author->username}"]]></item>
+		<item name="wcf.user.notification.conversation.mail.title"><![CDATA["{@$author}" hat die Konversation "{@$conversation->getTitle()}" gestartet]]></item>
 		<item name="wcf.user.notification.com.woltlab.wcf.conversation"><![CDATA[Konversationen]]></item>
 		<item name="wcf.user.notification.com.woltlab.wcf.conversation.notification.conversation"><![CDATA[Neue Konversation]]></item>
 		<item name="wcf.user.notification.com.woltlab.wcf.conversation.message.notification.conversationMessage"><![CDATA[Antwort auf bestehende Konversation]]></item>
