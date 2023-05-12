@@ -5,8 +5,8 @@
 		<packagename language="de">WoltLab Suite Core: Konversationen</packagename>
 		<packagedescription>Private conversations between multiple users</packagedescription>
 		<packagedescription language="de">Private Konversationen zwischen mehreren Benutzern</packagedescription>
-		<version>5.5.5</version>
-		<date>2022-09-22</date>
+		<version>5.5.12 dev 1</version>
+		<date>2023-05-12</date>
 	</packageinformation>
 	
 	<authorinformation>
@@ -15,7 +15,7 @@
 	</authorinformation>
 	
 	<requiredpackages>
-		<requiredpackage minversion="5.5.5">com.woltlab.wcf</requiredpackage>
+		<requiredpackage minversion="5.5.12 dev 1">com.woltlab.wcf</requiredpackage>
 	</requiredpackages>
 	
 	<excludedpackages>
@@ -40,32 +40,7 @@
 		<instruction type="page" />
 	</instructions>
 	
-	<instructions type="update" fromversion="5.4.*">
-		<instruction type="file" />
-		<instruction type="template" />
-		<instruction type="database">acp/database/update_com.woltlab.wcf.conversation_5.5_step1.php</instruction>
-		<instruction type="database">acp/database/update_com.woltlab.wcf.conversation_5.5_step2.php</instruction>
-
-		<instruction type="acpTemplateDelete" />
-		<instruction type="fileDelete" />
-		<instruction type="templateDelete" />
-
-		<instruction type="language" />
-		<instruction type="objectType" />
-
-		<!-- Updates to <moddefaultvalue> only -->
-		<instruction type="userGroupOption" />
-
-		<instruction type="script">acp/update_com.woltlab.wcf.conversation_5.5_cleanup_orphaned_attachments.php</instruction>
-	</instructions>
-
-	<instructions type="update" fromversion="5.5.3">
-		<instruction type="language"/>
-		
-		<instruction type="userGroupOption"/>
-	</instructions>
-
-	<instructions type="update" fromversion="5.5.5 dev 1">
-		<void/>
+	<instructions type="update" fromversion="5.5.5">
+		<instruction type="template">templates_update.tar</instruction>
 	</instructions>
 </package>
