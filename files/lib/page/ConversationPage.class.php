@@ -24,7 +24,6 @@ use wcf\system\request\LinkHandler;
 use wcf\system\user\signature\SignatureCache;
 use wcf\system\WCF;
 use wcf\util\HeaderUtil;
-use wcf\util\StringUtil;
 
 /**
  * Shows a conversation.
