@@ -48,6 +48,7 @@
 		<instruction type="objectType" />
 		<instruction type="templateListener" />
 
+		<instruction type="fileDelete" />
 		<instruction type="templateDelete" />
 	</instructions>
 </package>
