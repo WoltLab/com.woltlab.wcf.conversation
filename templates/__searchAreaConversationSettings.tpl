@@ -1,4 +1,4 @@
-{if $__searchAreaInitialized|empty && $templateName|substr:0:12 == 'conversation'}
+{if $__searchAreaInitialized|empty && $templateName|str_starts_with:'conversation'}
 	{assign var='__searchObjectTypeName' value='com.woltlab.wcf.conversation.message'}
 	
 	{if $__wcf->getActivePage()->identifier == 'com.woltlab.wcf.conversation.Conversation'}
