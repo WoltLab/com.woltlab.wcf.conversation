@@ -21,32 +21,8 @@
 .sidebar .box.conversationQuota .boxContent {
 	text-align: center;
 }
-.conversationUsageBar {
-	background-color: rgba(165, 223, 65, 1);
-	height: 5px;
-
-	> span {
-		background-color: rgba(76, 169, 22, 1);
-		color: transparent;
-		display: block;
-		height: 100%;
-	}
-
-	&.yellow {
-		background-color: rgba(254, 207, 35, 1);
-
-		> span {
-			background-color: rgba(253, 146, 21, 1);
-		}
-	}
-
-	&.red {
-		background-color: rgba(255, 205, 210, 1);
-
-		> span {
-			background-color: rgba(244, 67, 54, 1);
-		}
-	}
+.conversationQuotaMeter {
+	width: 100%;
 }
 
 .conversationItem {
