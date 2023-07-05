@@ -127,7 +127,7 @@
 		<item name="wcf.conversation.searchConversation"><![CDATA[Search This Conversation Only]]></item>
 		<item name="wcf.conversation.searchedConversation"><![CDATA[Only search conversation <a href="{link controller='Conversation' object=$searchedConversation}{/link}">{$searchedConversation->getTitle()}</a>]]></item>
 		<item name="wcf.conversation.participants.other"><![CDATA[and {if $conversation->participants - $participantSummaryCount == 1}one other{else}{#$conversation->participants-$participantSummaryCount} others{/if}]]></item>
-		<item name="wcf.conversation.attachments"><![CDATA[Conversation contains {#$conversation->attachments} attachment{if $conversation->attachments != 1}s{/if}]]></item>
+		<item name="wcf.conversation.attachments"><![CDATA[Conversation Contains {#$conversation->attachments} Attachment{if $conversation->attachments != 1}s{/if}]]></item>
 		<item name="wcf.conversation.error.mailboxIsFull"><![CDATA[You have reached your maximum conversations limit and cannot create new conversations.]]></item>
 		<item name="wcf.conversation.message.editNote"><![CDATA[{$message->username} edited this message {#$message->editCount} times, last: {time time=$message->lastEditTime}.]]></item>
 		<item name="wcf.conversation.noParticipantsWarning"><![CDATA[You are about to reply to a conversation without other participants, nobody is going to read your message!]]></item>
