@@ -201,7 +201,7 @@ class ConversationListPage extends SortablePage
             if (!empty($userIDs)) {
                 // The condition is split into two branches in order to account for invisible participants.
                 // Invisible participants are only visible to the conversation starter and remain invisible
-                // until the write their first message.
+                // until they write their first message.
                 //
                 // We need to protect these users from being exposed as participants by including them for
                 // any conversation that the current user has started. For all other conversations, users
