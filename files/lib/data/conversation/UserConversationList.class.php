@@ -106,6 +106,7 @@ class UserConversationList extends ConversationList
             conversation.*,
             (CASE
                 WHEN    conversation_to_user.leftAt <> 0
+                        AND conversation.lastPostTime > conversation_to_user.leftAt
                 THEN    conversation_to_user.leftAt
                 ELSE    conversation.lastPostTime
             END) AS lastPostTime";
