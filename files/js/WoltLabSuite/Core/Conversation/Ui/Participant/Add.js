@@ -43,12 +43,14 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Ajax", "WoltLabSuite/C
          * Shows the success message and closes the dialog overlay.
          */
         handleResponse(data) {
-            if (data.returnValues.errorMessage) {
+            if ("errorMessage" in data.returnValues) {
                 Util_1.default.innerError(document.getElementById("participantsInput").closest(".inputItemList"), data.returnValues.errorMessage);
                 return;
             }
-            if (data.returnValues.count) {
-                UiNotification.show(data.returnValues.successMessage, () => window.location.reload());
+            if ("count" in data.returnValues) {
+                UiNotification.show(data.returnValues.successMessage, () => {
+                    window.location.reload();
+                });
             }
             Dialog_1.default.close(this);
         }
@@ -70,7 +72,9 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Ajax", "WoltLabSuite/C
                 restrictUserGroupIDs: data.returnValues.restrictUserGroupIDs,
                 csvPerType: true,
             });
-            buttonSubmit.addEventListener("click", () => this.submit());
+            buttonSubmit.addEventListener("click", () => {
+                this.submit();
+            });
         }
         /**
          * Sends a request to add participants.

@@ -96,7 +96,9 @@ class UiSubjectEditor implements AjaxCallbackObject, DialogCallbackObject {
             }
           });
 
-          content.querySelector(".jsButtonSave")!.addEventListener("click", (ev) => this.saveEdit(ev));
+          content.querySelector(".jsButtonSave")!.addEventListener("click", (ev) => {
+            this.saveEdit(ev);
+          });
         },
         onShow: () => {
           this.subject.value = this.getCurrentValue();
