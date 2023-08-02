@@ -23,11 +23,14 @@ interface AjaxResponseData extends ResponseData {
 }
 
 interface AjaxAddParticipantsData extends AjaxResponseData {
-  returnValues: {
-    count?: number;
-    errorMessage?: string;
-    successMessage?: string;
-  };
+  returnValues:
+    | {
+        errorMessage: string;
+      }
+    | {
+        count: number;
+        successMessage: string;
+      };
 }
 
 interface AjaxGetAddParticipantsFormData extends AjaxResponseData {
@@ -76,16 +79,18 @@ class UiParticipantAdd implements AjaxCallbackObject, DialogCallbackObject {
    * Shows the success message and closes the dialog overlay.
    */
   protected handleResponse(data: AjaxAddParticipantsData): void {
-    if (data.returnValues.errorMessage) {
+    if ("errorMessage" in data.returnValues) {
       DomUtil.innerError(
-        document.getElementById("participantsInput")!.closest(".inputItemList") as HTMLElement,
+        document.getElementById("participantsInput")!.closest(".inputItemList")!,
         data.returnValues.errorMessage,
       );
       return;
     }
 
-    if (data.returnValues.count) {
-      UiNotification.show(data.returnValues.successMessage, () => window.location.reload());
+    if ("count" in data.returnValues) {
+      UiNotification.show(data.returnValues.successMessage, () => {
+        window.location.reload();
+      });
     }
 
     UiDialog.close(this);
@@ -111,7 +116,9 @@ class UiParticipantAdd implements AjaxCallbackObject, DialogCallbackObject {
       restrictUserGroupIDs: data.returnValues.restrictUserGroupIDs,
       csvPerType: true,
     });
-    buttonSubmit.addEventListener("click", () => this.submit());
+    buttonSubmit.addEventListener("click", () => {
+      this.submit();
+    });
   }
 
   /**
@@ -133,9 +140,9 @@ class UiParticipantAdd implements AjaxCallbackObject, DialogCallbackObject {
       participantsGroupIDs: participantsGroupIDs,
       visibility: null as null | string,
     };
-    const visibility = UiDialog.getDialog(this)!.content.querySelector(
+    const visibility = UiDialog.getDialog(this)!.content.querySelector<HTMLInputElement>(
       'input[name="messageVisibility"]:checked, input[name="messageVisibility"][type="hidden"]',
-    ) as HTMLInputElement;
+    );
 
     if (visibility) {
       parameters.visibility = visibility.value;
