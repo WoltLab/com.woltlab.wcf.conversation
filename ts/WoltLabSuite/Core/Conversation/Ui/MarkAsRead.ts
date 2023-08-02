@@ -30,7 +30,7 @@ export function setup(): void {
         (event) => {
           event.preventDefault();
 
-          const conversation = el.closest(".conversation") as HTMLElement;
+          const conversation = el.closest<HTMLElement>(".conversation")!;
           if (!conversation.classList.contains("new")) {
             return;
           }
