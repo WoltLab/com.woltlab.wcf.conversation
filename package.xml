@@ -3,8 +3,8 @@
 	<packageinformation>
 		<packagename>WoltLab Suite Core: Conversations</packagename>
 		<packagename language="de">WoltLab Suite Core: Konversationen</packagename>
-		<packagedescription>Private conversations between multiple users</packagedescription>
-		<packagedescription language="de">Private Konversationen zwischen mehreren Benutzern</packagedescription>
+		<packagedescription>Private conversations between multiple users.</packagedescription>
+		<packagedescription language="de">Private Konversationen zwischen mehreren Benutzern.</packagedescription>
 		<version>6.0.0 Beta 1</version>
 		<date>2023-08-17</date>
 	</packageinformation>
