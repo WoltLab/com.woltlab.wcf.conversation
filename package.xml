@@ -40,6 +40,18 @@
 		<instruction type="page" />
 	</instructions>
 
+	<instructions type="update" fromversion="5.5.*">
+		<instruction type="file" />
+		<instruction type="template" />
+
+		<instruction type="language" />
+		<instruction type="objectType" />
+		<instruction type="templateListener" />
+
+		<instruction type="fileDelete" />
+		<instruction type="templateDelete" />
+	</instructions>
+
 	<instructions type="update" fromversion="6.0.0 Alpha 8">
 		<void/>
 	</instructions>
