@@ -6,10 +6,7 @@ $finder = PhpCsFixer\Finder::create()
 return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
     ->setRules([
-        '@PSR1' => true,
-        '@PSR2' => true,
-        '@PSR12' => true,
-        '@PER' => true,
+        '@PER-CS2.0' => true,
 
         'array_push' => true,
         'backtick_to_shell_exec' => true,
