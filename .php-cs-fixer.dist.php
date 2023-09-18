@@ -7,6 +7,7 @@ return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
     ->setRules([
         '@PER-CS2.0' => true,
+        'single_line_empty_body' => false,
 
         'array_push' => true,
         'backtick_to_shell_exec' => true,
