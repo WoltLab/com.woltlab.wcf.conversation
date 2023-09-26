@@ -131,7 +131,7 @@
 		<item name="wcf.conversation.error.mailboxIsFull"><![CDATA[You have reached your maximum conversations limit and cannot create new conversations.]]></item>
 		<item name="wcf.conversation.message.editNote"><![CDATA[{$message->username} edited this message {#$message->editCount} times, last: {time time=$message->lastEditTime}.]]></item>
 		<item name="wcf.conversation.noParticipantsWarning"><![CDATA[You are about to reply to a conversation without other participants, nobody is going to read your message!]]></item>
-		<item name="wcf.conversation.invisibleParticipantWarning"><![CDATA[You are about to reply to this conversation as an invisible participant. Sending a reply will make your participation visible to all other participants and the reply will be visible to all participants.]]></item>
+		<item name="wcf.conversation.invisibleParticipantWarning"><![CDATA[You are currently an invisible participant of this conversation. Any message you write in this conversation will be visible to every participant and you will no longer be invisible to others.]]></item>
 		<item name="wcf.conversation.message.permalink"><![CDATA[Permalink to {#$startIndex}. message]]></item>
 		<item name="wcf.conversation.markAsRead.doubleClick"><![CDATA[Double-Click to Mark This Conversation Read]]></item>
 		<item name="wcf.conversation.visibility"><![CDATA[Read Access]]></item>
