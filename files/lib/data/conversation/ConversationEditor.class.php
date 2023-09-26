@@ -171,13 +171,13 @@ class ConversationEditor extends DatabaseObjectEditor
      */
     public function removeParticipant($userID)
     {
-        $sql = "SELECT  joinedAt
+        $sql = "SELECT  joinedAt, isInvisible
                 FROM    wcf1_conversation_to_user
                 WHERE   conversationID = ?
                     AND participantID = ?";
         $statement = WCF::getDB()->prepare($sql, 1);
         $statement->execute([$this->conversationID, $userID]);
-        $joinedAt = $statement->fetchSingleColumn();
+        $participantData = $statement->fetchSingleRow();
 
         $sql = "SELECT      messageID
                 FROM        wcf1_conversation_message
@@ -188,7 +188,7 @@ class ConversationEditor extends DatabaseObjectEditor
         $statement = WCF::getDB()->prepare($sql, 1);
         $statement->execute([
             $this->conversationID,
-            $joinedAt,
+            $participantData['joinedAt'],
             TIME_NOW,
         ]);
         $lastMessageID = $statement->fetchSingleColumn();
@@ -208,8 +208,8 @@ class ConversationEditor extends DatabaseObjectEditor
             $userID,
         ]);
 
-        // decrease participant count unless it is the author
-        if ($userID != $this->userID) {
+        // The author and invisible participants are not included in the count.
+        if ($userID != $this->userID && !$participantData['isInvisible']) {
             $this->updateCounters([
                 'participants' => -1,
             ]);
