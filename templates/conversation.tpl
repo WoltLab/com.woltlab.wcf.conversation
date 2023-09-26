@@ -173,8 +173,8 @@
 		});
 		
 		{if $conversation->canReply()}
-			require(['WoltLabSuite/Core/Ui/Message/Reply'], function(UiMessageReply) {
-				new UiMessageReply({
+			require(['WoltLabSuite/Core/Conversation/Ui/Message/Reply'], function({ Reply }) {
+				new Reply({
 					ajax: {
 						className: 'wcf\\data\\conversation\\message\\ConversationMessageAction'
 					},
