@@ -85,6 +85,7 @@ class ConversationEditor extends DatabaseObjectEditor
                     VALUES      (?, ?, ?, ?, ?)
                     ON DUPLICATE KEY
                     UPDATE      hideConversation = 0,
+                                isInvisible = 0,
                                 leftAt = 0,
                                 leftByOwnChoice = 1";
             $statement = WCF::getDB()->prepareStatement($sql);
