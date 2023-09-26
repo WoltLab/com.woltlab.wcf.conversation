@@ -1084,8 +1084,15 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
         $this->conversation->removeParticipant($this->parameters['userID']);
         $this->conversation->updateParticipantSummary();
 
-        ConversationModificationLogHandler::getInstance()
-            ->removeParticipant($this->conversation->getDecoratedObject(), $this->parameters['userID']);
+        $userConversation = Conversation::getUserConversation(
+            $this->conversation->conversationID,
+            $this->parameters['userID']
+        );
+
+        if (!$userConversation->isInvisible) {
+            ConversationModificationLogHandler::getInstance()
+                ->removeParticipant($this->conversation->getDecoratedObject(), $this->parameters['userID']);
+        }
 
         // reset storage
         UserStorageHandler::getInstance()->reset([$this->parameters['userID']], 'unreadConversationCount');
