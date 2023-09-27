@@ -395,39 +395,16 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
      */
     public function hasOtherParticipants(): bool
     {
-        if ($this->userID == WCF::getUser()->userID) {
-            // author
-            if ($this->participants == 0) {
-                return false;
-            }
+        $participantList = new ConversationParticipantList(
+            $this->conversationID,
+            WCF::getUser()->userID,
+            $this->userID == WCF::getUser()->userID
+        );
+        $participantList->getConditionBuilder()->add('conversation_to_user.hideConversation <> ?', [self::STATE_LEFT]);
+        $participantList->getConditionBuilder()->add('conversation_to_user.leftAt = ?', [0]);
+        $participantList->readObjectIDs();
 
-            return true;
-        } else {
-            if ($this->participants > 1) {
-                return true;
-            }
-            if ($this->isInvisible && $this->participants > 0) {
-                return true;
-            }
-
-            if ($this->userID) {
-                // check if author has left the conversation
-                $sql = "SELECT  hideConversation
-                        FROM    wcf" . WCF_N . "_conversation_to_user
-                        WHERE   conversationID = ?
-                            AND participantID = ?";
-                $statement = WCF::getDB()->prepareStatement($sql);
-                $statement->execute([$this->conversationID, $this->userID]);
-                $row = $statement->fetchArray();
-                if ($row !== false) {
-                    if ($row['hideConversation'] != self::STATE_LEFT) {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
+        return \count($participantList->getObjectIDs()) > 1;
     }
 
     /**
