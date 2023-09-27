@@ -4,11 +4,13 @@
 		
 		<div class="messageContent messageQuickReplyContent"{if $pageNo < $pages} data-placeholder="{lang}wcf.conversation.reply{/lang}"{/if}>
 			<div class="messageBody">
-				{if !$conversation->isDraft && !$conversation->hasOtherParticipants()}
-					<p class="warning" role="status">{lang}wcf.conversation.noParticipantsWarning{/lang}</p>
-				{/if}
-				{if $participants[$__wcf->user->userID]->isInvisible}
-					<p class="warning invisibleParticipantWarning" role="status">{lang}wcf.conversation.invisibleParticipantWarning{/lang}</p>
+				{if !$conversation->isDraft}
+					{if !$conversation->hasOtherParticipants()}
+						<p class="warning" role="status">{lang}wcf.conversation.noParticipantsWarning{/lang}</p>
+					{/if}
+					{if $participants[$__wcf->user->userID]->isInvisible}
+						<p class="warning invisibleParticipantWarning" role="status">{lang}wcf.conversation.invisibleParticipantWarning{/lang}</p>
+					{/if}
 				{/if}
 
 				{event name='beforeWysiwyg'}
