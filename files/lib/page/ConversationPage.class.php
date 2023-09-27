@@ -303,6 +303,11 @@ class ConversationPage extends MultipleLinkPage
             }
         }
 
+        // Drafts do not store their participants in conversation_to_user.
+        if ($this->conversation->isDraft) {
+            $visibleParticipantIDs[] = $this->conversation->userID;
+        }
+
         // load modification log entries
         $this->modificationLogList = new ConversationLogModificationLogList($this->conversation->conversationID);
         $this->modificationLogList->getConditionBuilder()
