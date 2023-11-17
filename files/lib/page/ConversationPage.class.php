@@ -212,8 +212,7 @@ class ConversationPage extends MultipleLinkPage
         // update last visit time count
         if (
             $this->conversation->isNew()
-            && (
-                $this->objectList->getMaxPostTime() > $this->conversation->lastVisitTime
+            && ($this->objectList->getMaxPostTime() > $this->conversation->lastVisitTime
                 || ($this->conversation->joinedAt && !\count($this->objectList))
             )
         ) {
@@ -383,6 +382,10 @@ class ConversationPage extends MultipleLinkPage
         $statement = WCF::getDB()->prepareStatement($sql, 1);
         $statement->execute($this->objectList->getConditionBuilder()->getParameters());
         $row = $statement->fetchArray();
+        if ($row === false) {
+            return;
+        }
+
         HeaderUtil::redirect(
             LinkHandler::getInstance()->getLink(
                 'Conversation',
