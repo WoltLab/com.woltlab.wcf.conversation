@@ -149,7 +149,7 @@
 {include file='header'}
 
 {if !$items}
-	<p class="info" role="status">{lang}wcf.conversation.noConversations{/lang}</p>
+	<woltlab-core-notice type="info">{lang}wcf.conversation.noConversations{/lang}</woltlab-core-notice>
 {else}
 	<div class="section tabularBox messageGroupList conversationList jsClipboardContainer" data-type="com.woltlab.wcf.conversation.conversation">
 		<ol class="tabularList">

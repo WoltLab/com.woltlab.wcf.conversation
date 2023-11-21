@@ -6,18 +6,21 @@
 			<div class="messageBody">
 				{if !$conversation->isDraft}
 					{if !$conversation->hasOtherParticipants()}
-						<p class="warning" role="status">{lang}wcf.conversation.noParticipantsWarning{/lang}</p>
+						<woltlab-core-notice type="warning">{lang}wcf.conversation.noParticipantsWarning{/lang}</woltlab-core-notice>
 					{/if}
 					{if $participants[$__wcf->user->userID]->isInvisible}
-						<p class="warning invisibleParticipantWarning" role="status">{lang}wcf.conversation.invisibleParticipantWarning{/lang}</p>
+						<woltlab-core-notice type="warning" class="invisibleParticipantWarning">{lang}wcf.conversation.invisibleParticipantWarning{/lang}</woltlab-core-notice>
 					{/if}
 				{/if}
 
 				{event name='beforeWysiwyg'}
 				
-				<textarea id="text" name="text" class="wysiwygTextarea"
-				          data-autosave="com.woltlab.wcf.conversation.messageAdd-{$conversation->conversationID}"
-				          data-support-mention="true"
+				<textarea
+					id="text"
+					name="text"
+					class="wysiwygTextarea"
+					data-autosave="com.woltlab.wcf.conversation.messageAdd-{$conversation->conversationID}"
+					data-support-mention="true"
 				></textarea>
 				{include file='messageFormTabsInline' inConversationQuickReply=true}
 			</div>
