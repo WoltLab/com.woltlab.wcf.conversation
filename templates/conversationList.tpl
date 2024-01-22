@@ -116,6 +116,9 @@
 		<div class="boxContent">
 			{assign var='conversationCount' value=$__wcf->getConversationHandler()->getConversationCount()}
 			{assign var='maxConversationCount' value=$__wcf->session->getPermission('user.conversation.maxConversations')}
+			{if $maxConversationCount == 0}
+				{assign var='maxConversationCount' value=1}
+			{/if}
 			{assign var='conversationCountValue' value=$conversationCount/$maxConversationCount*100}
 			<meter class="conversationQuotaMeter" min="0" max="100" low="90" high="99" value="{$conversationCountValue|ceil}" aria-label="{lang}wcf.conversation.quota{/lang}">
 				{#$conversationCountValue}&nbsp;%
