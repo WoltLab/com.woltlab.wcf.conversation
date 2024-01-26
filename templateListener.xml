@@ -13,6 +13,12 @@
 			<eventname>buttons</eventname>
 			<templatecode><![CDATA[{include file='__userInformationStartConversation'}]]></templatecode>
 		</templatelistener>
+		<templatelistener name="userCardConversationButton">
+			<environment>user</environment>
+			<templatename>userCard</templatename>
+			<eventname>buttons</eventname>
+			<templatecode><![CDATA[{include file='userCard_buttons_conversationButton'}]]></templatecode>
+		</templatelistener>
 		
 		<templatelistener name="searchAreaConversationSettings">
 			<environment>user</environment>
