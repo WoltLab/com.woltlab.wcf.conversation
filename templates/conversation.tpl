@@ -168,7 +168,7 @@
 		
 		{assign var=__supportPaste value=true}
 		{if !$conversation->canReply()}{assign var=__supportPaste value=false}{/if}
-		{include file='__messageQuoteManager' wysiwygSelector='text' supportPaste=$__supportPaste}
+		{include file='shared_messageQuoteManager' wysiwygSelector='text' supportPaste=$__supportPaste}
 		
 		new WCF.Conversation.Message.InlineEditor({@$conversation->conversationID}, $quoteManager);
 		

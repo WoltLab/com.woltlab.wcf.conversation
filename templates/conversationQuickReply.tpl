@@ -34,5 +34,5 @@
 		</div>
 	</article>
 	
-	{include file='wysiwyg'}
+	{include file='shared_wysiwyg'}
 </li>
