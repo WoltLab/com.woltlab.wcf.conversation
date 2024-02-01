@@ -15,5 +15,5 @@
 		<button type="button" class="button" data-type="cancel">{lang}wcf.global.button.cancel{/lang}</button>
 	</div>
 	
-	{include file='wysiwyg' wysiwygEnableUpload=true}
+	{include file='shared_wysiwyg' wysiwygEnableUpload=true}
 </div>

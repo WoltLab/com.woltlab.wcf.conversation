@@ -1,6 +1,6 @@
 {include file='header'}
 
-{include file='formError'}
+{include file='shared_formError'}
 
 <form id="messageContainer" class="jsFormGuard" method="post" action="{if $action == 'edit'}{link controller='ConversationDraftEdit' id=$conversationID}{/link}{else}{link controller='ConversationAdd'}{/link}{/if}">
 	<section class="section">
@@ -167,9 +167,9 @@
 		WCF.Message.Submit.registerButton('text', $('#messageContainer > .formSubmit > input[type=submit]'));
 		new WCF.Message.FormGuard();
 		
-		{include file='__messageQuoteManager' wysiwygSelector='text' supportPaste=true}
+		{include file='shared_messageQuoteManager' wysiwygSelector='text' supportPaste=true}
 	});
 </script>
 
-{include file='wysiwyg'}
+{include file='shared_wysiwyg'}
 {include file='footer'}
