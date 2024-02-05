@@ -134,7 +134,6 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
             'firstMessageID' => $resultValues['returnValues']->messageID,
         ]);
 
-        $conversation->setFirstMessage($resultValues['returnValues']);
         if (!$conversation->isDraft) {
             // fire notification event
             $notificationRecipients = \array_merge(
@@ -144,7 +143,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
             UserNotificationHandler::getInstance()->fireEvent(
                 'conversation',
                 'com.woltlab.wcf.conversation.notification',
-                new ConversationUserNotificationObject($conversation),
+                new ConversationUserNotificationObject(new Conversation($conversation->conversationID)),
                 $notificationRecipients
             );
         }

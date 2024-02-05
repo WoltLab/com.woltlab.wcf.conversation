@@ -4,6 +4,7 @@ namespace wcf\data\conversation;
 
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\label\ConversationLabelList;
+use wcf\system\cache\runtime\ConversationMessageRuntimeCache;
 use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\WCF;
@@ -216,7 +217,7 @@ class UserConversationList extends ConversationList
 
             $labels = $this->loadLabelAssignments();
 
-            $userIDs = [];
+            $userIDs = $messageIDs = [];
             foreach ($this->objects as $conversationID => $conversation) {
                 if (isset($labels[$conversationID])) {
                     foreach ($labels[$conversationID] as $label) {
@@ -230,10 +231,17 @@ class UserConversationList extends ConversationList
                 if ($conversation->lastPosterID) {
                     $userIDs[] = $conversation->lastPosterID;
                 }
+
+                if ($conversation->firstMessageID) {
+                    $messageIDs[] = $conversation->firstMessageID;
+                }
             }
 
-            if (!empty($userIDs)) {
+            if ($userIDs !== []) {
                 UserProfileRuntimeCache::getInstance()->cacheObjectIDs($userIDs);
+            }
+            if ($messageIDs !== []) {
+                ConversationMessageRuntimeCache::getInstance()->cacheObjectIDs($userIDs);
             }
         }
     }
