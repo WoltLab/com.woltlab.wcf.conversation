@@ -15,6 +15,7 @@ use wcf\system\request\LinkHandler;
  *
  * @method  Conversation    getDecoratedObject()
  * @mixin   Conversation
+ * @deprecated 6.1
  */
 class FeedConversation extends DatabaseObjectDecorator implements IFeedEntry
 {

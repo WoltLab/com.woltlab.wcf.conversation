@@ -57,7 +57,7 @@ return (new PhpCsFixer\Config())
         'nullable_type_declaration_for_default_null_value' => true,
         'static_lambda' => true,
 
-        'fully_qualified_strict_types' => true,
+        'fully_qualified_strict_types' => ['leading_backslash_in_global_namespace' => true],
         'no_unused_imports' => true,
         'ordered_imports' => true,
 

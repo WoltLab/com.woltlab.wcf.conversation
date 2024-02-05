@@ -8,6 +8,7 @@ use wcf\data\IPopoverObject;
 use wcf\data\user\group\UserGroup;
 use wcf\data\user\ignore\UserIgnore;
 use wcf\data\user\UserProfile;
+use wcf\system\cache\runtime\ConversationMessageRuntimeCache;
 use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\conversation\ConversationHandler;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
@@ -75,12 +76,6 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
      * @var bool
      */
     protected $canAddUnrestricted;
-
-    /**
-     * first message object
-     * @var ConversationMessage
-     */
-    protected $firstMessage;
 
     /**
      * true if the current user is an active participant of this conversation
@@ -313,28 +308,9 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
         return $this->canAddUnrestricted;
     }
 
-    /**
-     * Returns the first message in this conversation.
-     *
-     * @return  ConversationMessage
-     */
-    public function getFirstMessage()
+    public function getFirstMessage(): ?ConversationMessage
     {
-        if ($this->firstMessage === null) {
-            $this->firstMessage = new ConversationMessage($this->firstMessageID);
-        }
-
-        return $this->firstMessage;
-    }
-
-    /**
-     * Sets the first message.
-     *
-     * @param ConversationMessage $message
-     */
-    public function setFirstMessage(ConversationMessage $message)
-    {
-        $this->firstMessage = $message;
+        return ConversationMessageRuntimeCache::getInstance()->getObject($this->firstMessageID);
     }
 
     /**

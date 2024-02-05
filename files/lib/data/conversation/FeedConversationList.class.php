@@ -16,6 +16,7 @@ use wcf\system\WCF;
  * @method  FeedConversation|null   getSingleObject()
  * @method  FeedConversation|null   search($objectID)
  * @property    FeedConversation[] $objects
+ * @deprecated 6.1
  */
 class FeedConversationList extends ConversationList
 {
