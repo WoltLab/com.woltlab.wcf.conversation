@@ -93,9 +93,9 @@
 			<dt><label for="text">{lang}wcf.conversation.message{/lang}</label></dt>
 			<dd>
 				<textarea id="text" name="text" class="wysiwygTextarea"
-				          data-autosave="com.woltlab.wcf.conversation.conversationAdd"
-				          data-autosave-prompt="true"
-				          data-support-mention="true"
+					data-autosave="com.woltlab.wcf.conversation.conversationAdd"
+					data-autosave-prompt="true"
+					data-support-mention="true"
 				>{$text}</textarea>
 				{if $errorField == 'text'}
 					<small class="innerError">
