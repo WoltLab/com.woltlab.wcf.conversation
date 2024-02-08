@@ -3,7 +3,7 @@
 	<textarea id="{$wysiwygSelector}" class="wysiwygTextarea"
 		data-autosave="com.woltlab.wcf.conversation.messageEdit-{$message->messageID}"
 		data-support-mention="true"
-	>{$messageText}</textarea>
+	>{$text}</textarea>
 	{capture assign=wysiwygContainerID}messageEditor{@$message->messageID}{/capture}
 	{include file='messageFormTabsInline' inConversationInlineEdit=true wysiwygContainerID=$wysiwygContainerID}
 	

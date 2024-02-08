@@ -373,7 +373,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         WCF::getTPL()->assign([
             'defaultSmilies' => SmileyCache::getInstance()->getCategorySmilies(),
             'message' => $this->message,
-            'messageText' => $upcastProcessor->getHtml(),
+            'text' => $upcastProcessor->getHtml(),
             'permissionCanUseSmilies' => 'user.message.canUseSmilies',
             'wysiwygSelector' => 'messageEditor' . $this->message->messageID,
         ]);
