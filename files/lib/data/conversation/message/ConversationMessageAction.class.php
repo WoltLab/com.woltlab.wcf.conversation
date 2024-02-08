@@ -20,6 +20,7 @@ use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
 use wcf\system\flood\FloodControl;
 use wcf\system\html\input\HtmlInputProcessor;
+use wcf\system\html\upcast\HtmlUpcastProcessor;
 use wcf\system\message\censorship\Censorship;
 use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
 use wcf\system\message\QuickReplyManager;
@@ -363,9 +364,16 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
      */
     public function beginEdit()
     {
+        $upcastProcessor = new HtmlUpcastProcessor();
+        $upcastProcessor->process(
+            $this->message->message,
+            'com.woltlab.wcf.conversation.message',
+            $this->message->messageID
+        );
         WCF::getTPL()->assign([
             'defaultSmilies' => SmileyCache::getInstance()->getCategorySmilies(),
             'message' => $this->message,
+            'messageText' => $upcastProcessor->getHtml(),
             'permissionCanUseSmilies' => 'user.message.canUseSmilies',
             'wysiwygSelector' => 'messageEditor' . $this->message->messageID,
         ]);
