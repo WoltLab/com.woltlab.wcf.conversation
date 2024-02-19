@@ -13,35 +13,35 @@ use wcf\system\WCF;
 /**
  * Handles the number of conversations and unread conversations of the active user.
  *
- * @author  Marcel Werk
- * @copyright   2001-2019 WoltLab GmbH
- * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
+ * @author      Marcel Werk
+ * @copyright   2001-2024 WoltLab GmbH
+ * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  */
-class ConversationHandler extends SingletonFactory
+final class ConversationHandler extends SingletonFactory
 {
     /**
      * number of unread conversations
      * @var int[]
      */
-    protected $unreadConversationCount = [];
+    private array $unreadConversationCount = [];
 
     /**
      * number of conversations
      * @var int[]
      */
-    protected $conversationCount = [];
+    private array $conversationCount = [];
 
     /**
      * Returns the number of unread conversations for given user.
-     *
-     * @param int $userID
-     * @param bool $skipCache
-     * @return  int
      */
-    public function getUnreadConversationCount($userID = null, $skipCache = false)
+    public function getUnreadConversationCount(?int $userID = null, bool $skipCache = false): int
     {
         if ($userID === null) {
             $userID = WCF::getUser()->userID;
+        }
+
+        if (!$userID) {
+            return 0;
         }
 
         if (!isset($this->unreadConversationCount[$userID]) || $skipCache) {
@@ -87,14 +87,15 @@ class ConversationHandler extends SingletonFactory
 
     /**
      * Returns the number of conversations for given user.
-     *
-     * @param int $userID
-     * @return  int
      */
-    public function getConversationCount($userID = null)
+    public function getConversationCount(?int $userID = null): int
     {
         if ($userID === null) {
             $userID = WCF::getUser()->userID;
+        }
+
+        if (!$userID) {
+            return 0;
         }
 
         if (!isset($this->conversationCount[$userID])) {
@@ -151,7 +152,7 @@ class ConversationHandler extends SingletonFactory
      */
     public function enforceFloodControl(
         bool $isReply = false
-    ) {
+    ): void {
         if (!$isReply) {
             // 1. Check for the maximum conversations per 24 hours.
             $limit = WCF::getSession()->getPermission('user.conversation.maxStartedConversationsPer24Hours');
