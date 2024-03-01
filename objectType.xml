@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/5.4/objectType.xsd">
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/objectType.xsd">
 	<import>
 		<type>
 			<name>com.woltlab.wcf.conversation.message</name>
@@ -119,17 +119,12 @@
 	<delete>
 		<type name="com.woltlab.wcf.conversation">
 			<definitionname>com.woltlab.wcf.rebuildData</definitionname>
-			<classname>wcf\system\worker\ConversationRebuildDataWorker</classname>
 		</type>
 		<type name="com.woltlab.wcf.conversation.message">
 			<definitionname>com.woltlab.wcf.rebuildData</definitionname>
-			<classname>wcf\system\worker\ConversationMessageRebuildDataWorker</classname>
-			<nicevalue>-5</nicevalue>
 		</type>
 		<type name="com.woltlab.wcf.conversation.message.search.index">
 			<definitionname>com.woltlab.wcf.rebuildData</definitionname>
-			<classname>wcf\system\worker\ConversationMessageSearchIndexRebuildDataWorker</classname>
-			<nicevalue>121</nicevalue>
 		</type>
 	</delete>
 </data>
