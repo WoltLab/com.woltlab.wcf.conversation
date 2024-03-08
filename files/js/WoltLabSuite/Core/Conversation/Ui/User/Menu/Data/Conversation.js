@@ -27,6 +27,10 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Ajax", "WoltLabSuite/C
                     this.counter = counter;
                 }
             }
+            this.button.addEventListener("updateCounter", (event) => {
+                this.updateCounter(event.detail.counter);
+                this.stale = true;
+            });
         }
         getPanelButton() {
             return this.button;
