@@ -10,6 +10,7 @@
 import { dboAction } from "WoltLabSuite/Core/Ajax";
 import UserMenuView from "WoltLabSuite/Core/Ui/User/Menu/View";
 import {
+  EventUpdateCounter,
   UserMenuButton,
   UserMenuData,
   UserMenuFooter,
@@ -55,6 +56,11 @@ class UserMenuDataConversation implements UserMenuProvider {
         this.counter = counter;
       }
     }
+    this.button.addEventListener("updateCounter", (event: CustomEvent<EventUpdateCounter>) => {
+      this.updateCounter(event.detail.counter);
+
+      this.stale = true;
+    });
   }
 
   getPanelButton(): HTMLElement {
