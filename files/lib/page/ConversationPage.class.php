@@ -129,17 +129,17 @@ class ConversationPage extends MultipleLinkPage
             $this->conversationID = $this->message->conversationID;
         }
 
-        $this->conversation = Conversation::getUserConversation($this->conversationID, WCF::getUser()->userID);
-        if ($this->conversation === null) {
+        $conversation = Conversation::getUserConversation($this->conversationID, WCF::getUser()->userID);
+        if ($conversation === null) {
             throw new IllegalLinkException();
         }
-        if (!$this->conversation->canRead()) {
+        if (!$conversation->canRead()) {
             throw new PermissionDeniedException();
         }
 
         // load labels
         $this->labelList = ConversationLabel::getLabelsByUser();
-        $this->conversation = ViewableConversation::getViewableConversation($this->conversation, $this->labelList);
+        $this->conversation = ViewableConversation::getViewableConversation($conversation, $this->labelList);
 
         // messages per page
         /** @noinspection PhpUndefinedFieldInspection */
