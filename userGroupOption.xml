@@ -43,14 +43,16 @@
 			<option name="user.conversation.canReplyToConversation">
 				<categoryname>user.conversation</categoryname>
 				<optiontype>boolean</optiontype>
-				<defaultvalue>1</defaultvalue>
+				<defaultvalue>0</defaultvalue>
 				<usersonly>1</usersonly>
+				<userdefaultvalue>1</userdefaultvalue>
 			</option>
 			<option name="user.conversation.canStartConversation">
 				<categoryname>user.conversation</categoryname>
 				<optiontype>boolean</optiontype>
-				<defaultvalue>1</defaultvalue>
+				<defaultvalue>0</defaultvalue>
 				<usersonly>1</usersonly>
+				<userdefaultvalue>1</userdefaultvalue>
 			</option>
 			<option name="user.conversation.canEditMessage">
 				<categoryname>user.conversation</categoryname>
