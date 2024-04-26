@@ -326,12 +326,17 @@ class ConversationPage extends MultipleLinkPage
 
         MessageQuoteManager::getInstance()->assignVariables();
 
+        $identifier = WCF::getUser()->userID;
+        if ($identifier === 0) {
+            // Bind the tmpHash to the current session to make it unguessable.
+            $identifier = WCF::getSession()->sessionID;
+        }
+
         $tmpHash = \sha1(\implode("\0", [
             // Use class name + conversation ID to match the autosave scoping.
             self::class,
             $this->conversation->conversationID,
-            // Bind the tmpHash to the current session to make it unguessable.
-            WCF::getSession()->sessionID,
+            $identifier,
         ]));
         $attachmentHandler = new AttachmentHandler('com.woltlab.wcf.conversation.message', 0, $tmpHash, 0);
 
