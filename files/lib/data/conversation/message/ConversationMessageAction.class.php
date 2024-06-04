@@ -11,6 +11,7 @@ use wcf\data\IAttachmentMessageQuickReplyAction;
 use wcf\data\IMessageInlineEditorAction;
 use wcf\data\IMessageQuoteAction;
 use wcf\data\smiley\SmileyCache;
+use wcf\event\message\MessageSpamChecking;
 use wcf\system\attachment\AttachmentHandler;
 use wcf\system\bbcode\BBCodeHandler;
 use wcf\system\conversation\ConversationHandler;
@@ -305,6 +306,10 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
             WCF::getSession()->getPermission('user.message.disallowedBBCodes')
         ));
         QuickReplyManager::getInstance()->validateParameters($this, $this->parameters, Conversation::class);
+
+        if ($this->messageIsProbablySpam()) {
+            throw new PermissionDeniedException();
+        }
     }
 
     /**
@@ -421,6 +426,10 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
             $this->conversation,
             $this->getHtmlInputProcessor($this->parameters['data']['message'], $this->message->messageID)
         );
+
+        if ($this->messageIsProbablySpam()) {
+            throw new PermissionDeniedException();
+        }
     }
 
     /**
@@ -722,5 +731,22 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         $this->htmlInputProcessor->process($message, 'com.woltlab.wcf.conversation.message', $objectID);
 
         return $this->htmlInputProcessor;
+    }
+
+    /**
+     * This method triggers the event for the spam check and returns the result.
+     *
+     * @since 6.1
+     */
+    protected function messageIsProbablySpam(): bool
+    {
+        $event = new MessageSpamChecking(
+            $this->htmlInputProcessor,
+            WCF::getUser()->userID ? WCF::getUser() : null,
+            UserUtil::getIpAddress()
+        );
+        EventHandler::getInstance()->fire($event);
+
+        return $event->defaultPrevented();
     }
 }

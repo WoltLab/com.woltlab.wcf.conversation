@@ -256,6 +256,10 @@ class ConversationAddForm extends MessageForm
         }
 
         parent::validate();
+
+        if ($this->messageIsProbablySpam()) {
+            throw new PermissionDeniedException();
+        }
     }
 
     /**
