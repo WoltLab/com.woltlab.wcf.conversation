@@ -58,7 +58,7 @@ class ConversationParticipantList extends UserProfileList
         if (!empty($this->sqlSelects)) {
             $this->sqlSelects .= ',';
         }
-        $this->sqlSelects = 'conversation_to_user.*';
+        $this->sqlSelects .= 'conversation_to_user.*';
         $this->sqlJoins .= "
             LEFT JOIN   wcf" . WCF_N . "_conversation_to_user conversation_to_user
             ON          conversation_to_user.participantID = user_table.userID
