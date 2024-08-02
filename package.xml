@@ -45,17 +45,7 @@
 		<instruction type="template"/>
 		<instruction type="language"/>
 		<instruction type="objectType"/>
-		<instruction type="page"/>
-		<instruction type="clipboardAction"/>
 		<instruction type="templateListener"/>
-		<instruction type="option"/>
-		<instruction type="acpTemplateDelete"/>
-		<instruction type="templateDelete"/>
-		<instruction type="coreObject"/>
-		<instruction type="fileDelete"/>
-		<instruction type="eventListener"/>
 		<instruction type="userGroupOption"/>
-		<instruction type="userNotificationEvent"/>
-		<instruction type="userOption"/>
 	</instructions>
 </package>
