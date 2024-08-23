@@ -607,10 +607,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         }
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function saveFullQuote()
+    private function loadEmbeddedObjects(): void
     {
         if ($this->message->hasEmbeddedObjects) {
             ObjectTypeCache::getInstance()
@@ -622,6 +619,14 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
                 [$this->message->messageID]
             );
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function saveFullQuote()
+    {
+        $this->loadEmbeddedObjects();
 
         $quoteID = MessageQuoteManager::getInstance()->addQuote(
             'com.woltlab.wcf.conversation.message',
@@ -674,6 +679,8 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
      */
     public function saveQuote()
     {
+        $this->loadEmbeddedObjects();
+
         $quoteID = MessageQuoteManager::getInstance()->addQuote(
             'com.woltlab.wcf.conversation.message',
             $this->message->conversationID,
