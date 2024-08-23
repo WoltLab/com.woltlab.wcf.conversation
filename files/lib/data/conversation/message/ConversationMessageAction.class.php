@@ -10,6 +10,7 @@ use wcf\data\DatabaseObject;
 use wcf\data\IAttachmentMessageQuickReplyAction;
 use wcf\data\IMessageInlineEditorAction;
 use wcf\data\IMessageQuoteAction;
+use wcf\data\object\type\ObjectTypeCache;
 use wcf\data\smiley\SmileyCache;
 use wcf\event\message\MessageSpamChecking;
 use wcf\system\attachment\AttachmentHandler;
@@ -611,6 +612,17 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
      */
     public function saveFullQuote()
     {
+        if ($this->message->hasEmbeddedObjects) {
+            ObjectTypeCache::getInstance()
+                ->getObjectTypeByName('com.woltlab.wcf.attachment.objectType', 'com.woltlab.wcf.conversation.message')
+                ->getProcessor()
+                ->cacheObjects([$this->message->messageID]);
+            MessageEmbeddedObjectManager::getInstance()->loadObjects(
+                'com.woltlab.wcf.conversation.message',
+                [$this->message->messageID]
+            );
+        }
+
         $quoteID = MessageQuoteManager::getInstance()->addQuote(
             'com.woltlab.wcf.conversation.message',
             $this->message->conversationID,
