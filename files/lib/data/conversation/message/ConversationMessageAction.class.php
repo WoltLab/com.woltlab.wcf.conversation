@@ -118,20 +118,6 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
             // update last message
             $conversationEditor->addMessage($message);
 
-            // fire notification event
-            if (!$conversation->isDraft) {
-                // don't notify message author
-                $notificationRecipients = \array_diff($conversation->getParticipantIDs(true), [$message->userID]);
-                if (!empty($notificationRecipients)) {
-                    UserNotificationHandler::getInstance()->fireEvent(
-                        'conversationMessage',
-                        'com.woltlab.wcf.conversation.message.notification',
-                        new ConversationMessageUserNotificationObject($message),
-                        $notificationRecipients
-                    );
-                }
-            }
-
             $userConversation = Conversation::getUserConversation($conversation->conversationID, $message->userID);
             if ($userConversation !== null && $userConversation->isInvisible) {
                 // make invisible participant visible
@@ -194,6 +180,20 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
             MessageQuoteManager::getInstance()->markQuotesForRemoval($this->parameters['removeQuoteIDs']);
         }
         MessageQuoteManager::getInstance()->removeMarkedQuotes();
+
+        // fire notification event
+        if (empty($this->parameters['isFirstPost']) && !$conversation->isDraft) {
+            // don't notify message author
+            $notificationRecipients = \array_diff($conversation->getParticipantIDs(true), [$message->userID]);
+            if (!empty($notificationRecipients)) {
+                UserNotificationHandler::getInstance()->fireEvent(
+                    'conversationMessage',
+                    'com.woltlab.wcf.conversation.message.notification',
+                    new ConversationMessageUserNotificationObject(new ConversationMessage($message->messageID)),
+                    $notificationRecipients
+                );
+            }
+        }
 
         // return new message
         return $message;
