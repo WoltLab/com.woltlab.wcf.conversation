@@ -8,6 +8,7 @@ use wcf\data\DatabaseObject;
 use wcf\data\IMessage;
 use wcf\data\TUserContent;
 use wcf\system\html\output\HtmlOutputProcessor;
+use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
 use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
 use wcf\util\StringUtil;
@@ -107,6 +108,13 @@ class ConversationMessage extends DatabaseObject implements IMessage
      */
     public function getMailText($mimeType = 'text/plain'): string
     {
+        if ($this->hasEmbeddedObjects) {
+            MessageEmbeddedObjectManager::getInstance()->loadObjects(
+                'com.woltlab.wcf.conversation.message',
+                [$this->messageID]
+            );
+        }
+
         switch ($mimeType) {
             case 'text/plain':
                 $processor = new HtmlOutputProcessor();
