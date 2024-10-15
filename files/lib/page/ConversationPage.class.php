@@ -210,7 +210,8 @@ class ConversationPage extends MultipleLinkPage
         // update last visit time count
         if (
             $this->conversation->isNew()
-            && ($this->objectList->getMaxPostTime() > $this->conversation->lastVisitTime
+            && (
+                $this->objectList->getMaxPostTime() > $this->conversation->lastVisitTime
                 || ($this->conversation->joinedAt && !\count($this->objectList))
             )
         ) {
