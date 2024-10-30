@@ -41,7 +41,7 @@ class ConversationFeedPage extends AbstractFeedPage
         $this->items->getConditionBuilder()->add('conversation_to_user.participantID = ?', [WCF::getUser()->userID]);
         $this->items->getConditionBuilder()->add('conversation_to_user.hideConversation = ?', [0]);
         $this->items->sqlConditionJoins = "
-            LEFT JOIN   wcf" . WCF_N . "_conversation conversation
+            LEFT JOIN   wcf1_conversation conversation
             ON          conversation.conversationID = conversation_to_user.conversationID";
         $this->items->sqlLimit = 20;
         $this->items->readObjects();

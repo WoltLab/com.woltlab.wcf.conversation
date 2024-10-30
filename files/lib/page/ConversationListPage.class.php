@@ -189,9 +189,9 @@ class ConversationListPage extends SortablePage
             $conditions = new PreparedStatementConditionBuilder();
             $conditions->add('username IN (?)', [$this->participants]);
             $sql = "SELECT  userID
-                    FROM    wcf" . WCF_N . "_user
+                    FROM    wcf1_user
                     " . $conditions;
-            $statement = WCF::getDB()->prepareStatement($sql);
+            $statement = WCF::getDB()->prepare($sql);
             $statement->execute($conditions->getParameters());
             $userIDs = [];
             while ($userID = $statement->fetchColumn()) {
@@ -214,7 +214,7 @@ class ConversationListPage extends SortablePage
                             conversation.userID = ?
                             AND conversation.conversationID IN (
                                 SELECT      conversationID
-                                FROM        wcf' . WCF_N . '_conversation_to_user
+                                FROM        wcf1_conversation_to_user
                                 WHERE       participantID IN (?)
                                 GROUP BY    conversationID
                                 HAVING      COUNT(conversationID) = ?
@@ -225,7 +225,7 @@ class ConversationListPage extends SortablePage
                             conversation.userID <> ?
                             AND conversation.conversationID IN (
                                 SELECT      conversationID
-                                FROM        wcf' . WCF_N . '_conversation_to_user
+                                FROM        wcf1_conversation_to_user
                                 WHERE       participantID IN (?)
                                         AND isInvisible = ?
                                 GROUP BY    conversationID

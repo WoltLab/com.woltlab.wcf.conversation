@@ -17,8 +17,8 @@ class ConversationStatDailyHandler extends AbstractStatDailyHandler
     public function getData($date)
     {
         return [
-            'counter' => $this->getCounter($date, 'wcf' . WCF_N . '_conversation', 'time'),
-            'total' => $this->getTotal($date, 'wcf' . WCF_N . '_conversation', 'time'),
+            'counter' => $this->getCounter($date, 'wcf1_conversation', 'time'),
+            'total' => $this->getTotal($date, 'wcf1_conversation', 'time'),
         ];
     }
 }

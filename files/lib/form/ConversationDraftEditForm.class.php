@@ -161,9 +161,9 @@ class ConversationDraftEditForm extends ConversationAddForm
                         $condition->add('userID IN (?)', [$draftData[$participantType]]);
 
                         $sql = "SELECT  username
-                                FROM    wcf" . WCF_N . "_user
+                                FROM    wcf1_user
                                 " . $condition;
-                        $statement = WCF::getDB()->prepareStatement($sql);
+                        $statement = WCF::getDB()->prepare($sql);
                         $statement->execute($condition->getParameters());
 
                         if (!empty($this->{$participantType})) {

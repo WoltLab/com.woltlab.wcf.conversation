@@ -15,15 +15,15 @@ class ConversationUserActionRenameListener extends AbstractUserActionRenameListe
      * @inheritDoc
      */
     protected $databaseTables = [
-        'wcf{WCF_N}_conversation',
-        'wcf{WCF_N}_conversation_message',
+        'wcf1_conversation',
+        'wcf1_conversation_message',
         [
-            'name' => 'wcf{WCF_N}_conversation',
+            'name' => 'wcf1_conversation',
             'userID' => 'lastPosterID',
             'username' => 'lastPoster',
         ],
         [
-            'name' => 'wcf{WCF_N}_conversation_to_user',
+            'name' => 'wcf1_conversation_to_user',
             'userID' => 'participantID',
         ],
     ];

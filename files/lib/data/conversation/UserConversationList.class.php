@@ -69,7 +69,7 @@ class UserConversationList extends ConversationList
             $this->getConditionBuilder()
                 ->add('conversation_to_user.hideConversation = ?', [$this->filter == 'hidden' ? 1 : 0]);
             $this->sqlConditionJoins = "
-                LEFT JOIN   wcf" . WCF_N . "_conversation conversation
+                LEFT JOIN   wcf1_conversation conversation
                 ON          conversation.conversationID = conversation_to_user.conversationID";
             if ($this->filter == 'outbox') {
                 $this->getConditionBuilder()->add('conversation.userID = ?', [$userID]);
@@ -80,7 +80,7 @@ class UserConversationList extends ConversationList
         if ($labelID) {
             $this->getConditionBuilder()->add("conversation.conversationID IN (
                 SELECT  conversationID
-                FROM    wcf" . WCF_N . "_conversation_label_to_object
+                FROM    wcf1_conversation_label_to_object
                 WHERE   labelID = ?
             )", [$labelID]);
         }
@@ -88,7 +88,7 @@ class UserConversationList extends ConversationList
         // own posts
         $this->sqlSelects = "DISTINCT conversation_message.userID AS ownPosts";
         $this->sqlJoins = "
-            LEFT JOIN   wcf" . WCF_N . "_conversation_message conversation_message
+            LEFT JOIN   wcf1_conversation_message conversation_message
             ON          conversation_message.conversationID = conversation.conversationID
                     AND conversation_message.userID = " . $userID;
 
@@ -98,7 +98,7 @@ class UserConversationList extends ConversationList
         }
         $this->sqlSelects .= "conversation_to_user.*";
         $this->sqlJoins .= "
-            LEFT JOIN   wcf" . WCF_N . "_conversation_to_user conversation_to_user
+            LEFT JOIN   wcf1_conversation_to_user conversation_to_user
             ON          conversation_to_user.participantID = " . $userID . "
                     AND conversation_to_user.conversationID = conversation.conversationID";
 
@@ -136,10 +136,10 @@ class UserConversationList extends ConversationList
         }
 
         $sql = "SELECT  COUNT(*) AS count
-                FROM    wcf" . WCF_N . "_conversation_to_user conversation_to_user
+                FROM    wcf1_conversation_to_user conversation_to_user
                 " . $this->sqlConditionJoins . "
                 " . $this->getConditionBuilder();
-        $statement = WCF::getDB()->prepareStatement($sql);
+        $statement = WCF::getDB()->prepare($sql);
         $statement->execute($this->getConditionBuilder()->getParameters());
         $row = $statement->fetchArray();
 
@@ -163,11 +163,11 @@ class UserConversationList extends ConversationList
                             THEN    conversation_to_user.leftAt
                             ELSE    conversation.lastPostTime
                         END) AS lastPostTime
-                FROM    wcf" . WCF_N . "_conversation_to_user conversation_to_user
+                FROM    wcf1_conversation_to_user conversation_to_user
                     " . $this->sqlConditionJoins . "
                     " . $this->getConditionBuilder() . "
                     " . (!empty($this->sqlOrderBy) ? "ORDER BY " . $this->sqlOrderBy : '');
-        $statement = WCF::getDB()->prepareStatement($sql, $this->sqlLimit, $this->sqlOffset);
+        $statement = WCF::getDB()->prepare($sql, $this->sqlLimit, $this->sqlOffset);
         $statement->execute($this->getConditionBuilder()->getParameters());
         $this->objectIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
     }
@@ -194,9 +194,9 @@ class UserConversationList extends ConversationList
                 $conditions = new PreparedStatementConditionBuilder();
                 $conditions->add("messageID IN (?)", [$messageIDs]);
                 $sql = "SELECT  messageID, userID, username, time
-                        FROM    wcf" . WCF_N . "_conversation_message
+                        FROM    wcf1_conversation_message
                         " . $conditions;
-                $statement = WCF::getDB()->prepareStatement($sql);
+                $statement = WCF::getDB()->prepare($sql);
                 $statement->execute($conditions->getParameters());
                 $messageData = [];
                 while ($row = $statement->fetchArray()) {
@@ -277,9 +277,9 @@ class UserConversationList extends ConversationList
         $conditions->add("labelID IN (?)", [\array_keys($labels)]);
 
         $sql = "SELECT  labelID, conversationID
-                FROM    wcf" . WCF_N . "_conversation_label_to_object
+                FROM    wcf1_conversation_label_to_object
                 " . $conditions;
-        $statement = WCF::getDB()->prepareStatement($sql);
+        $statement = WCF::getDB()->prepare($sql);
         $statement->execute($conditions->getParameters());
         $data = [];
         while ($row = $statement->fetchArray()) {

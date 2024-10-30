@@ -63,10 +63,10 @@ final class ConversationHandler extends SingletonFactory
                 $conditionBuilder->add('conversation_to_user.leftAt = 0');
 
                 $sql = "SELECT  COUNT(*) AS count
-                        FROM    wcf" . WCF_N . "_conversation_to_user conversation_to_user,
-                                wcf" . WCF_N . "_conversation conversation
+                        FROM    wcf1_conversation_to_user conversation_to_user,
+                                wcf1_conversation conversation
                         " . $conditionBuilder;
-                $statement = WCF::getDB()->prepareStatement($sql);
+                $statement = WCF::getDB()->prepare($sql);
                 $statement->execute($conditionBuilder->getParameters());
                 $row = $statement->fetchArray();
                 $this->unreadConversationCount[$userID] = $row['count'];
@@ -118,14 +118,14 @@ final class ConversationHandler extends SingletonFactory
 
                 $sql = "SELECT (
                             SELECT  COUNT(*)
-                            FROM    wcf" . WCF_N . "_conversation_to_user conversation_to_user
+                            FROM    wcf1_conversation_to_user conversation_to_user
                             " . $conditionBuilder1 . "
                         ) + (
                             SELECT  COUNT(*)
-                            FROM    wcf" . WCF_N . "_conversation conversation
+                            FROM    wcf1_conversation conversation
                             " . $conditionBuilder2 . "
                         ) AS count";
-                $statement = WCF::getDB()->prepareStatement($sql);
+                $statement = WCF::getDB()->prepare($sql);
                 $statement->execute(\array_merge(
                     $conditionBuilder1->getParameters(),
                     $conditionBuilder2->getParameters()

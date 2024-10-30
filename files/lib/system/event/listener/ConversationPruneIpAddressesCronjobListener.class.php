@@ -20,6 +20,6 @@ class ConversationPruneIpAddressesCronjobListener implements IParameterizedEvent
     public function execute($eventObj, $className, $eventName, array &$parameters)
     {
         /** @var PruneIpAddressesCronjob $eventObj */
-        $eventObj->columns['wcf' . WCF_N . '_conversation_message']['ipAddress'] = 'time';
+        $eventObj->columns['wcf1_conversation_message']['ipAddress'] = 'time';
     }
 }

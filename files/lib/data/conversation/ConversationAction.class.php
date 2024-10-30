@@ -100,11 +100,11 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
             UserStorageHandler::getInstance()->reset($conversation->getParticipantIDs(), 'conversationCount');
 
             // mark conversation as read for the author
-            $sql = "UPDATE  wcf" . WCF_N . "_conversation_to_user
+            $sql = "UPDATE  wcf1_conversation_to_user
                     SET     lastVisitTime = ?
                     WHERE   participantID = ?
                         AND conversationID = ?";
-            $statement = WCF::getDB()->prepareStatement($sql);
+            $statement = WCF::getDB()->prepare($sql);
             $statement->execute([$data['time'], $data['userID'], $conversation->conversationID]);
         } else {
             // update conversation count
@@ -170,9 +170,9 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
             $conditions = new PreparedStatementConditionBuilder();
             $conditions->add("conversationID IN (?)", [$this->objectIDs]);
             $sql = "SELECT  DISTINCT participantID
-                    FROM    wcf" . WCF_N . "_conversation_to_user
+                    FROM    wcf1_conversation_to_user
                     " . $conditions;
-            $statement = WCF::getDB()->prepareStatement($sql);
+            $statement = WCF::getDB()->prepare($sql);
             $statement->execute($conditions->getParameters());
 
             while ($participantID = $statement->fetchColumn()) {
@@ -285,11 +285,11 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
         }
 
         $conversationIDs = [];
-        $sql = "UPDATE  wcf" . WCF_N . "_conversation_to_user
+        $sql = "UPDATE  wcf1_conversation_to_user
                 SET     lastVisitTime = ?
                 WHERE   participantID = ?
                     AND conversationID = ?";
-        $statement = WCF::getDB()->prepareStatement($sql);
+        $statement = WCF::getDB()->prepare($sql);
         WCF::getDB()->beginTransaction();
         foreach ($this->getObjects() as $conversation) {
             $statement->execute([
@@ -325,7 +325,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
             $condition->add('notification.eventID = ?', [$eventID]);
             $condition->add("notification.objectID IN (
                 SELECT  messageID
-                FROM    wcf" . WCF_N . "_conversation_message
+                FROM    wcf1_conversation_message
                 WHERE   conversationID IN (?)
                     AND time <= ?
             )", [
@@ -334,9 +334,9 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
             ]);
 
             $sql = "SELECT  notificationID
-                    FROM    wcf" . WCF_N . "_user_notification notification
+                    FROM    wcf1_user_notification notification
                     {$condition}";
-            $statement = WCF::getDB()->prepareStatement($sql);
+            $statement = WCF::getDB()->prepare($sql);
             $statement->execute($condition->getParameters());
 
             UserNotificationHandler::getInstance()->markAsConfirmedByIDs(
@@ -400,10 +400,10 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
      */
     public function markAllAsRead()
     {
-        $sql = "UPDATE  wcf" . WCF_N . "_conversation_to_user
+        $sql = "UPDATE  wcf1_conversation_to_user
                 SET     lastVisitTime = ?
                 WHERE   participantID = ?";
-        $statement = WCF::getDB()->prepareStatement($sql);
+        $statement = WCF::getDB()->prepare($sql);
         $statement->execute([
             TIME_NOW,
             WCF::getUser()->userID,
@@ -634,10 +634,10 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
     {
         // get hidden state from first conversation (all others have the same state)
         $sql = "SELECT  hideConversation
-                FROM    wcf" . WCF_N . "_conversation_to_user
+                FROM    wcf1_conversation_to_user
                 WHERE   conversationID = ?
                     AND participantID = ?";
-        $statement = WCF::getDB()->prepareStatement($sql);
+        $statement = WCF::getDB()->prepare($sql);
         $statement->execute([
             \current($this->objectIDs),
             WCF::getUser()->userID,
@@ -688,11 +688,11 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
      */
     public function hideConversation()
     {
-        $sql = "UPDATE  wcf" . WCF_N . "_conversation_to_user
+        $sql = "UPDATE  wcf1_conversation_to_user
                 SET     hideConversation = ?
                 WHERE   conversationID = ?
                     AND participantID = ?";
-        $statement = WCF::getDB()->prepareStatement($sql);
+        $statement = WCF::getDB()->prepare($sql);
 
         WCF::getDB()->beginTransaction();
         foreach ($this->objectIDs as $conversationID) {
@@ -735,13 +735,13 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
             $conditionBuilder->add('conversation.conversationID IN (?)', [$this->objectIDs]);
             $conditionBuilder->add('conversation_to_user.conversationID IS NULL');
             $sql = "SELECT      DISTINCT conversation.conversationID
-                    FROM        wcf" . WCF_N . "_conversation conversation
-                    LEFT JOIN   wcf" . WCF_N . "_conversation_to_user conversation_to_user
+                    FROM        wcf1_conversation conversation
+                    LEFT JOIN   wcf1_conversation_to_user conversation_to_user
                     ON          conversation_to_user.conversationID = conversation.conversationID
                             AND conversation_to_user.hideConversation <> " . Conversation::STATE_LEFT . "
                             AND conversation_to_user.participantID IS NOT NULL
                     " . $conditionBuilder;
-            $statement = WCF::getDB()->prepareStatement($sql);
+            $statement = WCF::getDB()->prepare($sql);
             $statement->execute($conditionBuilder->getParameters());
             $conversationIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
 
@@ -778,7 +778,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
     {
         $sqlSelect = '  , (
             SELECT      participantID
-            FROM        wcf' . WCF_N . '_conversation_to_user
+            FROM        wcf1_conversation_to_user
             WHERE       conversationID = conversation.conversationID
                     AND participantID <> conversation.userID
                     AND isInvisible = 0
@@ -787,7 +787,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
         ) AS otherParticipantID
         , (
             SELECT      username
-            FROM        wcf' . WCF_N . '_conversation_to_user
+            FROM        wcf1_conversation_to_user
             WHERE       conversationID = conversation.conversationID
                     AND participantID <> conversation.userID
                     AND isInvisible = 0
@@ -1136,10 +1136,10 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
         $conditionBuilder = new PreparedStatementConditionBuilder();
         $conditionBuilder->add('conversation_message.conversationID IN (?)', [$this->objectIDs]);
         $sql = "SELECT      conversationID, COUNT(messageID) AS messages, SUM(attachments) AS attachments
-                FROM        wcf" . WCF_N . "_conversation_message conversation_message
+                FROM        wcf1_conversation_message conversation_message
                 " . $conditionBuilder . "
                 GROUP BY    conversationID";
-        $statement = WCF::getDB()->prepareStatement($sql);
+        $statement = WCF::getDB()->prepare($sql);
         $statement->execute($conditionBuilder->getParameters());
 
         $objectIDs = [];
