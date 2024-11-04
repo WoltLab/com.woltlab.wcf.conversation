@@ -57,7 +57,7 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker
         $this->objectList->sqlOrderBy = 'conversation_message.messageID';
         $this->objectList->sqlSelects = '(
             SELECT  subject
-            FROM    wcf' . WCF_N . '_conversation
+            FROM    wcf1_conversation
             WHERE   conversationID = conversation_message.conversationID
         ) AS subject';
     }

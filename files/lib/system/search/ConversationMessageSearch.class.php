@@ -70,10 +70,10 @@ final class ConversationMessageSearch extends AbstractSearchProvider
      */
     public function getJoins(): string
     {
-        return "    JOIN        wcf" . WCF_N . "_conversation_to_user conversation_to_user
+        return "    JOIN        wcf1_conversation_to_user conversation_to_user
                     ON          conversation_to_user.participantID = " . WCF::getUser()->userID . "
                             AND conversation_to_user.conversationID = " . $this->getTableName() . ".conversationID
-                    LEFT JOIN   wcf" . WCF_N . "_conversation conversation
+                    LEFT JOIN   wcf1_conversation conversation
                     ON          conversation.conversationID = " . $this->getTableName() . ".conversationID";
     }
 
@@ -82,7 +82,7 @@ final class ConversationMessageSearch extends AbstractSearchProvider
      */
     public function getTableName(): string
     {
-        return 'wcf' . WCF_N . '_conversation_message';
+        return 'wcf1_conversation_message';
     }
 
     /**

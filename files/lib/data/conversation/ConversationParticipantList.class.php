@@ -52,7 +52,7 @@ class ConversationParticipantList extends UserProfileList
             }
         }
         $this->sqlConditionJoins .= "
-            LEFT JOIN   wcf" . WCF_N . "_user user_table
+            LEFT JOIN   wcf1_user user_table
             ON          user_table.userID = conversation_to_user.participantID";
 
         if (!empty($this->sqlSelects)) {
@@ -60,7 +60,7 @@ class ConversationParticipantList extends UserProfileList
         }
         $this->sqlSelects .= 'conversation_to_user.*';
         $this->sqlJoins .= "
-            LEFT JOIN   wcf" . WCF_N . "_conversation_to_user conversation_to_user
+            LEFT JOIN   wcf1_conversation_to_user conversation_to_user
             ON          conversation_to_user.participantID = user_table.userID
                     AND conversation_to_user.conversationID = " . $conversationID;
     }
@@ -71,10 +71,10 @@ class ConversationParticipantList extends UserProfileList
     public function countObjects()
     {
         $sql = "SELECT  COUNT(*) AS count
-                FROM    wcf" . WCF_N . "_conversation_to_user conversation_to_user
+                FROM    wcf1_conversation_to_user conversation_to_user
                 " . $this->sqlConditionJoins . "
                 " . $this->getConditionBuilder();
-        $statement = WCF::getDB()->prepareStatement($sql);
+        $statement = WCF::getDB()->prepare($sql);
         $statement->execute($this->getConditionBuilder()->getParameters());
         $row = $statement->fetchArray();
 
@@ -88,11 +88,11 @@ class ConversationParticipantList extends UserProfileList
     {
         $this->objectIDs = [];
         $sql = "SELECT  conversation_to_user.participantID AS objectID
-                FROM    wcf" . WCF_N . "_conversation_to_user conversation_to_user
+                FROM    wcf1_conversation_to_user conversation_to_user
                 " . $this->sqlConditionJoins . "
                 " . $this->getConditionBuilder() . "
                 " . (!empty($this->sqlOrderBy) ? "ORDER BY " . $this->sqlOrderBy : '');
-        $statement = WCF::getDB()->prepareStatement($sql, $this->sqlLimit, $this->sqlOffset);
+        $statement = WCF::getDB()->prepare($sql, $this->sqlLimit, $this->sqlOffset);
         $statement->execute($this->getConditionBuilder()->getParameters());
         $this->objectIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
     }
@@ -106,10 +106,10 @@ class ConversationParticipantList extends UserProfileList
 
         // check for deleted users
         $sql = "SELECT  username
-                FROM    wcf" . WCF_N . "_conversation_to_user
+                FROM    wcf1_conversation_to_user
                 WHERE   conversationID = ?
                     AND participantID IS NULL";
-        $statement = WCF::getDB()->prepareStatement($sql);
+        $statement = WCF::getDB()->prepare($sql);
         $statement->execute([$this->conversationID]);
         $i = 0;
         while ($row = $statement->fetchArray()) {

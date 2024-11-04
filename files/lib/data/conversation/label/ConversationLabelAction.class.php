@@ -182,9 +182,9 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction
             $conditions->add("labelID IN (?)", [$labelIDs]);
 
             $sql = "SELECT  labelID
-                    FROM    wcf" . WCF_N . "_conversation_label_to_object
+                    FROM    wcf1_conversation_label_to_object
                     " . $conditions;
-            $statement = WCF::getDB()->prepareStatement($sql);
+            $statement = WCF::getDB()->prepare($sql);
             $statement->execute($conditions->getParameters());
             $assignedLabels = $statement->fetchAll(\PDO::FETCH_COLUMN);
         }
@@ -247,17 +247,17 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction
         $conditions->add("conversationID IN (?)", [$this->parameters['conversationIDs']]);
         $conditions->add("labelID IN (?)", [$labelIDs]);
 
-        $sql = "DELETE FROM wcf" . WCF_N . "_conversation_label_to_object
+        $sql = "DELETE FROM wcf1_conversation_label_to_object
                 " . $conditions;
-        $statement = WCF::getDB()->prepareStatement($sql);
+        $statement = WCF::getDB()->prepare($sql);
         $statement->execute($conditions->getParameters());
 
         // assign label ids
         if (!empty($this->parameters['labelIDs'])) {
-            $sql = "INSERT INTO wcf" . WCF_N . "_conversation_label_to_object
+            $sql = "INSERT INTO wcf1_conversation_label_to_object
                                 (labelID, conversationID)
                     VALUES      (?, ?)";
-            $statement = WCF::getDB()->prepareStatement($sql);
+            $statement = WCF::getDB()->prepare($sql);
 
             WCF::getDB()->beginTransaction();
             foreach ($this->parameters['labelIDs'] as $labelID) {

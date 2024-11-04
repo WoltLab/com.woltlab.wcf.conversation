@@ -165,10 +165,10 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
         }
 
         $sql = "SELECT  *
-                FROM    wcf" . WCF_N . "_conversation_to_user
+                FROM    wcf1_conversation_to_user
                 WHERE   participantID = ?
                     AND conversationID = ?";
-        $statement = WCF::getDB()->prepareStatement($sql);
+        $statement = WCF::getDB()->prepare($sql);
         $statement->execute([$userID, $this->conversationID]);
         $row = $statement->fetchArray();
         if ($row !== false) {
@@ -186,12 +186,12 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     public static function getUserConversation($conversationID, $userID)
     {
         $sql = "SELECT      conversation_to_user.*, conversation.*
-                FROM        wcf" . WCF_N . "_conversation conversation
-                LEFT JOIN   wcf" . WCF_N . "_conversation_to_user conversation_to_user
+                FROM        wcf1_conversation conversation
+                LEFT JOIN   wcf1_conversation_to_user conversation_to_user
                 ON          conversation_to_user.participantID = ?
                         AND conversation_to_user.conversationID = conversation.conversationID
                 WHERE       conversation.conversationID = ?";
-        $statement = WCF::getDB()->prepareStatement($sql);
+        $statement = WCF::getDB()->prepare($sql);
         $statement->execute([$userID, $conversationID]);
         $row = $statement->fetchArray();
         if ($row !== false) {
@@ -213,12 +213,12 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
         $conditionBuilder = new PreparedStatementConditionBuilder();
         $conditionBuilder->add('conversation.conversationID IN (?)', [$conversationIDs]);
         $sql = "SELECT      conversation_to_user.*, conversation.*
-                FROM        wcf" . WCF_N . "_conversation conversation
-                LEFT JOIN   wcf" . WCF_N . "_conversation_to_user conversation_to_user
+                FROM        wcf1_conversation conversation
+                LEFT JOIN   wcf1_conversation_to_user conversation_to_user
                 ON          conversation_to_user.participantID = " . $userID . "
                         AND conversation_to_user.conversationID = conversation.conversationID
                 " . $conditionBuilder;
-        $statement = WCF::getDB()->prepareStatement($sql);
+        $statement = WCF::getDB()->prepare($sql);
         $statement->execute($conditionBuilder->getParameters());
         $conversations = [];
         while ($row = $statement->fetchArray()) {
@@ -289,10 +289,10 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
             $this->canAddUnrestricted = false;
             if ($this->isActiveParticipant()) {
                 $sql = "SELECT  joinedAt
-                        FROM    wcf" . WCF_N . "_conversation_to_user
+                        FROM    wcf1_conversation_to_user
                         WHERE   conversationID = ?
                             AND participantID = ?";
-                $statement = WCF::getDB()->prepareStatement($sql);
+                $statement = WCF::getDB()->prepare($sql);
                 $statement->execute([
                     $this->conversationID,
                     WCF::getUser()->userID,
@@ -329,9 +329,9 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
         }
 
         $sql = "SELECT  participantID
-                FROM    wcf" . WCF_N . "_conversation_to_user
+                FROM    wcf1_conversation_to_user
                 " . $conditions;
-        $statement = WCF::getDB()->prepareStatement($sql);
+        $statement = WCF::getDB()->prepare($sql);
         $statement->execute($conditions->getParameters());
 
         return $statement->fetchAll(\PDO::FETCH_COLUMN);
@@ -356,11 +356,11 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
         }
 
         $sql = "SELECT      user_table.username
-                FROM        wcf" . WCF_N . "_conversation_to_user conversation_to_user
-                LEFT JOIN   wcf" . WCF_N . "_user user_table
+                FROM        wcf1_conversation_to_user conversation_to_user
+                LEFT JOIN   wcf1_user user_table
                 ON          user_table.userID = conversation_to_user.participantID
                 " . $conditions;
-        $statement = WCF::getDB()->prepareStatement($sql);
+        $statement = WCF::getDB()->prepare($sql);
         $statement->execute($conditions->getParameters());
 
         return $statement->fetchAll(\PDO::FETCH_COLUMN);
@@ -390,10 +390,10 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     {
         if ($this->isActiveParticipant === null) {
             $sql = "SELECT  leftAt
-                    FROM    wcf" . WCF_N . "_conversation_to_user
+                    FROM    wcf1_conversation_to_user
                     WHERE   conversationID = ?
                         AND participantID = ?";
-            $statement = WCF::getDB()->prepareStatement($sql);
+            $statement = WCF::getDB()->prepare($sql);
             $statement->execute([
                 $this->conversationID,
                 WCF::getUser()->userID,
@@ -433,9 +433,9 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
         $conditions->add("userID = ?", [$userID]);
 
         $sql = "SELECT  conversationID
-                FROM    wcf" . WCF_N . "_conversation
+                FROM    wcf1_conversation
                 " . $conditions;
-        $statement = WCF::getDB()->prepareStatement($sql);
+        $statement = WCF::getDB()->prepare($sql);
         $statement->execute($conditions->getParameters());
         while ($row = $statement->fetchArray()) {
             $index = \array_search($row['conversationID'], $conversationIDs);
@@ -450,9 +450,9 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
             $conditions->add("hideConversation <> ?", [self::STATE_LEFT]);
 
             $sql = "SELECT  conversationID
-                    FROM    wcf" . WCF_N . "_conversation_to_user
+                    FROM    wcf1_conversation_to_user
                     " . $conditions;
-            $statement = WCF::getDB()->prepareStatement($sql);
+            $statement = WCF::getDB()->prepare($sql);
             $statement->execute($conditions->getParameters());
             while ($row = $statement->fetchArray()) {
                 $index = \array_search($row['conversationID'], $conversationIDs);
@@ -558,9 +558,9 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
             $conditionBuilder = new PreparedStatementConditionBuilder();
             $conditionBuilder->add('groupID IN (?)', [$validGroupIDs]);
             $sql = "SELECT  DISTINCT userID
-                    FROM    wcf" . WCF_N . "_user_to_group
+                    FROM    wcf1_user_to_group
                     " . $conditionBuilder;
-            $statement = WCF::getDB()->prepareStatement($sql);
+            $statement = WCF::getDB()->prepare($sql);
             $statement->execute($conditionBuilder->getParameters());
             while ($userID = $statement->fetchColumn()) {
                 $userIDs[] = $userID;
