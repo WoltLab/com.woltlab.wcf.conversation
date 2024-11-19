@@ -164,7 +164,6 @@
 	});
 	
 	$(function() {
-		WCF.Message.Submit.registerButton('text', $('#messageContainer > .formSubmit > input[type=submit]'));
 		new WCF.Message.FormGuard();
 		
 		{include file='shared_messageQuoteManager' wysiwygSelector='text' supportPaste=true}
