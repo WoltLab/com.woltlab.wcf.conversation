@@ -164,8 +164,6 @@
 	});
 	
 	$(function() {
-		new WCF.Message.FormGuard();
-		
 		{include file='shared_messageQuoteManager' wysiwygSelector='text' supportPaste=true}
 	});
 </script>
