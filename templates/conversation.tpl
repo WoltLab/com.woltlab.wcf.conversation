@@ -1,4 +1,4 @@
-{capture assign='pageTitle'}{$conversation->subject} {if $pageNo > 1} - {lang}wcf.page.pageNo{/lang}{/if}{/capture}
+{capture assign='pageTitle'}{$conversation->subject}{if $pageNo > 1} - {lang}wcf.page.pageNo{/lang}{/if}{/capture}
 
 {capture assign='contentHeader'}
 	<header class="contentHeader">
