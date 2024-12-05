@@ -1,6 +1,10 @@
 <?php
 
+use wcf\form\ConversationAddForm;
 use wcf\system\event\EventHandler;
+use wcf\system\request\LinkHandler;
+use wcf\system\view\user\profile\UserProfileHeaderViewInteractionOption;
+use wcf\system\WCF;
 
 return static function (): void {
     $eventHandler = EventHandler::getInstance();
@@ -11,6 +15,24 @@ return static function (): void {
             $event->register(wcf\system\worker\ConversationMessageRebuildDataWorker::class, -5);
             $event->register(wcf\system\worker\ConversationRebuildDataWorker::class, 0);
             $event->register(wcf\system\worker\ConversationMessageSearchIndexRebuildDataWorker::class, 300);
+        }
+    );
+
+    $eventHandler->register(
+        \wcf\event\user\profile\UserProfileHeaderInteractionOptionCollecting::class,
+        static function (\wcf\event\user\profile\UserProfileHeaderInteractionOptionCollecting $event) {
+            if (
+                MODULE_CONVERSATION
+                && WCF::getUser()->userID
+                && WCF::getSession()->getPermission('user.conversation.canUseConversation')
+                && WCF::getSession()->getPermission('user.conversation.canStartConversation')
+                && WCF::getUser()->userID != $event->user->userID
+            ) {
+                $event->register(UserProfileHeaderViewInteractionOption::forLink(
+                    WCF::getLanguage()->get('wcf.conversation.button.add'),
+                    LinkHandler::getInstance()->getControllerLink(ConversationAddForm::class, ['userID' => $event->user->userID])
+                ));
+            }
         }
     );
 };
