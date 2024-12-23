@@ -39,7 +39,11 @@ class ConversationRssFeedPage extends AbstractRssFeedPage
     {
         $feed = new RssFeed();
         $channel = $this->getDefaultChannel();
-        $channel->title(WCF::getLanguage()->get('wcf.conversation.conversations'));
+        $channel->title(\sprintf(
+            '%s - %s',
+            WCF::getLanguage()->get('wcf.conversation.conversations'),
+            WCF::getLanguage()->get(\PAGE_TITLE)
+        ));
 
         if ($this->conversations->valid()) {
             $channel->lastBuildDateFromTimestamp($this->conversations->current()->lastPostTime);
