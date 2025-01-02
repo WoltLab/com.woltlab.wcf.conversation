@@ -1,7 +1,7 @@
 define(["require", "exports", "tslib", "WoltLabSuite/Core/Ui/Dialog", "WoltLabSuite/Core/Dom/Util", "WoltLabSuite/Core/Ajax", "WoltLabSuite/Core/Language", "WoltLabSuite/Core/Ui/Notification"], function (require, exports, tslib_1, Dialog_1, Util_1, Ajax, Language, UiNotification) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.beginEdit = void 0;
+    exports.beginEdit = beginEdit;
     Dialog_1 = tslib_1.__importDefault(Dialog_1);
     Util_1 = tslib_1.__importDefault(Util_1);
     Ajax = tslib_1.__importStar(Ajax);
@@ -104,5 +104,4 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Ui/Dialog", "WoltLabSu
         editor = new UiSubjectEditor(objectId);
         editor.show();
     }
-    exports.beginEdit = beginEdit;
 });
