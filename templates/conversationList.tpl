@@ -341,12 +341,10 @@
 <script data-relocate="true">
 	require([
 		'WoltLabSuite/Core/Language',
-		'WoltLabSuite/Core/Controller/Popover',
 		'WoltLabSuite/Core/Ui/ItemList/User',
 		'WoltLabSuite/Core/Controller/Clipboard',
 	], (
 		Language,
-		ControllerPopover,
 		UiItemListUser,
 		ControllerClipboard
 	) => {
@@ -388,12 +386,6 @@
 		UiItemListUser.init('participants', {
 			excludedSearchValues: ['{$__wcf->user->username|encodeJS}'],
 			maxItems: 20
-		});
-		
-		ControllerPopover.init({
-			className: 'conversationLink',
-			dboAction: 'wcf\\data\\conversation\\ConversationAction',
-			identifier: 'com.woltlab.wcf.conversation'
 		});
 	});
 </script>

@@ -32,6 +32,12 @@
 			<eventname>dataFields</eventname>
 			<templatecode><![CDATA[{include file='__userGroupAddCanBeAddedAsConversationParticipant'}]]></templatecode>
 		</templatelistener>
+		<templatelistener name="javascriptInit">
+			<environment>user</environment>
+			<templatename>headIncludeJavaScript</templatename>
+			<eventname>javascriptInit</eventname>
+			<templatecode><![CDATA[{include file='headIncludeJavaScript_javascriptInit_conversation'}]]></templatecode>
+		</templatelistener>
 	</import>
 	<delete>
 		<templatelistener name="mobileMenuConversation">
