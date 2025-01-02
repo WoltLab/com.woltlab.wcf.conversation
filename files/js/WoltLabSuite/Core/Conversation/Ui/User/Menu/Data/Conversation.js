@@ -9,7 +9,7 @@
 define(["require", "exports", "tslib", "WoltLabSuite/Core/Ajax", "WoltLabSuite/Core/Ui/User/Menu/View", "WoltLabSuite/Core/Ui/User/Menu/Manager"], function (require, exports, tslib_1, Ajax_1, View_1, Manager_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.setup = void 0;
+    exports.setup = setup;
     View_1 = tslib_1.__importDefault(View_1);
     class UserMenuDataConversation {
         button;
@@ -133,5 +133,4 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Ajax", "WoltLabSuite/C
             isInitialized = true;
         }
     }
-    exports.setup = setup;
 });

@@ -9,7 +9,7 @@
 define(["require", "exports", "WoltLabSuite/Core/Ajax"], function (require, exports, Ajax_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.setup = void 0;
+    exports.setup = setup;
     const unreadConversations = new WeakSet();
     async function markAsRead(conversation) {
         const conversationId = parseInt(conversation.dataset.conversationId, 10);
@@ -32,5 +32,4 @@ define(["require", "exports", "WoltLabSuite/Core/Ajax"], function (require, expo
             }
         });
     }
-    exports.setup = setup;
 });
