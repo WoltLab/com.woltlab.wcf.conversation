@@ -39,7 +39,7 @@ return static function (): void {
     $eventHandler->register(
         \wcf\event\endpoint\ControllerCollecting::class,
         static function (\wcf\event\endpoint\ControllerCollecting $event) {
-            $event->register(new \wcf\system\endpoint\controller\core\conversations\GetConversationPopover);
+            $event->register(new \wcf\system\endpoint\controller\core\conversations\GetConversationPopover());
         }
     );
 };
