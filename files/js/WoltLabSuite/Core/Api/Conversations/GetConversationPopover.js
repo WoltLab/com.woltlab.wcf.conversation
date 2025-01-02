@@ -9,7 +9,7 @@
 define(["require", "exports", "WoltLabSuite/Core/Ajax/Backend", "WoltLabSuite/Core/Api/Result"], function (require, exports, Backend_1, Result_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.getConversationPopover = void 0;
+    exports.getConversationPopover = getConversationPopover;
     async function getConversationPopover(conversationId) {
         let response;
         try {
@@ -22,5 +22,4 @@ define(["require", "exports", "WoltLabSuite/Core/Ajax/Backend", "WoltLabSuite/Co
         }
         return (0, Result_1.apiResultFromValue)(response.template);
     }
-    exports.getConversationPopover = getConversationPopover;
 });
