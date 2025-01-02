@@ -12,9 +12,9 @@ return static function (): void {
     $eventHandler->register(
         \wcf\event\worker\RebuildWorkerCollecting::class,
         static function (\wcf\event\worker\RebuildWorkerCollecting $event) {
-            $event->register(wcf\system\worker\ConversationMessageRebuildDataWorker::class, -5);
-            $event->register(wcf\system\worker\ConversationRebuildDataWorker::class, 0);
-            $event->register(wcf\system\worker\ConversationMessageSearchIndexRebuildDataWorker::class, 300);
+            $event->register(\wcf\system\worker\ConversationMessageRebuildDataWorker::class, -5);
+            $event->register(\wcf\system\worker\ConversationRebuildDataWorker::class, 0);
+            $event->register(\wcf\system\worker\ConversationMessageSearchIndexRebuildDataWorker::class, 300);
         }
     );
 
@@ -33,6 +33,13 @@ return static function (): void {
                     LinkHandler::getInstance()->getControllerLink(ConversationAddForm::class, ['userID' => $event->user->userID])
                 ));
             }
+        }
+    );
+
+    $eventHandler->register(
+        \wcf\event\endpoint\ControllerCollecting::class,
+        static function (\wcf\event\endpoint\ControllerCollecting $event) {
+            $event->register(new \wcf\system\endpoint\controller\core\conversations\GetConversationPopover());
         }
     );
 };
