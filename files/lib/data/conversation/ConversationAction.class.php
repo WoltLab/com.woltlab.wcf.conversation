@@ -6,9 +6,7 @@ use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\data\conversation\message\ConversationMessageList;
-use wcf\data\conversation\message\SimplifiedViewableConversationMessageList;
 use wcf\data\IClipboardAction;
-use wcf\data\IPopoverAction;
 use wcf\data\IVisitableObjectAction;
 use wcf\data\user\group\UserGroup;
 use wcf\page\ConversationPage;
@@ -41,7 +39,6 @@ use wcf\util\StringUtil;
  */
 class ConversationAction extends AbstractDatabaseObjectAction implements
     IClipboardAction,
-    IPopoverAction,
     IVisitableObjectAction
 {
     /**
@@ -467,56 +464,6 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
             'maxLabels' => WCF::getSession()->getPermission('user.conversation.maxLabels'),
             'labelCount' => \count(ConversationLabel::getLabelsByUser()),
         ];
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function validateGetPopover()
-    {
-        $this->conversation = $this->getSingleObject();
-        if (!Conversation::isParticipant([$this->conversation->conversationID])) {
-            throw new PermissionDeniedException();
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getPopover()
-    {
-        $messageList = new SimplifiedViewableConversationMessageList();
-        $messageList->getConditionBuilder()
-            ->add("conversation_message.messageID = ?", [$this->conversation->firstMessageID]);
-        $messageList->readObjects();
-
-        return [
-            'template' => WCF::getTPL()->fetch('conversationMessagePreview', 'wcf', [
-                'message' => $messageList->getSingleObject(),
-            ]),
-        ];
-    }
-
-    /**
-     * Validates the get message preview action.
-     *
-     * @throws  PermissionDeniedException
-     * @deprecated  5.3     Use `validateGetPopover()` instead.
-     */
-    public function validateGetMessagePreview()
-    {
-        $this->validateGetPopover();
-    }
-
-    /**
-     * Returns a preview of a message in a specific conversation.
-     *
-     * @return  string[]
-     * @deprecated  5.3     Use `getPopover()` instead.
-     */
-    public function getMessagePreview()
-    {
-        return $this->getPopover();
     }
 
     /**
