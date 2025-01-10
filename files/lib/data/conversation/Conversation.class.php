@@ -344,7 +344,7 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
      * @param bool $leftByOwnChoice
      * @return  string[]
      */
-    public function getParticipantNames($excludeSelf = false, $leftByOwnChoice = false)
+    public function getParticipantNames($excludeSelf = false, $leftByOwnChoice = false, bool $isAuthor = false)
     {
         $conditions = new PreparedStatementConditionBuilder();
         $conditions->add("conversationID = ?", [$this->conversationID]);
@@ -353,6 +353,9 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
         }
         if ($leftByOwnChoice) {
             $conditions->add("conversation_to_user.leftByOwnChoice = ?", [1]);
+        }
+        if (!$isAuthor) {
+            $conditions->add("conversation_to_user.isInvisible = ?", [0]);
         }
 
         $sql = "SELECT      user_table.username
