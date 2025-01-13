@@ -919,9 +919,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
             } else {
                 if ($conversation->participants > 1) {
                     $image = '<span class="icon icon48 fa-users"></span>';
-                    $usernames = \array_filter($conversation->getParticipantNames(), static function ($username) use ($conversation) {
-                        return $username !== $conversation->getUserProfile()->username;
-                    });
+                    $usernames = $conversation->getParticipantNames(true);
                 } else {
                     $image = $conversation->getUserProfile()->getAvatar()->getImageTag(48);
                     $usernames = [$conversation->getUserProfile()->username];
@@ -1002,7 +1000,11 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
         }
 
         return [
-            'excludedSearchValues' => $this->conversation->getParticipantNames(false, true),
+            'excludedSearchValues' => $this->conversation->getParticipantNames(
+                false,
+                true,
+                $this->conversation->userID == WCF::getUser()->userID
+            ),
             'maxItems' => WCF::getSession()->getPermission('user.conversation.maxParticipants') - $this->conversation->participants,
             'canAddGroupParticipants' => WCF::getSession()->getPermission('user.conversation.canAddGroupParticipants'),
             'template' => WCF::getTPL()->fetch(
