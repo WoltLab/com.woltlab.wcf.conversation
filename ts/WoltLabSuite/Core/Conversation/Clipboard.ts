@@ -14,17 +14,17 @@ interface ConversationData {
   isClosed: boolean;
 }
 
+interface ResponseData {
+  returnValues: {
+    conversationData: {
+      [key: string]: ConversationData;
+    };
+  };
+}
+
 interface EventData {
   data: ClipboardActionData;
-  responseData:
-    | null
-    | (AjaxResponse & {
-        returnValues: {
-          conversationData: {
-            [key: string]: ConversationData;
-          };
-        };
-      });
+  responseData: null | (ResponseData & AjaxResponse);
 }
 
 // TODO add types for editorHandler
@@ -46,7 +46,7 @@ function execute(editorHandler, actionName: string, parameters) {
   }
 }
 
-function evaluateResponse(editorHandler, actionName: string, data) {
+function evaluateResponse(editorHandler, actionName: string, data: ResponseData) {
   switch (actionName) {
     case "com.woltlab.wcf.conversation.conversation.leave":
     case "com.woltlab.wcf.conversation.conversation.leavePermanently":
@@ -57,11 +57,9 @@ function evaluateResponse(editorHandler, actionName: string, data) {
 
     case "com.woltlab.wcf.conversation.conversation.close":
     case "com.woltlab.wcf.conversation.conversation.open":
-      Object.entries(data.returnValues.conversationData).forEach(
-        ([conversationId, conversationData]: [string, ConversationData]) => {
-          editorHandler.update(conversationId, conversationData.isClosed ? "close" : "open", conversationData);
-        },
-      );
+      Object.entries(data.returnValues.conversationData).forEach(([conversationId, conversationData]) => {
+        editorHandler.update(conversationId, conversationData.isClosed ? "close" : "open", conversationData);
+      });
       break;
   }
 }
