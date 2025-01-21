@@ -10,10 +10,21 @@
 import { add as addEvent } from "WoltLabSuite/Core/Event/Handler";
 import { AjaxResponse, ClipboardActionData } from "WoltLabSuite/Core/Controller/Clipboard/Data";
 
-// TODO complete types for EventData, add "conversationData"
+interface ConversationData {
+  isClosed: boolean;
+}
+
 interface EventData {
   data: ClipboardActionData;
-  responseData: AjaxResponse;
+  responseData:
+    | null
+    | (AjaxResponse & {
+        returnValues: {
+          conversationData: {
+            [key: string]: ConversationData;
+          };
+        };
+      });
 }
 
 // TODO add types for editorHandler
@@ -46,13 +57,11 @@ function evaluateResponse(editorHandler, actionName: string, data) {
 
     case "com.woltlab.wcf.conversation.conversation.close":
     case "com.woltlab.wcf.conversation.conversation.open":
-      for (const conversationId in data.returnValues.conversationData) {
-        if (Object.hasOwn(data.returnValues.conversationData, conversationId)) {
-          const $data = data.returnValues.conversationData[conversationId];
-
-          editorHandler.update(conversationId, $data.isClosed ? "close" : "open", $data);
-        }
-      }
+      Object.entries(data.returnValues.conversationData).forEach(
+        ([conversationId, conversationData]: [string, ConversationData]) => {
+          editorHandler.update(conversationId, conversationData.isClosed ? "close" : "open", conversationData);
+        },
+      );
       break;
   }
 }

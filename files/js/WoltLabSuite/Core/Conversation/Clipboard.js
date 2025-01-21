@@ -37,12 +37,9 @@ define(["require", "exports", "WoltLabSuite/Core/Event/Handler"], function (requ
                 break;
             case "com.woltlab.wcf.conversation.conversation.close":
             case "com.woltlab.wcf.conversation.conversation.open":
-                for (const conversationId in data.returnValues.conversationData) {
-                    if (Object.hasOwn(data.returnValues.conversationData, conversationId)) {
-                        const $data = data.returnValues.conversationData[conversationId];
-                        editorHandler.update(conversationId, $data.isClosed ? "close" : "open", $data);
-                    }
-                }
+                Object.entries(data.returnValues.conversationData).forEach(([conversationId, conversationData]) => {
+                    editorHandler.update(conversationId, conversationData.isClosed ? "close" : "open", conversationData);
+                });
                 break;
         }
     }
