@@ -343,10 +343,12 @@
 		'WoltLabSuite/Core/Language',
 		'WoltLabSuite/Core/Ui/ItemList/User',
 		'WoltLabSuite/Core/Controller/Clipboard',
+		'WoltLabSuite/Core/Conversation/Clipboard',
 	], (
 		Language,
 		UiItemListUser,
-		ControllerClipboard
+		ControllerClipboard,
+		ConversationClipboard,
 	) => {
 		Language.addObject({
 			'wcf.conversation.edit.addParticipants': '{jslang}wcf.conversation.edit.addParticipants{/jslang}',
@@ -374,8 +376,8 @@
 		var $editorHandler = new WCF.Conversation.EditorHandler();
 		var $inlineEditor = new WCF.Conversation.InlineEditor('.conversation');
 		$inlineEditor.setEditorHandler($editorHandler, 'list');
-		
-		new WCF.Conversation.Clipboard($editorHandler);
+
+		ConversationClipboard.setup($editorHandler);
 		new WCF.Conversation.Label.Manager('{link controller='ConversationList' encode=false}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}');
 		
 		// mobile safari hover workaround

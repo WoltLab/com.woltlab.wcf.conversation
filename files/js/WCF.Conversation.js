@@ -297,6 +297,8 @@ WCF.Conversation.EditorHandlerConversation = WCF.Conversation.EditorHandler.exte
 
 /**
  * Provides extended actions for conversation clipboard actions.
+ *
+ * @deprecated 6.2 use `WoltLabSuite/Core/Conversation/Clipboard` instead
  */
 WCF.Conversation.Clipboard = Class.extend({
 	/**
