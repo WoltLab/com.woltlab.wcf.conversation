@@ -6,7 +6,7 @@
  * @license  GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @since 6.2
  */
-define(["require", "exports", "WoltLabSuite/Core/Event/Handler"], function (require, exports, Handler_1) {
+define(["require", "exports", "WoltLabSuite/Core/Event/Handler", "./Component/Label/Editor"], function (require, exports, Handler_1, Editor_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.setup = setup;
@@ -23,8 +23,7 @@ define(["require", "exports", "WoltLabSuite/Core/Event/Handler"], function (requ
     }
     function execute(editorHandler, actionName, parameters) {
         if (actionName === "com.woltlab.wcf.conversation.conversation.assignLabel") {
-            // TODO update to new typescript label editor
-            new window.WCF.Conversation.Label.Editor(editorHandler, null, parameters.objectIDs);
+            void (0, Editor_1.openDialog)(editorHandler, parameters.objectIDs);
         }
     }
     function evaluateResponse(editorHandler, actionName, data) {

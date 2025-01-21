@@ -704,6 +704,8 @@ WCF.Conversation.Label = { };
  * @param	WCF.Conversation.EditorHandler	editorHandler
  * @param	string				elementID
  * @param	array<integer>			conversationIDs
+ *
+ * @deprecated 6.2 Use `WoltLabSuite/Core/Conversation/Component/Label/Editor` instead
  */
 WCF.Conversation.Label.Editor = Class.extend({
 	/**
