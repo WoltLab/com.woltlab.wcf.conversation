@@ -17,7 +17,7 @@ use wcf\system\WCF;
  * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @since       6.2
  */
-final class Leave
+final class LeaveConversation
 {
     public function __construct(
         public readonly array $conversationIDs,

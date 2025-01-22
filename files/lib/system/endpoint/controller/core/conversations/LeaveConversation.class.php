@@ -7,7 +7,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use wcf\data\conversation\Conversation;
 use wcf\http\Helper;
-use wcf\system\conversation\command\Leave;
 use wcf\system\endpoint\IController;
 use wcf\system\endpoint\PostRequest;
 use wcf\system\exception\PermissionDeniedException;
@@ -33,7 +32,7 @@ final class LeaveConversation implements IController
         $parameters = Helper::mapApiParameters($request, LeaveConversationParameters::class);
         $hideConversation = $parameters->hideConversation;
 
-        (new Leave([$conversation->conversationID], $hideConversation))();
+        (new \wcf\system\conversation\command\LeaveConversation([$conversation->conversationID], $hideConversation))();
 
         return new JsonResponse([
             'redirectUrl' => LinkHandler::getInstance()->getLink('ConversationList'),

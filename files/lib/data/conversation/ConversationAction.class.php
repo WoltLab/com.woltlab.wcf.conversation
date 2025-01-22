@@ -11,7 +11,7 @@ use wcf\data\IVisitableObjectAction;
 use wcf\data\user\group\UserGroup;
 use wcf\page\ConversationPage;
 use wcf\system\clipboard\ClipboardHandler;
-use wcf\system\conversation\command\Leave;
+use wcf\system\conversation\command\LeaveConversation;
 use wcf\system\conversation\ConversationHandler;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\event\EventHandler;
@@ -591,7 +591,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
      */
     public function hideConversation()
     {
-        (new Leave($this->objectIDs, $this->parameters['hideConversation']))();
+        (new LeaveConversation($this->objectIDs, $this->parameters['hideConversation']))();
 
         return [
             'actionName' => 'hideConversation',
