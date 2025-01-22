@@ -71,7 +71,7 @@ final class GetConversationLabels implements IController
             ->appendChildren([
                 MultipleSelectionFormField::create('labelIDs')
                     ->options(
-                        \array_map(function (ConversationLabel $label) {
+                        \array_map(static function (ConversationLabel $label) {
                             return \sprintf(
                                 '<span class="badge label%s">%s</span>',
                                 empty($label->cssClassName) ? '' : ' ' . $label->cssClassName,
@@ -79,7 +79,7 @@ final class GetConversationLabels implements IController
                             );
                         }, $labelList->getObjects())
                     )
-                    ->value($this->getAssignedLabelIDs($labelList->getObjectIDs(), $conversationID))
+                    ->value($this->getAssignedLabelIDs($labelList->getObjectIDs(), $conversationID)),
             ])
             ->addDefaultButton(false)
             ->build();
@@ -100,10 +100,10 @@ final class GetConversationLabels implements IController
                 " . $conditions;
         $statement = WCF::getDB()->prepare($sql);
         $statement->execute($conditions->getParameters());
+
         return $statement->fetchAll(\PDO::FETCH_COLUMN);
     }
 }
-
 
 /** @internal */
 final class GetConversationLabelsParameters

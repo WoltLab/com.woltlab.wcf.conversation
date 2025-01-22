@@ -113,9 +113,9 @@ final class ConversationLabelFormAction implements RequestHandlerInterface
     private function getForm(?ConversationLabel $label): Psr15DialogForm
     {
         $form = new Psr15DialogForm(
-            ConversationLabelFormAction::class,
+            self::class,
             $label ? WCF::getLanguage()->getDynamicVariable('wcf.conversation.label.management.editLabel', [
-                'labelName' => $label->label
+                'labelName' => $label->label,
             ]) : WCF::getLanguage()->get('wcf.conversation.label.management.addLabel')
         );
         $deleteLabel = CheckboxFormField::create('deleteLabel')
@@ -149,7 +149,7 @@ final class ConversationLabelFormAction implements RequestHandlerInterface
         $form->appendChildren([
             $deleteLabel,
             $labelFormField,
-            $cssClassNameFormField
+            $cssClassNameFormField,
         ]);
 
         // Map the pseudo value 'none' to an empty string

@@ -108,7 +108,6 @@ final class AssignConversationLabels implements IController
     }
 }
 
-
 /** @internal */
 final class AssignConversationLabelsParameters
 {
