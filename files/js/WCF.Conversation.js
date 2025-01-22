@@ -297,6 +297,8 @@ WCF.Conversation.EditorHandlerConversation = WCF.Conversation.EditorHandler.exte
 
 /**
  * Provides extended actions for conversation clipboard actions.
+ *
+ * @deprecated 6.2 use `WoltLabSuite/Core/Conversation/Clipboard` instead
  */
 WCF.Conversation.Clipboard = Class.extend({
 	/**
@@ -706,6 +708,8 @@ WCF.Conversation.Label = { };
  * @param	WCF.Conversation.EditorHandler	editorHandler
  * @param	string				elementID
  * @param	array<integer>			conversationIDs
+ *
+ * @deprecated 6.2 Use `WoltLabSuite/Core/Conversation/Component/Label/Editor` instead
  */
 WCF.Conversation.Label.Editor = Class.extend({
 	/**
@@ -863,6 +867,8 @@ WCF.Conversation.Label.Editor = Class.extend({
  * Label manager for conversations.
  * 
  * @param	string		link
+ *
+ * @deprecated 6.2 use `WoltLabSuite/Core/Conversation/Component/Label/Manager` instead
  */
 WCF.Conversation.Label.Manager = Class.extend({
 	/**

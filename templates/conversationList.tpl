@@ -343,10 +343,14 @@
 		'WoltLabSuite/Core/Language',
 		'WoltLabSuite/Core/Ui/ItemList/User',
 		'WoltLabSuite/Core/Controller/Clipboard',
+		'WoltLabSuite/Core/Conversation/Clipboard',
+	  	'WoltLabSuite/Core/Conversation/Component/Label/Manager',
 	], (
 		Language,
 		UiItemListUser,
-		ControllerClipboard
+		ControllerClipboard,
+		ConversationClipboard,
+		{ LabelManager },
 	) => {
 		Language.addObject({
 			'wcf.conversation.edit.addParticipants': '{jslang}wcf.conversation.edit.addParticipants{/jslang}',
@@ -357,8 +361,6 @@
 			'wcf.conversation.edit.subject': '{jslang}wcf.conversation.edit.subject{/jslang}',
 			'wcf.conversation.label.management': '{jslang}wcf.conversation.label.management{/jslang}',
 			'wcf.conversation.label.management.addLabel.success': '{jslang}wcf.conversation.label.management.addLabel.success{/jslang}',
-			'wcf.conversation.label.management.deleteLabel.confirmMessage': '{jslang}wcf.conversation.label.management.deleteLabel.confirmMessage{/jslang}',
-			'wcf.conversation.label.management.editLabel': '{jslang}wcf.conversation.label.management.editLabel{/jslang}',
 			'wcf.conversation.label.placeholder': '{jslang}wcf.conversation.label.placeholder{/jslang}',
 			'wcf.conversation.leave.title': '{jslang}wcf.conversation.leave.title{/jslang}',
 			'wcf.global.state.closed': '{jslang}wcf.global.state.closed{/jslang}',
@@ -374,9 +376,9 @@
 		var $editorHandler = new WCF.Conversation.EditorHandler();
 		var $inlineEditor = new WCF.Conversation.InlineEditor('.conversation');
 		$inlineEditor.setEditorHandler($editorHandler, 'list');
-		
-		new WCF.Conversation.Clipboard($editorHandler);
-		new WCF.Conversation.Label.Manager('{link controller='ConversationList' encode=false}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}');
+
+		ConversationClipboard.setup($editorHandler);
+		new LabelManager('{link controller='ConversationLabelForm'}{/link}', '{link controller='ConversationList' encode=false}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}');
 		
 		// mobile safari hover workaround
 		if ($(window).width() <= 800) {

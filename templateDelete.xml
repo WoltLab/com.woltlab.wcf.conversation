@@ -2,5 +2,6 @@
 <data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/templateDelete.xsd">
 	<delete>
 		<template>conversationListUserPanel</template>
+		<template>conversationLabelAssignment</template>
 	</delete>
 </data>

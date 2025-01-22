@@ -3,7 +3,6 @@
 namespace wcf\data\conversation;
 
 use wcf\data\AbstractDatabaseObjectAction;
-use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\data\conversation\message\ConversationMessageList;
 use wcf\data\IClipboardAction;
@@ -433,38 +432,6 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
     public function validateMarkAllAsRead()
     {
         // does nothing
-    }
-
-    /**
-     * Validates user access for label management.
-     *
-     * @throws  PermissionDeniedException
-     */
-    public function validateGetLabelManagement()
-    {
-        if (!WCF::getSession()->getPermission('user.conversation.canUseConversation')) {
-            throw new PermissionDeniedException();
-        }
-    }
-
-    /**
-     * Returns the conversation label management.
-     *
-     * @return  array
-     */
-    public function getLabelManagement()
-    {
-        WCF::getTPL()->assign([
-            'cssClassNames' => ConversationLabel::getLabelCssClassNames(),
-            'labelList' => ConversationLabel::getLabelsByUser(),
-        ]);
-
-        return [
-            'actionName' => 'getLabelManagement',
-            'template' => WCF::getTPL()->fetch('conversationLabelManagement'),
-            'maxLabels' => WCF::getSession()->getPermission('user.conversation.maxLabels'),
-            'labelCount' => \count(ConversationLabel::getLabelsByUser()),
-        ];
     }
 
     /**

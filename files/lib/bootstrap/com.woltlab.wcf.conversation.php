@@ -42,6 +42,9 @@ return static function (): void {
             $event->register(new \wcf\system\endpoint\controller\core\conversations\GetConversationPopover());
             $event->register(new \wcf\system\endpoint\controller\core\conversations\LeaveConversation());
             $event->register(new \wcf\system\endpoint\controller\core\conversations\GetConversationLeaveDialog());
+            $event->register(new \wcf\system\endpoint\controller\core\conversations\GetConversationLabels());
+            $event->register(new \wcf\system\endpoint\controller\core\conversations\AssignConversationLabels());
+            $event->register(new \wcf\system\endpoint\controller\core\conversations\GetConversationLabelManager());
         }
     );
 };
