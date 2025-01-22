@@ -506,10 +506,7 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
 			
 			case 'leave':
 				require(["WoltLabSuite/Core/Conversation/Component/Leave"], ({ openDialog }) => {
-				  openDialog(
-					elData(elById(elementID), "conversation-leave-form-link"),
-					this._environment,
-				  );
+				  openDialog(elData(elById(elementID), "conversation-id"), this._environment);
 				});
 			break;
 			

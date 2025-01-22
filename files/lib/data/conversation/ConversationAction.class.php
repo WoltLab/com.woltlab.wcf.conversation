@@ -11,6 +11,7 @@ use wcf\data\IVisitableObjectAction;
 use wcf\data\user\group\UserGroup;
 use wcf\page\ConversationPage;
 use wcf\system\clipboard\ClipboardHandler;
+use wcf\system\conversation\command\Leave;
 use wcf\system\conversation\ConversationHandler;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\event\EventHandler;
@@ -555,51 +556,6 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
     }
 
     /**
-     * Validates conversations for leave form.
-     *
-     * @throws  PermissionDeniedException
-     * @throws  UserInputException
-     */
-    public function validateGetLeaveForm()
-    {
-        if (empty($this->objectIDs)) {
-            throw new UserInputException('objectIDs');
-        }
-
-        // validate participation
-        if (!Conversation::isParticipant($this->objectIDs)) {
-            throw new PermissionDeniedException();
-        }
-    }
-
-    /**
-     * Returns dialog form to leave conversations.
-     *
-     * @return  array
-     */
-    public function getLeaveForm()
-    {
-        // get hidden state from first conversation (all others have the same state)
-        $sql = "SELECT  hideConversation
-                FROM    wcf1_conversation_to_user
-                WHERE   conversationID = ?
-                    AND participantID = ?";
-        $statement = WCF::getDB()->prepare($sql);
-        $statement->execute([
-            \current($this->objectIDs),
-            WCF::getUser()->userID,
-        ]);
-        $row = $statement->fetchArray();
-
-        WCF::getTPL()->assign('hideConversation', ($row !== false ? $row['hideConversation'] : 0));
-
-        return [
-            'actionName' => 'getLeaveForm',
-            'template' => WCF::getTPL()->fetch('conversationLeave'),
-        ];
-    }
-
-    /**
      * Validates parameters to hide conversations.
      *
      * @throws  PermissionDeniedException
@@ -635,68 +591,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
      */
     public function hideConversation()
     {
-        $sql = "UPDATE  wcf1_conversation_to_user
-                SET     hideConversation = ?
-                WHERE   conversationID = ?
-                    AND participantID = ?";
-        $statement = WCF::getDB()->prepare($sql);
-
-        WCF::getDB()->beginTransaction();
-        foreach ($this->objectIDs as $conversationID) {
-            $statement->execute([
-                $this->parameters['hideConversation'],
-                $conversationID,
-                WCF::getUser()->userID,
-            ]);
-        }
-        WCF::getDB()->commitTransaction();
-
-        // reset user's conversation counters if user leaves conversation
-        // permanently
-        if ($this->parameters['hideConversation'] == Conversation::STATE_LEFT) {
-            UserStorageHandler::getInstance()->reset([WCF::getUser()->userID], 'conversationCount');
-            UserStorageHandler::getInstance()->reset([WCF::getUser()->userID], 'unreadConversationCount');
-        }
-
-        // add modification log entry
-        if ($this->parameters['hideConversation'] == Conversation::STATE_LEFT) {
-            if (empty($this->objects)) {
-                $this->readObjects();
-            }
-
-            foreach ($this->getObjects() as $conversation) {
-                ConversationModificationLogHandler::getInstance()->leave($conversation->getDecoratedObject());
-            }
-        }
-
-        // unmark items
-        $this->unmarkItems();
-
-        if ($this->parameters['hideConversation'] == Conversation::STATE_LEFT) {
-            // update participants count and participant summary
-            ConversationEditor::updateParticipantCounts($this->objectIDs);
-            ConversationEditor::updateParticipantSummaries($this->objectIDs);
-
-            // delete conversation if all users have left it
-            $conditionBuilder = new PreparedStatementConditionBuilder();
-            $conditionBuilder->add('conversation.conversationID IN (?)', [$this->objectIDs]);
-            $conditionBuilder->add('conversation_to_user.conversationID IS NULL');
-            $sql = "SELECT      DISTINCT conversation.conversationID
-                    FROM        wcf1_conversation conversation
-                    LEFT JOIN   wcf1_conversation_to_user conversation_to_user
-                    ON          conversation_to_user.conversationID = conversation.conversationID
-                            AND conversation_to_user.hideConversation <> " . Conversation::STATE_LEFT . "
-                            AND conversation_to_user.participantID IS NOT NULL
-                    " . $conditionBuilder;
-            $statement = WCF::getDB()->prepare($sql);
-            $statement->execute($conditionBuilder->getParameters());
-            $conversationIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
-
-            if (!empty($conversationIDs)) {
-                $action = new self($conversationIDs, 'delete');
-                $action->executeAction();
-            }
-        }
+        (new Leave($this->objectIDs, $this->parameters['hideConversation']))();
 
         return [
             'actionName' => 'hideConversation',

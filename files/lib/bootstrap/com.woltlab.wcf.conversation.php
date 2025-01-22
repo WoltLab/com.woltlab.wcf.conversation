@@ -40,6 +40,8 @@ return static function (): void {
         \wcf\event\endpoint\ControllerCollecting::class,
         static function (\wcf\event\endpoint\ControllerCollecting $event) {
             $event->register(new \wcf\system\endpoint\controller\core\conversations\GetConversationPopover());
+            $event->register(new \wcf\system\endpoint\controller\core\conversations\LeaveConversation());
+            $event->register(new \wcf\system\endpoint\controller\core\conversations\GetConversationLeaveDialog());
         }
     );
 };
