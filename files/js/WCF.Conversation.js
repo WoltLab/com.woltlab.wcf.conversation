@@ -863,6 +863,8 @@ WCF.Conversation.Label.Editor = Class.extend({
  * Label manager for conversations.
  * 
  * @param	string		link
+ *
+ * @deprecated 6.2 use `WoltLabSuite/Core/Conversation/Component/Label/Manager` instead
  */
 WCF.Conversation.Label.Manager = Class.extend({
 	/**
