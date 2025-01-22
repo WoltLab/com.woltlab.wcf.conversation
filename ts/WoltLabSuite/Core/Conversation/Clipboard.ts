@@ -9,6 +9,7 @@
 
 import { add as addEvent } from "WoltLabSuite/Core/Event/Handler";
 import { AjaxResponse, ClipboardActionData } from "WoltLabSuite/Core/Controller/Clipboard/Data";
+import { openDialog as openAssignLabelDialog } from "./Component/Label/Editor";
 
 interface ConversationData {
   isClosed: boolean;
@@ -41,8 +42,7 @@ export function setup(editorHandler) {
 
 function execute(editorHandler, actionName: string, parameters) {
   if (actionName === "com.woltlab.wcf.conversation.conversation.assignLabel") {
-    // TODO update to new typescript label editor
-    new window.WCF.Conversation.Label.Editor(editorHandler, null, parameters.objectIDs);
+    void openAssignLabelDialog(editorHandler, parameters.objectIDs);
   }
 }
 

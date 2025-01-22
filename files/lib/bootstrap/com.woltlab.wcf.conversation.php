@@ -40,6 +40,9 @@ return static function (): void {
         \wcf\event\endpoint\ControllerCollecting::class,
         static function (\wcf\event\endpoint\ControllerCollecting $event) {
             $event->register(new \wcf\system\endpoint\controller\core\conversations\GetConversationPopover());
+            $event->register(new \wcf\system\endpoint\controller\core\conversations\GetConversationLabels());
+            $event->register(new \wcf\system\endpoint\controller\core\conversations\AssignConversationLabels());
+            $event->register(new \wcf\system\endpoint\controller\core\conversations\GetConversationLabelManager());
         }
     );
 };
