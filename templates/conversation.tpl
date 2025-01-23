@@ -169,9 +169,7 @@
 		{assign var=__supportPaste value=true}
 		{if !$conversation->canReply()}{assign var=__supportPaste value=false}{/if}
 		{include file='shared_messageQuoteManager' wysiwygSelector='text' supportPaste=$__supportPaste}
-		
-		new WCF.Conversation.Message.InlineEditor({@$conversation->conversationID}, $quoteManager);
-		
+
 		require(["WoltLabSuite/Core/Conversation/Ui/Message/Quote"], ({ UiConversationMessageQuote }) => {
 			new UiConversationMessageQuote($quoteManager);
 		});
@@ -187,8 +185,13 @@
 			});
 		{/if}
 	});
-	
-	require(['WoltLabSuite/Core/Conversation/Ui/Object/Action/RemoveParticipant'], (UiObjectActionRemoveParticipant) => {
+
+	require([
+		'WoltLabSuite/Core/Conversation/Ui/Object/Action/RemoveParticipant',
+		'WoltLabSuite/Core/Conversation/Ui/Message/InlineEditor',
+	], (UiObjectActionRemoveParticipant, { UiConversationMessageInlineEditor }) => {
+		new UiConversationMessageInlineEditor({$conversation->conversationID});
+
 		UiObjectActionRemoveParticipant.setup();
 	});
 </script>
