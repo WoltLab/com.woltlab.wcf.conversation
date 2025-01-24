@@ -18,6 +18,7 @@
 		<file>lib/form/ConversationMessageAddForm.class.php</file>
 		<file>lib/form/ConversationMessageEditForm.class.php</file>
 		<file>lib/page/ConversationLogPage.class.php</file>
+		<file>lib/system/message/quote/ConversationMessageQuoteHandler.class.php</file>
 		<file>lib/system/event/listener/UserGroupAddCanBeAddedAsParticipantListener.class.php</file>
 		<file>lib/system/user/online/location/ConversationLocation.class.php</file>
 		<file>style/conversation.less</file>
