@@ -248,9 +248,8 @@ class ConversationAddForm extends AbstractFormBuilderForm
                     $participantGroupsFormField?->getValue() ?: [],
                     $invisibleParticipantGroupsFormField?->getValue() ?: [],
                 );
-                $userIDs = \array_column($formField->getUsers(), 'userID');
                 $userIDs = \array_merge(
-                    $userIDs,
+                    \array_column($formField->getUsers(), 'userID'),
                     \array_column($invisibleParticipantsFormField?->getUsers() ?: [], 'userID'),
                 );
 
