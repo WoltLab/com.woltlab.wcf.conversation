@@ -47,6 +47,7 @@ final class LeaveConversation implements IController
     }
 }
 
+// @codingStandardsIgnoreStart
 /** @internal */
 final class LeaveConversationParameters
 {
@@ -56,3 +57,4 @@ final class LeaveConversationParameters
     ) {
     }
 }
+// @codingStandardsIgnoreEnd
