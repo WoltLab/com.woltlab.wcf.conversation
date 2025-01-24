@@ -83,16 +83,14 @@
 							<li
 								class="jsQuoteMessage"
 								data-object-id="{$message->messageID}"
-								data-is-quoted="{if $__quoteFullQuote|isset && $message->messageID|in_array:$__quoteFullQuote}1{else}0{/if}"
 							>
-								<a
-									href="#"
+								<button type="button"
 									title="{lang}wcf.message.quote.quoteMessage{/lang}"
 									class="button jsTooltip{if $__quoteFullQuote|isset && $message->messageID|in_array:$__quoteFullQuote} active{/if}"
 								>
 									{icon name='quote-left' type='solid'}
 									<span class="invisible">{lang}wcf.message.quote.quoteMessage{/lang}</span>
-								</a>
+								</button>
 							</li>
 							{if $message->userID != $__wcf->getUser()->userID && $__wcf->session->getPermission('user.profile.canReportContent')}
 								<li>

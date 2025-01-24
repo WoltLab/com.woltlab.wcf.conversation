@@ -162,10 +162,6 @@
 			});
 		{/if}
 	});
-	
-	$(function() {
-		{include file='shared_messageQuoteManager' wysiwygSelector='text' supportPaste=true}
-	});
 </script>
 
 {include file='shared_wysiwyg'}

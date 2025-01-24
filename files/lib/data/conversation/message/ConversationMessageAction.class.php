@@ -9,8 +9,6 @@ use wcf\data\conversation\ConversationEditor;
 use wcf\data\DatabaseObject;
 use wcf\data\IAttachmentMessageQuickReplyAction;
 use wcf\data\IMessageInlineEditorAction;
-use wcf\data\IMessageQuoteAction;
-use wcf\data\object\type\ObjectTypeCache;
 use wcf\data\smiley\SmileyCache;
 use wcf\event\message\MessageSpamChecking;
 use wcf\system\attachment\AttachmentHandler;
@@ -48,8 +46,7 @@ use wcf\util\UserUtil;
  */
 class ConversationMessageAction extends AbstractDatabaseObjectAction implements
     IAttachmentMessageQuickReplyAction,
-    IMessageInlineEditorAction,
-    IMessageQuoteAction
+    IMessageInlineEditorAction
 {
     /**
      * @inheritDoc
@@ -593,140 +590,6 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
     {
         /** @var ConversationMessage $message */
         return $message->getLink();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function validateSaveFullQuote()
-    {
-        $this->message = $this->getSingleObject();
-
-        if (!Conversation::isParticipant([$this->message->conversationID])) {
-            throw new PermissionDeniedException();
-        }
-    }
-
-    private function loadEmbeddedObjects(): void
-    {
-        if ($this->message->hasEmbeddedObjects) {
-            ObjectTypeCache::getInstance()
-                ->getObjectTypeByName('com.woltlab.wcf.attachment.objectType', 'com.woltlab.wcf.conversation.message')
-                ->getProcessor()
-                ->cacheObjects([$this->message->messageID]);
-            MessageEmbeddedObjectManager::getInstance()->loadObjects(
-                'com.woltlab.wcf.conversation.message',
-                [$this->message->messageID]
-            );
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function saveFullQuote()
-    {
-        $this->loadEmbeddedObjects();
-
-        $quoteID = MessageQuoteManager::getInstance()->addQuote(
-            'com.woltlab.wcf.conversation.message',
-            $this->message->conversationID,
-            $this->message->messageID,
-            $this->message->getExcerpt(),
-            $this->message->getMessage()
-        );
-
-        if ($quoteID === false) {
-            $removeQuoteID = MessageQuoteManager::getInstance()->getQuoteID(
-                'com.woltlab.wcf.conversation.message',
-                $this->message->messageID,
-                $this->message->getExcerpt(),
-                $this->message->getMessage()
-            );
-            MessageQuoteManager::getInstance()->removeQuote($removeQuoteID);
-        }
-
-        $returnValues = [
-            'count' => MessageQuoteManager::getInstance()->countQuotes(),
-            'fullQuoteMessageIDs' => MessageQuoteManager::getInstance()->getFullQuoteObjectIDs(
-                ['com.woltlab.wcf.conversation.message']
-            ),
-        ];
-
-        if ($quoteID) {
-            $returnValues['renderedQuote'] = MessageQuoteManager::getInstance()->getQuoteComponents($quoteID);
-        }
-
-        return $returnValues;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function validateSaveQuote()
-    {
-        $this->readString('message');
-        $this->readBoolean('renderQuote', true);
-        $this->message = $this->getSingleObject();
-
-        if (!Conversation::isParticipant([$this->message->conversationID])) {
-            throw new PermissionDeniedException();
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function saveQuote()
-    {
-        $this->loadEmbeddedObjects();
-
-        $quoteID = MessageQuoteManager::getInstance()->addQuote(
-            'com.woltlab.wcf.conversation.message',
-            $this->message->conversationID,
-            $this->message->messageID,
-            $this->parameters['message'],
-            false
-        );
-
-        $returnValues = [
-            'count' => MessageQuoteManager::getInstance()->countQuotes(),
-            'fullQuoteMessageIDs' => MessageQuoteManager::getInstance()->getFullQuoteObjectIDs(
-                ['com.woltlab.wcf.conversation.message']
-            ),
-        ];
-
-        if ($this->parameters['renderQuote']) {
-            $returnValues['renderedQuote'] = MessageQuoteManager::getInstance()->getQuoteComponents($quoteID);
-        }
-
-        return $returnValues;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function validateGetRenderedQuotes()
-    {
-        $this->readInteger('parentObjectID');
-
-        $this->conversation = new Conversation($this->parameters['parentObjectID']);
-        if (!$this->conversation->conversationID) {
-            throw new UserInputException('parentObjectID');
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getRenderedQuotes()
-    {
-        $quotes = MessageQuoteManager::getInstance()
-            ->getQuotesByParentObjectID('com.woltlab.wcf.conversation.message', $this->conversation->conversationID);
-
-        return [
-            'template' => \implode("\n\n", $quotes),
-        ];
     }
 
     /**
