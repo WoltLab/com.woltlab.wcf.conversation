@@ -267,7 +267,10 @@ class ConversationAddForm extends AbstractFormBuilderForm
 
                 if (\count($userIDs) > WCF::getSession()->getPermission('user.conversation.maxParticipants')) {
                     $formField->addValidationError(
-                        new FormFieldValidationError('tooManyParticipants')
+                        new FormFieldValidationError(
+                            'tooManyParticipants',
+                            'wcf.conversation.participants.error.tooManyParticipants'
+                        )
                     );
                 }
             }
