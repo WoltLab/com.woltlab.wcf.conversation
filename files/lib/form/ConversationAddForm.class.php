@@ -7,42 +7,35 @@ use wcf\data\conversation\ConversationAction;
 use wcf\data\user\group\UserGroup;
 use wcf\system\cache\builder\UserGroupCacheBuilder;
 use wcf\system\cache\runtime\UserProfileRuntimeCache;
-use wcf\system\conversation\ConversationHandler;
-use wcf\system\exception\IllegalLinkException;
-use wcf\system\exception\NamedUserException;
-use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
-use wcf\system\flood\FloodControl;
-use wcf\system\message\quote\MessageQuoteManager;
+use wcf\system\form\builder\container\FormContainer;
+use wcf\system\form\builder\container\wysiwyg\WysiwygFormContainer;
+use wcf\system\form\builder\field\BooleanFormField;
+use wcf\system\form\builder\field\dependency\NonEmptyFormFieldDependency;
+use wcf\system\form\builder\field\MultipleSelectionFormField;
+use wcf\system\form\builder\field\TextFormField;
+use wcf\system\form\builder\field\user\UserFormField;
+use wcf\system\form\builder\field\validation\FormFieldValidationError;
+use wcf\system\form\builder\field\validation\FormFieldValidator;
 use wcf\system\page\PageLocationManager;
+use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\WCF;
-use wcf\util\ArrayUtil;
-use wcf\util\HeaderUtil;
-use wcf\util\StringUtil;
 
 /**
  * Shows the conversation form.
  *
- * @author  Marcel Werk
- * @copyright   2001-2019 WoltLab GmbH
+ * @author      Olaf Braun, Marcel Werk
+ * @copyright   2001-2025 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
+ *
+ * @property Conversation $formObject
  */
-class ConversationAddForm extends MessageForm
+class ConversationAddForm extends AbstractFormBuilderForm
 {
     /**
      * @inheritDoc
      */
-    public $attachmentObjectType = 'com.woltlab.wcf.conversation.message';
-
-    /**
-     * @inheritDoc
-     */
     public $loginRequired = true;
-
-    /**
-     * @inheritDoc
-     */
-    public $messageObjectType = 'com.woltlab.wcf.conversation.message';
 
     /**
      * @inheritDoc
@@ -55,265 +48,9 @@ class ConversationAddForm extends MessageForm
     public $neededPermissions = ['user.conversation.canUseConversation'];
 
     /**
-     * participants (comma separated user names)
-     * @var string
-     */
-    public $participants = '';
-
-    /**
-     * invisible participants (comma separated user names)
-     * @var string
-     */
-    public $invisibleParticipants = '';
-
-    /**
-     * user group participants (comma separated ids)
-     * @var string
-     */
-    public $participantsGroupIDs = '';
-
-    /**
-     * invisible user group participants (comma separated ids)
-     * @var string
-     */
-    public $invisibleParticipantsGroupIDs = '';
-
-    /**
-     * draft status
-     * @var bool
-     */
-    public $draft = false;
-
-    /**
-     * true, if participants can add new participants
-     * @var bool
-     */
-    public $participantCanInvite = false;
-
-    /**
-     * participants (user ids)
-     * @var int[]
-     */
-    public $participantIDs = [];
-
-    /**
-     * invisible participants (user ids)
-     * @var int[]
-     */
-    public $invisibleParticipantIDs = [];
-
-    /**
      * @inheritDoc
      */
-    public function readParameters()
-    {
-        parent::readParameters();
-
-        if (!WCF::getUser()->userID) {
-            return;
-        }
-
-        // check max pc permission
-        if (ConversationHandler::getInstance()->getConversationCount() >= WCF::getSession()->getPermission('user.conversation.maxConversations')) {
-            throw new NamedUserException(WCF::getLanguage()->getDynamicVariable(
-                'wcf.conversation.error.mailboxIsFull'
-            ));
-        }
-
-        ConversationHandler::getInstance()->enforceFloodControl(false);
-
-        if (isset($_REQUEST['userID'])) {
-            $userID = \intval($_REQUEST['userID']);
-            $user = UserProfileRuntimeCache::getInstance()->getObject($userID);
-            if ($user === null || $user->userID == WCF::getUser()->userID) {
-                throw new IllegalLinkException();
-            }
-
-            // validate user
-            try {
-                Conversation::validateParticipant($user);
-            } catch (UserInputException $e) {
-                throw new NamedUserException(WCF::getLanguage()->getDynamicVariable(
-                    'wcf.conversation.participants.error.' . $e->getType(),
-                    ['errorData' => ['username' => $user->username]]
-                ));
-            }
-
-            $this->participants = $user->username;
-        }
-
-        // get max text length
-        $this->maxTextLength = WCF::getSession()->getPermission('user.conversation.maxLength');
-
-        // quotes
-        MessageQuoteManager::getInstance()->readParameters();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function readFormParameters()
-    {
-        parent::readFormParameters();
-
-        if (isset($_POST['draft'])) {
-            $this->draft = (bool)$_POST['draft'];
-        }
-        if (isset($_POST['participantCanInvite'])) {
-            $this->participantCanInvite = (bool)$_POST['participantCanInvite'];
-        }
-        if (isset($_POST['participants'])) {
-            $this->participants = StringUtil::trim($_POST['participants']);
-        }
-        if (isset($_POST['invisibleParticipants'])) {
-            $this->invisibleParticipants = StringUtil::trim($_POST['invisibleParticipants']);
-        }
-        if (WCF::getSession()->getPermission('user.conversation.canAddGroupParticipants')) {
-            if (isset($_POST['participantsGroupIDs'])) {
-                $this->participantsGroupIDs = StringUtil::trim($_POST['participantsGroupIDs']);
-            }
-            if (isset($_POST['invisibleParticipantsGroupIDs'])) {
-                $this->invisibleParticipantsGroupIDs = StringUtil::trim($_POST['invisibleParticipantsGroupIDs']);
-            }
-        }
-
-        // quotes
-        MessageQuoteManager::getInstance()->readFormParameters();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function validate()
-    {
-        if (
-            empty($this->participants)
-            && empty($this->invisibleParticipants)
-            && empty($this->participantsGroupIDs)
-            && empty($this->invisibleParticipantsGroupIDs)
-            && !$this->draft
-        ) {
-            throw new UserInputException('participants');
-        }
-
-        // check, if user is allowed to set invisible participants
-        if (
-            !WCF::getSession()->getPermission('user.conversation.canAddInvisibleParticipants')
-            && (!empty($this->invisibleParticipants) || !empty($this->invisibleParticipantsGroupIDs))
-        ) {
-            throw new UserInputException('participants', 'invisibleParticipantsNoPermission');
-        }
-
-        // check, if user is allowed to set participantCanInvite
-        if (!WCF::getSession()->getPermission('user.conversation.canSetCanInvite') && $this->participantCanInvite) {
-            throw new UserInputException('participantCanInvite', 'participantCanInviteNoPermission');
-        }
-
-        $this->participantIDs = Conversation::validateParticipants($this->participants);
-        $this->invisibleParticipantIDs = Conversation::validateParticipants(
-            $this->invisibleParticipants,
-            'invisibleParticipants'
-        );
-        if (!empty($this->participantsGroupIDs)) {
-            $validGroupParticipants = Conversation::validateGroupParticipants($this->participantsGroupIDs);
-            $validGroupParticipants = \array_diff($validGroupParticipants, $this->participantIDs);
-            if (empty($validGroupParticipants)) {
-                throw new UserInputException('participants', 'emptyGroup');
-            }
-            $this->participantIDs = \array_merge($this->participantIDs, $validGroupParticipants);
-        }
-        if (!empty($this->invisibleParticipantsGroupIDs)) {
-            $validGroupParticipants = Conversation::validateGroupParticipants(
-                $this->invisibleParticipantsGroupIDs,
-                'invisibleParticipants'
-            );
-            $validGroupParticipants = \array_diff($validGroupParticipants, $this->invisibleParticipantIDs);
-            if (empty($validGroupParticipants)) {
-                throw new UserInputException('invisibleParticipants', 'emptyGroup');
-            }
-            $this->invisibleParticipantIDs = \array_merge($this->invisibleParticipantIDs, $validGroupParticipants);
-        }
-
-        // remove duplicates
-        $intersection = \array_intersect($this->participantIDs, $this->invisibleParticipantIDs);
-        if (!empty($intersection)) {
-            $users = UserProfileRuntimeCache::getInstance()->getObjects(\array_slice($intersection, 0, 10));
-            throw new UserInputException('invisibleParticipants', \array_map(static function ($user) {
-                return [
-                    'type' => 'intersects',
-                    'username' => $user->username,
-                ];
-            }, $users));
-        }
-
-        if (empty($this->participantIDs) && empty($this->invisibleParticipantIDs) && !$this->draft) {
-            throw new UserInputException('participants');
-        }
-
-        // check number of participants
-        if (\count($this->participantIDs) + \count($this->invisibleParticipantIDs) > WCF::getSession()->getPermission('user.conversation.maxParticipants')) {
-            throw new UserInputException('participants', 'tooManyParticipants');
-        }
-
-        parent::validate();
-
-        if ($this->messageIsProbablySpam()) {
-            throw new PermissionDeniedException();
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function save()
-    {
-        parent::save();
-
-        // save conversation
-        $data = \array_merge($this->additionalFields, [
-            'subject' => $this->subject,
-            'time' => TIME_NOW,
-            'userID' => WCF::getUser()->userID,
-            'username' => WCF::getUser()->username,
-            'isDraft' => $this->draft ? 1 : 0,
-            'participantCanInvite' => $this->participantCanInvite ? 1 : 0,
-        ]);
-        if ($this->draft) {
-            $data['draftData'] = \serialize([
-                'participants' => $this->participantIDs,
-                'invisibleParticipants' => $this->invisibleParticipantIDs,
-            ]);
-        }
-
-        $conversationData = [
-            'data' => $data,
-            'attachmentHandler' => $this->attachmentHandler,
-            'htmlInputProcessor' => $this->htmlInputProcessor,
-            'messageData' => [],
-        ];
-        if (!$this->draft) {
-            $conversationData['participants'] = $this->participantIDs;
-            $conversationData['invisibleParticipants'] = $this->invisibleParticipantIDs;
-        }
-
-        $this->objectAction = new ConversationAction([], 'create', $conversationData);
-        /** @var Conversation $conversation */
-        $conversation = $this->objectAction->executeAction()['returnValues'];
-
-        MessageQuoteManager::getInstance()->saved();
-
-        if (!$this->draft) {
-            FloodControl::getInstance()->registerContent('com.woltlab.wcf.conversation');
-            FloodControl::getInstance()->registerContent('com.woltlab.wcf.conversation.message');
-        }
-
-        $this->saved();
-
-        // forward
-        HeaderUtil::redirect($conversation->getLink());
-
-        exit;
-    }
+    public $objectActionClass = ConversationAction::class;
 
     /**
      * @inheritDoc
@@ -326,83 +63,176 @@ class ConversationAddForm extends MessageForm
         PageLocationManager::getInstance()->addParentLocation('com.woltlab.wcf.conversation.ConversationList');
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function assignVariables()
+    #[\Override]
+    public function createForm()
     {
-        parent::assignVariables();
+        parent::createForm();
 
-        MessageQuoteManager::getInstance()->assignVariables();
-
-        $allowedUserGroupIDs = [];
-        foreach (UserGroupCacheBuilder::getInstance()->getData([], 'groups') as $group) {
-            if ($group->canBeAddedAsConversationParticipant) {
-                $allowedUserGroupIDs[] = $group->groupID;
+        $groupParticipants = \array_filter(
+            UserGroupCacheBuilder::getInstance()->getData([], 'groups'),
+            function (UserGroup $group) {
+                return $group->canBeAddedAsConversationParticipant;
             }
-        }
+        );
 
-        WCF::getTPL()->assign([
-            'participantCanInvite' => $this->participantCanInvite ? 1 : 0,
-            'participants' => $this->participants,
-            'participantsData' => $this->getParticipantsData(),
-            'invisibleParticipants' => $this->invisibleParticipants,
-            'invisibleParticipantsData' => $this->getParticipantsData(true),
-            'action' => 'add',
-            'allowedUserGroupIDs' => $allowedUserGroupIDs,
+        $this->form->appendChildren([
+            FormContainer::create('informationContainer')
+                ->label('wcf.conversation.information')
+                ->appendChildren([
+                    TextFormField::create('subject')
+                        ->label('wcf.global.subject')
+                        ->maximumLength(255)
+                        ->required(),
+                    BooleanFormField::create('isDraft')
+                        ->label('wcf.conversation.form.isDraft'),
+                ]),
+            FormContainer::create('participantsContainer')
+                ->label('wcf.conversation.participants')
+                ->appendChildren([
+                    UserFormField::create('participants')
+                        ->label('wcf.conversation.participants')
+                        ->description('wcf.conversation.participants.description')
+                        ->maximumMultiples(WCF::getSession()->getPermission('user.conversation.maxParticipants'))
+                        ->addValidator(ConversationAddForm::getParticipantsValidator()),
+                    BooleanFormField::create('addGroupParticipants')
+                        ->label('wcf.conversation.addGroupParticipants')
+                        ->available(\count($groupParticipants) > 0),
+                    MultipleSelectionFormField::create('participantGroups')
+                        ->label('wcf.conversation.participantGroups')
+                        ->available(WCF::getSession()->getPermission('user.conversation.canAddGroupParticipants'))
+                        ->filterable()
+                        ->options($groupParticipants)
+                        ->addValidator(ConversationAddForm::getGroupParticipantsValidator('participants'))
+                        ->addDependency(
+                            NonEmptyFormFieldDependency::create('addGroupParticipantsDependency')
+                                ->fieldId('addGroupParticipants')
+                        ),
+                    UserFormField::create('invisibleParticipants')
+                        ->label('wcf.conversation.invisibleParticipants')
+                        ->description('wcf.conversation.invisibleParticipants.description')
+                        ->available(WCF::getSession()->getPermission('user.conversation.canAddInvisibleParticipants'))
+                        ->maximumMultiples(WCF::getSession()->getPermission('user.conversation.maxParticipants'))
+                        ->addValidator(ConversationAddForm::getParticipantsValidator())
+                        ->addValidator(
+                            new FormFieldValidator(
+                                'duplicateParticipantsValidator',
+                                function (UserFormField $formField) {
+                                    /** @var UserFormField $participantsFormField */
+                                    $participantsFormField = $formField->getDocument()->getNodeById('participants');
+
+                                    $participants = \array_column($participantsFormField->getUsers(), 'userID');
+                                    $invisibleParticipants = \array_column($formField->getUsers(), 'userID');
+
+                                    $intersection = \array_intersect($participants, $invisibleParticipants);
+                                    if (!empty($intersection)) {
+                                        foreach (
+                                            UserProfileRuntimeCache::getInstance()->getObjects(
+                                                \array_slice($intersection, 0, 10)
+                                            ) as $user
+                                        ) {
+                                            $formField->addValidationError(
+                                                new FormFieldValidationError(
+                                                    'intersects',
+                                                    'wcf.conversation.participants.error.intersects',
+                                                    [
+                                                        'username' => $user->username
+                                                    ]
+                                                )
+                                            );
+                                        }
+                                    }
+                                }
+                            )
+                        ),
+                    BooleanFormField::create('addInvisibleGroupParticipants')
+                        ->label('wcf.conversation.addInvisibleGroupParticipants')
+                        ->available(
+                            \count($groupParticipants) > 0
+                            && WCF::getSession()->getPermission('user.conversation.canAddInvisibleParticipants')
+                        ),
+                    MultipleSelectionFormField::create('invisibleParticipantGroups')
+                        ->label('wcf.conversation.invisibleParticipantGroups')
+                        ->available(
+                            WCF::getSession()->getPermission('user.conversation.canAddInvisibleParticipants')
+                            && WCF::getSession()->getPermission('user.conversation.canAddGroupParticipants')
+                        )
+                        ->filterable()
+                        ->options($groupParticipants)
+                        ->addValidator(ConversationAddForm::getGroupParticipantsValidator('invisibleParticipants'))
+                        ->addDependency(
+                            NonEmptyFormFieldDependency::create('addInvisibleGroupParticipantsDependency')
+                                ->fieldId('addInvisibleGroupParticipants')
+                        ),
+                    BooleanFormField::create('participantCanInvite')
+                        ->label('wcf.conversation.participantCanInvite')
+                        ->available(WCF::getSession()->getPermission('user.conversation.canSetCanInvite'))
+                ]),
+            WysiwygFormContainer::create('text')
+                ->label('wcf.conversation.message')
+                ->messageObjectType('com.woltlab.wcf.conversation.message')
+                ->attachmentData('com.woltlab.wcf.conversation.message')
+                ->supportMentions()
+                ->supportQuotes()
+                ->required()
         ]);
+        // TODO validate participants count
+        // TODO add dataHandler to merge participants and participantGroups
+        // TODO add dataHandler to merge invisibleParticipants and invisibleParticipantGroups
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function show()
+    public static function getParticipantsValidator(): FormFieldValidator
     {
-        if (!WCF::getSession()->getPermission('user.conversation.canStartConversation')) {
-            throw new PermissionDeniedException();
-        }
+        return new FormFieldValidator('participantsValidator', function (UserFormField $formField) {
+            $users = $formField->getUsers();
+            $userIDs = \array_column($users, 'userID');
 
-        parent::show();
-    }
+            UserStorageHandler::getInstance()->loadStorage($userIDs);
 
-    /**
-     * @return list<array{
-     *  objectId: int,
-     *  value: string,
-     *  type: 'user'|'group',
-     * }>
-     */
-    private function getParticipantsData(bool $invisible = false): array
-    {
-        $result = [];
-        $participants = ArrayUtil::trim(\explode(
-            ',',
-            ($invisible ? $this->invisibleParticipants : $this->participants)
-        ));
-        foreach ($participants as $username) {
-            $result[] = [
-                'objectId' => 0,
-                'value' => $username,
-                'type' => 'user',
-            ];
-        }
+            foreach ($users as $user) {
+                try {
+                    if ($user->userID === WCF::getUser()->userID) {
+                        throw new UserInputException('isAuthor');
+                    }
 
-        $participants = ArrayUtil::toIntegerArray(\explode(
-            ',',
-            ($invisible ? $this->invisibleParticipantsGroupIDs : $this->participantsGroupIDs)
-        ));
-        foreach ($participants as $groupID) {
-            $group = UserGroup::getGroupByID($groupID);
-            if (!$group) {
-                continue;
+                    Conversation::validateParticipant($user, $formField->getId());
+                } catch (UserInputException $e) {
+                    $formField->addValidationError(
+                        new FormFieldValidationError(
+                            $e->getType(),
+                            'wcf.conversation.participants.error.' . $e->getType(),
+                            [
+                                'username' => $user->username
+                            ]
+                        )
+                    );
+                }
             }
-            $result[] = [
-                'objectId' => $groupID,
-                'value' => $group->getName(),
-                'type' => 'group',
-            ];
-        }
+        });
+    }
 
-        return $result;
+    public static function getGroupParticipantsValidator(string $participantsNodeId): FormFieldValidator
+    {
+        return new FormFieldValidator(
+            'groupParticipantsValidator',
+            function (MultipleSelectionFormField $formField) use ($participantsNodeId) {
+                $groupIDs = $formField->getValue();
+
+                $validGroupParticipants = Conversation::validateGroupParticipants($groupIDs, $formField->getId());
+
+                /** @var $participantsFormField UserFormField */
+                $participantsFormField = $formField->getDocument()->getNodeById($participantsNodeId);
+                $participantIDs = \array_column($participantsFormField->getUsers(), 'userID');
+
+                $validGroupParticipants = \array_diff($validGroupParticipants, $participantIDs);
+                if (empty($validGroupParticipants)) {
+                    $formField->addValidationError(
+                        new FormFieldValidationError(
+                            'emptyGroup',
+                            'wcf.conversation.participants.error.emptyGroup'
+                        )
+                    );
+                }
+            }
+        );
     }
 }

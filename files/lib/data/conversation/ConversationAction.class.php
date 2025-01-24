@@ -816,6 +816,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
      */
     public function addParticipants()
     {
+        // TODO migrate to FormBuilder
         try {
             $existingParticipants = $this->conversation->getParticipantIDs(true);
             $participantIDs = Conversation::validateParticipants(
@@ -853,7 +854,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
                 }
                 $errorMessage .= WCF::getLanguage()->getDynamicVariable(
                     'wcf.conversation.participants.error.' . $type['type'],
-                    ['errorData' => $type]
+                    ['username' => $type['username']]
                 );
             }
 
