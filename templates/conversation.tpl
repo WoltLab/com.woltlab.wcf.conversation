@@ -180,7 +180,7 @@
 	require([
 		'WoltLabSuite/Core/Conversation/Ui/Object/Action/RemoveParticipant',
 		'WoltLabSuite/Core/Conversation/Ui/Message/InlineEditor',
-	  'WoltLabSuite/Core/Component/Quote/Message',
+		'WoltLabSuite/Core/Component/Quote/Message',
 	], (UiObjectActionRemoveParticipant, { UiConversationMessageInlineEditor }, { registerContainer }) => {
 		new UiConversationMessageInlineEditor({$conversation->conversationID});
 
