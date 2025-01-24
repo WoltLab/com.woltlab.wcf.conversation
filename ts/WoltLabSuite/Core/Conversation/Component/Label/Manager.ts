@@ -17,6 +17,7 @@ import WoltlabCoreDialogElement from "WoltLabSuite/Core/Element/woltlab-core-dia
 import { getPhrase } from "WoltLabSuite/Core/Language";
 import { show as showNotification } from "WoltLabSuite/Core/Ui/Notification";
 import UiDropdownSimple from "WoltLabSuite/Core/Ui/Dropdown/Simple";
+import { addAvailableLabel } from "../EditorHandler";
 
 interface LabelFormResponse {
   deleteLabel: boolean;
@@ -143,5 +144,12 @@ export class LabelManager {
     UiDropdownSimple.getDropdownMenu("conversationLabelFilter")
       ?.querySelector(".scrollableDropdownMenu")
       ?.append(listItem);
+
+    addAvailableLabel({
+      labelID: data.labelID,
+      label: data.label,
+      cssClassName: data.cssClassName,
+      url: url.toString(),
+    });
   }
 }

@@ -13,10 +13,9 @@ import * as FormBuilderManager from "WoltLabSuite/Core/Form/Builder/Manager";
 import { assignConversationLabels } from "../../../Api/Conversations/AssignConversationLabels";
 import { reload as reloadClipboard } from "WoltLabSuite/Core/Controller/Clipboard";
 import { show as showNotification } from "WoltLabSuite/Core/Ui/Notification";
+import { getConversationEditor } from "../EditorHandler";
 
-// TODO type for editorHandler
-
-export async function openDialog(editorHandler, conversationIDs: number[]) {
+export async function openDialog(conversationIDs: number[]) {
   const response = await getConversationLabels(conversationIDs);
   if (!response.ok) {
     throw new Error("Failed to load form to assign labels to conversations.");
@@ -37,7 +36,7 @@ export async function openDialog(editorHandler, conversationIDs: number[]) {
 
       await assignConversationLabels(conversationIDs, labelIDs);
 
-      assignLabels(editorHandler, conversationIDs, labelIDs);
+      assignLabels(conversationIDs, labelIDs);
       reloadClipboard();
     });
   });
@@ -45,9 +44,9 @@ export async function openDialog(editorHandler, conversationIDs: number[]) {
   dialog.show(response.value.title);
 }
 
-function assignLabels(editorHandler, conversationIDs: number[], labelIDs: number[]) {
+function assignLabels(conversationIDs: number[], labelIDs: number[]) {
   conversationIDs.forEach((conversationID) => {
-    editorHandler.update(conversationID, "labelIDs", labelIDs);
+    getConversationEditor(conversationID)!.labelIDs = labelIDs;
   });
 
   showNotification();
