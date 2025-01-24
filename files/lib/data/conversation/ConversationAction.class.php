@@ -72,8 +72,11 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
             $data['participants'] = \count($this->parameters['participants']);
         }
         // count attachments
-        if (isset($this->parameters['attachmentHandler'])) {
-            $data['attachments'] = \count($this->parameters['attachmentHandler']);
+        if (
+            isset($this->parameters['message_attachmentHandler'])
+            && $this->parameters['message_attachmentHandler'] !== null
+        ) {
+            $data['attachments'] = \count($this->parameters['message_attachmentHandler']);
         }
         $conversation = \call_user_func([$this->className, 'create'], $data);
         $conversationEditor = new ConversationEditor($conversation);
@@ -110,7 +113,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
         $conversationEditor->updateParticipantSummary();
 
         // create message
-        $messageData = $this->parameters['messageData'];
+        $messageData = $this->parameters['messageData'] ?? [];
         $messageData['conversationID'] = $conversation->conversationID;
         $messageData['time'] = $this->parameters['data']['time'];
         $messageData['userID'] = $this->parameters['data']['userID'];
@@ -120,8 +123,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
             'data' => $messageData,
             'conversation' => $conversation,
             'isFirstPost' => true,
-            'attachmentHandler' => $this->parameters['attachmentHandler'] ?? null,
-            'htmlInputProcessor' => $this->parameters['htmlInputProcessor'] ?? null,
+            'attachmentHandler' => $this->parameters['message_attachmentHandler'] ?? null,
+            'htmlInputProcessor' => $this->parameters['message_htmlInputProcessor'] ?? null,
         ]);
         $resultValues = $messageAction->executeAction();
 

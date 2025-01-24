@@ -4,13 +4,17 @@ namespace wcf\form;
 
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationAction;
+use wcf\data\IStorableObject;
 use wcf\data\user\group\UserGroup;
 use wcf\system\cache\builder\UserGroupCacheBuilder;
 use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\exception\UserInputException;
+use wcf\system\flood\FloodControl;
 use wcf\system\form\builder\container\FormContainer;
 use wcf\system\form\builder\container\wysiwyg\WysiwygFormContainer;
+use wcf\system\form\builder\data\processor\CustomFormDataProcessor;
+use wcf\system\form\builder\data\processor\VoidFormDataProcessor;
 use wcf\system\form\builder\field\BooleanFormField;
 use wcf\system\form\builder\field\dependency\NonEmptyFormFieldDependency;
 use wcf\system\form\builder\field\MultipleSelectionFormField;
@@ -18,9 +22,11 @@ use wcf\system\form\builder\field\TextFormField;
 use wcf\system\form\builder\field\user\UserFormField;
 use wcf\system\form\builder\field\validation\FormFieldValidationError;
 use wcf\system\form\builder\field\validation\FormFieldValidator;
+use wcf\system\form\builder\IFormDocument;
 use wcf\system\page\PageLocationManager;
 use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\WCF;
+use wcf\util\HeaderUtil;
 
 /**
  * Shows the conversation form.
@@ -167,7 +173,7 @@ class ConversationAddForm extends AbstractFormBuilderForm
                         ->label('wcf.conversation.participantCanInvite')
                         ->available(WCF::getSession()->getPermission('user.conversation.canSetCanInvite'))
                 ]),
-            WysiwygFormContainer::create('text')
+            WysiwygFormContainer::create('message')
                 ->label('wcf.conversation.message')
                 ->messageObjectType('com.woltlab.wcf.conversation.message')
                 ->attachmentData('com.woltlab.wcf.conversation.message')
@@ -175,8 +181,86 @@ class ConversationAddForm extends AbstractFormBuilderForm
                 ->supportQuotes()
                 ->required()
         ]);
-        // TODO add dataHandler to merge participants and participantGroups
-        // TODO add dataHandler to merge invisibleParticipants and invisibleParticipantGroups
+
+        $this->form->getDataHandler()
+            ->addProcessor(new VoidFormDataProcessor('addGroupParticipants'))
+            ->addProcessor(new VoidFormDataProcessor('addInvisibleGroupParticipants'))
+            ->addProcessor(
+                new CustomFormDataProcessor('messageProcessor', function (IFormDocument $document, array $parameters) {
+                    unset($parameters['data']['message']);
+
+                    return $parameters;
+                }, function (IFormDocument $document, array $parameters, IStorableObject $object) {
+                    \assert($object instanceof Conversation);
+                    $parameters['data']['message'] = $object->getFirstMessage()->message;
+
+                    return $parameters;
+                })
+            )
+            ->addProcessor(
+                new CustomFormDataProcessor(
+                    'participantsProcessor',
+                    function (IFormDocument $document, array $parameters) {
+                        $participants = $parameters['participants'] ?? [];
+                        $invisibleParticipants = $parameters['invisibleParticipants'] ?? [];
+
+                        if (isset($parameters['participantGroups'])) {
+                            $groupIDs = $parameters['participantGroups'];
+                            $participants = \array_merge(
+                                $participants,
+                                ConversationAddForm::getUserByGroups($groupIDs)
+                            );
+                        }
+
+                        if (isset($parameters['invisibleParticipantGroups'])) {
+                            $groupIDs = $parameters['invisibleParticipantGroups'];
+                            $userIDs = ConversationAddForm::getUserByGroups($groupIDs);
+
+                            $invisibleParticipants = \array_merge(
+                                $invisibleParticipants,
+                                // filtere all users that are already in participants
+                                \array_diff($userIDs, $participants)
+                            );
+                        }
+
+                        $parameters['participants'] = $participants;
+                        $parameters['invisibleParticipants'] = $invisibleParticipants;
+
+                        return $parameters;
+                    }
+                )
+            );
+    }
+
+    #[\Override]
+    public function save()
+    {
+        $this->additionalFields = [
+            'time' => TIME_NOW,
+            'userID' => WCF::getUser()->userID,
+            'username' => WCF::getUser()->username,
+        ];
+
+        parent::save();
+    }
+
+    #[\Override]
+    public function saved()
+    {
+        parent::saved();
+
+        /** @var Conversation $conversation */
+        $conversation = $this->objectAction->getReturnValues()['returnValues'];
+
+        if (!$conversation->isDraft) {
+            FloodControl::getInstance()->registerContent('com.woltlab.wcf.conversation');
+            FloodControl::getInstance()->registerContent('com.woltlab.wcf.conversation.message');
+        }
+
+        // forward
+        HeaderUtil::redirect($conversation->getLink());
+
+        exit;
     }
 
     /**
@@ -251,18 +335,8 @@ class ConversationAddForm extends AbstractFormBuilderForm
                 $userIDs = \array_merge(
                     \array_column($formField->getUsers(), 'userID'),
                     \array_column($invisibleParticipantsFormField?->getUsers() ?: [], 'userID'),
+                    ConversationAddForm::getUserByGroups($groupIDs)
                 );
-
-                $conditionBuilder = new PreparedStatementConditionBuilder();
-                $conditionBuilder->add('groupID IN (?)', [$groupIDs]);
-                $sql = "SELECT  DISTINCT userID
-                        FROM    wcf1_user_to_group
-                        " . $conditionBuilder;
-                $statement = WCF::getDB()->prepare($sql);
-                $statement->execute($conditionBuilder->getParameters());
-                while ($userID = $statement->fetchColumn()) {
-                    $userIDs[] = $userID;
-                }
 
                 if (\count($userIDs) > WCF::getSession()->getPermission('user.conversation.maxParticipants')) {
                     $formField->addValidationError(
@@ -274,5 +348,32 @@ class ConversationAddForm extends AbstractFormBuilderForm
                 }
             }
         );
+    }
+
+    /**
+     * Returns the user IDs of the users that are in the given groups.
+     *
+     * @return int[]
+     */
+    public static function getUserByGroups(array $groupIDs): array
+    {
+        if ($groupIDs === []) {
+            return [];
+        }
+
+        $conditionBuilder = new PreparedStatementConditionBuilder();
+        $conditionBuilder->add('groupID IN (?)', [$groupIDs]);
+        $sql = "SELECT  DISTINCT userID
+                FROM    wcf1_user_to_group
+                " . $conditionBuilder;
+        $statement = WCF::getDB()->prepare($sql);
+        $statement->execute($conditionBuilder->getParameters());
+
+        $userIDs = [];
+        while ($userID = $statement->fetchColumn()) {
+            $userIDs[] = $userID;
+        }
+
+        return $userIDs;
     }
 }
