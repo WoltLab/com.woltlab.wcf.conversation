@@ -3,7 +3,11 @@
 namespace wcf\form;
 
 use wcf\data\conversation\Conversation;
+use wcf\data\conversation\message\ConversationMessageAction;
+use wcf\data\conversation\message\ConversationMessageList;
 use wcf\system\exception\IllegalLinkException;
+use wcf\system\form\builder\data\processor\CustomFormDataProcessor;
+use wcf\system\form\builder\IFormDocument;
 use wcf\system\WCF;
 
 /**
@@ -20,6 +24,11 @@ class ConversationDraftEditForm extends ConversationAddForm
      */
     public $templateName = 'conversationAdd';
 
+    /**
+     * @inheritDoc
+     */
+    public $formAction = 'edit';
+
     #[\Override]
     public function readParameters()
     {
@@ -32,5 +41,73 @@ class ConversationDraftEditForm extends ConversationAddForm
         if ($this->formObject->userID != WCF::getUser()->userID || !$this->formObject->isDraft) {
             throw new IllegalLinkException();
         }
+    }
+
+    #[\Override]
+    public function finalizeForm()
+    {
+        parent::finalizeForm();
+
+        $this->form->getDataHandler()
+            ->addProcessor(
+                new CustomFormDataProcessor(
+                    'messageDataProcessor',
+                    function (IFormDocument $document, array $parameters) {
+                        $messageData = [
+                            'htmlInputProcessor' => $parameters['message_htmlInputProcessor'],
+                            'attachmentHandler' => $parameters['message_attachmentHandler'],
+                            'data' => [],
+                        ];
+                        if ($parameters['data']['isDraft']) {
+                            $messageData['data']['time'] = TIME_NOW;
+                        }
+
+                        unset($parameters['message_htmlInputProcessor'], $parameters['message_attachmentHandler']);
+
+                        $parameters['messageData'] = $messageData;
+
+                        return $parameters;
+                    }
+                )
+            )
+            ->addProcessor(
+                new CustomFormDataProcessor('timeProcessor', function (IFormDocument $document, array $parameters) {
+                    if (!$parameters['data']['isDraft']) {
+                        $parameters['data']['time'] = $parameters['data']['lastPostTime'] = TIME_NOW;
+                    }
+
+                    return $parameters;
+                })
+            );
+    }
+
+    #[\Override]
+    public function saved()
+    {
+        // Reload conversation object to get updated data.
+        $conversation = new Conversation($this->formObject->conversationID);
+
+        // Update timestamp of other messages in this draft.
+        if (!$conversation->isDraft) {
+            $list = new ConversationMessageList();
+            $list->getConditionBuilder()->add('conversationID = ?', [$conversation->conversationID]);
+            $list->getConditionBuilder()->add('messageID <> ?', [$conversation->getFirstMessage()->messageID]);
+            $list->readObjectIDs();
+
+            if (\count($list->getObjectIDs())) {
+                $messageAction = new ConversationMessageAction(
+                    $list->getObjectIDs(),
+                    'update',
+                    [
+                        'data' => [
+                            'time' => TIME_NOW,
+                        ],
+                    ]
+                );
+                $messageAction->executeAction();
+            }
+        }
+
+        parent::saved();
     }
 }

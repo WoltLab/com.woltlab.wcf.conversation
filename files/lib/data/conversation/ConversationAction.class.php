@@ -218,6 +218,21 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
 
         parent::update();
 
+        if (isset($this->parameters['messageData'])) {
+            $messageIDs = [];
+            foreach ($this->getObjects() as $conversation) {
+                $messageIDs[] = $conversation->getFirstMessage()->messageID;
+            }
+
+            if ($messageIDs !== []) {
+                (new ConversationMessageAction(
+                    $messageIDs,
+                    'update',
+                    $this->parameters['messageData']
+                ))->executeAction();
+            }
+        }
+
         foreach ($this->getObjects() as $conversation) {
             // participants
             if (!empty($this->parameters['participants']) || !empty($this->parameters['invisibleParticipants'])) {
