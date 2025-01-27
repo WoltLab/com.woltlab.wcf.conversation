@@ -206,9 +206,11 @@ class ConversationAddForm extends AbstractFormBuilderForm
 
                         if (isset($parameters['participantGroups'])) {
                             $groupIDs = $parameters['participantGroups'];
-                            $participants = \array_merge(
-                                $participants,
-                                ConversationAddForm::getUserByGroups($groupIDs)
+                            $participants = \array_unique(
+                                \array_merge(
+                                    $participants,
+                                    ConversationAddForm::getUserByGroups($groupIDs)
+                                )
                             );
                         }
 
@@ -216,10 +218,12 @@ class ConversationAddForm extends AbstractFormBuilderForm
                             $groupIDs = $parameters['invisibleParticipantGroups'];
                             $userIDs = ConversationAddForm::getUserByGroups($groupIDs);
 
-                            $invisibleParticipants = \array_merge(
-                                $invisibleParticipants,
-                                // filtere all users that are already in participants
-                                \array_diff($userIDs, $participants)
+                            $invisibleParticipants = \array_unique(
+                                \array_merge(
+                                    $invisibleParticipants,
+                                    // filtere all users that are already in participants
+                                    \array_diff($userIDs, $participants)
+                                )
                             );
                         }
 
