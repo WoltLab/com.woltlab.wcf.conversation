@@ -9,200 +9,102 @@ WCF.Conversation = { };
 
 /**
  * Core editor handler for conversations.
+ *
+ * @deprecated 6.2 use `WoltLabSuite/Core/Conversation/EditorHandler` instead
  */
 WCF.Conversation.EditorHandler = Class.extend({
 	/**
-	 * list of attributes per conversation
-	 * @var	object
-	 */
-	_attributes: { },
-	
-	/**
-	 * list of conversations
-	 * @var	object
-	 */
-	_conversations: { },
-	
-	/**
-	 * list of permissions per conversation
-	 * @var	object
-	 */
-	_permissions: { },
-	
-	/**
 	 * Initializes the core editor handler for conversations.
 	 */
-	init: function(availableLabels) {
-		this._conversations = { };
-		
-		var self = this;
-		$('.conversation').each(function(index, conversation) {
-			var $conversation = $(conversation);
-			var $conversationID = $conversation.data('conversationID');
-			
-			if (!self._conversations[$conversationID]) {
-				self._conversations[$conversationID] = $conversation;
-				var $labelIDs = eval($conversation.data('labelIDs'));
-				
-				// set attributes
-				self._attributes[$conversationID] = {
-					isClosed: ($conversation.data('isClosed') ? true : false),
-					labelIDs: $labelIDs
-				};
-				
-				// set permissions
-				self._permissions[$conversationID] = {
-					canAddParticipants: ($conversation.data('canAddParticipants') ? true : false),
-					canCloseConversation: ($conversation.data('canCloseConversation') ? true : false)
-				};
-			}
+	init: function (availableLabels) {
+		require(["WoltLabSuite/Core/Conversation/Component/EditorHandler"], ({ setup }) => {
+			setup(availableLabels);
 		});
 	},
-	
+
 	/**
 	 * Returns a permission's value for given conversation id.
-	 * 
+	 *
 	 * @param	integer		conversationID
 	 * @param	string		permission
 	 * @return	boolean
 	 */
-	getPermission: function(conversationID, permission) {
-		if (this._permissions[conversationID][permission] === undefined) {
-			return false;
+	getPermission: function (conversationID, permission) {
+		switch (permission) {
+			case "canAddParticipants":
+				return require("WoltLabSuite/Core/Conversation/Component/EditorHandler").getConversationEditor(
+					conversationID,
+				).canAddParticipants;
+			case "canCloseConversation":
+				return require("WoltLabSuite/Core/Conversation/Component/EditorHandler").getConversationEditor(
+					conversationID,
+				).canCloseConversation;
+			default:
+				return false;
 		}
-		
-		return (this._permissions[conversationID][permission]) ? true : false;
 	},
-	
+
 	/**
 	 * Returns an attribute's value for given conversation id.
-	 * 
+	 *
 	 * @param	integer		conversationID
 	 * @param	string		key
 	 * @return	mixed
 	 */
-	getValue: function(conversationID, key) {
+	getValue: function (conversationID, key) {
 		switch (key) {
-			case 'labelIDs':
-				if (this._attributes[conversationID].labelIDs === undefined) {
-					this._attributes[conversationID].labelIDs = [ ];
-				}
-				
-				return this._attributes[conversationID].labelIDs;
-			break;
-			
-			case 'isClosed':
-				return (this._attributes[conversationID].isClosed) ? true : false;
-			break;
+			case "labelIDs":
+				return require("WoltLabSuite/Core/Conversation/Component/EditorHandler").getConversationEditor(
+					conversationID,
+				).labelIDs;
+				break;
+
+			case "isClosed":
+				return require("WoltLabSuite/Core/Conversation/Component/EditorHandler").getConversationEditor(
+					conversationID,
+				).isClosed;
 		}
 	},
-	
+
 	/**
 	 * Counts available labels.
-	 * 
+	 *
 	 * @return	integer
 	 */
-	countAvailableLabels: function() {
-		return (this.getAvailableLabels()).length;
+	countAvailableLabels: function () {
+		return require("WoltLabSuite/Core/Conversation/Component/EditorHandler").getAvailableLabels().length;
 	},
-	
+
 	/**
 	 * Returns a list with the data of the available labels.
-	 * 
+	 *
 	 * @return	array<object>
 	 */
-	getAvailableLabels: function() {
-		var $labels = [ ];
-		
-		WCF.Dropdown.getDropdownMenu('conversationLabelFilter').children('.scrollableDropdownMenu').children('li').each(function(index, listItem) {
-			var $listItem = $(listItem);
-			if ($listItem.hasClass('dropdownDivider')) {
-				return false;
-			}
-			
-			var $span = $listItem.find('span');
-			$labels.push({
-				cssClassName: $span.data('cssClassName'),
-				labelID: $span.data('labelID'),
-				label: $span.text()
-			});
-		});
-		
-		return $labels;
+	getAvailableLabels: function () {
+		return require("WoltLabSuite/Core/Conversation/Component/EditorHandler").getAvailableLabels();
 	},
-	
+
 	/**
 	 * Updates conversation data.
-	 * 
+	 *
 	 * @param	integer		conversationID
 	 * @param	object		data
 	 */
-	update: function(conversationID, key, data) {
-		if (!this._conversations[conversationID]) {
-			console.debug("[WCF.Conversation.EditorHandler] Unknown conversation id '" + conversationID + "'");
-			return;
-		}
-		var $conversation = this._conversations[conversationID];
-		
-		switch (key) {
-			case 'close':
-				$(`<li>
-					<span class="jsTooltip jsIconLock" title="${WCF.Language.get('wcf.global.state.closed')}">
-						<fa-icon size="16" name="lock"></fa-icon>
-					</span>
-				</li>`).prependTo($conversation.find('.statusIcons'));
-				
-				this._attributes[conversationID].isClosed = 1;
-			break;
-			
-			case 'labelIDs':
-				var $labels = { };
-				WCF.Dropdown.getDropdownMenu('conversationLabelFilter').find('li > a > span').each(function(index, span) {
-					var $span = $(span);
-					
-					$labels[$span.data('labelID')] = {
-						cssClassName: $span.data('cssClassName'),
-						label: $span.text(),
-						url: $span.parent().attr('href')
-					};
-				});
-				
-				var $labelList = $conversation.find('.columnSubject > .labelList');
-				if (!data.length) {
-					if ($labelList.length) $labelList.remove();
-				}
-				else {
-					// create label list if missing
-					if (!$labelList.length) {
-						$labelList = $('<ul class="labelList" />').prependTo($conversation.find('.columnSubject'));
-					}
-					
-					// remove all existing labels
-					$labelList.empty();
-					
-					// insert labels
-					for (var $i = 0, $length = data.length; $i < $length; $i++) {
-						var $label = $labels[data[$i]];
-						$('<li><a href="' + $label.url + '" class="badge label' + ($label.cssClassName ? " " + $label.cssClassName : "") + '">' + WCF.String.escapeHTML($label.label) + '</a></li>').appendTo($labelList);
-					}
-				}
-			break;
-			
-			case 'open':
-				$conversation.find('.statusIcons li').each(function(index, listItem) {
-					var $listItem = $(listItem);
-					if ($listItem.children('span.jsIconLock').length) {
-						$listItem.remove();
-						return false;
-					}
-				});
-				
-				this._attributes[conversationID].isClosed = 0;
-			break;
-		}
-		
-		WCF.Clipboard.reload();
-	}
+	update: function (conversationID, key, data) {
+		require(["WoltLabSuite/Core/Conversation/Component/EditorHandler"], ({ getConversationEditor }) => {
+			switch (key) {
+				case "close":
+					getConversationEditor(conversationID).isClosed = true;
+					break;
+				case "labelIDs":
+					getConversationEditor(conversationID).labelIDs = data;
+					break;
+				case "open":
+					getConversationEditor(conversationID).isClosed = false;
+					break;
+			}
+		});
+	},
 });
 
 /**
@@ -210,89 +112,18 @@ WCF.Conversation.EditorHandler = Class.extend({
  * 
  * @see	WCF.Conversation.EditorHandler
  * @param	array<object>	availableLabels
+ *
+ * @deprecated 6.2 use `WoltLabSuite/Core/Conversation/EditorHandler` instead
  */
 WCF.Conversation.EditorHandlerConversation = WCF.Conversation.EditorHandler.extend({
-	/**
-	 * list of available labels
-	 * @var	array<object>
-	 */
-	_availableLabels: null,
-	
 	/**
 	 * @see	WCF.Conversation.EditorHandler.init()
 	 * 
 	 * @param	array<object>	availableLabels
 	 */
 	init: function(availableLabels) {
-		this._availableLabels = availableLabels || [ ];
-		
-		this._super();
+		this._super(availableLabels);
 	},
-	
-	/**
-	 * @see	WCF.Conversation.EditorHandler.getAvailableLabels()
-	 */
-	getAvailableLabels: function() {
-		return this._availableLabels;
-	},
-	
-	/**
-	 * @see	WCF.Conversation.EditorHandler.update()
-	 */
-	update: function(conversationID, key, data) {
-		if (!this._conversations[conversationID]) {
-			console.debug("[WCF.Conversation.EditorHandler] Unknown conversation id '" + conversationID + "'");
-			return;
-		}
-		
-		var container = $('.contentHeaderTitle > .contentHeaderMetaData');
-		
-		switch (key) {
-			case 'close':
-				$(`<li>
-					<fa-icon size="16" name="lock"></fa-icon>
-					${WCF.Language.get('wcf.global.state.closed')}
-				</li>`).appendTo(container);
-				
-				this._attributes[conversationID].isClosed = 1;
-			break;
-			
-			case 'labelIDs':
-				var labelList = container.find('.labelList');
-				if (!data.length) {
-					labelList.parent().remove();
-				}
-				else {
-					var availableLabels = this.getAvailableLabels();
-					
-					if (!labelList.length) {
-						labelList = $(`<li>
-							<fa-icon size="16" name="tags"></fa-icon>
-							<ul class="labelList"></ul>
-						</li>`).prependTo(container);
-						labelList = labelList.children('ul');
-					}
-					
-					var html = '';
-					data.forEach(function(labelId) {
-						availableLabels.forEach(function(label) {
-							if (label.labelID == labelId) {
-								html += '<li><span class="label badge' + (label.cssClassName ? ' ' + label.cssClassName : '') + '">' + label.label + '</span></li>';
-							}
-						});
-					});
-					
-					labelList[0].innerHTML = html;
-				}
-			break;
-			
-			case 'open':
-				container.find('.jsIconLock').parent().remove();
-				
-				this._attributes[conversationID].isClosed = 0;
-			break;
-		}
-	}
 });
 
 /**
@@ -507,7 +338,9 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
 			break;
 			
 			case 'leave':
-				new WCF.Conversation.Leave([ $('#' + elementID).data('conversationID') ], this._environment);
+				require(["WoltLabSuite/Core/Conversation/Component/Leave"], ({ openDialog }) => {
+				  openDialog(elData(elById(elementID), "conversation-id"), this._environment);
+				});
 			break;
 			
 			case 'edit':
@@ -569,6 +402,8 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
  * Provides a dialog for leaving or restoring conversation.
  * 
  * @param	array<integer>		conversationIDs
+ *
+ * @deprecated 6.2 use `WoltLabSuite/Core/Conversation/Component/Leave` instead
  */
 WCF.Conversation.Leave = Class.extend({
 	/**
@@ -1143,31 +978,5 @@ WCF.Conversation.Label.Manager = Class.extend({
 		
 		// close dialog
 		this._dialog.wcfDialog('close');
-	}
-});
-
-/**
- * Namespace for conversation messages.
- */
-WCF.Conversation.Message = { };
-
-/**
- * Provides an inline editor for conversation messages.
- * 
- * @see	WCF.Message.InlineEditor
- */
-WCF.Conversation.Message.InlineEditor = WCF.Message.InlineEditor.extend({
-	/**
-	 * @see	WCF.Message.InlineEditor.init()
-	 */
-	init: function(containerID, quoteManager) {
-		this._super(containerID, true, quoteManager);
-	},
-	
-	/**
-	 * @see	WCF.Message.InlineEditor._getClassName()
-	 */
-	_getClassName: function() {
-		return 'wcf\\data\\conversation\\message\\ConversationMessageAction';
 	}
 });

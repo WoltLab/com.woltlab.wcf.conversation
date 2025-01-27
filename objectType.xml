@@ -37,7 +37,6 @@
 		<type>
 			<name>com.woltlab.wcf.conversation.message</name>
 			<definitionname>com.woltlab.wcf.message.quote</definitionname>
-			<classname>wcf\system\message\quote\ConversationMessageQuoteHandler</classname>
 		</type>
 		<type>
 			<name>com.woltlab.wcf.conversation.message</name>
