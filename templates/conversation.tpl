@@ -166,21 +166,12 @@
 		var $inlineEditor = new WCF.Conversation.InlineEditor('.conversation');
 		$inlineEditor.setEditorHandler($editorHandler);
 		
-		{assign var=__supportPaste value=true}
-		{if !$conversation->canReply()}{assign var=__supportPaste value=false}{/if}
-		{include file='shared_messageQuoteManager' wysiwygSelector='text' supportPaste=$__supportPaste}
-
-		require(["WoltLabSuite/Core/Conversation/Ui/Message/Quote"], ({ UiConversationMessageQuote }) => {
-			new UiConversationMessageQuote($quoteManager);
-		});
-		
 		{if $conversation->canReply()}
 			require(['WoltLabSuite/Core/Conversation/Ui/Message/Reply'], function({ Reply }) {
 				new Reply({
 					ajax: {
 						className: 'wcf\\data\\conversation\\message\\ConversationMessageAction'
 					},
-					quoteManager: $quoteManager
 				});
 			});
 		{/if}
@@ -189,10 +180,13 @@
 	require([
 		'WoltLabSuite/Core/Conversation/Ui/Object/Action/RemoveParticipant',
 		'WoltLabSuite/Core/Conversation/Ui/Message/InlineEditor',
-	], (UiObjectActionRemoveParticipant, { UiConversationMessageInlineEditor }) => {
+		'WoltLabSuite/Core/Component/Quote/Message',
+	], (UiObjectActionRemoveParticipant, { UiConversationMessageInlineEditor }, { registerContainer }) => {
 		new UiConversationMessageInlineEditor({$conversation->conversationID});
 
 		UiObjectActionRemoveParticipant.setup();
+
+		registerContainer(".message", ".messageBody", "wcf\\data\\conversation\\message\\ConversationMessage", "com.woltlab.wcf.conversation.message");
 	});
 </script>
 

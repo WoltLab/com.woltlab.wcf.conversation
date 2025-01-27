@@ -5,7 +5,9 @@ namespace wcf\data\conversation\message;
 use wcf\data\attachment\GroupedAttachmentList;
 use wcf\data\conversation\Conversation;
 use wcf\data\DatabaseObject;
+use wcf\data\IEmbeddedMessageObject;
 use wcf\data\IMessage;
+use wcf\data\object\type\ObjectTypeCache;
 use wcf\data\TUserContent;
 use wcf\system\html\output\HtmlOutputProcessor;
 use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
@@ -33,7 +35,7 @@ use wcf\util\StringUtil;
  * @property-read   int $editCount      number of times the conversation message has been edited
  * @property-read   int $hasEmbeddedObjects number of embedded objects in the conversation message
  */
-class ConversationMessage extends DatabaseObject implements IMessage
+class ConversationMessage extends DatabaseObject implements IMessage, IEmbeddedMessageObject
 {
     use TUserContent;
 
@@ -214,5 +216,20 @@ class ConversationMessage extends DatabaseObject implements IMessage
     public function __toString(): string
     {
         return $this->getFormattedMessage();
+    }
+
+    #[\Override]
+    public function loadEmbeddedObjects(): void
+    {
+        if ($this->hasEmbeddedObjects) {
+            ObjectTypeCache::getInstance()
+                ->getObjectTypeByName('com.woltlab.wcf.attachment.objectType', 'com.woltlab.wcf.conversation.message')
+                ->getProcessor()
+                ->cacheObjects([$this->messageID]);
+            MessageEmbeddedObjectManager::getInstance()->loadObjects(
+                'com.woltlab.wcf.conversation.message',
+                [$this->messageID]
+            );
+        }
     }
 }

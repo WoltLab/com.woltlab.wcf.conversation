@@ -12,11 +12,13 @@
 		<file>acp/update_com.woltlab.wcf.conversation_5.5_cleanup_orphaned_attachments.php</file>
 		<file>js/WoltLab/Conversation/UI/Participant/Add.js</file>
 		<file>js/WoltLab/Conversation/Ui/Participant/Add.js</file>
+		<file>js/WoltLab/Conversation/Ui/Message/Quote.js</file>
 		<file>js/require.build.js</file>
 		<file>js/require.build.min.js</file>
 		<file>lib/form/ConversationMessageAddForm.class.php</file>
 		<file>lib/form/ConversationMessageEditForm.class.php</file>
 		<file>lib/page/ConversationLogPage.class.php</file>
+		<file>lib/system/message/quote/ConversationMessageQuoteHandler.class.php</file>
 		<file>lib/system/event/listener/UserGroupAddCanBeAddedAsParticipantListener.class.php</file>
 		<file>lib/system/user/online/location/ConversationLocation.class.php</file>
 		<file>style/conversation.less</file>
