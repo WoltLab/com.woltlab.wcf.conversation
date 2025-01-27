@@ -261,6 +261,8 @@ class ConversationAddForm extends AbstractFormBuilderForm
                                 'participants' => $parameters['participants'] ?? [],
                                 'invisibleParticipants' => $parameters['invisibleParticipants'] ?? [],
                             ]);
+
+                            unset($parameters['participants'], $parameters['invisibleParticipants']);
                         } else {
                             $parameters['data']['draftData'] = \serialize([]);
                         }
@@ -287,7 +289,11 @@ class ConversationAddForm extends AbstractFormBuilderForm
         parent::saved();
 
         /** @var Conversation $conversation */
-        $conversation = $this->objectAction->getReturnValues()['returnValues'];
+        if ($this->formAction == 'create') {
+            $conversation = $this->objectAction->getReturnValues()['returnValues'];
+        } else {
+            $conversation = new Conversation($this->formObject->conversationID);
+        }
 
         if (!$conversation->isDraft) {
             FloodControl::getInstance()->registerContent('com.woltlab.wcf.conversation');
