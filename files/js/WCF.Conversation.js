@@ -338,7 +338,9 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
 			break;
 			
 			case 'leave':
-				new WCF.Conversation.Leave([ $('#' + elementID).data('conversationID') ], this._environment);
+				require(["WoltLabSuite/Core/Conversation/Component/Leave"], ({ openDialog }) => {
+				  openDialog(elData(elById(elementID), "conversation-id"), this._environment);
+				});
 			break;
 			
 			case 'edit':
@@ -400,6 +402,8 @@ WCF.Conversation.InlineEditor = WCF.InlineEditor.extend({
  * Provides a dialog for leaving or restoring conversation.
  * 
  * @param	array<integer>		conversationIDs
+ *
+ * @deprecated 6.2 use `WoltLabSuite/Core/Conversation/Component/Leave` instead
  */
 WCF.Conversation.Leave = Class.extend({
 	/**
