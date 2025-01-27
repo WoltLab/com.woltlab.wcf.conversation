@@ -181,6 +181,24 @@ class ConversationAddForm extends AbstractFormBuilderForm
                 ->supportQuotes()
                 ->required()
         ]);
+    }
+
+    #[\Override]
+    public function save()
+    {
+        $this->additionalFields = [
+            'time' => TIME_NOW,
+            'userID' => WCF::getUser()->userID,
+            'username' => WCF::getUser()->username,
+        ];
+
+        parent::save();
+    }
+
+    #[\Override]
+    protected function finalizeForm()
+    {
+        parent::finalizeForm();
 
         $this->form->getDataHandler()
             ->addProcessor(new VoidFormDataProcessor('addGroupParticipants'))
@@ -233,19 +251,24 @@ class ConversationAddForm extends AbstractFormBuilderForm
                         return $parameters;
                     }
                 )
+            )
+            ->addProcessor(
+                new CustomFormDataProcessor(
+                    'draftDataProcessor',
+                    function (IFormDocument $document, array $parameters) {
+                        if ($parameters['data']['isDraft']) {
+                            $parameters['data']['draftData'] = \serialize([
+                                'participants' => $parameters['participants'] ?? [],
+                                'invisibleParticipants' => $parameters['invisibleParticipants'] ?? [],
+                            ]);
+                        } else {
+                            $parameters['data']['draftData'] = null;
+                        }
+
+                        return $parameters;
+                    }
+                )
             );
-    }
-
-    #[\Override]
-    public function save()
-    {
-        $this->additionalFields = [
-            'time' => TIME_NOW,
-            'userID' => WCF::getUser()->userID,
-            'username' => WCF::getUser()->username,
-        ];
-
-        parent::save();
     }
 
     #[\Override]
