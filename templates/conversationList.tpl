@@ -372,8 +372,9 @@
 			pageClassName: 'wcf\\page\\ConversationListPage',
 			hasMarkedItems: {if $hasMarkedItems}true{else}false{/if},
 		});
-		
-		var $editorHandler = new WCF.Conversation.EditorHandler();
+
+		const availableLabels = [{implode from=$labelList item=label}{ cssClassName: '{if $label->cssClassName}{unsafe:$label->cssClassName|encodeJS}{/if}', labelID: {@$label->labelID}, label: '{$label->label|encodeJS}', url: '{link controller='ConversationList' encode=false}labelID={$label->labelID}{if $filter}&filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}' }{/implode} ];
+		var $editorHandler = new WCF.Conversation.EditorHandler(availableLabels);
 		var $inlineEditor = new WCF.Conversation.InlineEditor('.conversation');
 		$inlineEditor.setEditorHandler($editorHandler, 'list');
 

@@ -10,6 +10,7 @@
 import { add as addEvent } from "WoltLabSuite/Core/Event/Handler";
 import { AjaxResponse, ClipboardActionData } from "WoltLabSuite/Core/Controller/Clipboard/Data";
 import { openDialog as openAssignLabelDialog } from "./Component/Label/Editor";
+import { getConversationEditor } from "./Component/EditorHandler";
 
 interface ConversationData {
   isClosed: boolean;
@@ -28,25 +29,23 @@ interface EventData {
   responseData: null | (ResponseData & AjaxResponse);
 }
 
-// TODO add types for editorHandler
-
-export function setup(editorHandler) {
+export function setup() {
   addEvent("com.woltlab.wcf.clipboard", "com.woltlab.wcf.conversation.conversation", (data: EventData) => {
     if (data.responseData === null) {
-      execute(editorHandler, data.data.actionName, data.data.parameters);
+      execute(data.data.actionName, data.data.parameters);
     } else {
-      evaluateResponse(editorHandler, data.data.actionName, data.responseData);
+      evaluateResponse(data.data.actionName, data.responseData);
     }
   });
 }
 
-function execute(editorHandler, actionName: string, parameters) {
+function execute(actionName: string, parameters) {
   if (actionName === "com.woltlab.wcf.conversation.conversation.assignLabel") {
-    void openAssignLabelDialog(editorHandler, parameters.objectIDs);
+    void openAssignLabelDialog(parameters.objectIDs);
   }
 }
 
-function evaluateResponse(editorHandler, actionName: string, data: ResponseData) {
+function evaluateResponse(actionName: string, data: ResponseData) {
   switch (actionName) {
     case "com.woltlab.wcf.conversation.conversation.leave":
     case "com.woltlab.wcf.conversation.conversation.leavePermanently":
@@ -58,7 +57,7 @@ function evaluateResponse(editorHandler, actionName: string, data: ResponseData)
     case "com.woltlab.wcf.conversation.conversation.close":
     case "com.woltlab.wcf.conversation.conversation.open":
       Object.entries(data.returnValues.conversationData).forEach(([conversationId, conversationData]) => {
-        editorHandler.update(conversationId, conversationData.isClosed ? "close" : "open", conversationData);
+        getConversationEditor(parseInt(conversationId))!.isClosed = conversationData.isClosed;
       });
       break;
   }
