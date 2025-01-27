@@ -208,11 +208,11 @@ class ConversationAddForm extends AbstractFormBuilderForm
                     unset($parameters['data']['message']);
 
                     return $parameters;
-                }, function (IFormDocument $document, array $parameters, IStorableObject $object) {
+                }, function (IFormDocument $document, array $data, IStorableObject $object) {
                     \assert($object instanceof Conversation);
-                    $parameters['data']['message'] = $object->getFirstMessage()->message;
+                    $data['message'] = $object->getFirstMessage()->message;
 
-                    return $parameters;
+                    return $data;
                 })
             )
             ->addProcessor(
@@ -262,10 +262,20 @@ class ConversationAddForm extends AbstractFormBuilderForm
                                 'invisibleParticipants' => $parameters['invisibleParticipants'] ?? [],
                             ]);
                         } else {
-                            $parameters['data']['draftData'] = null;
+                            $parameters['data']['draftData'] = \serialize([]);
                         }
 
                         return $parameters;
+                    },
+                    function (IFormDocument $document, array $data, IStorableObject $object) {
+                        \assert($object instanceof Conversation);
+
+                        $draftData = @\unserialize($object->draftData);
+
+                        $data['participants'] = $draftData['participants'];
+                        $data['invisibleParticipants'] = $draftData['invisibleParticipants'];
+
+                        return $data;
                     }
                 )
             );
