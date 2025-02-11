@@ -40,15 +40,6 @@
 		<instruction type="page" />
 	</instructions>
 
-	<instructions type="update" fromversion="6.0.*">
-		<instruction type="file"/>
-		<instruction type="template"/>
-		<instruction type="objectType"/>
-		<instruction type="page"/>
-		<instruction type="templateListener"/>
-		<instruction type="userGroupOption"/>
-	</instructions>
-
 	<instructions type="update" fromversion="6.1.1">
 		<instruction type="file">files_update.tar</instruction>
 	</instructions>
