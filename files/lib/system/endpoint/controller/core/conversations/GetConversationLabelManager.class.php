@@ -34,10 +34,10 @@ final class GetConversationLabelManager implements IController
         }
 
         return new JsonResponse([
-            'template' => WCF::getTPL()->fetch('conversationLabelManagement', 'wcf', [
+            'template' => WCF::getTPL()->render('wcf', 'conversationLabelManagement', [
                 'cssClassNames' => ConversationLabel::getLabelCssClassNames(),
                 'labelList' => ConversationLabel::getLabelsByUser(),
-            ], true),
+            ]),
             'maxLabels' => WCF::getSession()->getPermission('user.conversation.maxLabels'),
             'labelCount' => \count(ConversationLabel::getLabelsByUser()),
         ]);

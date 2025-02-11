@@ -373,13 +373,6 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
             'com.woltlab.wcf.conversation.message',
             $this->message->messageID
         );
-        WCF::getTPL()->assign([
-            'defaultSmilies' => SmileyCache::getInstance()->getCategorySmilies(),
-            'message' => $this->message,
-            'text' => $upcastProcessor->getHtml(),
-            'permissionCanUseSmilies' => 'user.message.canUseSmilies',
-            'wysiwygSelector' => 'messageEditor' . $this->message->messageID,
-        ]);
 
         $tmpHash = StringUtil::getRandomID();
         $attachmentHandler = new AttachmentHandler(
@@ -389,18 +382,23 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         );
         $attachmentList = $attachmentHandler->getAttachmentList();
 
-        WCF::getTPL()->assign([
+        $tplVariable = [
+            'defaultSmilies' => SmileyCache::getInstance()->getCategorySmilies(),
+            'message' => $this->message,
+            'text' => $upcastProcessor->getHtml(),
+            'permissionCanUseSmilies' => 'user.message.canUseSmilies',
+            'wysiwygSelector' => 'messageEditor' . $this->message->messageID,
             'attachmentHandler' => $attachmentHandler,
             'attachmentList' => $attachmentList->getObjects(),
             'attachmentObjectID' => $this->message->messageID,
             'attachmentObjectType' => 'com.woltlab.wcf.conversation.message',
             'attachmentParentObjectID' => 0,
             'tmpHash' => $tmpHash,
-        ]);
+        ];
 
         return [
             'actionName' => 'beginEdit',
-            'template' => WCF::getTPL()->fetch('conversationMessageInlineEditor'),
+            'template' => WCF::getTPL()->render('wcf', 'conversationMessageInlineEditor', $tplVariable),
         ];
     }
 
@@ -479,11 +477,10 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
             'message' => $this->message->getFormattedMessage(),
         ];
 
-        WCF::getTPL()->assign([
+        $data['attachmentList'] = WCF::getTPL()->render('wcf', 'attachments', [
             'attachmentList' => $attachmentList,
             'objectID' => $this->message->messageID,
         ]);
-        $data['attachmentList'] = WCF::getTPL()->fetch('attachments');
 
         return $data;
     }
