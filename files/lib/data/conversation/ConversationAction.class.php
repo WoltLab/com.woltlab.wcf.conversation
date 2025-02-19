@@ -734,9 +734,9 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
             'excludedSearchValues' => $this->conversation->getParticipantNames(false, true),
             'maxItems' => WCF::getSession()->getPermission('user.conversation.maxParticipants') - $this->conversation->participants,
             'canAddGroupParticipants' => WCF::getSession()->getPermission('user.conversation.canAddGroupParticipants'),
-            'template' => WCF::getTPL()->fetch(
-                'conversationAddParticipants',
+            'template' => WCF::getTPL()->render(
                 'wcf',
+                'conversationAddParticipants',
                 ['conversation' => $this->conversation]
             ),
             'restrictUserGroupIDs' => $restrictUserGroupIDs,

@@ -31,9 +31,9 @@ final class GetConversationLeaveDialog implements IController
         $this->assertConversationIsAccessible($conversation);
 
         return new JsonResponse([
-            'template' => WCF::getTPL()->fetch('conversationLeave', 'wcf', [
+            'template' => WCF::getTPL()->render('wcf', 'conversationLeave', [
                 'hideConversation' => $this->isConversationHidden($conversation),
-            ], true)
+            ])
         ]);
     }
 
