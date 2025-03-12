@@ -6,7 +6,7 @@
  * @license  GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @since 6.2
  */
-define(["require", "exports", "tslib", "WoltLabSuite/Core/Component/Dialog", "../../../Api/Conversations/GetConversationLabels", "WoltLabSuite/Core/Form/Builder/Manager", "../../../Api/Conversations/AssignConversationLabels", "WoltLabSuite/Core/Controller/Clipboard", "WoltLabSuite/Core/Ui/Notification", "../EditorHandler"], function (require, exports, tslib_1, Dialog_1, GetConversationLabels_1, FormBuilderManager, AssignConversationLabels_1, Clipboard_1, Notification_1, EditorHandler_1) {
+define(["require", "exports", "tslib", "WoltLabSuite/Core/Component/Dialog", "../../../Api/Conversations/GetConversationLabels", "WoltLabSuite/Core/Form/Builder/Manager", "../../../Api/Conversations/AssignConversationLabels", "WoltLabSuite/Core/Controller/Clipboard", "WoltLabSuite/Core/Component/Snackbar", "../EditorHandler"], function (require, exports, tslib_1, Dialog_1, GetConversationLabels_1, FormBuilderManager, AssignConversationLabels_1, Clipboard_1, Snackbar_1, EditorHandler_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.openDialog = openDialog;
@@ -39,6 +39,6 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Component/Dialog", "..
         conversationIDs.forEach((conversationID) => {
             (0, EditorHandler_1.getConversationEditor)(conversationID).labelIDs = labelIDs;
         });
-        (0, Notification_1.show)();
+        (0, Snackbar_1.showDefaultSuccessSnackbar)();
     }
 });

@@ -11,7 +11,7 @@ import { AjaxCallbackObject } from "WoltLabSuite/Core/Ajax/Data";
 import { AjaxCallbackSetup, ResponseData } from "WoltLabSuite/Core/Ajax/Data";
 import DomUtil from "WoltLabSuite/Core/Dom/Util";
 import UiDialog from "WoltLabSuite/Core/Ui/Dialog";
-import * as UiNotification from "WoltLabSuite/Core/Ui/Notification";
+import { showSuccessSnackbar } from "WoltLabSuite/Core/Component/Snackbar";
 import { DialogCallbackObject, DialogCallbackSetup } from "WoltLabSuite/Core/Ui/Dialog/Data";
 import * as UiItemListUser from "WoltLabSuite/Core/Ui/ItemList/User";
 import { ItemData } from "WoltLabSuite/Core/Ui/ItemList";
@@ -87,7 +87,7 @@ class UiParticipantAdd implements AjaxCallbackObject, DialogCallbackObject {
     }
 
     if ("count" in data.returnValues) {
-      UiNotification.show(data.returnValues.successMessage, () => {
+      showSuccessSnackbar(data.returnValues.successMessage).addEventListener("snackbar:close", () => {
         window.location.reload();
       });
     }

@@ -1,4 +1,4 @@
-define(["require", "exports", "tslib", "WoltLabSuite/Core/Ui/Dialog", "WoltLabSuite/Core/Dom/Util", "WoltLabSuite/Core/Ajax", "WoltLabSuite/Core/Language", "WoltLabSuite/Core/Ui/Notification"], function (require, exports, tslib_1, Dialog_1, Util_1, Ajax, Language, UiNotification) {
+define(["require", "exports", "tslib", "WoltLabSuite/Core/Ui/Dialog", "WoltLabSuite/Core/Dom/Util", "WoltLabSuite/Core/Ajax", "WoltLabSuite/Core/Language", "WoltLabSuite/Core/Component/Snackbar"], function (require, exports, tslib_1, Dialog_1, Util_1, Ajax, Language, Snackbar_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.beginEdit = beginEdit;
@@ -6,7 +6,6 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Ui/Dialog", "WoltLabSu
     Util_1 = tslib_1.__importDefault(Util_1);
     Ajax = tslib_1.__importStar(Ajax);
     Language = tslib_1.__importStar(Language);
-    UiNotification = tslib_1.__importStar(UiNotification);
     class UiSubjectEditor {
         objectId;
         subject;
@@ -53,7 +52,7 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Ui/Dialog", "WoltLabSu
                 .forEach((subject) => {
                 subject.textContent = data.returnValues.subject;
             });
-            UiNotification.show();
+            (0, Snackbar_1.showDefaultSuccessSnackbar)();
         }
         _dialogSetup() {
             return {

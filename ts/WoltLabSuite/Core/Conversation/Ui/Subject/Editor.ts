@@ -11,7 +11,7 @@ import DomUtil from "WoltLabSuite/Core/Dom/Util";
 import * as Ajax from "WoltLabSuite/Core/Ajax";
 import * as Language from "WoltLabSuite/Core/Language";
 import { AjaxCallbackObject, ResponseData } from "WoltLabSuite/Core/Ajax/Data";
-import * as UiNotification from "WoltLabSuite/Core/Ui/Notification";
+import { showDefaultSuccessSnackbar } from "WoltLabSuite/Core/Component/Snackbar";
 import { DialogCallbackSetup } from "WoltLabSuite/Core/Ui/Dialog/Data";
 import { AjaxCallbackSetup } from "WoltLabSuite/Core/Ajax/Data";
 
@@ -81,7 +81,7 @@ class UiSubjectEditor implements AjaxCallbackObject, DialogCallbackObject {
         subject.textContent = data.returnValues.subject;
       });
 
-    UiNotification.show();
+    showDefaultSuccessSnackbar();
   }
 
   _dialogSetup(): ReturnType<DialogCallbackSetup> {

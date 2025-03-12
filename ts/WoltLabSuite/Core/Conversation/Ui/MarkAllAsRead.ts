@@ -8,7 +8,7 @@
  */
 
 import { dboAction } from "WoltLabSuite/Core/Ajax";
-import * as UiNotification from "WoltLabSuite/Core/Ui/Notification";
+import { showDefaultSuccessSnackbar } from "WoltLabSuite/Core/Component/Snackbar";
 
 async function markAllAsRead(): Promise<void> {
   await dboAction("markAllAsRead", "wcf\\data\\conversation\\ConversationAction").dispatch();
@@ -18,7 +18,7 @@ async function markAllAsRead(): Promise<void> {
   });
   document.querySelector("#unreadConversations .badgeUpdate")?.remove();
 
-  UiNotification.show();
+  showDefaultSuccessSnackbar();
 }
 
 export function setup(): void {
