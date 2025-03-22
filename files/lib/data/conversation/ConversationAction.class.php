@@ -178,7 +178,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
         }
 
         // delete conversations
-        parent::delete();
+        $count = parent::delete();
 
         if (!empty($this->objectIDs)) {
             // delete notifications
@@ -193,6 +193,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
                 UserStorageHandler::getInstance()->reset($participantIDs, 'unreadConversationCount');
             }
         }
+
+        return $count;
     }
 
     /**
