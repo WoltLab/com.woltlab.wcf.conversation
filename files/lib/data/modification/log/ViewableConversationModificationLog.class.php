@@ -14,8 +14,8 @@ use wcf\system\WCF;
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
- * @method  ModificationLog     getDecoratedObject()
- * @mixin   ModificationLog
+ * @mixin ModificationLog
+ * @extends DatabaseObjectDecorator<ModificationLog>
  */
 class ViewableConversationModificationLog extends DatabaseObjectDecorator
 {
@@ -26,7 +26,7 @@ class ViewableConversationModificationLog extends DatabaseObjectDecorator
 
     /**
      * user profile object
-     * @var UserProfile
+     * @var ?UserProfile
      */
     protected $userProfile;
 
@@ -46,7 +46,7 @@ class ViewableConversationModificationLog extends DatabaseObjectDecorator
     /**
      * Returns the profile object of the user who created the modification entry.
      *
-     * @return  UserProfile
+     * @return UserProfile
      */
     public function getUserProfile()
     {

@@ -141,11 +141,9 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     /**
      * Overrides the last message data, used when `leftAt < lastPostTime`.
      *
-     * @param int $userID
-     * @param string $username
-     * @param int $time
+     * @return void
      */
-    public function setLastMessage($userID, $username, $time)
+    public function setLastMessage(?int $userID, string $username, int $time)
     {
         $this->data['lastPostTime'] = $time;
         $this->data['lastPosterID'] = $userID;
@@ -156,9 +154,9 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
      * Loads participation data for given user id (default: current user) on runtime.
      * You should use Conversation::getUserConversation() instead if possible.
      *
-     * @param int $userID
+     * @return void
      */
-    public function loadUserParticipation($userID = null)
+    public function loadUserParticipation(?int $userID = null)
     {
         if ($userID === null) {
             $userID = WCF::getUser()->userID;
@@ -179,11 +177,9 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     /**
      * Returns a specific user conversation.
      *
-     * @param int $conversationID
-     * @param int $userID
-     * @return  null|Conversation
+     * @return ?Conversation
      */
-    public static function getUserConversation($conversationID, $userID)
+    public static function getUserConversation(int $conversationID, int $userID)
     {
         $sql = "SELECT      conversation_to_user.*, conversation.*
                 FROM        wcf1_conversation conversation
@@ -205,10 +201,9 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
      * Returns a list of user conversations.
      *
      * @param int[] $conversationIDs
-     * @param int $userID
-     * @return  Conversation[]
+     * @return Conversation[]
      */
-    public static function getUserConversations(array $conversationIDs, $userID)
+    public static function getUserConversations(array $conversationIDs, int $userID)
     {
         $conditionBuilder = new PreparedStatementConditionBuilder();
         $conditionBuilder->add('conversation.conversationID IN (?)', [$conversationIDs]);
@@ -316,10 +311,9 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     /**
      * Returns a list of the ids of all participants.
      *
-     * @param bool $excludeLeftParticipants
-     * @return  int[]
+     * @return int[]
      */
-    public function getParticipantIDs($excludeLeftParticipants = false)
+    public function getParticipantIDs(bool $excludeLeftParticipants = false)
     {
         $conditions = new PreparedStatementConditionBuilder();
         $conditions->add("conversationID = ?", [$this->conversationID]);
@@ -340,11 +334,9 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     /**
      * Returns a list of the usernames of all participants.
      *
-     * @param bool $excludeSelf
-     * @param bool $leftByOwnChoice
-     * @return  string[]
+     * @return string[]
      */
-    public function getParticipantNames($excludeSelf = false, $leftByOwnChoice = false, bool $isAuthor = false)
+    public function getParticipantNames(bool $excludeSelf = false, bool $leftByOwnChoice = false, bool $isAuthor = false)
     {
         $conditions = new PreparedStatementConditionBuilder();
         $conditions->add("conversationID = ?", [$this->conversationID]);
@@ -422,9 +414,8 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
      * of all given conversation ids.
      *
      * @param int[] $conversationIDs
-     * @param int $userID
      */
-    public static function isParticipant(array $conversationIDs, $userID = null): bool
+    public static function isParticipant(array $conversationIDs, ?int $userID = null): bool
     {
         if ($userID === null) {
             $userID = WCF::getUser()->userID;
@@ -473,15 +464,14 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     /**
      * Validates the participants.
      *
-     * @param mixed $participants
-     * @param string $field
+     * @param string[]|string $participants
      * @param int[] $existingParticipants
-     * @return  array       $result
-     * @throws  UserInputException
+     * @return list<int>
+     * @throws UserInputException
      */
     public static function validateParticipants(
-        $participants,
-        $field = 'participants',
+        array|string $participants,
+        string $field = 'participants',
         array $existingParticipants = []
     ) {
         $result = [];
@@ -534,14 +524,13 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     /**
      * Validates the group participants.
      *
-     * @param mixed $participants
-     * @param string $field
+     * @param string[]|string $participants
      * @param int[] $existingParticipants
-     * @return  array       $result
+     * @return list<int>
      */
     public static function validateGroupParticipants(
-        $participants,
-        $field = 'participants',
+        array|string $participants,
+        string $field = 'participants',
         array $existingParticipants = []
     ) {
         $groupIDs = \is_array($participants) ? $participants : ArrayUtil::toIntegerArray(\explode(',', $participants));
@@ -550,7 +539,7 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
 
         foreach ($groupIDs as $groupID) {
             $group = UserGroup::getGroupByID($groupID);
-            /** @noinspection PhpUndefinedFieldInspection */
+            // @phpstan-ignore property.notFound
             if ($group !== null && $group->canBeAddedAsConversationParticipant) {
                 $validGroupIDs[] = $groupID;
             }
@@ -599,11 +588,10 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     /**
      * Validates the given participant.
      *
-     * @param UserProfile $user
-     * @param string $field
-     * @throws  UserInputException
+     * @return void
+     * @throws UserInputException
      */
-    public static function validateParticipant(UserProfile $user, $field = 'participants')
+    public static function validateParticipant(UserProfile $user, string $field = 'participants')
     {
         // check participant's settings and permissions
         if (!$user->getPermission('user.conversation.canUseConversation')) {

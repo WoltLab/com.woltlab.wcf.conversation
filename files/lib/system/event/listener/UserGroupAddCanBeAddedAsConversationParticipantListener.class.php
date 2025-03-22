@@ -24,7 +24,7 @@ class UserGroupAddCanBeAddedAsConversationParticipantListener implements IParame
 
     /**
      * true if group can be added as participant
-     * @var bool
+     * @var int
      */
     protected $canBeAddedAsConversationParticipant = 0;
 
@@ -35,7 +35,7 @@ class UserGroupAddCanBeAddedAsConversationParticipantListener implements IParame
     {
         $this->eventObj = $eventObj;
 
-        if ($this->eventObj instanceof UserGroupEditForm && \is_object($this->eventObj->group)) {
+        if ($this->eventObj instanceof UserGroupEditForm && $this->eventObj->group !== null) {
             switch ($this->eventObj->group->groupType) {
                 case UserGroup::EVERYONE:
                 case UserGroup::GUESTS:
@@ -49,6 +49,8 @@ class UserGroupAddCanBeAddedAsConversationParticipantListener implements IParame
 
     /**
      * Handles the assignVariables event.
+     *
+     * @return void
      */
     protected function assignVariables()
     {
@@ -59,17 +61,23 @@ class UserGroupAddCanBeAddedAsConversationParticipantListener implements IParame
 
     /**
      * Handles the readData event.
-     * This is only called in UserGroupEditForm.
+     *
+     * @return void
      */
     protected function readData()
     {
-        if (empty($_POST)) {
+        \assert($this->eventObj instanceof UserGroupEditForm);
+
+        if ($_POST === []) {
+            // @phpstan-ignore property.notFound
             $this->canBeAddedAsConversationParticipant = $this->eventObj->group->canBeAddedAsConversationParticipant;
         }
     }
 
     /**
      * Handles the readFormParameters event.
+     *
+     * @return void
      */
     protected function readFormParameters()
     {
@@ -80,6 +88,8 @@ class UserGroupAddCanBeAddedAsConversationParticipantListener implements IParame
 
     /**
      * Handles the save event.
+     *
+     * @return void
      */
     protected function save()
     {

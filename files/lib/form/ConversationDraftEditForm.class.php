@@ -149,7 +149,7 @@ class ConversationDraftEditForm extends ConversationAddForm
 
         if (empty($_POST)) {
             $this->text = $this->conversation->getFirstMessage()->message;
-            $this->participantCanInvite = $this->conversation->participantCanInvite;
+            $this->participantCanInvite = (bool)$this->conversation->participantCanInvite;
             $this->subject = $this->conversation->subject;
 
             if ($this->conversation->draftData) {

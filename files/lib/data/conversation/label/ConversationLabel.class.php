@@ -40,10 +40,9 @@ class ConversationLabel extends DatabaseObject
     /**
      * Returns a list of conversation labels for given user id.
      *
-     * @param int $userID
-     * @return  ConversationLabelList
+     * @return ConversationLabelList
      */
-    public static function getLabelsByUser($userID = null)
+    public static function getLabelsByUser(?int $userID = null)
     {
         if ($userID === null) {
             $userID = WCF::getUser()->userID;
@@ -59,7 +58,7 @@ class ConversationLabel extends DatabaseObject
     /**
      * Returns a list of available CSS class names.
      *
-     * @return  string[]
+     * @return string[]
      */
     public static function getLabelCssClassNames()
     {

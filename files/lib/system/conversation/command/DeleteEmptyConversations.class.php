@@ -18,12 +18,15 @@ use wcf\system\WCF;
  */
 final class DeleteEmptyConversations
 {
+    /**
+     * @param int[] $conversationIDs
+     */
     public function __construct(
         public readonly array $conversationIDs,
     ) {
     }
 
-    public function __invoke()
+    public function __invoke(): void
     {
         // update participants count and participant summary
         ConversationEditor::updateParticipantCounts($this->conversationIDs);

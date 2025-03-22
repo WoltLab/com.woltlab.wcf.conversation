@@ -41,7 +41,7 @@ class ConversationMessage extends DatabaseObject implements IMessage, IEmbeddedM
 
     /**
      * conversation object
-     * @var Conversation
+     * @var ?Conversation
      */
     protected $conversation;
 
@@ -71,10 +71,9 @@ class ConversationMessage extends DatabaseObject implements IMessage, IEmbeddedM
     /**
      * Assigns and returns the embedded attachments.
      *
-     * @param bool $ignoreCache
-     * @return  null|GroupedAttachmentList
+     * @return ?GroupedAttachmentList
      */
-    public function getAttachments($ignoreCache = false)
+    public function getAttachments(bool $ignoreCache = false)
     {
         if ($this->attachments || $ignoreCache) {
             $attachmentList = new GroupedAttachmentList('com.woltlab.wcf.conversation.message');
@@ -108,7 +107,7 @@ class ConversationMessage extends DatabaseObject implements IMessage, IEmbeddedM
      *
      * @param string $mimeType Either 'text/plain' or 'text/html'
      */
-    public function getMailText($mimeType = 'text/plain'): string
+    public function getMailText(string $mimeType = 'text/plain'): string
     {
         if ($this->hasEmbeddedObjects) {
             MessageEmbeddedObjectManager::getInstance()->loadObjects(
@@ -134,7 +133,7 @@ class ConversationMessage extends DatabaseObject implements IMessage, IEmbeddedM
     /**
      * Returns the conversation of this message.
      *
-     * @return  Conversation
+     * @return ?Conversation
      */
     public function getConversation()
     {
@@ -148,7 +147,7 @@ class ConversationMessage extends DatabaseObject implements IMessage, IEmbeddedM
     /**
      * Sets the conversation of this message.
      *
-     * @param Conversation $conversation
+     * @return void
      */
     public function setConversation(Conversation $conversation)
     {

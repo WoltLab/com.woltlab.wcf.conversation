@@ -11,9 +11,8 @@ use wcf\data\DatabaseObjectEditor;
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
- * @method static ConversationLabel   create(array $parameters = [])
- * @method      ConversationLabel   getDecoratedObject()
- * @mixin       ConversationLabel
+ * @mixin ConversationLabel
+ * @extends DatabaseObjectEditor<ConversationLabel>
  */
 class ConversationLabelEditor extends DatabaseObjectEditor
 {

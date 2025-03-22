@@ -14,9 +14,7 @@ use wcf\system\WCF;
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @since   3.0
  *
- * @method  Conversation[]      getCachedObjects()
- * @method  Conversation        getObject($objectID)
- * @method  Conversation[]      getObjects(array $objectIDs)
+ * @extends AbstractRuntimeCache<Conversation, UserConversationList>
  */
 class UserConversationRuntimeCache extends AbstractRuntimeCache
 {

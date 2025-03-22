@@ -29,11 +29,9 @@ class ConversationParticipantList extends UserProfileList
     /**
      * Creates a new ConversationParticipantList object.
      *
-     * @param int $conversationID
-     * @param int $userID
      * @param bool $isAuthor true if given user is the author of this conversation
      */
-    public function __construct($conversationID, $userID = 0, $isAuthor = false)
+    public function __construct(int $conversationID, int $userID = 0, bool $isAuthor = false)
     {
         parent::__construct();
 

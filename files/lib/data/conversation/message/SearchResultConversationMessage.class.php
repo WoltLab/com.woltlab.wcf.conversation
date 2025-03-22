@@ -14,7 +14,7 @@ use wcf\system\search\SearchResultTextParser;
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
- * @property-read   string|null $subject
+ * @property-read ?string $subject
  */
 class SearchResultConversationMessage extends ViewableConversationMessage implements ISearchResultObject
 {

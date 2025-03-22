@@ -11,9 +11,8 @@ use wcf\data\DatabaseObjectEditor;
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
- * @method static ConversationMessage create(array $parameters = [])
- * @method      ConversationMessage getDecoratedObject()
- * @mixin       ConversationMessage
+ * @mixin ConversationMessage
+ * @extends DatabaseObjectEditor<ConversationMessage>
  */
 class ConversationMessageEditor extends DatabaseObjectEditor
 {

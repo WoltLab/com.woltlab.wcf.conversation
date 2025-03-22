@@ -3,7 +3,7 @@ includes:
     - ../WCF/phpstan-ambient.neon
 
 parameters:
-    level: 1
+    level: 6
     paths:
         - files
     scanFiles:
