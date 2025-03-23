@@ -65,6 +65,9 @@ final class AssignConversationLabels implements IController
         return new JsonResponse([]);
     }
 
+    /**
+     * @param int[] $conversationIDs
+     */
     private function removeOldLabels(ConversationLabelList $labelList, array $conversationIDs): void
     {
         // remove previous labels (if any)
@@ -83,6 +86,10 @@ final class AssignConversationLabels implements IController
         $statement->execute($conditions->getParameters());
     }
 
+    /**
+     * @param int[] $conversationIDs
+     * @param int[] $labelIDs
+     */
     private function assignLabels(array $conversationIDs, array $labelIDs): void
     {
         if ($labelIDs === []) {

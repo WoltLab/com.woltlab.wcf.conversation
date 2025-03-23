@@ -41,7 +41,7 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
 
     /**
      * list of conversation message
-     * @var ConversationMessage[]
+     * @var array<int, ?ConversationMessage>
      */
     protected static $messages = [];
 
@@ -129,10 +129,9 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
     /**
      * Returns a conversation message object by message id or null if message id is invalid.
      *
-     * @param int $objectID
-     * @return  ConversationMessage
+     * @return ?ConversationMessage
      */
-    protected function getMessage($objectID)
+    protected function getMessage(int $objectID)
     {
         if (!\array_key_exists($objectID, self::$messages)) {
             self::$messages[$objectID] = new ConversationMessage($objectID);

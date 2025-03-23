@@ -15,11 +15,8 @@ use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
- * @method  ViewableConversationMessage     current()
- * @method  ViewableConversationMessage[]       getObjects()
- * @method  ViewableConversationMessage|null    getSingleObject()
- * @method  ViewableConversationMessage|null    search($objectID)
- * @property    ViewableConversationMessage[] $objects
+ * @template TDatabaseObject of ViewableConversationMessage = ViewableConversationMessage
+ * @extends ConversationMessageList<TDatabaseObject>
  */
 class ViewableConversationMessageList extends ConversationMessageList
 {
@@ -47,7 +44,7 @@ class ViewableConversationMessageList extends ConversationMessageList
 
     /**
      * attachment list
-     * @var GroupedAttachmentList
+     * @var ?GroupedAttachmentList
      */
     protected $attachmentList;
 
@@ -121,6 +118,8 @@ class ViewableConversationMessageList extends ConversationMessageList
 
     /**
      * Reads the embedded objects of the messages in the list.
+     *
+     * @return void
      */
     public function readEmbeddedObjects()
     {
@@ -139,6 +138,8 @@ class ViewableConversationMessageList extends ConversationMessageList
 
     /**
      * Reads the list of attachments.
+     *
+     * @return void
      */
     public function readAttachments()
     {
@@ -153,7 +154,7 @@ class ViewableConversationMessageList extends ConversationMessageList
     /**
      * Returns the max post time.
      *
-     * @return  int
+     * @return int
      */
     public function getMaxPostTime()
     {
@@ -163,7 +164,7 @@ class ViewableConversationMessageList extends ConversationMessageList
     /**
      * Returns the list of attachments.
      *
-     * @return  GroupedAttachmentList
+     * @return ?GroupedAttachmentList
      */
     public function getAttachmentList()
     {
@@ -173,9 +174,9 @@ class ViewableConversationMessageList extends ConversationMessageList
     /**
      * Enables/disables the loading of attachments.
      *
-     * @param bool $enable
+     * @return void
      */
-    public function enableAttachmentLoading($enable = true)
+    public function enableAttachmentLoading(bool $enable = true)
     {
         $this->attachmentLoading = $enable;
     }
@@ -183,9 +184,9 @@ class ViewableConversationMessageList extends ConversationMessageList
     /**
      * Enables/disables the loading of embedded objects.
      *
-     * @param bool $enable
+     * @return void
      */
-    public function enableEmbeddedObjectLoading($enable = true)
+    public function enableEmbeddedObjectLoading(bool $enable = true)
     {
         $this->embeddedObjectLoading = $enable;
     }
@@ -193,7 +194,7 @@ class ViewableConversationMessageList extends ConversationMessageList
     /**
      * Sets active conversation.
      *
-     * @param Conversation $conversation
+     * @return void
      */
     public function setConversation(Conversation $conversation)
     {

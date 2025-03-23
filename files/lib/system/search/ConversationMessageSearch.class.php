@@ -18,21 +18,17 @@ use wcf\system\WCF;
  */
 final class ConversationMessageSearch extends AbstractSearchProvider
 {
-    /**
-     * @var int
-     */
-    private $conversationID = 0;
+    private int $conversationID = 0;
 
     /**
      * searched conversation
-     * @var Conversation
      */
-    private $conversation;
+    private Conversation $conversation;
 
     /**
      * @var SearchResultConversationMessage[]
      */
-    private $messageCache = [];
+    private array $messageCache = [];
 
     /**
      * @inheritDoc
@@ -50,7 +46,7 @@ final class ConversationMessageSearch extends AbstractSearchProvider
     /**
      * @inheritDoc
      */
-    public function getAdditionalData(): ?array
+    public function getAdditionalData(): array
     {
         return [
             'conversationID' => $this->conversationID,
@@ -104,7 +100,7 @@ final class ConversationMessageSearch extends AbstractSearchProvider
     /**
      * @inheritDoc
      */
-    public function getConditionBuilder(array $parameters): ?PreparedStatementConditionBuilder
+    public function getConditionBuilder(array $parameters): PreparedStatementConditionBuilder
     {
         $this->readParameters($parameters);
 
@@ -137,7 +133,7 @@ final class ConversationMessageSearch extends AbstractSearchProvider
      */
     public function getFormTemplateName(): string
     {
-        if ($this->conversation) {
+        if (isset($this->conversation)) {
             return 'searchConversationMessage';
         }
 
@@ -159,7 +155,7 @@ final class ConversationMessageSearch extends AbstractSearchProvider
     }
 
     /**
-     * @inheritDoc
+     * @param array<string, mixed> $parameters
      */
     private function readParameters(array $parameters): void
     {

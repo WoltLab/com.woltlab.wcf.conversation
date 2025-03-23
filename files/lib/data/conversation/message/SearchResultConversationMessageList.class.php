@@ -9,11 +9,7 @@ namespace wcf\data\conversation\message;
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
- * @method  SearchResultConversationMessage     current()
- * @method  SearchResultConversationMessage[]   getObjects()
- * @method  SearchResultConversationMessage|null    getSingleObject()
- * @method  SearchResultConversationMessage|null    search($objectID)
- * @property    SearchResultConversationMessage[] $objects
+ * @extends SimplifiedViewableConversationMessageList<SearchResultConversationMessage>
  */
 class SearchResultConversationMessageList extends SimplifiedViewableConversationMessageList
 {

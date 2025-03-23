@@ -11,11 +11,7 @@ use wcf\system\WCF;
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
- * @method  FeedConversation    current()
- * @method  FeedConversation[]  getObjects()
- * @method  FeedConversation|null   getSingleObject()
- * @method  FeedConversation|null   search($objectID)
- * @property    FeedConversation[] $objects
+ * @extends ConversationList<FeedConversation>
  * @deprecated 6.1
  */
 class FeedConversationList extends ConversationList

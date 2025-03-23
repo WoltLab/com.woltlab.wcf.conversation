@@ -14,6 +14,8 @@ use wcf\system\WCF;
  * @author  Alexander Ebert
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
+ *
+ * @extends AbstractClipboardAction<Conversation>
  */
 class ConversationClipboardAction extends AbstractClipboardAction
 {
@@ -136,6 +138,7 @@ class ConversationClipboardAction extends AbstractClipboardAction
      * Returns a list of conversations with user participation.
      *
      * @param Conversation[] $conversations
+     * @return void
      */
     protected function validateParticipation(array $conversations)
     {

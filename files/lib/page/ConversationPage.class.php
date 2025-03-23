@@ -32,7 +32,7 @@ use wcf\util\HeaderUtil;
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
- * @property    ViewableConversationMessageList $objectList
+ * @extends MultipleLinkPage<ViewableConversationMessageList>
  */
 class ConversationPage extends MultipleLinkPage
 {
@@ -365,6 +365,8 @@ class ConversationPage extends MultipleLinkPage
 
     /**
      * Calculates the position of a specific post in this conversation.
+     *
+     * @return void
      */
     protected function goToPost()
     {
@@ -382,6 +384,8 @@ class ConversationPage extends MultipleLinkPage
 
     /**
      * Gets the id of the last post in this conversation and forwards the user to this post.
+     *
+     * @return void
      */
     protected function goToLastPost()
     {
@@ -412,6 +416,8 @@ class ConversationPage extends MultipleLinkPage
 
     /**
      * Forwards the user to the first new message in this conversation.
+     *
+     * @return void
      */
     protected function goToFirstNewPost()
     {

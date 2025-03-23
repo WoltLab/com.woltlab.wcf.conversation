@@ -80,15 +80,15 @@ class ConversationAddForm extends MessageForm
 
     /**
      * draft status
-     * @var int
+     * @var bool
      */
-    public $draft = 0;
+    public $draft = false;
 
     /**
      * true, if participants can add new participants
-     * @var int
+     * @var bool
      */
-    public $participantCanInvite = 0;
+    public $participantCanInvite = false;
 
     /**
      * participants (user ids)
@@ -276,7 +276,7 @@ class ConversationAddForm extends MessageForm
             'userID' => WCF::getUser()->userID,
             'username' => WCF::getUser()->username,
             'isDraft' => $this->draft ? 1 : 0,
-            'participantCanInvite' => $this->participantCanInvite,
+            'participantCanInvite' => $this->participantCanInvite ? 1 : 0,
         ]);
         if ($this->draft) {
             $data['draftData'] = \serialize([
@@ -343,7 +343,7 @@ class ConversationAddForm extends MessageForm
         }
 
         WCF::getTPL()->assign([
-            'participantCanInvite' => $this->participantCanInvite,
+            'participantCanInvite' => $this->participantCanInvite ? 1 : 0,
             'participants' => $this->participants,
             'participantsData' => $this->getParticipantsData(),
             'invisibleParticipants' => $this->invisibleParticipants,
@@ -365,7 +365,14 @@ class ConversationAddForm extends MessageForm
         parent::show();
     }
 
-    private function getParticipantsData($invisible = false)
+    /**
+     * @return list<array{
+     *  objectId: int,
+     *  value: string,
+     *  type: 'user'|'group',
+     * }>
+     */
+    private function getParticipantsData(bool $invisible = false): array
     {
         $result = [];
         $participants = ArrayUtil::trim(\explode(

@@ -85,6 +85,10 @@ final class GetConversationLabels implements IController
             ->build();
     }
 
+    /**
+     * @param int[] $labelIDs
+     * @return int[]
+     */
     private function getAssignedLabelIDs(array $labelIDs, ?int $conversationID): array
     {
         if ($conversationID === null) {

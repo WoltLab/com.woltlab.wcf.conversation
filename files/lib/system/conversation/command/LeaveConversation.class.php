@@ -19,6 +19,9 @@ use wcf\system\WCF;
  */
 final class LeaveConversation
 {
+    /**
+     * @param int[] $conversationIDs
+     */
     public function __construct(
         public readonly array $conversationIDs,
         public readonly int $hideConversation
@@ -33,7 +36,7 @@ final class LeaveConversation
         }
     }
 
-    public function __invoke()
+    public function __invoke(): void
     {
         $sql = "UPDATE  wcf1_conversation_to_user
                 SET     hideConversation = ?

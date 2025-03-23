@@ -18,34 +18,34 @@ use wcf\system\WCF;
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
- * @method  Conversation    getDecoratedObject()
- * @mixin   Conversation
- * @property-read   int|null $otherParticipantID
- * @property-read   string|null $otherParticipant
+ * @mixin Conversation
+ * @property-read ?int $otherParticipantID
+ * @property-read ?string $otherParticipant
+ * @extends DatabaseObjectDecorator<Conversation>
  */
 class ViewableConversation extends DatabaseObjectDecorator
 {
     /**
      * participant summary
-     * @var string
+     * @var User[]|null
      */
     protected $__participantSummary;
 
     /**
      * user profile object
-     * @var UserProfile
+     * @var ?UserProfile
      */
     protected $userProfile;
 
     /**
      * last poster's profile
-     * @var UserProfile
+     * @var ?UserProfile
      */
     protected $lastPosterProfile;
 
     /**
      * other participant's profile
-     * @var UserProfile
+     * @var ?UserProfile
      */
     protected $otherParticipantProfile;
 
@@ -63,7 +63,7 @@ class ViewableConversation extends DatabaseObjectDecorator
     /**
      * Returns the user profile object.
      *
-     * @return  UserProfile
+     * @return UserProfile
      */
     public function getUserProfile()
     {
@@ -81,7 +81,7 @@ class ViewableConversation extends DatabaseObjectDecorator
     /**
      * Returns the last poster's profile object.
      *
-     * @return  UserProfile
+     * @return UserProfile
      */
     public function getLastPosterProfile()
     {
@@ -99,7 +99,7 @@ class ViewableConversation extends DatabaseObjectDecorator
     /**
      * Returns the number of pages in this conversation.
      *
-     * @return  int
+     * @return int
      */
     public function getPages()
     {
@@ -111,13 +111,13 @@ class ViewableConversation extends DatabaseObjectDecorator
             $messagesPerPage = CONVERSATION_MESSAGES_PER_PAGE;
         }
 
-        return \intval(\ceil(($this->replies + 1) / $messagesPerPage));
+        return (int)\ceil(($this->replies + 1) / $messagesPerPage);
     }
 
     /**
      * Returns a summary of the participants.
      *
-     * @return  User[]
+     * @return User[]
      */
     public function getParticipantSummary()
     {
@@ -144,7 +144,7 @@ class ViewableConversation extends DatabaseObjectDecorator
     /**
      * Returns the other participant's profile object.
      *
-     * @return  UserProfile
+     * @return UserProfile
      */
     public function getOtherParticipantProfile()
     {
@@ -163,7 +163,7 @@ class ViewableConversation extends DatabaseObjectDecorator
     /**
      * Assigns a label.
      *
-     * @param ConversationLabel $label
+     * @return void
      */
     public function assignLabel(ConversationLabel $label)
     {
@@ -173,7 +173,7 @@ class ViewableConversation extends DatabaseObjectDecorator
     /**
      * Returns a list of assigned labels.
      *
-     * @return  ConversationLabel[]
+     * @return ConversationLabel[]
      */
     public function getAssignedLabels()
     {
@@ -183,9 +183,7 @@ class ViewableConversation extends DatabaseObjectDecorator
     /**
      * Converts a conversation into a viewable conversation.
      *
-     * @param Conversation $conversation
-     * @param ConversationLabelList $labelList
-     * @return  ViewableConversation
+     * @return ViewableConversation
      */
     public static function getViewableConversation(Conversation $conversation, ?ConversationLabelList $labelList = null)
     {

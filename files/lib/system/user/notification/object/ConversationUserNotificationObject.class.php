@@ -12,8 +12,8 @@ use wcf\data\DatabaseObjectDecorator;
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
- * @method  Conversation    getDecoratedObject()
- * @mixin   Conversation
+ * @mixin Conversation
+ * @extends DatabaseObjectDecorator<Conversation>
  */
 class ConversationUserNotificationObject extends DatabaseObjectDecorator implements IUserNotificationObject
 {
