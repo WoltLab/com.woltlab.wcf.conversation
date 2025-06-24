@@ -6,7 +6,7 @@
  * @license  GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @since 6.2
  */
-define(["require", "exports", "tslib", "../../../Api/Conversations/GetConversationLabelManager", "WoltLabSuite/Core/Helper/PromiseMutex", "WoltLabSuite/Core/Component/Dialog", "WoltLabSuite/Core/Language", "WoltLabSuite/Core/Ui/Notification", "WoltLabSuite/Core/Ui/Dropdown/Simple", "../EditorHandler"], function (require, exports, tslib_1, GetConversationLabelManager_1, PromiseMutex_1, Dialog_1, Language_1, Notification_1, Simple_1, EditorHandler_1) {
+define(["require", "exports", "tslib", "../../../Api/Conversations/GetConversationLabelManager", "WoltLabSuite/Core/Helper/PromiseMutex", "WoltLabSuite/Core/Component/Dialog", "WoltLabSuite/Core/Language", "WoltLabSuite/Core/Component/Snackbar", "WoltLabSuite/Core/Ui/Dropdown/Simple", "../EditorHandler"], function (require, exports, tslib_1, GetConversationLabelManager_1, PromiseMutex_1, Dialog_1, Language_1, Snackbar_1, Simple_1, EditorHandler_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.LabelManager = void 0;
@@ -74,7 +74,7 @@ define(["require", "exports", "tslib", "../../../Api/Conversations/GetConversati
                 this.#dialog?.content.querySelector(".conversationLabelList")?.append(li);
                 this.#insertLabel(response.result);
                 this.#updateAddButtonState();
-                (0, Notification_1.show)();
+                (0, Snackbar_1.showDefaultSuccessSnackbar)();
             }
         }
         #updateAddButtonState() {

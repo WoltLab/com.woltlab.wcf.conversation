@@ -13,9 +13,7 @@ use wcf\data\conversation\message\ConversationMessageList;
  * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @since       6.1
  *
- * @method  ConversationMessage[]      getCachedObjects()
- * @method  ConversationMessage        getObject($objectID)
- * @method  ConversationMessage[]      getObjects(array $objectIDs)
+ * @extends AbstractRuntimeCache<ConversationMessage, ConversationMessageList>
  */
 class ConversationMessageRuntimeCache extends AbstractRuntimeCache
 {

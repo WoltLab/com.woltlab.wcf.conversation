@@ -14,9 +14,8 @@ use wcf\system\WCF;
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
- * @method static Conversation    create(array $parameters = [])
- * @method      Conversation    getDecoratedObject()
- * @mixin       Conversation
+ * @mixin Conversation
+ * @extends DatabaseObjectEditor<Conversation>
  */
 class ConversationEditor extends DatabaseObjectEditor
 {
@@ -28,7 +27,7 @@ class ConversationEditor extends DatabaseObjectEditor
     /**
      * Adds a new message to this conversation.
      *
-     * @param ConversationMessage $message
+     * @return void
      */
     public function addMessage(ConversationMessage $message)
     {
@@ -43,6 +42,8 @@ class ConversationEditor extends DatabaseObjectEditor
 
     /**
      * Resets the participants of this conversation.
+     *
+     * @return void
      */
     public function resetParticipants()
     {
@@ -58,9 +59,9 @@ class ConversationEditor extends DatabaseObjectEditor
      *
      * @param int[] $participantIDs
      * @param int[] $invisibleParticipantIDs
-     * @param string $visibility
+     * @return void
      */
-    public function updateParticipants(array $participantIDs, array $invisibleParticipantIDs = [], $visibility = 'all')
+    public function updateParticipants(array $participantIDs, array $invisibleParticipantIDs = [], string $visibility = 'all')
     {
         $usernames = [];
         if (!empty($participantIDs) || !empty($invisibleParticipantIDs)) {
@@ -124,6 +125,8 @@ class ConversationEditor extends DatabaseObjectEditor
 
     /**
      * Updates participant count.
+     *
+     * @return void
      */
     public function updateParticipantCount()
     {
@@ -148,6 +151,8 @@ class ConversationEditor extends DatabaseObjectEditor
 
     /**
      * Updates the participant summary of this conversation.
+     *
+     * @return void
      */
     public function updateParticipantSummary()
     {
@@ -166,9 +171,9 @@ class ConversationEditor extends DatabaseObjectEditor
     /**
      * Removes a participant from this conversation.
      *
-     * @param int $userID
+     * @return void
      */
-    public function removeParticipant($userID)
+    public function removeParticipant(int $userID)
     {
         $sql = "SELECT  joinedAt, isInvisible
                 FROM    wcf1_conversation_to_user
@@ -217,6 +222,8 @@ class ConversationEditor extends DatabaseObjectEditor
 
     /**
      * Updates the first message of this conversation.
+     *
+     * @return void
      */
     public function updateFirstMessage()
     {
@@ -236,6 +243,8 @@ class ConversationEditor extends DatabaseObjectEditor
 
     /**
      * Updates the last message of this conversation.
+     *
+     * @return void
      */
     public function updateLastMessage()
     {
@@ -260,6 +269,7 @@ class ConversationEditor extends DatabaseObjectEditor
      * Updates the participant summary of the given conversations.
      *
      * @param int[] $conversationIDs
+     * @return void
      */
     public static function updateParticipantSummaries(array $conversationIDs)
     {
@@ -277,6 +287,7 @@ class ConversationEditor extends DatabaseObjectEditor
      * Updates the participant counts of the given conversations.
      *
      * @param int[] $conversationIDs
+     * @return void
      */
     public static function updateParticipantCounts(array $conversationIDs)
     {

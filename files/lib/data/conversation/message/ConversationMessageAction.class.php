@@ -41,8 +41,8 @@ use wcf\util\UserUtil;
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
- * @method  ConversationMessageEditor[] getObjects()
- * @method  ConversationMessageEditor   getSingleObject()
+ * @extends AbstractDatabaseObjectAction<ConversationMessage, ConversationMessageEditor>
+ * @implements IAttachmentMessageQuickReplyAction<Conversation, ConversationMessage, ConversationMessageList>
  */
 class ConversationMessageAction extends AbstractDatabaseObjectAction implements
     IAttachmentMessageQuickReplyAction,
@@ -72,7 +72,6 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
 
     /**
      * @inheritDoc
-     * @return  ConversationMessage
      */
     public function create()
     {
@@ -81,7 +80,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         }
 
         // count attachments
-        if (isset($this->parameters['attachmentHandler']) && $this->parameters['attachmentHandler'] !== null) {
+        if (isset($this->parameters['attachmentHandler'])) {
             $this->parameters['data']['attachments'] = \count($this->parameters['attachmentHandler']);
         }
 
@@ -103,7 +102,6 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         }
 
         // create message
-        /** @var ConversationMessage $message */
         $message = parent::create();
         $messageEditor = new ConversationMessageEditor($message);
 
@@ -157,7 +155,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         );
 
         // update attachments
-        if (isset($this->parameters['attachmentHandler']) && $this->parameters['attachmentHandler'] !== null) {
+        if (isset($this->parameters['attachmentHandler'])) {
             /** @noinspection PhpUndefinedMethodInspection */
             $this->parameters['attachmentHandler']->updateObjectID($message->messageID);
         }
@@ -202,7 +200,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
     public function update()
     {
         // count attachments
-        if (isset($this->parameters['attachmentHandler']) && $this->parameters['attachmentHandler'] !== null) {
+        if (isset($this->parameters['attachmentHandler'])) {
             $this->parameters['data']['attachments'] = \count($this->parameters['attachmentHandler']);
         }
 
@@ -318,6 +316,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         $returnValues = QuickReplyManager::getInstance()->createMessage(
             $this,
             $this->parameters,
+            // @phpstan-ignore argument.type
             ConversationAction::class,
             CONVERSATION_LIST_DEFAULT_SORT_ORDER,
             'conversationMessageList'
@@ -373,13 +372,6 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
             'com.woltlab.wcf.conversation.message',
             $this->message->messageID
         );
-        WCF::getTPL()->assign([
-            'defaultSmilies' => SmileyCache::getInstance()->getCategorySmilies(),
-            'message' => $this->message,
-            'text' => $upcastProcessor->getHtml(),
-            'permissionCanUseSmilies' => 'user.message.canUseSmilies',
-            'wysiwygSelector' => 'messageEditor' . $this->message->messageID,
-        ]);
 
         $tmpHash = StringUtil::getRandomID();
         $attachmentHandler = new AttachmentHandler(
@@ -389,18 +381,23 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         );
         $attachmentList = $attachmentHandler->getAttachmentList();
 
-        WCF::getTPL()->assign([
+        $tplVariable = [
+            'defaultSmilies' => SmileyCache::getInstance()->getCategorySmilies(),
+            'message' => $this->message,
+            'text' => $upcastProcessor->getHtml(),
+            'permissionCanUseSmilies' => 'user.message.canUseSmilies',
+            'wysiwygSelector' => 'messageEditor' . $this->message->messageID,
             'attachmentHandler' => $attachmentHandler,
             'attachmentList' => $attachmentList->getObjects(),
             'attachmentObjectID' => $this->message->messageID,
             'attachmentObjectType' => 'com.woltlab.wcf.conversation.message',
             'attachmentParentObjectID' => 0,
             'tmpHash' => $tmpHash,
-        ]);
+        ];
 
         return [
             'actionName' => 'beginEdit',
-            'template' => WCF::getTPL()->fetch('conversationMessageInlineEditor'),
+            'template' => WCF::getTPL()->render('wcf', 'conversationMessageInlineEditor', $tplVariable),
         ];
     }
 
@@ -479,11 +476,10 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
             'message' => $this->message->getFormattedMessage(),
         ];
 
-        WCF::getTPL()->assign([
+        $data['attachmentList'] = WCF::getTPL()->render('wcf', 'attachments', [
             'attachmentList' => $attachmentList,
             'objectID' => $this->message->messageID,
         ]);
-        $data['attachmentList'] = WCF::getTPL()->fetch('attachments');
 
         return $data;
     }
@@ -493,8 +489,6 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
      */
     public function validateContainer(DatabaseObject $container)
     {
-        /** @var Conversation $container */
-
         if (!$container->conversationID) {
             throw new UserInputException('objectID');
         }
@@ -550,10 +544,8 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
     /**
      * @inheritDoc
      */
-    public function getMessageList(DatabaseObject $container, $lastMessageTime)
+    public function getMessageList(DatabaseObject $container, int $lastMessageTime)
     {
-        /** @var Conversation $container */
-
         $messageList = new ViewableConversationMessageList();
         $messageList->setConversation($container);
         $messageList->getConditionBuilder()
@@ -571,8 +563,6 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
      */
     public function getPageNo(DatabaseObject $container)
     {
-        /** @var Conversation $container */
-
         $sql = "SELECT  COUNT(*) AS count
                 FROM    wcf1_conversation_message
                 WHERE   conversationID = ?";
@@ -588,7 +578,6 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
      */
     public function getRedirectUrl(DatabaseObject $container, DatabaseObject $message)
     {
-        /** @var ConversationMessage $message */
         return $message->getLink();
     }
 
@@ -603,7 +592,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
     /**
      * @inheritDoc
      */
-    public function getHtmlInputProcessor($message = null, $objectID = 0)
+    public function getHtmlInputProcessor(?string $message = null, int $objectID = 0)
     {
         if ($message === null) {
             return $this->htmlInputProcessor;

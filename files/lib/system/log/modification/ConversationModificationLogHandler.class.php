@@ -23,8 +23,8 @@ class ConversationModificationLogHandler extends VoidExtendedModificationLogHand
     /**
      * Adds a log entry for newly added conversation participants.
      *
-     * @param Conversation $conversation
      * @param int[] $participantIDs
+     * @return void
      */
     public function addParticipants(Conversation $conversation, array $participantIDs)
     {
@@ -47,7 +47,7 @@ class ConversationModificationLogHandler extends VoidExtendedModificationLogHand
     /**
      * Adds a log entry for conversation close.
      *
-     * @param Conversation $conversation
+     * @return void
      */
     public function close(Conversation $conversation)
     {
@@ -57,7 +57,7 @@ class ConversationModificationLogHandler extends VoidExtendedModificationLogHand
     /**
      * Adds a log entry for conversation open.
      *
-     * @param Conversation $conversation
+     * @return void
      */
     public function open(Conversation $conversation)
     {
@@ -67,7 +67,7 @@ class ConversationModificationLogHandler extends VoidExtendedModificationLogHand
     /**
      * Adds a log entry for conversation leave.
      *
-     * @param Conversation $conversation
+     * @return void
      */
     public function leave(Conversation $conversation)
     {
@@ -77,10 +77,9 @@ class ConversationModificationLogHandler extends VoidExtendedModificationLogHand
     /**
      * Adds a log entry for a removed participant.
      *
-     * @param Conversation $conversation
-     * @param int $userID
+     * @return void
      */
-    public function removeParticipant(Conversation $conversation, $userID)
+    public function removeParticipant(Conversation $conversation, int $userID)
     {
         $user = new User($userID);
         $this->add($conversation, 'removeParticipant', [
@@ -92,11 +91,10 @@ class ConversationModificationLogHandler extends VoidExtendedModificationLogHand
     /**
      * Adds a conversation modification log entry.
      *
-     * @param Conversation $conversation
-     * @param string $action
-     * @param array $additionalData
+     * @param mixed[] $additionalData
+     * @return void
      */
-    public function add(Conversation $conversation, $action, array $additionalData = [])
+    public function add(Conversation $conversation, string $action, array $additionalData = [])
     {
         $this->createLog($action, $conversation->conversationID, null, $additionalData);
     }
@@ -106,6 +104,7 @@ class ConversationModificationLogHandler extends VoidExtendedModificationLogHand
      * ids.
      *
      * @param int[] $objectIDs
+     * @return void
      * @deprecated  3.0, use deleteLogs()
      */
     public function remove(array $objectIDs)

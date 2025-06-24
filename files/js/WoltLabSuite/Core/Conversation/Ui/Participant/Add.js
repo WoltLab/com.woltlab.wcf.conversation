@@ -5,12 +5,11 @@
  * @copyright   2001-2021 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  */
-define(["require", "exports", "tslib", "WoltLabSuite/Core/Ajax", "WoltLabSuite/Core/Dom/Util", "WoltLabSuite/Core/Ui/Dialog", "WoltLabSuite/Core/Ui/Notification", "WoltLabSuite/Core/Ui/ItemList/User", "WoltLabSuite/Core/Language"], function (require, exports, tslib_1, Ajax, Util_1, Dialog_1, UiNotification, UiItemListUser, Language) {
+define(["require", "exports", "tslib", "WoltLabSuite/Core/Ajax", "WoltLabSuite/Core/Dom/Util", "WoltLabSuite/Core/Ui/Dialog", "WoltLabSuite/Core/Component/Snackbar", "WoltLabSuite/Core/Ui/ItemList/User", "WoltLabSuite/Core/Language"], function (require, exports, tslib_1, Ajax, Util_1, Dialog_1, Snackbar_1, UiItemListUser, Language) {
     "use strict";
     Ajax = tslib_1.__importStar(Ajax);
     Util_1 = tslib_1.__importDefault(Util_1);
     Dialog_1 = tslib_1.__importDefault(Dialog_1);
-    UiNotification = tslib_1.__importStar(UiNotification);
     UiItemListUser = tslib_1.__importStar(UiItemListUser);
     Language = tslib_1.__importStar(Language);
     class UiParticipantAdd {
@@ -48,7 +47,7 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Ajax", "WoltLabSuite/C
                 return;
             }
             if ("count" in data.returnValues) {
-                UiNotification.show(data.returnValues.successMessage, () => {
+                (0, Snackbar_1.showSuccessSnackbar)(data.returnValues.successMessage).addEventListener("snackbar:close", () => {
                     window.location.reload();
                 });
             }

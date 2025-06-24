@@ -16,11 +16,7 @@ use wcf\system\WCF;
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
- * @method  ViewableConversation        current()
- * @method  ViewableConversation[]      getObjects()
- * @method  ViewableConversation|null   getSingleObject()
- * @method  ViewableConversation|null   search($objectID)
- * @property    ViewableConversation[] $objects
+ * @extends ConversationList<ViewableConversation>
  */
 class UserConversationList extends ConversationList
 {
@@ -119,7 +115,7 @@ class UserConversationList extends ConversationList
     /**
      * Sets the label list of the user the conversations belong to.
      *
-     * @param ConversationLabelList $labelList
+     * @return void
      */
     public function setLabelList(ConversationLabelList $labelList)
     {

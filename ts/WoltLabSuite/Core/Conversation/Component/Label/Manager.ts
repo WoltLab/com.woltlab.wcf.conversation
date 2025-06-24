@@ -15,7 +15,7 @@ import { promiseMutex } from "WoltLabSuite/Core/Helper/PromiseMutex";
 import { dialogFactory } from "WoltLabSuite/Core/Component/Dialog";
 import WoltlabCoreDialogElement from "WoltLabSuite/Core/Element/woltlab-core-dialog";
 import { getPhrase } from "WoltLabSuite/Core/Language";
-import { show as showNotification } from "WoltLabSuite/Core/Ui/Notification";
+import { showDefaultSuccessSnackbar } from "WoltLabSuite/Core/Component/Snackbar";
 import UiDropdownSimple from "WoltLabSuite/Core/Ui/Dropdown/Simple";
 import { addAvailableLabel } from "../EditorHandler";
 
@@ -116,7 +116,7 @@ export class LabelManager {
       this.#insertLabel(response.result);
 
       this.#updateAddButtonState();
-      showNotification();
+      showDefaultSuccessSnackbar();
     }
   }
 

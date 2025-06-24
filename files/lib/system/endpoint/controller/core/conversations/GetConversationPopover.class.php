@@ -54,8 +54,8 @@ final class GetConversationPopover implements IController
             return '';
         }
 
-        return WCF::getTPL()->fetch('conversationMessagePopover', 'wcf', [
+        return WCF::getTPL()->render('wcf', 'conversationMessagePopover', [
             'message' => $message,
-        ], true);
+        ]);
     }
 }

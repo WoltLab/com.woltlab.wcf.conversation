@@ -15,7 +15,7 @@ use wcf\util\ArrayUtil;
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
- * @method  ConversationMessage getObject($objectID)
+ * @extends AbstractAttachmentObjectType<ConversationMessage>
  */
 class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectType
 {
@@ -142,7 +142,7 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
             }
         }
 
-        if (!empty($messageIDs)) {
+        if ($messageIDs !== []) {
             $this->cacheObjects($messageIDs);
         }
 

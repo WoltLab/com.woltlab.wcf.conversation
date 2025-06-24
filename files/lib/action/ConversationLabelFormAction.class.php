@@ -74,7 +74,7 @@ final class ConversationLabelFormAction implements RequestHandlerInterface
             }
 
             $data = $form->getData()['data'];
-            $deleteLabel = $label && $data['deleteLabel'] ?? false;
+            $deleteLabel = $label && ($data['deleteLabel'] ?? false);
             unset($data['deleteLabel']);
 
             if ($deleteLabel) {

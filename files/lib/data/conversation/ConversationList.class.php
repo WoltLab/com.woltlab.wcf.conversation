@@ -2,6 +2,7 @@
 
 namespace wcf\data\conversation;
 
+use wcf\data\DatabaseObjectDecorator;
 use wcf\data\DatabaseObjectList;
 
 /**
@@ -11,11 +12,8 @@ use wcf\data\DatabaseObjectList;
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
- * @method  Conversation        current()
- * @method  Conversation[]      getObjects()
- * @method  Conversation|null   getSingleObject()
- * @method  Conversation|null   search($objectID)
- * @property    Conversation[] $objects
+ * @template TDatabaseObject of Conversation|DatabaseObjectDecorator<Conversation> = Conversation
+ * @extends DatabaseObjectList<TDatabaseObject>
  */
 class ConversationList extends DatabaseObjectList
 {

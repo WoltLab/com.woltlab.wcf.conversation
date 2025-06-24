@@ -13,8 +13,8 @@ use wcf\system\cache\runtime\UserProfileRuntimeCache;
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
- * @method  ConversationMessage getDecoratedObject()
- * @mixin   ConversationMessage
+ * @mixin ConversationMessage
+ * @extends DatabaseObjectDecorator<ConversationMessage>
  */
 class ViewableConversationMessage extends DatabaseObjectDecorator
 {

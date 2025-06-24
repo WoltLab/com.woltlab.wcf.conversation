@@ -12,7 +12,7 @@ import { getConversationLabels } from "../../../Api/Conversations/GetConversatio
 import * as FormBuilderManager from "WoltLabSuite/Core/Form/Builder/Manager";
 import { assignConversationLabels } from "../../../Api/Conversations/AssignConversationLabels";
 import { reload as reloadClipboard } from "WoltLabSuite/Core/Controller/Clipboard";
-import { show as showNotification } from "WoltLabSuite/Core/Ui/Notification";
+import { showDefaultSuccessSnackbar } from "WoltLabSuite/Core/Component/Snackbar";
 import { getConversationEditor } from "../EditorHandler";
 
 export async function openDialog(conversationIDs: number[]) {
@@ -49,5 +49,5 @@ function assignLabels(conversationIDs: number[], labelIDs: number[]) {
     getConversationEditor(conversationID)!.labelIDs = labelIDs;
   });
 
-  showNotification();
+  showDefaultSuccessSnackbar();
 }

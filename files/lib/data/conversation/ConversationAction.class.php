@@ -34,8 +34,7 @@ use wcf\util\StringUtil;
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
- * @method  ConversationEditor[]    getObjects()
- * @method  ConversationEditor  getSingleObject()
+ * @extends AbstractDatabaseObjectAction<Conversation, ConversationEditor>
  */
 class ConversationAction extends AbstractDatabaseObjectAction implements
     IClipboardAction,
@@ -60,7 +59,6 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
 
     /**
      * @inheritDoc
-     * @return  Conversation
      */
     public function create()
     {
@@ -181,7 +179,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
         }
 
         // delete conversations
-        parent::delete();
+        $count = parent::delete();
 
         if (!empty($this->objectIDs)) {
             // delete notifications
@@ -196,6 +194,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
                 UserStorageHandler::getInstance()->reset($participantIDs, 'unreadConversationCount');
             }
         }
+
+        return $count;
     }
 
     /**
@@ -372,6 +372,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
             $returnValues['markAsRead'] = \reset($conversationIDs);
         }
 
+        // @phpstan-ignore return.void
         return $returnValues;
     }
 
@@ -412,6 +413,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
 
     /**
      * Marks all conversations as read.
+     *
+     * @return array{markAllAsRead: bool}
      */
     public function markAllAsRead()
     {
@@ -446,6 +449,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
 
     /**
      * Validates the markAllAsRead action.
+     *
+     * @return void
      */
     public function validateMarkAllAsRead()
     {
@@ -455,8 +460,9 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
     /**
      * Validates parameters to close conversations.
      *
-     * @throws  PermissionDeniedException
-     * @throws  UserInputException
+     * @return void
+     * @throws PermissionDeniedException
+     * @throws UserInputException
      */
     public function validateClose()
     {
@@ -499,8 +505,9 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
     /**
      * Validates parameters to open conversations.
      *
-     * @throws  PermissionDeniedException
-     * @throws  UserInputException
+     * @return void
+     * @throws PermissionDeniedException
+     * @throws UserInputException
      */
     public function validateOpen()
     {
@@ -543,8 +550,9 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
     /**
      * Validates parameters to hide conversations.
      *
-     * @throws  PermissionDeniedException
-     * @throws  UserInputException
+     * @return void
+     * @throws PermissionDeniedException
+     * @throws UserInputException
      */
     public function validateHideConversation()
     {
@@ -572,7 +580,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
     /**
      * Hides or restores conversations.
      *
-     * @return  string[]
+     * @return array{actionName: string, redirectURL: string}
      */
     public function hideConversation()
     {
@@ -599,6 +607,18 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
     }
 
     /**
+     * @return array{
+     *  items: array<int, array{
+     *      content: string,
+     *      image: string,
+     *      isUnread: bool,
+     *      link: string,
+     *      objectId: int,
+     *      time: int,
+     *      usernames: string[],
+     *  }>,
+     *  totalCount: int,
+     * }
      * @since 5.5
      */
     public function getConversations(): array
@@ -666,9 +686,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
             } else {
                 if ($conversation->participants > 1) {
                     $image = FontAwesomeIcon::fromValues('users')->toHtml(48);
-                    $usernames = \array_filter($conversation->getParticipantNames(), static function ($username) use ($conversation) {
-                        return $username !== $conversation->getUserProfile()->username;
-                    });
+                    $usernames = $conversation->getParticipantNames(true);
                 } else {
                     $image = $conversation->getUserProfile()->getAvatar()->getImageTag(48);
                     $usernames = [$conversation->getUserProfile()->username];
@@ -702,6 +720,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
 
     /**
      * Validates the 'unmarkAll' action.
+     *
+     * @return void
      */
     public function validateUnmarkAll()
     {
@@ -710,6 +730,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
 
     /**
      * Unmarks all conversations.
+     *
+     * @return void
      */
     public function unmarkAll()
     {
@@ -721,7 +743,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
     /**
      * Validates parameters to display the 'add participants' form.
      *
-     * @throws  PermissionDeniedException
+     * @return void
+     * @throws PermissionDeniedException
      */
     public function validateGetAddParticipantsForm()
     {
@@ -737,24 +760,35 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
     /**
      * Shows the 'add participants' form.
      *
-     * @return  array
+     * @return array{
+     *  excludedSearchValues: string[],
+     *  maxItems: int,
+     *  canAddGroupParticipants: int,
+     *  template: string,
+     *  restrictUserGroupIDs: list<int>,
+     * }
      */
     public function getAddParticipantsForm()
     {
         $restrictUserGroupIDs = [];
         foreach (UserGroup::getAllGroups() as $group) {
+            // @phpstan-ignore property.notFound
             if ($group->canBeAddedAsConversationParticipant) {
                 $restrictUserGroupIDs[] = $group->groupID;
             }
         }
 
         return [
-            'excludedSearchValues' => $this->conversation->getParticipantNames(false, true),
+            'excludedSearchValues' => $this->conversation->getParticipantNames(
+                false,
+                true,
+                $this->conversation->userID == WCF::getUser()->userID
+            ),
             'maxItems' => WCF::getSession()->getPermission('user.conversation.maxParticipants') - $this->conversation->participants,
             'canAddGroupParticipants' => WCF::getSession()->getPermission('user.conversation.canAddGroupParticipants'),
-            'template' => WCF::getTPL()->fetch(
-                'conversationAddParticipants',
+            'template' => WCF::getTPL()->render(
                 'wcf',
+                'conversationAddParticipants',
                 ['conversation' => $this->conversation]
             ),
             'restrictUserGroupIDs' => $restrictUserGroupIDs,
@@ -763,6 +797,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
 
     /**
      * Validates parameters to add new participants.
+     *
+     * @return void
      */
     public function validateAddParticipants()
     {
@@ -787,7 +823,13 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
     /**
      * Adds new participants.
      *
-     * @return  array
+     * @return array{
+     *  count: int,
+     *  successMessage: string,
+     * }|array{
+     *  actionName: 'addParticipants',
+     *  errorMessage: string,
+     * }
      */
     public function addParticipants()
     {
@@ -890,8 +932,9 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
     /**
      * Validates parameters to remove a participant from a conversation.
      *
-     * @throws  PermissionDeniedException
-     * @throws  UserInputException
+     * @return void
+     * @throws PermissionDeniedException
+     * @throws UserInputException
      */
     public function validateRemoveParticipant()
     {
@@ -927,6 +970,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
 
     /**
      * Removes a participant from a conversation.
+     *
+     * @return array{userID: int}
      */
     public function removeParticipant()
     {
@@ -953,6 +998,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
 
     /**
      * Rebuilds the conversation data of the relevant conversations.
+     *
+     * @return void
      */
     public function rebuild()
     {
@@ -999,7 +1046,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
     /**
      * Validates the parameters to edit a conversation's subject.
      *
-     * @throws      PermissionDeniedException
+     * @return void
+     * @throws PermissionDeniedException
      */
     public function validateEditSubject()
     {
@@ -1014,7 +1062,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
     /**
      * Edits a conversation's subject.
      *
-     * @return      string[]
+     * @return array{subject: string}
      */
     public function editSubject()
     {
@@ -1044,11 +1092,9 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
     /**
      * Adds conversation modification data.
      *
-     * @param Conversation $conversation
-     * @param string $key
-     * @param mixed $value
+     * @return void
      */
-    protected function addConversationData(Conversation $conversation, $key, $value)
+    protected function addConversationData(Conversation $conversation, string $key, mixed $value)
     {
         if (!isset($this->conversationData[$conversation->conversationID])) {
             $this->conversationData[$conversation->conversationID] = [];
@@ -1060,7 +1106,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
     /**
      * Returns conversation data.
      *
-     * @return  mixed[][]
+     * @return mixed[][]
      */
     protected function getConversationData()
     {
@@ -1073,6 +1119,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
      * Unmarks conversations.
      *
      * @param int[] $conversationIDs
+     * @return void
      */
     protected function unmarkItems(array $conversationIDs = [])
     {

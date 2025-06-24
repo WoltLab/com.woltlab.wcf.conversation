@@ -14,7 +14,7 @@ use wcf\system\WCF;
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
- * @method  ConversationMessageList     getObjectList()
+ * @extends AbstractRebuildDataWorker<ConversationMessageList>
  */
 final class ConversationMessageSearchIndexRebuildDataWorker extends AbstractRebuildDataWorker
 {

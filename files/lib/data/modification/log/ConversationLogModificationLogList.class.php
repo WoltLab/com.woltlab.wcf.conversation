@@ -2,6 +2,7 @@
 
 namespace wcf\data\modification\log;
 
+use wcf\data\DatabaseObject;
 use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\log\modification\ConversationModificationLogHandler;
 use wcf\system\WCF;
@@ -13,18 +14,14 @@ use wcf\system\WCF;
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
- * @method  ViewableConversationModificationLog     current()
- * @method  ViewableConversationModificationLog[]       getObjects()
- * @method  ViewableConversationModificationLog|null    getSingleObject()
- * @method  ViewableConversationModificationLog|null    search($objectID)
- * @property    ViewableConversationModificationLog[] $objects
+ * @extends ModificationLogList<ViewableConversationModificationLog>
  */
 class ConversationLogModificationLogList extends ModificationLogList
 {
     /**
      * @inheritDoc
      */
-    public function __construct($conversationID)
+    public function __construct(int $conversationID)
     {
         parent::__construct();
 
@@ -50,11 +47,13 @@ class ConversationLogModificationLogList extends ModificationLogList
                 " . (!empty($this->sqlOrderBy) ? "ORDER BY " . $this->sqlOrderBy : '');
         $statement = WCF::getDB()->prepare($sql, $this->sqlLimit, $this->sqlOffset);
         $statement->execute($this->getConditionBuilder()->getParameters());
+        // @phpstan-ignore assign.propertyType, argument.templateType
         $this->objects = $statement->fetchObjects(($this->objectClassName ?: $this->className));
 
         // use table index as array index
         $objects = $userIDs = [];
         foreach ($this->objects as $object) {
+            /** @var ModificationLog $object */
             $objectID = $object->{$this->getDatabaseTableIndexName()};
             $objects[$objectID] = $object;
 
@@ -64,17 +63,16 @@ class ConversationLogModificationLogList extends ModificationLogList
                 $userIDs[] = $object->userID;
             }
         }
-        $this->objectIDs = $this->indexToObject;
-        $this->objects = $objects;
 
-        if (!empty($userIDs)) {
+        if ($userIDs !== []) {
             UserProfileRuntimeCache::getInstance()->cacheObjectIDs($userIDs);
         }
 
-        foreach ($this->objects as &$object) {
-            $object = new ViewableConversationModificationLog($object);
-        }
-        unset($object);
+        $this->objectIDs = $this->indexToObject;
+        $this->objects = \array_map(
+            static fn(DatabaseObject $object) => new ViewableConversationModificationLog($object),
+            $objects
+        );
     }
 
     /**

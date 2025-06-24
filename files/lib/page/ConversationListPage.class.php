@@ -21,7 +21,7 @@ use wcf\util\HeaderUtil;
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
- * @property    UserConversationList $objectList
+ * @extends SortablePage<UserConversationList>
  */
 class ConversationListPage extends SortablePage
 {
