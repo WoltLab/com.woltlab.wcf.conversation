@@ -130,12 +130,18 @@
 	{event name='boxes'}
 {/capture}
 
+{assign var='linkParameters' value=''}
+{if $participants}{capture append='linkParameters'}&participants={implode from=$participants item=participant}{unsafe:$participant|rawurlencode}{/implode}{/capture}{/if}
+{if $labelID}{capture append='linkParameters'}&labelID={$labelID}{/capture}{/if}
+
 {capture assign='contentInteractionPagination'}
-	{assign var='participantsParameter' value=''}
-	{if $participants}{capture assign='participantsParameter'}&participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}{/capture}{/if}
-	{assign var='labelIDParameter' value=''}
-	{if $labelID}{assign var='labelIDParameter' value="&labelID=$labelID"}{/if}
-	{pages print=true assign=pagesLinks controller='ConversationList' link="filter=$filter$participantsParameter&pageNo=%d&sortField=$sortField&sortOrder=$sortOrder$labelIDParameter"}
+	{if $pages > 1}
+		<woltlab-core-pagination
+			page="{$pageNo}"
+			count="{$pages}"
+			url="{link controller='ConversationList' filter=$filter sortField=$sortField sortOrder=$sortOrder}{unsafe:$linkParameters}{/link}"
+		></woltlab-core-pagination>
+	{/if}
 {/capture}
 
 {capture assign='contentInteractionButtons'}
@@ -312,11 +318,15 @@
 {/if}
 
 <footer class="contentFooter">
-	{hascontent}
+	{if $pages > 1}
 		<div class="paginationBottom">
-			{content}{@$pagesLinks}{/content}
+			<woltlab-core-pagination
+				page="{$pageNo}"
+				count="{$pages}"
+				url="{link controller='ConversationList' filter=$filter sortField=$sortField sortOrder=$sortOrder}{unsafe:$linkParameters}{/link}"
+			></woltlab-core-pagination>
 		</div>
-	{/hascontent}
+	{/if}
 	
 	{hascontent}
 		<nav class="contentFooterNavigation">
