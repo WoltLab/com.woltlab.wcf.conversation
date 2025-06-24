@@ -1,10 +1,10 @@
-{capture assign='wysiwygSelector'}messageEditor{@$message->messageID}{/capture}
+{capture assign='wysiwygSelector'}messageEditor{$message->messageID}{/capture}
 <div class="messageInlineEditor">
 	<textarea id="{$wysiwygSelector}" class="wysiwygTextarea"
 		data-autosave="com.woltlab.wcf.conversation.messageEdit-{$message->messageID}"
 		data-support-mention="true"
 	>{$text}</textarea>
-	{capture assign=wysiwygContainerID}messageEditor{@$message->messageID}{/capture}
+	{capture assign=wysiwygContainerID}messageEditor{$message->messageID}{/capture}
 	{include file='messageFormTabsInline' inConversationInlineEdit=true wysiwygContainerID=$wysiwygContainerID}
 	
 	<div class="formSubmit">

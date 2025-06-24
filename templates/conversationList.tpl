@@ -27,7 +27,7 @@
 {/capture}
 
 {capture assign='headContent'}
-	<link rel="alternate" type="application/rss+xml" title="{lang}wcf.global.button.rss{/lang}" href="{link controller='ConversationRssFeed'}at={@$__wcf->getUser()->userID}-{@$__wcf->getUser()->accessToken}{/link}">
+	<link rel="alternate" type="application/rss+xml" title="{lang}wcf.global.button.rss{/lang}" href="{link controller='ConversationRssFeed'}at={$__wcf->getUser()->userID}-{$__wcf->getUser()->accessToken}{/link}">
 {/capture}
 
 {capture assign='sidebarRight'}
@@ -58,7 +58,7 @@
 		<h2 class="boxTitle">{lang}wcf.conversation.filter.participants{/lang}</h2>
 		
 		<div class="boxContent">
-			<form action="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}" method="post">
+			<form action="{link controller='ConversationList' sortField=$sortField sortOrder=$sortOrder pageNo=$pageNo}{if $filter}filter={$filter}{/if}{/link}" method="post">
 				<dl>
 					<dt></dt>
 					<dd><label><textarea id="participants" name="participants" class="long">{implode from=$participants item=participant glue=','}{$participant}{/implode}</textarea></label></dd>
@@ -92,12 +92,12 @@
 				<div class="dropdownMenu">
 					<ul class="scrollableDropdownMenu">
 						{foreach from=$labelList item=label}
-							<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}&labelID={@$label->labelID}{/link}"><span class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}" data-css-class-name="{if $label->cssClassName}{@$label->cssClassName}{/if}" data-label-id="{$label->labelID}">{$label->label}</span></a></li>
+							<li><a href="{link controller='ConversationList' sortField=$sortField sortOrder=$sortOrder pageNo=$pageNo labelID=$label->labelID}{if $filter}filter={$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{unsafe:$participant|rawurlencode}{/implode}{/if}{/link}"><span class="badge label{if $label->cssClassName} {$label->cssClassName}{/if}" data-css-class-name="{if $label->cssClassName}{$label->cssClassName}{/if}" data-label-id="{$label->labelID}">{$label->label}</span></a></li>
 						{/foreach}
 					</ul>
 					<ul>
 						<li class="dropdownDivider"{if !$labelList|count} style="display: none;"{/if}></li>
-						<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}"><span class="badge label">{lang}wcf.conversation.label.disableFilter{/lang}</span></a></li>
+						<li><a href="{link controller='ConversationList' sortField=$sortField sortOrder=$sortOrder pageNo=$pageNo}{if $filter}filter={$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{unsafe:$participant|rawurlencode}{/implode}{/if}{/link}"><span class="badge label">{lang}wcf.conversation.label.disableFilter{/lang}</span></a></li>
 					</ul>
 				</div>
 			</div>
@@ -146,7 +146,7 @@
 {/capture}
 
 {capture assign='contentInteractionDropdownItems'}
-	<li><a rel="alternate" href="{link controller='ConversationRssFeed'}at={@$__wcf->getUser()->userID}-{@$__wcf->getUser()->accessToken}{/link}">{lang}wcf.global.button.rss{/lang}</a></li>
+	<li><a rel="alternate" href="{link controller='ConversationRssFeed'}at={$__wcf->getUser()->userID}-{$__wcf->getUser()->accessToken}{/link}">{lang}wcf.global.button.rss{/lang}</a></li>
 {/capture}
 
 {include file='header'}
@@ -163,7 +163,7 @@
 					<li class="columnSort">
 						<ul class="inlineList">
 							<li>
-								<a rel="nofollow" href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}pageNo={@$pageNo}&sortField={$sortField}&sortOrder={if $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">
+								<a rel="nofollow" href="{link controller='ConversationList' pageNo=$pageNo sortField=$sortField}{if $filter}filter={$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{unsafe:$participant|rawurlencode}{/implode}&{/if}sortOrder={if $sortOrder == 'ASC'}DESC{else}ASC{/if}{if $labelID}&labelID={$labelID}{/if}{/link}">
 									{if $sortOrder === 'ASC'}
 										<span class="jsTooltip" title="{lang}wcf.global.sorting{/lang} ({lang}wcf.global.sortOrder.ascending{/lang})">
 											{icon name='arrow-down-wide-short'}
@@ -181,7 +181,7 @@
 									
 									<ul class="dropdownMenu">
 										{foreach from=$validSortFields item=_sortField}
-											<li{if $_sortField === $sortField} class="active"{/if}><a rel="nofollow" href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}pageNo={@$pageNo}&sortField={$_sortField}&sortOrder={if $sortField === $_sortField}{if $sortOrder === 'DESC'}ASC{else}DESC{/if}{else}{$sortOrder}{/if}{if $labelID}&labelID={@$labelID}{/if}{/link}">{if $_sortField == 'subject'}{lang}wcf.global.subject{/lang}{else}{lang}wcf.conversation.{$_sortField}{/lang}{/if}</a></li>
+											<li{if $_sortField === $sortField} class="active"{/if}><a rel="nofollow" href="{link controller='ConversationList' pageNo=$pageNo sortField=$_sortField}{if $filter}filter={$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{unsafe:$participant|rawurlencode}{/implode}&{/if}sortOrder={if $sortField === $_sortField}{if $sortOrder === 'DESC'}ASC{else}DESC{/if}{else}{$sortOrder}{/if}{if $labelID}&labelID={$labelID}{/if}{/link}">{if $_sortField == 'subject'}{lang}wcf.global.subject{/lang}{else}{lang}wcf.conversation.{$_sortField}{/lang}{/if}</a></li>
 										{/foreach}
 									</ul>
 								</div>
@@ -200,11 +200,11 @@
 						<li class="columnIcon columnAvatar">
 							{if $conversation->getUserProfile()->getAvatar()}
 								<div>
-									<p{if $conversation->isNew()} title="{lang}wcf.conversation.markAsRead.doubleClick{/lang}"{/if}>{@$conversation->getUserProfile()->getAvatar()->getImageTag(48)}</p>
+									<p{if $conversation->isNew()} title="{lang}wcf.conversation.markAsRead.doubleClick{/lang}"{/if}>{unsafe:$conversation->getUserProfile()->getAvatar()->getImageTag(48)}</p>
 									
 									{if $conversation->ownPosts && $conversation->userID != $__wcf->user->userID}
 										{if $__wcf->getUserProfileHandler()->getAvatar()}
-											<small class="myAvatar jsTooltip" title="{lang}wcf.conversation.ownPosts{/lang}">{@$__wcf->getUserProfileHandler()->getAvatar()->getImageTag(24)}</small>
+											<small class="myAvatar jsTooltip" title="{lang}wcf.conversation.ownPosts{/lang}">{unsafe:$__wcf->getUserProfileHandler()->getAvatar()->getImageTag(24)}</small>
 										{/if}
 									{/if}
 								</div>
@@ -215,7 +215,7 @@
 								<ul class="labelList">
 									{content}
 										{foreach from=$conversation->getAssignedLabels() item=label}
-											<li><a href="{link controller='ConversationList'}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}&labelID={@$label->labelID}{/link}" class="badge label{if $label->cssClassName} {@$label->cssClassName}{/if}">{$label->label}</a></li>
+											<li><a href="{link controller='ConversationList' sortField=$sortField sortOrder=$sortOrder pageNo=$pageNo labelID=$label->labelID}{if $filter}filter={$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}{/if}{/link}" class="badge label{if $label->cssClassName} {$label->cssClassName}{/if}">{$label->label}</a></li>
 										{/foreach}
 									{/content}
 								</ul>
@@ -224,7 +224,7 @@
 							<h3>
 								<a href="{if $conversation->isNew()}{link controller='Conversation' object=$conversation}action=firstNew{/link}{else}{$conversation->getLink()}{/if}" class="conversationLink messageGroupLink" data-object-id="{$conversation->conversationID}">{$conversation->subject}</a>
 								{if $conversation->replies}
-									<span class="badge messageGroupCounterMobile">{@$conversation->replies|shortUnit}</span>
+									<span class="badge messageGroupCounterMobile">{$conversation->replies|shortUnit}</span>
 								{/if}
 							</h3>
 							
@@ -272,11 +272,11 @@
 						<li class="columnStats">
 							<dl class="plain statsDataList">
 								<dt>{lang}wcf.conversation.replies{/lang}</dt>
-								<dd>{@$conversation->replies|shortUnit}</dd>
+								<dd>{$conversation->replies|shortUnit}</dd>
 							</dl>
 							<dl class="plain statsDataList">
 								<dt>{lang}wcf.conversation.participants{/lang}</dt>
-								<dd>{@$conversation->participants|shortUnit}</dd>
+								<dd>{$conversation->participants|shortUnit}</dd>
 							</dl>
 							
 							<div class="messageGroupListStatsSimple">
@@ -284,14 +284,14 @@
 									<span aria-label="{lang}wcf.conversation.replies{/lang}">
 										{icon name='comment'}
 									</span>
-									{@$conversation->replies|shortUnit}
+									{$conversation->replies|shortUnit}
 								{/if}
 							</div>
 						</li>
 						<li class="columnLastPost">
 							{if $conversation->replies != 0 && $conversation->lastPostTime}
 								<div class="box32">
-									<a href="{link controller='Conversation' object=$conversation}action=lastPost{/link}" class="jsTooltip" title="{lang}wcf.conversation.gotoLastPost{/lang}">{@$conversation->getLastPosterProfile()->getAvatar()->getImageTag(32)}</a>
+									<a href="{link controller='Conversation' object=$conversation action='lastPost'}{/link}" class="jsTooltip" title="{lang}wcf.conversation.gotoLastPost{/lang}">{unsafe:$conversation->getLastPosterProfile()->getAvatar()->getImageTag(32)}</a>
 									
 									<div>
 										<p>
@@ -337,7 +337,7 @@
 	{/hascontent}
 </footer>
 
-<script data-relocate="true" src="{$__wcf->getPath()}js/WCF.Conversation{if !ENABLE_DEBUG_MODE}.min{/if}.js?v={@LAST_UPDATE_TIME}"></script>
+<script data-relocate="true" src="{$__wcf->getPath()}js/WCF.Conversation{if !ENABLE_DEBUG_MODE}.min{/if}.js?v={LAST_UPDATE_TIME}"></script>
 <script data-relocate="true">
 	require([
 		'WoltLabSuite/Core/Language',
@@ -373,13 +373,13 @@
 			hasMarkedItems: {if $hasMarkedItems}true{else}false{/if},
 		});
 
-		const availableLabels = [{implode from=$labelList item=label}{ cssClassName: '{if $label->cssClassName}{unsafe:$label->cssClassName|encodeJS}{/if}', labelID: {@$label->labelID}, label: '{$label->label|encodeJS}', url: '{link controller='ConversationList' encode=false}labelID={$label->labelID}{if $filter}&filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}' }{/implode} ];
+		const availableLabels = [{implode from=$labelList item=label}{ cssClassName: '{if $label->cssClassName}{unsafe:$label->cssClassName|encodeJS}{/if}', labelID: {$label->labelID}, label: '{$label->label|encodeJS}', url: '{link controller='ConversationList' encode=false sortField=$sortField sortOrder=$sortOrder pageNo=$pageNo}labelID={$label->labelID}{if $filter}&filter={$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{unsafe:$participant|rawurlencode}{/implode}{/if}{/link}' }{/implode} ];
 		var $editorHandler = new WCF.Conversation.EditorHandler(availableLabels);
 		var $inlineEditor = new WCF.Conversation.InlineEditor('.conversation');
 		$inlineEditor.setEditorHandler($editorHandler, 'list');
 
 		ConversationClipboard.setup($editorHandler);
-		new LabelManager('{link controller='ConversationLabelForm'}{/link}', '{link controller='ConversationList' encode=false}{if $filter}filter={@$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{$participant|rawurlencode}{/implode}&{/if}sortField={$sortField}&sortOrder={$sortOrder}&pageNo={@$pageNo}{/link}');
+		new LabelManager('{link controller='ConversationLabelForm'}{/link}', '{link controller='ConversationList' encode=false sortField=$sortField sortOrder=$sortOrder pageNo=$pageNo}{if $filter}filter={$filter}&{/if}{if !$participants|empty}participants={implode from=$participants item=participant}{unsafe:$participant|rawurlencode}{/implode}{/if}{/link}');
 		
 		// mobile safari hover workaround
 		if ($(window).width() <= 800) {

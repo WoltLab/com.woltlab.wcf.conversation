@@ -23,7 +23,7 @@
 			{event name='beforeMessageText'}
 			
 			<div class="messageText">
-				{@$message->getFormattedMessage()}
+				{unsafe:$message->getFormattedMessage()}
 			</div>
 			
 			{event name='afterMessageText'}
