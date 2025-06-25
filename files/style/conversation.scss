@@ -39,7 +39,33 @@
 	}
 }
 
-.conversationList .columnInteractions {
-	display: flex;
-	flex-direction: column;
+.conversationList {
+	.columnInteractions {
+		display: flex;
+		flex-direction: column;
+	}
+
+	@include screen-sm-down {
+		.conversationList_columnSubject {
+			flex-basis: calc(100% - 80px) !important;
+			max-width: calc(100% - 80px) !important;
+		}
+		.conversationList_columnAvatar {
+			margin-left: 5px;
+			margin-right: 5px !important;
+		}
+	}
+
+	/* revert style from `messageGroup.scss` */
+	@include screen-md-up {
+		&.messageGroupList .pagination {
+			font-size: inherit;
+		}
+	}
+	.pagination {
+		flex: inherit;
+		opacity: inherit;
+		transition: inherit;
+		font-weight: inherit;
+	}
 }

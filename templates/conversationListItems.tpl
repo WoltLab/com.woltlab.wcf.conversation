@@ -1,6 +1,6 @@
 {foreach from=$view->getItems() item=conversation}
 	<div class="listView__item tabularListRow" data-object-id="{$conversation->getObjectID()}">
-		<ol class="tabularListColumns messageGroup conversation jsClipboardObject{if $conversation->isNew()} new{/if}" data-conversation-id="{$conversation->conversationID}" data-label-ids="[ {implode from=$conversation->getAssignedLabels() item=label}{$label->labelID}{/implode} ]" data-is-closed="{$conversation->isClosed}" data-can-close-conversation="{if $conversation->userID == $__wcf->getUser()->userID}1{else}0{/if}" data-can-add-participants="{if $conversation->canAddParticipants()}1{else}0{/if}">
+		<ol class="tabularListColumns messageGroup conversation{if $conversation->isNew()} new{/if}">
 			<li class="columnInteractions">
 				{if $view->hasBulkInteractions()}
 					<label class="button small jsTooltip" title="{lang}wcf.clipboard.item.mark{/lang}">
@@ -10,7 +10,7 @@
 
 				{unsafe:$view->renderInteractionContextMenuButton($conversation)}
 			</li>
-			<li class="columnIcon columnAvatar">
+			<li class="columnIcon columnAvatar conversationList_columnAvatar">
 				{if $conversation->getUserProfile()->getAvatar()}
 					<div>
 						<p{if $conversation->isNew()} title="{lang}wcf.conversation.markAsRead.doubleClick{/lang}"{/if}>{unsafe:$conversation->getUserProfile()->getAvatar()->getImageTag(48)}</p>
@@ -23,7 +23,7 @@
 					</div>
 				{/if}
 			</li>
-			<li class="columnSubject">
+			<li class="columnSubject conversationList_columnSubject">
 				{hascontent}
 					<ul class="labelList">
 						{content}
@@ -103,7 +103,7 @@
 			<li class="columnLastPost">
 				{if $conversation->replies != 0 && $conversation->lastPostTime}
 					<div class="box32">
-						<a href="{link controller='Conversation' object=$conversation}action=lastPost{/link}" class="jsTooltip" title="{lang}wcf.conversation.gotoLastPost{/lang}">{@$conversation->getLastPosterProfile()->getAvatar()->getImageTag(32)}</a>
+						<a href="{link controller='Conversation' object=$conversation action="lastPost"}{/link}" class="jsTooltip" title="{lang}wcf.conversation.gotoLastPost{/lang}">{unsafe:$conversation->getLastPosterProfile()->getAvatar()->getImageTag(32)}</a>
 
 						<div>
 							<p>
