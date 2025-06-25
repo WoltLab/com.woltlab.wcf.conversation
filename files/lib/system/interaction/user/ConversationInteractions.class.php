@@ -38,8 +38,18 @@ final class ConversationInteractions extends AbstractInteractionProvider
                 'wcf.conversation.edit.subject',
                 static fn (ViewableConversation $conversation) => WCF::getUser()->userID === $conversation->userID,
             ),
-            // TODO close `wcf.conversation.edit.close`
-            // TODO open `wcf.conversation.edit.open`
+            new RpcInteraction(
+                'open',
+                'core/conversations/%s/open',
+                'wcf.conversation.edit.open',
+                isAvailableCallback: static fn (ViewableConversation $conversation) => $conversation->isClosed && $conversation->userID === WCF::getUser()->userID
+            ),
+            new RpcInteraction(
+                'close',
+                'core/conversations/%s/close',
+                'wcf.conversation.edit.close',
+                isAvailableCallback: static fn (ViewableConversation $conversation) => !$conversation->isClosed && $conversation->userID === WCF::getUser()->userID
+            ),
             new FormBuilderDialogInteraction(
                 'assignLabel',
                 LinkHandler::getInstance()->getControllerLink(AssignConversationLabelDialogAction::class, ['id' => '%s']),

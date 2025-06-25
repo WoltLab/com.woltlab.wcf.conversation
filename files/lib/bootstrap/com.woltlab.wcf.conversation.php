@@ -43,6 +43,8 @@ return static function (): void {
             $event->register(new \wcf\system\endpoint\controller\core\conversations\LeaveConversation());
             $event->register(new \wcf\system\endpoint\controller\core\conversations\LeavePermanentlyConversation());
             $event->register(new \wcf\system\endpoint\controller\core\conversations\RestoreConversation());
+            $event->register(new \wcf\system\endpoint\controller\core\conversations\OpenConversation());
+            $event->register(new \wcf\system\endpoint\controller\core\conversations\CloseConversation());
             $event->register(new \wcf\system\endpoint\controller\core\conversations\GetConversationLeaveDialog());
             $event->register(new \wcf\system\endpoint\controller\core\conversations\GetConversationLabels());
             $event->register(new \wcf\system\endpoint\controller\core\conversations\AssignConversationLabels());
