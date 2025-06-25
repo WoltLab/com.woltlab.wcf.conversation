@@ -3,14 +3,16 @@
 namespace wcf\system\interaction\user;
 
 use wcf\action\AssignConversationLabelDialogAction;
-use wcf\data\conversation\Conversation;
+use wcf\action\EditSubjectConversationDialogAction;
 use wcf\data\conversation\label\ConversationLabel;
+use wcf\data\conversation\ViewableConversation;
 use wcf\event\interaction\user\ConversationInteractionCollecting;
 use wcf\system\event\EventHandler;
 use wcf\system\interaction\AbstractInteractionProvider;
 use wcf\system\interaction\Divider;
 use wcf\system\interaction\FormBuilderDialogInteraction;
 use wcf\system\request\LinkHandler;
+use wcf\system\WCF;
 
 /**
  * Interaction provider for conversations.
@@ -27,7 +29,12 @@ final class ConversationInteractions extends AbstractInteractionProvider
         $labelList = ConversationLabel::getLabelsByUser();
 
         $this->addInteractions([
-            // TODO edit subject `wcf.conversation.edit.subject`
+            new FormBuilderDialogInteraction(
+                'editSubject',
+                LinkHandler::getInstance()->getControllerLink(EditSubjectConversationDialogAction::class, ['id' => '%s']),
+                'wcf.conversation.edit.subject',
+                static fn (ViewableConversation $conversation) => WCF::getUser()->userID === $conversation->userID,
+            ),
             // TODO close `wcf.conversation.edit.close`
             // TODO open `wcf.conversation.edit.open`
             new FormBuilderDialogInteraction(
@@ -49,6 +56,6 @@ final class ConversationInteractions extends AbstractInteractionProvider
     #[\Override]
     public function getObjectClassName(): string
     {
-        return Conversation::class;
+        return ViewableConversation::class;
     }
 }
