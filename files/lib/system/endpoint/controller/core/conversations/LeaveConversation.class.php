@@ -19,6 +19,8 @@ use wcf\system\request\LinkHandler;
  * @copyright   2001-2025 WoltLab GmbH
  * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @since       6.2
+ *
+ * TODO remove
  */
 #[PostRequest('/core/conversations/{id:\d+}/leave')]
 final class LeaveConversation implements IController

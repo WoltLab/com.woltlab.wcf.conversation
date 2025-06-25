@@ -26,6 +26,8 @@ use wcf\util\StringUtil;
  * @copyright   2001-2025 WoltLab GmbH
  * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @since       6.2
+ *
+ * TODO remove
  */
 #[GetRequest('/core/conversations/labels')]
 final class GetConversationLabels implements IController
