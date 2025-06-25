@@ -12,6 +12,8 @@ use wcf\system\event\EventHandler;
 use wcf\system\interaction\AbstractInteractionProvider;
 use wcf\system\interaction\Divider;
 use wcf\system\interaction\FormBuilderDialogInteraction;
+use wcf\system\interaction\InteractionConfirmationType;
+use wcf\system\interaction\RpcInteraction;
 use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
 
@@ -51,7 +53,27 @@ final class ConversationInteractions extends AbstractInteractionProvider
                 'wcf.conversation.edit.addParticipants',
                 static fn (ViewableConversation $conversation) => $conversation->canAddParticipants(),
             ),
-            // TODO leave `wcf.conversation.edit.leave`
+            new RpcInteraction(
+                'restore',
+                'core/conversations/%s/restore',
+                'wcf.conversation.hideConversation.restore',
+                isAvailableCallback: static fn (ViewableConversation $conversation) => $conversation->hideConversation
+            ),
+            new RpcInteraction(
+                'leave',
+                'core/conversations/%s/leave',
+                'wcf.conversation.hideConversation.leave',
+                InteractionConfirmationType::Custom,
+                'wcf.conversation.hideConversation.leave.description',
+                static fn (ViewableConversation $conversation) => !$conversation->hideConversation
+            ),
+            new RpcInteraction(
+                'leave-permanently',
+                'core/conversations/%s/leave-permanently',
+                'wcf.conversation.hideConversation.leavePermanently',
+                InteractionConfirmationType::Custom,
+                'wcf.conversation.hideConversation.leavePermanently.description',
+            ),
         ]);
 
         EventHandler::getInstance()->fire(

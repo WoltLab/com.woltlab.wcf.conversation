@@ -12,15 +12,15 @@ use wcf\system\endpoint\PostRequest;
 use wcf\system\exception\PermissionDeniedException;
 
 /**
- * API endpoint for leaving a conversation.
+ * API endpoint for leaving a conversation permanently.
  *
- * @author      Olaf Braun
- * @copyright   2001-2025 WoltLab GmbH
- * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @since       6.2
+ * @author Olaf Braun
+ * @copyright 2001-2025 WoltLab GmbH
+ * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
+ * @since 6.2
  */
-#[PostRequest('/core/conversations/{id:\d+}/leave')]
-final class LeaveConversation implements IController
+#[PostRequest('/core/conversations/{id:\d+}/leave-permanently')]
+final class LeavePermanentlyConversation implements IController
 {
     #[\Override]
     public function __invoke(ServerRequestInterface $request, array $variables): ResponseInterface
@@ -28,7 +28,7 @@ final class LeaveConversation implements IController
         $conversation = Helper::fetchObjectFromRequestParameter($variables['id'], Conversation::class);
         $this->assertConversationIsAccessible($conversation);
 
-        (new \wcf\system\conversation\command\LeaveConversation([$conversation->conversationID], Conversation::STATE_HIDDEN))();
+        (new \wcf\system\conversation\command\LeaveConversation([$conversation->conversationID], Conversation::STATE_LEFT))();
 
         return new JsonResponse([]);
     }
