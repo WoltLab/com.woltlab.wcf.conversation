@@ -2,6 +2,7 @@
 
 namespace wcf\system\interaction\user;
 
+use wcf\action\AddParticipantConversationDialogAction;
 use wcf\action\AssignConversationLabelDialogAction;
 use wcf\action\EditSubjectConversationDialogAction;
 use wcf\data\conversation\label\ConversationLabel;
@@ -44,7 +45,12 @@ final class ConversationInteractions extends AbstractInteractionProvider
                 static fn () => $labelList->count() > 0,
             ),
             new Divider(),
-            // TODO add a participant `wcf.conversation.edit.addParticipants`
+            new FormBuilderDialogInteraction(
+                'addParticipants',
+                LinkHandler::getInstance()->getControllerLink(AddParticipantConversationDialogAction::class, ['id' => '%s']),
+                'wcf.conversation.edit.addParticipants',
+                static fn (ViewableConversation $conversation) => $conversation->canAddParticipants(),
+            ),
             // TODO leave `wcf.conversation.edit.leave`
         ]);
 

@@ -1,0 +1,140 @@
+<?php
+
+namespace wcf\action;
+
+use CuyZ\Valinor\Mapper\MappingError;
+use Laminas\Diactoros\Response\JsonResponse;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use wcf\data\conversation\Conversation;
+use wcf\data\user\group\UserGroup;
+use wcf\form\ConversationAddForm;
+use wcf\http\Helper;
+use wcf\system\cache\builder\UserGroupCacheBuilder;
+use wcf\system\conversation\command\AddParticipantConversation;
+use wcf\system\exception\IllegalLinkException;
+use wcf\system\exception\PermissionDeniedException;
+use wcf\system\form\builder\field\BooleanFormField;
+use wcf\system\form\builder\field\dependency\NonEmptyFormFieldDependency;
+use wcf\system\form\builder\field\MultipleSelectionFormField;
+use wcf\system\form\builder\field\RadioButtonFormField;
+use wcf\system\form\builder\field\user\UserFormField;
+use wcf\system\form\builder\Psr15DialogForm;
+use wcf\system\WCF;
+
+/**
+ * Form dialog to add participants to a conversation.
+ *
+ * @author Olaf Braun
+ * @copyright 2001-2025 WoltLab GmbH
+ * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
+ * @since 6.2
+ */
+final class AddParticipantConversationDialogAction implements RequestHandlerInterface
+{
+    #[\Override]
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        try {
+            $parameters = Helper::mapQueryParameters(
+                $request->getQueryParams(),
+                <<<'EOT'
+                array {
+                    id: positive-int,
+                }
+                EOT
+            );
+        } catch (MappingError) {
+            throw new IllegalLinkException();
+        }
+
+        $conversation = new Conversation($parameters['id']);
+
+        if (!Conversation::isParticipant([$conversation->conversationID]) || !$conversation->canAddParticipants()) {
+            throw new PermissionDeniedException();
+        }
+
+        $form = $this->getForm($conversation);
+
+        if ($request->getMethod() === 'GET') {
+            return $form->toResponse();
+        } elseif ($request->getMethod() === 'POST') {
+            $response = $form->validateRequest($request);
+            if ($response !== null) {
+                return $response;
+            }
+
+            $data = $form->getData();
+
+            $messageVisibility = $data['data']['messageVisibility'] ?? 'new';
+            $participants = $data['participants'] ?? [];
+            if (isset($data['participantGroups'])) {
+                $groupIDs = $data['participantGroups'];
+                $participants = \array_unique(
+                    \array_merge(
+                        $participants,
+                        ConversationAddForm::getUserByGroups($groupIDs)
+                    )
+                );
+            }
+
+            (new AddParticipantConversation($conversation, $participants, $messageVisibility))();
+
+            return new JsonResponse([]);
+        } else {
+            throw new \LogicException('Unreachable');
+        }
+    }
+
+    private function getForm(Conversation $conversation): Psr15DialogForm
+    {
+        $form = new Psr15DialogForm(
+            static::class,
+            WCF::getLanguage()->get('wcf.conversation.edit.addParticipants')
+        );
+
+        $groupParticipants = \array_filter(
+            UserGroupCacheBuilder::getInstance()->getData([], 'groups'),
+            // @phpstan-ignore property.notFound
+            static fn (UserGroup $group) => $group->canBeAddedAsConversationParticipant
+        );
+
+        $form->appendChildren([
+            UserFormField::create('participants')
+                ->label('wcf.conversation.participants')
+                ->description('wcf.conversation.participants.description')
+                ->maximumMultiples(WCF::getSession()->getPermission('user.conversation.maxParticipants'))
+                ->multiple()
+                ->maximumMultiples(WCF::getSession()->getPermission('user.conversation.maxParticipants') - $conversation->participants)
+                ->addValidator(ConversationAddForm::getParticipantsValidator())
+                ->addValidator(ConversationAddForm::getMaximumParticipantsValidator(invisibleParticipantGroupsFieldId: null)),
+            BooleanFormField::create('addGroupParticipants')
+                ->label('wcf.conversation.addGroupParticipants')
+                ->available(\count($groupParticipants) > 0),
+            MultipleSelectionFormField::create('participantGroups')
+                ->label('wcf.conversation.participantGroups')
+                ->available(WCF::getSession()->getPermission('user.conversation.canAddGroupParticipants'))
+                ->filterable()
+                ->options($groupParticipants)
+                ->addDependency(
+                    NonEmptyFormFieldDependency::create('addGroupParticipantsDependency')
+                        ->fieldId('addGroupParticipants')
+                ),
+            RadioButtonFormField::create('messageVisibility')
+                ->label('wcf.conversation.visibility')
+                ->available(!$conversation->isDraft && $conversation->canAddParticipantsUnrestricted())
+                ->required()
+                ->options([
+                    'all' => 'wcf.conversation.visibility.all',
+                    'new' => 'wcf.conversation.visibility.new',
+                ])
+                ->value('all'),
+        ]);
+
+        $form->markRequiredFields(false);
+        $form->build();
+
+        return $form;
+    }
+}

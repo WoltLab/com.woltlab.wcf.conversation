@@ -350,7 +350,7 @@ class ConversationAddForm extends AbstractFormBuilderForm
     public static function getMaximumParticipantsValidator(
         string $invisibleParticipantsFieldId = 'invisibleParticipants',
         string $participantGroupsFieldId = 'participantGroups',
-        string $invisibleParticipantGroupsFieldId = 'invisibleParticipantGroups'
+        ?string $invisibleParticipantGroupsFieldId = 'invisibleParticipantGroups'
     ): FormFieldValidator {
         return new FormFieldValidator(
             'participantsMaximumValidator',
@@ -359,18 +359,19 @@ class ConversationAddForm extends AbstractFormBuilderForm
                 $participantGroupsFieldId,
                 $invisibleParticipantGroupsFieldId
             ) {
-                /**
-                 * @var UserFormField|null              $invisibleParticipantsFormField
-                 * @var MultipleSelectionFormField|null $participantGroupsFormField
-                 * @var MultipleSelectionFormField|null $invisibleParticipantGroupsFormField
-                 */
-
                 $invisibleParticipantsFormField = $formField->getDocument()
                     ->getNodeById($invisibleParticipantsFieldId);
                 $participantGroupsFormField = $formField->getDocument()
                     ->getNodeById($participantGroupsFieldId);
-                $invisibleParticipantGroupsFormField = $formField->getDocument()
-                    ->getNodeById($invisibleParticipantGroupsFieldId);
+                $isDraftFormField = $formField->getDocument()->getNodeById('isDraft');
+                $invisibleParticipantGroupsFormField = $invisibleParticipantGroupsFieldId !== null ? $formField->getDocument()
+                    ->getNodeById($invisibleParticipantGroupsFieldId) : null;
+
+                \assert($invisibleParticipantsFormField === null || $invisibleParticipantsFormField instanceof UserFormField);
+                \assert($isDraftFormField === null || $isDraftFormField instanceof BooleanFormField);
+                \assert($participantGroupsFormField === null || $participantGroupsFormField instanceof MultipleSelectionFormField);
+                \assert($invisibleParticipantGroupsFormField === null || $invisibleParticipantGroupsFormField instanceof MultipleSelectionFormField);
+
                 $groupIDs = \array_merge(
                     $participantGroupsFormField?->getValue() ?: [],
                     $invisibleParticipantGroupsFormField?->getValue() ?: [],
@@ -388,6 +389,10 @@ class ConversationAddForm extends AbstractFormBuilderForm
                             'wcf.conversation.participants.error.tooManyParticipants'
                         )
                     );
+                }
+
+                if ($userIDs === []) {
+                    $formField->addValidationError(new FormFieldValidationError('empty'));
                 }
             }
         );
