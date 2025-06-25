@@ -24,6 +24,8 @@ use wcf\system\WCF;
  * @copyright   2001-2025 WoltLab GmbH
  * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @since       6.2
+ *
+ * TODO remove
  */
 #[PostRequest('/core/conversations/assign-labels')]
 final class AssignConversationLabels implements IController

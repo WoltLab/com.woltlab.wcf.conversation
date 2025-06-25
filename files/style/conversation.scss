@@ -38,3 +38,8 @@
 		margin-left: 10px;
 	}
 }
+
+.conversationList .columnInteractions {
+	display: flex;
+	flex-direction: column;
+}
