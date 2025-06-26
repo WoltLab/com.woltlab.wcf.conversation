@@ -45,13 +45,13 @@ class UserConversationList extends ConversationList
 
     /**
      * Creates a new UserConversationList
-     *
-     * @param int $userID
-     * @param string $filter
-     * @param int $labelID
      */
-    public function __construct($userID, $filter = '', $labelID = 0)
+    public function __construct(?int $userID = null, string $filter = '', ?int $labelID = null)
     {
+        if (!$userID) {
+            $userID = WCF::getUser()->userID;
+        }
+
         parent::__construct();
 
         $this->filter = $filter;
