@@ -5,44 +5,8 @@
 		<div class="contentHeaderIcon">
 			{@$conversation->getUserProfile()->getAvatar()->getImageTag(64)}
 		</div>
-		
-		<div class="contentHeaderTitle">
-			<h1 class="contentTitle jsConversationSubject" data-conversation-id="{$conversation->conversationID}">{$conversation->subject}</h1>
-			
-			<ul class="inlineList contentHeaderMetaData">
-				{hascontent}
-					<li>
-						{icon name='tags'}
-						<ul class="labelList">
-							{content}
-								{foreach from=$conversation->getAssignedLabels() item=label}
-									<li><span class="label badge{if $label->cssClassName} {$label->cssClassName}{/if}">{$label->label}</span></li>
-								{/foreach}
-							{/content}
-						</ul>
-					</li>
-				{/hascontent}
-				
-				<li>
-					{icon name='user'}
-					{user object=$conversation->getUserProfile()}
-				</li>
-				
-				<li>
-					{icon name='clock'}
-					<a href="{$conversation->getLink()}">{time time=$conversation->time}</a>
-				</li>
-				
-				{if $conversation->isClosed}
-					<li>
-						<span class="jsIconLock">
-							{icon name='lock'}
-						</span>
-						{lang}wcf.global.state.closed{/lang}
-					</li>
-				{/if}
-			</ul>
-		</div>
+
+		{include file='conversationContentHeaderTitle'}
 		
 		{hascontent}
 			<nav class="contentHeaderNavigation">
@@ -69,18 +33,8 @@
 {/capture}
 
 {capture assign='contentInteractionButtons'}
-	<div class="conversation jsConversationInlineEditorContainer contentInteractionButton" data-conversation-id="{$conversation->conversationID}" data-label-ids="[ {implode from=$conversation->getAssignedLabels() item=label}{$label->labelID}{/implode} ]" data-is-closed="{$conversation->isClosed}" data-can-close-conversation="{if $conversation->userID == $__wcf->getUser()->userID}1{else}0{/if}" data-can-add-participants="{if $conversation->canAddParticipants()}1{else}0{/if}" data-is-draft="{if $conversation->isDraft}1{else}0{/if}">
-		{if $conversation->isDraft}
-			<a href="{link controller='ConversationDraftEdit' id=$conversation->conversationID}{/link}" class="button small jsConversationInlineEditor">
-				{icon name='pencil'}
-				<span>{lang}wcf.global.button.edit{/lang}</span>
-			</a>
-		{else}
-			<button type="button" class="button small jsConversationInlineEditor">
-				{icon name='pencil'}
-				<span>{lang}wcf.global.button.edit{/lang}</span>
-			</button>
-		{/if}
+	<div class="conversation contentInteractionButton">
+		{unsafe:$interactionContextMenu->render()}
 	</div>
 {/capture}
 

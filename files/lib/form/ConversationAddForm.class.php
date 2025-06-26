@@ -376,6 +376,7 @@ class ConversationAddForm extends AbstractFormBuilderForm
                     $participantGroupsFormField?->getValue() ?: [],
                     $invisibleParticipantGroupsFormField?->getValue() ?: [],
                 );
+
                 $userIDs = \array_merge(
                     \array_column($formField->getUsers(), 'userID'),
                     \array_column($invisibleParticipantsFormField?->getUsers() ?: [], 'userID'),
@@ -391,7 +392,7 @@ class ConversationAddForm extends AbstractFormBuilderForm
                     );
                 }
 
-                if ($userIDs === []) {
+                if (!$isDraftFormField?->getValue() && $userIDs === []) {
                     $formField->addValidationError(new FormFieldValidationError('empty'));
                 }
             }

@@ -9,10 +9,12 @@ use wcf\data\conversation\Conversation;
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\ViewableConversation;
 use wcf\event\interaction\user\ConversationInteractionCollecting;
+use wcf\form\ConversationDraftEditForm;
 use wcf\system\cache\runtime\UserConversationRuntimeCache;
 use wcf\system\event\EventHandler;
 use wcf\system\interaction\AbstractInteractionProvider;
 use wcf\system\interaction\Divider;
+use wcf\system\interaction\EditInteraction;
 use wcf\system\interaction\FormBuilderDialogInteraction;
 use wcf\system\interaction\InteractionConfirmationType;
 use wcf\system\interaction\RpcInteraction;
@@ -101,6 +103,12 @@ final class ConversationInteractions extends AbstractInteractionProvider
                 InteractionConfirmationType::Custom,
                 'wcf.conversation.hideConversation.leavePermanently.description',
                 invalidatesAllItems: true
+            ),
+            new EditInteraction(
+                ConversationDraftEditForm::class,
+                static function (ViewableConversation|Conversation $conversation) {
+                    return $conversation->isDraft;
+                }
             ),
         ]);
 
