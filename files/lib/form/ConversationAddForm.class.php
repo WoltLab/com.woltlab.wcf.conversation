@@ -35,7 +35,7 @@ use wcf\util\HeaderUtil;
  * @copyright   2001-2025 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
- * @property Conversation $formObject
+ * @extends AbstractFormBuilderForm<Conversation>
  */
 class ConversationAddForm extends AbstractFormBuilderForm
 {
@@ -77,7 +77,8 @@ class ConversationAddForm extends AbstractFormBuilderForm
 
         $groupParticipants = \array_filter(
             UserGroupCacheBuilder::getInstance()->getData([], 'groups'),
-            function (UserGroup $group) {
+            static function (UserGroup $group) {
+                // @phpstan-ignore property.notFound
                 return $group->canBeAddedAsConversationParticipant;
             }
         );
@@ -100,8 +101,8 @@ class ConversationAddForm extends AbstractFormBuilderForm
                         ->label('wcf.conversation.participants')
                         ->description('wcf.conversation.participants.description')
                         ->maximumMultiples(WCF::getSession()->getPermission('user.conversation.maxParticipants'))
-                        ->addValidator(ConversationAddForm::getParticipantsValidator())
-                        ->addValidator(ConversationAddForm::getMaximumParticipantsValidator()),
+                        ->addValidator(self::getParticipantsValidator())
+                        ->addValidator(self::getMaximumParticipantsValidator()),
                     BooleanFormField::create('addGroupParticipants')
                         ->label('wcf.conversation.addGroupParticipants')
                         ->available(\count($groupParticipants) > 0),
@@ -119,11 +120,11 @@ class ConversationAddForm extends AbstractFormBuilderForm
                         ->description('wcf.conversation.invisibleParticipants.description')
                         ->available(WCF::getSession()->getPermission('user.conversation.canAddInvisibleParticipants'))
                         ->maximumMultiples(WCF::getSession()->getPermission('user.conversation.maxParticipants'))
-                        ->addValidator(ConversationAddForm::getParticipantsValidator())
+                        ->addValidator(self::getParticipantsValidator())
                         ->addValidator(
                             new FormFieldValidator(
                                 'duplicateParticipantsValidator',
-                                function (UserFormField $formField) {
+                                static function (UserFormField $formField) {
                                     /** @var UserFormField $participantsFormField */
                                     $participantsFormField = $formField->getDocument()->getNodeById('participants');
 
@@ -142,7 +143,7 @@ class ConversationAddForm extends AbstractFormBuilderForm
                                                     'intersects',
                                                     'wcf.conversation.participants.error.intersects',
                                                     [
-                                                        'username' => $user->username
+                                                        'username' => $user->username,
                                                     ]
                                                 )
                                             );
@@ -171,7 +172,7 @@ class ConversationAddForm extends AbstractFormBuilderForm
                         ),
                     BooleanFormField::create('participantCanInvite')
                         ->label('wcf.conversation.participantCanInvite')
-                        ->available(WCF::getSession()->getPermission('user.conversation.canSetCanInvite'))
+                        ->available(WCF::getSession()->getPermission('user.conversation.canSetCanInvite')),
                 ]),
             WysiwygFormContainer::create('message')
                 ->label('wcf.conversation.message')
@@ -179,7 +180,7 @@ class ConversationAddForm extends AbstractFormBuilderForm
                 ->attachmentData('com.woltlab.wcf.conversation.message')
                 ->supportMentions()
                 ->supportQuotes()
-                ->required()
+                ->required(),
         ]);
     }
 
@@ -204,11 +205,11 @@ class ConversationAddForm extends AbstractFormBuilderForm
             ->addProcessor(new VoidFormDataProcessor('addGroupParticipants'))
             ->addProcessor(new VoidFormDataProcessor('addInvisibleGroupParticipants'))
             ->addProcessor(
-                new CustomFormDataProcessor('messageProcessor', function (IFormDocument $document, array $parameters) {
+                new CustomFormDataProcessor('messageProcessor', static function (IFormDocument $document, array $parameters) {
                     unset($parameters['data']['message']);
 
                     return $parameters;
-                }, function (IFormDocument $document, array $data, IStorableObject $object) {
+                }, static function (IFormDocument $document, array $data, IStorableObject $object) {
                     \assert($object instanceof Conversation);
                     $data['message'] = $object->getFirstMessage()->message;
 
@@ -218,7 +219,7 @@ class ConversationAddForm extends AbstractFormBuilderForm
             ->addProcessor(
                 new CustomFormDataProcessor(
                     'participantsProcessor',
-                    function (IFormDocument $document, array $parameters) {
+                    static function (IFormDocument $document, array $parameters) {
                         $participants = $parameters['participants'] ?? [];
                         $invisibleParticipants = $parameters['invisibleParticipants'] ?? [];
 
@@ -255,7 +256,7 @@ class ConversationAddForm extends AbstractFormBuilderForm
             ->addProcessor(
                 new CustomFormDataProcessor(
                     'draftDataProcessor',
-                    function (IFormDocument $document, array $parameters) {
+                    static function (IFormDocument $document, array $parameters) {
                         if ($parameters['data']['isDraft']) {
                             $parameters['data']['draftData'] = \serialize([
                                 'participants' => $parameters['participants'] ?? [],
@@ -269,7 +270,7 @@ class ConversationAddForm extends AbstractFormBuilderForm
 
                         return $parameters;
                     },
-                    function (IFormDocument $document, array $data, IStorableObject $object) {
+                    static function (IFormDocument $document, array $data, IStorableObject $object) {
                         \assert($object instanceof Conversation);
 
                         $draftData = @\unserialize($object->draftData);
@@ -289,7 +290,7 @@ class ConversationAddForm extends AbstractFormBuilderForm
         parent::saved();
 
         /** @var Conversation $conversation */
-        if ($this->formAction == 'create') {
+        if ($this->formAction === 'create') {
             $conversation = $this->objectAction->getReturnValues()['returnValues'];
         } else {
             $conversation = new Conversation($this->formObject->conversationID);
@@ -313,7 +314,7 @@ class ConversationAddForm extends AbstractFormBuilderForm
      */
     public static function getParticipantsValidator(): FormFieldValidator
     {
-        return new FormFieldValidator('participantsValidator', function (UserFormField $formField) {
+        return new FormFieldValidator('participantsValidator', static function (UserFormField $formField) {
             $users = $formField->getUsers();
             $userIDs = \array_column($users, 'userID');
 
@@ -332,7 +333,7 @@ class ConversationAddForm extends AbstractFormBuilderForm
                             $e->getType(),
                             'wcf.conversation.participants.error.' . $e->getType(),
                             [
-                                'username' => $user->username
+                                'username' => $user->username,
                             ]
                         )
                     );
@@ -353,7 +354,7 @@ class ConversationAddForm extends AbstractFormBuilderForm
     ): FormFieldValidator {
         return new FormFieldValidator(
             'participantsMaximumValidator',
-            function (UserFormField $formField) use (
+            static function (UserFormField $formField) use (
                 $invisibleParticipantsFieldId,
                 $participantGroupsFieldId,
                 $invisibleParticipantGroupsFieldId
@@ -370,7 +371,6 @@ class ConversationAddForm extends AbstractFormBuilderForm
                     ->getNodeById($participantGroupsFieldId);
                 $invisibleParticipantGroupsFormField = $formField->getDocument()
                     ->getNodeById($invisibleParticipantGroupsFieldId);
-
                 $groupIDs = \array_merge(
                     $participantGroupsFormField?->getValue() ?: [],
                     $invisibleParticipantGroupsFormField?->getValue() ?: [],
@@ -395,6 +395,8 @@ class ConversationAddForm extends AbstractFormBuilderForm
 
     /**
      * Returns the user IDs of the users that are in the given groups.
+     *
+     * @param int[] $groupIDs
      *
      * @return int[]
      */
