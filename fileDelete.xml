@@ -22,5 +22,6 @@
 		<file>lib/system/event/listener/UserGroupAddCanBeAddedAsParticipantListener.class.php</file>
 		<file>lib/system/user/online/location/ConversationLocation.class.php</file>
 		<file>style/conversation.less</file>
+		<file>lib/system/clipboard/action/ConversationClipboardAction.class.php</file>
 	</delete>
 </data>

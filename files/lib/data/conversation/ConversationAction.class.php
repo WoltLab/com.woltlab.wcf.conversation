@@ -5,10 +5,8 @@ namespace wcf\data\conversation;
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\data\conversation\message\ConversationMessageList;
-use wcf\data\IClipboardAction;
 use wcf\data\IVisitableObjectAction;
 use wcf\page\ConversationPage;
-use wcf\system\clipboard\ClipboardHandler;
 use wcf\system\conversation\ConversationHandler;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\exception\IllegalLinkException;
@@ -32,9 +30,7 @@ use wcf\util\StringUtil;
  *
  * @extends AbstractDatabaseObjectAction<Conversation, ConversationEditor>
  */
-class ConversationAction extends AbstractDatabaseObjectAction implements
-    IClipboardAction,
-    IVisitableObjectAction
+class ConversationAction extends AbstractDatabaseObjectAction implements IVisitableObjectAction
 {
     /**
      * @inheritDoc
@@ -350,10 +346,6 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
             );
         }
 
-        if (!empty($conversationIDs)) {
-            $this->unmarkItems($conversationIDs);
-        }
-
         $returnValues = [
             'totalCount' => ConversationHandler::getInstance()
                 ->getUnreadConversationCount($this->parameters['userID'], true),
@@ -575,28 +567,6 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
     }
 
     /**
-     * Validates the 'unmarkAll' action.
-     *
-     * @return void
-     */
-    public function validateUnmarkAll()
-    {
-        // does nothing
-    }
-
-    /**
-     * Unmarks all conversations.
-     *
-     * @return void
-     */
-    public function unmarkAll()
-    {
-        ClipboardHandler::getInstance()->removeItems(
-            ClipboardHandler::getInstance()->getObjectTypeID('com.woltlab.wcf.conversation.conversation')
-        );
-    }
-
-    /**
      * Rebuilds the conversation data of the relevant conversations.
      *
      * @return void
@@ -641,23 +611,5 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
             $conversationAction = new self($deleteConversationIDs, 'delete');
             $conversationAction->executeAction();
         }
-    }
-
-    /**
-     * Unmarks conversations.
-     *
-     * @param int[] $conversationIDs
-     * @return void
-     */
-    protected function unmarkItems(array $conversationIDs = [])
-    {
-        if (empty($conversationIDs)) {
-            $conversationIDs = $this->objectIDs;
-        }
-
-        ClipboardHandler::getInstance()->unmark(
-            $conversationIDs,
-            ClipboardHandler::getInstance()->getObjectTypeID('com.woltlab.wcf.conversation.conversation')
-        );
     }
 }

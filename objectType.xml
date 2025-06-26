@@ -18,11 +18,6 @@
 			<definitionname>com.woltlab.wcf.message</definitionname>
 		</type>
 		<type>
-			<name>com.woltlab.wcf.conversation.conversation</name>
-			<definitionname>com.woltlab.wcf.clipboardItem</definitionname>
-			<listclassname>wcf\data\conversation\ConversationList</listclassname>
-		</type>
-		<type>
 			<name>com.woltlab.wcf.conversation.notification</name>
 			<definitionname>com.woltlab.wcf.notification.objectType</definitionname>
 			<classname>wcf\system\user\notification\object\type\ConversationNotificationObjectType</classname>
@@ -124,6 +119,9 @@
 		</type>
 		<type name="com.woltlab.wcf.conversation.message.search.index">
 			<definitionname>com.woltlab.wcf.rebuildData</definitionname>
+		</type>
+		<type name="com.woltlab.wcf.conversation.conversation">
+			<definitionname>com.woltlab.wcf.clipboardItem</definitionname>
 		</type>
 	</delete>
 </data>
