@@ -80,10 +80,27 @@
 	require([
 		'WoltLabSuite/Core/Conversation/Ui/Message/InlineEditor',
 		'WoltLabSuite/Core/Component/Quote/Message',
-	], ({ UiConversationMessageInlineEditor }, { registerContainer }) => {
+		'WoltLabSuite/Core/Api/Conversations/GetParticipantList',
+	], ({ UiConversationMessageInlineEditor }, { registerContainer }, { getParticipantList }) => {
 		new UiConversationMessageInlineEditor({$conversation->conversationID});
 
 		registerContainer(".message", ".messageBody", "wcf\\data\\conversation\\message\\ConversationMessage", "com.woltlab.wcf.conversation.message");
+
+		const contextMenu = document.getElementById('{unsafe:$interactionContextMenu->getContainerID()|encodeJS}')
+		console.log(contextMenu);
+		contextMenu.addEventListener('interaction:invalidate', () => reloadConversationParticipantList())
+		contextMenu.addEventListener('interaction:invalidate-all', () => reloadConversationParticipantList())
+
+		function reloadConversationParticipantList () {
+			void getParticipantList({$conversation->conversationID}).then((response) => {
+				if (!response.ok) {
+					return;
+				}
+
+				const participantList = document.querySelector('.conversationParticipantList');
+				participantList.outerHTML = response.value;
+			});
+		}
 	});
 </script>
 
