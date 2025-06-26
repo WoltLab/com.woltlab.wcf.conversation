@@ -5,9 +5,11 @@ namespace wcf\system\interaction\user;
 use wcf\action\AddParticipantConversationDialogAction;
 use wcf\action\AssignConversationLabelDialogAction;
 use wcf\action\EditSubjectConversationDialogAction;
+use wcf\data\conversation\Conversation;
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\ViewableConversation;
 use wcf\event\interaction\user\ConversationInteractionCollecting;
+use wcf\system\cache\runtime\UserConversationRuntimeCache;
 use wcf\system\event\EventHandler;
 use wcf\system\interaction\AbstractInteractionProvider;
 use wcf\system\interaction\Divider;
@@ -36,19 +38,19 @@ final class ConversationInteractions extends AbstractInteractionProvider
                 'editSubject',
                 LinkHandler::getInstance()->getControllerLink(EditSubjectConversationDialogAction::class, ['id' => '%s']),
                 'wcf.conversation.edit.subject',
-                static fn (ViewableConversation $conversation) => WCF::getUser()->userID === $conversation->userID,
+                static fn (ViewableConversation|Conversation $conversation) => WCF::getUser()->userID === $conversation->userID,
             ),
             new RpcInteraction(
                 'open',
                 'core/conversations/%s/open',
                 'wcf.conversation.edit.open',
-                isAvailableCallback: static fn (ViewableConversation $conversation) => $conversation->isClosed && $conversation->userID === WCF::getUser()->userID
+                isAvailableCallback: static fn (ViewableConversation|Conversation $conversation) => $conversation->isClosed && $conversation->userID === WCF::getUser()->userID
             ),
             new RpcInteraction(
                 'close',
                 'core/conversations/%s/close',
                 'wcf.conversation.edit.close',
-                isAvailableCallback: static fn (ViewableConversation $conversation) => !$conversation->isClosed && $conversation->userID === WCF::getUser()->userID
+                isAvailableCallback: static fn (ViewableConversation|Conversation $conversation) => !$conversation->isClosed && $conversation->userID === WCF::getUser()->userID
             ),
             new FormBuilderDialogInteraction(
                 'assignLabel',
@@ -61,13 +63,21 @@ final class ConversationInteractions extends AbstractInteractionProvider
                 'addParticipants',
                 LinkHandler::getInstance()->getControllerLink(AddParticipantConversationDialogAction::class, ['id' => '%s']),
                 'wcf.conversation.edit.addParticipants',
-                static fn (ViewableConversation $conversation) => $conversation->canAddParticipants(),
+                static fn (ViewableConversation|Conversation $conversation) => $conversation->canAddParticipants(),
             ),
             new RpcInteraction(
                 'restore',
                 'core/conversations/%s/restore',
                 'wcf.conversation.hideConversation.restore',
-                isAvailableCallback: static fn (ViewableConversation $conversation) => $conversation->hideConversation
+                InteractionConfirmationType::Custom,
+                isAvailableCallback: static function (ViewableConversation|Conversation $conversation) {
+                    if (!($conversation instanceof ViewableConversation)) {
+                        $conversation = UserConversationRuntimeCache::getInstance()->getObject($conversation->conversationID);
+                    }
+
+                    return (bool)$conversation->hideConversation;
+                },
+                invalidatesAllItems: true
             ),
             new RpcInteraction(
                 'leave',
@@ -75,7 +85,14 @@ final class ConversationInteractions extends AbstractInteractionProvider
                 'wcf.conversation.hideConversation.leave',
                 InteractionConfirmationType::Custom,
                 'wcf.conversation.hideConversation.leave.description',
-                static fn (ViewableConversation $conversation) => !$conversation->hideConversation
+                static function (ViewableConversation|Conversation $conversation) {
+                    if (!($conversation instanceof ViewableConversation)) {
+                        $conversation = UserConversationRuntimeCache::getInstance()->getObject($conversation->conversationID);
+                    }
+
+                    return !$conversation->hideConversation;
+                },
+                true
             ),
             new RpcInteraction(
                 'leave-permanently',
@@ -83,6 +100,7 @@ final class ConversationInteractions extends AbstractInteractionProvider
                 'wcf.conversation.hideConversation.leavePermanently',
                 InteractionConfirmationType::Custom,
                 'wcf.conversation.hideConversation.leavePermanently.description',
+                invalidatesAllItems: true
             ),
         ]);
 
@@ -94,6 +112,6 @@ final class ConversationInteractions extends AbstractInteractionProvider
     #[\Override]
     public function getObjectClassName(): string
     {
-        return ViewableConversation::class;
+        return Conversation::class;
     }
 }
