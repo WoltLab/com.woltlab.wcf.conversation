@@ -1,5 +1,5 @@
 /**
- * Gets the html code for the rendering the conversation leave dialog.
+ * Remove a participant from a conversation.
  *
  * @author  Olaf Braun
  * @copyright  2001-2025 WoltLab GmbH
@@ -14,11 +14,13 @@ type Response = {
   template: string;
 };
 
-export async function getConversationLeaveDialog(conversationId: number): Promise<ApiResult<string>> {
+export async function removeParticipant(conversationId: number, participantId: number): Promise<ApiResult<string>> {
   let response: Response;
   try {
-    response = (await prepareRequest(`${window.WSC_RPC_API_URL}core/conversations/${conversationId}/leave-dialog`)
-      .get()
+    response = (await prepareRequest(
+      `${window.WSC_RPC_API_URL}core/conversations/${conversationId}/participants/${participantId}`,
+    )
+      .delete()
       .fetchAsJson()) as Response;
   } catch (e) {
     return apiResultFromError(e);
