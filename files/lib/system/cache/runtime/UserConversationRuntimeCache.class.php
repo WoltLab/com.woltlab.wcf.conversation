@@ -2,8 +2,8 @@
 
 namespace wcf\system\cache\runtime;
 
-use wcf\data\conversation\Conversation;
 use wcf\data\conversation\UserConversationList;
+use wcf\data\conversation\ViewableConversation;
 use wcf\system\WCF;
 
 /**
@@ -14,7 +14,7 @@ use wcf\system\WCF;
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @since   3.0
  *
- * @extends AbstractRuntimeCache<Conversation, UserConversationList>
+ * @extends AbstractRuntimeCache<ViewableConversation, UserConversationList>
  */
 class UserConversationRuntimeCache extends AbstractRuntimeCache
 {
