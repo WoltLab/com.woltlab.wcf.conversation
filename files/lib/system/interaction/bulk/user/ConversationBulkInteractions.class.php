@@ -52,14 +52,15 @@ final class ConversationBulkInteractions extends AbstractBulkInteractionProvider
                 'core/conversations/%s/restore',
                 'wcf.conversation.hideConversation.restore',
                 InteractionConfirmationType::Custom,
-                isAvailableCallback: static fn (ViewableConversation $conversation) => (bool)$conversation->hideConversation
+                'wcf.conversation.hideConversation.restore.confirmationMessage',
+                static fn (ViewableConversation $conversation) => (bool)$conversation->hideConversation
             ),
             new BulkRpcInteraction(
                 'leave',
                 'core/conversations/%s/leave',
                 'wcf.conversation.hideConversation.leave',
                 InteractionConfirmationType::Custom,
-                'wcf.conversation.hideConversation.leave.description',
+                'wcf.conversation.hideConversation.leave.confirmationMessage',
                 static fn (ViewableConversation $conversation) => !$conversation->hideConversation
             ),
             new BulkRpcInteraction(
@@ -67,7 +68,7 @@ final class ConversationBulkInteractions extends AbstractBulkInteractionProvider
                 'core/conversations/%s/leave-permanently',
                 'wcf.conversation.hideConversation.leavePermanently',
                 InteractionConfirmationType::Custom,
-                'wcf.conversation.hideConversation.leavePermanently.description',
+                'wcf.conversation.hideConversation.leavePermanently.confirmationMessage',
             ),
         ]);
 
