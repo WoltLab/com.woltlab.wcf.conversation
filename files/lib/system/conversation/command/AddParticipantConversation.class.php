@@ -32,6 +32,10 @@ final class AddParticipantConversation
 
     public function __invoke(): void
     {
+        if ($this->participants === []) {
+            return;
+        }
+
         if ($this->conversation->isDraft) {
             $draftData = \unserialize($this->conversation->draftData);
             $draftData['participants'] = \array_merge($draftData['participants'], $this->participants);

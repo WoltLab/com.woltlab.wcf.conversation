@@ -79,12 +79,28 @@ final class AddParticipantConversationDialogAction implements RequestHandlerInte
                 );
             }
 
+            $participants = $this->filterOutParticipantsAlreadyAdded($participants, $conversation);
+
             (new AddParticipantConversation($conversation, $participants, $messageVisibility))();
 
             return new JsonResponse([]);
         } else {
             throw new \LogicException('Unreachable');
         }
+    }
+
+    /**
+     * @param int[] $participants
+     *
+     * @return int[]
+     */
+    private function filterOutParticipantsAlreadyAdded(array $participants, Conversation $conversation): array
+    {
+        $alreadyParticipantIDs = $conversation->getParticipantIDs(true);
+
+        return \array_filter($participants, static function (int $userID) use ($alreadyParticipantIDs): bool {
+            return !\in_array($userID, $alreadyParticipantIDs, true);
+        });
     }
 
     private function getForm(Conversation $conversation): Psr15DialogForm
