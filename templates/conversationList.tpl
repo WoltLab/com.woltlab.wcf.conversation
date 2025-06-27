@@ -76,6 +76,12 @@
 	{event name='boxes'}
 {/capture}
 
+{capture assign='contentInteractionButtons'}
+	{if $__wcf->user->userID}
+		<button type="button" class="markAllAsReadButton contentInteractionButton button small jsOnly">{icon name='check'} <span>{lang}wcf.global.button.markAllAsRead{/lang}</span></button>
+	{/if}
+{/capture}
+
 {capture assign='contentInteractionDropdownItems'}
 	<li><a rel="alternate" href="{link controller='ConversationRssFeed'}at={$__wcf->getUser()->userID}-{$__wcf->getUser()->accessToken}{/link}">{lang}wcf.global.button.rss{/lang}</a></li>
 {/capture}
@@ -85,5 +91,14 @@
 <div class="section messageGroupList conversationList">
 	{unsafe:$listView->render()}
 </div>
+
+
+{if $__wcf->user->userID}
+	<script data-relocate="true">
+	require(['WoltLabSuite/Core/Conversation/Ui/MarkAllAsRead'], ({ setup }) => {
+		setup();
+	});
+	</script>
+{/if}
 
 {include file='footer'}
