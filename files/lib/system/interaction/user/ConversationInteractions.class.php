@@ -17,6 +17,7 @@ use wcf\system\interaction\Divider;
 use wcf\system\interaction\EditInteraction;
 use wcf\system\interaction\FormBuilderDialogInteraction;
 use wcf\system\interaction\InteractionConfirmationType;
+use wcf\system\interaction\InteractionEffect;
 use wcf\system\interaction\RpcInteraction;
 use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
@@ -72,21 +73,21 @@ final class ConversationInteractions extends AbstractInteractionProvider
                 'core/conversations/%s/restore',
                 'wcf.conversation.hideConversation.restore',
                 InteractionConfirmationType::Custom,
-                isAvailableCallback: static function (ViewableConversation|Conversation $conversation) {
+                'wcf.conversation.hideConversation.restore.confirmationMessage',
+                static function (ViewableConversation|Conversation $conversation) {
                     if (!($conversation instanceof ViewableConversation)) {
                         $conversation = UserConversationRuntimeCache::getInstance()->getObject($conversation->conversationID);
                     }
 
                     return (bool)$conversation->hideConversation;
                 },
-                invalidatesAllItems: true
             ),
             new RpcInteraction(
                 'leave',
                 'core/conversations/%s/leave',
                 'wcf.conversation.hideConversation.leave',
                 InteractionConfirmationType::Custom,
-                'wcf.conversation.hideConversation.leave.description',
+                'wcf.conversation.hideConversation.leave.confirmationMessage',
                 static function (ViewableConversation|Conversation $conversation) {
                     if (!($conversation instanceof ViewableConversation)) {
                         $conversation = UserConversationRuntimeCache::getInstance()->getObject($conversation->conversationID);
@@ -94,15 +95,14 @@ final class ConversationInteractions extends AbstractInteractionProvider
 
                     return !$conversation->hideConversation;
                 },
-                true
             ),
             new RpcInteraction(
                 'leave-permanently',
                 'core/conversations/%s/leave-permanently',
                 'wcf.conversation.hideConversation.leavePermanently',
                 InteractionConfirmationType::Custom,
-                'wcf.conversation.hideConversation.leavePermanently.description',
-                invalidatesAllItems: true
+                'wcf.conversation.hideConversation.leavePermanently.confirmationMessage',
+                interactionEffect: InteractionEffect::RemoveItem,
             ),
             new EditInteraction(
                 ConversationDraftEditForm::class,

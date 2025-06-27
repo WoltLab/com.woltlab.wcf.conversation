@@ -83,10 +83,11 @@
 		<item name="wcf.conversation.folder.outbox"><![CDATA[Gestartet]]></item>
 		<item name="wcf.conversation.hideConversation"><![CDATA[Teilnahme verwalten]]></item>
 		<item name="wcf.conversation.hideConversation.leave"><![CDATA[Ausblenden]]></item>
-		<item name="wcf.conversation.hideConversation.leave.description"><![CDATA[Die Konversation wird bis zu einer neuen Antwort nicht mehr als aktive Konversation gelistet.]]></item>
 		<item name="wcf.conversation.hideConversation.leavePermanently"><![CDATA[Verlassen]]></item>
-		<item name="wcf.conversation.hideConversation.leavePermanently.description"><![CDATA[Die Konversation wird verlassen und {if LANGUAGE_USE_INFORMAL_VARIANT}du wirst{else}Sie werden{/if} nicht länger als aktiver Teilnehmer gelistet.]]></item>
 		<item name="wcf.conversation.hideConversation.restore"><![CDATA[Als aktiv markieren]]></item>
+		<item name="wcf.conversation.hideConversation.restore.confirmationMessage"><![CDATA[Konversation wieder als aktiv markieren?]]></item>
+		<item name="wcf.conversation.hideConversation.leavePermanently.confirmationMessage"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Möchtest du{else}Möchten Sie{/if} die Konversation wirklich verlassen, {if LANGUAGE_USE_INFORMAL_VARIANT}du wirst{else}Sie werden{/if} nicht länger als aktiver Teilnehmer gelistet?]]></item>
+		<item name="wcf.conversation.hideConversation.leave.confirmationMessage"><![CDATA[Konversation ausblenden, bis eine neue Antwort verfasst wird?]]></item>
 		<item name="wcf.conversation.information"><![CDATA[Informationen]]></item>
 		<item name="wcf.conversation.invisible"><![CDATA[unsichtbar]]></item>
 		<item name="wcf.conversation.invisibleParticipants"><![CDATA[Unsichtbare Teilnehmer]]></item>
@@ -286,5 +287,7 @@
 	<item name="wcf.user.usersOnline.location.ConversationMessageAddForm"/>
 	<item name="wcf.user.usersOnline.location.ConversationMessageEditForm"/>
 	<item name="wcf.user.usersOnline.location.ConversationPage"/>
+	<item name="wcf.conversation.hideConversation.leave.description"/>
+	<item name="wcf.conversation.hideConversation.leavePermanently.description"/>
 </delete>
 </language>
