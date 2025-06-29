@@ -1,7 +1,7 @@
 {if $mimeType === 'text/plain'}
 {lang}wcf.user.notification.conversation.mail.plaintext{/lang}
 
-{@$event->getUserNotificationObject()->getFirstMessage()->getMailText($mimeType)} {* this line ends with a space *}
+{unsafe:$event->getUserNotificationObject()->getFirstMessage()->getMailText($mimeType)} {* this line ends with a space *}
 {else}
 	{lang}wcf.user.notification.conversation.mail.html{/lang}
 	{assign var='user' value=$event->getAuthor()}
@@ -13,7 +13,7 @@
 	{capture assign='messageContent'}
 	<table cellpadding="0" cellspacing="0" border="0">
 		<tr>
-			<td><a href="{link controller='User' object=$user isHtmlEmail=true}{/link}" title="{$message->username}">{@$user->getAvatar()->getSafeImageTag($avatarSize)}</a></td>
+			<td><a href="{link controller='User' object=$user isHtmlEmail=true}{/link}" title="{$message->username}">{unsafe:$user->getAvatar()->getSafeImageTag($avatarSize)}</a></td>
 			<td class="boxContent">
 				<div class="containerHeadline">
 					<h3>
@@ -27,7 +27,7 @@
 					</h3>
 				</div>
 				<div>
-					{@$message->getMailText($mimeType)}
+					{unsafe:$message->getMailText($mimeType)}
 				</div>
 			</td>
 		</tr>

@@ -17,7 +17,7 @@
 						{elseif $errorType == 'censoredWordsFound'}
 							{lang}wcf.message.error.censoredWordsFound{/lang}
 						{else}
-							{lang}wcf.conversation.subject.error.{@$errorType}{/lang}
+							{lang}wcf.conversation.subject.error.{$errorType}{/lang}
 						{/if}
 					</small>
 				{/if}
@@ -40,10 +40,10 @@
 							{lang}wcf.global.form.error.empty{/lang}
 						{elseif $errorType|is_array}
 							{foreach from=$errorType item='errorData'}
-								{lang}wcf.conversation.participants.error.{@$errorData.type}{/lang}
+								{lang}wcf.conversation.participants.error.{$errorData.type}{/lang}
 							{/foreach}
 						{else}
-							{lang}wcf.conversation.participants.error.{@$errorType}{/lang}
+							{lang}wcf.conversation.participants.error.{$errorType}{/lang}
 						{/if}
 					</small>
 				{/if}
@@ -62,10 +62,10 @@
 								{lang}wcf.global.form.error.empty{/lang}
 							{elseif $errorType|is_array}
 								{foreach from=$errorType item='errorData'}
-									{lang}wcf.conversation.participants.error.{@$errorData.type}{/lang}
+									{lang}wcf.conversation.participants.error.{$errorData.type}{/lang}
 								{/foreach}
 							{else}
-								{lang}wcf.conversation.participants.error.{@$errorType}{/lang}
+								{lang}wcf.conversation.participants.error.{$errorType}{/lang}
 							{/if}
 						</small>
 					{/if}
@@ -108,7 +108,7 @@
 						{elseif $errorType == 'disallowedBBCodes'}
 							{lang}wcf.message.error.disallowedBBCodes{/lang}
 						{else}
-							{lang}wcf.conversation.message.error.{@$errorType}{/lang}
+							{lang}wcf.conversation.message.error.{$errorType}{/lang}
 						{/if}
 					</small>
 				{/if}
@@ -133,14 +133,14 @@
 <script data-relocate="true">
 	require(['WoltLabSuite/Core/Ui/ItemList/User'], function(UiItemListUser) {
 		UiItemListUser.init('participants', {
-			maxItems: {@$__wcf->getSession()->getPermission('user.conversation.maxParticipants')},
+			maxItems: {$__wcf->getSession()->getPermission('user.conversation.maxParticipants')},
 			includeUserGroups: {if $__wcf->getSession()->getPermission('user.conversation.canAddGroupParticipants')}true{else}false{/if},
-			restrictUserGroupIDs: [-1, {implode from=$allowedUserGroupIDs item=allowedUserGroupID}{@$allowedUserGroupID}{/implode}],
+			restrictUserGroupIDs: [-1, {implode from=$allowedUserGroupIDs item=allowedUserGroupID}{$allowedUserGroupID}{/implode}],
 			csvPerType: true,
 			callbackSetupValues: function() {
 				return [
 					{implode from=$participantsData item=participant}
-						{ objectId: {@$participant['objectId']}, value: '{@$participant['value']|encodeJS}', type: '{@$participant['type']}' }
+						{ objectId: {$participant['objectId']}, value: '{unsafe:$participant['value']|encodeJS}', type: '{unsafe:$participant['type']|encodeJS}' }
 					{/implode}
 				];
 			}
@@ -148,14 +148,14 @@
 		
 		{if $__wcf->session->getPermission('user.conversation.canAddInvisibleParticipants')}
 			UiItemListUser.init('invisibleParticipants', {
-				maxItems: {@$__wcf->getSession()->getPermission('user.conversation.maxParticipants')},
+				maxItems: {$__wcf->getSession()->getPermission('user.conversation.maxParticipants')},
 				includeUserGroups: {if $__wcf->getSession()->getPermission('user.conversation.canAddGroupParticipants')}true{else}false{/if},
-				restrictUserGroupIDs: [-1, {implode from=$allowedUserGroupIDs item=allowedUserGroupID}{@$allowedUserGroupID}{/implode}],
+				restrictUserGroupIDs: [-1, {implode from=$allowedUserGroupIDs item=allowedUserGroupID}{$allowedUserGroupID}{/implode}],
 				csvPerType: true,
 				callbackSetupValues: function() {
 					return [
 						{implode from=$invisibleParticipantsData item=participant}
-							{ objectId: {@$participant['objectId']}, value: '{@$participant['value']|encodeJS}', type: '{@$participant['type']}' }
+							{ objectId: {$participant['objectId']}, value: '{unsafe:$participant['value']|encodeJS}', type: '{unsafe:$participant['type']|encodeJS}' }
 						{/implode}
 					];
 				}

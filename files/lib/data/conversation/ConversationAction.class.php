@@ -144,7 +144,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
             );
         }
 
-        return $conversation;
+        // Reload the object so that `firstMessageID` is set.
+        return new Conversation($conversation->conversationID);
     }
 
     /**

@@ -13,7 +13,7 @@
 									{user object=$modificationLogEntry->getUserProfile() class='username'}
 									<small class="separatorLeft">{time time=$modificationLogEntry->time}</small>
 								</h2>
-								<div>{@$modificationLogEntry}</div>
+								<div>{unsafe:$modificationLogEntry}</div>
 							</div>
 						</div>
 					</div>
