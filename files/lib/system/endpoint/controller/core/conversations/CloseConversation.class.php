@@ -32,7 +32,7 @@ final class CloseConversation implements IController
         $this->assertConversationCanClosed($conversation);
 
         if (!$conversation->isClosed) {
-            $this->openConversation($conversation);
+            $this->closeConversation($conversation);
         }
 
         return new JsonResponse([]);
