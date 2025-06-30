@@ -95,8 +95,9 @@
 
 {if $__wcf->user->userID}
 	<script data-relocate="true">
-	require(['WoltLabSuite/Core/Conversation/Ui/MarkAllAsRead'], ({ setup }) => {
-		setup();
+	require(['WoltLabSuite/Core/Conversation/Ui/MarkAllAsRead', 'WoltLabSuite/Core/Conversation/Ui/MarkAsRead'], (MarkAllAsRead, MarkAsRead) => {
+		MarkAllAsRead.setup();
+		MarkAsRead.setup();
 	});
 	</script>
 {/if}
