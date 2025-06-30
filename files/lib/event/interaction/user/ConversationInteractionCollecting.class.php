@@ -15,7 +15,7 @@ use wcf\system\interaction\user\ConversationInteractions;
  */
 final class ConversationInteractionCollecting implements IPsr14Event
 {
-    public function __construct(public readonly ConversationInteractions $param)
+    public function __construct(public readonly ConversationInteractions $provider)
     {
     }
 }
