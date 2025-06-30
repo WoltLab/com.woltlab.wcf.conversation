@@ -49,7 +49,7 @@ final class CloseConversation implements IController
         }
     }
 
-    private function openConversation(Conversation $conversation): void
+    private function closeConversation(Conversation $conversation): void
     {
         $editor = new ConversationEditor($conversation);
         $editor->update(['isClosed' => 1]);
