@@ -1,6 +1,6 @@
 {foreach from=$view->getItems() item=conversation}
 	<div class="listView__item tabularListRow" data-object-id="{$conversation->getObjectID()}">
-		<ol class="tabularListColumns messageGroup conversation{if $conversation->isNew()} new{/if}">
+		<ol class="tabularListColumns messageGroup conversation{if $conversation->isNew()} new{/if}" data-conversation-id="{$conversation->conversationID}">
 			<li class="columnInteractions">
 				{if $view->hasBulkInteractions()}
 					<label class="button small jsTooltip" title="{lang}wcf.clipboard.item.mark{/lang}">
