@@ -32,6 +32,7 @@
 		<file>js/WoltLabSuite/Core/Conversation/Component/Leave.js</file>
 		<file>js/WoltLabSuite/Core/Conversation/Component/Label/Editor.js</file>
 		<file>js/WoltLabSuite/Core/Conversation/Component/Label/Manager.js</file>
+		<file>js/WoltLabSuite/Core/Conversation/Component/Subject/Editor.js</file>
 		<file>js/WoltLabSuite/Core/Conversation/Clipboard.js</file>
 		<file>js/WoltLabSuite/Core/Conversation/Ui/Participant/Add.js</file>
 		<file>js/WoltLabSuite/Core/Conversation/Ui/Object/Action/RemoveParticipant.js</file>
