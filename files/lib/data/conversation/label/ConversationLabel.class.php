@@ -68,7 +68,7 @@ class ConversationLabel extends DatabaseObject
 
     public function render(): string
     {
-        $cssClassName = $this->cssClassName ? ' ' . $this->cssClassName : '';
+        $cssClassName = StringUtil::encodeHTML($this->cssClassName ? ' ' . $this->cssClassName : '');
         $title = StringUtil::encodeHTML($this->label);
 
         return <<<HTML

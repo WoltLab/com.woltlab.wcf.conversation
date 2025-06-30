@@ -15,7 +15,7 @@ use wcf\system\listView\user\ConversationListView;
  */
 final class ConversationListViewInitialized implements IPsr14Event
 {
-    public function __construct(public readonly ConversationListView $param)
+    public function __construct(public readonly ConversationListView $provider)
     {
     }
 }

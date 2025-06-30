@@ -1,5 +1,5 @@
 <div class="contentHeaderTitle">
-	<h1 class="contentTitle jsConversationSubject" data-conversation-id="{$conversation->conversationID}">{$conversation->subject}</h1>
+	<h1 class="contentTitle">{$conversation->subject}</h1>
 
 	<ul class="inlineList contentHeaderMetaData">
 		{hascontent}

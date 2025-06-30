@@ -15,7 +15,7 @@ use wcf\system\interaction\bulk\user\ConversationBulkInteractions;
  */
 final class ConversationBulkInteractionCollecting implements IPsr14Event
 {
-    public function __construct(public readonly ConversationBulkInteractions $param)
+    public function __construct(public readonly ConversationBulkInteractions $provider)
     {
     }
 }
