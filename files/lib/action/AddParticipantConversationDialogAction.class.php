@@ -9,10 +9,10 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use wcf\data\conversation\Conversation;
 use wcf\data\user\group\UserGroup;
-use wcf\form\ConversationAddForm;
 use wcf\http\Helper;
 use wcf\system\cache\builder\UserGroupCacheBuilder;
 use wcf\system\conversation\command\AddParticipantConversation;
+use wcf\system\conversation\TConversationForm;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\form\builder\field\BooleanFormField;
@@ -33,6 +33,8 @@ use wcf\system\WCF;
  */
 final class AddParticipantConversationDialogAction implements RequestHandlerInterface
 {
+    use TConversationForm;
+
     #[\Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
@@ -74,7 +76,7 @@ final class AddParticipantConversationDialogAction implements RequestHandlerInte
                 $participants = \array_unique(
                     \array_merge(
                         $participants,
-                        ConversationAddForm::getUserByGroups($groupIDs)
+                        $this->getUserByGroups($groupIDs)
                     )
                 );
             }
@@ -123,8 +125,8 @@ final class AddParticipantConversationDialogAction implements RequestHandlerInte
                 ->maximumMultiples(WCF::getSession()->getPermission('user.conversation.maxParticipants'))
                 ->multiple()
                 ->maximumMultiples(WCF::getSession()->getPermission('user.conversation.maxParticipants') - $conversation->participants)
-                ->addValidator(ConversationAddForm::getParticipantsValidator())
-                ->addValidator(ConversationAddForm::getMaximumParticipantsValidator(invisibleParticipantGroupsFieldId: null)),
+                ->addValidator($this->getParticipantsValidator())
+                ->addValidator($this->getMaximumParticipantsValidator(invisibleParticipantGroupsFieldId: null)),
             BooleanFormField::create('addGroupParticipants')
                 ->label('wcf.conversation.addGroupParticipants')
                 ->available(\count($groupParticipants) > 0),

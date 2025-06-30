@@ -8,8 +8,7 @@ use wcf\data\IStorableObject;
 use wcf\data\user\group\UserGroup;
 use wcf\system\cache\builder\UserGroupCacheBuilder;
 use wcf\system\cache\runtime\UserProfileRuntimeCache;
-use wcf\system\database\util\PreparedStatementConditionBuilder;
-use wcf\system\exception\UserInputException;
+use wcf\system\conversation\TConversationForm;
 use wcf\system\flood\FloodControl;
 use wcf\system\form\builder\container\FormContainer;
 use wcf\system\form\builder\container\wysiwyg\WysiwygFormContainer;
@@ -24,7 +23,6 @@ use wcf\system\form\builder\field\validation\FormFieldValidationError;
 use wcf\system\form\builder\field\validation\FormFieldValidator;
 use wcf\system\form\builder\IFormDocument;
 use wcf\system\page\PageLocationManager;
-use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\WCF;
 use wcf\util\HeaderUtil;
 
@@ -39,6 +37,8 @@ use wcf\util\HeaderUtil;
  */
 class ConversationAddForm extends AbstractFormBuilderForm
 {
+    use TConversationForm;
+
     /**
      * @inheritDoc
      */
@@ -101,8 +101,8 @@ class ConversationAddForm extends AbstractFormBuilderForm
                         ->label('wcf.conversation.participants')
                         ->description('wcf.conversation.participants.description')
                         ->maximumMultiples(WCF::getSession()->getPermission('user.conversation.maxParticipants'))
-                        ->addValidator(self::getParticipantsValidator())
-                        ->addValidator(self::getMaximumParticipantsValidator()),
+                        ->addValidator($this->getParticipantsValidator())
+                        ->addValidator($this->getMaximumParticipantsValidator()),
                     BooleanFormField::create('addGroupParticipants')
                         ->label('wcf.conversation.addGroupParticipants')
                         ->available(\count($groupParticipants) > 0),
@@ -120,7 +120,7 @@ class ConversationAddForm extends AbstractFormBuilderForm
                         ->description('wcf.conversation.invisibleParticipants.description')
                         ->available(WCF::getSession()->getPermission('user.conversation.canAddInvisibleParticipants'))
                         ->maximumMultiples(WCF::getSession()->getPermission('user.conversation.maxParticipants'))
-                        ->addValidator(self::getParticipantsValidator())
+                        ->addValidator($this->getParticipantsValidator())
                         ->addValidator(
                             new FormFieldValidator(
                                 'duplicateParticipantsValidator',
@@ -219,7 +219,7 @@ class ConversationAddForm extends AbstractFormBuilderForm
             ->addProcessor(
                 new CustomFormDataProcessor(
                     'participantsProcessor',
-                    static function (IFormDocument $document, array $parameters) {
+                    function (IFormDocument $document, array $parameters) {
                         $participants = $parameters['participants'] ?? [];
                         $invisibleParticipants = $parameters['invisibleParticipants'] ?? [];
 
@@ -228,14 +228,14 @@ class ConversationAddForm extends AbstractFormBuilderForm
                             $participants = \array_unique(
                                 \array_merge(
                                     $participants,
-                                    ConversationAddForm::getUserByGroups($groupIDs)
+                                    $this->getUserByGroups($groupIDs)
                                 )
                             );
                         }
 
                         if (isset($parameters['invisibleParticipantGroups'])) {
                             $groupIDs = $parameters['invisibleParticipantGroups'];
-                            $userIDs = ConversationAddForm::getUserByGroups($groupIDs);
+                            $userIDs = $this->getUserByGroups($groupIDs);
 
                             $invisibleParticipants = \array_unique(
                                 \array_merge(
@@ -305,126 +305,5 @@ class ConversationAddForm extends AbstractFormBuilderForm
         HeaderUtil::redirect($conversation->getLink());
 
         exit;
-    }
-
-    /**
-     * Returns a validator that checks if the selected participants are valid.
-     *
-     * @since 6.2
-     */
-    public static function getParticipantsValidator(): FormFieldValidator
-    {
-        return new FormFieldValidator('participantsValidator', static function (UserFormField $formField) {
-            $users = $formField->getUsers();
-            $userIDs = \array_column($users, 'userID');
-
-            UserStorageHandler::getInstance()->loadStorage($userIDs);
-
-            foreach ($users as $user) {
-                try {
-                    if ($user->userID === WCF::getUser()->userID) {
-                        throw new UserInputException('isAuthor');
-                    }
-
-                    Conversation::validateParticipant($user, $formField->getId());
-                } catch (UserInputException $e) {
-                    $formField->addValidationError(
-                        new FormFieldValidationError(
-                            $e->getType(),
-                            'wcf.conversation.participants.error.' . $e->getType(),
-                            [
-                                'username' => $user->username,
-                            ]
-                        )
-                    );
-                }
-            }
-        });
-    }
-
-    /**
-     * Returns a validator that checks if the maximum number of participants is not exceeded.
-     *
-     * @since 6.2
-     */
-    public static function getMaximumParticipantsValidator(
-        string $invisibleParticipantsFieldId = 'invisibleParticipants',
-        string $participantGroupsFieldId = 'participantGroups',
-        ?string $invisibleParticipantGroupsFieldId = 'invisibleParticipantGroups'
-    ): FormFieldValidator {
-        return new FormFieldValidator(
-            'participantsMaximumValidator',
-            static function (UserFormField $formField) use (
-                $invisibleParticipantsFieldId,
-                $participantGroupsFieldId,
-                $invisibleParticipantGroupsFieldId
-            ) {
-                $invisibleParticipantsFormField = $formField->getDocument()
-                    ->getNodeById($invisibleParticipantsFieldId);
-                $participantGroupsFormField = $formField->getDocument()
-                    ->getNodeById($participantGroupsFieldId);
-                $isDraftFormField = $formField->getDocument()->getNodeById('isDraft');
-                $invisibleParticipantGroupsFormField = $invisibleParticipantGroupsFieldId !== null ? $formField->getDocument()
-                    ->getNodeById($invisibleParticipantGroupsFieldId) : null;
-
-                \assert($invisibleParticipantsFormField === null || $invisibleParticipantsFormField instanceof UserFormField);
-                \assert($isDraftFormField === null || $isDraftFormField instanceof BooleanFormField);
-                \assert($participantGroupsFormField === null || $participantGroupsFormField instanceof MultipleSelectionFormField);
-                \assert($invisibleParticipantGroupsFormField === null || $invisibleParticipantGroupsFormField instanceof MultipleSelectionFormField);
-
-                $groupIDs = \array_merge(
-                    $participantGroupsFormField?->getValue() ?: [],
-                    $invisibleParticipantGroupsFormField?->getValue() ?: [],
-                );
-
-                $userIDs = \array_merge(
-                    \array_column($formField->getUsers(), 'userID'),
-                    \array_column($invisibleParticipantsFormField?->getUsers() ?: [], 'userID'),
-                    ConversationAddForm::getUserByGroups($groupIDs)
-                );
-
-                if (\count($userIDs) > WCF::getSession()->getPermission('user.conversation.maxParticipants')) {
-                    $formField->addValidationError(
-                        new FormFieldValidationError(
-                            'tooManyParticipants',
-                            'wcf.conversation.participants.error.tooManyParticipants'
-                        )
-                    );
-                }
-
-                if (!$isDraftFormField?->getValue() && $userIDs === []) {
-                    $formField->addValidationError(new FormFieldValidationError('empty'));
-                }
-            }
-        );
-    }
-
-    /**
-     * Returns the user IDs of the users that are in the given groups.
-     *
-     * @param int[] $groupIDs
-     *
-     * @return int[]
-     */
-    public static function getUserByGroups(array $groupIDs): array
-    {
-        if ($groupIDs === []) {
-            return [];
-        }
-
-        $conditionBuilder = new PreparedStatementConditionBuilder();
-        $conditionBuilder->add('groupID IN (?)', [$groupIDs]);
-        $sql = "SELECT  DISTINCT userID
-                FROM    wcf1_user_to_group
-                " . $conditionBuilder;
-        $statement = WCF::getDB()->prepare($sql);
-        $statement->execute($conditionBuilder->getParameters());
-
-        $userIDs = [];
-        while ($userID = $statement->fetchColumn()) {
-            $userIDs[] = $userID;
-        }
-
-        return $userIDs;
     }
 }
