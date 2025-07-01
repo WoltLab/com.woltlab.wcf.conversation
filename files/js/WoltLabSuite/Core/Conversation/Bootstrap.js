@@ -55,6 +55,11 @@ define(["require", "exports", "WoltLabSuite/Core/LazyLoader", "../Api/Conversati
                 });
             });
         });
+        (0, LazyLoader_1.whenFirstSeen)(".conversationRemoveParticipant", () => {
+            void new Promise((resolve_2, reject_2) => { require(["../Component/Conversation/RemoveParticipant"], resolve_2, reject_2); }).then(__importStar).then(({ setup }) => {
+                setup();
+            });
+        });
     }
     function setup() {
         setupPopover();

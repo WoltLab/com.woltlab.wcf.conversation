@@ -22,5 +22,22 @@
 		<file>lib/system/event/listener/UserGroupAddCanBeAddedAsParticipantListener.class.php</file>
 		<file>lib/system/user/online/location/ConversationLocation.class.php</file>
 		<file>style/conversation.less</file>
+		<file>lib/system/clipboard/action/ConversationClipboardAction.class.php</file>
+		<file>js/WoltLabSuite/Core/Api/Conversations/AssignConversationLabels.js</file>
+		<file>js/WoltLabSuite/Core/Api/Conversations/GetConversationLabelManager.js</file>
+		<file>js/WoltLabSuite/Core/Api/Conversations/GetConversationLabels.js</file>
+		<file>js/WoltLabSuite/Core/Api/Conversations/GetConversationLeaveDialog.js</file>
+		<file>js/WoltLabSuite/Core/Api/Conversations/LeaveConversation.js</file>
+		<file>js/WoltLabSuite/Core/Conversation/Component/EditorHandler.js</file>
+		<file>js/WoltLabSuite/Core/Conversation/Component/Leave.js</file>
+		<file>js/WoltLabSuite/Core/Conversation/Component/Label/Editor.js</file>
+		<file>js/WoltLabSuite/Core/Conversation/Component/Label/Manager.js</file>
+		<file>js/WoltLabSuite/Core/Conversation/Component/Subject/Editor.js</file>
+		<file>js/WoltLabSuite/Core/Conversation/Clipboard.js</file>
+		<file>js/WoltLabSuite/Core/Conversation/Ui/Participant/Add.js</file>
+		<file>js/WoltLabSuite/Core/Conversation/Ui/Object/Action/RemoveParticipant.js</file>
+		<file>js/WCF.Conversation.js</file>
+		<file>js/WCF.Conversation.min.js</file>
+		<file>js/WCF.Conversation.tiny.min.js</file>
 	</delete>
 </data>

@@ -41,10 +41,13 @@ return static function (): void {
         static function (\wcf\event\endpoint\ControllerCollecting $event) {
             $event->register(new \wcf\system\endpoint\controller\core\conversations\GetConversationPopover());
             $event->register(new \wcf\system\endpoint\controller\core\conversations\LeaveConversation());
-            $event->register(new \wcf\system\endpoint\controller\core\conversations\GetConversationLeaveDialog());
-            $event->register(new \wcf\system\endpoint\controller\core\conversations\GetConversationLabels());
-            $event->register(new \wcf\system\endpoint\controller\core\conversations\AssignConversationLabels());
-            $event->register(new \wcf\system\endpoint\controller\core\conversations\GetConversationLabelManager());
+            $event->register(new \wcf\system\endpoint\controller\core\conversations\LeavePermanentlyConversation());
+            $event->register(new \wcf\system\endpoint\controller\core\conversations\RestoreConversation());
+            $event->register(new \wcf\system\endpoint\controller\core\conversations\OpenConversation());
+            $event->register(new \wcf\system\endpoint\controller\core\conversations\CloseConversation());
+            $event->register(new \wcf\system\endpoint\controller\core\conversations\GetConversationHeaderTitle());
+            $event->register(new \wcf\system\endpoint\controller\core\conversations\RemoveConversationParticipant());
+            $event->register(new \wcf\system\endpoint\controller\core\conversations\GetConversationParticipantList());
         }
     );
 };

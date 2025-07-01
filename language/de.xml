@@ -83,10 +83,11 @@
 		<item name="wcf.conversation.folder.outbox"><![CDATA[Gestartet]]></item>
 		<item name="wcf.conversation.hideConversation"><![CDATA[Teilnahme verwalten]]></item>
 		<item name="wcf.conversation.hideConversation.leave"><![CDATA[Ausblenden]]></item>
-		<item name="wcf.conversation.hideConversation.leave.description"><![CDATA[Die Konversation wird bis zu einer neuen Antwort nicht mehr als aktive Konversation gelistet.]]></item>
 		<item name="wcf.conversation.hideConversation.leavePermanently"><![CDATA[Verlassen]]></item>
-		<item name="wcf.conversation.hideConversation.leavePermanently.description"><![CDATA[Die Konversation wird verlassen und {if LANGUAGE_USE_INFORMAL_VARIANT}du wirst{else}Sie werden{/if} nicht länger als aktiver Teilnehmer gelistet.]]></item>
 		<item name="wcf.conversation.hideConversation.restore"><![CDATA[Als aktiv markieren]]></item>
+		<item name="wcf.conversation.hideConversation.restore.confirmationMessage"><![CDATA[Konversation wieder als aktiv markieren?]]></item>
+		<item name="wcf.conversation.hideConversation.leavePermanently.confirmationMessage"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Möchtest du{else}Möchten Sie{/if} die Konversation wirklich verlassen, {if LANGUAGE_USE_INFORMAL_VARIANT}du wirst{else}Sie werden{/if} nicht länger als aktiver Teilnehmer gelistet?]]></item>
+		<item name="wcf.conversation.hideConversation.leave.confirmationMessage"><![CDATA[Konversation ausblenden, bis eine neue Antwort verfasst wird?]]></item>
 		<item name="wcf.conversation.information"><![CDATA[Informationen]]></item>
 		<item name="wcf.conversation.invisible"><![CDATA[unsichtbar]]></item>
 		<item name="wcf.conversation.invisibleParticipants"><![CDATA[Unsichtbare Teilnehmer]]></item>
@@ -102,15 +103,15 @@
 		<item name="wcf.conversation.participantCanInvite"><![CDATA[Teilnehmer können weitere Teilnehmer hinzufügen]]></item>
 		<item name="wcf.conversation.participants"><![CDATA[Teilnehmer]]></item>
 		<item name="wcf.conversation.participants.description"><![CDATA[Mehrere Benutzer müssen einzeln eingegeben werden.]]></item>
-		<item name="wcf.conversation.participants.error.mailboxIsFull"><![CDATA[{$errorData[username]} hat das zulässige Limit für Konversationen bereits erreicht und kann an keinen neuen Konversationen teilnehmen.]]></item>
-		<item name="wcf.conversation.participants.error.notFound"><![CDATA[Der Benutzername {$errorData[username]} konnte nicht gefunden werden.]]></item>
+		<item name="wcf.conversation.participants.error.mailboxIsFull"><![CDATA[{$username} hat das zulässige Limit für Konversationen bereits erreicht und kann an keinen neuen Konversationen teilnehmen.]]></item>
+		<item name="wcf.conversation.participants.error.notFound"><![CDATA[Der Benutzername {$username} konnte nicht gefunden werden.]]></item>
 		<item name="wcf.conversation.participants.error.isAuthor"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Du bist{else}Sie sind{/if} bereits Teilnehmer dieser Konversation.]]></item>
-		<item name="wcf.conversation.participants.error.duplicate"><![CDATA[{$errorData[username]} ist bereits Teilnehmer dieser Konversation.]]></item>
-		<item name="wcf.conversation.participants.error.canNotUseConversation"><![CDATA[{$errorData[username]} besitzt nicht die notwendigen Berechtigungen, um an einer Konversation teilnehmen zu dürfen.]]></item>
-		<item name="wcf.conversation.participants.error.doesNotAcceptConversation"><![CDATA[{$errorData[username]} möchte nicht an Konversationen teilnehmen.]]></item>
+		<item name="wcf.conversation.participants.error.duplicate"><![CDATA[{$username} ist bereits Teilnehmer dieser Konversation.]]></item>
+		<item name="wcf.conversation.participants.error.canNotUseConversation"><![CDATA[{$username} besitzt nicht die notwendigen Berechtigungen, um an einer Konversation teilnehmen zu dürfen.]]></item>
+		<item name="wcf.conversation.participants.error.doesNotAcceptConversation"><![CDATA[{$username} möchte nicht an Konversationen teilnehmen.]]></item>
 		<item name="wcf.conversation.participants.error.emptyGroup"><![CDATA[Alle Mitglieder der angegebenen Gruppen sind bereits Teilnehmer dieser Konversation.]]></item>
-		<item name="wcf.conversation.participants.error.intersects"><![CDATA[{$errorData[username]} ist bereits als sichtbarer Teilnehmer eingetragen.]]></item>
-		<item name="wcf.conversation.participants.error.ignoresYou"><![CDATA[{$errorData[username]} hat {if LANGUAGE_USE_INFORMAL_VARIANT}dich{else}Sie{/if} blockiert.]]></item>
+		<item name="wcf.conversation.participants.error.intersects"><![CDATA[{$username} ist bereits als sichtbarer Teilnehmer eingetragen.]]></item>
+		<item name="wcf.conversation.participants.error.ignoresYou"><![CDATA[{$username} hat {if LANGUAGE_USE_INFORMAL_VARIANT}dich{else}Sie{/if} blockiert.]]></item>
 		<item name="wcf.conversation.participants.error.tooManyParticipants"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Du hast{else}Sie haben{/if} zu viele Teilnehmer angegeben. Das Maximum liegt bei {#$__wcf->getSession()->getPermission('user.conversation.maxParticipants')} Teilnehmern.]]></item>
 		<item name="wcf.conversation.participants.error.invisibleParticipantsNoPermission"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Du hast{else}Sie haben{/if} keine Berechtigung, unsichtbare Teilnehmer hinzuzufügen.]]></item>
 		<item name="wcf.conversation.participants.error.participantCanInviteNoPermission"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Du hast{else}Sie haben{/if} keine Berechtigung, Teilnehmern das Hinzufügen weiterer Teilnehmer zu erlauben.]]></item>
@@ -145,6 +146,11 @@
 		<item name="wcf.conversation.username"><![CDATA[Autor]]></item>
 		<item name="wcf.conversation.error.floodControl"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Du hast{else}Sie haben{/if} innerhalb der letzten 24 Stunden bereits {if $limit == 1}eine Konversation{else}{#$limit} Konversationen{/if} gestartet. Bitte {if LANGUAGE_USE_INFORMAL_VARIANT}warte{else}warten Sie{/if} bis zum <strong>{time time=$notBefore type='plainTime'}</strong>, bevor {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} eine neue Konversation {if LANGUAGE_USE_INFORMAL_VARIANT}startest{else}starten{/if}.]]></item>
 		<item name="wcf.conversation.message.error.floodControl"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Du hast{else}Sie haben{/if} bereits eine Nachricht innerhalb der letzten {plural value=$__wcf->getSession()->getPermission('user.conversation.floodControlTime') 1='Sekunde' other='# Sekunden'} versendet. {if LANGUAGE_USE_INFORMAL_VARIANT}Du kannst{else}Sie können{/if} erst in {plural value=$waitTime 1='einer Sekunde' other='# Sekunden'} eine neue Nachricht verfassen.]]></item>
+		<item name="wcf.conversation.addGroupParticipants"><![CDATA[Benutzergruppen hinzufügen]]></item>
+		<item name="wcf.conversation.participantGroups"><![CDATA[Benutzergruppen]]></item>
+		<item name="wcf.conversation.addInvisibleGroupParticipants"><![CDATA[Unsichtbare Benutzergruppen hinzufügen]]></item>
+		<item name="wcf.conversation.invisibleParticipantGroups"><![CDATA[Unsichtbare Benutzergruppen]]></item>
+		<item name="wcf.conversation.form.isDraft"><![CDATA[Als Entwurf speichern]]></item>
 	</category>
 	<category name="wcf.conversation.edit">
 		<item name="wcf.conversation.edit.addParticipants"><![CDATA[Teilnehmer hinzufügen]]></item>
@@ -154,6 +160,7 @@
 		<item name="wcf.conversation.edit.leave"><![CDATA[Teilnahme verwalten]]></item>
 		<item name="wcf.conversation.edit.open"><![CDATA[Öffnen]]></item>
 		<item name="wcf.conversation.edit.subject"><![CDATA[Betreff bearbeiten]]></item>
+		<item name="wcf.conversation.edit.conversation"><![CDATA[Konversation bearbeiten]]></item>
 	</category>
 	<category name="wcf.conversation.label">
 		<item name="wcf.conversation.label"><![CDATA[Filter nach Label]]></item>
@@ -280,5 +287,16 @@
 	<item name="wcf.user.usersOnline.location.ConversationMessageAddForm"/>
 	<item name="wcf.user.usersOnline.location.ConversationMessageEditForm"/>
 	<item name="wcf.user.usersOnline.location.ConversationPage"/>
+	<item name="wcf.conversation.hideConversation.leave.description"/>
+	<item name="wcf.conversation.hideConversation.leavePermanently.description"/>
+	<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.assignLabel"/>
+	<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.close"/>
+	<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.leave"/>
+	<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.leavePermanently"/>
+	<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.markAsRead"/>
+	<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.markAsRead.confirmMessage"/>
+	<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.open"/>
+	<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.restore"/>
+	<item name="wcf.clipboard.label.com.woltlab.wcf.conversation.conversation.marked"/>
 </delete>
 </language>

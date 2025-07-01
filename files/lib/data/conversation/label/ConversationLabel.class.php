@@ -4,6 +4,7 @@ namespace wcf\data\conversation\label;
 
 use wcf\data\DatabaseObject;
 use wcf\system\WCF;
+use wcf\util\StringUtil;
 
 /**
  * Represents a conversation label.
@@ -63,5 +64,15 @@ class ConversationLabel extends DatabaseObject
     public static function getLabelCssClassNames()
     {
         return self::$availableCssClassNames;
+    }
+
+    public function render(): string
+    {
+        $cssClassName = StringUtil::encodeHTML($this->cssClassName ? ' ' . $this->cssClassName : '');
+        $title = StringUtil::encodeHTML($this->label);
+
+        return <<<HTML
+            <span class="badge label{$cssClassName}">{$title}</span>
+        HTML;
     }
 }

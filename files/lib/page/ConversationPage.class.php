@@ -17,6 +17,8 @@ use wcf\system\attachment\AttachmentHandler;
 use wcf\system\bbcode\BBCodeHandler;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\PermissionDeniedException;
+use wcf\system\interaction\StandaloneInteractionContextMenuComponent;
+use wcf\system\interaction\user\ConversationInteractions;
 use wcf\system\message\quote\MessageQuoteManager;
 use wcf\system\page\PageLocationManager;
 use wcf\system\page\ParentPageLocation;
@@ -355,6 +357,13 @@ class ConversationPage extends MultipleLinkPage
             'conversationID' => $this->conversationID,
             'participants' => $this->participantList->getObjects(),
             'defaultSmilies' => SmileyCache::getInstance()->getCategorySmilies(),
+            'interactionContextMenu' => StandaloneInteractionContextMenuComponent::forContentInteractionButton(
+                new ConversationInteractions(),
+                $this->conversation,
+                LinkHandler::getInstance()->getControllerLink(ConversationListPage::class),
+                WCF::getLanguage()->getDynamicVariable('wcf.conversation.edit.conversation'),
+                "core/conversations/{$this->conversationID}/content-header-title"
+            ),
         ]);
 
         BBCodeHandler::getInstance()->setDisallowedBBCodes(\explode(
