@@ -11,6 +11,7 @@ use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\label\ConversationLabelList;
 use wcf\http\Helper;
 use wcf\system\conversation\command\AssignConversationLabel;
+use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\form\builder\field\MultipleSelectionFormField;
@@ -93,7 +94,7 @@ final class AssignConversationLabelDialogAction implements RequestHandlerInterfa
                 ->options(
                     \array_map(static fn (ConversationLabel $label) => $label->render(), $labelList->getObjects())
                 )
-                ->value($this->getSelectedLabelIDs($conversationIDs)),
+                ->value($this->getSelectedLabelIDs($conversationIDs, $labelList)),
         ]);
 
         $form->markRequiredFields(false);
@@ -107,17 +108,21 @@ final class AssignConversationLabelDialogAction implements RequestHandlerInterfa
      *
      * @return int[]
      */
-    private function getSelectedLabelIDs(array $conversationIDs): array
+    private function getSelectedLabelIDs(array $conversationIDs, ConversationLabelList $labelList): array
     {
         if (\count($conversationIDs) !== 1) {
             return [];
         }
 
+        $conditionBuilder = new PreparedStatementConditionBuilder();
+        $conditionBuilder->add('conversationID = ?', [\reset($conversationIDs)]);
+        $conditionBuilder->add('labelID IN (?)', [$labelList->getObjectIDs()]);
+
         $sql = "SELECT  labelID
                 FROM    wcf1_conversation_label_to_object
-                WHERE   conversationID = ?";
+                {$conditionBuilder}";
         $statement = WCF::getDB()->prepare($sql);
-        $statement->execute([\reset($conversationIDs)]);
+        $statement->execute($conditionBuilder->getParameters());
 
         return $statement->fetchAll(\PDO::FETCH_COLUMN) ?: [];
     }

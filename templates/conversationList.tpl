@@ -80,6 +80,8 @@
 	{if $__wcf->user->userID}
 		<button type="button" class="markAllAsReadButton contentInteractionButton button small jsOnly">{icon name='check'} <span>{lang}wcf.global.button.markAllAsRead{/lang}</span></button>
 	{/if}
+
+	<button type="button" id="manageLabel" class="button contentInteractionButton small">{lang}wcf.conversation.label.management{/lang}</button>
 {/capture}
 
 {capture assign='contentInteractionDropdownItems'}
@@ -92,12 +94,18 @@
 	{unsafe:$listView->render()}
 </div>
 
-
 {if $__wcf->user->userID}
 	<script data-relocate="true">
-	require(['WoltLabSuite/Core/Conversation/Ui/MarkAllAsRead', 'WoltLabSuite/Core/Conversation/Ui/MarkAsRead'], (MarkAllAsRead, MarkAsRead) => {
+		{jsphrase name='wcf.conversation.label.management'}
+	require([
+		'WoltLabSuite/Core/Conversation/Ui/MarkAllAsRead',
+		'WoltLabSuite/Core/Conversation/Ui/MarkAsRead',
+		'WoltLabSuite/Core/Conversation/Component/Label/Manager'
+	], (MarkAllAsRead, MarkAsRead, { LabelManager }) => {
 		MarkAllAsRead.setup();
 		MarkAsRead.setup();
+
+		new LabelManager('{unsafe:$listView->getID()|encodeJS}', '{link controller='ConversationLabelForm'}{/link}');
 	});
 	</script>
 {/if}
