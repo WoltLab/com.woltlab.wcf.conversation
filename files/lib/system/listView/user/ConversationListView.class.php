@@ -50,7 +50,7 @@ final class ConversationListView extends AbstractListView
 
         $this->addAvailableFilters([
             new TextFilter('subject', 'wcf.global.title'),
-            new UserFilter('participants', 'wcf.conversation.participants'),
+            ...$this->getParticipantFilter($filter),
             $this->getLabelFilter(),
         ]);
 
@@ -85,6 +85,69 @@ final class ConversationListView extends AbstractListView
     public function getParameters(): array
     {
         return ['filter' => $this->filter];
+    }
+
+    /**
+     * @return AbstractFilter[]
+     */
+    private function getParticipantFilter(string $filter): array
+    {
+        // Participants in draft conversations are not yet stored in the `wcf1_conversation_to_user` table,
+        // they are serialized in `draftData`.
+        if ($filter === 'draft') {
+            return [];
+        }
+
+        return [
+            new class(id: 'participants', languageItem: 'wcf.conversation.participants') extends UserFilter {
+                #[\Override]
+                public function applyFilter(DatabaseObjectList $list, string $value): void
+                {
+                    // The condition is split into two branches in order to account for invisible participants.
+                    // Invisible participants are only visible to the conversation starter and remain invisible
+                    // until they write their first message.
+                    //
+                    // We need to protect these users from being exposed as participants by including them for
+                    // any conversation that the current user has started. For all other conversations, users
+                    // flagged with `isInvisible = 0` must be excluded.
+                    //
+                    // See https://github.com/WoltLab/com.woltlab.wcf.conversation/issues/131
+
+                    $list->getConditionBuilder()->add(
+                        "(
+                            (
+                                conversation.userID = ?
+                                AND conversation.conversationID IN (
+                                    SELECT      conversationID
+                                    FROM        wcf1_conversation_to_user
+                                    WHERE       participantID = ?
+                                )
+                            )
+                            OR
+                            (
+                                conversation.userID <> ?
+                                AND conversation.conversationID IN (
+                                    SELECT      conversationID
+                                    FROM        wcf1_conversation_to_user
+                                    WHERE       participantID = ?
+                                            AND isInvisible = ?
+                                )
+                            )
+                        )",
+                        [
+                            // Parameters for the first condition.
+                            WCF::getUser()->userID,
+                            $value,
+
+                            // Parameters for the second condition.
+                            WCF::getUser()->userID,
+                            $value,
+                            0,
+                        ]
+                    );
+                }
+            },
+        ];
     }
 
     private function getLabelFilter(): AbstractFilter
