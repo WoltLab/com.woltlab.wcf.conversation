@@ -81,7 +81,7 @@
 		<button type="button" class="markAllAsReadButton contentInteractionButton button small jsOnly">{icon name='check'} <span>{lang}wcf.global.button.markAllAsRead{/lang}</span></button>
 	{/if}
 
-	<a href="{link controller="ConversationLabelList"}{/link}" class="button contentInteractionButton small">{icon name='gear'} <span>{lang}wcf.conversation.label.management{/lang}</span></a>
+	<a href="{link controller="ConversationLabelList"}{/link}" class="button contentInteractionButton small">{icon name='tags'} <span>{lang}wcf.conversation.label.management{/lang}</span></a>
 {/capture}
 
 {capture assign='contentInteractionDropdownItems'}
