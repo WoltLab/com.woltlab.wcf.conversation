@@ -48,7 +48,6 @@ return static function (): void {
             $event->register(new \wcf\system\endpoint\controller\core\conversations\GetConversationHeaderTitle());
             $event->register(new \wcf\system\endpoint\controller\core\conversations\RemoveConversationParticipant());
             $event->register(new \wcf\system\endpoint\controller\core\conversations\GetConversationParticipantList());
-            $event->register(new \wcf\system\endpoint\controller\core\conversations\GetConversationLabelManager());
             $event->register(new \wcf\system\endpoint\controller\core\conversations\labels\DeleteConversationLabel());
         }
     );

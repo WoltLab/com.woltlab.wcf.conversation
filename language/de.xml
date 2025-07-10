@@ -174,9 +174,7 @@
 		<item name="wcf.conversation.label.management.addLabel.success"><![CDATA[Label wurde hinzugefügt]]></item>
 		<item name="wcf.conversation.label.management.deleteLabel"><![CDATA[Label löschen?]]></item>
 		<item name="wcf.conversation.label.management.deleteLabel.confirmMessage"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Willst du{else}Wollen Sie{/if} das Label <span class="confirmationObject">#labelName#</span> wirklich löschen?]]></item>
-		<item name="wcf.conversation.label.management.edit.description"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} ein Label an, um dieses zu bearbeiten oder zu löschen.]]></item>
 		<item name="wcf.conversation.label.management.editLabel"><![CDATA[Label „{$labelName}“ bearbeiten]]></item>
-		<item name="wcf.conversation.label.management.existingLabels"><![CDATA[Vorhandene Labels]]></item>
 		<item name="wcf.conversation.label.placeholder"><![CDATA[Label]]></item>
 		<item name="wcf.conversation.label.assignLabels"><![CDATA[Label zuweisen]]></item>
 	</category>
@@ -299,5 +297,7 @@
 	<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.open"/>
 	<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.restore"/>
 	<item name="wcf.clipboard.label.com.woltlab.wcf.conversation.conversation.marked"/>
+	<item name="wcf.conversation.label.management.existingLabels"/>
+	<item name="wcf.conversation.label.management.edit.description"/>
 </delete>
 </language>
