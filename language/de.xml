@@ -170,7 +170,7 @@
 		<item name="wcf.conversation.label.labelName"><![CDATA[Bezeichnung]]></item>
 		<item name="wcf.conversation.label.management"><![CDATA[Labels verwalten]]></item>
 		<item name="wcf.conversation.label.management.addLabel"><![CDATA[Label hinzufügen]]></item>
-		<item name="wcf.conversation.label.management.addLabel.maxLabels"><![CDATA[Du hast bereits die maximale Anzahl an Labels erstellt.]]></item>
+		<item name="wcf.conversation.label.management.addLabel.maxLabels"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Du hast{else}Sie haben{/if} bereits die maximale Anzahl an Labels erstellt.]]></item>
 		<item name="wcf.conversation.label.management.addLabel.success"><![CDATA[Label wurde hinzugefügt]]></item>
 		<item name="wcf.conversation.label.management.deleteLabel"><![CDATA[Label löschen?]]></item>
 		<item name="wcf.conversation.label.management.deleteLabel.confirmMessage"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Willst du{else}Wollen Sie{/if} das Label <span class="confirmationObject">#labelName#</span> wirklich löschen?]]></item>
