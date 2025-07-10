@@ -19,14 +19,14 @@
 			<pageType>system</pageType>
 			<controller>wcf\page\ConversationLabelListPage</controller>
 			<parent>com.woltlab.wcf.conversation.ConversationList</parent>
-			<name language="de">Konversationen Labels verwalten</name>
+			<name language="de">Labels für Konversationen verwalten</name>
 			<name language="en">Manage Conversation Labels</name>
 			<excludeFromLandingPage>1</excludeFromLandingPage>
 			<content language="en">
 				<title>Manage Conversation Labels</title>
 			</content>
 			<content language="de">
-				<title>Konversationen Labels verwalten</title>
+				<title>Labels für Konversationen verwalten</title>
 			</content>
 		</page>
 		<page identifier="com.woltlab.wcf.conversation.Conversation">
