@@ -1,6 +1,3 @@
-{capture assign='contentInteractionButtons'}
-{/capture}
-
 {capture assign='contentHeader'}
 	<header class="contentHeader">
 		<div class="contentHeaderTitle">
