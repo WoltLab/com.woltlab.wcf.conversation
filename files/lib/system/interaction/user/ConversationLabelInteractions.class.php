@@ -25,13 +25,13 @@ final class ConversationLabelInteractions extends AbstractInteractionProvider
     public function __construct()
     {
         $this->addInteractions([
+            new DeleteInteraction('core/conversations/labels/%s'),
+            new Divider(),
             new FormBuilderDialogInteraction(
                 'edit',
                 LinkHandler::getInstance()->getControllerLink(ConversationLabelFormAction::class, ['labelID' => '%s']),
                 'wcf.global.button.edit',
             ),
-            new Divider(),
-            new DeleteInteraction('core/conversations/labels/%s'),
         ]);
 
         EventHandler::getInstance()->fire(
