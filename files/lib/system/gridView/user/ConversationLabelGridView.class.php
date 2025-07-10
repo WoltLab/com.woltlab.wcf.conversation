@@ -7,12 +7,10 @@ use wcf\data\conversation\label\ConversationLabelList;
 use wcf\data\DatabaseObject;
 use wcf\event\gridView\user\ConversationLabelGridViewInitialized;
 use wcf\system\gridView\AbstractGridView;
-use wcf\system\gridView\filter\ObjectIdFilter;
 use wcf\system\gridView\filter\TextFilter;
 use wcf\system\gridView\GridViewColumn;
 use wcf\system\gridView\GridViewRowLink;
 use wcf\system\gridView\renderer\DefaultColumnRenderer;
-use wcf\system\gridView\renderer\ObjectIdColumnRenderer;
 use wcf\system\interaction\user\ConversationLabelInteractions;
 use wcf\system\WCF;
 
@@ -31,24 +29,18 @@ final class ConversationLabelGridView extends AbstractGridView
     public function __construct()
     {
         $this->addColumns([
-            GridViewColumn::for('labelID')
-                ->label('wcf.global.objectID')
-                ->renderer(new ObjectIdColumnRenderer())
-                ->sortable()
-                ->filter(new ObjectIdFilter()),
             GridViewColumn::for('label')
                 ->label('wcf.global.title')
                 ->titleColumn()
                 ->sortable()
                 ->filter(new TextFilter())
                 ->renderer(
-                    new
-                    /** @template-extends DefaultColumnRenderer<ConversationLabel> */
-                    class extends DefaultColumnRenderer {
+                    new class extends DefaultColumnRenderer {
                         #[\Override]
                         public function render(mixed $value, DatabaseObject $row): string
                         {
-                            /** @var ConversationLabel $row */
+                            \assert($row instanceof ConversationLabel);
+
                             return $row->render();
                         }
                     }
@@ -57,9 +49,7 @@ final class ConversationLabelGridView extends AbstractGridView
 
         $interactions = new ConversationLabelInteractions();
         $this->setInteractionProvider($interactions);
-
-        $this->setSortField("labelID");
-        $this->setSortOrder("ASC");
+        $this->setSortField("label");
         $this->addRowLink(new GridViewRowLink(cssClass: 'editConversationLabel'));
     }
 
