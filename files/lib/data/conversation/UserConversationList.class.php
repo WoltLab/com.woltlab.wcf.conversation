@@ -33,12 +33,6 @@ class UserConversationList extends ConversationList
     public $filter = '';
 
     /**
-     * label list object
-     * @var ConversationLabelList
-     */
-    public $labelList;
-
-    /**
      * @inheritDoc
      */
     public $decoratorClassName = ViewableConversation::class;
@@ -110,16 +104,6 @@ class UserConversationList extends ConversationList
             // this avoids appending `conversation.*` to the SELECT list
             $this->useQualifiedShorthand = false;
         }
-    }
-
-    /**
-     * Sets the label list of the user the conversations belong to.
-     *
-     * @return void
-     */
-    public function setLabelList(ConversationLabelList $labelList)
-    {
-        $this->labelList = $labelList;
     }
 
     /**
@@ -243,28 +227,14 @@ class UserConversationList extends ConversationList
     }
 
     /**
-     * Returns a list of conversation labels.
-     *
-     * @return  ConversationLabel[]
-     */
-    protected function getLabels()
-    {
-        if ($this->labelList === null) {
-            $this->labelList = ConversationLabel::getLabelsByUser();
-        }
-
-        return $this->labelList->getObjects();
-    }
-
-    /**
      * Returns label assignments per conversation.
      *
      * @return  ConversationLabel[][]
      */
     protected function loadLabelAssignments()
     {
-        $labels = $this->getLabels();
-        if (empty($labels)) {
+        $labels = ConversationLabel::getUserLabels();
+        if ($labels === []) {
             return [];
         }
 

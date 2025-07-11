@@ -2,7 +2,6 @@
 
 namespace wcf\system\conversation\command;
 
-use wcf\data\conversation\label\ConversationLabelList;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\WCF;
 
@@ -15,7 +14,10 @@ use wcf\system\WCF;
 final class AssignConversationLabel
 {
     public function __construct(
-        public readonly ConversationLabelList $labelList,
+        /**
+         * @var int[]
+         */
+        public readonly array $oldLabelIDs,
         /**
          * @var int[]
          */
@@ -23,14 +25,13 @@ final class AssignConversationLabel
         /**
          * @var int[]
          */
-        public readonly array $labelIDs
-    ) {
-    }
+        public readonly array $newLabelIDs
+    ) {}
 
     public function __invoke(): void
     {
-        $this->removeOldLabels($this->conversationIDs, $this->labelList->getObjectIDs());
-        $this->assignLabels($this->conversationIDs, $this->labelIDs);
+        $this->removeOldLabels($this->conversationIDs, $this->oldLabelIDs);
+        $this->assignLabels($this->conversationIDs, $this->newLabelIDs);
     }
 
     /**

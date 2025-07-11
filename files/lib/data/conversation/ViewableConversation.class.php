@@ -189,12 +189,8 @@ class ViewableConversation extends DatabaseObjectDecorator
     {
         $conversation = new self($conversation);
 
-        if ($labelList === null) {
-            $labelList = ConversationLabel::getLabelsByUser();
-        }
-
-        $labels = $labelList->getObjects();
-        if (!empty($labels)) {
+        $labels = ConversationLabel::getUserLabels();
+        if ($labels !== []) {
             $conditions = new PreparedStatementConditionBuilder();
             $conditions->add("conversationID = ?", [$conversation->conversationID]);
             $conditions->add("labelID IN (?)", [\array_keys($labels)]);

@@ -3,7 +3,6 @@
 namespace wcf\system\listView\user;
 
 use wcf\data\conversation\label\ConversationLabel;
-use wcf\data\conversation\label\ConversationLabelList;
 use wcf\data\conversation\UserConversationList;
 use wcf\data\conversation\ViewableConversation;
 use wcf\data\DatabaseObjectList;
@@ -54,7 +53,7 @@ final class ConversationListView extends AbstractListView
         if ($filter !== 'draft') {
             $this->addAvailableFilter($this->getParticipantFilter());
         }
-        if ($this->hasLabels()) {
+        if (ConversationLabel::getUserLabels() !== []) {
             $this->addAvailableFilter($this->getLabelFilter());
         }
 
@@ -145,11 +144,8 @@ final class ConversationListView extends AbstractListView
     private function getLabelFilter(): AbstractFilter
     {
         return new class extends AbstractFilter {
-            public readonly ConversationLabelList $labelList;
-
             public function __construct()
             {
-                $this->labelList = ConversationLabel::getLabelsByUser();
                 parent::__construct('label', 'wcf.label.label');
             }
 
@@ -157,7 +153,7 @@ final class ConversationListView extends AbstractListView
             {
                 return ConversationLabelFormField::create('label')
                     ->label($this->languageItem)
-                    ->labels($this->labelList->getObjects());
+                    ->labels(ConversationLabel::getUserLabels());
             }
 
             public function applyFilter(DatabaseObjectList $list, string $value): void
@@ -175,15 +171,8 @@ final class ConversationListView extends AbstractListView
             #[\Override]
             public function renderValue(string $value): string
             {
-                $label = $this->labelList->search((int)$value);
-
-                return $label ? $label->label : '';
+                return ConversationLabel::getUserLabels()[$value]->label;
             }
         };
-    }
-
-    private function hasLabels(): bool
-    {
-        return ConversationLabel::getLabelsByUser()->getObjects() !== [];
     }
 }

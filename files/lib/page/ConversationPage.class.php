@@ -83,6 +83,7 @@ class ConversationPage extends MultipleLinkPage
     /**
      * conversation label list
      * @var ConversationLabelList
+     * @deprecated 6.2 No longer in use.
      */
     public $labelList;
 
@@ -139,9 +140,7 @@ class ConversationPage extends MultipleLinkPage
             throw new PermissionDeniedException();
         }
 
-        // load labels
-        $this->labelList = ConversationLabel::getLabelsByUser();
-        $this->conversation = ViewableConversation::getViewableConversation($conversation, $this->labelList);
+        $this->conversation = ViewableConversation::getViewableConversation($conversation);
 
         // messages per page
         /** @noinspection PhpUndefinedFieldInspection */
@@ -350,7 +349,6 @@ class ConversationPage extends MultipleLinkPage
             'attachmentParentObjectID' => 0,
             'tmpHash' => $tmpHash,
             'attachmentList' => $this->objectList->getAttachmentList(),
-            'labelList' => $this->labelList,
             'modificationLogList' => $this->modificationLogList,
             'sortOrder' => $this->sortOrder,
             'conversation' => $this->conversation,

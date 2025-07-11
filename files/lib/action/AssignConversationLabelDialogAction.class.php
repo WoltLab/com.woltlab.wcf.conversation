@@ -8,7 +8,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\label\ConversationLabel;
-use wcf\data\conversation\label\ConversationLabelList;
 use wcf\http\Helper;
 use wcf\system\conversation\command\AssignConversationLabel;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
@@ -55,12 +54,12 @@ final class AssignConversationLabelDialogAction implements RequestHandlerInterfa
             throw new PermissionDeniedException();
         }
 
-        $labelList = ConversationLabel::getLabelsByUser();
-        if ($labelList->count() === 0) {
+        $labels = ConversationLabel::getUserLabels();
+        if ($labels === []) {
             throw new IllegalLinkException();
         }
 
-        $form = $this->getForm($conversationIDs, $labelList);
+        $form = $this->getForm($conversationIDs, $labels);
 
         if ($request->getMethod() === 'GET') {
             return $form->toResponse();
@@ -71,7 +70,7 @@ final class AssignConversationLabelDialogAction implements RequestHandlerInterfa
             }
             $labelIDs = $form->getData()['labelIDs'] ?? [];
 
-            (new AssignConversationLabel($labelList, $conversationIDs, $labelIDs))();
+            (new AssignConversationLabel(\array_keys($labels), $conversationIDs, $labelIDs))();
 
             return new JsonResponse([]);
         } else {
@@ -81,8 +80,9 @@ final class AssignConversationLabelDialogAction implements RequestHandlerInterfa
 
     /**
      * @param int[] $conversationIDs
+     * @param array<int, ConversationLabel> $labels
      */
-    private function getForm(array $conversationIDs, ConversationLabelList $labelList): Psr15DialogForm
+    private function getForm(array $conversationIDs, array $labels): Psr15DialogForm
     {
         $form = new Psr15DialogForm(
             static::class,
@@ -92,9 +92,9 @@ final class AssignConversationLabelDialogAction implements RequestHandlerInterfa
         $form->appendChildren([
             MultipleSelectionFormField::create('labelIDs')
                 ->options(
-                    \array_map(static fn (ConversationLabel $label) => $label->render(), $labelList->getObjects())
+                    \array_map(static fn(ConversationLabel $label) => $label->render(), $labels)
                 )
-                ->value($this->getSelectedLabelIDs($conversationIDs, $labelList)),
+                ->value($this->getSelectedLabelIDs($conversationIDs, \array_keys($labels))),
         ]);
 
         $form->markRequiredFields(false);
@@ -105,10 +105,11 @@ final class AssignConversationLabelDialogAction implements RequestHandlerInterfa
 
     /**
      * @param int[] $conversationIDs
+     * @param int[] $labelIDs
      *
      * @return int[]
      */
-    private function getSelectedLabelIDs(array $conversationIDs, ConversationLabelList $labelList): array
+    private function getSelectedLabelIDs(array $conversationIDs, array $labelIDs): array
     {
         if (\count($conversationIDs) !== 1) {
             return [];
@@ -116,7 +117,7 @@ final class AssignConversationLabelDialogAction implements RequestHandlerInterfa
 
         $conditionBuilder = new PreparedStatementConditionBuilder();
         $conditionBuilder->add('conversationID = ?', [\reset($conversationIDs)]);
-        $conditionBuilder->add('labelID IN (?)', [$labelList->getObjectIDs()]);
+        $conditionBuilder->add('labelID IN (?)', [$labelIDs]);
 
         $sql = "SELECT  labelID
                 FROM    wcf1_conversation_label_to_object

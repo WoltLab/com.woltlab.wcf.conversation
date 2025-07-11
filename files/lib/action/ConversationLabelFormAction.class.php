@@ -55,7 +55,7 @@ final class ConversationLabelFormAction implements RequestHandlerInterface
                 throw new PermissionDeniedException();
             }
         } elseif (
-            \count(ConversationLabel::getLabelsByUser())
+            \count(ConversationLabel::getUserLabels())
             >= WCF::getSession()->getPermission('user.conversation.maxLabels')
         ) {
             throw new NamedUserException(WCF::getLanguage()->get('wcf.conversation.label.management.addLabel.maxLabels'));

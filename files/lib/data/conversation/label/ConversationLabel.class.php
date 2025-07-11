@@ -23,6 +23,7 @@ class ConversationLabel extends DatabaseObject
     /**
      * list of pre-defined css class names
      * @var string[]
+     * @deprecated 6.2 No longer in use.
      */
     public static $availableCssClassNames = [
         'yellow',
@@ -38,10 +39,32 @@ class ConversationLabel extends DatabaseObject
         'none', /* not a real value */
     ];
 
+    private static array $userLabels;
+
+    /**
+     * Returns the conversation labels of the active user.
+     *
+     * @return array<int, ConversationLabel>
+     * @since 6.2
+     */
+    public static function getUserLabels(): array
+    {
+        if (!isset(self::$userLabels)) {
+            $labelList = new ConversationLabelList();
+            $labelList->getConditionBuilder()->add("conversation_label.userID = ?", [WCF::getUser()->userID]);
+            $labelList->readObjects();
+
+            self::$userLabels = $labelList->getObjects();
+        }
+
+        return self::$userLabels;
+    }
+
     /**
      * Returns a list of conversation labels for given user id.
      *
      * @return ConversationLabelList
+     * @deprecated 6.2 Use `ConversationLabel::getUserLabels()` instead.
      */
     public static function getLabelsByUser(?int $userID = null)
     {
@@ -60,6 +83,7 @@ class ConversationLabel extends DatabaseObject
      * Returns a list of available CSS class names.
      *
      * @return string[]
+     * @deprecated 6.2 No longer in use.
      */
     public static function getLabelCssClassNames()
     {

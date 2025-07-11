@@ -34,39 +34,37 @@ final class ConversationInteractions extends AbstractInteractionProvider
 {
     public function __construct()
     {
-        $labelList = ConversationLabel::getLabelsByUser();
-
         $this->addInteractions([
             new FormBuilderDialogInteraction(
                 'editSubject',
                 LinkHandler::getInstance()->getControllerLink(EditSubjectConversationDialogAction::class, ['id' => '%s']),
                 'wcf.conversation.edit.subject',
-                static fn (ViewableConversation|Conversation $conversation) => WCF::getUser()->userID === $conversation->userID,
+                static fn(ViewableConversation|Conversation $conversation) => WCF::getUser()->userID === $conversation->userID,
             ),
             new RpcInteraction(
                 'open',
                 'core/conversations/%s/open',
                 'wcf.conversation.edit.open',
-                isAvailableCallback: static fn (ViewableConversation|Conversation $conversation) => $conversation->isClosed && $conversation->userID === WCF::getUser()->userID
+                isAvailableCallback: static fn(ViewableConversation|Conversation $conversation) => $conversation->isClosed && $conversation->userID === WCF::getUser()->userID
             ),
             new RpcInteraction(
                 'close',
                 'core/conversations/%s/close',
                 'wcf.conversation.edit.close',
-                isAvailableCallback: static fn (ViewableConversation|Conversation $conversation) => !$conversation->isClosed && $conversation->userID === WCF::getUser()->userID
+                isAvailableCallback: static fn(ViewableConversation|Conversation $conversation) => !$conversation->isClosed && $conversation->userID === WCF::getUser()->userID
             ),
             new FormBuilderDialogInteraction(
                 'assignLabel',
                 LinkHandler::getInstance()->getControllerLink(AssignConversationLabelDialogAction::class, ['id' => '%s']),
                 'wcf.conversation.edit.assignLabel',
-                static fn () => $labelList->count() > 0,
+                static fn() => ConversationLabel::getUserLabels() !== [],
             ),
             new Divider(),
             new FormBuilderDialogInteraction(
                 'addParticipants',
                 LinkHandler::getInstance()->getControllerLink(AddParticipantConversationDialogAction::class, ['id' => '%s']),
                 'wcf.conversation.edit.addParticipants',
-                static fn (ViewableConversation|Conversation $conversation) => $conversation->canAddParticipants(),
+                static fn(ViewableConversation|Conversation $conversation) => $conversation->canAddParticipants(),
             ),
             new RpcInteraction(
                 'restore',
