@@ -10,16 +10,14 @@ use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\label\ConversationLabelAction;
 use wcf\data\IStorableObject;
 use wcf\http\Helper;
+use wcf\system\exception\NamedUserException;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\form\builder\data\processor\CustomFormDataProcessor;
 use wcf\system\form\builder\field\BadgeColorFormField;
-use wcf\system\form\builder\field\CheckboxFormField;
-use wcf\system\form\builder\field\dependency\EmptyFormFieldDependency;
 use wcf\system\form\builder\field\TextFormField;
 use wcf\system\form\builder\IFormDocument;
 use wcf\system\form\builder\Psr15DialogForm;
 use wcf\system\WCF;
-use wcf\util\StringUtil;
 
 /**
  * Action for adding/editing conversation labels.
@@ -60,7 +58,7 @@ final class ConversationLabelFormAction implements RequestHandlerInterface
             \count(ConversationLabel::getLabelsByUser())
             >= WCF::getSession()->getPermission('user.conversation.maxLabels')
         ) {
-            throw new PermissionDeniedException();
+            throw new NamedUserException(WCF::getLanguage()->get('wcf.conversation.label.management.addLabel.maxLabels'));
         }
 
         $form = $this->getForm($label);
@@ -74,36 +72,21 @@ final class ConversationLabelFormAction implements RequestHandlerInterface
             }
 
             $data = $form->getData()['data'];
-            $deleteLabel = $label && ($data['deleteLabel'] ?? false);
-            unset($data['deleteLabel']);
 
-            if ($deleteLabel) {
-                (new ConversationLabelAction([$label], 'delete'))->executeAction();
-
-                $labelID = $label->labelID;
-            } elseif ($label) {
+            if ($label) {
                 (new ConversationLabelAction([$label], 'update', [
                     'data' => $data,
                 ]))->executeAction();
-
-                $labelID = $label->labelID;
             } else {
-                $returnValues = (new ConversationLabelAction([], 'create', [
+                (new ConversationLabelAction([], 'create', [
                     'data' => \array_merge($data, [
                         'userID' => WCF::getUser()->userID,
                     ]),
                 ]))->executeAction();
-
-                $labelID = $returnValues['returnValues']->labelID;
             }
 
             return new JsonResponse([
-                'result' => [
-                    'deleteLabel' => $deleteLabel,
-                    'label' => $deleteLabel ? '' : StringUtil::encodeHTML($data['label']),
-                    'cssClassName' => $deleteLabel ? '' : $data['cssClassName'],
-                    'labelID' => $labelID,
-                ],
+                'result' => [],
             ]);
         } else {
             throw new \LogicException('Unreachable');
@@ -118,10 +101,6 @@ final class ConversationLabelFormAction implements RequestHandlerInterface
                 'labelName' => $label->label,
             ]) : WCF::getLanguage()->get('wcf.conversation.label.management.addLabel')
         );
-        $deleteLabel = CheckboxFormField::create('deleteLabel')
-            ->label('wcf.conversation.label.management.deleteLabel')
-            ->available($label !== null)
-            ->value(false);
         $labelFormField = TextFormField::create('label')
             ->label('wcf.conversation.label.labelName')
             ->required();
@@ -134,20 +113,7 @@ final class ConversationLabelFormAction implements RequestHandlerInterface
             ->value('none')
             ->required();
 
-        if ($label !== null) {
-            $cssClassNameFormField
-                ->addDependency(
-                    EmptyFormFieldDependency::create('deleteDependency')
-                        ->fieldId('deleteLabel')
-                );
-            $labelFormField->addDependency(
-                EmptyFormFieldDependency::create('deleteDependency')
-                    ->fieldId('deleteLabel')
-            );
-        }
-
         $form->appendChildren([
-            $deleteLabel,
             $labelFormField,
             $cssClassNameFormField,
         ]);

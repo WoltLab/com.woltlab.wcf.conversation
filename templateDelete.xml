@@ -4,7 +4,7 @@
 		<template>conversationListUserPanel</template>
 		<template>conversationLabelAssignment</template>
 		<template>conversationLeave</template>
-		<template>conversationLabelManagement</template>
 		<template>conversationAddParticipants</template>
+		<template>conversationLabelManagement</template>
 	</delete>
 </data>

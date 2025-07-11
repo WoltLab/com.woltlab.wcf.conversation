@@ -183,7 +183,9 @@ final class ConversationListView extends AbstractListView
             #[\Override]
             public function renderValue(string $value): string
             {
-                return $this->labelList->search((int)$value)->label;
+                $label = $this->labelList->search((int)$value);
+
+                return $label ? $label->label : '';
             }
         };
     }
