@@ -51,8 +51,10 @@ final class ConversationListView extends AbstractListView
         $this->addAvailableFilters([
             new TextFilter('subject', 'wcf.global.title'),
             ...$this->getParticipantFilter($filter),
-            $this->getLabelFilter(),
         ]);
+        if ($this->hasLabels()) {
+            $this->addAvailableFilter($this->getLabelFilter());
+        }
 
         $this->setInteractionProvider(new ConversationInteractions());
         $this->setBulkInteractionProvider(new ConversationBulkInteractions());
@@ -188,5 +190,10 @@ final class ConversationListView extends AbstractListView
                 return $label ? $label->label : '';
             }
         };
+    }
+
+    private function hasLabels(): bool
+    {
+        return ConversationLabel::getLabelsByUser()->getObjects() !== [];
     }
 }
