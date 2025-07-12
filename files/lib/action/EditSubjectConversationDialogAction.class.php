@@ -78,6 +78,7 @@ final class EditSubjectConversationDialogAction implements RequestHandlerInterfa
             TextFormField::create('subject')
                 ->label('wcf.global.subject')
                 ->maximumLength(255)
+                ->autoFocus()
                 ->required(),
         ]);
 
