@@ -20,7 +20,7 @@
 						</ul>
 						
 						<ul class="messageStatus">
-							{if $conversation->isNewMessage($message->getDecoratedObject())}
+							{if $conversation->isNewMessage($message)}
 								<li><span class="badge label newMessageBadge">{lang}wcf.message.new{/lang}</span></li>
 							{/if}
 							

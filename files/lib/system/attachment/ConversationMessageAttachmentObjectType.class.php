@@ -106,18 +106,6 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
         $messageList = new ConversationMessageList();
         $messageList->setObjectIDs($objectIDs);
         $messageList->readObjects();
-        $conversationIDs = [];
-        foreach ($messageList as $message) {
-            $conversationIDs[] = $message->conversationID;
-        }
-        if (!empty($conversationIDs)) {
-            $conversations = Conversation::getUserConversations($conversationIDs, WCF::getUser()->userID);
-            foreach ($messageList as $message) {
-                if (isset($conversations[$message->conversationID])) {
-                    $message->setConversation($conversations[$message->conversationID]);
-                }
-            }
-        }
 
         foreach ($messageList->getObjects() as $objectID => $object) {
             $this->cachedObjects[$objectID] = $object;

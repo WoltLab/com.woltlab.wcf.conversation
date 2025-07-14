@@ -71,20 +71,7 @@ final class ConversationMessageSearchIndexRebuildDataWorker extends AbstractRebu
             return;
         }
 
-        // read associated conversations
-        $conversationIDs = \array_column(
-            $this->getObjectList()->getObjects(),
-            'conversationID'
-        );
-
-        $threadList = new ConversationList();
-        $threadList->setObjectIDs($conversationIDs);
-        $threadList->readObjects();
-        $conversations = $threadList->getObjects();
-
         foreach ($this->getObjectList() as $message) {
-            $message->setConversation($conversations[$message->conversationID]);
-
             $subject = '';
             if ($message->messageID == $message->getConversation()->firstMessageID) {
                 $subject = $message->getTitle();

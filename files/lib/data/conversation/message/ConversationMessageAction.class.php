@@ -546,8 +546,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
      */
     public function getMessageList(DatabaseObject $container, int $lastMessageTime)
     {
-        $messageList = new ViewableConversationMessageList();
-        $messageList->setConversation($container);
+        $messageList = new ConversationMessageList();
         $messageList->getConditionBuilder()
             ->add("conversation_message.conversationID = ?", [$container->conversationID]);
         $messageList->getConditionBuilder()

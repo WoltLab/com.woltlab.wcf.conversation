@@ -5,10 +5,9 @@ namespace wcf\page;
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationAction;
 use wcf\data\conversation\ConversationParticipantList;
-use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\label\ConversationLabelList;
 use wcf\data\conversation\message\ConversationMessage;
-use wcf\data\conversation\message\ViewableConversationMessageList;
+use wcf\data\conversation\message\ConversationMessageList;
 use wcf\data\conversation\ViewableConversation;
 use wcf\data\modification\log\ConversationLogModificationLogList;
 use wcf\data\smiley\SmileyCache;
@@ -34,7 +33,7 @@ use wcf\util\HeaderUtil;
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
- * @extends MultipleLinkPage<ViewableConversationMessageList>
+ * @extends MultipleLinkPage<ConversationMessageList>
  */
 class ConversationPage extends MultipleLinkPage
 {
@@ -51,7 +50,7 @@ class ConversationPage extends MultipleLinkPage
     /**
      * @inheritDoc
      */
-    public $objectListClassName = ViewableConversationMessageList::class;
+    public $objectListClassName = ConversationMessageList::class;
 
     /**
      * @inheritDoc
@@ -163,7 +162,6 @@ class ConversationPage extends MultipleLinkPage
 
         $this->objectList->getConditionBuilder()
             ->add('conversation_message.conversationID = ?', [$this->conversation->conversationID]);
-        $this->objectList->setConversation($this->conversation->getDecoratedObject());
 
         // handle visibility filter
         if ($this->conversation->joinedAt > 0) {
@@ -212,11 +210,11 @@ class ConversationPage extends MultipleLinkPage
         if (
             $this->conversation->isNew()
             && (
-                $this->objectList->getMaxPostTime() > $this->conversation->lastVisitTime
+                $this->objectList->getMaxTime() > $this->conversation->lastVisitTime
                 || ($this->conversation->joinedAt && !\count($this->objectList))
             )
         ) {
-            $visitTime = $this->objectList->getMaxPostTime();
+            $visitTime = $this->objectList->getMaxTime();
             if ($visitTime == $this->conversation->lastPostTime) {
                 $visitTime = TIME_NOW;
             }
@@ -265,8 +263,8 @@ class ConversationPage extends MultipleLinkPage
         }
 
         // set attachment permissions
-        if ($this->objectList->getAttachmentList() !== null) {
-            $this->objectList->getAttachmentList()->setPermissions([
+        if ($this->objectList->getAttachments() !== null) {
+            $this->objectList->getAttachments()->setPermissions([
                 'canDownload' => true,
                 'canViewPreview' => true,
             ]);
@@ -348,7 +346,7 @@ class ConversationPage extends MultipleLinkPage
             'attachmentObjectType' => 'com.woltlab.wcf.conversation.message',
             'attachmentParentObjectID' => 0,
             'tmpHash' => $tmpHash,
-            'attachmentList' => $this->objectList->getAttachmentList(),
+            'attachmentList' => $this->objectList->getAttachments(),
             'modificationLogList' => $this->modificationLogList,
             'sortOrder' => $this->sortOrder,
             'conversation' => $this->conversation,
