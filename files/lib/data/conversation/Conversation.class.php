@@ -13,6 +13,7 @@ use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\conversation\ConversationHandler;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\exception\UserInputException;
+use wcf\system\file\processor\ImageData;
 use wcf\system\request\IRouteController;
 use wcf\system\request\LinkHandler;
 use wcf\system\user\storage\UserStorageHandler;
@@ -148,6 +149,22 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
         $this->data['lastPostTime'] = $time;
         $this->data['lastPosterID'] = $userID;
         $this->data['lastPoster'] = $username;
+    }
+
+    /**
+     * @since 6.2
+     */
+    public function getTeaser(): string
+    {
+        return $this->getFirstMessage()->getTeaser();
+    }
+
+    /**
+     * @since 6.2
+     */
+    public function getImage(): ?ImageData
+    {
+        return $this->getFirstMessage()->getImage();
     }
 
     /**

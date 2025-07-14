@@ -128,11 +128,13 @@ class ViewableConversation extends DatabaseObjectDecorator
                 $data = \unserialize($this->participantSummary);
                 if ($data !== false) {
                     foreach ($data as $userData) {
+                        $this->__participantSummary[] = UserProfileRuntimeCache::getInstance()->getObject($userData['userID']);
+                        /* todo
                         $this->__participantSummary[] = new User(null, [
                             'userID' => $userData['userID'],
                             'username' => $userData['username'],
                             'hideConversation' => $userData['hideConversation'],
-                        ]);
+                        ]);*/
                     }
                 }
             }

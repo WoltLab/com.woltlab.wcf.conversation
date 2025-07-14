@@ -63,7 +63,8 @@ final class ConversationListView extends AbstractListView
         $this->setItemsPerPage(WCF::getUser()->conversationsPerPage ?: \CONVERSATIONS_PER_PAGE);
         $this->setSortField(\CONVERSATION_LIST_DEFAULT_SORT_FIELD);
         $this->setSortOrder(\CONVERSATION_LIST_DEFAULT_SORT_ORDER);
-        $this->setCssClassName("tabularList");
+        $this->setCssClassName("conversationList");
+        $this->setContainerCssClassName('conversationList__container');
     }
 
     #[\Override]

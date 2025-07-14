@@ -9,6 +9,7 @@ use wcf\data\IEmbeddedMessageObject;
 use wcf\data\IMessage;
 use wcf\data\object\type\ObjectTypeCache;
 use wcf\data\TUserContent;
+use wcf\system\file\processor\ImageData;
 use wcf\system\html\output\HtmlOutputProcessor;
 use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
 use wcf\system\request\LinkHandler;
@@ -128,6 +129,38 @@ class ConversationMessage extends DatabaseObject implements IMessage, IEmbeddedM
         }
 
         throw new \LogicException('Unreachable');
+    }
+
+    /**
+     * @since 6.2
+     */
+    public function getTeaser(): string
+    {
+        $processor = new HtmlOutputProcessor();
+        $processor->setOutputType('text/plain');
+        $processor->process($this->message, 'com.woltlab.wcf.conversation.message', $this->messageID);
+
+        return StringUtil::truncate($processor->getHtml(), 255);
+    }
+
+    /**
+     * @since 6.2
+     */
+    public function getImage(): ?ImageData
+    {
+        // todo
+        $list = $this->getAttachments();
+        if ($list === null) {
+            return null;
+        }
+
+        foreach ($list->getGroupedObjects($this->messageID) as $attachment) {
+            if ($attachment->isImage) {
+                return $attachment->getFile()->getImageData(320, 200);
+            }
+        }
+
+        return null;
     }
 
     /**
