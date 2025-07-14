@@ -82,6 +82,7 @@ html[data-color-scheme="dark"] {
 	align-items: center;
 	display: grid;
 	column-gap: 5px;
+	grid-template-areas: "status interactions";
 	grid-template-columns: auto fit-content(200px);
 	transition:
 		grid-template-columns 0.24s ease-in-out 0.12s,
@@ -96,11 +97,13 @@ html[data-color-scheme="dark"] {
 .conversationList__item__status {
 	display: flex;
 	gap: 5px;
+	grid-area: status;
 }
 
 .conversationList__item__interactions {
 	display: flex;
 	gap: 5px;
+	grid-area: interactions;
 	opacity: 1;
 	transition: opacity 0.24s ease-in-out 0.12s;
 }
