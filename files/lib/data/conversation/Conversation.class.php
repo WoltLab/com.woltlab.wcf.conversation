@@ -5,6 +5,7 @@ namespace wcf\data\conversation;
 use wcf\data\CollectionDatabaseObject;
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\message\ConversationMessage;
+use wcf\data\conversation\participant\ConversationParticipant;
 use wcf\data\IPopoverObject;
 use wcf\data\user\group\UserGroup;
 use wcf\data\user\ignore\UserIgnore;
@@ -159,6 +160,8 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
 
     /**
      * Returns a specific user conversation.
+     *
+     * @deprecated 6.2 Use `Conversation::getParticipant()` or `Conversation::getOtherParticipant()` instead.
      */
     public static function getUserConversation(int $conversationID, int $userID): ?Conversation
     {
@@ -183,6 +186,7 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
      *
      * @param int[] $conversationIDs
      * @return array<int, Conversation>
+     * @deprecated 6.2
      */
     public static function getUserConversations(array $conversationIDs, int $userID): array
     {
@@ -274,7 +278,7 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
      *
      * @return int[]
      */
-    public function getParticipantIDs(bool $excludeLeftParticipants = false)
+    public function getParticipantIDs(bool $excludeLeftParticipants = false): array
     {
         $conditions = new PreparedStatementConditionBuilder();
         $conditions->add("conversationID = ?", [$this->conversationID]);
@@ -297,7 +301,7 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
      *
      * @return string[]
      */
-    public function getParticipantNames(bool $excludeSelf = false, bool $leftByOwnChoice = false, bool $isAuthor = false)
+    public function getParticipantNames(bool $excludeSelf = false, bool $leftByOwnChoice = false, bool $isAuthor = false): array
     {
         $conditions = new PreparedStatementConditionBuilder();
         $conditions->add("conversationID = ?", [$this->conversationID]);
@@ -324,6 +328,8 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
 
     /**
      * Returns false if the active user is the last participant of this conversation.
+     *
+     * @deprecated 6.2 No longer in use.
      */
     public function hasOtherParticipants(): bool
     {
@@ -414,6 +420,7 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
      * @param int[] $existingParticipants
      * @return list<int>
      * @throws UserInputException
+     * @deprecated 6.2 No longer in use.
      */
     public static function validateParticipants(
         array|string $participants,
@@ -473,6 +480,7 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
      * @param string[]|string $participants
      * @param int[] $existingParticipants
      * @return list<int>
+     * @deprecated 6.2 No longer in use.
      */
     public static function validateGroupParticipants(
         array|string $participants,
@@ -536,6 +544,7 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
      *
      * @return void
      * @throws UserInputException
+     * @deprecated 6.2 Use `TConversationForm::getParticipantsValidator()` instead.
      */
     public static function validateParticipant(UserProfile $user, string $field = 'participants')
     {
@@ -606,16 +615,25 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
     }
 
     /**
-     * Returns true if the given user is a invisible participant of this conversation.
+     * Provides information about the active user's participation in this conversation.
+     * Returns null if the active user is not a participant in this conversation.
+     *
      * @since 6.2
      */
-    public function isInvisibleParticipant(int $userID): bool
+    public function getParticipant(): ?ConversationParticipant
     {
-        $sql = "SELECT isInvisible FROM wcf1_conversation_to_user WHERE conversationID = ? AND userID = ?";
-        $statement = WCF::getDB()->prepare($sql);
-        $statement->execute([$this->conversationID, $userID]);
+        return $this->getCollection()->getParticipant($this);
+    }
 
-        return (bool)$statement->fetchSingleColumn();
+    /**
+     * Provides information about the given user's participation in this conversation.
+     * Returns null if the given user is not a participant in this conversation.
+     *
+     * @since 6.2
+     */
+    public function getOtherParticipant(int $userID): ?ConversationParticipant
+    {
+        return ConversationParticipant::getParticipant($this->conversationID, $userID);
     }
 
     #[\Override]
@@ -623,8 +641,17 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
     {
         return match ($name) {
             'participantID', 'hideConversation', 'isInvisible', 'lastVisitTime',
-            'joinedAt', 'leftAt', 'lastMessageID', 'leftByOwnChoice' => $this->data[$name] ?? $this->getCollection()->getUserInfo($this, $name),
+            'joinedAt', 'leftAt', 'lastMessageID', 'leftByOwnChoice' => $this->getParticipantData($name),
             default => parent::__get($name),
         };
+    }
+
+    private function getParticipantData(string $name): mixed
+    {
+        if (\array_key_exists($name, $this->data)) {
+            return $this->data[$name];
+        }
+
+        return $this->getParticipant()?->$name;
     }
 }

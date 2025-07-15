@@ -5,6 +5,8 @@ namespace wcf\data\conversation;
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\message\ConversationMessage;
+use wcf\data\conversation\participant\ConversationParticipant;
+use wcf\data\conversation\participant\ConversationParticipantList;
 use wcf\data\DatabaseObjectCollection;
 use wcf\data\user\UserProfile;
 use wcf\system\cache\runtime\ConversationMessageRuntimeCache;
@@ -35,9 +37,9 @@ class ConversationCollection extends DatabaseObjectCollection
     private array $participantSummaries;
 
     /**
-     * @var array<int, array<string, mixed>>
+     * @var array<int, ConversationParticipant>
      */
-    private array $userInfo;
+    private array $participants;
 
     private bool $userProfilesLoaded = false;
     private bool $firstMessagesLoaded = false;
@@ -209,32 +211,28 @@ class ConversationCollection extends DatabaseObjectCollection
         }
     }
 
-    public function getUserInfo(Conversation $conversation, string $name): mixed
+    public function getParticipant(Conversation $conversation): ?ConversationParticipant
     {
-        $this->loadUserInfo();
+        $this->loadParticipants();
 
-        return $this->userInfo[$conversation->getObjectID()][$name] ?? null;
+        return $this->participants[$conversation->getObjectID()] ?? null;
     }
 
-    private function loadUserInfo(): void
+    private function loadParticipants(): void
     {
-        if (isset($this->userInfo)) {
+        if (isset($this->participants)) {
             return;
         }
 
-        $this->userInfo = [];
+        $this->participants = [];
 
-        $conditions = new PreparedStatementConditionBuilder();
-        $conditions->add("conversationID IN (?)", [$this->getObjectIDs()]);
-        $conditions->add("participantID = ?", [WCF::getUser()->userID]);
+        $list = new ConversationParticipantList();
+        $list->getConditionBuilder()->add("conversationID IN (?)", [$this->getObjectIDs()]);
+        $list->getConditionBuilder()->add("participantID = ?", [WCF::getUser()->userID]);
+        $list->readObjects();
 
-        $sql = "SELECT  *
-                FROM    wcf1_conversation_to_user
-                        " . $conditions;
-        $statement = WCF::getDB()->prepare($sql);
-        $statement->execute($conditions->getParameters());
-        while ($row = $statement->fetchArray()) {
-            $this->userInfo[$row['conversationID']] = $row;
+        foreach ($list->getObjects() as $participant) {
+            $this->participants[$participant->conversationID] = $participant;
         }
     }
 }

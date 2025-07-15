@@ -81,6 +81,7 @@ return [
         ]),
     DatabaseTable::create('wcf1_conversation_to_user')
         ->columns([
+            ObjectIdDatabaseTableColumn::create('conversationParticipantID'),
             NotNullInt10DatabaseTableColumn::create('conversationID'),
             IntDatabaseTableColumn::create('participantID')
                 ->length(10),
@@ -102,6 +103,8 @@ return [
             DefaultTrueBooleanDatabaseTableColumn::create('leftByOwnChoice'),
         ])
         ->indices([
+            DatabaseTablePrimaryIndex::create()
+                ->columns(['conversationID']),
             DatabaseTableIndex::create('participantID')
                 ->columns(['participantID', 'conversationID'])
                 ->type(DatabaseTableIndex::UNIQUE_TYPE),

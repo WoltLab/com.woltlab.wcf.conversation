@@ -41,7 +41,8 @@ trait TConversationOnlineLocationPageHandler
         if ($conversation->userID != WCF::getUser()->userID && $user->userID != WCF::getUser()->userID) {
             // Make sure that requests from invisible participants are not listed
             // if the active user is not the author of the conversation.
-            if ($conversation->isInvisibleParticipant($user->userID)) {
+            $participant = $conversation->getOtherParticipant($user->userID);
+            if ($participant !== null && $participant->isInvisible) {
                 return '';
             }
         }
