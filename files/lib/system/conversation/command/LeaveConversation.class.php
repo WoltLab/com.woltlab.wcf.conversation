@@ -4,7 +4,6 @@ namespace wcf\system\conversation\command;
 
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationList;
-use wcf\system\clipboard\ClipboardHandler;
 use wcf\system\log\modification\ConversationModificationLogHandler;
 use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\WCF;
@@ -70,17 +69,6 @@ final class LeaveConversation
             }
         }
 
-        // unmark items
-        $this->unmarkItems();
-
         (new DeleteEmptyConversations($this->conversationIDs))();
-    }
-
-    private function unmarkItems(): void
-    {
-        ClipboardHandler::getInstance()->unmark(
-            $this->conversationIDs,
-            ClipboardHandler::getInstance()->getObjectTypeID('com.woltlab.wcf.conversation.conversation')
-        );
     }
 }
