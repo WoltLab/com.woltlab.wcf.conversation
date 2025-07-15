@@ -3,7 +3,7 @@
  *
  * @author  Olaf Braun
  * @copyright  2001-2025 WoltLab GmbH
- * @license  WoltLab License <http://www.woltlab.com/license-agreement.html>
+ * @license  GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @since  6.2
  */
 define(["require", "exports", "tslib", "WoltLabSuite/Core/Ui/Message/InlineEditor"], function (require, exports, tslib_1, InlineEditor_1) {
