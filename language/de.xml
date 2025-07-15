@@ -60,17 +60,6 @@
 		<item name="wcf.acp.stat.com.woltlab.wcf.conversation.message"><![CDATA[Konversations-Nachrichten]]></item>
 		<item name="wcf.acp.stat.category.com.woltlab.wcf.conversation"><![CDATA[Konversationen]]></item>
 	</category>
-	<category name="wcf.clipboard">
-		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.assignLabel"><![CDATA[Label zuweisen ({#$count})]]></item>
-		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.close"><![CDATA[Für Antworten schließen ({#$count})]]></item>
-		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.leave"><![CDATA[Ausblenden ({#$count})]]></item>
-		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.leavePermanently"><![CDATA[Verlassen ({#$count})]]></item>
-		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.markAsRead"><![CDATA[Als gelesen markieren ({#$count})]]></item>
-		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.markAsRead.confirmMessage"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Willst du{else}Wollen Sie{/if} die {if $count == 1}markierte Konversation{else}markierten Konversationen{/if} wirklich als gelesen markieren?]]></item>
-		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.open"><![CDATA[Öffnen ({#$count})]]></item>
-		<item name="wcf.clipboard.item.com.woltlab.wcf.conversation.conversation.restore"><![CDATA[Als aktiv markieren ({#$count})]]></item>
-		<item name="wcf.clipboard.label.com.woltlab.wcf.conversation.conversation.marked"><![CDATA[{if $count == 1}Eine Konversation{else}{#$count} Konversationen{/if}]]></item>
-	</category>
 	<category name="wcf.conversation">
 		<item name="wcf.conversation.add"><![CDATA[Neue Konversation starten]]></item>
 		<item name="wcf.conversation.button.add"><![CDATA[Konversation starten]]></item>
