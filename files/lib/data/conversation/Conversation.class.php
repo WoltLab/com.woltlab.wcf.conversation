@@ -152,9 +152,9 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
     /**
      * @since 6.2
      */
-    public function getImage(): ?ImageData
+    public function getTeaserImage(): ?ImageData
     {
-        return $this->getFirstMessage()->getImage();
+        return $this->getFirstMessage()->getTeaserImage();
     }
 
     /**

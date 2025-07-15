@@ -147,21 +147,9 @@ class ConversationMessage extends CollectionDatabaseObject implements IMessage
     /**
      * @since 6.2
      */
-    public function getImage(): ?ImageData
+    public function getTeaserImage(): ?ImageData
     {
-        // todo
-        $list = $this->getAttachments();
-        if ($list === null) {
-            return null;
-        }
-
-        foreach ($list->getGroupedObjects($this->messageID) as $attachment) {
-            if ($attachment->isImage) {
-                return $attachment->getFile()->getImageData(320, 200);
-            }
-        }
-
-        return null;
+        return $this->getCollection()->getTeaserImage($this);
     }
 
     public function getConversation(): ?Conversation

@@ -78,9 +78,9 @@
 				{$conversation->getTeaser()}
 			</div>
 
-			{if $conversation->getImage()}
+			{if $conversation->getTeaserImage()}
 				<div class="conversationList__item__image">
-					{unsafe:$conversation->getImage()->toHtml()}
+					{unsafe:$conversation->getTeaserImage()->toHtml()}
 				</div>
 			{/if}
 
