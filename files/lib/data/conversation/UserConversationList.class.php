@@ -2,53 +2,33 @@
 
 namespace wcf\data\conversation;
 
-use wcf\data\conversation\label\ConversationLabel;
-use wcf\data\conversation\label\ConversationLabelList;
-use wcf\system\cache\runtime\ConversationMessageRuntimeCache;
-use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\WCF;
 
 /**
- * Represents a list of conversations.
+ * Represents a list of conversations in which a specific user is a participant.
  *
- * @author  Marcel Werk
- * @copyright   2001-2019 WoltLab GmbH
- * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- *
- * @extends ConversationList<ViewableConversation>
+ * @author      Marcel Werk
+ * @copyright   2001-2025 WoltLab GmbH
+ * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  */
 class UserConversationList extends ConversationList
 {
     /**
-     * list of available filters
      * @var string[]
      */
-    public static $availableFilters = ['hidden', 'draft', 'outbox'];
+    public static array $availableFilters = ['hidden', 'draft', 'outbox'];
 
-    /**
-     * active filter
-     * @var string
-     */
-    public $filter = '';
-
-    /**
-     * @inheritDoc
-     */
-    public $decoratorClassName = ViewableConversation::class;
-
-    /**
-     * Creates a new UserConversationList
-     */
-    public function __construct(?int $userID = null, string $filter = '', ?int $labelID = null)
-    {
-        if (!$userID) {
+    public function __construct(
+        ?int $userID = null,
+        public readonly string $filter = '',
+        ?int $labelID = null
+    ) {
+        if ($userID === null) {
             $userID = WCF::getUser()->userID;
         }
 
         parent::__construct();
-
-        $this->filter = $filter;
 
         // apply filter
         if ($this->filter === 'draft') {
@@ -106,9 +86,7 @@ class UserConversationList extends ConversationList
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function countObjects()
     {
         if ($this->filter == 'draft') {
@@ -126,9 +104,7 @@ class UserConversationList extends ConversationList
         return $row['count'];
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function readObjectIDs()
     {
         if ($this->filter === 'draft') {
@@ -152,9 +128,7 @@ class UserConversationList extends ConversationList
         $this->objectIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function readObjects()
     {
         if ($this->objectIDs === null) {
@@ -163,99 +137,48 @@ class UserConversationList extends ConversationList
 
         parent::readObjects();
 
-        if (!empty($this->objects)) {
-            $messageIDs = [];
-            foreach ($this->objects as $conversation) {
-                if ($conversation->lastMessageID) {
-                    $messageIDs[] = $conversation->lastMessageID;
-                }
-            }
-            if (!empty($messageIDs)) {
-                $conditions = new PreparedStatementConditionBuilder();
-                $conditions->add("messageID IN (?)", [$messageIDs]);
-                $sql = "SELECT  messageID, userID, username, time
-                        FROM    wcf1_conversation_message
-                        " . $conditions;
-                $statement = WCF::getDB()->prepare($sql);
-                $statement->execute($conditions->getParameters());
-                $messageData = [];
-                while ($row = $statement->fetchArray()) {
-                    $messageData[$row['messageID']] = $row;
-                }
-
-                foreach ($this->objects as $conversation) {
-                    if ($conversation->lastMessageID) {
-                        $data = (isset($messageData[$conversation->lastMessageID])) ? $messageData[$conversation->lastMessageID] : null;
-                        if ($data !== null) {
-                            $conversation->setLastMessage($data['userID'], $data['username'], $data['time']);
-                        } else {
-                            $conversation->setLastMessage(null, '', 0);
-                        }
-                    }
-                }
-            }
-
-            $labels = $this->loadLabelAssignments();
-
-            $userIDs = $messageIDs = [];
-            foreach ($this->objects as $conversationID => $conversation) {
-                if (isset($labels[$conversationID])) {
-                    foreach ($labels[$conversationID] as $label) {
-                        $conversation->assignLabel($label);
-                    }
-                }
-
-                if ($conversation->userID) {
-                    $userIDs[] = $conversation->userID;
-                }
-                if ($conversation->lastPosterID) {
-                    $userIDs[] = $conversation->lastPosterID;
-                }
-
-                if ($conversation->firstMessageID) {
-                    $messageIDs[] = $conversation->firstMessageID;
-                }
-            }
-
-            if ($userIDs !== []) {
-                UserProfileRuntimeCache::getInstance()->cacheObjectIDs($userIDs);
-            }
-            if ($messageIDs !== []) {
-                ConversationMessageRuntimeCache::getInstance()->cacheObjectIDs($userIDs);
-            }
-        }
+        $this->setLastMessages();
     }
 
-    /**
-     * Returns label assignments per conversation.
-     *
-     * @return  ConversationLabel[][]
-     */
-    protected function loadLabelAssignments()
+    protected function setLastMessages(): void
     {
-        $labels = ConversationLabel::getUserLabels();
-        if ($labels === []) {
-            return [];
+        if ($this->getObjects() === []) {
+            return;
         }
+
+        $messageIDs = [];
+        foreach ($this->getObjects() as $conversation) {
+            if ($conversation->lastMessageID) {
+                $messageIDs[] = $conversation->lastMessageID;
+            }
+        }
+
+        if ($messageIDs === []) {
+            return;
+        }
+
 
         $conditions = new PreparedStatementConditionBuilder();
-        $conditions->add("conversationID IN (?)", [\array_keys($this->objects)]);
-        $conditions->add("labelID IN (?)", [\array_keys($labels)]);
-
-        $sql = "SELECT  labelID, conversationID
-                FROM    wcf1_conversation_label_to_object
-                " . $conditions;
+        $conditions->add("messageID IN (?)", [$messageIDs]);
+        $sql = "SELECT  messageID, userID, username, time
+                FROM    wcf1_conversation_message
+                        " . $conditions;
         $statement = WCF::getDB()->prepare($sql);
         $statement->execute($conditions->getParameters());
-        $data = [];
+        $messageData = [];
         while ($row = $statement->fetchArray()) {
-            if (!isset($data[$row['conversationID']])) {
-                $data[$row['conversationID']] = [];
-            }
-
-            $data[$row['conversationID']][$row['labelID']] = $labels[$row['labelID']];
+            $messageData[$row['messageID']] = $row;
         }
 
-        return $data;
+        foreach ($this->objects as $conversation) {
+            if ($conversation->lastMessageID) {
+                $data = (isset($messageData[$conversation->lastMessageID])) ? $messageData[$conversation->lastMessageID] : null;
+                if ($data !== null) {
+                    $conversation->setLastMessage($data['userID'], $data['username'], $data['time']);
+                } else {
+                    $conversation->setLastMessage(null, '', 0);
+                }
+            }
+        }
     }
 }

@@ -2,9 +2,9 @@
 
 namespace wcf\system\attachment;
 
-use wcf\data\conversation\Conversation;
 use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\conversation\message\ConversationMessageList;
+use wcf\system\cache\runtime\ConversationRuntimeCache;
 use wcf\system\WCF;
 use wcf\util\ArrayUtil;
 
@@ -53,7 +53,7 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
     {
         if ($objectID) {
             $message = new ConversationMessage($objectID);
-            $conversation = Conversation::getUserConversation($message->conversationID, WCF::getUser()->userID);
+            $conversation = ConversationRuntimeCache::getInstance()->getObject($message->conversationID);
             if ($conversation !== null && $conversation->canRead()) {
                 return true;
             }

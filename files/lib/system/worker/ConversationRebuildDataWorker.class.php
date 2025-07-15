@@ -170,14 +170,6 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker
             ]);
             $data['participants'] = $participantCounterStatement->fetchSingleColumn();
 
-            // get participant summary
-            $participantStatement->execute([$conversation->conversationID, $conversation->userID, 0]);
-            $users = [];
-            while ($row = $participantStatement->fetchArray()) {
-                $users[] = $row;
-            }
-            $data['participantSummary'] = \serialize($users);
-
             $updateData[$conversation->conversationID] = $data;
         }
 
@@ -190,8 +182,7 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker
                         username = ?,
                         replies = ?,
                         attachments = ?,
-                        participants = ?,
-                        participantSummary = ?
+                        participants = ?
                 WHERE   conversationID = ?";
         $statement = WCF::getDB()->prepare($sql);
 
@@ -207,7 +198,6 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker
                 $data['replies'],
                 $data['attachments'],
                 $data['participants'],
-                $data['participantSummary'],
                 $conversationID,
             ]);
         }

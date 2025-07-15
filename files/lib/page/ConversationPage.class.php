@@ -8,12 +8,12 @@ use wcf\data\conversation\ConversationParticipantList;
 use wcf\data\conversation\label\ConversationLabelList;
 use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\conversation\message\ConversationMessageList;
-use wcf\data\conversation\ViewableConversation;
 use wcf\data\modification\log\ConversationLogModificationLogList;
 use wcf\data\smiley\SmileyCache;
 use wcf\data\user\UserProfile;
 use wcf\system\attachment\AttachmentHandler;
 use wcf\system\bbcode\BBCodeHandler;
+use wcf\system\cache\runtime\ConversationRuntimeCache;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\interaction\StandaloneInteractionContextMenuComponent;
@@ -75,7 +75,7 @@ class ConversationPage extends MultipleLinkPage
 
     /**
      * viewable conversation object
-     * @var ViewableConversation
+     * @var Conversation
      */
     public $conversation;
 
@@ -131,15 +131,13 @@ class ConversationPage extends MultipleLinkPage
             $this->conversationID = $this->message->conversationID;
         }
 
-        $conversation = Conversation::getUserConversation($this->conversationID, WCF::getUser()->userID);
-        if ($conversation === null) {
+        $this->conversation = ConversationRuntimeCache::getInstance()->getObject($this->conversationID);
+        if ($this->conversation === null) {
             throw new IllegalLinkException();
         }
-        if (!$conversation->canRead()) {
+        if (!$this->conversation->canRead()) {
             throw new PermissionDeniedException();
         }
-
-        $this->conversation = ViewableConversation::getViewableConversation($conversation);
 
         // messages per page
         /** @noinspection PhpUndefinedFieldInspection */
@@ -219,7 +217,7 @@ class ConversationPage extends MultipleLinkPage
                 $visitTime = TIME_NOW;
             }
             $conversationAction = new ConversationAction(
-                [$this->conversation->getDecoratedObject()],
+                [$this->conversation],
                 'markAsRead',
                 ['visitTime' => $visitTime]
             );

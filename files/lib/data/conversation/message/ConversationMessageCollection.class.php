@@ -6,9 +6,9 @@ use wcf\data\conversation\Conversation;
 use wcf\data\DatabaseObjectCollection;
 use wcf\data\object\type\ObjectTypeCache;
 use wcf\data\user\UserProfile;
+use wcf\system\cache\runtime\ConversationRuntimeCache;
 use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
-use wcf\system\WCF;
 
 /**
  * Represents a collection of conversation messages.
@@ -16,6 +16,7 @@ use wcf\system\WCF;
  * @author      Marcel Werk
  * @copyright   2001-2025 WoltLab GmbH
  * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
+ * @since       6.2
  *
  * @extends DatabaseObjectCollection<ConversationMessage>
  */
@@ -47,7 +48,7 @@ class ConversationMessageCollection extends DatabaseObjectCollection
         $conversationIDs = \array_unique($conversationIDs);
 
         if ($conversationIDs !== []) {
-            $this->conversations = Conversation::getUserConversations($conversationIDs, WCF::getUser()->userID);
+            $this->conversations = ConversationRuntimeCache::getInstance()->getObjects($conversationIDs);
         }
     }
 

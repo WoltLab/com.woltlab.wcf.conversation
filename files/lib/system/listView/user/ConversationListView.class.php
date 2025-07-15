@@ -2,9 +2,9 @@
 
 namespace wcf\system\listView\user;
 
+use wcf\data\conversation\Conversation;
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\UserConversationList;
-use wcf\data\conversation\ViewableConversation;
 use wcf\data\DatabaseObjectList;
 use wcf\event\listView\user\ConversationListViewInitialized;
 use wcf\system\form\builder\field\AbstractFormField;
@@ -24,7 +24,7 @@ use wcf\system\WCF;
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @since 6.2
  *
- * @extends AbstractListView<ViewableConversation, UserConversationList>
+ * @extends AbstractListView<Conversation, UserConversationList>
  */
 final class ConversationListView extends AbstractListView
 {

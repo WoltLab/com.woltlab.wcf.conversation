@@ -3,9 +3,9 @@
 namespace wcf\system\interaction\bulk\user;
 
 use wcf\action\AssignConversationLabelDialogAction;
+use wcf\data\conversation\Conversation;
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\UserConversationList;
-use wcf\data\conversation\ViewableConversation;
 use wcf\event\interaction\bulk\user\ConversationBulkInteractionCollecting;
 use wcf\system\event\EventHandler;
 use wcf\system\interaction\bulk\AbstractBulkInteractionProvider;
@@ -31,13 +31,13 @@ final class ConversationBulkInteractions extends AbstractBulkInteractionProvider
                 'open',
                 'core/conversations/%s/open',
                 'wcf.conversation.edit.open',
-                isAvailableCallback: static fn(ViewableConversation $conversation) => $conversation->isClosed && $conversation->userID === WCF::getUser()->userID
+                isAvailableCallback: static fn(Conversation $conversation) => $conversation->isClosed && $conversation->userID === WCF::getUser()->userID
             ),
             new BulkRpcInteraction(
                 'close',
                 'core/conversations/%s/close',
                 'wcf.conversation.edit.close',
-                isAvailableCallback: static fn(ViewableConversation $conversation) => !$conversation->isClosed && $conversation->userID === WCF::getUser()->userID
+                isAvailableCallback: static fn(Conversation $conversation) => !$conversation->isClosed && $conversation->userID === WCF::getUser()->userID
             ),
             new BulkFormBuilderDialogInteraction(
                 'assignLabel',
@@ -51,7 +51,7 @@ final class ConversationBulkInteractions extends AbstractBulkInteractionProvider
                 'wcf.conversation.hideConversation.restore',
                 InteractionConfirmationType::Custom,
                 'wcf.conversation.hideConversation.restore.confirmationMessage',
-                static fn(ViewableConversation $conversation) => (bool)$conversation->hideConversation
+                static fn(Conversation $conversation) => (bool)$conversation->hideConversation
             ),
             new BulkRpcInteraction(
                 'leave',
@@ -59,7 +59,7 @@ final class ConversationBulkInteractions extends AbstractBulkInteractionProvider
                 'wcf.conversation.hideConversation.leave',
                 InteractionConfirmationType::Custom,
                 'wcf.conversation.hideConversation.leave.confirmationMessage',
-                static fn(ViewableConversation $conversation) => !$conversation->hideConversation
+                static fn(Conversation $conversation) => !$conversation->hideConversation
             ),
             new BulkRpcInteraction(
                 'leave-permanently',

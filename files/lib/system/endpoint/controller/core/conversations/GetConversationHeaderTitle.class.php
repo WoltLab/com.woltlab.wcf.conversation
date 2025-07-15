@@ -5,8 +5,8 @@ namespace wcf\system\endpoint\controller\core\conversations;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use wcf\data\conversation\ViewableConversation;
-use wcf\system\cache\runtime\UserConversationRuntimeCache;
+use wcf\data\conversation\Conversation;
+use wcf\system\cache\runtime\ConversationRuntimeCache;
 use wcf\system\endpoint\GetRequest;
 use wcf\system\endpoint\IController;
 use wcf\system\exception\IllegalLinkException;
@@ -27,7 +27,7 @@ final class GetConversationHeaderTitle implements IController
     #[\Override]
     public function __invoke(ServerRequestInterface $request, array $variables): ResponseInterface
     {
-        $conversation = UserConversationRuntimeCache::getInstance()->getObject(\intval($variables['id']));
+        $conversation = ConversationRuntimeCache::getInstance()->getObject(\intval($variables['id']));
         if ($conversation === null) {
             throw new IllegalLinkException();
         }
@@ -41,7 +41,7 @@ final class GetConversationHeaderTitle implements IController
         ]);
     }
 
-    private function assertConversationIsAccessible(ViewableConversation $conversation): void
+    private function assertConversationIsAccessible(Conversation $conversation): void
     {
         if (!$conversation->isActiveParticipant()) {
             throw new PermissionDeniedException();

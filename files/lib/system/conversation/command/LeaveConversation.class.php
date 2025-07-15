@@ -60,7 +60,6 @@ final class LeaveConversation
             UserStorageHandler::getInstance()->reset([WCF::getUser()->userID], 'conversationCount');
             UserStorageHandler::getInstance()->reset([WCF::getUser()->userID], 'unreadConversationCount');
 
-
             // add modification log entry
             $conversationList = new ConversationList();
             $conversationList->setObjectIDs($this->conversationIDs);

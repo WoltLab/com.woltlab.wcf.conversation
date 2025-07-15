@@ -6,6 +6,7 @@ use wcf\data\conversation\Conversation;
 use wcf\data\conversation\message\SearchResultConversationMessage;
 use wcf\data\conversation\message\SearchResultConversationMessageList;
 use wcf\data\search\ISearchResultObject;
+use wcf\system\cache\runtime\ConversationRuntimeCache;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\WCF;
 
@@ -146,7 +147,7 @@ final class ConversationMessageSearch extends AbstractSearchProvider
     public function assignVariables(): void
     {
         if (!empty($_REQUEST['conversationID'])) {
-            $conversation = Conversation::getUserConversation(\intval($_REQUEST['conversationID']), WCF::getUser()->userID);
+            $conversation = ConversationRuntimeCache::getInstance()->getObject(\intval($_REQUEST['conversationID']));
             if ($conversation !== null && $conversation->canRead()) {
                 $this->conversation = $conversation;
                 WCF::getTPL()->assign('searchedConversation', $conversation);

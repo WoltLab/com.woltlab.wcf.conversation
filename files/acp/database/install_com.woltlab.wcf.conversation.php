@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @author  Tim Duesterhus
- * @copyright   2001-2021 WoltLab GmbH
- * @license WoltLab License <http://www.woltlab.com/license-agreement.html>
+ * @author      Tim Duesterhus
+ * @copyright   2001-2025 WoltLab GmbH
+ * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  */
 
 use wcf\system\database\table\column\DefaultFalseBooleanDatabaseTableColumn;
@@ -15,7 +15,6 @@ use wcf\system\database\table\column\NotNullInt10DatabaseTableColumn;
 use wcf\system\database\table\column\NotNullVarchar255DatabaseTableColumn;
 use wcf\system\database\table\column\ObjectIdDatabaseTableColumn;
 use wcf\system\database\table\column\SmallintDatabaseTableColumn;
-use wcf\system\database\table\column\TextDatabaseTableColumn;
 use wcf\system\database\table\column\TinyintDatabaseTableColumn;
 use wcf\system\database\table\column\VarcharDatabaseTableColumn;
 use wcf\system\database\table\DatabaseTable;
@@ -57,7 +56,6 @@ return [
             MediumintDatabaseTableColumn::create('participants')
                 ->notNull()
                 ->defaultValue(0),
-            TextDatabaseTableColumn::create('participantSummary'),
             DefaultFalseBooleanDatabaseTableColumn::create('participantCanInvite'),
             DefaultFalseBooleanDatabaseTableColumn::create('isClosed'),
             DefaultFalseBooleanDatabaseTableColumn::create('isDraft'),

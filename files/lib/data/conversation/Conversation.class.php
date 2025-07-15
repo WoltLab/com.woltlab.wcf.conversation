@@ -2,13 +2,13 @@
 
 namespace wcf\data\conversation;
 
+use wcf\data\CollectionDatabaseObject;
+use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\message\ConversationMessage;
-use wcf\data\DatabaseObject;
 use wcf\data\IPopoverObject;
 use wcf\data\user\group\UserGroup;
 use wcf\data\user\ignore\UserIgnore;
 use wcf\data\user\UserProfile;
-use wcf\system\cache\runtime\ConversationMessageRuntimeCache;
 use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\conversation\ConversationHandler;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
@@ -39,7 +39,6 @@ use wcf\util\ArrayUtil;
  * @property-read   int $replies        number of replies on the conversation
  * @property-read   int $attachments        total number of attachments in all messages of the conversation
  * @property-read   int $participants       number of participants of the conversations
- * @property-read   string $participantSummary serialized data of five of the conversation participants (sorted by username)
  * @property-read   int $participantCanInvite   is `1` if participants can invite other users to join the conversation, otherwise `0`
  * @property-read   int $isClosed       is `1` if the conversation is closed for new messages, otherwise `0`
  * @property-read   int $isDraft        is `1` if the conversation is a draft only, thus not sent to any participant, otherwise `0`
@@ -51,8 +50,11 @@ use wcf\util\ArrayUtil;
  * @property-read   int|null $joinedAt       timestamp at which the user joined the conversation; is `null` if the conversation has not been fetched via `UserConversationList`
  * @property-read   int|null $leftAt         timestamp at which the user left the conversation or `0` if they did not leave the conversation; is `null` if the conversation has not been fetched via `UserConversationList`
  * @property-read   int|null $lastMessageID      id of the last message written before the user left the conversation or `0` if they did not leave the conversation; is `null` if the conversation has not been fetched via `UserConversationList`
+ * @property-read   int|null $leftByOwnChoice
+ *
+ * @extends CollectionDatabaseObject<ConversationCollection>
  */
-class Conversation extends DatabaseObject implements IPopoverObject, IRouteController
+class Conversation extends CollectionDatabaseObject implements IPopoverObject, IRouteController
 {
     /**
      * default participation state
@@ -71,18 +73,6 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
      * @var int
      */
     public const STATE_LEFT/*4DEAD*/ = 2;
-
-    /**
-     * true if the current user can add users without limitations
-     * @var bool
-     */
-    protected $canAddUnrestricted;
-
-    /**
-     * true if the current user is an active participant of this conversation
-     * @var bool
-     */
-    protected $isActiveParticipant;
 
     /**
      * @inheritDoc
@@ -168,35 +158,9 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     }
 
     /**
-     * Loads participation data for given user id (default: current user) on runtime.
-     * You should use Conversation::getUserConversation() instead if possible.
-     *
-     * @return void
-     */
-    public function loadUserParticipation(?int $userID = null)
-    {
-        if ($userID === null) {
-            $userID = WCF::getUser()->userID;
-        }
-
-        $sql = "SELECT  *
-                FROM    wcf1_conversation_to_user
-                WHERE   participantID = ?
-                    AND conversationID = ?";
-        $statement = WCF::getDB()->prepare($sql);
-        $statement->execute([$userID, $this->conversationID]);
-        $row = $statement->fetchArray();
-        if ($row !== false) {
-            $this->data = \array_merge($this->data, $row);
-        }
-    }
-
-    /**
      * Returns a specific user conversation.
-     *
-     * @return ?Conversation
      */
-    public static function getUserConversation(int $conversationID, int $userID)
+    public static function getUserConversation(int $conversationID, int $userID): ?Conversation
     {
         $sql = "SELECT      conversation_to_user.*, conversation.*
                 FROM        wcf1_conversation conversation
@@ -218,9 +182,9 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
      * Returns a list of user conversations.
      *
      * @param int[] $conversationIDs
-     * @return Conversation[]
+     * @return array<int, Conversation>
      */
-    public static function getUserConversations(array $conversationIDs, int $userID)
+    public static function getUserConversations(array $conversationIDs, int $userID): array
     {
         $conditionBuilder = new PreparedStatementConditionBuilder();
         $conditionBuilder->add('conversation.conversationID IN (?)', [$conversationIDs]);
@@ -297,32 +261,12 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
      */
     public function canAddParticipantsUnrestricted(): bool
     {
-        if ($this->canAddUnrestricted === null) {
-            $this->canAddUnrestricted = false;
-            if ($this->isActiveParticipant()) {
-                $sql = "SELECT  joinedAt
-                        FROM    wcf1_conversation_to_user
-                        WHERE   conversationID = ?
-                            AND participantID = ?";
-                $statement = WCF::getDB()->prepare($sql);
-                $statement->execute([
-                    $this->conversationID,
-                    WCF::getUser()->userID,
-                ]);
-                $joinedAt = $statement->fetchSingleColumn();
-
-                if ($joinedAt !== false && $joinedAt == 0) {
-                    $this->canAddUnrestricted = true;
-                }
-            }
-        }
-
-        return $this->canAddUnrestricted;
+        return $this->joinedAt === 0;
     }
 
     public function getFirstMessage(): ?ConversationMessage
     {
-        return ConversationMessageRuntimeCache::getInstance()->getObject($this->firstMessageID);
+        return $this->getCollection()->getFirstMessage($this);
     }
 
     /**
@@ -400,22 +344,7 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
      */
     public function isActiveParticipant(): bool
     {
-        if ($this->isActiveParticipant === null) {
-            $sql = "SELECT  leftAt
-                    FROM    wcf1_conversation_to_user
-                    WHERE   conversationID = ?
-                        AND participantID = ?";
-            $statement = WCF::getDB()->prepare($sql);
-            $statement->execute([
-                $this->conversationID,
-                WCF::getUser()->userID,
-            ]);
-            $leftAt = $statement->fetchSingleColumn();
-
-            $this->isActiveParticipant = ($leftAt !== false && $leftAt == 0);
-        }
-
-        return $this->isActiveParticipant;
+        return $this->leftAt === 0;
     }
 
     /**
@@ -640,5 +569,62 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
                 throw new UserInputException($field, 'mailboxIsFull');
             }
         }
+    }
+
+    /**
+     * @since 6.2
+     */
+    public function getUserProfile(): UserProfile
+    {
+        return $this->getCollection()->getUserProfile($this);
+    }
+
+    /**
+     * @since 6.2
+     */
+    public function getLastPosterProfile(): UserProfile
+    {
+        return $this->getCollection()->getLastPosterProfile($this);
+    }
+
+    /**
+     * @return array<int, ConversationLabel>
+     * @since 6.2
+     */
+    public function getAssignedLabels(): array
+    {
+        return $this->getCollection()->getAssignedLabels($this);
+    }
+
+    /**
+     * @return list<UserProfile>
+     * @since 6.2
+     */
+    public function getParticipantSummary(): array
+    {
+        return $this->getCollection()->getParticipantSummary($this);
+    }
+
+    /**
+     * Returns true if the given user is a invisible participant of this conversation.
+     * @since 6.2
+     */
+    public function isInvisibleParticipant(int $userID): bool
+    {
+        $sql = "SELECT isInvisible FROM wcf1_conversation_to_user WHERE conversationID = ? AND userID = ?";
+        $statement = WCF::getDB()->prepare($sql);
+        $statement->execute([$this->conversationID, $userID]);
+
+        return (bool)$statement->fetchSingleColumn();
+    }
+
+    #[\Override]
+    public function __get($name)
+    {
+        return match ($name) {
+            'participantID', 'hideConversation', 'isInvisible', 'lastVisitTime',
+            'joinedAt', 'leftAt', 'lastMessageID', 'leftByOwnChoice' => $this->data[$name] ?? $this->getCollection()->getUserInfo($this, $name),
+            default => parent::__get($name),
+        };
     }
 }
