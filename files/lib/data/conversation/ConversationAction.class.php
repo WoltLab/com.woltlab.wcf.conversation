@@ -539,7 +539,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
                     }
 
                     $image = $userProfile->getAvatar()->getImageTag(48);
-                    $usernames = [$$userProfile->username];
+                    $usernames = [$userProfile->username];
                 }
             } else {
                 if ($conversation->participants > 1) {
