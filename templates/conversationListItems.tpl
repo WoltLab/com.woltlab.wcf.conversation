@@ -36,7 +36,7 @@
 
 				<div class="conversationList__item__interactions">
 					{if $view->hasBulkInteractions()}
-						<label class="button small jsTooltip" title="{lang}wcf.clipboard.item.mark{/lang}">
+						<label class="listView__selectItem__label jsTooltip" title="{lang}wcf.clipboard.item.mark{/lang}">
 							<input type="checkbox" class="listView__selectItem" aria-label="{lang}wcf.clipboard.item.mark{/lang}">
 						</label>
 					{/if}
@@ -62,6 +62,10 @@
 				<a href="{if $conversation->isNew()}{link controller='Conversation' object=$conversation action='firstNew'}{/link}{else}{$conversation->getLink()}{/if}" class="conversationList__item__link">{$conversation->subject}</a>
 			</h2>
 
+			<div class="conversationList__item__teaser">
+				{$conversation->getTeaser()}
+			</div>
+
 			{hascontent}
 				<div class="conversationList__item__labels">
 					<ul class="labelList">
@@ -73,10 +77,6 @@
 					</ul>
 				</div>
 			{/hascontent}
-
-			<div class="conversationList__item__teaser">
-				{$conversation->getTeaser()}
-			</div>
 
 			{if $conversation->getTeaserImage()}
 				<div class="conversationList__item__image">
