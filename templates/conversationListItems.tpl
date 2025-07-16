@@ -1,17 +1,17 @@
 {foreach from=$view->getItems() item='conversation'}
-	<article class="listView__item conversationList__item" data-object-id="{$conversation->getObjectID()}">
-		<div class="conversationList__item__header">
-			<div class="conversationList__item__meta">
-				<div class="conversationList__item__meta__avatar">
+	<article class="listView__item discussionList__item conversationList__item" data-object-id="{$conversation->getObjectID()}">
+		<div class="discussionList__item__header">
+			<div class="discussionList__item__meta">
+				<div class="discussionList__item__meta__avatar">
 					{unsafe:$conversation->getUserProfile()->getAvatar()->getImageTag(32)}
 				</div>
 
-				<div class="conversationList__item__meta__content">
-					<div class="conversationList__item__meta__author">
+				<div class="discussionList__item__meta__content">
+					<div class="discussionList__item__meta__author">
 						{unsafe:$conversation->getUserProfile()->getFormattedUsername()}
 					</div>
 					
-					<div class="conversationList__item__meta__time">
+					<div class="discussionList__item__meta__time">
 						{time time=$conversation->time}
 					</div>
 				</div>
@@ -19,9 +19,9 @@
 				{event name='meta'}
 			</div>
 
-			<div class="conversationList__item__toolbar">
+			<div class="discussionList__item__toolbar">
 				{hascontent}
-					<div class="conversationList__item__status">
+					<div class="discussionList__item__status">
 						{content}
 							{if $conversation->isClosed}
 								<span class="jsTooltip" title="{lang}wcf.global.state.closed{/lang}">
@@ -34,7 +34,7 @@
 					</div>
 				{/hascontent}
 
-				<div class="conversationList__item__interactions">
+				<div class="discussionList__item__interactions">
 					{if $view->hasBulkInteractions()}
 						<label class="listView__selectItem__label jsTooltip" title="{lang}wcf.clipboard.item.mark{/lang}">
 							<input type="checkbox" class="listView__selectItem" aria-label="{lang}wcf.clipboard.item.mark{/lang}">
@@ -46,28 +46,28 @@
 			</div>
 		</div>
 
-		<div class="conversationList__item__content">
+		<div class="discussionList__item__content">
 			{if $conversation->isNew()}
 				<button
 					type="button"
-					class="conversationList__item__markAsRead jsTooltip"
+					class="discussionList__item__markAsRead jsTooltip"
 					title="{lang}wcf.conversation.markAsRead{/lang}"
 					data-object-id="{$conversation->conversationID}"
 				>
-					<span class="conversationList__item__unread__indicator" aria-hidden="true"></span>
+					<span class="discussionList__item__unread__indicator" aria-hidden="true"></span>
 				</button>
 			{/if}
 			
-			<h2 class="conversationList__item__title">
-				<a href="{if $conversation->isNew()}{link controller='Conversation' object=$conversation action='firstNew'}{/link}{else}{$conversation->getLink()}{/if}" class="conversationList__item__link">{$conversation->subject}</a>
+			<h2 class="discussionList__item__title">
+				<a href="{if $conversation->isNew()}{link controller='Conversation' object=$conversation action='firstNew'}{/link}{else}{$conversation->getLink()}{/if}" class="discussionList__item__link">{$conversation->subject}</a>
 			</h2>
 
-			<div class="conversationList__item__teaser">
+			<div class="discussionList__item__teaser">
 				{$conversation->getTeaser()}
 			</div>
 
 			{hascontent}
-				<div class="conversationList__item__labels">
+				<div class="discussionList__item__labels">
 					<ul class="labelList">
 						{content}
 							{foreach from=$conversation->getAssignedLabels() item=label}
@@ -79,7 +79,7 @@
 			{/hascontent}
 
 			{if $conversation->getTeaserImage()}
-				<div class="conversationList__item__image">
+				<div class="discussionList__item__image">
 					{unsafe:$conversation->getTeaserImage()->toHtml()}
 				</div>
 			{/if}
@@ -87,7 +87,7 @@
 			{event name='content'}
 		</div>
 
-		<div class="conversationList__item__footer">
+		<div class="discussionList__item__footer">
 			{if $conversation->getParticipantSummary()|count}
 				{assign var='participantSummaryCount' value=$conversation->getParticipantSummary()|count}
 				<ul class="conversationList__item__participants">
@@ -104,25 +104,25 @@
 				</ul>
 			{/if}
 			
-			<div class="conversationList__item__replies">
+			<div class="discussionList__item__replies">
 				{icon name='comment'}
 				{lang replies=$conversation->replies}wcf.conversation.replies.count{/lang}
 			</div>
 
 			{if $conversation->replies != 0 && $conversation->lastPostTime}
-				<div class="conversationList__item__lastPost">
-					<div class="conversationList__item__lastPost__time">
+				<div class="discussionList__item__lastPost">
+					<div class="discussionList__item__lastPost__time">
 						{icon name='reply'}
 						<a
 							href="{link controller='Conversation' object=$conversation action='lastPost'}{/link}"
-							class="conversationList__item__lastPost__link jsTooltip"
+							class="discussionList__item__lastPost__link jsTooltip"
 							title="{lang}wcf.conversation.gotoLastPost{/lang}"
 						>
 							{time time=$conversation->lastPostTime}
 						</a>
 					</div>
 					
-					<div class="conversationList__item__lastPost__author">
+					<div class="discussionList__item__lastPost__author">
 						{unsafe:$conversation->getLastPosterProfile()->getAvatar()->getImageTag(16)}
 						<span>{unsafe:$conversation->getLastPosterProfile()->getFormattedUsername()}</span>
 					</div>
