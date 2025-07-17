@@ -24,7 +24,7 @@ function setupPopover(): void {
   });
 
   whenFirstSeen(".conversationRemoveParticipant", () => {
-    void import("../Component/Conversation/RemoveParticipant").then(({ setup }) => {
+    void import("./Component/RemoveParticipant").then(({ setup }) => {
       setup();
     });
   });
