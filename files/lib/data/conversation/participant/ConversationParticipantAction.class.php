@@ -14,4 +14,4 @@ use wcf\data\AbstractDatabaseObjectAction;
  *
  * @extends AbstractDatabaseObjectAction<ConversationParticipant, ConversationParticipantEditor>
  */
-class UserRankAction extends AbstractDatabaseObjectAction {}
+class ConversationParticipantAction extends AbstractDatabaseObjectAction {}

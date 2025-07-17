@@ -167,7 +167,7 @@ class ConversationMessageCollection extends DatabaseObjectCollection
             \array_merge($conditions->getParameters(), [1])
         );
 
-        $rows = $statement->fetchAll();
+        $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
         foreach ($rows as $row) {
             FileRuntimeCache::getInstance()->cacheObjectID($row['fileID']);
         }

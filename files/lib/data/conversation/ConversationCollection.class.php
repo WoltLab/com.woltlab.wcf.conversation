@@ -121,10 +121,6 @@ class ConversationCollection extends DatabaseObjectCollection
         $statement = WCF::getDB()->prepare($sql);
         $statement->execute($conditions->getParameters());
         while ($row = $statement->fetchArray()) {
-            if (!isset($this->assignedLabels[$row['conversationID']])) {
-                $this->assignedLabels[$row['conversationID']] = [];
-            }
-
             $this->assignedLabels[$row['conversationID']][$row['labelID']] = $labels[$row['labelID']];
         }
     }
@@ -192,7 +188,7 @@ class ConversationCollection extends DatabaseObjectCollection
             \array_merge($conditions->getParameters(), [5])
         );
 
-        $rows = $statement->fetchAll();
+        $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
         foreach ($rows as $row) {
             if ($row['userID']) {
                 UserProfileRuntimeCache::getInstance()->cacheObjectID($row['userID']);
