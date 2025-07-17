@@ -7,10 +7,8 @@ use wcf\action\AssignConversationLabelDialogAction;
 use wcf\action\EditSubjectConversationDialogAction;
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\label\ConversationLabel;
-use wcf\data\conversation\ViewableConversation;
 use wcf\event\interaction\user\ConversationInteractionCollecting;
 use wcf\form\ConversationDraftEditForm;
-use wcf\system\cache\runtime\UserConversationRuntimeCache;
 use wcf\system\event\EventHandler;
 use wcf\system\interaction\AbstractInteractionProvider;
 use wcf\system\interaction\Divider;
@@ -39,19 +37,19 @@ final class ConversationInteractions extends AbstractInteractionProvider
                 'editSubject',
                 LinkHandler::getInstance()->getControllerLink(EditSubjectConversationDialogAction::class, ['id' => '%s']),
                 'wcf.conversation.edit.subject',
-                static fn(ViewableConversation|Conversation $conversation) => WCF::getUser()->userID === $conversation->userID,
+                static fn(Conversation $conversation) => WCF::getUser()->userID === $conversation->userID,
             ),
             new RpcInteraction(
                 'open',
                 'core/conversations/%s/open',
                 'wcf.conversation.edit.open',
-                isAvailableCallback: static fn(ViewableConversation|Conversation $conversation) => $conversation->isClosed && $conversation->userID === WCF::getUser()->userID
+                isAvailableCallback: static fn(Conversation $conversation) => $conversation->isClosed && $conversation->userID === WCF::getUser()->userID
             ),
             new RpcInteraction(
                 'close',
                 'core/conversations/%s/close',
                 'wcf.conversation.edit.close',
-                isAvailableCallback: static fn(ViewableConversation|Conversation $conversation) => !$conversation->isClosed && $conversation->userID === WCF::getUser()->userID
+                isAvailableCallback: static fn(Conversation $conversation) => !$conversation->isClosed && $conversation->userID === WCF::getUser()->userID
             ),
             new FormBuilderDialogInteraction(
                 'assignLabel',
@@ -64,7 +62,7 @@ final class ConversationInteractions extends AbstractInteractionProvider
                 'addParticipants',
                 LinkHandler::getInstance()->getControllerLink(AddParticipantConversationDialogAction::class, ['id' => '%s']),
                 'wcf.conversation.edit.addParticipants',
-                static fn(ViewableConversation|Conversation $conversation) => $conversation->canAddParticipants(),
+                static fn(Conversation $conversation) => $conversation->canAddParticipants(),
             ),
             new RpcInteraction(
                 'restore',
@@ -72,11 +70,7 @@ final class ConversationInteractions extends AbstractInteractionProvider
                 'wcf.conversation.hideConversation.restore',
                 InteractionConfirmationType::Custom,
                 'wcf.conversation.hideConversation.restore.confirmationMessage',
-                static function (ViewableConversation|Conversation $conversation) {
-                    if (!($conversation instanceof ViewableConversation)) {
-                        $conversation = UserConversationRuntimeCache::getInstance()->getObject($conversation->conversationID);
-                    }
-
+                static function (Conversation $conversation) {
                     return (bool)$conversation->hideConversation;
                 },
             ),
@@ -86,11 +80,7 @@ final class ConversationInteractions extends AbstractInteractionProvider
                 'wcf.conversation.hideConversation.leave',
                 InteractionConfirmationType::Custom,
                 'wcf.conversation.hideConversation.leave.confirmationMessage',
-                static function (ViewableConversation|Conversation $conversation) {
-                    if (!($conversation instanceof ViewableConversation)) {
-                        $conversation = UserConversationRuntimeCache::getInstance()->getObject($conversation->conversationID);
-                    }
-
+                static function (Conversation $conversation) {
                     return !$conversation->hideConversation;
                 },
             ),
@@ -104,7 +94,7 @@ final class ConversationInteractions extends AbstractInteractionProvider
             ),
             new EditInteraction(
                 ConversationDraftEditForm::class,
-                static function (ViewableConversation|Conversation $conversation) {
+                static function (Conversation $conversation) {
                     return $conversation->isDraft;
                 }
             ),

@@ -88,14 +88,14 @@
 
 {include file='header'}
 
-<div class="section messageGroupList conversationList">
+<div class="section {$listView->getContainerCssClassName()}">
 	{unsafe:$listView->render()}
 </div>
 
 <script data-relocate="true">
 	require([
-		'WoltLabSuite/Core/Conversation/Ui/MarkAllAsRead',
-		'WoltLabSuite/Core/Conversation/Ui/MarkAsRead',
+		'WoltLabSuite/Core/Conversation/Component/MarkAllAsRead',
+		'WoltLabSuite/Core/Conversation/Component/MarkAsRead',
 	], (MarkAllAsRead, MarkAsRead) => {
 		MarkAllAsRead.setup();
 		MarkAsRead.setup();

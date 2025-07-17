@@ -2,9 +2,8 @@
 
 namespace wcf\system\conversation;
 
-use wcf\data\conversation\Conversation;
+use wcf\data\user\ignore\UserIgnore;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
-use wcf\system\exception\UserInputException;
 use wcf\system\form\builder\field\BooleanFormField;
 use wcf\system\form\builder\field\MultipleSelectionFormField;
 use wcf\system\form\builder\field\user\UserFormField;
@@ -64,22 +63,96 @@ trait TConversationForm
             UserStorageHandler::getInstance()->loadStorage($userIDs);
 
             foreach ($users as $user) {
-                try {
-                    if ($user->userID === WCF::getUser()->userID) {
-                        throw new UserInputException('isAuthor');
-                    }
-
-                    Conversation::validateParticipant($user, $formField->getId());
-                } catch (UserInputException $e) {
+                if ($user->userID === WCF::getUser()->userID) {
                     $formField->addValidationError(
                         new FormFieldValidationError(
-                            $e->getType(),
-                            'wcf.conversation.participants.error.' . $e->getType(),
+                            'isAuthor',
+                            'wcf.conversation.participants.error.isAuthor'
+                        )
+                    );
+
+                    continue;
+                }
+
+                // check participant's settings and permissions
+                if (!$user->getPermission('user.conversation.canUseConversation')) {
+                    $formField->addValidationError(
+                        new FormFieldValidationError(
+                            'canNotUseConversation',
+                            'wcf.conversation.participants.error.canNotUseConversation',
                             [
                                 'username' => $user->username,
                             ]
                         )
                     );
+
+                    continue;
+                }
+
+                if (!WCF::getSession()->getPermission('user.profile.cannotBeIgnored')) {
+                    // check if user wants to receive any conversations
+                    /** @noinspection PhpUndefinedFieldInspection */
+                    if ($user->canSendConversation == 2) {
+                        $formField->addValidationError(
+                            new FormFieldValidationError(
+                                'doesNotAcceptConversation',
+                                'wcf.conversation.participants.error.doesNotAcceptConversation',
+                                [
+                                    'username' => $user->username,
+                                ]
+                            )
+                        );
+
+                        continue;
+                    }
+
+                    // check if user only wants to receive conversations by
+                    // users they are following and if the active user is followed
+                    // by the relevant user
+                    /** @noinspection PhpUndefinedFieldInspection */
+                    if ($user->canSendConversation == 1 && !$user->isFollowing(WCF::getUser()->userID)) {
+                        $formField->addValidationError(
+                            new FormFieldValidationError(
+                                'doesNotAcceptConversation',
+                                'wcf.conversation.participants.error.doesNotAcceptConversation',
+                                [
+                                    'username' => $user->username,
+                                ]
+                            )
+                        );
+
+                        continue;
+                    }
+
+                    // active user is ignored by participant
+                    if ($user->isIgnoredUser(WCF::getUser()->userID, UserIgnore::TYPE_BLOCK_DIRECT_CONTACT)) {
+                        $formField->addValidationError(
+                            new FormFieldValidationError(
+                                'ignoresYou',
+                                'wcf.conversation.participants.error.ignoresYou',
+                                [
+                                    'username' => $user->username,
+                                ]
+                            )
+                        );
+
+                        continue;
+                    }
+
+                    // check participant's mailbox quota
+                    if (ConversationHandler::getInstance()->getConversationCount($user->userID) >= $user->getPermission('user.conversation.maxConversations')) {
+                        $formField->addValidationError(
+                            new FormFieldValidationError(
+                                'mailboxIsFull',
+                                'wcf.conversation.participants.error.mailboxIsFull',
+                                [
+                                    'username' => $user->username,
+                                ]
+                            )
+                        );
+
+                        continue;
+                    }
                 }
             }
         });

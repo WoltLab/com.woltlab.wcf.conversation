@@ -9,18 +9,15 @@ namespace wcf\data\conversation\message;
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
- * @extends SimplifiedViewableConversationMessageList<SearchResultConversationMessage>
+ * @extends ConversationMessageList<SearchResultConversationMessage>
  */
-class SearchResultConversationMessageList extends SimplifiedViewableConversationMessageList
+class SearchResultConversationMessageList extends ConversationMessageList
 {
     /**
      * @inheritDoc
      */
     public $decoratorClassName = SearchResultConversationMessage::class;
 
-    /**
-     * Creates a new SearchResultConversationMessageList object.
-     */
     public function __construct()
     {
         parent::__construct();

@@ -2,10 +2,9 @@
 
 namespace wcf\system\page\handler;
 
-use wcf\data\conversation\Conversation;
 use wcf\data\page\Page;
 use wcf\data\user\online\UserOnline;
-use wcf\system\cache\runtime\UserConversationRuntimeCache;
+use wcf\system\cache\runtime\ConversationRuntimeCache;
 use wcf\system\WCF;
 
 /**
@@ -27,7 +26,6 @@ trait TConversationOnlineLocationPageHandler
      * @param UserOnline $user user online object with request data
      * @return  string
      * @see IOnlineLocationPageHandler::getOnlineLocation()
-     *
      */
     public function getOnlineLocation(Page $page, UserOnline $user)
     {
@@ -35,7 +33,7 @@ trait TConversationOnlineLocationPageHandler
             return '';
         }
 
-        $conversation = UserConversationRuntimeCache::getInstance()->getObject($user->pageObjectID);
+        $conversation = ConversationRuntimeCache::getInstance()->getObject($user->pageObjectID);
         if ($conversation === null || !$conversation->canRead()) {
             return '';
         }
@@ -43,8 +41,8 @@ trait TConversationOnlineLocationPageHandler
         if ($conversation->userID != WCF::getUser()->userID && $user->userID != WCF::getUser()->userID) {
             // Make sure that requests from invisible participants are not listed
             // if the active user is not the author of the conversation.
-            $userConversation = Conversation::getUserConversation($conversation->conversationID, $user->userID);
-            if ($userConversation !== null && $userConversation->isInvisible) {
+            $participant = $conversation->getOtherParticipant($user->userID);
+            if ($participant !== null && $participant->isInvisible) {
                 return '';
             }
         }
@@ -68,7 +66,7 @@ trait TConversationOnlineLocationPageHandler
         UserOnline $user
     ) {
         if ($user->pageObjectID !== null) {
-            UserConversationRuntimeCache::getInstance()->cacheObjectID($user->pageObjectID);
+            ConversationRuntimeCache::getInstance()->cacheObjectID($user->pageObjectID);
         }
     }
 }

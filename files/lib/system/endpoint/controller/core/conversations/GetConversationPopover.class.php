@@ -6,7 +6,7 @@ use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use wcf\data\conversation\Conversation;
-use wcf\data\conversation\message\SimplifiedViewableConversationMessageList;
+use wcf\data\conversation\message\ConversationMessageList;
 use wcf\http\Helper;
 use wcf\system\endpoint\GetRequest;
 use wcf\system\endpoint\IController;
@@ -45,7 +45,7 @@ final class GetConversationPopover implements IController
 
     private function renderPopover(Conversation $conversation): string
     {
-        $messageList = new SimplifiedViewableConversationMessageList();
+        $messageList = new ConversationMessageList();
         $messageList->getConditionBuilder()
             ->add("conversation_message.messageID = ?", [$conversation->firstMessageID]);
         $messageList->readObjects();

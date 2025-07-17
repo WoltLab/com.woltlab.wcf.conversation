@@ -3,20 +3,22 @@
 namespace wcf\data\conversation\message;
 
 use wcf\data\conversation\Conversation;
+use wcf\data\DatabaseObjectDecorator;
 use wcf\data\search\ISearchResultObject;
 use wcf\system\request\LinkHandler;
 use wcf\system\search\SearchResultTextParser;
 
 /**
- * Represents a list of search result.
+ * Represents a conversation message as a search result.
  *
  * @author  Marcel Werk
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
  * @property-read ?string $subject
+ * @extends DatabaseObjectDecorator<ConversationMessage>
  */
-class SearchResultConversationMessage extends ViewableConversationMessage implements ISearchResultObject
+class SearchResultConversationMessage extends DatabaseObjectDecorator implements ISearchResultObject
 {
     /**
      * conversation object
@@ -105,5 +107,11 @@ class SearchResultConversationMessage extends ViewableConversationMessage implem
     public function getContainerLink()
     {
         return '';
+    }
+
+    #[\Override]
+    public function getUserProfile()
+    {
+        return $this->getDecoratedObject()->getUserProfile();
     }
 }

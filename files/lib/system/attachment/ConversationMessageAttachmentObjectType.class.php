@@ -2,9 +2,9 @@
 
 namespace wcf\system\attachment;
 
-use wcf\data\conversation\Conversation;
 use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\conversation\message\ConversationMessageList;
+use wcf\system\cache\runtime\ConversationRuntimeCache;
 use wcf\system\WCF;
 use wcf\util\ArrayUtil;
 
@@ -53,7 +53,7 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
     {
         if ($objectID) {
             $message = new ConversationMessage($objectID);
-            $conversation = Conversation::getUserConversation($message->conversationID, WCF::getUser()->userID);
+            $conversation = ConversationRuntimeCache::getInstance()->getObject($message->conversationID);
             if ($conversation !== null && $conversation->canRead()) {
                 return true;
             }
@@ -106,18 +106,6 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
         $messageList = new ConversationMessageList();
         $messageList->setObjectIDs($objectIDs);
         $messageList->readObjects();
-        $conversationIDs = [];
-        foreach ($messageList as $message) {
-            $conversationIDs[] = $message->conversationID;
-        }
-        if (!empty($conversationIDs)) {
-            $conversations = Conversation::getUserConversations($conversationIDs, WCF::getUser()->userID);
-            foreach ($messageList as $message) {
-                if (isset($conversations[$message->conversationID])) {
-                    $message->setConversation($conversations[$message->conversationID]);
-                }
-            }
-        }
 
         foreach ($messageList->getObjects() as $objectID => $object) {
             $this->cachedObjects[$objectID] = $object;

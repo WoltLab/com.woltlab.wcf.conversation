@@ -4,8 +4,8 @@ namespace wcf\system\user\notification\object\type;
 
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationList;
+use wcf\system\cache\runtime\ConversationRuntimeCache;
 use wcf\system\user\notification\object\ConversationUserNotificationObject;
-use wcf\system\WCF;
 
 /**
  * Represents a conversation notification object type.
@@ -36,8 +36,7 @@ class ConversationNotificationObjectType extends AbstractUserNotificationObjectT
      */
     public function getObjectsByIDs(array $objectIDs)
     {
-        $objects = Conversation::getUserConversations($objectIDs, WCF::getUser()->userID);
-
+        $objects = ConversationRuntimeCache::getInstance()->getObjects($objectIDs);
         foreach ($objects as $objectID => $conversation) {
             $objects[$objectID] = new static::$decoratorClassName($conversation);
         }

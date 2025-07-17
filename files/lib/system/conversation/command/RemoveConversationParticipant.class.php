@@ -20,21 +20,15 @@ final class RemoveConversationParticipant
     public function __construct(
         public readonly Conversation $conversation,
         public readonly int $participantID,
-    ) {
-    }
+    ) {}
 
     public function __invoke(): void
     {
         $editor = new ConversationEditor($this->conversation);
         $editor->removeParticipant($this->participantID);
-        $editor->updateParticipantSummary();
 
-        $userConversation = Conversation::getUserConversation(
-            $this->conversation->conversationID,
-            $this->participantID
-        );
-
-        if (!$userConversation->isInvisible) {
+        $participant = $this->conversation->getOtherParticipant($this->participantID);
+        if ($participant !== null && !$participant->isInvisible) {
             ConversationModificationLogHandler::getInstance()->removeParticipant($this->conversation, $this->participantID);
         }
 

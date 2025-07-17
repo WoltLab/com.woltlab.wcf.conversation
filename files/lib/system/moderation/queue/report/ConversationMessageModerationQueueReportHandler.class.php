@@ -3,11 +3,9 @@
 namespace wcf\system\moderation\queue\report;
 
 use wcf\data\conversation\Conversation;
-use wcf\data\conversation\ConversationList;
 use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\data\conversation\message\ConversationMessageList;
-use wcf\data\conversation\message\ViewableConversationMessage;
 use wcf\data\moderation\queue\ModerationQueue;
 use wcf\data\moderation\queue\ViewableModerationQueue;
 use wcf\system\moderation\queue\AbstractModerationQueueHandler;
@@ -98,7 +96,7 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
     public function getReportedContent(ViewableModerationQueue $queue)
     {
         return WCF::getTPL()->render('wcf', 'moderationConversationMessage', [
-            'message' => ViewableConversationMessage::getViewableConversationMessage($queue->objectID),
+            'message' => new Conversation($queue->objectID),
         ]);
     }
 
@@ -166,25 +164,9 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
             }
         }
 
-        // fetch conversations
-        $conversationIDs = [];
-        foreach ($messages as $message) {
-            $conversationIDs[] = $message->conversationID;
-        }
-
-        if (!empty($conversationIDs)) {
-            $conversationList = new ConversationList();
-            $conversationList->setObjectIDs($conversationIDs);
-            $conversationList->readObjects();
-            $conversations = $conversationList->getObjects();
-
-            foreach ($queues as $object) {
-                if (isset($messages[$object->objectID])) {
-                    $message = $messages[$object->objectID];
-                    $message->setConversation($conversations[$message->conversationID]);
-
-                    $object->setAffectedObject($message);
-                }
+        foreach ($queues as $object) {
+            if (isset($messages[$object->objectID])) {
+                $object->setAffectedObject($messages[$object->objectID]);
             }
         }
     }

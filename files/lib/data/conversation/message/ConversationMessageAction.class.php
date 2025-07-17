@@ -113,8 +113,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
             // update last message
             $conversationEditor->addMessage($message);
 
-            $userConversation = Conversation::getUserConversation($conversation->conversationID, $message->userID);
-            if ($userConversation !== null && $userConversation->isInvisible) {
+            if ($conversation->isInvisibleParticipant($message->userID)) {
                 // make invisible participant visible
                 $sql = "UPDATE  wcf1_conversation_to_user
                         SET     isInvisible = 0
@@ -123,7 +122,6 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
                 $statement = WCF::getDB()->prepare($sql);
                 $statement->execute([$message->userID, $conversation->conversationID]);
 
-                $conversationEditor->updateParticipantSummary();
                 $conversationEditor->updateParticipantCount();
             }
 
@@ -495,7 +493,6 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         if ($container->isClosed) {
             throw new PermissionDeniedException();
         }
-        $container->loadUserParticipation();
         if (!$container->canReply()) {
             throw new PermissionDeniedException();
         }
@@ -546,8 +543,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
      */
     public function getMessageList(DatabaseObject $container, int $lastMessageTime)
     {
-        $messageList = new ViewableConversationMessageList();
-        $messageList->setConversation($container);
+        $messageList = new ConversationMessageList();
         $messageList->getConditionBuilder()
             ->add("conversation_message.conversationID = ?", [$container->conversationID]);
         $messageList->getConditionBuilder()

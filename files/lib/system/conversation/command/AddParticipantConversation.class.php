@@ -27,8 +27,7 @@ final class AddParticipantConversation
          * @var 'new'|'all'
          */
         public readonly ?string $messageVisibility
-    ) {
-    }
+    ) {}
 
     public function __invoke(): void
     {
@@ -50,9 +49,5 @@ final class AddParticipantConversation
         (new ConversationAction([$this->conversation], 'update', $data))->executeAction();
 
         ConversationModificationLogHandler::getInstance()->addParticipants($this->conversation, $this->participants);
-
-        if (!$this->conversation->isDraft) {
-            (new ConversationEditor($this->conversation))->updateParticipantSummary();
-        }
     }
 }

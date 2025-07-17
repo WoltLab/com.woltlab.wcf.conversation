@@ -14,6 +14,7 @@ use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
  * @author  Marcel Werk
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
+ * @deprecated 6.2 No longer in use.
  *
  * @template TDatabaseObject of ViewableConversationMessage = ViewableConversationMessage
  * @extends ConversationMessageList<TDatabaseObject>
@@ -87,9 +88,6 @@ class ViewableConversationMessageList extends ConversationMessageList
         foreach ($this->objects as $message) {
             if ($message->time > $this->maxPostTime) {
                 $this->maxPostTime = $message->time;
-            }
-            if ($this->conversation !== null) {
-                $message->setConversation($this->conversation);
             }
 
             if ($message->attachments) {

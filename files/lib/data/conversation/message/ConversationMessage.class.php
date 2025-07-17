@@ -3,14 +3,13 @@
 namespace wcf\data\conversation\message;
 
 use wcf\data\attachment\GroupedAttachmentList;
+use wcf\data\CollectionDatabaseObject;
 use wcf\data\conversation\Conversation;
-use wcf\data\DatabaseObject;
-use wcf\data\IEmbeddedMessageObject;
 use wcf\data\IMessage;
-use wcf\data\object\type\ObjectTypeCache;
 use wcf\data\TUserContent;
+use wcf\data\user\UserProfile;
+use wcf\system\file\processor\ImageData;
 use wcf\system\html\output\HtmlOutputProcessor;
-use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
 use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
 use wcf\util\StringUtil;
@@ -34,8 +33,10 @@ use wcf\util\StringUtil;
  * @property-read   int $lastEditTime       timestamp at which the conversation message has been edited the last time
  * @property-read   int $editCount      number of times the conversation message has been edited
  * @property-read   int $hasEmbeddedObjects number of embedded objects in the conversation message
+ *
+ * @extends CollectionDatabaseObject<ConversationMessageCollection>
  */
-class ConversationMessage extends DatabaseObject implements IMessage, IEmbeddedMessageObject
+class ConversationMessage extends CollectionDatabaseObject implements IMessage
 {
     use TUserContent;
 
@@ -50,6 +51,8 @@ class ConversationMessage extends DatabaseObject implements IMessage, IEmbeddedM
      */
     public function getFormattedMessage(): string
     {
+        $this->getCollection()->loadEmbeddedObjects();
+
         $processor = new HtmlOutputProcessor();
         $processor->process($this->message, 'com.woltlab.wcf.conversation.message', $this->messageID);
 
@@ -61,6 +64,8 @@ class ConversationMessage extends DatabaseObject implements IMessage, IEmbeddedM
      */
     public function getSimplifiedFormattedMessage(): string
     {
+        $this->getCollection()->loadEmbeddedObjects();
+
         $processor = new HtmlOutputProcessor();
         $processor->setOutputType('text/simplified-html');
         $processor->process($this->message, 'com.woltlab.wcf.conversation.message', $this->messageID);
@@ -109,12 +114,7 @@ class ConversationMessage extends DatabaseObject implements IMessage, IEmbeddedM
      */
     public function getMailText(string $mimeType = 'text/plain'): string
     {
-        if ($this->hasEmbeddedObjects) {
-            MessageEmbeddedObjectManager::getInstance()->loadObjects(
-                'com.woltlab.wcf.conversation.message',
-                [$this->messageID]
-            );
-        }
+        $this->getCollection()->loadEmbeddedObjects();
 
         switch ($mimeType) {
             case 'text/plain':
@@ -131,29 +131,30 @@ class ConversationMessage extends DatabaseObject implements IMessage, IEmbeddedM
     }
 
     /**
-     * Returns the conversation of this message.
-     *
-     * @return ?Conversation
+     * @since 6.2
      */
-    public function getConversation()
+    public function getTeaser(): string
     {
-        if ($this->conversation === null) {
-            $this->conversation = Conversation::getUserConversation($this->conversationID, WCF::getUser()->userID);
-        }
+        $this->getCollection()->loadEmbeddedObjects();
 
-        return $this->conversation;
+        $processor = new HtmlOutputProcessor();
+        $processor->setOutputType('text/plain');
+        $processor->process($this->message, 'com.woltlab.wcf.conversation.message', $this->messageID);
+
+        return StringUtil::truncate($processor->getHtml(), 255);
     }
 
     /**
-     * Sets the conversation of this message.
-     *
-     * @return void
+     * @since 6.2
      */
-    public function setConversation(Conversation $conversation)
+    public function getTeaserImage(): ?ImageData
     {
-        if ($this->conversationID == $conversation->conversationID) {
-            $this->conversation = $conversation;
-        }
+        return $this->getCollection()->getTeaserImage($this);
+    }
+
+    public function getConversation(): ?Conversation
+    {
+        return $this->getCollection()->getConversation($this);
     }
 
     /**
@@ -217,18 +218,11 @@ class ConversationMessage extends DatabaseObject implements IMessage, IEmbeddedM
         return $this->getFormattedMessage();
     }
 
-    #[\Override]
-    public function loadEmbeddedObjects(): void
+    /**
+     * @since 6.2
+     */
+    public function getUserProfile(): UserProfile
     {
-        if ($this->hasEmbeddedObjects) {
-            ObjectTypeCache::getInstance()
-                ->getObjectTypeByName('com.woltlab.wcf.attachment.objectType', 'com.woltlab.wcf.conversation.message')
-                ->getProcessor()
-                ->cacheObjects([$this->messageID]);
-            MessageEmbeddedObjectManager::getInstance()->loadObjects(
-                'com.woltlab.wcf.conversation.message',
-                [$this->messageID]
-            );
-        }
+        return $this->getCollection()->getUserProfile($this);
     }
 }

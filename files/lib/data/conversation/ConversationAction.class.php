@@ -6,7 +6,9 @@ use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\data\conversation\message\ConversationMessageList;
 use wcf\data\IVisitableObjectAction;
+use wcf\data\user\UserProfile;
 use wcf\page\ConversationPage;
+use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\conversation\ConversationHandler;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\exception\IllegalLinkException;
@@ -94,9 +96,6 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
             // update conversation count
             UserStorageHandler::getInstance()->reset([$data['userID']], 'conversationCount');
         }
-
-        // update participant summary
-        $conversationEditor->updateParticipantSummary();
 
         // create message
         $messageData = $this->parameters['messageData'] ?? [];
@@ -230,7 +229,6 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
                     (!empty($this->parameters['invisibleParticipants']) ? $this->parameters['invisibleParticipants'] : []),
                     (!empty($this->parameters['visibility']) ? $this->parameters['visibility'] : 'all')
                 );
-                $conversation->updateParticipantSummary();
 
                 // check if new participants have been added
                 $newParticipantIDs = \array_diff(\array_merge(
@@ -522,14 +520,26 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
             UserStorageHandler::getInstance()->reset([WCF::getUser()->userID], 'unreadConversationCount');
         }
 
-        $conversations = \array_map(static function (ViewableConversation $conversation) {
+        foreach ($unreadConversationList->getObjects() as $conversation) {
+            if ($conversation->otherParticipantID) {
+                UserProfileRuntimeCache::getInstance()->cacheObjectID($conversation->otherParticipantID);
+            }
+        }
+
+        $conversations = \array_map(static function (Conversation $conversation) {
             if ($conversation->userID === WCF::getUser()->userID) {
                 if ($conversation->participants > 1) {
                     $image = FontAwesomeIcon::fromValues('users')->toHtml(48);
-                    $usernames = \array_column($conversation->getParticipantSummary(), 'username');
+                    $usernames = \array_map(static fn($user) => $user->username, $conversation->getParticipantSummary());
                 } else {
-                    $image = $conversation->getOtherParticipantProfile()->getAvatar()->getImageTag(48);
-                    $usernames = [$conversation->getOtherParticipantProfile()->username];
+                    if ($conversation->otherParticipantID) {
+                        $userProfile = UserProfileRuntimeCache::getInstance()->getObject($conversation->otherParticipantID);
+                    } else {
+                        $userProfile = UserProfile::getGuestUserProfile($conversation->otherParticipant);
+                    }
+
+                    $image = $userProfile->getAvatar()->getImageTag(48);
+                    $usernames = [$userProfile->username];
                 }
             } else {
                 if ($conversation->participants > 1) {

@@ -150,25 +150,6 @@ class ConversationEditor extends DatabaseObjectEditor
     }
 
     /**
-     * Updates the participant summary of this conversation.
-     *
-     * @return void
-     */
-    public function updateParticipantSummary()
-    {
-        $sql = "SELECT      participantID AS userID, hideConversation, username
-                FROM        wcf1_conversation_to_user
-                WHERE       conversationID = ?
-                        AND participantID <> ?
-                        AND isInvisible = 0
-                ORDER BY    username";
-        $statement = WCF::getDB()->prepare($sql, 5);
-        $statement->execute([$this->conversationID, $this->userID]);
-
-        $this->update(['participantSummary' => \serialize($statement->fetchAll(\PDO::FETCH_ASSOC))]);
-    }
-
-    /**
      * Removes a participant from this conversation.
      *
      * @return void
@@ -263,24 +244,6 @@ class ConversationEditor extends DatabaseObjectEditor
             'lastPosterID' => $row['userID'],
             'lastPoster' => $row['username'],
         ]);
-    }
-
-    /**
-     * Updates the participant summary of the given conversations.
-     *
-     * @param int[] $conversationIDs
-     * @return void
-     */
-    public static function updateParticipantSummaries(array $conversationIDs)
-    {
-        $conversationList = new ConversationList();
-        $conversationList->setObjectIDs($conversationIDs);
-        $conversationList->readObjects();
-
-        foreach ($conversationList as $conversation) {
-            $editor = new self($conversation);
-            $editor->updateParticipantSummary();
-        }
     }
 
     /**

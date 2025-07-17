@@ -18,6 +18,21 @@ use wcf\system\WCF;
  */
 final class ConversationListPage extends AbstractListViewPage
 {
+    /**
+     * @inheritDoc
+     */
+    public $loginRequired = true;
+
+    /**
+     * @inheritDoc
+     */
+    public $neededModules = ['MODULE_CONVERSATION'];
+
+    /**
+     * @inheritDoc
+     */
+    public $neededPermissions = ['user.conversation.canUseConversation'];
+
     public string $filter = '';
 
     public int $conversationCount = 0;

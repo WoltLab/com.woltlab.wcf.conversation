@@ -23,14 +23,12 @@ final class DeleteEmptyConversations
      */
     public function __construct(
         public readonly array $conversationIDs,
-    ) {
-    }
+    ) {}
 
     public function __invoke(): void
     {
         // update participants count and participant summary
         ConversationEditor::updateParticipantCounts($this->conversationIDs);
-        ConversationEditor::updateParticipantSummaries($this->conversationIDs);
 
         $conditionBuilder = new PreparedStatementConditionBuilder();
         $conditionBuilder->add('conversation.conversationID IN (?)', [$this->conversationIDs]);
