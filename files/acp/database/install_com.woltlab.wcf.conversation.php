@@ -104,7 +104,7 @@ return [
         ])
         ->indices([
             DatabaseTablePrimaryIndex::create()
-                ->columns(['conversationID']),
+                ->columns(['conversationParticipantID']),
             DatabaseTableIndex::create('participantID')
                 ->columns(['participantID', 'conversationID'])
                 ->type(DatabaseTableIndex::UNIQUE_TYPE),
