@@ -6,9 +6,12 @@ use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationAction;
 use wcf\data\IStorableObject;
 use wcf\data\user\group\UserGroup;
+use wcf\data\user\UserProfile;
 use wcf\system\cache\builder\UserGroupCacheBuilder;
 use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\conversation\TConversationForm;
+use wcf\system\exception\IllegalLinkException;
+use wcf\system\exception\NamedUserException;
 use wcf\system\flood\FloodControl;
 use wcf\system\form\builder\container\FormContainer;
 use wcf\system\form\builder\container\wysiwyg\WysiwygFormContainer;
@@ -59,6 +62,8 @@ class ConversationAddForm extends AbstractFormBuilderForm
      */
     public $objectActionClass = ConversationAction::class;
 
+    protected ?UserProfile $user = null;
+
     /**
      * @inheritDoc
      */
@@ -69,6 +74,26 @@ class ConversationAddForm extends AbstractFormBuilderForm
         // add breadcrumbs
         PageLocationManager::getInstance()->addParentLocation('com.woltlab.wcf.conversation.ConversationList');
     }
+
+    #[\Override]
+    public function readParameters()
+    {
+        parent::readParameters();
+
+        if (isset($_REQUEST['userID'])) {
+            $userID = \intval($_REQUEST['userID']);
+            $this->user = UserProfileRuntimeCache::getInstance()->getObject($userID);
+            if ($this->user === null || $this->user->userID === WCF::getUser()->userID) {
+                throw new IllegalLinkException();
+            }
+
+            $error = $this->isValidParticipant($this->user);
+            if ($error !== null) {
+                throw new NamedUserException($error->getMessage());
+            }
+        }
+    }
+
 
     #[\Override]
     public function createForm()
@@ -102,7 +127,8 @@ class ConversationAddForm extends AbstractFormBuilderForm
                         ->description('wcf.conversation.participants.description')
                         ->maximumMultiples(WCF::getSession()->getPermission('user.conversation.maxParticipants'))
                         ->addValidator($this->getParticipantsValidator())
-                        ->addValidator($this->getMaximumParticipantsValidator()),
+                        ->addValidator($this->getMaximumParticipantsValidator())
+                        ->value($this->user ? [$this->user->userID] : []),
                     BooleanFormField::create('addGroupParticipants')
                         ->label('wcf.conversation.addGroupParticipants')
                         ->available(\count($groupParticipants) > 0),
