@@ -3,6 +3,7 @@
 namespace wcf\system\conversation;
 
 use wcf\data\user\ignore\UserIgnore;
+use wcf\data\user\UserProfile;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\form\builder\field\BooleanFormField;
 use wcf\system\form\builder\field\MultipleSelectionFormField;
@@ -56,106 +57,92 @@ trait TConversationForm
      */
     protected function getParticipantsValidator(): FormFieldValidator
     {
-        return new FormFieldValidator('participantsValidator', static function (UserFormField $formField) {
+        return new FormFieldValidator('participantsValidator', function (UserFormField $formField) {
             $users = $formField->getUsers();
             $userIDs = \array_column($users, 'userID');
 
             UserStorageHandler::getInstance()->loadStorage($userIDs);
 
             foreach ($users as $user) {
-                if ($user->userID === WCF::getUser()->userID) {
-                    $formField->addValidationError(
-                        new FormFieldValidationError(
-                            'isAuthor',
-                            'wcf.conversation.participants.error.isAuthor'
-                        )
-                    );
-
-                    continue;
-                }
-
-                // check participant's settings and permissions
-                if (!$user->getPermission('user.conversation.canUseConversation')) {
-                    $formField->addValidationError(
-                        new FormFieldValidationError(
-                            'canNotUseConversation',
-                            'wcf.conversation.participants.error.canNotUseConversation',
-                            [
-                                'username' => $user->username,
-                            ]
-                        )
-                    );
-
-                    continue;
-                }
-
-                if (!WCF::getSession()->getPermission('user.profile.cannotBeIgnored')) {
-                    // check if user wants to receive any conversations
-                    /** @noinspection PhpUndefinedFieldInspection */
-                    if ($user->canSendConversation == 2) {
-                        $formField->addValidationError(
-                            new FormFieldValidationError(
-                                'doesNotAcceptConversation',
-                                'wcf.conversation.participants.error.doesNotAcceptConversation',
-                                [
-                                    'username' => $user->username,
-                                ]
-                            )
-                        );
-
-                        continue;
-                    }
-
-                    // check if user only wants to receive conversations by
-                    // users they are following and if the active user is followed
-                    // by the relevant user
-                    /** @noinspection PhpUndefinedFieldInspection */
-                    if ($user->canSendConversation == 1 && !$user->isFollowing(WCF::getUser()->userID)) {
-                        $formField->addValidationError(
-                            new FormFieldValidationError(
-                                'doesNotAcceptConversation',
-                                'wcf.conversation.participants.error.doesNotAcceptConversation',
-                                [
-                                    'username' => $user->username,
-                                ]
-                            )
-                        );
-
-                        continue;
-                    }
-
-                    // active user is ignored by participant
-                    if ($user->isIgnoredUser(WCF::getUser()->userID, UserIgnore::TYPE_BLOCK_DIRECT_CONTACT)) {
-                        $formField->addValidationError(
-                            new FormFieldValidationError(
-                                'ignoresYou',
-                                'wcf.conversation.participants.error.ignoresYou',
-                                [
-                                    'username' => $user->username,
-                                ]
-                            )
-                        );
-
-                        continue;
-                    }
-
-                    // check participant's mailbox quota
-                    if (ConversationHandler::getInstance()->getConversationCount($user->userID) >= $user->getPermission('user.conversation.maxConversations')) {
-                        $formField->addValidationError(
-                            new FormFieldValidationError(
-                                'mailboxIsFull',
-                                'wcf.conversation.participants.error.mailboxIsFull',
-                                [
-                                    'username' => $user->username,
-                                ]
-                            )
-                        );
-
-                        continue;
-                    }
+                $error = $this->isValidParticipant($user);
+                if ($error !== null) {
+                    $formField->addValidationError($error);
                 }
             }
         });
+    }
+
+    protected function isValidParticipant(UserProfile $user): ?FormFieldValidationError
+    {
+        if ($user->userID === WCF::getUser()->userID) {
+            return new FormFieldValidationError(
+                'isAuthor',
+                'wcf.conversation.participants.error.isAuthor'
+            );
+        }
+
+        // check participant's settings and permissions
+        if (!$user->getPermission('user.conversation.canUseConversation')) {
+            return new FormFieldValidationError(
+                'canNotUseConversation',
+                'wcf.conversation.participants.error.canNotUseConversation',
+                [
+                    'username' => $user->username,
+                ]
+            );
+        }
+
+        if (!WCF::getSession()->getPermission('user.profile.cannotBeIgnored')) {
+            // check if user wants to receive any conversations
+            /** @noinspection PhpUndefinedFieldInspection */
+            if ($user->canSendConversation == 2) {
+                return new FormFieldValidationError(
+                    'doesNotAcceptConversation',
+                    'wcf.conversation.participants.error.doesNotAcceptConversation',
+                    [
+                        'username' => $user->username,
+                    ]
+                );
+            }
+
+            // check if user only wants to receive conversations by
+            // users they are following and if the active user is followed
+            // by the relevant user
+            /** @noinspection PhpUndefinedFieldInspection */
+            if ($user->canSendConversation == 1 && !$user->isFollowing(WCF::getUser()->userID)) {
+                return new FormFieldValidationError(
+                    'doesNotAcceptConversation',
+                    'wcf.conversation.participants.error.doesNotAcceptConversation',
+                    [
+                        'username' => $user->username,
+                    ]
+                );
+            }
+
+            // active user is ignored by participant
+            if ($user->isIgnoredUser(WCF::getUser()->userID, UserIgnore::TYPE_BLOCK_DIRECT_CONTACT)) {
+                return new FormFieldValidationError(
+                    'ignoresYou',
+                    'wcf.conversation.participants.error.ignoresYou',
+                    [
+                        'username' => $user->username,
+                    ]
+                );
+            }
+
+            // check participant's mailbox quota
+            if (ConversationHandler::getInstance()->getConversationCount($user->userID) >= $user->getPermission('user.conversation.maxConversations')) {
+                return new FormFieldValidationError(
+                    'mailboxIsFull',
+                    'wcf.conversation.participants.error.mailboxIsFull',
+                    [
+                        'username' => $user->username,
+                    ]
+                );
+            }
+        }
+
+        return null;
     }
 
     /**
