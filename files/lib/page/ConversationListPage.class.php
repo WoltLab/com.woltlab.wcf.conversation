@@ -4,7 +4,6 @@ namespace wcf\page;
 
 use wcf\data\conversation\UserConversationList;
 use wcf\system\listView\user\ConversationListView;
-use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
 
 /**
@@ -56,9 +55,7 @@ final class ConversationListPage extends AbstractListViewPage
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function readData()
     {
         parent::readData();
@@ -95,12 +92,10 @@ final class ConversationListPage extends AbstractListViewPage
     }
 
     #[\Override]
-    protected function initListView(): void
+    protected function getBaseUrlParameters(): array
     {
-        parent::initListView();
-
-        $this->listView->setBaseUrl(LinkHandler::getInstance()->getControllerLink(static::class, [
-            'filter' => $this->filter,
-        ]));
+        return [
+            'filter' => $this->filter ?: null,
+        ];
     }
 }

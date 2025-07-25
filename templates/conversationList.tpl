@@ -26,7 +26,7 @@
 	</header>
 {/capture}
 
-{capture assign='headContent'}
+{capture append='headContent'}
 	<link rel="alternate" type="application/rss+xml" title="{lang}wcf.global.button.rss{/lang}" href="{link controller='ConversationRssFeed' at=$__wcf->user->getAccessToken()}{/link}">
 {/capture}
 
