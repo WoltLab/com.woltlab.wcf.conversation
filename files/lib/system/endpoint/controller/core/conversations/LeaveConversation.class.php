@@ -12,7 +12,7 @@ use wcf\system\endpoint\PostRequest;
 use wcf\system\exception\PermissionDeniedException;
 
 /**
- * API endpoint for leaving a conversation.
+ * Leaves the conversation with the given ID.
  *
  * @author      Olaf Braun
  * @copyright   2001-2025 WoltLab GmbH

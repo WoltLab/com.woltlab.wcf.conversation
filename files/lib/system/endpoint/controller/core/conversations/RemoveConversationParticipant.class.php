@@ -15,7 +15,7 @@ use wcf\system\exception\PermissionDeniedException;
 use wcf\system\WCF;
 
 /**
- * API endpoint for removing a participant from a conversation.
+ * Removes a participant from the conversation with the given ID.
  *
  * @author Olaf Braun
  * @copyright 2001-2025 WoltLab GmbH

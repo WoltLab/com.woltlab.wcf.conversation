@@ -14,7 +14,7 @@ use wcf\system\exception\PermissionDeniedException;
 use wcf\system\WCF;
 
 /**
- * API endpoint for retrieving the participant list of a conversation.
+ * Retrieves the HTML code for the list of participants of the conversation with the given ID.
  *
  * @author Olaf Braun
  * @copyright 2001-2025 WoltLab GmbH

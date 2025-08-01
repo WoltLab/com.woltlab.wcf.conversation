@@ -15,7 +15,7 @@ use wcf\system\log\modification\ConversationModificationLogHandler;
 use wcf\system\WCF;
 
 /**
- * API endpoint for close a conversation for new messages.
+ * Closes the conversation with the given ID for new messages.
  *
  * @author Olaf Braun
  * @copyright 2001-2025 WoltLab GmbH
