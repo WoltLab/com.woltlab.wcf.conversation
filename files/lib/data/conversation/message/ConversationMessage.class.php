@@ -231,7 +231,7 @@ class ConversationMessage extends CollectionDatabaseObject implements IMessage
      */
     public function canRead(): bool
     {
-        $conversation = $this->getCollection()->getConversation($this);
+        $conversation = $this->getConversation();
         if ($conversation === null) {
             return false;
         }
