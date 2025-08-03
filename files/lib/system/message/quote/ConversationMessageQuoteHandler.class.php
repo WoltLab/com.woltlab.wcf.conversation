@@ -2,7 +2,6 @@
 
 namespace wcf\system\message\quote;
 
-use wcf\data\conversation\Conversation;
 use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\IMessage;
 
@@ -23,7 +22,7 @@ final class ConversationMessageQuoteHandler extends AbstractMessageQuoteHandler
             return null;
         }
 
-        if (!Conversation::isParticipant([$message->conversationID])) {
+        if ($message->canRead()) {
             return null;
         }
 
