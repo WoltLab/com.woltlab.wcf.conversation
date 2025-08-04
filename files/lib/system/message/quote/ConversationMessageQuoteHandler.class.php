@@ -22,7 +22,7 @@ final class ConversationMessageQuoteHandler extends AbstractMessageQuoteHandler
             return null;
         }
 
-        if ($message->canRead()) {
+        if (!$message->canRead()) {
             return null;
         }
 

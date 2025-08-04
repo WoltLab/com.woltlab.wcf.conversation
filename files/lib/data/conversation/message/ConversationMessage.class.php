@@ -241,7 +241,7 @@ class ConversationMessage extends CollectionDatabaseObject implements IMessage
             return false;
         }
 
-        if ($participant->joinedAt > $this->time || $participant->leftAt < $this->time) {
+        if ($participant->hasJoinedAfter($this->time) || $participant->hasLeftBefore($this->time)) {
             return false;
         }
 
