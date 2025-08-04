@@ -84,7 +84,7 @@
 	], ({ UiConversationMessageInlineEditor }, { registerContainer }, { getParticipantList }) => {
 		new UiConversationMessageInlineEditor({$conversation->conversationID});
 
-		registerContainer(".message", ".messageBody", "wcf\\data\\conversation\\message\\ConversationMessage", "com.woltlab.wcf.conversation.message");
+		registerContainer(".message", ".messageBody", "com.woltlab.wcf.conversation.message");
 
 		const contextMenu = document.getElementById('{unsafe:$interactionContextMenu->getContainerID()|encodeJS}')
 		console.log(contextMenu);

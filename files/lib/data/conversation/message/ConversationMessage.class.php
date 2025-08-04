@@ -225,4 +225,26 @@ class ConversationMessage extends CollectionDatabaseObject implements IMessage
     {
         return $this->getCollection()->getUserProfile($this);
     }
+
+    /**
+     * Checks if the current user can read this particular message.
+     */
+    public function canRead(): bool
+    {
+        $conversation = $this->getConversation();
+        if ($conversation === null) {
+            return false;
+        }
+
+        $participant = $conversation->getParticipant();
+        if ($participant === null) {
+            return false;
+        }
+
+        if ($participant->hasJoinedAfter($this->time) || $participant->hasLeftBefore($this->time)) {
+            return false;
+        }
+
+        return true;
+    }
 }

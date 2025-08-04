@@ -37,6 +37,32 @@ class ConversationParticipant extends DatabaseObject
      */
     protected static $databaseTableIndexName = 'conversationParticipantID';
 
+    /**
+     * Returns true if the user has joined the conversation after the provided
+     * timestamp.
+     */
+    public function hasJoinedAfter(int $timestamp): bool
+    {
+        if ($this->joinedAt === 0) {
+            return false;
+        }
+
+        return $this->joinedAt > $timestamp;
+    }
+
+    /**
+     * Returns true if the user has left the conversation before the provided
+     * timestamp.
+     */
+    public function hasLeftBefore(int $timestamp): bool
+    {
+        if ($this->leftAt === 0) {
+            return false;
+        }
+
+        return $this->leftAt < $timestamp;
+    }
+
     public static function getParticipant(int $conversationID, int $userID): ?static
     {
         $sql = "SELECT * FROM wcf1_conversation_to_user WHERE conversationID = ? AND userID = ?";
