@@ -5,6 +5,7 @@ namespace wcf\data\conversation;
 use wcf\data\CollectionDatabaseObject;
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\message\ConversationMessage;
+use wcf\data\conversation\message\ViewableConversationMessage;
 use wcf\data\conversation\participant\ConversationParticipant;
 use wcf\data\IPopoverObject;
 use wcf\data\user\group\UserGroup;
@@ -109,7 +110,7 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
     /**
      * Returns true if the active user doesn't have read the given message.
      */
-    public function isNewMessage(ConversationMessage $message): bool
+    public function isNewMessage(ConversationMessage|ViewableConversationMessage $message): bool
     {
         if (!$this->isDraft && $message->time > $this->lastVisitTime) {
             return true;

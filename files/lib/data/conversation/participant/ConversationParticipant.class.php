@@ -65,9 +65,9 @@ class ConversationParticipant extends DatabaseObject
 
     public static function getParticipant(int $conversationID, int $userID): ?static
     {
-        $sql = "SELECT * FROM wcf1_conversation_to_user WHERE conversationID = ? AND userID = ?";
+        $sql = "SELECT * FROM wcf1_conversation_to_user WHERE participantID = ? AND conversationID = ?";
         $statement = WCF::getDB()->prepare($sql);
-        $statement->execute([$conversationID, $userID]);
+        $statement->execute([$userID, $conversationID]);
 
         $row = $statement->fetchSingleRow();
         if ($row !== false) {
