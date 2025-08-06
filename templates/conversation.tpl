@@ -86,12 +86,11 @@
 
 		registerContainer(".message", ".messageBody", "com.woltlab.wcf.conversation.message");
 
-		const contextMenu = document.getElementById('{unsafe:$interactionContextMenu->getContainerID()|encodeJS}')
-		console.log(contextMenu);
-		contextMenu.addEventListener('interaction:invalidate', () => reloadConversationParticipantList())
-		contextMenu.addEventListener('interaction:invalidate-all', () => reloadConversationParticipantList())
+		const contextMenu = document.getElementById('{unsafe:$interactionContextMenu->getContainerID()|encodeJS}');
+		contextMenu.addEventListener('interaction:invalidate', () => reloadConversationParticipantList());
+		contextMenu.addEventListener('interaction:invalidate-all', () => reloadConversationParticipantList());
 
-		function reloadConversationParticipantList () {
+		function reloadConversationParticipantList() {
 			void getParticipantList({$conversation->conversationID}).then((response) => {
 				if (!response.ok) {
 					return;
