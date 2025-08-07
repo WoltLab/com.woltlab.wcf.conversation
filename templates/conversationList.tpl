@@ -93,12 +93,8 @@
 </div>
 
 <script data-relocate="true">
-	require([
-		'WoltLabSuite/Core/Conversation/Component/MarkAllAsRead',
-		'WoltLabSuite/Core/Conversation/Component/MarkAsRead',
-	], (MarkAllAsRead, MarkAsRead) => {
-		MarkAllAsRead.setup();
-		MarkAsRead.setup();
+	require(['WoltLabSuite/Core/Conversation/Component/MarkAllAsRead'], ({ setup }) => {
+		setup(document.getElementById('{unsafe:$listView->getID()|encodeJS}_items'));
 	});
 </script>
 
