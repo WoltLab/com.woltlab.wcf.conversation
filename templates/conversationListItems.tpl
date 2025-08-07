@@ -48,14 +48,7 @@
 
 		<div class="discussionList__item__content">
 			{if $conversation->isNew()}
-				<button
-					type="button"
-					class="discussionList__item__markAsRead jsTooltip"
-					title="{lang}wcf.conversation.markAsRead{/lang}"
-					data-object-id="{$conversation->conversationID}"
-				>
-					<span class="discussionList__item__unread__indicator" aria-hidden="true"></span>
-				</button>
+				{unsafe:$view->renderMarkAsReadButton($conversation)}
 			{/if}
 			
 			<h2 class="discussionList__item__title">

@@ -121,7 +121,6 @@
 		<item name="wcf.conversation.noParticipantsWarning"><![CDATA[You are about to reply to a conversation without other participants, nobody is going to read your message!]]></item>
 		<item name="wcf.conversation.invisibleParticipantWarning"><![CDATA[You are currently an invisible participant of this conversation. Any message you write in this conversation will be visible to every participant and you will no longer be invisible to others.]]></item>
 		<item name="wcf.conversation.message.permalink"><![CDATA[Permalink to {#$startIndex}. message]]></item>
-		<item name="wcf.conversation.markAsRead"><![CDATA[Mark This Conversation as Read]]></item>
 		<item name="wcf.conversation.visibility"><![CDATA[Read Access]]></item>
 		<item name="wcf.conversation.visibility.all"><![CDATA[All messages]]></item>
 		<item name="wcf.conversation.visibility.all.description"><![CDATA[All messages will be shown, including those written before they were added to this conversation.]]></item>

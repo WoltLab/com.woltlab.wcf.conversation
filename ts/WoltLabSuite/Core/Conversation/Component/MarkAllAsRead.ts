@@ -7,27 +7,26 @@
  * @since 6.2
  */
 
-import { dboAction } from "WoltLabSuite/Core/Ajax";
 import { showDefaultSuccessSnackbar } from "WoltLabSuite/Core/Component/Snackbar";
 import { promiseMutex } from "WoltLabSuite/Core/Helper/PromiseMutex";
+import { markAllConversationsAsRead } from "../../Api/Conversations/MarkAllConversationsAsRead";
 
-async function markAllAsRead(): Promise<void> {
-  await dboAction("markAllAsRead", "wcf\\data\\conversation\\ConversationAction").dispatch();
+async function markAllAsRead(listView: HTMLElement): Promise<void> {
+  (await markAllConversationsAsRead()).unwrap();
 
-  document.querySelectorAll(".conversationList__item__markAsRead").forEach((element: HTMLElement) => {
-    element.remove();
-  });
+  listView.dispatchEvent(new CustomEvent("interaction:invalidate-all"));
+
   document.querySelector("#unreadConversations .badgeUpdate")?.remove();
 
   showDefaultSuccessSnackbar();
 }
 
-export function setup(): void {
+export function setup(listView: HTMLElement): void {
   document.querySelectorAll(".markAllAsReadButton").forEach((element: HTMLElement) => {
     element.addEventListener(
       "click",
       promiseMutex(async () => {
-        await markAllAsRead();
+        await markAllAsRead(listView);
       }),
     );
   });
