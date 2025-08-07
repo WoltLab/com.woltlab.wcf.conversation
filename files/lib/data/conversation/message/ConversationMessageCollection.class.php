@@ -121,8 +121,8 @@ class ConversationMessageCollection extends DatabaseObjectCollection
     private function getEmbeddedObjectIDs(): array
     {
         return \array_map(
-            fn($content) => $content->recordID,
-            \array_filter($this->getObjects(), fn($content) => $content->hasEmbeddedObjects)
+            fn($content) => $content->getObjectID(),
+            \array_filter($this->getObjects(), fn($content) => !!$content->hasEmbeddedObjects)
         );
     }
 

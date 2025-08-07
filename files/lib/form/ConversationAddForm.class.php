@@ -34,7 +34,7 @@ use wcf\util\HeaderUtil;
  *
  * @author      Olaf Braun, Marcel Werk
  * @copyright   2001-2025 WoltLab GmbH
- * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
+ * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
  * @extends AbstractFormBuilderForm<Conversation>
  */
@@ -64,14 +64,11 @@ class ConversationAddForm extends AbstractFormBuilderForm
 
     protected ?UserProfile $user = null;
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function readData()
     {
         parent::readData();
 
-        // add breadcrumbs
         PageLocationManager::getInstance()->addParentLocation('com.woltlab.wcf.conversation.ConversationList');
     }
 
@@ -93,7 +90,6 @@ class ConversationAddForm extends AbstractFormBuilderForm
             }
         }
     }
-
 
     #[\Override]
     public function createForm()
@@ -182,13 +178,13 @@ class ConversationAddForm extends AbstractFormBuilderForm
                         ->label('wcf.conversation.addInvisibleGroupParticipants')
                         ->available(
                             \count($groupParticipants) > 0
-                            && WCF::getSession()->getPermission('user.conversation.canAddInvisibleParticipants')
+                                && WCF::getSession()->getPermission('user.conversation.canAddInvisibleParticipants')
                         ),
                     MultipleSelectionFormField::create('invisibleParticipantGroups')
                         ->label('wcf.conversation.invisibleParticipantGroups')
                         ->available(
                             WCF::getSession()->getPermission('user.conversation.canAddInvisibleParticipants')
-                            && WCF::getSession()->getPermission('user.conversation.canAddGroupParticipants')
+                                && WCF::getSession()->getPermission('user.conversation.canAddGroupParticipants')
                         )
                         ->filterable()
                         ->options($groupParticipants)
@@ -315,9 +311,9 @@ class ConversationAddForm extends AbstractFormBuilderForm
     {
         parent::saved();
 
-        /** @var Conversation $conversation */
         if ($this->formAction === 'create') {
             $conversation = $this->objectAction->getReturnValues()['returnValues'];
+            \assert($conversation instanceof Conversation);
         } else {
             $conversation = new Conversation($this->formObject->conversationID);
         }
@@ -327,7 +323,6 @@ class ConversationAddForm extends AbstractFormBuilderForm
             FloodControl::getInstance()->registerContent('com.woltlab.wcf.conversation.message');
         }
 
-        // forward
         HeaderUtil::redirect($conversation->getLink());
 
         exit;

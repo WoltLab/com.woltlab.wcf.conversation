@@ -60,10 +60,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
             $data['participants'] = \count($this->parameters['participants']);
         }
         // count attachments
-        if (
-            isset($this->parameters['message_attachmentHandler'])
-            && $this->parameters['message_attachmentHandler'] !== null
-        ) {
+        if (isset($this->parameters['message_attachmentHandler'])) {
             $data['attachments'] = \count($this->parameters['message_attachmentHandler']);
         }
         $conversation = \call_user_func([$this->className, 'create'], $data);
@@ -521,6 +518,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
         }
 
         foreach ($unreadConversationList->getObjects() as $conversation) {
+            // @phpstan-ignore property.notFound
             if ($conversation->otherParticipantID) {
                 UserProfileRuntimeCache::getInstance()->cacheObjectID($conversation->otherParticipantID);
             }
@@ -532,9 +530,11 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
                     $image = FontAwesomeIcon::fromValues('users')->toHtml(48);
                     $usernames = \array_map(static fn($user) => $user->username, $conversation->getParticipantSummary());
                 } else {
+                    // @phpstan-ignore property.notFound
                     if ($conversation->otherParticipantID) {
                         $userProfile = UserProfileRuntimeCache::getInstance()->getObject($conversation->otherParticipantID);
                     } else {
+                        // @phpstan-ignore property.notFound
                         $userProfile = UserProfile::getGuestUserProfile($conversation->otherParticipant);
                     }
 

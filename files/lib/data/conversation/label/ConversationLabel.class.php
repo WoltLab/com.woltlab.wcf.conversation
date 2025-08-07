@@ -39,6 +39,9 @@ class ConversationLabel extends DatabaseObject
         'none', /* not a real value */
     ];
 
+    /**
+     * @var array<int, ConversationLabel>
+     */
     private static array $userLabels;
 
     /**

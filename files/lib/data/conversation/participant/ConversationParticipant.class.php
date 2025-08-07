@@ -14,7 +14,7 @@ use wcf\system\WCF;
  * @since       6.2
  *
  * @property-read   int     $conversationParticipantID
- * @property-read   int     $participantID
+ * @property-read   int     $conversationID
  * @property-read   ?int    $participantID
  * @property-read   string  $username
  * @property-read   bool    $hideConversation
@@ -63,7 +63,7 @@ class ConversationParticipant extends DatabaseObject
         return $this->leftAt < $timestamp;
     }
 
-    public static function getParticipant(int $conversationID, int $userID): ?static
+    public static function getParticipant(int $conversationID, int $userID): ?ConversationParticipant
     {
         $sql = "SELECT * FROM wcf1_conversation_to_user WHERE participantID = ? AND conversationID = ?";
         $statement = WCF::getDB()->prepare($sql);
@@ -71,7 +71,7 @@ class ConversationParticipant extends DatabaseObject
 
         $row = $statement->fetchSingleRow();
         if ($row !== false) {
-            return new static(null, $row);
+            return new ConversationParticipant(null, $row);
         }
 
         return null;

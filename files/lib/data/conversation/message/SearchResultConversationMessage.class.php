@@ -16,6 +16,7 @@ use wcf\system\search\SearchResultTextParser;
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
  * @property-read ?string $subject
+ * @mixin ConversationMessage
  * @extends DatabaseObjectDecorator<ConversationMessage>
  */
 class SearchResultConversationMessage extends DatabaseObjectDecorator implements ISearchResultObject
