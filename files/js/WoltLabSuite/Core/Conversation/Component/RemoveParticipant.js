@@ -10,7 +10,7 @@ define(["require", "exports", "WoltLabSuite/Core/Helper/Selector", "../../Api/Co
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.setup = setup;
     function setup() {
-        (0, Selector_1.wheneverSeen)(".conversationRemoveParticipant", (element) => {
+        (0, Selector_1.wheneverFirstSeen)(".conversationRemoveParticipant", (element) => {
             const participantId = parseInt(element.dataset.participantId || "0", 10);
             const conversationId = parseInt(element.dataset.conversationId || "0", 10);
             const confirmMessage = element.dataset.confirmMessage;

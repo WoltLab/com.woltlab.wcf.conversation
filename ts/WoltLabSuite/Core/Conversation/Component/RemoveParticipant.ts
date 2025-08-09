@@ -6,14 +6,14 @@
  * @license  GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  */
 
-import { wheneverSeen } from "WoltLabSuite/Core/Helper/Selector";
+import { wheneverFirstSeen } from "WoltLabSuite/Core/Helper/Selector";
 import { removeParticipant } from "../../Api/Conversations/RemoveParticipant";
 import { promiseMutex } from "WoltLabSuite/Core/Helper/PromiseMutex";
 import { confirmationFactory } from "WoltLabSuite/Core/Component/Confirmation";
 import { getPhrase } from "WoltLabSuite/Core/Language";
 
 export function setup(): void {
-  wheneverSeen(".conversationRemoveParticipant", (element: HTMLButtonElement) => {
+  wheneverFirstSeen(".conversationRemoveParticipant", (element: HTMLButtonElement) => {
     const participantId = parseInt(element.dataset.participantId || "0", 10);
     const conversationId = parseInt(element.dataset.conversationId || "0", 10);
     const confirmMessage = element.dataset.confirmMessage!;
