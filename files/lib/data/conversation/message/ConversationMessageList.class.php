@@ -62,10 +62,10 @@ class ConversationMessageList extends DatabaseObjectList
             $this->attachments = null;
             $attachmentObjectIDs = $this->getAttachmentObjectIDs();
             if ($attachmentObjectIDs !== []) {
-                $attachmentList = new GroupedAttachmentList('com.woltlab.wcf.conversation.message');
-                $attachmentList->getConditionBuilder()
+                $this->attachments = new GroupedAttachmentList('com.woltlab.wcf.conversation.message');
+                $this->attachments->getConditionBuilder()
                     ->add('attachment.objectID IN (?)', [$attachmentObjectIDs]);
-                $attachmentList->readObjects();
+                $this->attachments->readObjects();
             } else {
                 $this->attachments = null;
             }
