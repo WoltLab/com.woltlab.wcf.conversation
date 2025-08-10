@@ -6,7 +6,7 @@
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @woltlabExcludeBundle tiny
  */
-define(["require", "exports", "tslib", "WoltLabSuite/Core/Ajax", "WoltLabSuite/Core/Ui/User/Menu/View", "WoltLabSuite/Core/Ui/User/Menu/Manager"], function (require, exports, tslib_1, Ajax_1, View_1, Manager_1) {
+define(["require", "exports", "tslib", "WoltLabSuite/Core/Ajax", "WoltLabSuite/Core/Ui/User/Menu/View", "WoltLabSuite/Core/Ui/User/Menu/Manager", "../../../../../Api/Conversations/MarkAllConversationsAsRead"], function (require, exports, tslib_1, Ajax_1, View_1, Manager_1, MarkAllConversationsAsRead_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.setup = setup;
@@ -101,7 +101,7 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Ajax", "WoltLabSuite/C
             this.updateCounter(response.totalCount);
         }
         async markAllAsRead() {
-            await (0, Ajax_1.dboAction)("markAllAsRead", "wcf\\data\\conversation\\ConversationAction").dispatch();
+            (await (0, MarkAllConversationsAsRead_1.markAllConversationsAsRead)()).unwrap();
             this.updateCounter(0);
         }
         updateCounter(counter) {

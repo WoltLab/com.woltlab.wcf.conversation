@@ -21,7 +21,8 @@ final class MarkConversationAsRead
 {
     public function __construct(
         public readonly Conversation $conversation,
-        public readonly User $user
+        public readonly User $user,
+        public readonly int $time = \TIME_NOW
     ) {}
 
     public function __invoke(): void
@@ -32,17 +33,17 @@ final class MarkConversationAsRead
                     AND conversationID = ?";
         $statement = WCF::getDB()->prepare($sql);
         $statement->execute([
-            \TIME_NOW,
+            $this->time,
             $this->user->userID,
             $this->conversation->conversationID,
         ]);
 
         UserStorageHandler::getInstance()->reset([$this->user->userID], 'unreadConversationCount');
 
-        $this->markNotificationsAsConfirmed($this->conversation->conversationID, $this->user->userID);
+        $this->markNotificationsAsConfirmed($this->conversation->conversationID, $this->user->userID, $this->time);
     }
 
-    private function markNotificationsAsConfirmed(int $conversationID, int $userID): void
+    private function markNotificationsAsConfirmed(int $conversationID, int $userID, int $time): void
     {
         // 1) Mark notifications about new conversations as read.
         UserNotificationHandler::getInstance()->markAsConfirmed(
@@ -68,7 +69,7 @@ final class MarkConversationAsRead
                 AND time <= ?
         )", [
             $conversationID,
-            \TIME_NOW,
+            $time,
         ]);
 
         $sql = "SELECT  notificationID

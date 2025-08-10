@@ -2,6 +2,7 @@
 
 namespace wcf\data\conversation;
 
+use wcf\command\conversation\MarkAllConversationsAsRead;
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\data\conversation\message\ConversationMessageList;
@@ -265,6 +266,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
 
     /**
      * @inheritDoc
+     * @deprecated 6.2 Use `MarkConversationAsRead` instead.
      */
     public function markAsRead()
     {
@@ -356,6 +358,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
 
     /**
      * @inheritDoc
+     * @deprecated 6.2 Use `MarkConversationAsRead` instead.
      */
     public function validateMarkAsRead()
     {
@@ -393,32 +396,11 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
      * Marks all conversations as read.
      *
      * @return array{markAllAsRead: bool}
+     * @deprecated 6.2 Use `MarkAllConversationsAsRead` instead.
      */
     public function markAllAsRead()
     {
-        $sql = "UPDATE  wcf1_conversation_to_user
-                SET     lastVisitTime = ?
-                WHERE   participantID = ?";
-        $statement = WCF::getDB()->prepare($sql);
-        $statement->execute([
-            TIME_NOW,
-            WCF::getUser()->userID,
-        ]);
-
-        // reset storage
-        UserStorageHandler::getInstance()->reset([WCF::getUser()->userID], 'unreadConversationCount');
-
-        // confirm obsolete notifications
-        UserNotificationHandler::getInstance()->markAsConfirmed(
-            'conversation',
-            'com.woltlab.wcf.conversation.notification',
-            [WCF::getUser()->userID]
-        );
-        UserNotificationHandler::getInstance()->markAsConfirmed(
-            'conversationMessage',
-            'com.woltlab.wcf.conversation.message.notification',
-            [WCF::getUser()->userID]
-        );
+        (new MarkAllConversationsAsRead(WCF::getUser()))();
 
         return [
             'markAllAsRead' => true,
@@ -429,6 +411,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
      * Validates the markAllAsRead action.
      *
      * @return void
+     * @deprecated 6.2 Use `MarkAllConversationsAsRead` instead.
      */
     public function validateMarkAllAsRead()
     {

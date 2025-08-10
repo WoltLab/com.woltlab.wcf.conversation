@@ -17,6 +17,7 @@ import {
   UserMenuProvider,
 } from "WoltLabSuite/Core/Ui/User/Menu/Data/Provider";
 import { registerProvider } from "WoltLabSuite/Core/Ui/User/Menu/Manager";
+import { markAllConversationsAsRead } from "../../../../../Api/Conversations/MarkAllConversationsAsRead";
 
 type Options = {
   canStartConversation: boolean;
@@ -152,7 +153,7 @@ class UserMenuDataConversation implements UserMenuProvider {
   }
 
   async markAllAsRead(): Promise<void> {
-    await dboAction("markAllAsRead", "wcf\\data\\conversation\\ConversationAction").dispatch();
+    (await markAllConversationsAsRead()).unwrap();
 
     this.updateCounter(0);
   }

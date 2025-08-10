@@ -2,8 +2,8 @@
 
 namespace wcf\page;
 
+use wcf\command\conversation\MarkConversationAsRead;
 use wcf\data\conversation\Conversation;
-use wcf\data\conversation\ConversationAction;
 use wcf\data\conversation\ConversationParticipantList;
 use wcf\data\conversation\label\ConversationLabelList;
 use wcf\data\conversation\message\ConversationMessage;
@@ -214,14 +214,9 @@ class ConversationPage extends MultipleLinkPage
         ) {
             $visitTime = $this->objectList->getMaxTime();
             if ($visitTime == $this->conversation->lastPostTime) {
-                $visitTime = TIME_NOW;
+                $visitTime = \TIME_NOW;
             }
-            $conversationAction = new ConversationAction(
-                [$this->conversation],
-                'markAsRead',
-                ['visitTime' => $visitTime]
-            );
-            $conversationAction->executeAction();
+            (new MarkConversationAsRead($this->conversation, WCF::getUser(), $visitTime))();
         }
 
         // get participants
