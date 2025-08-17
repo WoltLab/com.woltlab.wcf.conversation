@@ -2,6 +2,7 @@
 
 namespace wcf\data\conversation\message;
 
+use wcf\command\conversation\RebuildConversation;
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationAction;
@@ -242,10 +243,10 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
     {
         $count = parent::delete();
 
-        $attachmentMessageIDs = $conversationIDs = [];
+        $attachmentMessageIDs = $conversations = [];
         foreach ($this->getObjects() as $message) {
-            if (!\in_array($message->conversationID, $conversationIDs)) {
-                $conversationIDs[] = $message->conversationID;
+            if (!\array_key_exists($message->conversationID, $conversations)) {
+                $conversations[$message->conversationID] = $message->getConversation();
             }
 
             if ($message->attachments) {
@@ -253,10 +254,8 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
             }
         }
 
-        // rebuild conversations
-        if (!empty($conversationIDs)) {
-            $conversationAction = new ConversationAction($conversationIDs, 'rebuild');
-            $conversationAction->executeAction();
+        foreach ($conversations as $conversation) {
+            (new RebuildConversation($conversation))();
         }
 
         if (!empty($this->objectIDs)) {

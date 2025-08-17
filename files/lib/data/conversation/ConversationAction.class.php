@@ -3,6 +3,7 @@
 namespace wcf\data\conversation;
 
 use wcf\command\conversation\MarkAllConversationsAsRead;
+use wcf\command\conversation\RebuildConversation;
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\data\conversation\message\ConversationMessageList;
@@ -563,6 +564,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
      * Rebuilds the conversation data of the relevant conversations.
      *
      * @return void
+     *
+     * @deprecated 6.3 Use the `RebuildConversation` command instead.
      */
     public function rebuild()
     {
@@ -570,39 +573,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
             $this->readObjects();
         }
 
-        // collect number of messages for each conversation
-        $conditionBuilder = new PreparedStatementConditionBuilder();
-        $conditionBuilder->add('conversation_message.conversationID IN (?)', [$this->objectIDs]);
-        $sql = "SELECT      conversationID, COUNT(messageID) AS messages, SUM(attachments) AS attachments
-                FROM        wcf1_conversation_message conversation_message
-                " . $conditionBuilder . "
-                GROUP BY    conversationID";
-        $statement = WCF::getDB()->prepare($sql);
-        $statement->execute($conditionBuilder->getParameters());
-
-        $objectIDs = [];
-        while ($row = $statement->fetchArray()) {
-            if (!$row['messages']) {
-                continue;
-            }
-            $objectIDs[] = $row['conversationID'];
-
-            $conversationEditor = new ConversationEditor(new Conversation(null, [
-                'conversationID' => $row['conversationID'],
-            ]));
-            $conversationEditor->update([
-                'attachments' => $row['attachments'],
-                'replies' => $row['messages'] - 1,
-            ]);
-            $conversationEditor->updateFirstMessage();
-            $conversationEditor->updateLastMessage();
-        }
-
-        // delete conversations without messages
-        $deleteConversationIDs = \array_diff($this->objectIDs, $objectIDs);
-        if (!empty($deleteConversationIDs)) {
-            $conversationAction = new self($deleteConversationIDs, 'delete');
-            $conversationAction->executeAction();
+        foreach ($this->objects as $editor) {
+            (new RebuildConversation($editor->getDecoratedObject()))();
         }
     }
 }
