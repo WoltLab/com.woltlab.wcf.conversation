@@ -79,6 +79,7 @@ final class EditSubjectConversationDialogAction implements RequestHandlerInterfa
                 ->label('wcf.global.subject')
                 ->maximumLength(255)
                 ->autoFocus()
+                ->censorship()
                 ->required(),
         ]);
 

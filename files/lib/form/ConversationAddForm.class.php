@@ -111,6 +111,7 @@ class ConversationAddForm extends AbstractFormBuilderForm
                     TextFormField::create('subject')
                         ->label('wcf.global.subject')
                         ->maximumLength(255)
+                        ->censorship()
                         ->required(),
                     BooleanFormField::create('isDraft')
                         ->label('wcf.conversation.form.isDraft'),
