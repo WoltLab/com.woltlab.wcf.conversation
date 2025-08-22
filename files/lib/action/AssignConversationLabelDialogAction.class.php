@@ -35,16 +35,16 @@ final class AssignConversationLabelDialogAction implements RequestHandlerInterfa
             <<<'EOT'
                 array {
                     id?: positive-int,
-                    objectIDs?: positive-int[]
+                    ids?: positive-int[]
                 }
                 EOT
         );
 
-        if (!isset($parameters['id']) && !isset($parameters['objectIDs'])) {
+        if (!isset($parameters['id']) && !isset($parameters['ids'])) {
             throw new IllegalLinkException();
         }
 
-        $conversationIDs = $parameters['objectIDs'] ?? [$parameters['id']];
+        $conversationIDs = $parameters['ids'] ?? [$parameters['id']];
 
         if ($conversationIDs === []) {
             throw new IllegalLinkException();
