@@ -39,4 +39,21 @@
 		<instruction type="eventListener" />
 		<instruction type="page" />
 	</instructions>
+
+	<instructions type="update" fromversion="6.1.*">
+		<instruction type="file"/>
+		<instruction type="template"/>
+
+		<instruction type="database">acp/database/update_com.woltlab.wcf.conversation_6.2.php</instruction>
+
+		<instruction type="language"/>
+
+		<instruction type="objectType"/>
+		<instruction type="page"/>
+		<instruction type="clipboardAction"/>
+		<instruction type="fileDelete"/>
+		<instruction type="templateDelete"/>
+		<instruction type="templateListener"/>
+		<instruction type="userGroupOption"/>
+	</instructions>
 </package>
