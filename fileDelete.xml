@@ -4,6 +4,7 @@
 		<file>js/WCF.Conversation.js</file>
 		<file>js/WCF.Conversation.min.js</file>
 		<file>js/WCF.Conversation.tiny.min.js</file>
+		<file>js/WoltLabSuite/Core/Conversation/Ui/MarkAllAsRead.js</file>
 		<file>js/WoltLabSuite/Core/Conversation/Ui/MarkAsRead.js</file>
 		<file>js/WoltLabSuite/Core/Conversation/Ui/Message/Quote.js</file>
 		<file>js/WoltLabSuite/Core/Conversation/Ui/Object/Action/RemoveParticipant.js</file>
@@ -11,6 +12,5 @@
 		<file>js/WoltLabSuite/Core/Conversation/Ui/Subject/Editor.js</file>
 		<file>lib/data/conversation/ViewableConversation.class.php</file>
 		<file>lib/system/clipboard/action/ConversationClipboardAction.class.php</file>
-		<file>lib/system/message/quote/ConversationMessageQuoteHandler.class.php</file>
 	</delete>
 </data>
