@@ -68,10 +68,10 @@
 		<item name="wcf.conversation.filter.participants"><![CDATA[Filter nach Teilnehmern]]></item>
 		<item name="wcf.conversation.folders"><![CDATA[Ordner]]></item>
 		<item name="wcf.conversation.folder.draft"><![CDATA[Entwürfe]]></item>
-		<item name="wcf.conversation.folder.hidden"><![CDATA[Ausgeblendet]]></item>
+		<item name="wcf.conversation.folder.hidden"><![CDATA[Archiviert]]></item>
 		<item name="wcf.conversation.folder.outbox"><![CDATA[Gestartet]]></item>
 		<item name="wcf.conversation.hideConversation"><![CDATA[Teilnahme verwalten]]></item>
-		<item name="wcf.conversation.hideConversation.leave"><![CDATA[Ausblenden]]></item>
+		<item name="wcf.conversation.hideConversation.leave"><![CDATA[Archivieren]]></item>
 		<item name="wcf.conversation.hideConversation.leavePermanently"><![CDATA[Verlassen]]></item>
 		<item name="wcf.conversation.hideConversation.restore"><![CDATA[Als aktiv markieren]]></item>
 		<item name="wcf.conversation.hideConversation.restore.confirmationMessage"><![CDATA[Konversation wieder als aktiv markieren?]]></item>
