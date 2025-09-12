@@ -5,10 +5,9 @@ namespace wcf\data\conversation\message;
 use wcf\data\conversation\Conversation;
 use wcf\data\DatabaseObjectCollection;
 use wcf\data\object\type\ObjectTypeCache;
-use wcf\data\user\UserProfile;
+use wcf\data\TCollectionUserProfiles;
 use wcf\system\cache\runtime\ConversationRuntimeCache;
 use wcf\system\cache\runtime\FileRuntimeCache;
-use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\file\processor\ImageData;
 use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
@@ -26,6 +25,8 @@ use wcf\system\WCF;
  */
 class ConversationMessageCollection extends DatabaseObjectCollection
 {
+    use TCollectionUserProfiles;
+
     /**
      * @var array<int, Conversation>
      */
@@ -37,7 +38,6 @@ class ConversationMessageCollection extends DatabaseObjectCollection
     private array $teaserImages;
 
     private bool $embeddedObjectsLoaded = false;
-    private bool $userProfilesLoaded = false;
 
     public function getConversation(ConversationMessage $object): ?Conversation
     {
@@ -82,37 +82,6 @@ class ConversationMessageCollection extends DatabaseObjectCollection
 
         MessageEmbeddedObjectManager::getInstance()
             ->loadObjects('com.woltlab.wcf.conversation.message', $objectIDs);
-    }
-
-    public function getUserProfile(ConversationMessage $message): UserProfile
-    {
-        $this->loadUserProfiles();
-
-        if ($message->userID) {
-            return UserProfileRuntimeCache::getInstance()->getObject($message->userID);
-        } else {
-            return UserProfile::getGuestUserProfile($message->username);
-        }
-    }
-
-    private function loadUserProfiles(): void
-    {
-        if ($this->userProfilesLoaded) {
-            return;
-        }
-
-        $this->userProfilesLoaded = true;
-
-        $userIDs = [];
-        foreach ($this->getObjects() as $object) {
-            if ($object->userID) {
-                $userIDs[] = $object->userID;
-            }
-        }
-
-        if ($userIDs !== []) {
-            UserProfileRuntimeCache::getInstance()->cacheObjectIDs($userIDs);
-        }
     }
 
     /**
