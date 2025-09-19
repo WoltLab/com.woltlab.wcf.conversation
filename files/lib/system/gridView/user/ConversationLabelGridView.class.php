@@ -49,7 +49,7 @@ final class ConversationLabelGridView extends AbstractGridView
 
         $interactions = new ConversationLabelInteractions();
         $this->setInteractionProvider($interactions);
-        $this->setSortField("label");
+        $this->setDefaultSortField("label");
         $this->addRowLink(new GridViewRowLink(cssClass: 'editConversationLabel'));
     }
 
