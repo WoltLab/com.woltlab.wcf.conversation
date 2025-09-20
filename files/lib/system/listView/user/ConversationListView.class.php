@@ -61,8 +61,8 @@ final class ConversationListView extends AbstractListView
         $this->setBulkInteractionProvider(new ConversationBulkInteractions());
 
         $this->setItemsPerPage(WCF::getUser()->conversationsPerPage ?: \CONVERSATIONS_PER_PAGE);
-        $this->setSortField(\CONVERSATION_LIST_DEFAULT_SORT_FIELD);
-        $this->setSortOrder(\CONVERSATION_LIST_DEFAULT_SORT_ORDER);
+        $this->setDefaultSortField(\CONVERSATION_LIST_DEFAULT_SORT_FIELD);
+        $this->setDefaultSortOrder(\CONVERSATION_LIST_DEFAULT_SORT_ORDER);
         $this->setCssClassName("discussionList conversationList");
         $this->setContainerCssClassName('discussionList__container conversationList__container');
         $this->setMarkAsReadEndpoints('core/conversations/%s/mark-as-read');
