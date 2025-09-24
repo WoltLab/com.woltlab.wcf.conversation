@@ -7,11 +7,11 @@ use wcf\data\conversation\label\ConversationLabelList;
 use wcf\data\DatabaseObject;
 use wcf\event\gridView\user\ConversationLabelGridViewInitialized;
 use wcf\system\gridView\AbstractGridView;
-use wcf\system\gridView\filter\TextFilter;
 use wcf\system\gridView\GridViewColumn;
 use wcf\system\gridView\GridViewRowLink;
 use wcf\system\gridView\renderer\DefaultColumnRenderer;
 use wcf\system\interaction\user\ConversationLabelInteractions;
+use wcf\system\view\filter\TextFilter;
 use wcf\system\WCF;
 
 /**
@@ -33,7 +33,7 @@ final class ConversationLabelGridView extends AbstractGridView
                 ->label('wcf.global.title')
                 ->titleColumn()
                 ->sortable()
-                ->filter(new TextFilter())
+                ->filter(TextFilter::class)
                 ->renderer(
                     new class extends DefaultColumnRenderer {
                         #[\Override]

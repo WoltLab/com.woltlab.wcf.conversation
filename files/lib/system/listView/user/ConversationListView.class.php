@@ -12,9 +12,9 @@ use wcf\system\form\builder\field\ConversationLabelFormField;
 use wcf\system\interaction\bulk\user\ConversationBulkInteractions;
 use wcf\system\interaction\user\ConversationInteractions;
 use wcf\system\listView\AbstractListView;
-use wcf\system\listView\filter\AbstractFilter;
-use wcf\system\listView\filter\TextFilter;
-use wcf\system\listView\filter\UserFilter;
+use wcf\system\view\filter\AbstractFilter;
+use wcf\system\view\filter\TextFilter;
+use wcf\system\view\filter\UserFilter;
 use wcf\system\listView\ListViewSortField;
 use wcf\system\WCF;
 
