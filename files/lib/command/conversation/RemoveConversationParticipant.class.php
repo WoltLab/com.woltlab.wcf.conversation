@@ -8,12 +8,12 @@ use wcf\system\log\modification\ConversationModificationLogHandler;
 use wcf\system\user\storage\UserStorageHandler;
 
 /**
- * Command for removing a participant from a conversation.
+ * Removes a participant from a conversation.
  *
- * @author Olaf Braun
- * @copyright 2001-2025 WoltLab GmbH
- * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @since 6.2
+ * @author      Olaf Braun
+ * @copyright   2001-2025 WoltLab GmbH
+ * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
+ * @since       6.2
  */
 final class RemoveConversationParticipant
 {

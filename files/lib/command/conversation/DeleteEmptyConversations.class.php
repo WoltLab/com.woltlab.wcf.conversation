@@ -9,7 +9,7 @@ use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\WCF;
 
 /**
- * Command for deleting conversation if all users have left it
+ * Deletes conversations if all users have left them.
  *
  * @author      Olaf Braun
  * @copyright   2001-2025 WoltLab GmbH

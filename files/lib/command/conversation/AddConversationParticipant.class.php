@@ -7,7 +7,7 @@ use wcf\data\conversation\ConversationAction;
 use wcf\system\log\modification\ConversationModificationLogHandler;
 
 /**
- * Command to add participants to a conversation.
+ * Adds participants to a conversation.
  *
  * @author      Olaf Braun
  * @copyright   2001-2025 WoltLab GmbH
