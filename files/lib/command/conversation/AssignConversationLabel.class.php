@@ -1,6 +1,6 @@
 <?php
 
-namespace wcf\system\conversation\command;
+namespace wcf\command\conversation;
 
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\WCF;

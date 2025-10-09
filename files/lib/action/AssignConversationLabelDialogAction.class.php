@@ -9,7 +9,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\http\Helper;
-use wcf\system\conversation\command\AssignConversationLabel;
+use wcf\command\conversation\AssignConversationLabel;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\PermissionDeniedException;

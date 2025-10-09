@@ -7,11 +7,11 @@ use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use wcf\command\conversation\AddConversationParticipant;
 use wcf\data\conversation\Conversation;
 use wcf\data\user\group\UserGroup;
 use wcf\http\Helper;
 use wcf\system\cache\builder\UserGroupCacheBuilder;
-use wcf\system\conversation\command\AddParticipantConversation;
 use wcf\system\conversation\TConversationForm;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\PermissionDeniedException;
@@ -83,7 +83,7 @@ final class AddConversationParticipantDialogAction implements RequestHandlerInte
 
             $participants = $this->filterOutParticipantsAlreadyAdded($participants, $conversation);
 
-            (new AddParticipantConversation($conversation, $participants, $messageVisibility))();
+            (new AddConversationParticipant($conversation, $participants, $messageVisibility))();
 
             return new JsonResponse([]);
         } else {

@@ -9,7 +9,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use wcf\data\conversation\Conversation;
 use wcf\http\Helper;
-use wcf\system\conversation\command\SetConversationSubject;
+use wcf\command\conversation\SetConversationSubject;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\form\builder\field\TextFormField;

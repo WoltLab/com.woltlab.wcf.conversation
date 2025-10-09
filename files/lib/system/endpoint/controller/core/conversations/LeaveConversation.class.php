@@ -28,7 +28,7 @@ final class LeaveConversation implements IController
         $conversation = Helper::fetchObjectFromRequestParameter($variables['id'], Conversation::class);
         $this->assertConversationIsAccessible($conversation);
 
-        (new \wcf\system\conversation\command\LeaveConversation([$conversation->conversationID], Conversation::STATE_HIDDEN))();
+        (new \wcf\command\conversation\LeaveConversation([$conversation->conversationID], Conversation::STATE_HIDDEN))();
 
         return new JsonResponse([]);
     }

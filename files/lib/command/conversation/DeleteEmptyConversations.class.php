@@ -1,6 +1,6 @@
 <?php
 
-namespace wcf\system\conversation\command;
+namespace wcf\command\conversation;
 
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationAction;

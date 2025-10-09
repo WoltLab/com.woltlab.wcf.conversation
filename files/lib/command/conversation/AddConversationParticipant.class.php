@@ -1,21 +1,20 @@
 <?php
 
-namespace wcf\system\conversation\command;
+namespace wcf\command\conversation;
 
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationAction;
-use wcf\data\conversation\ConversationEditor;
 use wcf\system\log\modification\ConversationModificationLogHandler;
 
 /**
  * Command to add participants to a conversation.
  *
- * @author Olaf Braun
- * @copyright 2001-2025 WoltLab GmbH
- * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @since 6.2
+ * @author      Olaf Braun
+ * @copyright   2001-2025 WoltLab GmbH
+ * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
+ * @since       6.2
  */
-final class AddParticipantConversation
+final class AddConversationParticipant
 {
     public function __construct(
         public readonly Conversation $conversation,

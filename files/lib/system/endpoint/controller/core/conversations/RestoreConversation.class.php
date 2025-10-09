@@ -28,7 +28,7 @@ final class RestoreConversation implements IController
         $conversation = Helper::fetchObjectFromRequestParameter($variables['id'], Conversation::class);
         $this->assertConversationIsAccessible($conversation);
 
-        (new \wcf\system\conversation\command\LeaveConversation([$conversation->conversationID], Conversation::STATE_DEFAULT))();
+        (new \wcf\command\conversation\LeaveConversation([$conversation->conversationID], Conversation::STATE_DEFAULT))();
 
         return new JsonResponse([]);
     }

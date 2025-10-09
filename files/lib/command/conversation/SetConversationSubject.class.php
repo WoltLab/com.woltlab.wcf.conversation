@@ -1,6 +1,6 @@
 <?php
 
-namespace wcf\system\conversation\command;
+namespace wcf\command\conversation;
 
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationEditor;
@@ -17,8 +17,7 @@ final class SetConversationSubject
     public function __construct(
         public readonly Conversation $conversation,
         public readonly string $subject,
-    ) {
-    }
+    ) {}
 
     public function __invoke(): void
     {
