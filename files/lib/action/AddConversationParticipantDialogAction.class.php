@@ -31,7 +31,7 @@ use wcf\system\WCF;
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @since 6.2
  */
-final class AddParticipantConversationDialogAction implements RequestHandlerInterface
+final class AddConversationParticipantDialogAction implements RequestHandlerInterface
 {
     use TConversationForm;
 
@@ -115,7 +115,7 @@ final class AddParticipantConversationDialogAction implements RequestHandlerInte
         $groupParticipants = \array_filter(
             UserGroupCacheBuilder::getInstance()->getData([], 'groups'),
             // @phpstan-ignore property.notFound
-            static fn (UserGroup $group) => $group->canBeAddedAsConversationParticipant
+            static fn(UserGroup $group) => $group->canBeAddedAsConversationParticipant
         );
 
         $form->appendChildren([

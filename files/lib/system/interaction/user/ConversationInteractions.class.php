@@ -2,7 +2,7 @@
 
 namespace wcf\system\interaction\user;
 
-use wcf\action\AddParticipantConversationDialogAction;
+use wcf\action\AddConversationParticipantDialogAction;
 use wcf\action\AssignConversationLabelDialogAction;
 use wcf\action\EditSubjectConversationDialogAction;
 use wcf\data\conversation\Conversation;
@@ -60,7 +60,7 @@ final class ConversationInteractions extends AbstractInteractionProvider
             new Divider(),
             new FormBuilderDialogInteraction(
                 'addParticipants',
-                LinkHandler::getInstance()->getControllerLink(AddParticipantConversationDialogAction::class, ['id' => '%s']),
+                LinkHandler::getInstance()->getControllerLink(AddConversationParticipantDialogAction::class, ['id' => '%s']),
                 'wcf.conversation.edit.addParticipants',
                 static fn(Conversation $conversation) => $conversation->canAddParticipants(),
             ),
