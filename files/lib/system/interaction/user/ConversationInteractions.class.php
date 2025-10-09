@@ -75,21 +75,21 @@ final class ConversationInteractions extends AbstractInteractionProvider
                 },
             ),
             new RpcInteraction(
-                'leave',
-                'core/conversations/%s/leave',
-                'wcf.conversation.hideConversation.leave',
+                'hide',
+                'core/conversations/%s/hide',
+                'wcf.conversation.hideConversation.hide',
                 InteractionConfirmationType::Custom,
-                'wcf.conversation.hideConversation.leave.confirmationMessage',
+                'wcf.conversation.hideConversation.hide.confirmationMessage',
                 static function (Conversation $conversation) {
                     return !$conversation->hideConversation;
                 },
             ),
             new RpcInteraction(
-                'leave-permanently',
-                'core/conversations/%s/leave-permanently',
-                'wcf.conversation.hideConversation.leavePermanently',
+                'leave',
+                'core/conversations/%s/leave',
+                'wcf.conversation.hideConversation.leave',
                 InteractionConfirmationType::Custom,
-                'wcf.conversation.hideConversation.leavePermanently.confirmationMessage',
+                'wcf.conversation.hideConversation.leave.confirmationMessage',
                 interactionEffect: InteractionEffect::RemoveItem,
             ),
             new EditInteraction(

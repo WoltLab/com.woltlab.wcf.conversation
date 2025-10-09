@@ -12,15 +12,15 @@ use wcf\system\endpoint\PostRequest;
 use wcf\system\exception\PermissionDeniedException;
 
 /**
- * Leaves the conversation with the given ID permanently.
+ * Hides the conversation with the given ID.
  *
  * @author Olaf Braun
  * @copyright 2001-2025 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @since 6.2
  */
-#[PostRequest('/core/conversations/{id:\d+}/leave-permanently')]
-final class LeavePermanentlyConversation implements IController
+#[PostRequest('/core/conversations/{id:\d+}/hide')]
+final class HideConversation implements IController
 {
     #[\Override]
     public function __invoke(ServerRequestInterface $request, array $variables): ResponseInterface
@@ -28,7 +28,7 @@ final class LeavePermanentlyConversation implements IController
         $conversation = Helper::fetchObjectFromRequestParameter($variables['id'], Conversation::class);
         $this->assertConversationIsAccessible($conversation);
 
-        (new \wcf\command\conversation\LeaveConversation([$conversation->conversationID], Conversation::STATE_LEFT))();
+        (new \wcf\command\conversation\HideConversation($conversation))();
 
         return new JsonResponse([]);
     }

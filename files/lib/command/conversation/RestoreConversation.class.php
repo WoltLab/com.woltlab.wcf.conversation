@@ -3,19 +3,17 @@
 namespace wcf\command\conversation;
 
 use wcf\data\conversation\Conversation;
-use wcf\system\log\modification\ConversationModificationLogHandler;
-use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\WCF;
 
 /**
- * Removes the active user from the given conversation.
+ * Restores the given conversation for the active user.
  *
  * @author      Olaf Braun
  * @copyright   2001-2025 WoltLab GmbH
  * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @since       6.2
  */
-final class LeaveConversation
+final class RestoreConversation
 {
     public function __construct(
         public readonly Conversation $conversation,
@@ -29,16 +27,9 @@ final class LeaveConversation
                     AND participantID = ?";
         $statement = WCF::getDB()->prepare($sql);
         $statement->execute([
-            Conversation::STATE_LEFT,
+            Conversation::STATE_DEFAULT,
             $this->conversation->conversationID,
             WCF::getUser()->userID,
         ]);
-
-        UserStorageHandler::getInstance()->reset([WCF::getUser()->userID], 'conversationCount');
-        UserStorageHandler::getInstance()->reset([WCF::getUser()->userID], 'unreadConversationCount');
-
-        ConversationModificationLogHandler::getInstance()->leave($this->conversation);
-
-        (new DeleteEmptyConversations([$this->conversation->conversationID]))();
     }
 }
