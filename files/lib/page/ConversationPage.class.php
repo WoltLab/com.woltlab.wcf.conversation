@@ -42,6 +42,8 @@ class ConversationPage extends MultipleLinkPage
      */
     public $itemsPerPage = CONVERSATION_MESSAGES_PER_PAGE;
 
+    public $sortField = 'conversation_message.time';
+
     /**
      * @inheritDoc
      */
