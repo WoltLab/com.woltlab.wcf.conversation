@@ -2,18 +2,18 @@
 
 namespace wcf\data\conversation\message;
 
-use wcf\data\conversation\Conversation;
 use wcf\data\DatabaseObjectDecorator;
 use wcf\data\search\ISearchResultObject;
+use wcf\page\ConversationPage;
 use wcf\system\request\LinkHandler;
 use wcf\system\search\SearchResultTextParser;
 
 /**
  * Represents a conversation message as a search result.
  *
- * @author  Marcel Werk
- * @copyright   2001-2019 WoltLab GmbH
- * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
+ * @author      Marcel Werk
+ * @copyright   2001-2025 WoltLab GmbH
+ * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
  * @property-read ?string $subject
  * @mixin ConversationMessage
@@ -22,27 +22,9 @@ use wcf\system\search\SearchResultTextParser;
 class SearchResultConversationMessage extends DatabaseObjectDecorator implements ISearchResultObject
 {
     /**
-     * conversation object
-     * @var Conversation
+     * @inheritDoc
      */
-    public $conversation;
-
-    /**
-     * Returns the conversation object.
-     *
-     * @return  Conversation
-     */
-    public function getConversation()
-    {
-        if ($this->conversation === null) {
-            $this->conversation = new Conversation(null, [
-                'conversationID' => $this->conversationID,
-                'subject' => $this->subject,
-            ]);
-        }
-
-        return $this->conversation;
-    }
+    protected static $baseClass = ConversationMessage::class;
 
     /**
      * @inheritDoc
@@ -68,7 +50,7 @@ class SearchResultConversationMessage extends DatabaseObjectDecorator implements
     public function getLink($query = '')
     {
         if ($query) {
-            return LinkHandler::getInstance()->getLink('Conversation', [
+            return LinkHandler::getInstance()->getControllerLink(ConversationPage::class, [
                 'object' => $this->getConversation(),
                 'messageID' => $this->messageID,
                 'highlight' => \urlencode($query),

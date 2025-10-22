@@ -5,9 +5,9 @@ namespace wcf\data\conversation\message;
 /**
  * Represents a list of search results.
  *
- * @author  Marcel Werk
- * @copyright   2001-2019 WoltLab GmbH
- * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
+ * @author      Marcel Werk
+ * @copyright   2001-2025 WoltLab GmbH
+ * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
  * @extends ConversationMessageList<SearchResultConversationMessage>
  */
