@@ -54,19 +54,19 @@ final class ConversationBulkInteractions extends AbstractBulkInteractionProvider
                 static fn(Conversation $conversation) => (bool)$conversation->hideConversation
             ),
             new BulkRpcInteraction(
+                'hide',
+                'core/conversations/%s/hide',
+                'wcf.conversation.hideConversation.hide',
+                InteractionConfirmationType::Custom,
+                'wcf.conversation.hideConversation.hide.confirmationMessage',
+                static fn(Conversation $conversation) => !$conversation->hideConversation
+            ),
+            new BulkRpcInteraction(
                 'leave',
                 'core/conversations/%s/leave',
                 'wcf.conversation.hideConversation.leave',
                 InteractionConfirmationType::Custom,
-                'wcf.conversation.hideConversation.leave.confirmationMessage',
-                static fn(Conversation $conversation) => !$conversation->hideConversation
-            ),
-            new BulkRpcInteraction(
-                'leave-permanently',
-                'core/conversations/%s/leave-permanently',
-                'wcf.conversation.hideConversation.leavePermanently',
-                InteractionConfirmationType::Custom,
-                'wcf.conversation.hideConversation.leavePermanently.confirmationMessage',
+                'wcf.conversation.hideConversation.leave.confirmationMessage'
             ),
         ]);
 
