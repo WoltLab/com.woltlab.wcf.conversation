@@ -121,7 +121,6 @@ class ConversationAddForm extends AbstractFormBuilderForm
                 ->appendChildren([
                     UserFormField::create('participants')
                         ->label('wcf.conversation.participants')
-                        ->description('wcf.conversation.participants.description')
                         ->maximumMultiples(WCF::getSession()->getPermission('user.conversation.maxParticipants'))
                         ->addValidator($this->getParticipantsValidator())
                         ->addValidator($this->getMaximumParticipantsValidator())

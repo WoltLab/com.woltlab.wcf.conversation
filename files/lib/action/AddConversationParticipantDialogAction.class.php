@@ -121,7 +121,6 @@ final class AddConversationParticipantDialogAction implements RequestHandlerInte
         $form->appendChildren([
             UserFormField::create('participants')
                 ->label('wcf.conversation.participants')
-                ->description('wcf.conversation.participants.description')
                 ->maximumMultiples(WCF::getSession()->getPermission('user.conversation.maxParticipants'))
                 ->multiple()
                 ->maximumMultiples(WCF::getSession()->getPermission('user.conversation.maxParticipants') - $conversation->participants)

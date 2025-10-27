@@ -91,7 +91,6 @@
 		<item name="wcf.conversation.noMoreItems"><![CDATA[You have no recent conversations.]]></item>
 		<item name="wcf.conversation.participantCanInvite"><![CDATA[Participants can add new participants]]></item>
 		<item name="wcf.conversation.participants"><![CDATA[Participants]]></item>
-		<item name="wcf.conversation.participants.description"><![CDATA[Multiple users must be entered separately.]]></item>
 		<item name="wcf.conversation.participants.error.mailboxIsFull"><![CDATA[{$username} is already participating in too many conversations and cannot be added.]]></item>
 		<item name="wcf.conversation.participants.error.notFound"><![CDATA[The username “{$username}” does not exist.]]></item>
 		<item name="wcf.conversation.participants.error.isAuthor"><![CDATA[You are already a participant of this conversation.]]></item>
@@ -231,5 +230,6 @@
 	<item name="wcf.conversation.markAsRead.doubleClick"/>
 	<item name="wcf.conversation.ownPosts"/>
 	<item name="wcf.conversation.participants.other"/>
+	<item name="wcf.conversation.participants.description"/>
 </delete>
 </language>
