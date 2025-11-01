@@ -98,7 +98,7 @@
 			{/if}
 			
 			<div class="discussionList__item__replies">
-				{icon name='comment'}
+				{icon name='comments'}
 				{lang replies=$conversation->replies}wcf.conversation.replies.count{/lang}
 			</div>
 
