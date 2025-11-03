@@ -103,6 +103,7 @@ final class ConversationLabelFormAction implements RequestHandlerInterface
         );
         $labelFormField = TextFormField::create('label')
             ->label('wcf.conversation.label.labelName')
+            ->maximumLength(80)
             ->required();
 
         $cssClassNameFormField = BadgeColorFormField::create('cssClassName')
