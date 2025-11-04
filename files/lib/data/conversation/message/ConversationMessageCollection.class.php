@@ -142,7 +142,7 @@ class ConversationMessageCollection extends DatabaseObjectCollection
         }
 
         foreach ($rows as $row) {
-            $this->teaserImages[$row['objectID']] = FileRuntimeCache::getInstance()->getObject($row['fileID'])->getImageData(320, 200);
+            $this->teaserImages[$row['objectID']] = FileRuntimeCache::getInstance()->getObject($row['fileID'])->getImageData(160, 100);
         }
     }
 }
