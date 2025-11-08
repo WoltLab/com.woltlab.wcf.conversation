@@ -236,6 +236,13 @@ class ConversationMessage extends CollectionDatabaseObject implements IMessage
             return false;
         }
 
+        // Drafts are a special type of conversations that may or may not have
+        // any participants. The author will only be added as a participant
+        // after the conversation is no longer a draft.
+        if ($conversation->isDraft && $conversation->userID && $conversation->userID === WCF::getUser()->userID) {
+            return true;
+        }
+
         $participant = $conversation->getParticipant();
         if ($participant === null) {
             return false;
