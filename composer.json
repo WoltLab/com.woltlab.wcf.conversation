@@ -2,7 +2,7 @@
     "name": "woltlab/com.woltlab.wcf.conversation",
     "type": "project",
     "require-dev": {
-        "phpstan/phpstan": "^2.1"
+        "phpstan/phpstan": "^2.1.32"
     },
     "require": {}
 }
