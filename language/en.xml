@@ -202,8 +202,8 @@
 		<item name="wcf.user.notification.conversation.mail.html"><![CDATA[<p><strong>{$author}</strong> started the conversation <a href="{$conversation->getLink()}">{$conversation->getTitle()}</a>:</p>]]></item>
 		<item name="wcf.user.notification.conversation.mail.title"><![CDATA["{@$author}" started the conversation "{@$conversation->getTitle()}"]]></item>
 		<item name="wcf.user.notification.com.woltlab.wcf.conversation"><![CDATA[Conversations]]></item>
-		<item name="wcf.user.notification.com.woltlab.wcf.conversation.notification.conversation"><![CDATA[Notify me of new conversations]]></item>
-		<item name="wcf.user.notification.com.woltlab.wcf.conversation.message.notification.conversationMessage"><![CDATA[Notify me of new replies in conversations]]></item>
+		<item name="wcf.user.notification.com.woltlab.wcf.conversation.notification.conversation"><![CDATA[New conversation]]></item>
+		<item name="wcf.user.notification.com.woltlab.wcf.conversation.message.notification.conversationMessage"><![CDATA[New reply in a conversation]]></item>
 	</category>
 	<category name="wcf.user.option">
 		<item name="wcf.user.option.conversationMessagesPerPage"><![CDATA[Messages per Page]]></item>
