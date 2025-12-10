@@ -113,7 +113,8 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
             // update last message
             $conversationEditor->addMessage($message);
 
-            if ($conversation->getOtherParticipant($message->userID)->isInvisible) {
+            $participant = $conversation->getOtherParticipant($message->userID);
+            if ($participant !== null && $participant->isInvisible) {
                 // make invisible participant visible
                 $sql = "UPDATE  wcf1_conversation_to_user
                         SET     isInvisible = 0
