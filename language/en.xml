@@ -229,7 +229,7 @@
 	<item name="wcf.conversation.label.management.existingLabels"/>
 	<item name="wcf.conversation.markAsRead.doubleClick"/>
 	<item name="wcf.conversation.ownPosts"/>
-	<item name="wcf.conversation.participants.other"/>
 	<item name="wcf.conversation.participants.description"/>
+	<item name="wcf.conversation.participants.other"/>
 </delete>
 </language>
