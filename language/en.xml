@@ -95,7 +95,7 @@
 		<item name="wcf.conversation.participants.error.notFound"><![CDATA[The username “{$username}” does not exist.]]></item>
 		<item name="wcf.conversation.participants.error.isAuthor"><![CDATA[You are already a participant of this conversation.]]></item>
 		<item name="wcf.conversation.participants.error.duplicate"><![CDATA[{$username} is already a participant of this conversation.]]></item>
-		<item name="wcf.conversation.participants.error.canNotUseConversation"><![CDATA[{$username} is not allowed to participate in a conversation.]]></item>
+		<item name="wcf.conversation.participants.error.canNotUseConversation"><![CDATA[{$username} is not allowed to participate in conversations.]]></item>
 		<item name="wcf.conversation.participants.error.doesNotAcceptConversation"><![CDATA[{$username} does not want to be added in conversations.]]></item>
 		<item name="wcf.conversation.participants.error.emptyGroup"><![CDATA[All members of the entered user groups already participate in this conversation.]]></item>
 		<item name="wcf.conversation.participants.error.intersects"><![CDATA[{$username} was already added as a visible participant.]]></item>
