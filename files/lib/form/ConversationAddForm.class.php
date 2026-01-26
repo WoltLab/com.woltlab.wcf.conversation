@@ -16,9 +16,7 @@ use wcf\system\flood\FloodControl;
 use wcf\system\form\builder\container\FormContainer;
 use wcf\system\form\builder\container\wysiwyg\WysiwygFormContainer;
 use wcf\system\form\builder\data\processor\CustomFormDataProcessor;
-use wcf\system\form\builder\data\processor\VoidFormDataProcessor;
 use wcf\system\form\builder\field\BooleanFormField;
-use wcf\system\form\builder\field\dependency\NonEmptyFormFieldDependency;
 use wcf\system\form\builder\field\MultipleSelectionFormField;
 use wcf\system\form\builder\field\TextFormField;
 use wcf\system\form\builder\field\user\UserFormField;
@@ -125,18 +123,12 @@ class ConversationAddForm extends AbstractFormBuilderForm
                         ->addValidator($this->getParticipantsValidator())
                         ->addValidator($this->getMaximumParticipantsValidator())
                         ->value($this->user ? [$this->user->userID] : []),
-                    BooleanFormField::create('addGroupParticipants')
-                        ->label('wcf.conversation.addGroupParticipants')
-                        ->available(\count($groupParticipants) > 0),
                     MultipleSelectionFormField::create('participantGroups')
                         ->label('wcf.conversation.participantGroups')
-                        ->available(WCF::getSession()->getPermission('user.conversation.canAddGroupParticipants'))
-                        ->filterable()
-                        ->options($groupParticipants)
-                        ->addDependency(
-                            NonEmptyFormFieldDependency::create('addGroupParticipantsDependency')
-                                ->fieldId('addGroupParticipants')
-                        ),
+                        ->available(WCF::getSession()->getPermission('user.conversation.canAddGroupParticipants')
+                            && \count($groupParticipants) > 0)
+                        ->filterable(\count($groupParticipants) > 20)
+                        ->options($groupParticipants),
                     UserFormField::create('invisibleParticipants')
                         ->label('wcf.conversation.invisibleParticipants')
                         ->description('wcf.conversation.invisibleParticipants.description')
@@ -174,24 +166,15 @@ class ConversationAddForm extends AbstractFormBuilderForm
                                 }
                             )
                         ),
-                    BooleanFormField::create('addInvisibleGroupParticipants')
-                        ->label('wcf.conversation.addInvisibleGroupParticipants')
-                        ->available(
-                            \count($groupParticipants) > 0
-                                && WCF::getSession()->getPermission('user.conversation.canAddInvisibleParticipants')
-                        ),
                     MultipleSelectionFormField::create('invisibleParticipantGroups')
                         ->label('wcf.conversation.invisibleParticipantGroups')
                         ->available(
                             WCF::getSession()->getPermission('user.conversation.canAddInvisibleParticipants')
                                 && WCF::getSession()->getPermission('user.conversation.canAddGroupParticipants')
+                                && \count($groupParticipants) > 0
                         )
-                        ->filterable()
-                        ->options($groupParticipants)
-                        ->addDependency(
-                            NonEmptyFormFieldDependency::create('addInvisibleGroupParticipantsDependency')
-                                ->fieldId('addInvisibleGroupParticipants')
-                        ),
+                        ->filterable(\count($groupParticipants) > 20)
+                        ->options($groupParticipants),
                     BooleanFormField::create('participantCanInvite')
                         ->label('wcf.conversation.participantCanInvite')
                         ->available(WCF::getSession()->getPermission('user.conversation.canSetCanInvite')),
@@ -224,8 +207,6 @@ class ConversationAddForm extends AbstractFormBuilderForm
         parent::finalizeForm();
 
         $this->form->getDataHandler()
-            ->addProcessor(new VoidFormDataProcessor('addGroupParticipants'))
-            ->addProcessor(new VoidFormDataProcessor('addInvisibleGroupParticipants'))
             ->addProcessor(
                 new CustomFormDataProcessor('messageProcessor', static function (IFormDocument $document, array $parameters) {
                     unset($parameters['data']['message']);

@@ -15,8 +15,6 @@ use wcf\system\cache\builder\UserGroupCacheBuilder;
 use wcf\system\conversation\TConversationForm;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\PermissionDeniedException;
-use wcf\system\form\builder\field\BooleanFormField;
-use wcf\system\form\builder\field\dependency\NonEmptyFormFieldDependency;
 use wcf\system\form\builder\field\MultipleSelectionFormField;
 use wcf\system\form\builder\field\RadioButtonFormField;
 use wcf\system\form\builder\field\user\UserFormField;
@@ -126,18 +124,12 @@ final class AddConversationParticipantDialogAction implements RequestHandlerInte
                 ->maximumMultiples(WCF::getSession()->getPermission('user.conversation.maxParticipants') - $conversation->participants)
                 ->addValidator($this->getParticipantsValidator())
                 ->addValidator($this->getMaximumParticipantsValidator(invisibleParticipantGroupsFieldId: null)),
-            BooleanFormField::create('addGroupParticipants')
-                ->label('wcf.conversation.addGroupParticipants')
-                ->available(\count($groupParticipants) > 0),
             MultipleSelectionFormField::create('participantGroups')
                 ->label('wcf.conversation.participantGroups')
-                ->available(WCF::getSession()->getPermission('user.conversation.canAddGroupParticipants'))
-                ->filterable()
-                ->options($groupParticipants)
-                ->addDependency(
-                    NonEmptyFormFieldDependency::create('addGroupParticipantsDependency')
-                        ->fieldId('addGroupParticipants')
-                ),
+                ->available(WCF::getSession()->getPermission('user.conversation.canAddGroupParticipants')
+                    && \count($groupParticipants) > 0)
+                ->filterable(\count($groupParticipants) > 20)
+                ->options($groupParticipants),
             RadioButtonFormField::create('messageVisibility')
                 ->label('wcf.conversation.visibility')
                 ->available(!$conversation->isDraft && $conversation->canAddParticipantsUnrestricted())
