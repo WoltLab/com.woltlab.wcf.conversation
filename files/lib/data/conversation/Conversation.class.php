@@ -148,7 +148,7 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
      */
     public function getTeaser(): string
     {
-        return $this->getFirstMessage()->getTeaser();
+        return $this->getFirstMessage()?->getTeaser() ?? '';
     }
 
     /**
@@ -156,7 +156,7 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
      */
     public function getTeaserImage(): ?ImageData
     {
-        return $this->getFirstMessage()->getTeaserImage();
+        return $this->getFirstMessage()?->getTeaserImage();
     }
 
     /**

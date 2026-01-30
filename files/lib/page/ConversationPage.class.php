@@ -141,6 +141,10 @@ class ConversationPage extends MultipleLinkPage
             throw new PermissionDeniedException();
         }
 
+        if ($this->conversation->getFirstMessage() === null) {
+            throw new IllegalLinkException();
+        }
+
         // messages per page
         /** @noinspection PhpUndefinedFieldInspection */
         if (WCF::getUser()->conversationMessagesPerPage) {
