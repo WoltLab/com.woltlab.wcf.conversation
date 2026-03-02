@@ -556,7 +556,6 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
 
         if (!WCF::getSession()->getPermission('user.profile.cannotBeIgnored')) {
             // check if user wants to receive any conversations
-            /** @noinspection PhpUndefinedFieldInspection */
             if ($user->canSendConversation == 2) {
                 throw new UserInputException($field, 'doesNotAcceptConversation');
             }
@@ -564,7 +563,6 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
             // check if user only wants to receive conversations by
             // users they are following and if the active user is followed
             // by the relevant user
-            /** @noinspection PhpUndefinedFieldInspection */
             if ($user->canSendConversation == 1 && !$user->isFollowing(WCF::getUser()->userID)) {
                 throw new UserInputException($field, 'doesNotAcceptConversation');
             }

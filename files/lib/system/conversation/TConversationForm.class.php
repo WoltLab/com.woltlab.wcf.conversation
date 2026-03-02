@@ -94,7 +94,6 @@ trait TConversationForm
 
         if (!WCF::getSession()->getPermission('user.profile.cannotBeIgnored')) {
             // check if user wants to receive any conversations
-            /** @noinspection PhpUndefinedFieldInspection */
             if ($user->canSendConversation == 2) {
                 return new FormFieldValidationError(
                     'doesNotAcceptConversation',
@@ -108,7 +107,6 @@ trait TConversationForm
             // check if user only wants to receive conversations by
             // users they are following and if the active user is followed
             // by the relevant user
-            /** @noinspection PhpUndefinedFieldInspection */
             if ($user->canSendConversation == 1 && !$user->isFollowing(WCF::getUser()->userID)) {
                 return new FormFieldValidationError(
                     'doesNotAcceptConversation',

@@ -146,9 +146,7 @@ class ConversationPage extends MultipleLinkPage
         }
 
         // messages per page
-        /** @noinspection PhpUndefinedFieldInspection */
         if (WCF::getUser()->conversationMessagesPerPage) {
-            /** @noinspection PhpUndefinedFieldInspection */
             $this->itemsPerPage = WCF::getUser()->conversationMessagesPerPage;
         }
 
@@ -293,7 +291,6 @@ class ConversationPage extends MultipleLinkPage
         // get visible participants
         $visibleParticipantIDs = [];
         foreach ($this->participantList as $participant) {
-            /** @noinspection PhpUndefinedFieldInspection */
             if (!$participant->isInvisible || WCF::getUser()->userID == $this->conversation->userID) {
                 $visibleParticipantIDs[] = $participant->userID;
             }

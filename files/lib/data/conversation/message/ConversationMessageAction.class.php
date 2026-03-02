@@ -97,8 +97,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         }
 
         if (!empty($this->parameters['htmlInputProcessor'])) {
-            /** @noinspection PhpUndefinedMethodInspection */
-            $this->parameters['data']['message'] = $this->parameters['htmlInputProcessor']->getHtml();
+            /this->parameters['data']['message'] = $this->parameters['htmlInputProcessor']->getHtml();
         }
 
         // create message
@@ -155,13 +154,11 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
 
         // update attachments
         if (isset($this->parameters['attachmentHandler'])) {
-            /** @noinspection PhpUndefinedMethodInspection */
             $this->parameters['attachmentHandler']->updateObjectID($message->messageID);
         }
 
         // save embedded objects
         if (!empty($this->parameters['htmlInputProcessor'])) {
-            /** @noinspection PhpUndefinedMethodInspection */
             $this->parameters['htmlInputProcessor']->setObjectID($message->messageID);
 
             if (MessageEmbeddedObjectManager::getInstance()->registerObjects($this->parameters['htmlInputProcessor'])) {
@@ -204,7 +201,6 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         }
 
         if (!empty($this->parameters['htmlInputProcessor'])) {
-            /** @noinspection PhpUndefinedMethodInspection */
             $this->parameters['data']['message'] = $this->parameters['htmlInputProcessor']->getHtml();
         }
 
@@ -225,7 +221,6 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
                 );
 
                 if (!empty($this->parameters['htmlInputProcessor'])) {
-                    /** @noinspection PhpUndefinedMethodInspection */
                     $this->parameters['htmlInputProcessor']->setObjectID($message->messageID);
 
                     if ($message->hasEmbeddedObjects != MessageEmbeddedObjectManager::getInstance()->registerObjects($this->parameters['htmlInputProcessor'])) {
