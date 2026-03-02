@@ -2,6 +2,7 @@
 
 namespace wcf\form;
 
+use wcf\command\conversation\MarkConversationAsRead;
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\data\conversation\message\ConversationMessageList;
@@ -15,7 +16,7 @@ use wcf\system\WCF;
  *
  * @author      Olaf Braun, Marcel Werk
  * @copyright   2001-2025 WoltLab GmbH
- * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
+ * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  */
 class ConversationDraftEditForm extends ConversationAddForm
 {
@@ -59,7 +60,7 @@ class ConversationDraftEditForm extends ConversationAddForm
                             'data' => [],
                         ];
                         if ($parameters['data']['isDraft']) {
-                            $messageData['data']['time'] = TIME_NOW;
+                            $messageData['data']['time'] = \TIME_NOW;
                         }
 
                         unset($parameters['message_htmlInputProcessor'], $parameters['message_attachmentHandler']);
@@ -73,7 +74,7 @@ class ConversationDraftEditForm extends ConversationAddForm
             ->addProcessor(
                 new CustomFormDataProcessor('timeProcessor', function (IFormDocument $document, array $parameters) {
                     if (!$parameters['data']['isDraft']) {
-                        $parameters['data']['time'] = $parameters['data']['lastPostTime'] = TIME_NOW;
+                        $parameters['data']['time'] = $parameters['data']['lastPostTime'] = \TIME_NOW;
                     }
 
                     return $parameters;
@@ -100,12 +101,16 @@ class ConversationDraftEditForm extends ConversationAddForm
                     'update',
                     [
                         'data' => [
-                            'time' => TIME_NOW,
+                            'time' => \TIME_NOW,
                         ],
                     ]
                 );
                 $messageAction->executeAction();
             }
+        }
+
+        if (!$conversation->isDraft) {
+            (new MarkConversationAsRead($conversation, WCF::getUser()))();
         }
 
         parent::saved();
