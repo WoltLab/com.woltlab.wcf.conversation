@@ -29,6 +29,7 @@ final class SetConversationSubject
         ]);
 
         $message = $this->conversation->getFirstMessage();
+        \assert($message !== null);
 
         SearchIndexManager::getInstance()->set(
             'com.woltlab.wcf.conversation.message',

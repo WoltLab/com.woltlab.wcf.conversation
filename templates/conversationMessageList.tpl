@@ -14,7 +14,7 @@
 				<header class="messageHeader">
 					<div class="messageHeaderBox">
 						<ul class="messageHeaderMetaData">
-							<li><a href="{link controller='Conversation' object=$conversation}messageID={@$message->messageID}{/link}#message{$message->messageID}" class="permalink messagePublicationTime">{time time=$message->time}</a></li>
+							<li><a href="{link controller='Conversation' object=$conversation messageID=$message->messageID}{/link}#message{$message->messageID}" class="permalink messagePublicationTime">{time time=$message->time}</a></li>
 							
 							{event name='messageHeaderMetaData'}
 						</ul>
@@ -29,7 +29,7 @@
 					</div>
 					
 					<ul class="messageQuickOptions">
-						<li><a href="{link controller='Conversation' object=$conversation}messageID={@$message->messageID}{/link}#message{$message->messageID}" class="jsTooltip" title="{lang}wcf.conversation.message.permalink{/lang}">#{#$startIndex}</a></li>
+						<li><a href="{link controller='Conversation' object=$conversation messageID=$message->messageID}{/link}#message{$message->messageID}" class="jsTooltip" title="{lang}wcf.conversation.message.permalink{/lang}">#{#$startIndex}</a></li>
 						
 						{event name='messageQuickOptions'}
 					</ul>
@@ -41,7 +41,7 @@
 					{event name='beforeMessageText'}
 					
 					<div class="messageText">
-						{@$message->getFormattedMessage()}
+						{unsafe:$message->getFormattedMessage()}
 					</div>
 					
 					{event name='afterMessageText'}
@@ -52,7 +52,7 @@
 					
 					{if $message->getUserProfile()->showSignature()}
 						<div class="messageSignature">
-							<div>{@$message->getUserProfile()->getSignature()}</div>
+							<div>{unsafe:$message->getUserProfile()->getSignature()}</div>
 						</div>
 					{/if}
 					

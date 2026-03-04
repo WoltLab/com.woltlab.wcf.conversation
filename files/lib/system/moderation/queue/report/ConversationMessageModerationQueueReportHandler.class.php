@@ -96,7 +96,7 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
     public function getReportedContent(ViewableModerationQueue $queue)
     {
         return WCF::getTPL()->render('wcf', 'moderationConversationMessage', [
-            'message' => new Conversation($queue->objectID),
+            'message' => new ConversationMessage($queue->objectID),
         ]);
     }
 
