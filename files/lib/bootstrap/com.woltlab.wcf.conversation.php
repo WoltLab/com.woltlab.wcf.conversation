@@ -54,22 +54,4 @@ return static function (): void {
             }
         );
     }
-
-    $eventHandler->register(
-        \wcf\event\endpoint\ControllerCollecting::class,
-        static function (\wcf\event\endpoint\ControllerCollecting $event) {
-            $event->register(new \wcf\system\endpoint\controller\core\conversations\GetConversationPopover());
-            $event->register(new \wcf\system\endpoint\controller\core\conversations\LeaveConversation());
-            $event->register(new \wcf\system\endpoint\controller\core\conversations\HideConversation());
-            $event->register(new \wcf\system\endpoint\controller\core\conversations\RestoreConversation());
-            $event->register(new \wcf\system\endpoint\controller\core\conversations\OpenConversation());
-            $event->register(new \wcf\system\endpoint\controller\core\conversations\CloseConversation());
-            $event->register(new \wcf\system\endpoint\controller\core\conversations\GetConversationHeaderTitle());
-            $event->register(new \wcf\system\endpoint\controller\core\conversations\MarkAllConversationsAsRead());
-            $event->register(new \wcf\system\endpoint\controller\core\conversations\MarkConversationAsRead());
-            $event->register(new \wcf\system\endpoint\controller\core\conversations\RemoveConversationParticipant());
-            $event->register(new \wcf\system\endpoint\controller\core\conversations\GetConversationParticipantList());
-            $event->register(new \wcf\system\endpoint\controller\core\conversations\labels\DeleteConversationLabel());
-        }
-    );
 };
