@@ -27,7 +27,7 @@ final class ConversationMessageQuoteHandler extends AbstractMessageQuoteHandler
         }
 
         if ($message->hasEmbeddedObjects) {
-            $message->getCollection()->loadEmbeddedObjects();
+            $message->loadEmbeddedObjects();
         }
 
         return $message;

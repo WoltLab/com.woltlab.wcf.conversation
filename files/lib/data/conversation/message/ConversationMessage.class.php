@@ -51,7 +51,7 @@ class ConversationMessage extends CollectionDatabaseObject implements IMessage
      */
     public function getFormattedMessage(): string
     {
-        $this->getCollection()->loadEmbeddedObjects();
+        $this->loadEmbeddedObjects();
 
         $processor = new HtmlOutputProcessor();
         $processor->process($this->message, 'com.woltlab.wcf.conversation.message', $this->messageID);
@@ -64,7 +64,7 @@ class ConversationMessage extends CollectionDatabaseObject implements IMessage
      */
     public function getSimplifiedFormattedMessage(): string
     {
-        $this->getCollection()->loadEmbeddedObjects();
+        $this->loadEmbeddedObjects();
 
         $processor = new HtmlOutputProcessor();
         $processor->setOutputType('text/simplified-html');
@@ -114,10 +114,9 @@ class ConversationMessage extends CollectionDatabaseObject implements IMessage
      */
     public function getMailText(string $mimeType = 'text/plain'): string
     {
-        $this->getCollection()->loadEmbeddedObjects();
-
         switch ($mimeType) {
             case 'text/plain':
+                $this->loadEmbeddedObjects();
                 $processor = new HtmlOutputProcessor();
                 $processor->setOutputType('text/plain');
                 $processor->process($this->message, 'com.woltlab.wcf.conversation.message', $this->messageID);
@@ -135,7 +134,7 @@ class ConversationMessage extends CollectionDatabaseObject implements IMessage
      */
     public function getTeaser(): string
     {
-        $this->getCollection()->loadEmbeddedObjects();
+        $this->loadEmbeddedObjects();
 
         $processor = new HtmlOutputProcessor();
         $processor->setOutputType('text/plain');
@@ -253,5 +252,13 @@ class ConversationMessage extends CollectionDatabaseObject implements IMessage
         }
 
         return true;
+    }
+
+    /**
+     * @since 6.3
+     */
+    public function loadEmbeddedObjects(): void
+    {
+        $this->getCollection()->loadEmbeddedObjects('com.woltlab.wcf.conversation.message');
     }
 }

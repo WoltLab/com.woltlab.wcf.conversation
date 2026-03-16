@@ -5,12 +5,12 @@ namespace wcf\data\conversation\message;
 use wcf\data\conversation\Conversation;
 use wcf\data\DatabaseObjectCollection;
 use wcf\data\object\type\ObjectTypeCache;
+use wcf\data\TCollectionEmbeddedObjects;
 use wcf\data\TCollectionUserProfiles;
 use wcf\system\cache\runtime\ConversationRuntimeCache;
 use wcf\system\cache\runtime\FileRuntimeCache;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\file\processor\ImageData;
-use wcf\system\message\embedded\object\MessageEmbeddedObjectManager;
 use wcf\system\WCF;
 
 /**
@@ -26,6 +26,7 @@ use wcf\system\WCF;
 class ConversationMessageCollection extends DatabaseObjectCollection
 {
     use TCollectionUserProfiles;
+    use TCollectionEmbeddedObjects;
 
     /**
      * @var array<int, Conversation>
@@ -36,8 +37,6 @@ class ConversationMessageCollection extends DatabaseObjectCollection
      * @var array<int, ImageData>
      */
     private array $teaserImages;
-
-    private bool $embeddedObjectsLoaded = false;
 
     public function getConversation(ConversationMessage $object): ?Conversation
     {
@@ -59,40 +58,6 @@ class ConversationMessageCollection extends DatabaseObjectCollection
         if ($conversationIDs !== []) {
             $this->conversations = ConversationRuntimeCache::getInstance()->getObjects($conversationIDs);
         }
-    }
-
-    public function loadEmbeddedObjects(): void
-    {
-        if ($this->embeddedObjectsLoaded) {
-            return;
-        }
-
-        $this->embeddedObjectsLoaded = true;
-
-        // Add message objects to attachment object cache to save SQL queries.
-        ObjectTypeCache::getInstance()
-            ->getObjectTypeByName('com.woltlab.wcf.attachment.objectType', 'com.woltlab.wcf.conversation.message')
-            ->getProcessor()
-            ->setCachedObjects($this->getObjects());
-
-        $objectIDs = $this->getEmbeddedObjectIDs();
-        if ($objectIDs === []) {
-            return;
-        }
-
-        MessageEmbeddedObjectManager::getInstance()
-            ->loadObjects('com.woltlab.wcf.conversation.message', $objectIDs);
-    }
-
-    /**
-     * @return int[]
-     */
-    private function getEmbeddedObjectIDs(): array
-    {
-        return \array_map(
-            fn($content) => $content->getObjectID(),
-            \array_filter($this->getObjects(), fn($content) => !!$content->hasEmbeddedObjects)
-        );
     }
 
     public function getTeaserImage(ConversationMessage $message): ?ImageData
