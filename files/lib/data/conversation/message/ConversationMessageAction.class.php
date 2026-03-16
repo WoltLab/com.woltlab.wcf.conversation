@@ -97,7 +97,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         }
 
         if (!empty($this->parameters['htmlInputProcessor'])) {
-            /this->parameters['data']['message'] = $this->parameters['htmlInputProcessor']->getHtml();
+            $this->parameters['data']['message'] = $this->parameters['htmlInputProcessor']->getHtml();
         }
 
         // create message
