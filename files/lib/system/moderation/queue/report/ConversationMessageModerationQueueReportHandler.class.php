@@ -171,6 +171,12 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
         }
     }
 
+    #[\Override]
+    public function canRemoveContent(ModerationQueue $queue)
+    {
+        return WCF::getSession()->getPermission('mod.conversation.canModerateConversation');
+    }
+
     /**
      * @inheritDoc
      */
