@@ -28,9 +28,12 @@ export class LabelManager {
     document.getElementById("addLabel")?.addEventListener(
       "click",
       promiseMutex(async () => {
-        await dialogFactory().usingFormBuilder().fromEndpoint<LabelFormResponse>(this.#formLink);
+        const { ok } = await dialogFactory().usingFormBuilder().fromEndpoint<LabelFormResponse>(this.#formLink);
+        if (ok) {
+          this.#refreshGridView();
 
-        this.#refreshGridView();
+          showDefaultSuccessSnackbar();
+        }
       }),
     );
 

@@ -42,7 +42,7 @@ final class EditSubjectConversationDialogAction implements RequestHandlerInterfa
             throw new IllegalLinkException();
         }
 
-        $conversation = new Conversation($parameters['id']);
+        $conversation = Helper::fetchObjectFromRequestParameter($parameters['id'], Conversation::class);
 
         if ($conversation->userID !== WCF::getUser()->userID) {
             throw new PermissionDeniedException();

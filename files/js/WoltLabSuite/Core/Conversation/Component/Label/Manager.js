@@ -15,8 +15,11 @@ define(["require", "exports", "WoltLabSuite/Core/Helper/PromiseMutex", "WoltLabS
         constructor(formLink) {
             this.#formLink = formLink;
             document.getElementById("addLabel")?.addEventListener("click", (0, PromiseMutex_1.promiseMutex)(async () => {
-                await (0, Dialog_1.dialogFactory)().usingFormBuilder().fromEndpoint(this.#formLink);
-                this.#refreshGridView();
+                const { ok } = await (0, Dialog_1.dialogFactory)().usingFormBuilder().fromEndpoint(this.#formLink);
+                if (ok) {
+                    this.#refreshGridView();
+                    (0, Snackbar_1.showDefaultSuccessSnackbar)();
+                }
             }));
             (0, Selector_1.wheneverFirstSeen)(".editConversationLabel", (button) => {
                 button.addEventListener("click", (0, PromiseMutex_1.promiseMutex)(async () => {

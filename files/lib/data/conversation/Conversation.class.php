@@ -266,6 +266,10 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
      */
     public function canAddParticipantsUnrestricted(): bool
     {
+        if ($this->joinedAt === null) {
+            throw new \RuntimeException("Data not available, conversation must be fetched through `UserConversationList`.");
+        }
+
         return $this->joinedAt === 0;
     }
 
@@ -351,6 +355,10 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
      */
     public function isActiveParticipant(): bool
     {
+        if ($this->leftAt === null) {
+            throw new \RuntimeException("Data not available, conversation must be fetched through `UserConversationList`.");
+        }
+
         return $this->leftAt === 0;
     }
 

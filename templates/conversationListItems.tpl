@@ -81,8 +81,8 @@
 		</div>
 
 		<div class="discussionList__item__footer">
-			{if $conversation->getParticipantSummary()|count}
-				{assign var='participantSummaryCount' value=$conversation->getParticipantSummary()|count}
+			{assign var='participantSummaryCount' value=$conversation->getParticipantSummary()|count}
+			{if $participantSummaryCount > 0}
 				<ul class="conversationList__item__participants">
 					{if $participantSummaryCount < $conversation->participants}
 						<li class="conversationList__item__otherParticipant">
