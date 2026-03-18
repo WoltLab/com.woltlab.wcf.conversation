@@ -17,13 +17,13 @@ use wcf\system\WCF;
  * @property-read   int     $conversationID
  * @property-read   ?int    $participantID
  * @property-read   string  $username
- * @property-read   bool    $hideConversation
- * @property-read   bool    $isInvisible
+ * @property-read   0|1     $hideConversation
+ * @property-read   0|1     $isInvisible
  * @property-read   int     $lastVisitTime
  * @property-read   int     $joinedAt
  * @property-read   int     $leftAt
  * @property-read   ?int    $lastMessageID
- * @property-read   bool    $leftByOwnChoice
+ * @property-read   0|1     $leftByOwnChoice
  */
 class ConversationParticipant extends DatabaseObject
 {

@@ -13,10 +13,10 @@ use wcf\util\StringUtil;
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
- * @property-read   int $labelID    unique id of the conversation label
- * @property-read   int $userID     id of the user who created the conversation label
- * @property-read   string $label      name of the conversation label
- * @property-read   string $cssClassName   CSS class name of the conversation label handeling its appearance (color)
+ * @property-read   int     $labelID        unique id of the conversation label
+ * @property-read   int     $userID         id of the user who created the conversation label
+ * @property-read   string  $label          name of the conversation label
+ * @property-read   string  $cssClassName   CSS class name of the conversation label handeling its appearance (color)
  */
 class ConversationLabel extends DatabaseObject
 {

@@ -21,18 +21,18 @@ use wcf\util\StringUtil;
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
- * @property-read   int $messageID      unique id of the conversation message
- * @property-read   int $conversationID     id of the conversation the conversation message belongs to
- * @property-read   int|null $userID         id of the user who wrote the conversation message or `null` if the user does not exist anymore
- * @property-read   string $username       name of the user who wrote the conversation message
- * @property-read   string $message        text of the conversation message
- * @property-read   int $time           timestamp at which the conversation message has been written
- * @property-read   int $attachments        number of attachments
- * @property-read   int $enableHtml     is `1` if the conversation message's format has been converted to html, otherwise `0`
- * @property-read   string $ipAddress      ip address of the user who wrote the conversation message at time of writing or empty if no ip addresses are logged
- * @property-read   int $lastEditTime       timestamp at which the conversation message has been edited the last time
- * @property-read   int $editCount      number of times the conversation message has been edited
- * @property-read   int $hasEmbeddedObjects number of embedded objects in the conversation message
+ * @property-read   int     $messageID          unique id of the conversation message
+ * @property-read   int     $conversationID     id of the conversation the conversation message belongs to
+ * @property-read   ?int    $userID             id of the user who wrote the conversation message or `null` if the user does not exist anymore
+ * @property-read   string  $username           name of the user who wrote the conversation message
+ * @property-read   string  $message            text of the conversation message
+ * @property-read   int     $time               timestamp at which the conversation message has been written
+ * @property-read   int     $attachments        number of attachments
+ * @property-read   0|1     $enableHtml         is `1` if the conversation message's format has been converted to html, otherwise `0`
+ * @property-read   string  $ipAddress          ip address of the user who wrote the conversation message at time of writing or empty if no ip addresses are logged
+ * @property-read   int     $lastEditTime       timestamp at which the conversation message has been edited the last time
+ * @property-read   int     $editCount          number of times the conversation message has been edited
+ * @property-read   0|1     $hasEmbeddedObjects number of embedded objects in the conversation message
  *
  * @extends CollectionDatabaseObject<ConversationMessageCollection>
  */
