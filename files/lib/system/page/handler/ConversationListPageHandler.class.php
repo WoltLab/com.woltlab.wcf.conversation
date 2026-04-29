@@ -11,23 +11,18 @@ use wcf\system\WCF;
  * @author  Matthias Schmidt
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @since   3.0
  */
 class ConversationListPageHandler extends AbstractMenuPageHandler
 {
-    /**
-     * @inheritDoc
-     */
-    public function getOutstandingItemCount($objectID = null)
+    #[\Override]
+    public function getOutstandingItemCount(?int $objectID = null)
     {
         return ConversationHandler::getInstance()->getUnreadConversationCount();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function isVisible($objectID = null)
+    #[\Override]
+    public function isVisible(?int $objectID = null)
     {
-        return WCF::getUser()->userID != 0;
+        return !WCF::getUser()->isGuest();
     }
 }

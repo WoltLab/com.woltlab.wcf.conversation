@@ -22,25 +22,19 @@ class ConversationUserNotificationObject extends DatabaseObjectDecorator impleme
      */
     protected static $baseClass = Conversation::class;
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getTitle(): string
     {
         return $this->subject;
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getURL(): string
     {
         return $this->getLink();
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getAuthorID()
     {
         return $this->userID;

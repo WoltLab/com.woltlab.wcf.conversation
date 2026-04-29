@@ -32,28 +32,24 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction
      */
     protected $permissionsUpdate = ['user.conversation.canUseConversation'];
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function validateUpdate()
     {
         parent::validateUpdate();
 
         $label = $this->getSingleObject();
-        if ($label->userID != WCF::getUser()->userID) {
+        if ($label->userID !== WCF::getUser()->userID) {
             throw new PermissionDeniedException();
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function validateDelete()
     {
         parent::validateDelete();
 
         $label = $this->getSingleObject();
-        if ($label->userID != WCF::getUser()->userID) {
+        if ($label->userID !== WCF::getUser()->userID) {
             throw new PermissionDeniedException();
         }
     }

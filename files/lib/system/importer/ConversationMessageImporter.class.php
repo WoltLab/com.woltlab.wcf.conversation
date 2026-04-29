@@ -19,14 +19,12 @@ class ConversationMessageImporter extends AbstractImporter
      */
     protected $className = ConversationMessage::class;
 
-    /**
-     * @inheritDoc
-     */
-    public function import($oldID, array $data, array $additionalData = [])
+    #[\Override]
+    public function import(mixed $oldID, array $data, array $additionalData = [])
     {
         $data['conversationID'] = ImportHandler::getInstance()
             ->getNewID('com.woltlab.wcf.conversation', $data['conversationID']);
-        if (!$data['conversationID']) {
+        if ($data['conversationID'] === null) {
             return 0;
         }
         $data['userID'] = ImportHandler::getInstance()->getNewID('com.woltlab.wcf.user', $data['userID']);
@@ -34,7 +32,7 @@ class ConversationMessageImporter extends AbstractImporter
         // check existing message
         if (\ctype_digit((string)$oldID)) {
             $existingMessage = new ConversationMessage($oldID);
-            if (!$existingMessage->messageID) {
+            if ($existingMessage->isNil()) {
                 $data['messageID'] = $oldID;
             }
         }

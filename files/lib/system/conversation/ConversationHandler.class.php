@@ -36,11 +36,9 @@ final class ConversationHandler extends SingletonFactory
      */
     public function getUnreadConversationCount(?int $userID = null, bool $skipCache = false): int
     {
-        if ($userID === null) {
-            $userID = WCF::getUser()->userID;
-        }
+        $userID ??= WCF::getUser()->userID;
 
-        if (!$userID) {
+        if ($userID === 0) {
             return 0;
         }
 
@@ -90,11 +88,9 @@ final class ConversationHandler extends SingletonFactory
      */
     public function getConversationCount(?int $userID = null): int
     {
-        if ($userID === null) {
-            $userID = WCF::getUser()->userID;
-        }
+        $userID ??= WCF::getUser()->userID;
 
-        if (!$userID) {
+        if ($userID === 0) {
             return 0;
         }
 
@@ -156,14 +152,14 @@ final class ConversationHandler extends SingletonFactory
         if (!$isReply) {
             // 1. Check for the maximum conversations per 24 hours.
             $limit = WCF::getSession()->getPermission('user.conversation.maxStartedConversationsPer24Hours');
-            if ($limit == 0) {
+            if ($limit === 0) {
                 // `0` is not a valid value, but the interface logic does not permit and exclusion
                 // while also allowing the special value `-1`. Therefore, `0` behaves like the
                 // 'canStartConversation' permission added in WoltLab Suite 5.2.
                 throw new PermissionDeniedException();
             }
 
-            if ($limit != -1) {
+            if ($limit !== -1) {
                 $count = FloodControl::getInstance()->countContent('com.woltlab.wcf.conversation', new \DateInterval('P1D'));
                 if ($count['count'] >= $limit) {
                     throw new NamedUserException(WCF::getLanguage()->getDynamicVariable(
@@ -180,12 +176,12 @@ final class ConversationHandler extends SingletonFactory
         // 2. Check the time between conversation messages.
         $floodControlTime = WCF::getSession()->getPermission('user.conversation.floodControlTime');
         $lastTime = FloodControl::getInstance()->getLastTime('com.woltlab.wcf.conversation.message');
-        if ($lastTime !== null && $lastTime > TIME_NOW - $floodControlTime) {
+        if ($lastTime !== null && $lastTime > \TIME_NOW - $floodControlTime) {
             throw new NamedUserException(WCF::getLanguage()->getDynamicVariable(
                 'wcf.conversation.message.error.floodControl',
                 [
                     'lastMessageTime' => $lastTime,
-                    'waitTime' => $lastTime + $floodControlTime - TIME_NOW,
+                    'waitTime' => $lastTime + $floodControlTime - \TIME_NOW,
                 ]
             ));
         }

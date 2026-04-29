@@ -39,7 +39,7 @@ class ConversationDraftEditForm extends ConversationAddForm
             throw new IllegalLinkException();
         }
         $this->formObject = new Conversation(\intval($_REQUEST['id']));
-        if ($this->formObject->userID != WCF::getUser()->userID || !$this->formObject->isDraft) {
+        if ($this->formObject->userID !== WCF::getUser()->userID || $this->formObject->isDraft === 0) {
             throw new IllegalLinkException();
         }
     }
@@ -89,7 +89,7 @@ class ConversationDraftEditForm extends ConversationAddForm
         $conversation = new Conversation($this->formObject->conversationID);
 
         // Update timestamp of other messages in this draft.
-        if (!$conversation->isDraft) {
+        if ($conversation->isDraft === 0) {
             $list = new ConversationMessageList();
             $list->getConditionBuilder()->add('conversationID = ?', [$conversation->conversationID]);
             $list->getConditionBuilder()->add('messageID <> ?', [$conversation->getFirstMessage()->messageID]);
@@ -109,7 +109,7 @@ class ConversationDraftEditForm extends ConversationAddForm
             }
         }
 
-        if (!$conversation->isDraft) {
+        if ($conversation->isDraft === 0) {
             (new MarkConversationAsRead($conversation, WCF::getUser()))();
         }
 

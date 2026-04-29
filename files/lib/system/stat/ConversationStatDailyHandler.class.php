@@ -11,10 +11,8 @@ namespace wcf\system\stat;
  */
 class ConversationStatDailyHandler extends AbstractStatDailyHandler
 {
-    /**
-     * @inheritDoc
-     */
-    public function getData($date)
+    #[\Override]
+    public function getData(int $date)
     {
         return [
             'counter' => $this->getCounter($date, 'wcf1_conversation', 'time'),

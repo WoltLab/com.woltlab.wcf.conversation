@@ -31,7 +31,7 @@ final class CloseConversation implements IController
         $conversation = Helper::fetchObjectFromRequestParameter($variables['id'], Conversation::class);
         $this->assertConversationCanClosed($conversation);
 
-        if (!$conversation->isClosed) {
+        if ($conversation->isClosed === 0) {
             $this->closeConversation($conversation);
         }
 

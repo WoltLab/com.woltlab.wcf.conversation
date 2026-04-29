@@ -32,7 +32,7 @@ final class ConversationListView extends AbstractListView
 
     public function __construct(string $filter = '')
     {
-        if ($filter === '' || \in_array($filter, UserConversationList::$availableFilters)) {
+        if ($filter === '' || \in_array($filter, UserConversationList::$availableFilters, true)) {
             $this->filter = $filter;
         } else {
             $this->filter = '';
@@ -151,6 +151,7 @@ final class ConversationListView extends AbstractListView
                 parent::__construct('label', 'wcf.label.label');
             }
 
+            #[\Override]
             public function getFormField(): AbstractFormField
             {
                 return ConversationLabelFormField::create('label')
@@ -158,6 +159,7 @@ final class ConversationListView extends AbstractListView
                     ->labels(ConversationLabel::getUserLabels());
             }
 
+            #[\Override]
             public function applyFilter(DatabaseObjectList $list, string $value): void
             {
                 $list->getConditionBuilder()->add(

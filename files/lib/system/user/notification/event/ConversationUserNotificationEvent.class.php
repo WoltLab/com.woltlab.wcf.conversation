@@ -19,17 +19,13 @@ class ConversationUserNotificationEvent extends AbstractUserNotificationEvent im
     use TTestableConversationRelatedUserNotificationEvent;
     use TTestableUserNotificationEvent;
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getTitle(): string
     {
         return $this->getLanguage()->get('wcf.user.notification.conversation.title');
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getMessage(): string
     {
         return $this->getLanguage()->getDynamicVariable('wcf.user.notification.conversation.message', [
@@ -38,10 +34,8 @@ class ConversationUserNotificationEvent extends AbstractUserNotificationEvent im
         ]);
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getEmailMessage($notificationType = 'instant')
+    #[\Override]
+    public function getEmailMessage(string $notificationType = 'instant'): array
     {
         return [
             'message-id' => 'com.woltlab.wcf.conversation.notification/' . $this->getUserNotificationObject()->conversationID,
@@ -54,10 +48,7 @@ class ConversationUserNotificationEvent extends AbstractUserNotificationEvent im
         ];
     }
 
-    /**
-     * @inheritDoc
-     * @since   5.2
-     */
+    #[\Override]
     public function getEmailTitle(): string
     {
         return $this->getLanguage()->getDynamicVariable('wcf.user.notification.conversation.mail.title', [
@@ -66,25 +57,19 @@ class ConversationUserNotificationEvent extends AbstractUserNotificationEvent im
         ]);
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getLink(): string
     {
         return $this->getUserNotificationObject()->getLink();
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function checkAccess(): bool
     {
         return $this->getUserNotificationObject()->canRead();
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public static function getTestObjects(UserProfile $recipient, UserProfile $author)
     {
         return [new ConversationUserNotificationObject(self::createTestConversation($author, $recipient))];

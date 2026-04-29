@@ -26,11 +26,6 @@ class ConversationParticipantList extends UserProfileList
      */
     public $sqlLimit = 0;
 
-    /**
-     * Creates a new ConversationParticipantList object.
-     *
-     * @param bool $isAuthor true if given user is the author of this conversation
-     */
     public function __construct(int $conversationID, int $userID = 0, bool $isAuthor = false)
     {
         parent::__construct();
@@ -38,7 +33,7 @@ class ConversationParticipantList extends UserProfileList
         $this->conversationID = $conversationID;
         $this->getConditionBuilder()->add('conversation_to_user.conversationID = ?', [$conversationID]);
         if (!$isAuthor) {
-            if ($userID) {
+            if ($userID !== 0) {
                 $this->getConditionBuilder()->add(
                     '(conversation_to_user.isInvisible = 0 OR conversation_to_user.participantID = ?)',
                     [$userID]
@@ -53,7 +48,7 @@ class ConversationParticipantList extends UserProfileList
             LEFT JOIN   wcf1_user user_table
             ON          user_table.userID = conversation_to_user.participantID";
 
-        if (!empty($this->sqlSelects)) {
+        if ($this->sqlSelects !== '') {
             $this->sqlSelects .= ',';
         }
         $this->sqlSelects .= 'conversation_to_user.*';
@@ -63,9 +58,7 @@ class ConversationParticipantList extends UserProfileList
                     AND conversation_to_user.conversationID = " . $conversationID;
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function countObjects()
     {
         $sql = "SELECT  COUNT(*) AS count
@@ -79,9 +72,7 @@ class ConversationParticipantList extends UserProfileList
         return $row['count'];
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function readObjectIDs()
     {
         $this->objectIDs = [];
@@ -89,15 +80,13 @@ class ConversationParticipantList extends UserProfileList
                 FROM    wcf1_conversation_to_user conversation_to_user
                 " . $this->sqlConditionJoins . "
                 " . $this->getConditionBuilder() . "
-                " . (!empty($this->sqlOrderBy) ? "ORDER BY " . $this->sqlOrderBy : '');
+                " . ($this->sqlOrderBy !== '' ? "ORDER BY " . $this->sqlOrderBy : '');
         $statement = WCF::getDB()->prepare($sql, $this->sqlLimit, $this->sqlOffset);
         $statement->execute($this->getConditionBuilder()->getParameters());
         $this->objectIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function readObjects()
     {
         parent::readObjects();

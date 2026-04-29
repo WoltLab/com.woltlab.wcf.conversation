@@ -26,9 +26,7 @@ class ConversationMessageUserNotificationEvent extends AbstractUserNotificationE
      */
     protected $stackable = true;
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getTitle(): string
     {
         $count = \count($this->getAuthors());
@@ -42,9 +40,7 @@ class ConversationMessageUserNotificationEvent extends AbstractUserNotificationE
         return $this->getLanguage()->get('wcf.user.notification.conversation.message.title');
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getMessage(): string
     {
         $authors = \array_values($this->getAuthors());
@@ -69,10 +65,8 @@ class ConversationMessageUserNotificationEvent extends AbstractUserNotificationE
         ]);
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getEmailMessage($notificationType = 'instant')
+    #[\Override]
+    public function getEmailMessage(string $notificationType = 'instant'): array
     {
         $messageID = '<com.woltlab.wcf.conversation.notification/' . $this->getUserNotificationObject()->getConversation()->conversationID . '@' . Email::getHost() . '>';
 
@@ -89,10 +83,7 @@ class ConversationMessageUserNotificationEvent extends AbstractUserNotificationE
         ];
     }
 
-    /**
-     * @inheritDoc
-     * @since   5.2
-     */
+    #[\Override]
     public function getEmailTitle(): string
     {
         if (\count($this->getAuthors()) > 1) {
@@ -106,33 +97,25 @@ class ConversationMessageUserNotificationEvent extends AbstractUserNotificationE
         ]);
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getLink(): string
     {
         return $this->getUserNotificationObject()->getLink();
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getEventHash(): string
     {
         return \sha1($this->eventID . '-' . $this->getUserNotificationObject()->conversationID);
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function checkAccess(): bool
     {
         return $this->getUserNotificationObject()->getConversation()->canRead();
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public static function getTestObjects(UserProfile $recipient, UserProfile $author)
     {
         return [

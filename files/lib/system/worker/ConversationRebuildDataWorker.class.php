@@ -24,9 +24,7 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker
      */
     protected $limit = 100;
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function countObjects()
     {
         if ($this->count === null) {
@@ -42,18 +40,14 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     protected function initObjectList()
     {
         $this->objectList = new ConversationList();
         $this->objectList->sqlOrderBy = 'conversation.conversationID';
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function execute()
     {
         $this->objectList->getConditionBuilder()->add(
@@ -118,22 +112,22 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker
                 'lastPostTime' => $conversation->lastPostTime,
                 'lastPosterID' => $conversation->lastPosterID,
                 'lastPoster' => $conversation->lastPoster,
-                'replies' => $row['messages'] ? $row['messages'] - 1 : 0,
+                'replies' => $row['messages'] !== 0 ? $row['messages'] - 1 : 0,
                 'userID' => $conversation->userID,
                 'username' => $conversation->username,
             ];
 
             // check for obsolete conversations
-            $obsolete = $row['messages'] == 0;
+            $obsolete = $row['messages'] === 0;
             if (!$obsolete) {
-                if ($conversation->isDraft) {
-                    if (!$conversation->userID) {
+                if ($conversation->isDraft === 1) {
+                    if ($conversation->userID === null) {
                         $obsolete = true;
                     }
                 } else {
                     $existingParticipantStatement->execute([$conversation->conversationID, Conversation::STATE_LEFT]);
                     $row = $existingParticipantStatement->fetchSingleRow();
-                    if (!$row['participants']) {
+                    if ($row['participants'] === 0) {
                         $obsolete = true;
                     }
                 }
@@ -204,7 +198,7 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker
         WCF::getDB()->commitTransaction();
 
         // delete obsolete conversations
-        if (!empty($obsoleteConversations)) {
+        if ($obsoleteConversations !== []) {
             $action = new ConversationAction($obsoleteConversations, 'delete');
             $action->executeAction();
         }

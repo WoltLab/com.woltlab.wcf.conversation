@@ -4,6 +4,7 @@ namespace wcf\data\conversation\message;
 
 use wcf\data\DatabaseObjectDecorator;
 use wcf\data\search\ISearchResultObject;
+use wcf\data\user\UserProfile;
 use wcf\page\ConversationPage;
 use wcf\system\request\LinkHandler;
 use wcf\system\search\SearchResultTextParser;
@@ -26,9 +27,7 @@ class SearchResultConversationMessage extends DatabaseObjectDecorator implements
      */
     protected static $baseClass = ConversationMessage::class;
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getFormattedMessage()
     {
         return SearchResultTextParser::getInstance()->parse(
@@ -36,20 +35,16 @@ class SearchResultConversationMessage extends DatabaseObjectDecorator implements
         );
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getSubject()
     {
         return $this->subject;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getLink($query = '')
+    #[\Override]
+    public function getLink(string $query = '')
     {
-        if ($query) {
+        if ($query !== '') {
             return LinkHandler::getInstance()->getControllerLink(ConversationPage::class, [
                 'object' => $this->getConversation(),
                 'messageID' => $this->messageID,
@@ -60,40 +55,32 @@ class SearchResultConversationMessage extends DatabaseObjectDecorator implements
         return $this->getDecoratedObject()->getLink();
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getTime()
     {
         return $this->time;
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getObjectTypeName()
     {
         return 'com.woltlab.wcf.conversation.message';
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getContainerTitle()
     {
         return '';
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getContainerLink()
     {
         return '';
     }
 
     #[\Override]
-    public function getUserProfile()
+    public function getUserProfile(): UserProfile
     {
         return $this->getDecoratedObject()->getUserProfile();
     }

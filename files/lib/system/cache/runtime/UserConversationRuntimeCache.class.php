@@ -12,7 +12,6 @@ use wcf\system\WCF;
  * @author  Matthias Schmidt
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @since   3.0
  * @deprecated 6.2 Use `ConversationRuntimeCache` instead.
  *
  * @extends AbstractRuntimeCache<Conversation, UserConversationList>
@@ -24,9 +23,7 @@ class UserConversationRuntimeCache extends AbstractRuntimeCache
      */
     protected $listClassName = UserConversationList::class;
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     protected function getObjectList()
     {
         return new UserConversationList(WCF::getUser()->userID);

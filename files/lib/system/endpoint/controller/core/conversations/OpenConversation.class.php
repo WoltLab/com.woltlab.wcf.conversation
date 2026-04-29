@@ -31,7 +31,7 @@ final class OpenConversation implements IController
         $conversation = Helper::fetchObjectFromRequestParameter($variables['id'], Conversation::class);
         $this->assertConversationCanOpened($conversation);
 
-        if ($conversation->isClosed) {
+        if ($conversation->isClosed === 1) {
             $this->openConversation($conversation);
         }
 

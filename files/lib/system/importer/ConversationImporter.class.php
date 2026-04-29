@@ -19,10 +19,8 @@ class ConversationImporter extends AbstractImporter
      */
     protected $className = Conversation::class;
 
-    /**
-     * @inheritDoc
-     */
-    public function import($oldID, array $data, array $additionalData = [])
+    #[\Override]
+    public function import(mixed $oldID, array $data, array $additionalData = [])
     {
         $oldUserID = $data['userID'];
         $data['userID'] = ImportHandler::getInstance()->getNewID('com.woltlab.wcf.user', $data['userID']);
@@ -30,7 +28,7 @@ class ConversationImporter extends AbstractImporter
         // check existing conversation
         if (\ctype_digit((string)$oldID)) {
             $existingConversation = new Conversation($oldID);
-            if (!$existingConversation->conversationID) {
+            if ($existingConversation->isNil()) {
                 $data['conversationID'] = $oldID;
             }
         }
@@ -40,7 +38,7 @@ class ConversationImporter extends AbstractImporter
         ImportHandler::getInstance()->saveNewID('com.woltlab.wcf.conversation', $oldID, $conversation->conversationID);
 
         // add author
-        if (empty($data['isDraft'])) {
+        if (($data['isDraft'] ?? false) === false) {
             ImportHandler::getInstance()->getImporter('com.woltlab.wcf.conversation.user')->import(0, [
                 'conversationID' => $oldID,
                 'participantID' => $oldUserID,

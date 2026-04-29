@@ -31,13 +31,13 @@ final class ConversationBulkInteractions extends AbstractBulkInteractionProvider
                 'open',
                 'core/conversations/%s/open',
                 'wcf.conversation.edit.open',
-                isAvailableCallback: static fn(Conversation $conversation) => $conversation->isClosed && $conversation->userID === WCF::getUser()->userID
+                isAvailableCallback: static fn(Conversation $conversation) => $conversation->isClosed === 1 && $conversation->userID === WCF::getUser()->userID
             ),
             new BulkRpcInteraction(
                 'close',
                 'core/conversations/%s/close',
                 'wcf.conversation.edit.close',
-                isAvailableCallback: static fn(Conversation $conversation) => !$conversation->isClosed && $conversation->userID === WCF::getUser()->userID
+                isAvailableCallback: static fn(Conversation $conversation) => $conversation->isClosed === 0 && $conversation->userID === WCF::getUser()->userID
             ),
             new BulkFormBuilderDialogInteraction(
                 'assignLabel',
@@ -59,7 +59,7 @@ final class ConversationBulkInteractions extends AbstractBulkInteractionProvider
                 'wcf.conversation.hideConversation.hide',
                 InteractionConfirmationType::Custom,
                 'wcf.conversation.hideConversation.hide.confirmationMessage',
-                static fn(Conversation $conversation) => !$conversation->hideConversation
+                static fn(Conversation $conversation) => $conversation->hideConversation === null || $conversation->hideConversation === 0
             ),
             new BulkRpcInteraction(
                 'leave',

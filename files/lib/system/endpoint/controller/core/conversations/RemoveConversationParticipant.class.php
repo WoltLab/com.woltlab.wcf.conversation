@@ -58,7 +58,7 @@ final class RemoveConversationParticipant implements IController
         }
 
         $participantUserIDs = $conversation->getParticipantIDs(true);
-        if (!\in_array($participantUserID, $participantUserIDs)) {
+        if (!\in_array($participantUserID, $participantUserIDs, true)) {
             throw new IllegalLinkException();
         }
     }

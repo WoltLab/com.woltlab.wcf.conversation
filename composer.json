@@ -1,8 +1,14 @@
 {
-    "name": "woltlab/com.woltlab.wcf.conversation",
-    "type": "project",
-    "require-dev": {
-        "phpstan/phpstan": "^2.1.32"
-    },
-    "require": {}
+  "name": "woltlab/com.woltlab.wcf.conversation",
+  "type": "project",
+  "require-dev": {
+    "phpstan/phpstan": "^2.1.53",
+    "phpstan/phpstan-strict-rules": "^2.0.10",
+    "phpstan/extension-installer": "^1.4.3"
+  },
+  "config": {
+    "allow-plugins": {
+      "phpstan/extension-installer": true
+    }
+  }
 }

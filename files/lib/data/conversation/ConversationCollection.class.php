@@ -48,7 +48,7 @@ class ConversationCollection extends DatabaseObjectCollection
     {
         $this->loadUserProfiles();
 
-        if ($conversation->userID) {
+        if ($conversation->userID !== null) {
             return UserProfileRuntimeCache::getInstance()->getObject($conversation->userID);
         } else {
             return UserProfile::getGuestUserProfile($conversation->username);
@@ -59,7 +59,7 @@ class ConversationCollection extends DatabaseObjectCollection
     {
         $this->loadUserProfiles();
 
-        if ($conversation->lastPosterID) {
+        if ($conversation->lastPosterID !== null) {
             return UserProfileRuntimeCache::getInstance()->getObject($conversation->lastPosterID);
         } else {
             return UserProfile::getGuestUserProfile($conversation->lastPoster);
@@ -76,10 +76,10 @@ class ConversationCollection extends DatabaseObjectCollection
 
         $userIDs = [];
         foreach ($this->getObjects() as $object) {
-            if ($object->userID) {
+            if ($object->userID !== null) {
                 $userIDs[] = $object->userID;
             }
-            if ($object->lastPosterID) {
+            if ($object->lastPosterID !== null) {
                 $userIDs[] = $object->lastPosterID;
             }
         }
@@ -142,7 +142,7 @@ class ConversationCollection extends DatabaseObjectCollection
 
         $messageIDs = [];
         foreach ($this->getObjects() as $conversation) {
-            if ($conversation->firstMessageID) {
+            if ($conversation->firstMessageID !== null) {
                 $messageIDs[] = $conversation->firstMessageID;
             }
         }

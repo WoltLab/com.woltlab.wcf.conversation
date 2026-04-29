@@ -19,17 +19,13 @@ use wcf\util\ArrayUtil;
  */
 class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectType
 {
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getMaxSize()
     {
         return WCF::getSession()->getPermission('user.conversation.maxAttachmentSize');
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getAllowedExtensions()
     {
         return ArrayUtil::trim(\explode(
@@ -38,20 +34,16 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
         ));
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getMaxCount()
     {
         return WCF::getSession()->getPermission('user.conversation.maxAttachmentCount');
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function canDownload($objectID)
+    #[\Override]
+    public function canDownload(int $objectID)
     {
-        if ($objectID) {
+        if ($objectID !== 0) {
             $message = new ConversationMessage($objectID);
             $conversation = ConversationRuntimeCache::getInstance()->getObject($message->conversationID);
             if ($conversation !== null && $conversation->canRead()) {
@@ -62,18 +54,16 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
         return false;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function canUpload($objectID, $parentObjectID = 0)
+    #[\Override]
+    public function canUpload(int $objectID, int $parentObjectID = 0)
     {
-        if (!WCF::getSession()->getPermission('user.conversation.canUploadAttachment')) {
+        if (!WCF::getSession()->hasPermission('user.conversation.canUploadAttachment')) {
             return false;
         }
 
-        if ($objectID) {
+        if ($objectID !== 0) {
             $message = new ConversationMessage($objectID);
-            if ($message->userID == WCF::getUser()->userID) {
+            if ($message->userID === WCF::getUser()->userID) {
                 return true;
             }
 
@@ -83,14 +73,12 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
         return true;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function canDelete($objectID)
+    #[\Override]
+    public function canDelete(int $objectID)
     {
-        if ($objectID) {
+        if ($objectID !== 0) {
             $message = new ConversationMessage($objectID);
-            if ($message->userID == WCF::getUser()->userID) {
+            if ($message->userID === WCF::getUser()->userID) {
                 return true;
             }
         }
@@ -98,9 +86,7 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
         return false;
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function cacheObjects(array $objectIDs)
     {
         $messageList = new ConversationMessageList();
@@ -112,9 +98,7 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function setPermissions(array $attachments)
     {
         $messageIDs = [];
@@ -144,7 +128,7 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
                     'canDownload' => true,
                     'canViewPreview' => true,
                 ]);
-            } elseif ($attachment->tmpHash != '' && $attachment->userID == WCF::getUser()->userID) {
+            } elseif ($attachment->tmpHash !== '' && $attachment->userID === WCF::getUser()->userID) {
                 $attachment->setPermissions([
                     'canDownload' => true,
                     'canViewPreview' => true,

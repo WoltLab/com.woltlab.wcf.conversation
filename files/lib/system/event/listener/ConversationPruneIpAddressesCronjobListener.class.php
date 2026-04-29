@@ -10,13 +10,10 @@ use wcf\system\cronjob\PruneIpAddressesCronjob;
  * @author  Alexander Ebert
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @since       5.2
  */
 class ConversationPruneIpAddressesCronjobListener implements IParameterizedEventListener
 {
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function execute($eventObj, $className, $eventName, array &$parameters)
     {
         /** @var PruneIpAddressesCronjob $eventObj */

@@ -34,7 +34,7 @@ final class AddConversationParticipant
             return;
         }
 
-        if ($this->conversation->isDraft) {
+        if ($this->conversation->isDraft === 1) {
             $draftData = \unserialize($this->conversation->draftData);
             $draftData['participants'] = \array_merge($draftData['participants'], $this->participants);
             $data = ['data' => ['draftData' => \serialize($draftData)]];

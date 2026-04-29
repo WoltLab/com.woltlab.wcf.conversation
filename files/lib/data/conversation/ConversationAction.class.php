@@ -46,9 +46,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
      */
     public $conversation;
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function create()
     {
         // create conversation
@@ -57,7 +55,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
         $data['lastPoster'] = $data['username'];
         $data['lastPostTime'] = $data['time'];
         // count participants
-        if (!empty($this->parameters['participants'])) {
+        if (isset($this->parameters['participants']) && $this->parameters['participants'] !== []) {
             $data['participants'] = \count($this->parameters['participants']);
         }
         // count attachments
@@ -70,8 +68,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
         if (!$conversation->isDraft) {
             // save participants
             $conversationEditor->updateParticipants(
-                (!empty($this->parameters['participants']) ? $this->parameters['participants'] : []),
-                (!empty($this->parameters['invisibleParticipants']) ? $this->parameters['invisibleParticipants'] : []),
+                $this->parameters['participants'] ?? [],
+                $this->parameters['invisibleParticipants'] ?? [],
                 'all'
             );
 
@@ -119,8 +117,8 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
         if (!$conversation->isDraft) {
             // fire notification event
             $notificationRecipients = \array_merge(
-                !empty($this->parameters['participants']) ? $this->parameters['participants'] : [],
-                !empty($this->parameters['invisibleParticipants']) ? $this->parameters['invisibleParticipants'] : []
+                $this->parameters['participants'] ?? [],
+                $this->parameters['invisibleParticipants'] ?? []
             );
             UserNotificationHandler::getInstance()->fireEvent(
                 'conversation',
@@ -134,9 +132,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
         return new Conversation($conversation->conversationID);
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function delete()
     {
         // deletes messages
@@ -148,7 +144,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
 
         // get the list of participants in order to reset the 'unread conversation'-counter
         $participantIDs = [];
-        if (!empty($this->objectIDs)) {
+        if ($this->objectIDs !== []) {
             $conditions = new PreparedStatementConditionBuilder();
             $conditions->add("conversationID IN (?)", [$this->objectIDs]);
             $sql = "SELECT  DISTINCT participantID
@@ -165,7 +161,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
         // delete conversations
         $count = parent::delete();
 
-        if (!empty($this->objectIDs)) {
+        if ($this->objectIDs !== []) {
             // delete notifications
             UserNotificationHandler::getInstance()
                 ->removeNotifications('com.woltlab.wcf.conversation.notification', $this->objectIDs);
@@ -174,7 +170,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
             ConversationModificationLogHandler::getInstance()->deleteLogs($this->objectIDs);
 
             // reset the number of unread conversations
-            if (!empty($participantIDs)) {
+            if ($participantIDs !== []) {
                 UserStorageHandler::getInstance()->reset($participantIDs, 'unreadConversationCount');
             }
         }
@@ -182,9 +178,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
         return $count;
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function update()
     {
         if (!isset($this->parameters['participants'])) {
@@ -195,7 +189,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
         }
 
         // count participants
-        if (!empty($this->parameters['participants'])) {
+        if ($this->parameters['participants'] !== []) {
             $this->parameters['data']['participants'] = \count($this->parameters['participants']);
         }
 
@@ -218,14 +212,14 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
 
         foreach ($this->getObjects() as $conversation) {
             // participants
-            if (!empty($this->parameters['participants']) || !empty($this->parameters['invisibleParticipants'])) {
+            if ($this->parameters['participants'] !== [] || $this->parameters['invisibleParticipants'] !== []) {
                 // get current participants
                 $participantIDs = $conversation->getParticipantIDs();
 
                 $conversation->updateParticipants(
-                    (!empty($this->parameters['participants']) ? $this->parameters['participants'] : []),
-                    (!empty($this->parameters['invisibleParticipants']) ? $this->parameters['invisibleParticipants'] : []),
-                    (!empty($this->parameters['visibility']) ? $this->parameters['visibility'] : 'all')
+                    $this->parameters['participants'],
+                    $this->parameters['invisibleParticipants'],
+                    $this->parameters['visibility'] ?? 'all'
                 );
 
                 // check if new participants have been added
@@ -233,7 +227,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
                     $this->parameters['participants'],
                     $this->parameters['invisibleParticipants']
                 ), $participantIDs);
-                if (!empty($newParticipantIDs)) {
+                if ($newParticipantIDs !== []) {
                     // update conversation count
                     UserStorageHandler::getInstance()->reset($newParticipantIDs, 'unreadConversationCount');
                     UserStorageHandler::getInstance()->reset($newParticipantIDs, 'conversationCount');
@@ -250,7 +244,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
 
             // draft status
             if (isset($this->parameters['data']['isDraft'])) {
-                if ($conversation->isDraft && !$this->parameters['data']['isDraft']) {
+                if ($conversation->isDraft === 1 && !(bool)$this->parameters['data']['isDraft']) {
                     // add author
                     $conversation->updateParticipants([$conversation->userID], [], 'all');
 
@@ -265,21 +259,19 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
     }
 
     /**
-     * @inheritDoc
      * @deprecated 6.2 Use `MarkConversationAsRead` instead.
      */
+    #[\Override]
     public function markAsRead()
     {
-        if (empty($this->parameters['visitTime'])) {
-            $this->parameters['visitTime'] = TIME_NOW;
+        if ((int)($this->parameters['visitTime'] ?? 0) === 0) {
+            $this->parameters['visitTime'] = \TIME_NOW;
         }
 
         // in case this is a call via PHP and the userID parameter is missing, set it to the userID of the current user
-        if (!isset($this->parameters['userID'])) {
-            $this->parameters['userID'] = WCF::getUser()->userID;
-        }
+        $this->parameters['userID'] ??= WCF::getUser()->userID;
 
-        if (empty($this->objects)) {
+        if ($this->objects === []) {
             $this->readObjects();
         }
 
@@ -304,7 +296,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
         UserStorageHandler::getInstance()->reset([$this->parameters['userID']], 'unreadConversationCount');
 
         // mark notifications as confirmed
-        if (!empty($conversationIDs)) {
+        if ($conversationIDs !== []) {
             // 1) Mark notifications about new conversations as read.
             UserNotificationHandler::getInstance()->markAsConfirmed(
                 'conversation',
@@ -348,7 +340,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
                 ->getUnreadConversationCount($this->parameters['userID'], true),
         ];
 
-        if (\count($conversationIDs) == 1) {
+        if (\count($conversationIDs) === 1) {
             $returnValues['markAsRead'] = \reset($conversationIDs);
         }
 
@@ -357,23 +349,23 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
     }
 
     /**
-     * @inheritDoc
      * @deprecated 6.2 Use `MarkConversationAsRead` instead.
      */
+    #[\Override]
     public function validateMarkAsRead()
     {
         // visitTime might not be in the future
         if (isset($this->parameters['visitTime'])) {
             $this->parameters['visitTime'] = \intval($this->parameters['visitTime']);
-            if ($this->parameters['visitTime'] > TIME_NOW) {
-                $this->parameters['visitTime'] = TIME_NOW;
+            if ($this->parameters['visitTime'] > \TIME_NOW) {
+                $this->parameters['visitTime'] = \TIME_NOW;
             }
         }
 
         // userID should always be equal to the userID of the current user when called via AJAX
         $this->parameters['userID'] = WCF::getUser()->userID;
 
-        if (empty($this->objects)) {
+        if ($this->objects === []) {
             $this->readObjects();
         }
 
@@ -383,7 +375,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
             $conversationIDs[] = $conversation->conversationID;
         }
 
-        if (empty($conversationIDs)) {
+        if ($conversationIDs === []) {
             throw new UserInputException('objectIDs');
         }
 
@@ -423,11 +415,11 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
      */
     public function validateGetConversations(): void
     {
-        if (!\MODULE_CONVERSATION) {
+        if (\MODULE_CONVERSATION === 0) {
             throw new IllegalLinkException();
         }
 
-        if (!WCF::getSession()->getPermission('user.conversation.canUseConversation')) {
+        if (!WCF::getSession()->hasPermission('user.conversation.canUseConversation')) {
             throw new PermissionDeniedException();
         }
     }
@@ -566,7 +558,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
      */
     public function rebuild()
     {
-        if (empty($this->objects)) {
+        if ($this->objects === []) {
             $this->readObjects();
         }
 
@@ -582,7 +574,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
 
         $objectIDs = [];
         while ($row = $statement->fetchArray()) {
-            if (!$row['messages']) {
+            if ($row['messages'] === 0) {
                 continue;
             }
             $objectIDs[] = $row['conversationID'];
@@ -600,7 +592,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
 
         // delete conversations without messages
         $deleteConversationIDs = \array_diff($this->objectIDs, $objectIDs);
-        if (!empty($deleteConversationIDs)) {
+        if ($deleteConversationIDs !== []) {
             $conversationAction = new self($deleteConversationIDs, 'delete');
             $conversationAction->executeAction();
         }

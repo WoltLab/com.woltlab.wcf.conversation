@@ -82,7 +82,7 @@ class ConversationMessageList extends DatabaseObjectList
     {
         $objectIDs = [];
         foreach ($this->getObjects() as $message) {
-            if ($message->attachments) {
+            if ($message->attachments !== 0) {
                 $objectIDs[] = $message->getObjectID();
             }
         }

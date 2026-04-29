@@ -28,7 +28,7 @@ final class RemoveConversationParticipant
         $editor->removeParticipant($this->participantID);
 
         $participant = $this->conversation->getOtherParticipant($this->participantID);
-        if ($participant !== null && !$participant->isInvisible) {
+        if ($participant !== null && $participant->isInvisible === 0) {
             ConversationModificationLogHandler::getInstance()->removeParticipant($this->conversation, $this->participantID);
         }
 

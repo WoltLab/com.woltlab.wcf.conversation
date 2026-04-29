@@ -38,7 +38,7 @@ class ViewableConversationMessage extends DatabaseObjectDecorator
     public function getUserProfile()
     {
         if ($this->userProfile === null) {
-            if ($this->userID) {
+            if ($this->userID !== null) {
                 $this->userProfile = UserProfileRuntimeCache::getInstance()->getObject($this->userID);
             } else {
                 $this->userProfile = UserProfile::getGuestUserProfile($this->username);
@@ -51,10 +51,9 @@ class ViewableConversationMessage extends DatabaseObjectDecorator
     /**
      * Returns the viewable conversation message with the given id.
      *
-     * @param int $messageID
      * @return  ViewableConversationMessage
      */
-    public static function getViewableConversationMessage($messageID)
+    public static function getViewableConversationMessage(int $messageID)
     {
         $messageList = new ViewableConversationMessageList();
         $messageList->setObjectIDs([$messageID]);

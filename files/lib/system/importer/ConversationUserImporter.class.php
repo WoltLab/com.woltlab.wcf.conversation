@@ -13,14 +13,12 @@ use wcf\system\WCF;
  */
 class ConversationUserImporter extends AbstractImporter
 {
-    /**
-     * @inheritDoc
-     */
-    public function import($oldID, array $data, array $additionalData = [])
+    #[\Override]
+    public function import(mixed $oldID, array $data, array $additionalData = [])
     {
         $data['conversationID'] = ImportHandler::getInstance()
             ->getNewID('com.woltlab.wcf.conversation', $data['conversationID']);
-        if (!$data['conversationID']) {
+        if ($data['conversationID'] === null) {
             return 0;
         }
         $data['participantID'] = ImportHandler::getInstance()->getNewID('com.woltlab.wcf.user', $data['participantID']);
@@ -42,14 +40,14 @@ class ConversationUserImporter extends AbstractImporter
         ]);
 
         // save labels
-        if ($data['participantID'] && !empty($additionalData['labelIDs'])) {
+        if ($data['participantID'] !== null && ($additionalData['labelIDs'] ?? []) !== []) {
             $sql = "INSERT IGNORE INTO  wcf1_conversation_label_to_object
                                         (labelID, conversationID)
                     VALUES              (?, ?)";
             $statement = WCF::getDB()->prepare($sql);
             foreach ($additionalData['labelIDs'] as $labelID) {
                 $labelID = ImportHandler::getInstance()->getNewID('com.woltlab.wcf.conversation.label', $labelID);
-                if ($labelID) {
+                if ($labelID !== null) {
                     $statement->execute([$labelID, $data['conversationID']]);
                 }
             }

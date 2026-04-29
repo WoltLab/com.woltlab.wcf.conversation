@@ -8,6 +8,7 @@ use wcf\data\conversation\Conversation;
 use wcf\data\IMessage;
 use wcf\data\TUserContent;
 use wcf\data\user\UserProfile;
+use wcf\page\ConversationPage;
 use wcf\system\file\processor\ImageData;
 use wcf\system\html\output\HtmlOutputProcessor;
 use wcf\system\request\LinkHandler;
@@ -46,9 +47,7 @@ class ConversationMessage extends CollectionDatabaseObject implements IMessage
      */
     protected $conversation;
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getFormattedMessage(): string
     {
         $this->loadEmbeddedObjects();
@@ -80,7 +79,7 @@ class ConversationMessage extends CollectionDatabaseObject implements IMessage
      */
     public function getAttachments(bool $ignoreCache = false)
     {
-        if ($this->attachments || $ignoreCache) {
+        if ($this->attachments !== 0 || $ignoreCache) {
             $attachmentList = new GroupedAttachmentList('com.woltlab.wcf.conversation.message');
             $attachmentList->getConditionBuilder()->add('attachment.objectID IN (?)', [$this->messageID]);
             $attachmentList->readObjects();
@@ -89,7 +88,7 @@ class ConversationMessage extends CollectionDatabaseObject implements IMessage
                 'canViewPreview' => true,
             ]);
 
-            if ($ignoreCache && !\count($attachmentList)) {
+            if ($ignoreCache && \count($attachmentList) === 0) {
                 return null;
             }
 
@@ -99,10 +98,8 @@ class ConversationMessage extends CollectionDatabaseObject implements IMessage
         return null;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getExcerpt($maxLength = 255): string
+    #[\Override]
+    public function getExcerpt(int $maxLength = 255): string
     {
         return StringUtil::truncateHTML($this->getSimplifiedFormattedMessage(), $maxLength);
     }
@@ -161,57 +158,46 @@ class ConversationMessage extends CollectionDatabaseObject implements IMessage
      */
     public function canEdit(): bool
     {
-        return WCF::getUser()->userID == $this->userID
+        return WCF::getUser()->userID === $this->userID
             && (
-                $this->getConversation()->isDraft
-                || WCF::getSession()->getPermission('user.conversation.canEditMessage')
+                $this->getConversation()->isDraft === 1
+                || WCF::getSession()->hasPermission('user.conversation.canEditMessage')
             )
             && $this->getConversation()->canReply();
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getMessage(): string
     {
         return $this->message;
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getLink(): string
     {
-        return LinkHandler::getInstance()->getLink('Conversation', [
+        return LinkHandler::getInstance()->getControllerLink(ConversationPage::class, [
             'object' => $this->getConversation(),
             'messageID' => $this->messageID,
-            'forceFrontend' => true,
         ], '#message' . $this->messageID);
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getTitle(): string
     {
-        if ($this->messageID == $this->getConversation()->firstMessageID) {
+        if ($this->messageID === $this->getConversation()->firstMessageID) {
             return $this->getConversation()->subject;
         }
 
         return 'RE: ' . $this->getConversation()->subject;
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function isVisible(): bool
     {
         return true;
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function __toString(): string
     {
         return $this->getFormattedMessage();
@@ -238,7 +224,7 @@ class ConversationMessage extends CollectionDatabaseObject implements IMessage
         // Drafts are a special type of conversations that may or may not have
         // any participants. The author will only be added as a participant
         // after the conversation is no longer a draft.
-        if ($conversation->isDraft && $conversation->userID && $conversation->userID === WCF::getUser()->userID) {
+        if ($conversation->isDraft === 1 && $conversation->userID !== null && $conversation->userID === WCF::getUser()->userID) {
             return true;
         }
 

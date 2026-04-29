@@ -2,6 +2,7 @@
 
 namespace wcf\page;
 
+use Laminas\Diactoros\Response\RedirectResponse;
 use wcf\command\conversation\MarkConversationAsRead;
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationParticipantList;
@@ -24,14 +25,13 @@ use wcf\system\page\ParentPageLocation;
 use wcf\system\request\LinkHandler;
 use wcf\system\user\signature\SignatureCache;
 use wcf\system\WCF;
-use wcf\util\HeaderUtil;
 
 /**
  * Shows a conversation.
  *
- * @author  Marcel Werk
- * @copyright   2001-2019 WoltLab GmbH
- * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
+ * @author      Marcel Werk
+ * @copyright   2001-2026 WoltLab GmbH
+ * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
  * @extends MultipleLinkPage<ConversationMessageList>
  */
@@ -40,7 +40,7 @@ class ConversationPage extends MultipleLinkPage
     /**
      * @inheritDoc
      */
-    public $itemsPerPage = CONVERSATION_MESSAGES_PER_PAGE;
+    public $itemsPerPage = \CONVERSATION_MESSAGES_PER_PAGE;
 
     public $sortField = 'conversation_message.time';
 
@@ -112,9 +112,7 @@ class ConversationPage extends MultipleLinkPage
      */
     public $participantList;
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function readParameters()
     {
         parent::readParameters();
@@ -125,9 +123,9 @@ class ConversationPage extends MultipleLinkPage
         if (isset($_REQUEST['messageID'])) {
             $this->messageID = \intval($_REQUEST['messageID']);
         }
-        if ($this->messageID) {
+        if ($this->messageID !== 0) {
             $this->message = new ConversationMessage($this->messageID);
-            if (!$this->message->messageID) {
+            if ($this->message->isNil()) {
                 throw new IllegalLinkException();
             }
             $this->conversationID = $this->message->conversationID;
@@ -146,18 +144,16 @@ class ConversationPage extends MultipleLinkPage
         }
 
         // messages per page
-        if (WCF::getUser()->conversationMessagesPerPage) {
+        if ((int)WCF::getUser()->conversationMessagesPerPage !== 0) {
             $this->itemsPerPage = WCF::getUser()->conversationMessagesPerPage;
         }
 
-        $this->canonicalURL = LinkHandler::getInstance()->getLink('Conversation', [
+        $this->canonicalURL = LinkHandler::getInstance()->getControllerLink(ConversationPage::class, [
             'object' => $this->conversation,
-        ], ($this->pageNo ? 'pageNo=' . $this->pageNo : ''));
+        ], ($this->pageNo !== 0 ? 'pageNo=' . $this->pageNo : ''));
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     protected function initObjectList()
     {
         parent::initObjectList();
@@ -176,33 +172,35 @@ class ConversationPage extends MultipleLinkPage
         }
 
         // handle jump to
-        if ($this->action == 'lastPost') {
-            $this->goToLastPost();
+        if ($this->action === 'lastPost') {
+            $this->maybeSetPsr7Response(
+                $this->goToLastPost()
+            );
         }
-        if ($this->action == 'firstNew') {
-            $this->goToFirstNewPost();
+        if ($this->action === 'firstNew') {
+            $this->maybeSetPsr7Response(
+                $this->goToFirstNewPost()
+            );
         }
-        if ($this->messageID) {
+        if ($this->messageID !== 0) {
             $this->goToPost();
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function readData()
     {
         parent::readData();
 
         // add breadcrumbs
-        if ($this->conversation->isDraft) {
+        if ($this->conversation->isDraft === 1) {
             // `-1` = pseudo object id to have to pages with identifier `com.woltlab.wcf.conversation.ConversationList`
             PageLocationManager::getInstance()->addParentLocation(
                 'com.woltlab.wcf.conversation.ConversationList',
                 -1,
                 new ParentPageLocation(
                     WCF::getLanguage()->get('wcf.conversation.folder.draft'),
-                    LinkHandler::getInstance()->getLink('ConversationList', ['filter' => 'draft'])
+                    LinkHandler::getInstance()->getControllerLink(ConversationListPage::class, ['filter' => 'draft'])
                 )
             );
         }
@@ -213,11 +211,11 @@ class ConversationPage extends MultipleLinkPage
             $this->conversation->isNew()
             && (
                 $this->objectList->getMaxTime() > $this->conversation->lastVisitTime
-                || ($this->conversation->joinedAt && !\count($this->objectList))
+                || ($this->conversation->joinedAt !== null && \count($this->objectList) === 0)
             )
         ) {
             $visitTime = $this->objectList->getMaxTime();
-            if ($visitTime == $this->conversation->lastPostTime) {
+            if ($visitTime === $this->conversation->lastPostTime) {
                 $visitTime = \TIME_NOW;
             }
             (new MarkConversationAsRead($this->conversation, WCF::getUser(), $visitTime))();
@@ -227,7 +225,7 @@ class ConversationPage extends MultipleLinkPage
         $this->participantList = new ConversationParticipantList(
             $this->conversationID,
             WCF::getUser()->userID,
-            $this->conversation->userID == WCF::getUser()->userID
+            $this->conversation->userID === WCF::getUser()->userID
         );
         $this->participantList->readObjects();
 
@@ -240,21 +238,21 @@ class ConversationPage extends MultipleLinkPage
 
         $userIDs = [];
         foreach ($this->objectList as $message) {
-            if ($message->userID) {
+            if ($message->userID !== null) {
                 $userIDs[] = $message->userID;
             }
         }
         $userIDs = \array_unique($userIDs);
 
         // fetch special trophies
-        if (MODULE_TROPHY) {
-            if (!empty($userIDs)) {
+        if (\MODULE_TROPHY === 1) {
+            if ($userIDs !== []) {
                 UserProfile::prepareSpecialTrophies($userIDs);
             }
         }
 
-        if (MODULE_USER_SIGNATURE) {
-            if (!empty($userIDs)) {
+        if (\MODULE_USER_SIGNATURE === 1) {
+            if ($userIDs !== []) {
                 SignatureCache::getInstance()->cacheUserSignature($userIDs);
             }
         }
@@ -270,7 +268,7 @@ class ConversationPage extends MultipleLinkPage
         // get timeframe for modifications
         $this->objectList->rewind();
         $startTime = ($this->conversation->joinedAt ?: $this->objectList->current()->time);
-        $endTime = ($this->conversation->leftAt ?: TIME_NOW);
+        $endTime = ($this->conversation->leftAt ?: \TIME_NOW);
 
         $count = \count($this->objectList);
         if ($count > 1) {
@@ -291,13 +289,13 @@ class ConversationPage extends MultipleLinkPage
         // get visible participants
         $visibleParticipantIDs = [];
         foreach ($this->participantList as $participant) {
-            if (!$participant->isInvisible || WCF::getUser()->userID == $this->conversation->userID) {
+            if ($participant->isInvisible === 0 || WCF::getUser()->userID === $this->conversation->userID) {
                 $visibleParticipantIDs[] = $participant->userID;
             }
         }
 
         // Drafts do not store their participants in conversation_to_user.
-        if ($this->conversation->isDraft) {
+        if ($this->conversation->isDraft === 1) {
             $visibleParticipantIDs[] = $this->conversation->userID;
         }
 
@@ -313,9 +311,7 @@ class ConversationPage extends MultipleLinkPage
         $this->modificationLogList->readObjects();
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function assignVariables()
     {
         parent::assignVariables();
@@ -372,7 +368,7 @@ class ConversationPage extends MultipleLinkPage
     protected function goToPost()
     {
         $conditionBuilder = clone $this->objectList->getConditionBuilder();
-        $conditionBuilder->add('time ' . ($this->sortOrder == 'ASC' ? '<=' : '>=') . ' ?', [$this->message->time]);
+        $conditionBuilder->add('time ' . ($this->sortOrder === 'ASC' ? '<=' : '>=') . ' ?', [$this->message->time]);
 
         $sql = "SELECT  COUNT(*) AS messages
                 FROM    wcf1_conversation_message conversation_message
@@ -385,25 +381,23 @@ class ConversationPage extends MultipleLinkPage
 
     /**
      * Gets the id of the last post in this conversation and forwards the user to this post.
-     *
-     * @return void
      */
-    protected function goToLastPost()
+    protected function goToLastPost(): ?RedirectResponse
     {
         $sql = "SELECT      conversation_message.messageID
                 FROM        wcf1_conversation_message conversation_message
                 " . $this->objectList->getConditionBuilder() . "
-                ORDER BY    time " . ($this->sortOrder == 'ASC' ? 'DESC' : 'ASC');
+                ORDER BY    time " . ($this->sortOrder === 'ASC' ? 'DESC' : 'ASC');
         $statement = WCF::getDB()->prepare($sql, 1);
         $statement->execute($this->objectList->getConditionBuilder()->getParameters());
         $row = $statement->fetchArray();
         if ($row === false) {
-            return;
+            return null;
         }
 
-        HeaderUtil::redirect(
-            LinkHandler::getInstance()->getLink(
-                'Conversation',
+        return new RedirectResponse(
+            LinkHandler::getInstance()->getControllerLink(
+                ConversationPage::class,
                 [
                     'encodeTitle' => true,
                     'object' => $this->conversation,
@@ -411,16 +405,12 @@ class ConversationPage extends MultipleLinkPage
                 ]
             ) . '#message' . $row['messageID']
         );
-
-        exit;
     }
 
     /**
      * Forwards the user to the first new message in this conversation.
-     *
-     * @return void
      */
-    protected function goToFirstNewPost()
+    protected function goToFirstNewPost(): ?RedirectResponse
     {
         $conditionBuilder = clone $this->objectList->getConditionBuilder();
         $conditionBuilder->add('time > ?', [$this->conversation->lastVisitTime]);
@@ -432,21 +422,19 @@ class ConversationPage extends MultipleLinkPage
         $statement = WCF::getDB()->prepare($sql, 1);
         $statement->execute($conditionBuilder->getParameters());
         $row = $statement->fetchArray();
-        if ($row !== false) {
-            HeaderUtil::redirect(
-                LinkHandler::getInstance()->getLink(
-                    'Conversation',
-                    [
-                        'encodeTitle' => true,
-                        'object' => $this->conversation,
-                        'messageID' => $row['messageID'],
-                    ]
-                ) . '#message' . $row['messageID']
-            );
-
-            exit;
-        } else {
-            $this->goToLastPost();
+        if ($row === false) {
+            return $this->goToLastPost();
         }
+
+        return new RedirectResponse(
+            LinkHandler::getInstance()->getControllerLink(
+                ConversationPage::class,
+                [
+                    'encodeTitle' => true,
+                    'object' => $this->conversation,
+                    'messageID' => $row['messageID'],
+                ]
+            ) . '#message' . $row['messageID']
+        );
     }
 }

@@ -30,9 +30,7 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker
      */
     protected $htmlInputProcessor;
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function countObjects()
     {
         if ($this->count === null) {
@@ -48,9 +46,7 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     protected function initObjectList()
     {
         $this->objectList = new ConversationMessageList();
@@ -62,9 +58,7 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker
         ) AS subject';
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function execute()
     {
         $this->objectList->getConditionBuilder()->add(
@@ -74,7 +68,7 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker
 
         parent::execute();
 
-        if (!\count($this->objectList)) {
+        if (\count($this->objectList) === 0) {
             return;
         }
 
@@ -110,7 +104,7 @@ class ConversationMessageRebuildDataWorker extends AbstractRebuildDataWorker
 
             // update message
             $data['enableHtml'] = 1;
-            if (!$message->enableHtml) {
+            if ($message->enableHtml === 0) {
                 $this->getHtmlInputProcessor()->process(
                     $message->message,
                     'com.woltlab.wcf.conversation.message',

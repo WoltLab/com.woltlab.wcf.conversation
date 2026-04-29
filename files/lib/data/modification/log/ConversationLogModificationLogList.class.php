@@ -18,9 +18,6 @@ use wcf\system\WCF;
  */
 class ConversationLogModificationLogList extends ModificationLogList
 {
-    /**
-     * @inheritDoc
-     */
     public function __construct(int $conversationID)
     {
         parent::__construct();
@@ -36,15 +33,13 @@ class ConversationLogModificationLogList extends ModificationLogList
         );
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function readObjects()
     {
         $sql = "SELECT  modification_log.*
                 FROM    wcf1_modification_log modification_log
                 " . $this->getConditionBuilder() . "
-                " . (!empty($this->sqlOrderBy) ? "ORDER BY " . $this->sqlOrderBy : '');
+                " . ($this->sqlOrderBy !== '' ? "ORDER BY " . $this->sqlOrderBy : '');
         $statement = WCF::getDB()->prepare($sql, $this->sqlLimit, $this->sqlOffset);
         $statement->execute($this->getConditionBuilder()->getParameters());
         // @phpstan-ignore assign.propertyType, argument.templateType
@@ -59,7 +54,7 @@ class ConversationLogModificationLogList extends ModificationLogList
 
             $this->indexToObject[] = $objectID;
 
-            if ($object->userID) {
+            if ($object->userID !== null) {
                 $userIDs[] = $object->userID;
             }
         }
@@ -79,10 +74,9 @@ class ConversationLogModificationLogList extends ModificationLogList
      * Returns all log entries created before given point of time. Applicable entries
      * will be returned and removed from collection.
      *
-     * @param int $time
      * @return  ViewableConversationModificationLog[]
      */
-    public function getEntriesUntil($time)
+    public function getEntriesUntil(int $time)
     {
         $entries = [];
         foreach ($this->objects as $index => $entry) {
@@ -92,7 +86,7 @@ class ConversationLogModificationLogList extends ModificationLogList
             }
         }
 
-        if (!empty($entries)) {
+        if ($entries !== []) {
             $this->indexToObject = \array_keys($this->objects);
         }
 

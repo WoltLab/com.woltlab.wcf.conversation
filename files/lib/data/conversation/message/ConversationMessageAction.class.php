@@ -70,9 +70,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
      */
     public $message;
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function create()
     {
         if (!isset($this->parameters['data']['enableHtml'])) {
@@ -84,7 +82,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
             $this->parameters['data']['attachments'] = \count($this->parameters['attachmentHandler']);
         }
 
-        if (LOG_IP_ADDRESS) {
+        if (\LOG_IP_ADDRESS === 1) {
             // add ip address
             if (!isset($this->parameters['data']['ipAddress'])) {
                 $this->parameters['data']['ipAddress'] = UserUtil::getIpAddress();
@@ -96,7 +94,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
             }
         }
 
-        if (!empty($this->parameters['htmlInputProcessor'])) {
+        if (isset($this->parameters['htmlInputProcessor'])) {
             $this->parameters['data']['message'] = $this->parameters['htmlInputProcessor']->getHtml();
         }
 
@@ -108,12 +106,12 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         $conversation = ($this->parameters['conversation'] ?? new Conversation($message->conversationID));
         $conversationEditor = new ConversationEditor($conversation);
 
-        if (empty($this->parameters['isFirstPost'])) {
+        if (($this->parameters['isFirstPost'] ?? false) === false) {
             // update last message
             $conversationEditor->addMessage($message);
 
             $participant = $conversation->getOtherParticipant($message->userID);
-            if ($participant !== null && $participant->isInvisible) {
+            if ($participant !== null && $participant->isInvisible === 1) {
                 // make invisible participant visible
                 $sql = "UPDATE  wcf1_conversation_to_user
                         SET     isInvisible = 0
@@ -146,7 +144,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
             'com.woltlab.wcf.conversation.message',
             $message->messageID,
             $message->message,
-            !empty($this->parameters['isFirstPost']) ? $conversation->subject : '',
+            (bool)($this->parameters['isFirstPost'] ?? false) ? $conversation->subject : '',
             $message->time,
             $message->userID,
             $message->username
@@ -158,7 +156,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         }
 
         // save embedded objects
-        if (!empty($this->parameters['htmlInputProcessor'])) {
+        if (isset($this->parameters['htmlInputProcessor'])) {
             $this->parameters['htmlInputProcessor']->setObjectID($message->messageID);
 
             if (MessageEmbeddedObjectManager::getInstance()->registerObjects($this->parameters['htmlInputProcessor'])) {
@@ -167,16 +165,16 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         }
 
         // clear quotes
-        if (isset($this->parameters['removeQuoteIDs']) && !empty($this->parameters['removeQuoteIDs'])) {
+        if (isset($this->parameters['removeQuoteIDs']) && $this->parameters['removeQuoteIDs'] !== []) {
             MessageQuoteManager::getInstance()->markQuotesForRemoval($this->parameters['removeQuoteIDs']);
         }
         MessageQuoteManager::getInstance()->removeMarkedQuotes();
 
         // fire notification event
-        if (empty($this->parameters['isFirstPost']) && !$conversation->isDraft) {
+        if (($this->parameters['isFirstPost'] ?? false) === false && $conversation->isDraft === 0) {
             // don't notify message author
             $notificationRecipients = \array_diff($conversation->getParticipantIDs(true), [$message->userID]);
-            if (!empty($notificationRecipients)) {
+            if ($notificationRecipients !== []) {
                 UserNotificationHandler::getInstance()->fireEvent(
                     'conversationMessage',
                     'com.woltlab.wcf.conversation.message.notification',
@@ -190,9 +188,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         return $message;
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function update()
     {
         // count attachments
@@ -200,7 +196,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
             $this->parameters['data']['attachments'] = \count($this->parameters['attachmentHandler']);
         }
 
-        if (!empty($this->parameters['htmlInputProcessor'])) {
+        if (isset($this->parameters['htmlInputProcessor'])) {
             $this->parameters['data']['message'] = $this->parameters['htmlInputProcessor']->getHtml();
         }
 
@@ -214,48 +210,46 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
                     'com.woltlab.wcf.conversation.message',
                     $message->messageID,
                     $this->parameters['data']['message'],
-                    $conversation->firstMessageID == $message->messageID ? $conversation->subject : '',
+                    $conversation->firstMessageID === $message->messageID ? $conversation->subject : '',
                     $message->time,
                     $message->userID,
                     $message->username
                 );
 
-                if (!empty($this->parameters['htmlInputProcessor'])) {
+                if (isset($this->parameters['htmlInputProcessor'])) {
                     $this->parameters['htmlInputProcessor']->setObjectID($message->messageID);
 
-                    if ($message->hasEmbeddedObjects != MessageEmbeddedObjectManager::getInstance()->registerObjects($this->parameters['htmlInputProcessor'])) {
-                        $message->update(['hasEmbeddedObjects' => $message->hasEmbeddedObjects ? 0 : 1]);
+                    if ((bool)$message->hasEmbeddedObjects !== MessageEmbeddedObjectManager::getInstance()->registerObjects($this->parameters['htmlInputProcessor'])) {
+                        $message->update(['hasEmbeddedObjects' => $message->hasEmbeddedObjects === 1 ? 0 : 1]);
                     }
                 }
             }
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function delete()
     {
         $count = parent::delete();
 
         $attachmentMessageIDs = $conversationIDs = [];
         foreach ($this->getObjects() as $message) {
-            if (!\in_array($message->conversationID, $conversationIDs)) {
+            if (!\in_array($message->conversationID, $conversationIDs, true)) {
                 $conversationIDs[] = $message->conversationID;
             }
 
-            if ($message->attachments) {
+            if ($message->attachments !== 0) {
                 $attachmentMessageIDs[] = $message->messageID;
             }
         }
 
         // rebuild conversations
-        if (!empty($conversationIDs)) {
+        if ($conversationIDs !== []) {
             $conversationAction = new ConversationAction($conversationIDs, 'rebuild');
             $conversationAction->executeAction();
         }
 
-        if (!empty($this->objectIDs)) {
+        if ($this->objectIDs !== []) {
             // delete notifications
             UserNotificationHandler::getInstance()
                 ->removeNotifications('com.woltlab.wcf.conversation.message.notification', $this->objectIDs);
@@ -273,16 +267,14 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         }
 
         // remove attachments
-        if (!empty($attachmentMessageIDs)) {
+        if ($attachmentMessageIDs !== []) {
             AttachmentHandler::removeAttachments('com.woltlab.wcf.conversation.message', $attachmentMessageIDs);
         }
 
         return $count;
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function validateQuickReply()
     {
         try {
@@ -302,9 +294,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function quickReply()
     {
         $returnValues = QuickReplyManager::getInstance()->createMessage(
@@ -312,7 +302,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
             $this->parameters,
             // @phpstan-ignore argument.type
             ConversationAction::class,
-            CONVERSATION_LIST_DEFAULT_SORT_ORDER,
+            \CONVERSATION_LIST_DEFAULT_SORT_ORDER,
             'conversationMessageList'
         );
 
@@ -323,25 +313,23 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         return $returnValues;
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function validateBeginEdit()
     {
         $this->readInteger('containerID');
         $this->readInteger('objectID');
 
         $this->conversation = new Conversation($this->parameters['containerID']);
-        if (!$this->conversation->conversationID) {
+        if ($this->conversation->isNil()) {
             throw new UserInputException('containerID');
         }
 
-        if ($this->conversation->isClosed || !Conversation::isParticipant([$this->conversation->conversationID])) {
+        if ($this->conversation->isClosed === 1 || !Conversation::isParticipant([$this->conversation->conversationID])) {
             throw new PermissionDeniedException();
         }
 
         $this->message = new ConversationMessage($this->parameters['objectID']);
-        if (!$this->message->messageID) {
+        if ($this->message->isNil()) {
             throw new UserInputException('objectID');
         }
 
@@ -355,9 +343,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         ));
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function beginEdit()
     {
         $upcastProcessor = new HtmlUpcastProcessor();
@@ -395,14 +381,12 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         ];
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function validateSave()
     {
         $this->readString('message', true, 'data');
 
-        if (empty($this->parameters['data']['message'])) {
+        if (($this->parameters['data']['message'] ?? '') === '') {
             throw new UserInputException(
                 'message',
                 WCF::getLanguage()->getDynamicVariable('wcf.global.form.error.empty')
@@ -421,15 +405,13 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function save()
     {
         $data = [];
 
-        if (!$this->message->getConversation()->isDraft) {
-            $data['lastEditTime'] = TIME_NOW;
+        if ($this->message->getConversation()->isDraft === 0) {
+            $data['lastEditTime'] = \TIME_NOW;
             $data['editCount'] = $this->message->editCount + 1;
         }
         // execute update action
@@ -456,7 +438,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         }
 
         // update count to reflect number of attachments after edit
-        if ($count != $this->message->attachments) {
+        if ($count !== $this->message->attachments) {
             $messageEditor = new ConversationMessageEditor($this->message);
             $messageEditor->update(['attachments' => $count]);
         }
@@ -478,15 +460,13 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         return $data;
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function validateContainer(DatabaseObject $container)
     {
-        if (!$container->conversationID) {
+        if ($container->conversationID === 0) {
             throw new UserInputException('objectID');
         }
-        if ($container->isClosed) {
+        if ($container->isClosed === 1) {
             throw new PermissionDeniedException();
         }
         if (!$container->canReply()) {
@@ -494,9 +474,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function validateMessage(DatabaseObject $container, HtmlInputProcessor $htmlInputProcessor)
     {
         $message = $htmlInputProcessor->getTextContent();
@@ -512,7 +490,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
 
         // search for disallowed bbcodes
         $disallowedBBCodes = $htmlInputProcessor->validate();
-        if (!empty($disallowedBBCodes)) {
+        if ($disallowedBBCodes !== []) {
             throw new UserInputException(
                 'text',
                 WCF::getLanguage()->getDynamicVariable(
@@ -523,7 +501,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         }
 
         $censoredWords = Censorship::getInstance()->test($message);
-        if ($censoredWords) {
+        if ($censoredWords !== false) {
             throw new UserInputException(
                 'message',
                 WCF::getLanguage()->getDynamicVariable(
@@ -534,9 +512,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getMessageList(DatabaseObject $container, int $lastMessageTime)
     {
         $messageList = new ViewableConversationMessageList();
@@ -545,15 +521,13 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
             ->add("conversation_message.conversationID = ?", [$container->conversationID]);
         $messageList->getConditionBuilder()
             ->add("conversation_message.time > ?", [$lastMessageTime]);
-        $messageList->sqlOrderBy = "conversation_message.time " . CONVERSATION_LIST_DEFAULT_SORT_ORDER;
+        $messageList->sqlOrderBy = "conversation_message.time " . \CONVERSATION_LIST_DEFAULT_SORT_ORDER;
         $messageList->readObjects();
 
         return $messageList;
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getPageNo(DatabaseObject $container)
     {
         $sql = "SELECT  COUNT(*) AS count
@@ -563,28 +537,22 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         $statement->execute([$container->conversationID]);
         $count = $statement->fetchArray();
 
-        return [\intval(\ceil($count['count'] / CONVERSATION_MESSAGES_PER_PAGE)), $count['count']];
+        return [\intval(\ceil($count['count'] / \CONVERSATION_MESSAGES_PER_PAGE)), $count['count']];
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getRedirectUrl(DatabaseObject $container, DatabaseObject $message)
     {
         return $message->getLink();
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getAttachmentHandler(DatabaseObject $container)
     {
         return new AttachmentHandler('com.woltlab.wcf.conversation.message', 0, $this->parameters['tmpHash']);
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getHtmlInputProcessor(?string $message = null, int $objectID = 0)
     {
         if ($message === null) {
@@ -606,7 +574,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
     {
         $event = new MessageSpamChecking(
             $this->htmlInputProcessor,
-            WCF::getUser()->userID ? WCF::getUser() : null,
+            !WCF::getUser()->isGuest() ? WCF::getUser() : null,
             UserUtil::getIpAddress()
         );
         EventHandler::getInstance()->fire($event);

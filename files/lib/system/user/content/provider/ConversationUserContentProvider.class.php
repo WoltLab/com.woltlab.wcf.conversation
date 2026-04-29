@@ -11,7 +11,6 @@ use wcf\data\conversation\ConversationList;
  * @author  Joshua Ruesweg
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @since   5.2
  *
  * @extends AbstractDatabaseUserContentProvider<ConversationList>
  */
@@ -20,6 +19,7 @@ class ConversationUserContentProvider extends AbstractDatabaseUserContentProvide
     /**
      * @inheritdoc
      */
+    #[\Override]
     public static function getDatabaseObjectClass()
     {
         return Conversation::class;

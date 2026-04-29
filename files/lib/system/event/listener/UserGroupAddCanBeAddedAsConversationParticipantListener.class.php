@@ -28,9 +28,7 @@ class UserGroupAddCanBeAddedAsConversationParticipantListener implements IParame
      */
     protected $canBeAddedAsConversationParticipant = 0;
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function execute($eventObj, $className, $eventName, array &$parameters)
     {
         $this->eventObj = $eventObj;

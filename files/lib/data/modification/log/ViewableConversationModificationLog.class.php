@@ -35,6 +35,7 @@ class ViewableConversationModificationLog extends DatabaseObjectDecorator
      *
      * @return  string
      */
+    #[\Override]
     public function __toString()
     {
         return WCF::getLanguage()->getDynamicVariable(
@@ -51,7 +52,7 @@ class ViewableConversationModificationLog extends DatabaseObjectDecorator
     public function getUserProfile()
     {
         if ($this->userProfile === null) {
-            if ($this->userID) {
+            if ($this->userID !== null) {
                 $this->userProfile = UserProfileRuntimeCache::getInstance()->getObject($this->userID);
             } else {
                 $this->userProfile = UserProfile::getGuestUserProfile($this->username);

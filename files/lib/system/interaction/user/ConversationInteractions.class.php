@@ -43,13 +43,13 @@ final class ConversationInteractions extends AbstractInteractionProvider
                 'open',
                 'core/conversations/%s/open',
                 'wcf.conversation.edit.open',
-                isAvailableCallback: static fn(Conversation $conversation) => $conversation->isClosed && $conversation->userID === WCF::getUser()->userID
+                isAvailableCallback: static fn(Conversation $conversation) => $conversation->isClosed === 1 && $conversation->userID === WCF::getUser()->userID
             ),
             new RpcInteraction(
                 'close',
                 'core/conversations/%s/close',
                 'wcf.conversation.edit.close',
-                isAvailableCallback: static fn(Conversation $conversation) => !$conversation->isClosed && $conversation->userID === WCF::getUser()->userID
+                isAvailableCallback: static fn(Conversation $conversation) => $conversation->isClosed === 0 && $conversation->userID === WCF::getUser()->userID
             ),
             new FormBuilderDialogInteraction(
                 'assignLabel',
@@ -81,7 +81,7 @@ final class ConversationInteractions extends AbstractInteractionProvider
                 InteractionConfirmationType::Custom,
                 'wcf.conversation.hideConversation.hide.confirmationMessage',
                 static function (Conversation $conversation) {
-                    return !$conversation->hideConversation;
+                    return $conversation->hideConversation === null || $conversation->hideConversation === 0;
                 },
             ),
             new RpcInteraction(
@@ -95,7 +95,7 @@ final class ConversationInteractions extends AbstractInteractionProvider
             new EditInteraction(
                 ConversationDraftEditForm::class,
                 static function (Conversation $conversation) {
-                    return $conversation->isDraft;
+                    return $conversation->isDraft === 1;
                 }
             ),
         ]);

@@ -41,10 +41,10 @@ final class ConversationLabelFormAction implements RequestHandlerInterface
                 EOT
         );
 
-        if (!WCF::getUser()->userID) {
+        if (WCF::getUser()->isGuest()) {
             throw new PermissionDeniedException();
         }
-        if (!WCF::getSession()->getPermission('user.conversation.canUseConversation')) {
+        if (!WCF::getSession()->hasPermission('user.conversation.canUseConversation')) {
             throw new PermissionDeniedException();
         }
 
@@ -73,7 +73,7 @@ final class ConversationLabelFormAction implements RequestHandlerInterface
 
             $data = $form->getData()['data'];
 
-            if ($label) {
+            if ($label !== null) {
                 (new ConversationLabelAction([$label], 'update', [
                     'data' => $data,
                 ]))->executeAction();
@@ -97,7 +97,7 @@ final class ConversationLabelFormAction implements RequestHandlerInterface
     {
         $form = new Psr15DialogForm(
             self::class,
-            $label ? WCF::getLanguage()->getDynamicVariable('wcf.conversation.label.management.editLabel', [
+            $label !== null ? WCF::getLanguage()->getDynamicVariable('wcf.conversation.label.management.editLabel', [
                 'labelName' => $label->label,
             ]) : WCF::getLanguage()->get('wcf.conversation.label.management.addLabel')
         );

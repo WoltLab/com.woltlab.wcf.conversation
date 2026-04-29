@@ -64,7 +64,7 @@ class ConversationEditor extends DatabaseObjectEditor
     public function updateParticipants(array $participantIDs, array $invisibleParticipantIDs = [], string $visibility = 'all')
     {
         $usernames = [];
-        if (!empty($participantIDs) || !empty($invisibleParticipantIDs)) {
+        if ($participantIDs !== [] || $invisibleParticipantIDs !== []) {
             $conditions = new PreparedStatementConditionBuilder();
             $conditions->add("userID IN (?)", [\array_merge($participantIDs, $invisibleParticipantIDs)]);
 
@@ -78,7 +78,7 @@ class ConversationEditor extends DatabaseObjectEditor
             }
         }
 
-        if (!empty($participantIDs)) {
+        if ($participantIDs !== []) {
             WCF::getDB()->beginTransaction();
             $sql = "INSERT INTO wcf1_conversation_to_user
                                 (conversationID, participantID, username, isInvisible, joinedAt)
@@ -96,13 +96,13 @@ class ConversationEditor extends DatabaseObjectEditor
                     $userID,
                     $usernames[$userID],
                     0,
-                    ($visibility === 'all') ? 0 : TIME_NOW,
+                    ($visibility === 'all') ? 0 : \TIME_NOW,
                 ]);
             }
             WCF::getDB()->commitTransaction();
         }
 
-        if (!empty($invisibleParticipantIDs)) {
+        if ($invisibleParticipantIDs !== []) {
             WCF::getDB()->beginTransaction();
             $sql = "INSERT INTO     wcf1_conversation_to_user
                                     (conversationID, participantID, username, isInvisible)
@@ -174,7 +174,7 @@ class ConversationEditor extends DatabaseObjectEditor
         $statement->execute([
             $this->conversationID,
             $participantData['joinedAt'],
-            TIME_NOW,
+            \TIME_NOW,
         ]);
         $lastMessageID = $statement->fetchSingleColumn();
 
@@ -186,7 +186,7 @@ class ConversationEditor extends DatabaseObjectEditor
                     AND participantID = ?";
         $statement = WCF::getDB()->prepare($sql);
         $statement->execute([
-            TIME_NOW,
+            \TIME_NOW,
             $lastMessageID ?: null,
             0,
             $this->conversationID,
@@ -194,7 +194,7 @@ class ConversationEditor extends DatabaseObjectEditor
         ]);
 
         // The author and invisible participants are not included in the count.
-        if ($userID != $this->userID && !$participantData['isInvisible']) {
+        if ($userID !== $this->userID && $participantData['isInvisible'] === 0) {
             $this->updateCounters([
                 'participants' => -1,
             ]);

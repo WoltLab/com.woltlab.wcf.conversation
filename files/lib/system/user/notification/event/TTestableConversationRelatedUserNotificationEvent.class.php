@@ -12,26 +12,18 @@ use wcf\data\user\UserProfile;
  * Provides methods to create conversations and conversation messages for testing
  * user notification events.
  *
- * @author  Matthias Schmidt
- * @copyright   2001-2019 WoltLab GmbH
- * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @since   3.1
+ * @author      Matthias Schmidt
+ * @copyright   2001-2026 WoltLab GmbH
+ * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  */
 trait TTestableConversationRelatedUserNotificationEvent
 {
-    /**
-     * Creates a conversation for testing.
-     *
-     * @param UserProfile $conversationAuthor
-     * @param UserProfile $participant
-     * @return  Conversation
-     */
-    public static function createTestConversation(UserProfile $conversationAuthor, UserProfile $participant)
+    public static function createTestConversation(UserProfile $conversationAuthor, UserProfile $participant): Conversation
     {
         return (new ConversationAction([], 'create', [
             'data' => [
                 'subject' => 'Test Conversation Subject',
-                'time' => TIME_NOW,
+                'time' => \TIME_NOW,
                 'userID' => $conversationAuthor->userID,
                 'username' => $conversationAuthor->username,
             ],
@@ -42,14 +34,7 @@ trait TTestableConversationRelatedUserNotificationEvent
         ]))->executeAction()['returnValues'];
     }
 
-    /**
-     * Creates a conversation message for testing.
-     *
-     * @param UserProfile $conversationAuthor
-     * @param UserProfile $messageAuthor
-     * @return  ConversationMessage
-     */
-    public static function createTestConversationMessage(UserProfile $conversationAuthor, UserProfile $messageAuthor)
+    public static function createTestConversationMessage(UserProfile $conversationAuthor, UserProfile $messageAuthor): ConversationMessage
     {
         $conversation = self::createTestConversation($conversationAuthor, $messageAuthor);
 
@@ -57,7 +42,7 @@ trait TTestableConversationRelatedUserNotificationEvent
             'data' => [
                 'conversationID' => $conversation->conversationID,
                 'message' => 'Test Conversation Message Message',
-                'time' => TIME_NOW,
+                'time' => \TIME_NOW,
                 'userID' => $messageAuthor->userID,
                 'username' => $messageAuthor->username,
             ],

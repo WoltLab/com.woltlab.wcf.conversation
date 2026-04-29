@@ -73,9 +73,7 @@ class ViewableConversationMessageList extends ConversationMessageList
      */
     protected $conversation;
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function readObjects()
     {
         if ($this->objectIDs === null) {
@@ -90,19 +88,19 @@ class ViewableConversationMessageList extends ConversationMessageList
                 $this->maxPostTime = $message->time;
             }
 
-            if ($message->attachments) {
+            if ($message->attachments !== 0) {
                 $this->attachmentObjectIDs[] = $message->messageID;
             }
 
-            if ($message->hasEmbeddedObjects) {
+            if ($message->hasEmbeddedObjects === 1) {
                 $this->embeddedObjectMessageIDs[] = $message->messageID;
             }
-            if ($message->userID) {
+            if ($message->userID !== null) {
                 $userIDs[] = $message->userID;
             }
         }
 
-        if (!empty($userIDs)) {
+        if ($userIDs !== []) {
             UserProfileRuntimeCache::getInstance()->cacheObjectIDs($userIDs);
         }
 
@@ -121,7 +119,7 @@ class ViewableConversationMessageList extends ConversationMessageList
      */
     public function readEmbeddedObjects()
     {
-        if (!empty($this->embeddedObjectMessageIDs)) {
+        if ($this->embeddedObjectMessageIDs !== []) {
             // add message objects to attachment object cache to save SQL queries
             ObjectTypeCache::getInstance()
                 ->getObjectTypeByName('com.woltlab.wcf.attachment.objectType', 'com.woltlab.wcf.conversation.message')
@@ -141,7 +139,7 @@ class ViewableConversationMessageList extends ConversationMessageList
      */
     public function readAttachments()
     {
-        if (!empty($this->attachmentObjectIDs)) {
+        if ($this->attachmentObjectIDs !== []) {
             $this->attachmentList = new GroupedAttachmentList('com.woltlab.wcf.conversation.message');
             $this->attachmentList->getConditionBuilder()
                 ->add('attachment.objectID IN (?)', [$this->attachmentObjectIDs]);

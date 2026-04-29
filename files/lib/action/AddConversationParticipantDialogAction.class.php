@@ -126,13 +126,13 @@ final class AddConversationParticipantDialogAction implements RequestHandlerInte
                 ->addValidator($this->getMaximumParticipantsValidator(invisibleParticipantGroupsFieldId: null)),
             MultipleSelectionFormField::create('participantGroups')
                 ->label('wcf.conversation.participantGroups')
-                ->available(WCF::getSession()->getPermission('user.conversation.canAddGroupParticipants')
+                ->available(WCF::getSession()->hasPermission('user.conversation.canAddGroupParticipants')
                     && \count($groupParticipants) > 0)
                 ->filterable(\count($groupParticipants) > 20)
                 ->options($groupParticipants),
             RadioButtonFormField::create('messageVisibility')
                 ->label('wcf.conversation.visibility')
-                ->available(!$conversation->isDraft && $conversation->canAddParticipantsUnrestricted())
+                ->available($conversation->isDraft === 0 && $conversation->canAddParticipantsUnrestricted())
                 ->required()
                 ->options([
                     'all' => 'wcf.conversation.visibility.all',

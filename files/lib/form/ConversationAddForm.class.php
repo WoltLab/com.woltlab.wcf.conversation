@@ -2,6 +2,7 @@
 
 namespace wcf\form;
 
+use Laminas\Diactoros\Response\RedirectResponse;
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationAction;
 use wcf\data\IStorableObject;
@@ -25,7 +26,6 @@ use wcf\system\form\builder\field\validation\FormFieldValidator;
 use wcf\system\form\builder\IFormDocument;
 use wcf\system\page\PageLocationManager;
 use wcf\system\WCF;
-use wcf\util\HeaderUtil;
 
 /**
  * Shows the conversation form.
@@ -122,17 +122,17 @@ class ConversationAddForm extends AbstractFormBuilderForm
                         ->maximumMultiples(WCF::getSession()->getPermission('user.conversation.maxParticipants'))
                         ->addValidator($this->getParticipantsValidator())
                         ->addValidator($this->getMaximumParticipantsValidator())
-                        ->value($this->user ? [$this->user->userID] : []),
+                        ->value($this->user !== null ? [$this->user->userID] : []),
                     MultipleSelectionFormField::create('participantGroups')
                         ->label('wcf.conversation.participantGroups')
-                        ->available(WCF::getSession()->getPermission('user.conversation.canAddGroupParticipants')
+                        ->available(WCF::getSession()->hasPermission('user.conversation.canAddGroupParticipants')
                             && \count($groupParticipants) > 0)
                         ->filterable(\count($groupParticipants) > 20)
                         ->options($groupParticipants),
                     UserFormField::create('invisibleParticipants')
                         ->label('wcf.conversation.invisibleParticipants')
                         ->description('wcf.conversation.invisibleParticipants.description')
-                        ->available(WCF::getSession()->getPermission('user.conversation.canAddInvisibleParticipants'))
+                        ->available(WCF::getSession()->hasPermission('user.conversation.canAddInvisibleParticipants'))
                         ->maximumMultiples(WCF::getSession()->getPermission('user.conversation.maxParticipants'))
                         ->addValidator($this->getParticipantsValidator())
                         ->addValidator(
@@ -146,7 +146,7 @@ class ConversationAddForm extends AbstractFormBuilderForm
                                     $invisibleParticipants = \array_column($formField->getUsers(), 'userID');
 
                                     $intersection = \array_intersect($participants, $invisibleParticipants);
-                                    if (!empty($intersection)) {
+                                    if ($intersection !== []) {
                                         foreach (
                                             UserProfileRuntimeCache::getInstance()->getObjects(
                                                 \array_slice($intersection, 0, 10)
@@ -169,15 +169,15 @@ class ConversationAddForm extends AbstractFormBuilderForm
                     MultipleSelectionFormField::create('invisibleParticipantGroups')
                         ->label('wcf.conversation.invisibleParticipantGroups')
                         ->available(
-                            WCF::getSession()->getPermission('user.conversation.canAddInvisibleParticipants')
-                                && WCF::getSession()->getPermission('user.conversation.canAddGroupParticipants')
+                            WCF::getSession()->hasPermission('user.conversation.canAddInvisibleParticipants')
+                                && WCF::getSession()->hasPermission('user.conversation.canAddGroupParticipants')
                                 && \count($groupParticipants) > 0
                         )
                         ->filterable(\count($groupParticipants) > 20)
                         ->options($groupParticipants),
                     BooleanFormField::create('participantCanInvite')
                         ->label('wcf.conversation.participantCanInvite')
-                        ->available(WCF::getSession()->getPermission('user.conversation.canSetCanInvite')),
+                        ->available(WCF::getSession()->hasPermission('user.conversation.canSetCanInvite')),
                 ]),
             WysiwygFormContainer::create('message')
                 ->label('wcf.conversation.message')
@@ -193,7 +193,7 @@ class ConversationAddForm extends AbstractFormBuilderForm
     public function save()
     {
         $this->additionalFields = [
-            'time' => TIME_NOW,
+            'time' => \TIME_NOW,
             'userID' => WCF::getUser()->userID,
             'username' => WCF::getUser()->username,
         ];
@@ -299,13 +299,15 @@ class ConversationAddForm extends AbstractFormBuilderForm
             $conversation = new Conversation($this->formObject->conversationID);
         }
 
-        if (!$conversation->isDraft) {
+        if ($conversation->isDraft === 0) {
             FloodControl::getInstance()->registerContent('com.woltlab.wcf.conversation');
             FloodControl::getInstance()->registerContent('com.woltlab.wcf.conversation.message');
         }
 
-        HeaderUtil::redirect($conversation->getLink());
-
-        exit;
+        $this->setPsr7Response(
+            new RedirectResponse(
+                $conversation->getLink(),
+            )
+        );
     }
 }

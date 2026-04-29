@@ -22,7 +22,7 @@ class SearchResultConversationMessageList extends ConversationMessageList
     {
         parent::__construct();
 
-        if (!empty($this->sqlSelects)) {
+        if ($this->sqlSelects !== '') {
             $this->sqlSelects .= ',';
         }
         $this->sqlSelects .= 'conversation.subject';

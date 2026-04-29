@@ -31,9 +31,7 @@ class ConversationNotificationObjectType extends AbstractUserNotificationObjectT
      */
     protected static $objectListClassName = ConversationList::class;
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getObjectsByIDs(array $objectIDs)
     {
         $objects = ConversationRuntimeCache::getInstance()->getObjects($objectIDs);

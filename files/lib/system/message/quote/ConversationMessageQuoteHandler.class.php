@@ -18,7 +18,7 @@ final class ConversationMessageQuoteHandler extends AbstractMessageQuoteHandler
     public function getMessage(int $objectID): ?IMessage
     {
         $message = new ConversationMessage($objectID);
-        if (!$message->messageID) {
+        if ($message->isNil()) {
             return null;
         }
 
@@ -26,7 +26,7 @@ final class ConversationMessageQuoteHandler extends AbstractMessageQuoteHandler
             return null;
         }
 
-        if ($message->hasEmbeddedObjects) {
+        if ($message->hasEmbeddedObjects === 1) {
             $message->loadEmbeddedObjects();
         }
 

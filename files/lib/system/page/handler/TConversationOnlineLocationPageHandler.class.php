@@ -13,7 +13,6 @@ use wcf\system\WCF;
  * @author  Matthias Schmidt
  * @copyright   2001-2019 WoltLab GmbH
  * @license GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @since   3.0
  */
 trait TConversationOnlineLocationPageHandler
 {
@@ -38,11 +37,11 @@ trait TConversationOnlineLocationPageHandler
             return '';
         }
 
-        if ($conversation->userID != WCF::getUser()->userID && $user->userID != WCF::getUser()->userID) {
+        if ($conversation->userID !== WCF::getUser()->userID && $user->userID !== WCF::getUser()->userID) {
             // Make sure that requests from invisible participants are not listed
             // if the active user is not the author of the conversation.
             $participant = $conversation->getOtherParticipant($user->userID);
-            if ($participant !== null && $participant->isInvisible) {
+            if ($participant !== null && $participant->isInvisible === 1) {
                 return '';
             }
         }

@@ -82,7 +82,7 @@ trait TConversationForm
         }
 
         // check participant's settings and permissions
-        if (!$user->getPermission('user.conversation.canUseConversation')) {
+        if (!(bool)$user->getPermission('user.conversation.canUseConversation')) {
             return new FormFieldValidationError(
                 'canNotUseConversation',
                 'wcf.conversation.participants.error.canNotUseConversation',
@@ -92,9 +92,9 @@ trait TConversationForm
             );
         }
 
-        if (!WCF::getSession()->getPermission('user.profile.cannotBeIgnored')) {
+        if (!WCF::getSession()->hasPermission('user.profile.cannotBeIgnored')) {
             // check if user wants to receive any conversations
-            if ($user->canSendConversation == 2) {
+            if ((int)$user->canSendConversation === 2) {
                 return new FormFieldValidationError(
                     'doesNotAcceptConversation',
                     'wcf.conversation.participants.error.doesNotAcceptConversation',
@@ -107,7 +107,7 @@ trait TConversationForm
             // check if user only wants to receive conversations by
             // users they are following and if the active user is followed
             // by the relevant user
-            if ($user->canSendConversation == 1 && !$user->isFollowing(WCF::getUser()->userID)) {
+            if ((int)$user->canSendConversation === 1 && !$user->isFollowing(WCF::getUser()->userID)) {
                 return new FormFieldValidationError(
                     'doesNotAcceptConversation',
                     'wcf.conversation.participants.error.doesNotAcceptConversation',
@@ -191,7 +191,7 @@ trait TConversationForm
                     );
                 }
 
-                if (!$isDraftFormField?->getValue() && $userIDs === []) {
+                if (!(bool)$isDraftFormField?->getValue() && $userIDs === []) {
                     $formField->addValidationError(new FormFieldValidationError('empty'));
                 }
             }

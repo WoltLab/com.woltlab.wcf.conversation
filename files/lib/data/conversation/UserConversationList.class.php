@@ -24,9 +24,7 @@ class UserConversationList extends ConversationList
         public readonly string $filter = '',
         ?int $labelID = null
     ) {
-        if ($userID === null) {
-            $userID = WCF::getUser()->userID;
-        }
+        $userID ??= WCF::getUser()->userID;
 
         parent::__construct();
 
@@ -37,17 +35,17 @@ class UserConversationList extends ConversationList
         } else {
             $this->getConditionBuilder()->add('conversation_to_user.participantID = ?', [$userID]);
             $this->getConditionBuilder()
-                ->add('conversation_to_user.hideConversation = ?', [$this->filter == 'hidden' ? 1 : 0]);
+                ->add('conversation_to_user.hideConversation = ?', [$this->filter === 'hidden' ? 1 : 0]);
             $this->sqlConditionJoins = "
                 LEFT JOIN   wcf1_conversation conversation
                 ON          conversation.conversationID = conversation_to_user.conversationID";
-            if ($this->filter == 'outbox') {
+            if ($this->filter === 'outbox') {
                 $this->getConditionBuilder()->add('conversation.userID = ?', [$userID]);
             }
         }
 
         // filter by label id
-        if ($labelID) {
+        if ($labelID !== null) {
             $this->getConditionBuilder()->add("conversation.conversationID IN (
                 SELECT  conversationID
                 FROM    wcf1_conversation_label_to_object
@@ -63,10 +61,7 @@ class UserConversationList extends ConversationList
                     AND conversation_message.userID = " . $userID;
 
         // user info
-        if (!empty($this->sqlSelects)) {
-            $this->sqlSelects .= ',';
-        }
-        $this->sqlSelects .= "conversation_to_user.*";
+        $this->sqlSelects .= ", conversation_to_user.*";
         $this->sqlJoins .= "
             LEFT JOIN   wcf1_conversation_to_user conversation_to_user
             ON          conversation_to_user.participantID = " . $userID . "
@@ -89,7 +84,7 @@ class UserConversationList extends ConversationList
     #[\Override]
     public function countObjects()
     {
-        if ($this->filter == 'draft') {
+        if ($this->filter === 'draft') {
             return parent::countObjects();
         }
 
@@ -122,7 +117,7 @@ class UserConversationList extends ConversationList
                 FROM    wcf1_conversation_to_user conversation_to_user
                     " . $this->sqlConditionJoins . "
                     " . $this->getConditionBuilder() . "
-                    " . (!empty($this->sqlOrderBy) ? "ORDER BY " . $this->sqlOrderBy : '');
+                    " . ($this->sqlOrderBy !== '' ? "ORDER BY " . $this->sqlOrderBy : '');
         $statement = WCF::getDB()->prepare($sql, $this->sqlLimit, $this->sqlOffset);
         $statement->execute($this->getConditionBuilder()->getParameters());
         $this->objectIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
@@ -148,7 +143,7 @@ class UserConversationList extends ConversationList
 
         $messageIDs = [];
         foreach ($this->getObjects() as $conversation) {
-            if ($conversation->lastMessageID) {
+            if ($conversation->lastMessageID !== null) {
                 $messageIDs[] = $conversation->lastMessageID;
             }
         }
@@ -171,7 +166,7 @@ class UserConversationList extends ConversationList
         }
 
         foreach ($this->objects as $conversation) {
-            if ($conversation->lastMessageID) {
+            if ($conversation->lastMessageID !== null) {
                 $data = (isset($messageData[$conversation->lastMessageID])) ? $messageData[$conversation->lastMessageID] : null;
                 if ($data !== null) {
                     $conversation->setLastMessage($data['userID'], $data['username'], $data['time']);

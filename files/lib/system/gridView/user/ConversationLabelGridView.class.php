@@ -56,8 +56,8 @@ final class ConversationLabelGridView extends AbstractGridView
     #[\Override]
     public function isAccessible(): bool
     {
-        return WCF::getUser()->userID > 0
-            && WCF::getSession()->getPermission('user.conversation.canUseConversation');
+        return !WCF::getUser()->isGuest()
+            && WCF::getSession()->hasPermission('user.conversation.canUseConversation');
     }
 
     #[\Override]

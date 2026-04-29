@@ -23,9 +23,7 @@ final class ConversationMessageSearchIndexRebuildDataWorker extends AbstractRebu
      */
     protected $limit = 1000;
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function countObjects()
     {
         if ($this->count === null) {
@@ -41,18 +39,14 @@ final class ConversationMessageSearchIndexRebuildDataWorker extends AbstractRebu
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     protected function initObjectList()
     {
         $this->objectList = new ConversationMessageList();
         $this->objectList->sqlOrderBy = 'conversation_message.messageID';
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function execute()
     {
         $this->objectList->getConditionBuilder()->add(
@@ -62,18 +56,18 @@ final class ConversationMessageSearchIndexRebuildDataWorker extends AbstractRebu
 
         parent::execute();
 
-        if (!$this->loopCount) {
+        if ($this->loopCount === 0) {
             // reset search index
             SearchIndexManager::getInstance()->reset('com.woltlab.wcf.conversation.message');
         }
 
-        if (!\count($this->objectList)) {
+        if (\count($this->objectList) === 0) {
             return;
         }
 
         foreach ($this->getObjectList() as $message) {
             $subject = '';
-            if ($message->messageID == $message->getConversation()->firstMessageID) {
+            if ($message->messageID === $message->getConversation()->firstMessageID) {
                 $subject = $message->getTitle();
             }
 

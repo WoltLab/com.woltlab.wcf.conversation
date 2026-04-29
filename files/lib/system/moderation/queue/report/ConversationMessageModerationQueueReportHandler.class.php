@@ -48,15 +48,13 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
      */
     protected $requiredPermission = 'mod.conversation.canModerateConversation';
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function assignQueues(array $queues)
     {
         $assignments = [];
         foreach ($queues as $queue) {
             $assignUser = false;
-            if (WCF::getSession()->getPermission('mod.conversation.canModerateConversation')) {
+            if (WCF::getSession()->hasPermission('mod.conversation.canModerateConversation')) {
                 $assignUser = true;
             }
 
@@ -66,10 +64,8 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
         ModerationQueueManager::getInstance()->setAssignment($assignments);
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function canReport($objectID)
+    #[\Override]
+    public function canReport(int $objectID)
     {
         if (!$this->isValid($objectID)) {
             return false;
@@ -82,17 +78,13 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
         return true;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getContainerID($objectID)
+    #[\Override]
+    public function getContainerID(int $objectID)
     {
         return 0;
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getReportedContent(ViewableModerationQueue $queue)
     {
         return WCF::getTPL()->render('wcf', 'moderationConversationMessage', [
@@ -100,10 +92,8 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
         ]);
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getReportedObject($objectID)
+    #[\Override]
+    public function getReportedObject(int $objectID)
     {
         if ($this->isValid($objectID)) {
             return $this->getMessage($objectID);
@@ -112,10 +102,8 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
         return null;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function isValid($objectID)
+    #[\Override]
+    public function isValid(int $objectID)
     {
         if ($this->getMessage($objectID) === null) {
             return false;
@@ -133,7 +121,7 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
     {
         if (!\array_key_exists($objectID, self::$messages)) {
             self::$messages[$objectID] = new ConversationMessage($objectID);
-            if (!self::$messages[$objectID]->messageID) {
+            if (self::$messages[$objectID]->isNil()) {
                 self::$messages[$objectID] = null;
             }
         }
@@ -141,9 +129,7 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
         return self::$messages[$objectID];
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function populate(array $queues)
     {
         $objectIDs = [];
@@ -174,13 +160,11 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
     #[\Override]
     public function canRemoveContent(ModerationQueue $queue)
     {
-        return WCF::getSession()->getPermission('mod.conversation.canModerateConversation');
+        return WCF::getSession()->hasPermission('mod.conversation.canModerateConversation');
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function removeContent(ModerationQueue $queue, $message)
+    #[\Override]
+    public function removeContent(ModerationQueue $queue, string $message)
     {
         if ($this->isValid($queue->objectID)) {
             $messageAction = new ConversationMessageAction([$this->getMessage($queue->objectID)], 'delete');

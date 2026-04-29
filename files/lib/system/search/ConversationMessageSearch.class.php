@@ -31,9 +31,7 @@ final class ConversationMessageSearch extends AbstractSearchProvider
      */
     private array $messageCache = [];
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function cacheObjects(array $objectIDs, ?array $additionalData = null): void
     {
         $messageList = new SearchResultConversationMessageList();
@@ -44,9 +42,7 @@ final class ConversationMessageSearch extends AbstractSearchProvider
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getAdditionalData(): array
     {
         return [
@@ -54,17 +50,13 @@ final class ConversationMessageSearch extends AbstractSearchProvider
         ];
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getObject(int $objectID): ?ISearchResultObject
     {
         return $this->messageCache[$objectID] ?? null;
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getJoins(): string
     {
         return "    JOIN        wcf1_conversation_to_user conversation_to_user
@@ -74,64 +66,52 @@ final class ConversationMessageSearch extends AbstractSearchProvider
                     ON          conversation.conversationID = " . $this->getTableName() . ".conversationID";
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getTableName(): string
     {
         return 'wcf1_conversation_message';
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getIDFieldName(): string
     {
         return $this->getTableName() . '.messageID';
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getSubjectFieldName(): string
     {
         return 'conversation.subject';
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getConditionBuilder(array $parameters): PreparedStatementConditionBuilder
     {
         $this->readParameters($parameters);
 
         $conditionBuilder = new PreparedStatementConditionBuilder();
         $conditionBuilder->add('conversation_to_user.hideConversation IN (0,1)');
-        if ($this->conversationID) {
+        if ($this->conversationID !== 0) {
             $conditionBuilder->add('conversation.conversationID = ?', [$this->conversationID]);
         }
 
         return $conditionBuilder;
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function isAccessible(): bool
     {
-        if (!WCF::getUser()->userID) {
+        if (WCF::getUser()->isGuest()) {
             return false;
         }
-        if (!MODULE_CONVERSATION) {
+        if (\MODULE_CONVERSATION === 0) {
             return false;
         }
 
-        return WCF::getSession()->getPermission('user.conversation.canUseConversation');
+        return WCF::getSession()->hasPermission('user.conversation.canUseConversation');
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getFormTemplateName(): string
     {
         if (isset($this->conversation)) {
@@ -141,13 +121,12 @@ final class ConversationMessageSearch extends AbstractSearchProvider
         return '';
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function assignVariables(): void
     {
-        if (!empty($_REQUEST['conversationID'])) {
-            $conversation = ConversationRuntimeCache::getInstance()->getObject(\intval($_REQUEST['conversationID']));
+        $conversationID = (int)($_REQUEST['conversationID'] ?? 0);
+        if ($conversationID !== 0) {
+            $conversation = ConversationRuntimeCache::getInstance()->getObject($conversationID);
             if ($conversation !== null && $conversation->canRead()) {
                 $this->conversation = $conversation;
                 WCF::getTPL()->assign('searchedConversation', $conversation);
@@ -160,8 +139,9 @@ final class ConversationMessageSearch extends AbstractSearchProvider
      */
     private function readParameters(array $parameters): void
     {
-        if (!empty($parameters['conversationID'])) {
-            $this->conversationID = \intval($parameters['conversationID']);
+        $conversationID = (int)($parameters['conversationID'] ?? 0);
+        if ($conversationID !== 0) {
+            $this->conversationID = $conversationID;
         }
     }
 }

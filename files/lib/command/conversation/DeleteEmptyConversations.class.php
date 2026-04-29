@@ -44,7 +44,7 @@ final class DeleteEmptyConversations
         $statement->execute($conditionBuilder->getParameters());
         $conversationIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
 
-        if (!empty($conversationIDs)) {
+        if ($conversationIDs !== []) {
             $action = new ConversationAction($conversationIDs, 'delete');
             $action->executeAction();
         }

@@ -20,10 +20,10 @@ return static function (): void {
     );
 
     if (
-        \MODULE_CONVERSATION
-        && WCF::getUser()->userID
-        && WCF::getSession()->getPermission('user.conversation.canUseConversation')
-        && WCF::getSession()->getPermission('user.conversation.canStartConversation')
+        \MODULE_CONVERSATION===1
+        && !WCF::getUser()->isGuest()
+        && WCF::getSession()->hasPermission('user.conversation.canUseConversation')
+        && WCF::getSession()->hasPermission('user.conversation.canStartConversation')
     ) {
         $eventHandler->register(
             \wcf\event\interaction\user\UserProfileInteractionCollecting::class,

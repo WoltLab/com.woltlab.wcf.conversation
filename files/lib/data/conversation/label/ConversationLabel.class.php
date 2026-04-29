@@ -71,9 +71,7 @@ class ConversationLabel extends DatabaseObject
      */
     public static function getLabelsByUser(?int $userID = null)
     {
-        if ($userID === null) {
-            $userID = WCF::getUser()->userID;
-        }
+        $userID ??= WCF::getUser()->userID;
 
         $labelList = new ConversationLabelList();
         $labelList->getConditionBuilder()->add("conversation_label.userID = ?", [$userID]);
@@ -95,7 +93,7 @@ class ConversationLabel extends DatabaseObject
 
     public function render(): string
     {
-        $cssClassName = StringUtil::encodeHTML($this->cssClassName ? ' ' . $this->cssClassName : '');
+        $cssClassName = StringUtil::encodeHTML($this->cssClassName !== '' ? ' ' . $this->cssClassName : '');
         $title = StringUtil::encodeHTML($this->label);
 
         return <<<HTML

@@ -11,6 +11,7 @@ use wcf\data\IPopoverObject;
 use wcf\data\user\group\UserGroup;
 use wcf\data\user\ignore\UserIgnore;
 use wcf\data\user\UserProfile;
+use wcf\page\ConversationPage;
 use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\conversation\ConversationHandler;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
@@ -76,22 +77,17 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
      */
     public const STATE_LEFT/*4DEAD*/ = 2;
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getTitle(): string
     {
         return $this->subject;
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getLink(): string
     {
-        return LinkHandler::getInstance()->getLink('Conversation', [
+        return LinkHandler::getInstance()->getControllerLink(ConversationPage::class, [
             'object' => $this,
-            'forceFrontend' => true,
         ]);
     }
 
@@ -100,7 +96,7 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
      */
     public function isNew(): bool
     {
-        if (!$this->isDraft && $this->lastPostTime > $this->lastVisitTime) {
+        if ($this->isDraft === 0 && $this->lastPostTime > $this->lastVisitTime) {
             return true;
         }
 
@@ -112,7 +108,7 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
      */
     public function isNewMessage(ConversationMessage|ViewableConversationMessage $message): bool
     {
-        if (!$this->isDraft && $message->time > $this->lastVisitTime) {
+        if ($this->isDraft === 0 && $message->time > $this->lastVisitTime) {
             return true;
         }
 
@@ -128,7 +124,9 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
             return false;
         }
 
-        return !$this->isClosed && !$this->leftAt && WCF::getSession()->getPermission('user.conversation.canReplyToConversation');
+        return $this->isClosed === 0
+            && $this->leftAt === 0
+            && WCF::getSession()->hasPermission('user.conversation.canReplyToConversation');
     }
 
     /**
@@ -214,15 +212,15 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
      */
     public function canRead(): bool
     {
-        if (!WCF::getUser()->userID) {
+        if (WCF::getUser()->isGuest()) {
             return false;
         }
 
-        if ($this->isDraft && $this->userID == WCF::getUser()->userID) {
+        if ($this->isDraft === 1 && $this->userID === WCF::getUser()->userID) {
             return true;
         }
 
-        if ($this->participantID == WCF::getUser()->userID && $this->hideConversation != self::STATE_LEFT) {
+        if ($this->participantID === WCF::getUser()->userID && $this->hideConversation !== self::STATE_LEFT) {
             return true;
         }
 
@@ -234,15 +232,15 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
      */
     public function canAddParticipants(): bool
     {
-        if ($this->isDraft) {
+        if ($this->isDraft === 1) {
             return false;
         }
 
         // check permissions
-        if (WCF::getUser()->userID != $this->userID) {
+        if (WCF::getUser()->userID !== $this->userID) {
             if (
-                !$this->participantCanInvite
-                && !WCF::getSession()->getPermission('mod.conversation.canAlwaysInviteUsers')
+                $this->participantCanInvite === 0
+                && !WCF::getSession()->hasPermission('mod.conversation.canAlwaysInviteUsers')
             ) {
                 return false;
             }
@@ -341,7 +339,7 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
         $participantList = new ConversationParticipantList(
             $this->conversationID,
             WCF::getUser()->userID,
-            $this->userID == WCF::getUser()->userID
+            $this->userID === WCF::getUser()->userID
         );
         $participantList->getConditionBuilder()->add('conversation_to_user.hideConversation <> ?', [self::STATE_LEFT]);
         $participantList->getConditionBuilder()->add('conversation_to_user.leftAt = ?', [0]);
@@ -362,9 +360,7 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
         return $this->leftAt === 0;
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function getPopoverLinkClass(): string
     {
         return 'conversationLink';
@@ -378,9 +374,7 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
      */
     public static function isParticipant(array $conversationIDs, ?int $userID = null): bool
     {
-        if ($userID === null) {
-            $userID = WCF::getUser()->userID;
-        }
+        $userID ??= WCF::getUser()->userID;
 
         // check if user is the initial author
         $conditions = new PreparedStatementConditionBuilder();
@@ -393,12 +387,12 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
         $statement = WCF::getDB()->prepare($sql);
         $statement->execute($conditions->getParameters());
         while ($row = $statement->fetchArray()) {
-            $index = \array_search($row['conversationID'], $conversationIDs);
+            $index = \array_search($row['conversationID'], $conversationIDs, true);
             unset($conversationIDs[$index]);
         }
 
         // check for participation
-        if (!empty($conversationIDs)) {
+        if ($conversationIDs !== []) {
             $conditions = new PreparedStatementConditionBuilder();
             $conditions->add("conversationID IN (?)", [$conversationIDs]);
             $conditions->add("participantID = ?", [$userID]);
@@ -410,12 +404,12 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
             $statement = WCF::getDB()->prepare($sql);
             $statement->execute($conditions->getParameters());
             while ($row = $statement->fetchArray()) {
-                $index = \array_search($row['conversationID'], $conversationIDs);
+                $index = \array_search($row['conversationID'], $conversationIDs, true);
                 unset($conversationIDs[$index]);
             }
         }
 
-        if (!empty($conversationIDs)) {
+        if ($conversationIDs !== []) {
             return false;
         }
 
@@ -447,7 +441,7 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
         // load user storage at once to avoid multiple queries
         $userIDs = [];
         foreach ($participantList as $user) {
-            if ($user) {
+            if ($user !== null) {
                 $userIDs[] = $user->userID;
             }
         }
@@ -460,9 +454,9 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
                 }
 
                 // user is author
-                if ($user->userID == WCF::getUser()->userID) {
+                if ($user->userID === WCF::getUser()->userID) {
                     throw new UserInputException($field, 'isAuthor');
-                } elseif (\in_array($user->userID, $existingParticipants)) {
+                } elseif (\in_array($user->userID, $existingParticipants, true)) {
                     throw new UserInputException($field, 'duplicate');
                 }
 
@@ -476,7 +470,7 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
             }
         }
 
-        if (!empty($error)) {
+        if ($error !== []) {
             throw new UserInputException($field, $error);
         }
 
@@ -508,7 +502,7 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
             }
         }
 
-        if (!empty($validGroupIDs)) {
+        if ($validGroupIDs !== []) {
             $userIDs = [];
             $conditionBuilder = new PreparedStatementConditionBuilder();
             $conditionBuilder->add('groupID IN (?)', [$validGroupIDs]);
@@ -521,15 +515,15 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
                 $userIDs[] = $userID;
             }
 
-            if (!empty($userIDs)) {
+            if ($userIDs !== []) {
                 $users = UserProfileRuntimeCache::getInstance()->getObjects($userIDs);
                 UserStorageHandler::getInstance()->loadStorage($userIDs);
 
                 foreach ($users as $user) {
                     // user is author
-                    if ($user->userID == WCF::getUser()->userID) {
+                    if ($user->userID === WCF::getUser()->userID) {
                         continue;
-                    } elseif (\in_array($user->userID, $existingParticipants)) {
+                    } elseif (\in_array($user->userID, $existingParticipants, true)) {
                         continue;
                     }
 
@@ -558,20 +552,20 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
     public static function validateParticipant(UserProfile $user, string $field = 'participants')
     {
         // check participant's settings and permissions
-        if (!$user->getPermission('user.conversation.canUseConversation')) {
+        if (!(bool)$user->getPermission('user.conversation.canUseConversation')) {
             throw new UserInputException($field, 'canNotUseConversation');
         }
 
-        if (!WCF::getSession()->getPermission('user.profile.cannotBeIgnored')) {
+        if (!WCF::getSession()->hasPermission('user.profile.cannotBeIgnored')) {
             // check if user wants to receive any conversations
-            if ($user->canSendConversation == 2) {
+            if ((int)$user->canSendConversation === 2) {
                 throw new UserInputException($field, 'doesNotAcceptConversation');
             }
 
             // check if user only wants to receive conversations by
             // users they are following and if the active user is followed
             // by the relevant user
-            if ($user->canSendConversation == 1 && !$user->isFollowing(WCF::getUser()->userID)) {
+            if ((int)$user->canSendConversation === 1 && !$user->isFollowing(WCF::getUser()->userID)) {
                 throw new UserInputException($field, 'doesNotAcceptConversation');
             }
 
@@ -644,7 +638,7 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
     }
 
     #[\Override]
-    public function __get($name)
+    public function __get(string $name)
     {
         return match ($name) {
             'participantID', 'hideConversation', 'isInvisible', 'lastVisitTime',

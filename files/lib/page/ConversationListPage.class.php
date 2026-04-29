@@ -50,7 +50,7 @@ final class ConversationListPage extends AbstractListViewPage
         if (isset($_REQUEST['filter'])) {
             $this->filter = $_REQUEST['filter'];
         }
-        if (!\in_array($this->filter, UserConversationList::$availableFilters)) {
+        if (!\in_array($this->filter, UserConversationList::$availableFilters, true)) {
             $this->filter = '';
         }
     }
