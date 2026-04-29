@@ -43,7 +43,7 @@ final class GetConversationHeaderTitle implements IController
 
     private function assertConversationIsAccessible(Conversation $conversation): void
     {
-        if (!$conversation->isActiveParticipant()) {
+        if (!$conversation->canRead()) {
             throw new PermissionDeniedException();
         }
     }
