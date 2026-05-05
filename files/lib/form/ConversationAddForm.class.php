@@ -7,7 +7,6 @@ use wcf\data\conversation\ConversationAction;
 use wcf\data\IStorableObject;
 use wcf\data\user\group\UserGroup;
 use wcf\data\user\UserProfile;
-use wcf\system\cache\builder\UserGroupCacheBuilder;
 use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\conversation\TConversationForm;
 use wcf\system\exception\IllegalLinkException;
@@ -95,11 +94,9 @@ class ConversationAddForm extends AbstractFormBuilderForm
         parent::createForm();
 
         $groupParticipants = \array_filter(
-            UserGroupCacheBuilder::getInstance()->getData([], 'groups'),
-            static function (UserGroup $group) {
-                // @phpstan-ignore property.notFound
-                return $group->canBeAddedAsConversationParticipant;
-            }
+            UserGroup::getSortedGroupsByType(),
+            // @phpstan-ignore property.notFound
+            static fn(UserGroup $group) => $group->canBeAddedAsConversationParticipant
         );
 
         $this->form->appendChildren([

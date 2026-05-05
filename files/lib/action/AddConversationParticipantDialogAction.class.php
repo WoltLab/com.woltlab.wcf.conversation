@@ -11,7 +11,6 @@ use wcf\command\conversation\AddConversationParticipant;
 use wcf\data\conversation\Conversation;
 use wcf\data\user\group\UserGroup;
 use wcf\http\Helper;
-use wcf\system\cache\builder\UserGroupCacheBuilder;
 use wcf\system\conversation\TConversationForm;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\PermissionDeniedException;
@@ -111,7 +110,7 @@ final class AddConversationParticipantDialogAction implements RequestHandlerInte
         );
 
         $groupParticipants = \array_filter(
-            UserGroupCacheBuilder::getInstance()->getData([], 'groups'),
+            UserGroup::getSortedGroupsByType(),
             // @phpstan-ignore property.notFound
             static fn(UserGroup $group) => $group->canBeAddedAsConversationParticipant
         );
