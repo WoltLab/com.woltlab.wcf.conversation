@@ -17,7 +17,7 @@ use wcf\system\WCF;
  * @mixin ModificationLog
  * @extends DatabaseObjectDecorator<ModificationLog>
  */
-class ViewableConversationModificationLog extends DatabaseObjectDecorator
+class ViewableConversationModificationLog extends DatabaseObjectDecorator implements \Stringable
 {
     /**
      * @inheritDoc
