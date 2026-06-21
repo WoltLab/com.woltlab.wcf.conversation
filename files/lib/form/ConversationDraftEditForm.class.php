@@ -115,4 +115,10 @@ class ConversationDraftEditForm extends ConversationAddForm
 
         parent::saved();
     }
+
+    #[\Override]
+    protected function getAutosaveId(): string
+    {
+        return 'com.woltlab.wcf.conversation.conversationEdit-' . $this->formObject->getObjectID();
+    }
 }

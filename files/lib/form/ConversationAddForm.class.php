@@ -182,7 +182,8 @@ class ConversationAddForm extends AbstractFormBuilderForm
                 ->attachmentData('com.woltlab.wcf.conversation.message')
                 ->supportMentions()
                 ->supportQuotes()
-                ->required(),
+                ->required()
+                ->autosaveId($this->getAutosaveId()),
         ]);
     }
 
@@ -304,5 +305,10 @@ class ConversationAddForm extends AbstractFormBuilderForm
         HeaderUtil::redirect($conversation->getLink());
 
         exit;
+    }
+
+    protected function getAutosaveId(): string
+    {
+        return 'com.woltlab.wcf.conversation.conversationAdd';
     }
 }
