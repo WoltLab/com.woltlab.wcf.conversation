@@ -28,7 +28,7 @@ final class HideConversation implements IController
         $conversation = Helper::fetchObjectFromRequestParameter($variables['id'], Conversation::class);
         $this->assertConversationIsAccessible($conversation);
 
-        (new \wcf\command\conversation\HideConversation($conversation))();
+        new \wcf\command\conversation\HideConversation($conversation)();
 
         return new JsonResponse([]);
     }

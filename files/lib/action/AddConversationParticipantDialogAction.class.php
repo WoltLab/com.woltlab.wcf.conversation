@@ -81,7 +81,7 @@ final class AddConversationParticipantDialogAction implements RequestHandlerInte
 
             $participants = $this->filterOutParticipantsAlreadyAdded($participants, $conversation);
 
-            (new AddConversationParticipant($conversation, $participants, $messageVisibility))();
+            new AddConversationParticipant($conversation, $participants, $messageVisibility)();
 
             return new JsonResponse([]);
         } else {

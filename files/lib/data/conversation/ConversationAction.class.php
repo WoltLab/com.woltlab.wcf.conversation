@@ -392,7 +392,7 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
      */
     public function markAllAsRead()
     {
-        (new MarkAllConversationsAsRead(WCF::getUser()))();
+        new MarkAllConversationsAsRead(WCF::getUser())();
 
         return [
             'markAllAsRead' => true,

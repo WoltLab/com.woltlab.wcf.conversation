@@ -110,7 +110,7 @@ class ConversationDraftEditForm extends ConversationAddForm
         }
 
         if ($conversation->isDraft === 0) {
-            (new MarkConversationAsRead($conversation, WCF::getUser()))();
+            new MarkConversationAsRead($conversation, WCF::getUser())();
         }
 
         parent::saved();

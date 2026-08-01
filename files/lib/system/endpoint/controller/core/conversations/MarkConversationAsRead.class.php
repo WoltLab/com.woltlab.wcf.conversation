@@ -29,7 +29,7 @@ final class MarkConversationAsRead implements IController
         $conversation = Helper::fetchObjectFromRequestParameter($variables['id'], Conversation::class);
         $this->assertConversationIsAccessible($conversation);
 
-        (new \wcf\command\conversation\MarkConversationAsRead($conversation, WCF::getUser()))();
+        new \wcf\command\conversation\MarkConversationAsRead($conversation, WCF::getUser())();
 
         return new JsonResponse([]);
     }

@@ -33,7 +33,7 @@ final class RemoveConversationParticipant implements IController
 
         $this->assertCanRemoveParticipant($conversation, $participantUserID);
 
-        (new \wcf\command\conversation\RemoveConversationParticipant($conversation, $participantUserID))();
+        new \wcf\command\conversation\RemoveConversationParticipant($conversation, $participantUserID)();
 
         return new JsonResponse([
             'template' => WCF::getTPL()->render('wcf', 'conversationParticipantList', [

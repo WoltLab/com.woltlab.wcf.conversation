@@ -59,7 +59,7 @@ final class EditSubjectConversationDialogAction implements RequestHandlerInterfa
             }
             $data = $form->getData()['data'];
 
-            (new SetConversationSubject($conversation, $data['subject']))();
+            new SetConversationSubject($conversation, $data['subject'])();
 
             return new JsonResponse([]);
         } else {

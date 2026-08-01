@@ -39,6 +39,6 @@ final class LeaveConversation
 
         ConversationModificationLogHandler::getInstance()->leave($this->conversation);
 
-        (new DeleteEmptyConversations([$this->conversation->conversationID]))();
+        new DeleteEmptyConversations([$this->conversation->conversationID])();
     }
 }

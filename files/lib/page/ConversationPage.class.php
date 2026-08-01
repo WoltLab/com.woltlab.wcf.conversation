@@ -218,7 +218,7 @@ class ConversationPage extends MultipleLinkPage
             if ($visitTime === $this->conversation->lastPostTime) {
                 $visitTime = \TIME_NOW;
             }
-            (new MarkConversationAsRead($this->conversation, WCF::getUser(), $visitTime))();
+            new MarkConversationAsRead($this->conversation, WCF::getUser(), $visitTime)();
         }
 
         // get participants

@@ -28,7 +28,7 @@ final class MarkAllConversationsAsRead implements IController
             throw new PermissionDeniedException();
         }
 
-        (new \wcf\command\conversation\MarkAllConversationsAsRead(WCF::getUser()))();
+        new \wcf\command\conversation\MarkAllConversationsAsRead(WCF::getUser())();
 
         return new JsonResponse([]);
     }

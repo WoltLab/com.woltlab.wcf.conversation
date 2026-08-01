@@ -70,7 +70,7 @@ final class AssignConversationLabelDialogAction implements RequestHandlerInterfa
             }
             $labelIDs = $form->getData()['labelIDs'] ?? [];
 
-            (new AssignConversationLabel(\array_keys($labels), $conversationIDs, $labelIDs))();
+            new AssignConversationLabel(\array_keys($labels), $conversationIDs, $labelIDs)();
 
             return new JsonResponse([]);
         } else {
