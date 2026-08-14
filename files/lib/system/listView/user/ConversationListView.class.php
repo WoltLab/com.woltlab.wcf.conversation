@@ -177,4 +177,12 @@ final class ConversationListView extends AbstractListView
             }
         };
     }
+
+    #[\Override]
+    public function isAccessible(): bool
+    {
+        return \MODULE_CONVERSATION !== 0
+            && WCF::getUser()->userID !== 0
+            && WCF::getSession()->getPermission('user.conversation.canUseConversation');
+    }
 }
