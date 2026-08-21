@@ -8,6 +8,7 @@ use wcf\data\IStorableObject;
 use wcf\data\user\group\UserGroup;
 use wcf\data\user\UserProfile;
 use wcf\system\cache\runtime\UserProfileRuntimeCache;
+use wcf\system\conversation\ConversationHandler;
 use wcf\system\conversation\TConversationForm;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\NamedUserException;
@@ -73,6 +74,23 @@ class ConversationAddForm extends AbstractFormBuilderForm
     public function readParameters()
     {
         parent::readParameters();
+
+        // `$loginRequired` is checked in `show()` which runs after this method,
+        // returning early skips the flood control check.
+        if (WCF::getUser()->userID === 0) {
+            return;
+        }
+
+        if (
+            ConversationHandler::getInstance()->getConversationCount()
+            >= WCF::getSession()->getPermission('user.conversation.maxConversations')
+        ) {
+            throw new NamedUserException(WCF::getLanguage()->getDynamicVariable(
+                'wcf.conversation.error.mailboxIsFull'
+            ));
+        }
+
+        ConversationHandler::getInstance()->enforceFloodControl(false);
 
         if (isset($_REQUEST['userID'])) {
             $userID = \intval($_REQUEST['userID']);
