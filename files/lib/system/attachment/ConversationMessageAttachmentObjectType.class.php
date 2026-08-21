@@ -4,7 +4,7 @@ namespace wcf\system\attachment;
 
 use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\conversation\message\ConversationMessageList;
-use wcf\system\cache\runtime\ConversationRuntimeCache;
+use wcf\system\cache\runtime\ConversationMessageRuntimeCache;
 use wcf\system\WCF;
 use wcf\util\ArrayUtil;
 
@@ -52,9 +52,8 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
     public function canDownload($objectID)
     {
         if ($objectID) {
-            $message = new ConversationMessage($objectID);
-            $conversation = ConversationRuntimeCache::getInstance()->getObject($message->conversationID);
-            if ($conversation !== null && $conversation->canRead()) {
+            $message = ConversationMessageRuntimeCache::getInstance()->getObject($objectID);
+            if ($message?->canRead()) {
                 return true;
             }
         }
@@ -136,7 +135,7 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
 
         foreach ($attachments as $attachment) {
             if (($message = $this->getObject($attachment->objectID)) !== null) {
-                if (!$message->getConversation()->canRead()) {
+                if (!$message->canRead()) {
                     continue;
                 }
 
