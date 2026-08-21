@@ -50,7 +50,7 @@ final class GetConversationPopover implements IController
             ->add("conversation_message.messageID = ?", [$conversation->firstMessageID]);
         $messageList->readObjects();
         $message = $messageList->getSingleObject();
-        if ($message === null) {
+        if ($message === null || !$message->canRead()) {
             return '';
         }
 
