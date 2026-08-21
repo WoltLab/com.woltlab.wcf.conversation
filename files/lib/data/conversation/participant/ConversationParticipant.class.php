@@ -17,7 +17,7 @@ use wcf\system\WCF;
  * @property-read   int     $conversationID
  * @property-read   ?int    $participantID
  * @property-read   string  $username
- * @property-read   bool    $hideConversation
+ * @property-read   0|1|2    $hideConversation
  * @property-read   bool    $isInvisible
  * @property-read   int     $lastVisitTime
  * @property-read   int     $joinedAt

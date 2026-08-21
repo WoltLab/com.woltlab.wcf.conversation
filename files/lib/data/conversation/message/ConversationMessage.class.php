@@ -248,6 +248,10 @@ class ConversationMessage extends CollectionDatabaseObject implements IMessage
             return false;
         }
 
+        if ($participant->hideConversation === Conversation::STATE_LEFT) {
+            return false;
+        }
+
         if ($participant->hasJoinedAfter($this->time) || $participant->hasLeftBefore($this->time)) {
             return false;
         }
