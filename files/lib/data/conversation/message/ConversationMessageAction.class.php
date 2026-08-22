@@ -290,6 +290,8 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
      */
     public function validateQuickReply()
     {
+        unset($this->parameters['isFirstPost'], $this->parameters['conversation']);
+
         try {
             ConversationHandler::getInstance()->enforceFloodControl(true);
         } catch (NamedUserException $e) {
