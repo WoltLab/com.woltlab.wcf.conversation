@@ -61,10 +61,8 @@ final class ConversationLabelFormField extends AbstractFormField
     #[\Override]
     public function validate()
     {
-        if ($this->isRequired()) {
-            if ($this->value <= 0) {
-                $this->addValidationError(new FormFieldValidationError('empty'));
-            }
+        if ($this->isRequired() && $this->value <= 0) {
+            $this->addValidationError(new FormFieldValidationError('empty'));
         } elseif ($this->value > 0 && !\array_key_exists($this->value, $this->labels)) {
             $this->addValidationError(new FormFieldValidationError(
                 'invalidValue',
