@@ -81,6 +81,8 @@ class ConversationAddForm extends AbstractFormBuilderForm
             return;
         }
 
+        WCF::getSession()->checkPermissions(['user.conversation.canStartConversation']);
+
         if (
             ConversationHandler::getInstance()->getConversationCount()
             >= WCF::getSession()->getPermission('user.conversation.maxConversations')
