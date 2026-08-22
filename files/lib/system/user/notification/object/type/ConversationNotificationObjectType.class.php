@@ -36,7 +36,7 @@ class ConversationNotificationObjectType extends AbstractUserNotificationObjectT
      */
     public function getObjectsByIDs(array $objectIDs)
     {
-        $objects = ConversationRuntimeCache::getInstance()->getObjects($objectIDs);
+        $objects = \array_filter(ConversationRuntimeCache::getInstance()->getObjects($objectIDs));
         foreach ($objects as $objectID => $conversation) {
             $objects[$objectID] = new static::$decoratorClassName($conversation);
         }
