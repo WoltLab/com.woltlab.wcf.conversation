@@ -13,6 +13,7 @@ use wcf\system\interaction\bulk\user\ConversationBulkInteractions;
 use wcf\system\interaction\user\ConversationInteractions;
 use wcf\system\listView\AbstractListView;
 use wcf\system\view\filter\AbstractFilter;
+use wcf\system\view\filter\exception\InvalidFilterValue;
 use wcf\system\view\filter\TextFilter;
 use wcf\system\view\filter\UserFilter;
 use wcf\system\listView\ListViewSortField;
@@ -160,6 +161,12 @@ final class ConversationListView extends AbstractListView
 
             public function applyFilter(DatabaseObjectList $list, string $value): void
             {
+                // Labels are private to their owner, therefore filtering by a foreign
+                // label id would disclose how somebody else has labeled a conversation.
+                if (!isset(ConversationLabel::getUserLabels()[$value])) {
+                    throw new InvalidFilterValue("Invalid value '{$value}' for filter '{$this->id}' given.");
+                }
+
                 $list->getConditionBuilder()->add(
                     "{$list->getDatabaseTableAlias()}.{$list->getDatabaseTableIndexName()} IN (
                         SELECT  conversationID
