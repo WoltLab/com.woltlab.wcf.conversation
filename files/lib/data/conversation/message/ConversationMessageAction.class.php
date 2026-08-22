@@ -552,6 +552,20 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
             ->add("conversation_message.conversationID = ?", [$container->conversationID]);
         $messageList->getConditionBuilder()
             ->add("conversation_message.time > ?", [$lastMessageTime]);
+        // Participants must not be able to read the messages that were written
+        // outside of the timeframe of their participation.
+        if ($container->joinedAt > 0) {
+            $messageList->getConditionBuilder()->add(
+                "conversation_message.time >= ?",
+                [$container->joinedAt]
+            );
+        }
+        if ($container->leftAt > 0) {
+            $messageList->getConditionBuilder()->add(
+                "conversation_message.time <= ?",
+                [$container->leftAt]
+            );
+        }
         $messageList->sqlOrderBy = "conversation_message.time " . CONVERSATION_LIST_DEFAULT_SORT_ORDER;
         $messageList->readObjects();
 
