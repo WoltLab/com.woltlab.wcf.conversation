@@ -70,10 +70,17 @@ class ConversationMessageCollection extends DatabaseObjectCollection
         $this->embeddedObjectsLoaded = true;
 
         // Add message objects to attachment object cache to save SQL queries.
+        // The objects of a collection are not keyed by their object id, but the
+        // attachment cache is looked up by the attachment's `objectID`.
+        $messages = [];
+        foreach ($this->getObjects() as $message) {
+            $messages[$message->getObjectID()] = $message;
+        }
+
         ObjectTypeCache::getInstance()
             ->getObjectTypeByName('com.woltlab.wcf.attachment.objectType', 'com.woltlab.wcf.conversation.message')
             ->getProcessor()
-            ->setCachedObjects($this->getObjects());
+            ->setCachedObjects($messages);
 
         $objectIDs = $this->getEmbeddedObjectIDs();
         if ($objectIDs === []) {

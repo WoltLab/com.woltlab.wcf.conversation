@@ -124,7 +124,9 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
                 'canViewPreview' => false,
             ]);
 
-            if ($this->getObject($attachment->objectID) === null) {
+            // Attachments that are still bound to a `tmpHash` have no object id
+            // yet and must never resolve to a message through the cache.
+            if ($attachment->objectID > 0 && $this->getObject($attachment->objectID) === null) {
                 $messageIDs[] = $attachment->objectID;
             }
         }
@@ -134,7 +136,8 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
         }
 
         foreach ($attachments as $attachment) {
-            if (($message = $this->getObject($attachment->objectID)) !== null) {
+            $message = $attachment->objectID ? $this->getObject($attachment->objectID) : null;
+            if ($message !== null) {
                 if (!$message->canRead()) {
                     continue;
                 }
