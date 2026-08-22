@@ -10,6 +10,7 @@ use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\label\ConversationLabelAction;
 use wcf\data\IStorableObject;
 use wcf\http\Helper;
+use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\NamedUserException;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\form\builder\data\processor\CustomFormDataProcessor;
@@ -32,6 +33,10 @@ final class ConversationLabelFormAction implements RequestHandlerInterface
     #[\Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        if (\MODULE_CONVERSATION === 0) {
+            throw new IllegalLinkException();
+        }
+
         $parameters = Helper::mapQueryParameters(
             $request->getQueryParams(),
             <<<'EOT'

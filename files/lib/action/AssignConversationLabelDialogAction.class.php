@@ -30,6 +30,10 @@ final class AssignConversationLabelDialogAction implements RequestHandlerInterfa
     #[\Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        if (\MODULE_CONVERSATION === 0) {
+            throw new IllegalLinkException();
+        }
+
         $parameters = Helper::mapQueryParameters(
             $request->getQueryParams(),
             <<<'EOT'
