@@ -285,7 +285,7 @@ class ConversationPage extends MultipleLinkPage
                         ORDER BY    time";
                 $statement = WCF::getDB()->prepare($sql, 1);
                 $statement->execute([$this->conversationID, $this->objectList->current()->time]);
-                $endTime = $statement->fetchSingleColumn() - 1;
+                $endTime = \min($endTime, $statement->fetchSingleColumn() - 1);
             }
         }
         $this->objectList->rewind();
