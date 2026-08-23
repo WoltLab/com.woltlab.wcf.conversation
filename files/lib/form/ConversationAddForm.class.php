@@ -204,7 +204,13 @@ class ConversationAddForm extends AbstractFormBuilderForm
             WysiwygFormContainer::create('message')
                 ->label('wcf.conversation.message')
                 ->messageObjectType('com.woltlab.wcf.conversation.message')
-                ->attachmentData('com.woltlab.wcf.conversation.message')
+                ->attachmentData(
+                    'com.woltlab.wcf.conversation.message',
+                    0,
+                    // Attachments are bound to the message, not to the conversation,
+                    // therefore the id of the form object must not be used.
+                    $this->formObject?->getFirstMessage()?->messageID
+                )
                 ->maximumLength((int)WCF::getSession()->getPermission('user.conversation.maxLength'))
                 ->supportMentions()
                 ->supportQuotes()
