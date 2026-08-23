@@ -32,6 +32,10 @@ final class ConversationInteractions extends AbstractInteractionProvider
 {
     public function __construct()
     {
+        if (\MODULE_CONVERSATION === 0) {
+            return;
+        }
+
         $this->addInteractions([
             new FormBuilderDialogInteraction(
                 'editSubject',
@@ -55,14 +59,16 @@ final class ConversationInteractions extends AbstractInteractionProvider
                 'assignLabel',
                 LinkHandler::getInstance()->getControllerLink(AssignConversationLabelDialogAction::class, ['id' => '%s']),
                 'wcf.conversation.edit.assignLabel',
-                static fn() => ConversationLabel::getUserLabels() !== [],
+                static fn(Conversation $conversation) => $conversation->canRead()
+                    && ConversationLabel::getUserLabels() !== [],
             ),
             new Divider(),
             new FormBuilderDialogInteraction(
                 'addParticipants',
                 LinkHandler::getInstance()->getControllerLink(AddConversationParticipantDialogAction::class, ['id' => '%s']),
                 'wcf.conversation.edit.addParticipants',
-                static fn(Conversation $conversation) => $conversation->canAddParticipants(),
+                static fn(Conversation $conversation) => $conversation->canRead()
+                    && $conversation->canAddParticipants(),
             ),
             new RpcInteraction(
                 'restore',
@@ -71,7 +77,7 @@ final class ConversationInteractions extends AbstractInteractionProvider
                 InteractionConfirmationType::Custom,
                 'wcf.conversation.hideConversation.restore.confirmationMessage',
                 static function (Conversation $conversation) {
-                    return (bool)$conversation->hideConversation;
+                    return $conversation->canRead() && (bool)$conversation->hideConversation;
                 },
             ),
             new RpcInteraction(
@@ -81,7 +87,7 @@ final class ConversationInteractions extends AbstractInteractionProvider
                 InteractionConfirmationType::Custom,
                 'wcf.conversation.hideConversation.hide.confirmationMessage',
                 static function (Conversation $conversation) {
-                    return !$conversation->hideConversation;
+                    return $conversation->canRead() && !$conversation->hideConversation;
                 },
             ),
             new RpcInteraction(
@@ -90,12 +96,13 @@ final class ConversationInteractions extends AbstractInteractionProvider
                 'wcf.conversation.hideConversation.leave',
                 InteractionConfirmationType::Custom,
                 'wcf.conversation.hideConversation.leave.confirmationMessage',
+                isAvailableCallback: static fn(Conversation $conversation) => $conversation->canRead(),
                 interactionEffect: InteractionEffect::RemoveItem,
             ),
             new EditInteraction(
                 ConversationDraftEditForm::class,
                 static function (Conversation $conversation) {
-                    return $conversation->isDraft;
+                    return $conversation->canRead() && $conversation->isDraft;
                 }
             ),
         ]);
