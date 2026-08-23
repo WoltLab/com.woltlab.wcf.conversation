@@ -21,9 +21,13 @@ use wcf\system\WCF;
 #[PostRequest('/core/conversations/mark-all-as-read')]
 final class MarkAllConversationsAsRead implements IController
 {
+    use TConversationEndpoint;
+
     #[\Override]
     public function __invoke(ServerRequestInterface $request, array $variables): ResponseInterface
     {
+        $this->assertConversationsAreEnabled();
+
         if (!WCF::getUser()->userID) {
             throw new PermissionDeniedException();
         }

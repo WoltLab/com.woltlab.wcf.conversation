@@ -23,9 +23,13 @@ use wcf\system\WCF;
 #[PostRequest('/core/conversations/{id:\d+}/mark-as-read')]
 final class MarkConversationAsRead implements IController
 {
+    use TConversationEndpoint;
+
     #[\Override]
     public function __invoke(ServerRequestInterface $request, array $variables): ResponseInterface
     {
+        $this->assertConversationsAreEnabled();
+
         $conversation = Helper::fetchObjectFromRequestParameter($variables['id'], Conversation::class);
         $this->assertConversationIsAccessible($conversation);
 

@@ -25,9 +25,13 @@ use wcf\system\WCF;
 #[DeleteRequest('/core/conversations/{conversationId:\d+}/participants/{participantId:\d+}')]
 final class RemoveConversationParticipant implements IController
 {
+    use TConversationEndpoint;
+
     #[\Override]
     public function __invoke(ServerRequestInterface $request, array $variables): ResponseInterface
     {
+        $this->assertConversationsAreEnabled();
+
         $conversation = Helper::fetchObjectFromRequestParameter($variables['conversationId'], Conversation::class);
         $participantUserID = \intval($variables['participantId']);
 

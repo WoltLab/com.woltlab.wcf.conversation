@@ -24,9 +24,13 @@ use wcf\system\WCF;
 #[GetRequest('/core/conversations/{id:\d+}/content-header-title')]
 final class GetConversationHeaderTitle implements IController
 {
+    use TConversationEndpoint;
+
     #[\Override]
     public function __invoke(ServerRequestInterface $request, array $variables): ResponseInterface
     {
+        $this->assertConversationsAreEnabled();
+
         $conversation = ConversationRuntimeCache::getInstance()->getObject(\intval($variables['id']));
         if ($conversation === null) {
             throw new IllegalLinkException();

@@ -24,9 +24,13 @@ use wcf\system\WCF;
 #[GetRequest('/core/conversations/{conversationId:\d+}/participants')]
 final class GetConversationParticipantList implements IController
 {
+    use TConversationEndpoint;
+
     #[\Override]
     public function __invoke(ServerRequestInterface $request, array $variables): ResponseInterface
     {
+        $this->assertConversationsAreEnabled();
+
         $conversation = Helper::fetchObjectFromRequestParameter($variables['conversationId'], Conversation::class);
 
         $this->assertCanRetrieveParticipantList($conversation);

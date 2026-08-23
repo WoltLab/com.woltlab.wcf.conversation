@@ -24,9 +24,13 @@ use wcf\system\WCF;
 #[GetRequest('/core/conversations/{id:\d+}/popover')]
 final class GetConversationPopover implements IController
 {
+    use TConversationEndpoint;
+
     #[\Override]
     public function __invoke(ServerRequestInterface $request, array $variables): ResponseInterface
     {
+        $this->assertConversationsAreEnabled();
+
         $conversation = Helper::fetchObjectFromRequestParameter($variables['id'], Conversation::class);
 
         $this->assertConversationIsAccessible($conversation);

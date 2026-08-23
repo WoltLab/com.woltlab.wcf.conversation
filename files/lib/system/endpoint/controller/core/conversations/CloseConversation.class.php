@@ -25,9 +25,13 @@ use wcf\system\WCF;
 #[PostRequest('/core/conversations/{id:\d+}/close')]
 final class CloseConversation implements IController
 {
+    use TConversationEndpoint;
+
     #[\Override]
     public function __invoke(ServerRequestInterface $request, array $variables): ResponseInterface
     {
+        $this->assertConversationsAreEnabled();
+
         $conversation = Helper::fetchObjectFromRequestParameter($variables['id'], Conversation::class);
         $this->assertConversationCanClosed($conversation);
 

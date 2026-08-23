@@ -8,6 +8,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\data\conversation\label\ConversationLabelAction;
 use wcf\http\Helper;
+use wcf\system\endpoint\controller\core\conversations\TConversationEndpoint;
 use wcf\system\endpoint\DeleteRequest;
 use wcf\system\endpoint\IController;
 use wcf\system\exception\PermissionDeniedException;
@@ -24,9 +25,13 @@ use wcf\system\WCF;
 #[DeleteRequest('/core/conversations/labels/{id:\d+}')]
 final class DeleteConversationLabel implements IController
 {
+    use TConversationEndpoint;
+
     #[\Override]
     public function __invoke(ServerRequestInterface $request, array $variables): ResponseInterface
     {
+        $this->assertConversationsAreEnabled();
+
         $label = Helper::fetchObjectFromRequestParameter($variables['id'], ConversationLabel::class);
         $this->assertLabelCanBeDeleted($label);
 
