@@ -205,6 +205,7 @@ class ConversationAddForm extends AbstractFormBuilderForm
                 ->label('wcf.conversation.message')
                 ->messageObjectType('com.woltlab.wcf.conversation.message')
                 ->attachmentData('com.woltlab.wcf.conversation.message')
+                ->maximumLength((int)WCF::getSession()->getPermission('user.conversation.maxLength'))
                 ->supportMentions()
                 ->supportQuotes()
                 ->required()
