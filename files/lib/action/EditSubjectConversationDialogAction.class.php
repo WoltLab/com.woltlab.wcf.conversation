@@ -33,6 +33,10 @@ final class EditSubjectConversationDialogAction implements RequestHandlerInterfa
             throw new IllegalLinkException();
         }
 
+        if (!WCF::getSession()->getPermission('user.conversation.canUseConversation')) {
+            throw new PermissionDeniedException();
+        }
+
         try {
             $parameters = Helper::mapQueryParameters(
                 $request->getQueryParams(),
@@ -49,6 +53,10 @@ final class EditSubjectConversationDialogAction implements RequestHandlerInterfa
         $conversation = Helper::fetchObjectFromRequestParameter($parameters['id'], Conversation::class);
 
         if ($conversation->userID !== WCF::getUser()->userID) {
+            throw new PermissionDeniedException();
+        }
+
+        if (!Conversation::isParticipant([$conversation->conversationID])) {
             throw new PermissionDeniedException();
         }
 

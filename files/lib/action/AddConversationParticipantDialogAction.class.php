@@ -39,6 +39,10 @@ final class AddConversationParticipantDialogAction implements RequestHandlerInte
             throw new IllegalLinkException();
         }
 
+        if (!WCF::getSession()->getPermission('user.conversation.canUseConversation')) {
+            throw new PermissionDeniedException();
+        }
+
         try {
             $parameters = Helper::mapQueryParameters(
                 $request->getQueryParams(),

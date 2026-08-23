@@ -34,6 +34,10 @@ final class AssignConversationLabelDialogAction implements RequestHandlerInterfa
             throw new IllegalLinkException();
         }
 
+        if (!WCF::getSession()->getPermission('user.conversation.canUseConversation')) {
+            throw new PermissionDeniedException();
+        }
+
         $parameters = Helper::mapQueryParameters(
             $request->getQueryParams(),
             <<<'EOT'
