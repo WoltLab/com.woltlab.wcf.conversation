@@ -26,24 +26,29 @@ final class ConversationBulkInteractions extends AbstractBulkInteractionProvider
 {
     public function __construct()
     {
+        if (\MODULE_CONVERSATION === 0) {
+            return;
+        }
+
         $this->addInteractions([
             new BulkRpcInteraction(
                 'open',
                 'core/conversations/%s/open',
                 'wcf.conversation.edit.open',
-                isAvailableCallback: static fn(Conversation $conversation) => $conversation->isClosed && $conversation->userID === WCF::getUser()->userID
+                isAvailableCallback: static fn(Conversation $conversation) => $conversation->canRead() && $conversation->isClosed && $conversation->userID === WCF::getUser()->userID
             ),
             new BulkRpcInteraction(
                 'close',
                 'core/conversations/%s/close',
                 'wcf.conversation.edit.close',
-                isAvailableCallback: static fn(Conversation $conversation) => !$conversation->isClosed && $conversation->userID === WCF::getUser()->userID
+                isAvailableCallback: static fn(Conversation $conversation) => $conversation->canRead() && !$conversation->isClosed && $conversation->userID === WCF::getUser()->userID
             ),
             new BulkFormBuilderDialogInteraction(
                 'assignLabel',
                 AssignConversationLabelDialogAction::class,
                 'wcf.conversation.edit.assignLabel',
-                static fn() => ConversationLabel::getUserLabels() !== [],
+                static fn(Conversation $conversation) => $conversation->canRead()
+                    && ConversationLabel::getUserLabels() !== [],
             ),
             new BulkRpcInteraction(
                 'restore',
@@ -51,7 +56,7 @@ final class ConversationBulkInteractions extends AbstractBulkInteractionProvider
                 'wcf.conversation.hideConversation.restore',
                 InteractionConfirmationType::Custom,
                 'wcf.conversation.hideConversation.restore.confirmationMessage',
-                static fn(Conversation $conversation) => (bool)$conversation->hideConversation
+                static fn(Conversation $conversation) => $conversation->canRead() && (bool)$conversation->hideConversation
             ),
             new BulkRpcInteraction(
                 'hide',
@@ -59,14 +64,15 @@ final class ConversationBulkInteractions extends AbstractBulkInteractionProvider
                 'wcf.conversation.hideConversation.hide',
                 InteractionConfirmationType::Custom,
                 'wcf.conversation.hideConversation.hide.confirmationMessage',
-                static fn(Conversation $conversation) => !$conversation->hideConversation
+                static fn(Conversation $conversation) => $conversation->canRead() && !$conversation->hideConversation
             ),
             new BulkRpcInteraction(
                 'leave',
                 'core/conversations/%s/leave',
                 'wcf.conversation.hideConversation.leave',
                 InteractionConfirmationType::Custom,
-                'wcf.conversation.hideConversation.leave.confirmationMessage'
+                'wcf.conversation.hideConversation.leave.confirmationMessage',
+                static fn(Conversation $conversation) => $conversation->canRead()
             ),
         ]);
 
