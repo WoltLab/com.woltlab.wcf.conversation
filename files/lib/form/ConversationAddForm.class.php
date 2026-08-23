@@ -7,11 +7,14 @@ use wcf\data\conversation\ConversationAction;
 use wcf\data\IStorableObject;
 use wcf\data\user\group\UserGroup;
 use wcf\data\user\UserProfile;
+use wcf\event\message\MessageSpamChecking;
 use wcf\system\cache\runtime\UserProfileRuntimeCache;
 use wcf\system\conversation\ConversationHandler;
 use wcf\system\conversation\TConversationForm;
+use wcf\system\event\EventHandler;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\NamedUserException;
+use wcf\system\exception\PermissionDeniedException;
 use wcf\system\flood\FloodControl;
 use wcf\system\form\builder\container\FormContainer;
 use wcf\system\form\builder\container\wysiwyg\WysiwygFormContainer;
@@ -22,10 +25,12 @@ use wcf\system\form\builder\field\TextFormField;
 use wcf\system\form\builder\field\user\UserFormField;
 use wcf\system\form\builder\field\validation\FormFieldValidationError;
 use wcf\system\form\builder\field\validation\FormFieldValidator;
+use wcf\system\form\builder\field\wysiwyg\WysiwygFormField;
 use wcf\system\form\builder\IFormDocument;
 use wcf\system\page\PageLocationManager;
 use wcf\system\WCF;
 use wcf\util\HeaderUtil;
+use wcf\util\UserUtil;
 
 /**
  * Shows the conversation form.
@@ -205,6 +210,35 @@ class ConversationAddForm extends AbstractFormBuilderForm
                 ->required()
                 ->autosaveId($this->getAutosaveId()),
         ]);
+    }
+
+    #[\Override]
+    public function validate()
+    {
+        parent::validate();
+
+        // Runs after `parent::validate()` because the html input processor is only
+        // populated once the wysiwyg field itself has been validated.
+        $messageField = $this->form->getNodeById('message');
+        \assert($messageField instanceof WysiwygFormField);
+
+        $htmlInputProcessor = $messageField->getHtmlInputProcessor();
+        \assert($htmlInputProcessor !== null);
+
+        $subjectField = $this->form->getNodeById('subject');
+        \assert($subjectField instanceof TextFormField);
+
+        $event = new MessageSpamChecking(
+            $htmlInputProcessor,
+            WCF::getUser(),
+            UserUtil::getIpAddress(),
+            (string)$subjectField->getValue(),
+        );
+        EventHandler::getInstance()->fire($event);
+
+        if ($event->defaultPrevented()) {
+            throw new PermissionDeniedException();
+        }
     }
 
     #[\Override]
