@@ -8,13 +8,17 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use wcf\data\conversation\Conversation;
+use wcf\event\message\MessageSpamChecking;
 use wcf\http\Helper;
 use wcf\command\conversation\SetConversationSubject;
+use wcf\system\event\EventHandler;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\form\builder\field\TextFormField;
 use wcf\system\form\builder\Psr15DialogForm;
+use wcf\system\html\input\HtmlInputProcessor;
 use wcf\system\WCF;
+use wcf\util\UserUtil;
 
 /**
  * Form dialog to edit the subject of a conversation.
@@ -71,11 +75,41 @@ final class EditSubjectConversationDialogAction implements RequestHandlerInterfa
             }
             $data = $form->getData()['data'];
 
+            $this->assertIsNotSpam($conversation, $data['subject']);
+
             (new SetConversationSubject($conversation, $data['subject']))();
 
             return new JsonResponse([]);
         } else {
             throw new \LogicException('Unreachable');
+        }
+    }
+
+    private function assertIsNotSpam(Conversation $conversation, string $subject): void
+    {
+        $message = $conversation->getFirstMessage();
+        \assert($message !== null);
+
+        // The event expects the processor of the message that is being written,
+        // but only the subject is editable here. The unchanged first message is
+        // passed to provide the context of the conversation.
+        $htmlInputProcessor = new HtmlInputProcessor();
+        $htmlInputProcessor->process(
+            $message->message,
+            'com.woltlab.wcf.conversation.message',
+            $message->messageID
+        );
+
+        $event = new MessageSpamChecking(
+            $htmlInputProcessor,
+            WCF::getUser(),
+            UserUtil::getIpAddress(),
+            $subject,
+        );
+        EventHandler::getInstance()->fire($event);
+
+        if ($event->defaultPrevented()) {
+            throw new PermissionDeniedException();
         }
     }
 
