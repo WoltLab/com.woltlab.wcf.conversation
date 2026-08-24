@@ -2,8 +2,9 @@
 
 namespace wcf\system\message\quote;
 
-use wcf\data\conversation\ConversationList;
+use wcf\data\conversation\Conversation;
 use wcf\data\conversation\message\ConversationMessageList;
+use wcf\system\WCF;
 
 /**
  * IMessageQuoteHandler implementation for conversation messages.
@@ -19,6 +20,14 @@ class ConversationMessageQuoteHandler extends AbstractMessageQuoteHandler
      */
     protected function getMessages(array $data)
     {
+        if (\MODULE_CONVERSATION === 0) {
+            return [];
+        }
+
+        if (!WCF::getSession()->getPermission('user.conversation.canUseConversation')) {
+            return [];
+        }
+
         // read messages
         $messageList = new ConversationMessageList();
         $messageList->setObjectIDs(\array_keys($data));
@@ -26,22 +35,30 @@ class ConversationMessageQuoteHandler extends AbstractMessageQuoteHandler
         $messages = $messageList->getObjects();
 
         // read conversations
-        $conversationIDs = $validMessageIDs = [];
+        $conversationIDs = [];
         foreach ($messages as $message) {
             $conversationIDs[] = $message->conversationID;
-            $validMessageIDs[] = $message->messageID;
         }
 
+        $validMessageIDs = [];
         $quotedMessages = [];
         if (!empty($conversationIDs)) {
-            $conversationList = new ConversationList();
-            $conversationList->setObjectIDs($conversationIDs);
-            $conversationList->readObjects();
-            $conversations = $conversationList->getObjects();
+            // The conversations must be read for the active user, otherwise the
+            // participation is unknown and `canRead()` cannot be evaluated.
+            $conversations = Conversation::getUserConversations($conversationIDs, WCF::getUser()->userID);
 
             // create QuotedMessage objects
             foreach ($messages as $conversationMessage) {
+                if (!isset($conversations[$conversationMessage->conversationID])) {
+                    continue;
+                }
+
                 $conversationMessage->setConversation($conversations[$conversationMessage->conversationID]);
+                if (!$conversationMessage->canRead()) {
+                    continue;
+                }
+
+                $validMessageIDs[] = $conversationMessage->messageID;
                 $message = new QuotedMessage($conversationMessage);
 
                 foreach (\array_keys($data[$conversationMessage->messageID]) as $quoteID) {
