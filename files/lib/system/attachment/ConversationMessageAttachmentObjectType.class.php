@@ -51,6 +51,10 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
      */
     public function canDownload($objectID)
     {
+        if (!$this->conversationsAreEnabled()) {
+            return false;
+        }
+
         if ($objectID) {
             $message = ConversationMessageRuntimeCache::getInstance()->getObject($objectID);
             if ($message?->canRead()) {
@@ -66,11 +70,7 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
      */
     public function canUpload($objectID, $parentObjectID = 0)
     {
-        if (\MODULE_CONVERSATION === 0) {
-            return false;
-        }
-
-        if (!WCF::getSession()->getPermission('user.conversation.canUseConversation')) {
+        if (!$this->conversationsAreEnabled()) {
             return false;
         }
 
@@ -96,6 +96,15 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
     public function canDelete($objectID)
     {
         return $this->canUpload($objectID);
+    }
+
+    private function conversationsAreEnabled(): bool
+    {
+        if (\MODULE_CONVERSATION === 0) {
+            return false;
+        }
+
+        return (bool)WCF::getSession()->getPermission('user.conversation.canUseConversation');
     }
 
     /**
@@ -130,6 +139,10 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
             if ($attachment->objectID > 0 && $this->getObject($attachment->objectID) === null) {
                 $messageIDs[] = $attachment->objectID;
             }
+        }
+
+        if (!$this->conversationsAreEnabled()) {
+            return;
         }
 
         if ($messageIDs !== []) {

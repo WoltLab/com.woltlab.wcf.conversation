@@ -4,6 +4,7 @@ namespace wcf\system\message\quote;
 
 use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\IMessage;
+use wcf\system\WCF;
 
 /**
  * IMessageQuoteHandler implementation for conversation messages.
@@ -17,6 +18,14 @@ final class ConversationMessageQuoteHandler extends AbstractMessageQuoteHandler
     #[\Override]
     public function getMessage(int $objectID): ?IMessage
     {
+        if (\MODULE_CONVERSATION === 0) {
+            return null;
+        }
+
+        if (!WCF::getSession()->getPermission('user.conversation.canUseConversation')) {
+            return null;
+        }
+
         $message = new ConversationMessage($objectID);
         if (!$message->messageID) {
             return null;
