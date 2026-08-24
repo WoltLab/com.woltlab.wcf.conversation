@@ -234,6 +234,27 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     }
 
     /**
+     * Returns true if the given participant is permitted to read the first message
+     * of this conversation. Participants that joined at a later point must not see
+     * the messages that were written before they joined.
+     *
+     * @since 6.0.26
+     */
+    public function canReadFirstMessage(?int $userID = null): bool
+    {
+        if ($userID === null || $userID === WCF::getUser()->userID) {
+            $joinedAt = $this->joinedAt;
+        } else {
+            $joinedAt = self::getUserConversation($this->conversationID, $userID)?->joinedAt;
+        }
+
+        // Drafts have no participants at all and conversations that were not fetched
+        // through `UserConversationList` do not carry a join time. Both cases offer no
+        // restriction to apply, the read access itself is enforced by the callers.
+        return ($joinedAt ?? 0) === 0;
+    }
+
+    /**
      * Returns true if the active user has the permission to read this conversation.
      */
     public function canRead(): bool

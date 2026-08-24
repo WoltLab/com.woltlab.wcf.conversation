@@ -1,11 +1,14 @@
 {if $mimeType === 'text/plain'}
 {lang}wcf.user.notification.conversation.mail.plaintext{/lang}
+{if $canReadFirstMessage}
 
 {@$event->getUserNotificationObject()->getFirstMessage()->getMailText($mimeType)} {* this line ends with a space *}
+{/if}
 {else}
 	{lang}wcf.user.notification.conversation.mail.html{/lang}
 	{assign var='user' value=$event->getAuthor()}
 	{assign var='conversation' value=$event->getUserNotificationObject()}
+	{if $canReadFirstMessage}
 	{assign var='message' value=$conversation->getFirstMessage()}
 	
 	{if $notificationType == 'instant'}{assign var='avatarSize' value=48}
@@ -34,4 +37,5 @@
 	</table>
 	{/capture}
 	{include file='email_paddingHelper' block=true class='box'|concat:$avatarSize content=$messageContent sandbox=true}
+	{/if}
 {/if}
