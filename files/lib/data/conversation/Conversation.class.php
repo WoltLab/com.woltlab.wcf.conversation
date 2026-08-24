@@ -454,13 +454,22 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
             $userID = WCF::getUser()->userID;
         }
 
-        // check if user is the initial author
+        // Check if the user is the initial author. Drafts have no rows in
+        // `conversation_to_user`, therefore a missing row is treated as an
+        // active participation.
         $conditions = new PreparedStatementConditionBuilder();
-        $conditions->add("conversationID IN (?)", [$conversationIDs]);
-        $conditions->add("userID = ?", [$userID]);
+        $conditions->add("conversation.conversationID IN (?)", [$conversationIDs]);
+        $conditions->add("conversation.userID = ?", [$userID]);
+        $conditions->add(
+            "(conversation_to_user.hideConversation IS NULL OR conversation_to_user.hideConversation <> ?)",
+            [self::STATE_LEFT]
+        );
 
-        $sql = "SELECT  conversationID
-                FROM    wcf" . WCF_N . "_conversation
+        $sql = "SELECT      conversation.conversationID
+                FROM        wcf" . WCF_N . "_conversation conversation
+                LEFT JOIN   wcf" . WCF_N . "_conversation_to_user conversation_to_user
+                ON          conversation_to_user.conversationID = conversation.conversationID
+                        AND conversation_to_user.participantID = conversation.userID
                 " . $conditions;
         $statement = WCF::getDB()->prepareStatement($sql);
         $statement->execute($conditions->getParameters());
