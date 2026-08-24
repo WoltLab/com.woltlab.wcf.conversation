@@ -11,6 +11,7 @@ use wcf\data\IClipboardAction;
 use wcf\data\IPopoverAction;
 use wcf\data\IVisitableObjectAction;
 use wcf\data\user\group\UserGroup;
+use wcf\event\message\MessageSpamChecking;
 use wcf\page\ConversationPage;
 use wcf\system\clipboard\ClipboardHandler;
 use wcf\system\conversation\ConversationHandler;
@@ -19,6 +20,7 @@ use wcf\system\event\EventHandler;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
+use wcf\system\html\input\HtmlInputProcessor;
 use wcf\system\log\modification\ConversationModificationLogHandler;
 use wcf\system\request\LinkHandler;
 use wcf\system\search\SearchIndexManager;
@@ -28,6 +30,7 @@ use wcf\system\user\notification\UserNotificationHandler;
 use wcf\system\user\storage\UserStorageHandler;
 use wcf\system\WCF;
 use wcf\util\StringUtil;
+use wcf\util\UserUtil;
 
 /**
  * Executes conversation-related actions.
@@ -1215,6 +1218,36 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
 
         $this->conversation = $this->getSingleObject();
         if ($this->conversation->userID != WCF::getUser()->userID) {
+            throw new PermissionDeniedException();
+        }
+
+        $this->assertIsNotSpam($this->parameters['subject']);
+    }
+
+    private function assertIsNotSpam(string $subject): void
+    {
+        $message = $this->conversation->getFirstMessage();
+        \assert($message !== null);
+
+        // The event expects the processor of the message that is being written,
+        // but only the subject is editable here. The unchanged first message is
+        // passed to provide the context of the conversation.
+        $htmlInputProcessor = new HtmlInputProcessor();
+        $htmlInputProcessor->process(
+            $message->message,
+            'com.woltlab.wcf.conversation.message',
+            $message->messageID
+        );
+
+        $event = new MessageSpamChecking(
+            $htmlInputProcessor,
+            WCF::getUser(),
+            UserUtil::getIpAddress(),
+            $subject,
+        );
+        EventHandler::getInstance()->fire($event);
+
+        if ($event->defaultPrevented()) {
             throw new PermissionDeniedException();
         }
     }
