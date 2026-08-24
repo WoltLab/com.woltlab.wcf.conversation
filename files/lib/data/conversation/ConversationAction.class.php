@@ -486,14 +486,30 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
      */
     public function getPopover()
     {
+        // The participation carries the timeframe that limits which messages may
+        // be read, it is not part of the conversation read through `getObjects()`.
+        $userConversation = Conversation::getUserConversation(
+            $this->conversation->conversationID,
+            WCF::getUser()->userID
+        );
+        if ($userConversation === null) {
+            return ['template' => ''];
+        }
+
         $messageList = new SimplifiedViewableConversationMessageList();
+        $messageList->setConversation($userConversation);
         $messageList->getConditionBuilder()
             ->add("conversation_message.messageID = ?", [$this->conversation->firstMessageID]);
         $messageList->readObjects();
 
+        $message = $messageList->getSingleObject();
+        if ($message === null || !$message->canRead()) {
+            return ['template' => ''];
+        }
+
         return [
             'template' => WCF::getTPL()->fetch('conversationMessagePreview', 'wcf', [
-                'message' => $messageList->getSingleObject(),
+                'message' => $message,
             ]),
         ];
     }
