@@ -55,12 +55,16 @@ class ConversationRssFeedPage extends AbstractRssFeedPage
             $item
                 ->title($conversation->getTitle())
                 ->link($conversation->getLink())
-                ->description($conversation->getFirstMessage()->getExcerpt())
                 ->pubDateFromTimestamp($conversation->lastPostTime)
                 ->creator($conversation->lastPoster)
                 ->guid($conversation->getLink())
-                ->contentEncoded($conversation->getFirstMessage()->getSimplifiedFormattedMessage())
                 ->slashComments($conversation->replies);
+
+            if ($conversation->canReadFirstMessage()) {
+                $item
+                    ->description($conversation->getFirstMessage()->getExcerpt())
+                    ->contentEncoded($conversation->getFirstMessage()->getSimplifiedFormattedMessage());
+            }
 
             $channel->item($item);
         }

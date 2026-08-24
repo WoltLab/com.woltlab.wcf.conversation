@@ -148,6 +148,10 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
      */
     public function getTeaser(): string
     {
+        if (!$this->canReadFirstMessage()) {
+            return '';
+        }
+
         return $this->getFirstMessage()?->getTeaser() ?? '';
     }
 
@@ -156,6 +160,10 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
      */
     public function getTeaserImage(): ?ImageData
     {
+        if (!$this->canReadFirstMessage()) {
+            return null;
+        }
+
         return $this->getFirstMessage()?->getTeaserImage();
     }
 
@@ -271,6 +279,27 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
         }
 
         return $this->joinedAt === 0;
+    }
+
+    /**
+     * Returns true if the given participant is permitted to read the first message
+     * of this conversation. Participants that joined at a later point must not see
+     * the messages that were written before they joined.
+     *
+     * @since 6.2
+     */
+    public function canReadFirstMessage(?int $userID = null): bool
+    {
+        if ($userID === null || $userID === WCF::getUser()->userID) {
+            $joinedAt = $this->joinedAt;
+        } else {
+            $joinedAt = $this->getOtherParticipant($userID)?->joinedAt;
+        }
+
+        // Drafts have no participants at all and conversations that were not fetched
+        // through `UserConversationList` do not carry a join time. Both cases offer no
+        // restriction to apply, the read access itself is enforced by the callers.
+        return ($joinedAt ?? 0) === 0;
     }
 
     public function getFirstMessage(): ?ConversationMessage
