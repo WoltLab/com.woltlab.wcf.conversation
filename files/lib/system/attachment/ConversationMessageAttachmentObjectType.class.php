@@ -66,17 +66,25 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
      */
     public function canUpload($objectID, $parentObjectID = 0)
     {
+        if (\MODULE_CONVERSATION === 0) {
+            return false;
+        }
+
+        if (!WCF::getSession()->getPermission('user.conversation.canUseConversation')) {
+            return false;
+        }
+
         if (!WCF::getSession()->getPermission('user.conversation.canUploadAttachment')) {
             return false;
         }
 
         if ($objectID) {
-            $message = new ConversationMessage($objectID);
-            if ($message->userID == WCF::getUser()->userID) {
-                return true;
-            }
+            // `canEdit()` covers the ownership of the message as well as the
+            // state of the conversation, both of which must not be bypassed
+            // through the attachment upload.
+            $message = ConversationMessageRuntimeCache::getInstance()->getObject($objectID);
 
-            return false;
+            return $message !== null && $message->canEdit();
         }
 
         return true;
@@ -87,14 +95,7 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
      */
     public function canDelete($objectID)
     {
-        if ($objectID) {
-            $message = new ConversationMessage($objectID);
-            if ($message->userID == WCF::getUser()->userID) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->canUpload($objectID);
     }
 
     /**
@@ -146,7 +147,11 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
                     'canDownload' => true,
                     'canViewPreview' => true,
                 ]);
-            } elseif ($attachment->tmpHash != '' && $attachment->userID == WCF::getUser()->userID) {
+            } elseif (
+                $attachment->tmpHash !== ''
+                && $attachment->userID !== null
+                && $attachment->userID === WCF::getUser()->userID
+            ) {
                 $attachment->setPermissions([
                     'canDownload' => true,
                     'canViewPreview' => true,
