@@ -38,6 +38,11 @@ trait TConversationOnlineLocationPageHandler
             return '';
         }
 
+        // Guest can never be reading a conversation.
+        if ($user->userID === 0) {
+            return '';
+        }
+
         if ($conversation->userID != WCF::getUser()->userID && $user->userID != WCF::getUser()->userID) {
             // Make sure that requests from invisible participants are not listed
             // if the active user is not the author of the conversation.
