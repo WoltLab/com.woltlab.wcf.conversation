@@ -53,8 +53,7 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
     {
         if ($objectID) {
             $message = new ConversationMessage($objectID);
-            $conversation = Conversation::getUserConversation($message->conversationID, WCF::getUser()->userID);
-            if ($conversation !== null && $conversation->canRead()) {
+            if ($message->messageID && $message->canRead()) {
                 return true;
             }
         }
@@ -148,7 +147,7 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
 
         foreach ($attachments as $attachment) {
             if (($message = $this->getObject($attachment->objectID)) !== null) {
-                if (!$message->getConversation()->canRead()) {
+                if (!$message->canRead()) {
                     continue;
                 }
 

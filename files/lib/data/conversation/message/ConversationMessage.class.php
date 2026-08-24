@@ -148,6 +148,32 @@ class ConversationMessage extends DatabaseObject implements IMessage
     }
 
     /**
+     * Checks if the current user can read this particular message.
+     *
+     * @since 6.0.26
+     */
+    public function canRead(): bool
+    {
+        $conversation = $this->getConversation();
+        if ($conversation === null || !$conversation->canRead()) {
+            return false;
+        }
+
+        // Participants must not be able to read the messages that were written
+        // outside of the timeframe of their participation. Both values are `null`
+        // for drafts, which have no participants at all.
+        if ($conversation->joinedAt > 0 && $this->time < $conversation->joinedAt) {
+            return false;
+        }
+
+        if ($conversation->leftAt > 0 && $this->time > $conversation->leftAt) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Returns true if current user may edit this message.
      */
     public function canEdit(): bool
