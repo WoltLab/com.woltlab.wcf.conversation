@@ -148,36 +148,47 @@ class UserConversationList extends ConversationList
 
         $messageIDs = [];
         foreach ($this->getObjects() as $conversation) {
-            if ($conversation->lastMessageID) {
+            if (($conversation->leftAt ?? 0) !== 0 && $conversation->lastMessageID !== null) {
                 $messageIDs[] = $conversation->lastMessageID;
             }
         }
 
-        if ($messageIDs === []) {
-            return;
-        }
-
-
-        $conditions = new PreparedStatementConditionBuilder();
-        $conditions->add("messageID IN (?)", [$messageIDs]);
-        $sql = "SELECT  messageID, userID, username, time
-                FROM    wcf1_conversation_message
-                        " . $conditions;
-        $statement = WCF::getDB()->prepare($sql);
-        $statement->execute($conditions->getParameters());
         $messageData = [];
-        while ($row = $statement->fetchArray()) {
-            $messageData[$row['messageID']] = $row;
+        if ($messageIDs !== []) {
+            $conditions = new PreparedStatementConditionBuilder();
+            $conditions->add("messageID IN (?)", [$messageIDs]);
+            $sql = "SELECT  messageID, userID, username, time
+                    FROM    wcf1_conversation_message
+                            " . $conditions;
+            $statement = WCF::getDB()->prepare($sql);
+            $statement->execute($conditions->getParameters());
+            while ($row = $statement->fetchArray()) {
+                $messageData[$row['messageID']] = $row;
+            }
         }
 
         foreach ($this->objects as $conversation) {
-            if ($conversation->lastMessageID) {
-                $data = (isset($messageData[$conversation->lastMessageID])) ? $messageData[$conversation->lastMessageID] : null;
-                if ($data !== null) {
-                    $conversation->setLastMessage($data['userID'], $data['username'], $data['time']);
-                } else {
-                    $conversation->setLastMessage(null, '', 0);
-                }
+            // Only participants that left see a different last message than the
+            // conversation itself. `leftAt = 0` covers both the active participants and
+            // those that were added back to the conversation, the latter may still carry
+            // the `lastMessageID` of their previous departure.
+            if (($conversation->leftAt ?? 0) === 0) {
+                continue;
+            }
+
+            // `lastMessageID` is `null` if no message existed when the participant was
+            // removed or if the referenced message has been deleted since. Falling back
+            // to the conversation's own last message would disclose the activity that
+            // happened after their departure.
+            $data = null;
+            if ($conversation->lastMessageID !== null) {
+                $data = $messageData[$conversation->lastMessageID] ?? null;
+            }
+
+            if ($data !== null) {
+                $conversation->setLastMessage($data['userID'], $data['username'], $data['time']);
+            } else {
+                $conversation->setLastMessage(null, '', 0);
             }
         }
     }
