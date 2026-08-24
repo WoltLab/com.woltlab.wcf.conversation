@@ -17,6 +17,7 @@ use wcf\system\attachment\AttachmentHandler;
 use wcf\system\bbcode\BBCodeHandler;
 use wcf\system\conversation\ConversationHandler;
 use wcf\system\event\EventHandler;
+use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\NamedUserException;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
@@ -72,6 +73,24 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
      * @var ConversationMessage
      */
     public $message;
+
+    /**
+     * @inheritDoc
+     */
+    public function validateAction()
+    {
+        // `$permissionsCreate`, `$permissionsUpdate` and `$permissionsDelete` only
+        // cover those three actions, every other action must be guarded here.
+        if (\MODULE_CONVERSATION === 0) {
+            throw new IllegalLinkException();
+        }
+
+        if (!WCF::getSession()->getPermission('user.conversation.canUseConversation')) {
+            throw new PermissionDeniedException();
+        }
+
+        parent::validateAction();
+    }
 
     /**
      * @inheritDoc
@@ -296,6 +315,8 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
      */
     public function validateQuickReply()
     {
+        unset($this->parameters['isFirstPost'], $this->parameters['conversation']);
+
         try {
             ConversationHandler::getInstance()->enforceFloodControl(true);
         } catch (NamedUserException $e) {
@@ -563,6 +584,20 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
             ->add("conversation_message.conversationID = ?", [$container->conversationID]);
         $messageList->getConditionBuilder()
             ->add("conversation_message.time > ?", [$lastMessageTime]);
+        // Participants must not be able to read the messages that were written
+        // outside of the timeframe of their participation.
+        if ($container->joinedAt > 0) {
+            $messageList->getConditionBuilder()->add(
+                "conversation_message.time >= ?",
+                [$container->joinedAt]
+            );
+        }
+        if ($container->leftAt > 0) {
+            $messageList->getConditionBuilder()->add(
+                "conversation_message.time <= ?",
+                [$container->leftAt]
+            );
+        }
         $messageList->sqlOrderBy = "conversation_message.time " . CONVERSATION_LIST_DEFAULT_SORT_ORDER;
         $messageList->readObjects();
 

@@ -2,7 +2,6 @@
 
 namespace wcf\system\moderation\queue\report;
 
-use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationList;
 use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\conversation\message\ConversationMessageAction;
@@ -73,15 +72,19 @@ class ConversationMessageModerationQueueReportHandler extends AbstractModeration
      */
     public function canReport($objectID)
     {
+        if (\MODULE_CONVERSATION === 0) {
+            return false;
+        }
+
+        if (!WCF::getSession()->getPermission('user.conversation.canUseConversation')) {
+            return false;
+        }
+
         if (!$this->isValid($objectID)) {
             return false;
         }
 
-        if (!Conversation::isParticipant([$this->getMessage($objectID)->conversationID])) {
-            return false;
-        }
-
-        return true;
+        return $this->getMessage($objectID)->canRead();
     }
 
     /**

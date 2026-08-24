@@ -63,6 +63,24 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
 
     /**
      * @inheritDoc
+     */
+    public function validateAction()
+    {
+        // `$permissionsCreate`, `$permissionsUpdate` and `$permissionsDelete` only
+        // cover those three actions, every other action must be guarded here.
+        if (\MODULE_CONVERSATION === 0) {
+            throw new IllegalLinkException();
+        }
+
+        if (!WCF::getSession()->getPermission('user.conversation.canUseConversation')) {
+            throw new PermissionDeniedException();
+        }
+
+        parent::validateAction();
+    }
+
+    /**
+     * @inheritDoc
      * @return  Conversation
      */
     public function create()
@@ -485,14 +503,30 @@ class ConversationAction extends AbstractDatabaseObjectAction implements
      */
     public function getPopover()
     {
+        // The participation carries the timeframe that limits which messages may
+        // be read, it is not part of the conversation read through `getObjects()`.
+        $userConversation = Conversation::getUserConversation(
+            $this->conversation->conversationID,
+            WCF::getUser()->userID
+        );
+        if ($userConversation === null) {
+            return ['template' => ''];
+        }
+
         $messageList = new SimplifiedViewableConversationMessageList();
+        $messageList->setConversation($userConversation);
         $messageList->getConditionBuilder()
             ->add("conversation_message.messageID = ?", [$this->conversation->firstMessageID]);
         $messageList->readObjects();
 
+        $message = $messageList->getSingleObject();
+        if ($message === null || !$message->canRead()) {
+            return ['template' => ''];
+        }
+
         return [
             'template' => WCF::getTPL()->fetch('conversationMessagePreview', 'wcf', [
-                'message' => $messageList->getSingleObject(),
+                'message' => $message,
             ]),
         ];
     }

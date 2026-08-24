@@ -229,6 +229,27 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
     }
 
     /**
+     * Returns true if the given participant is permitted to read the first message
+     * of this conversation. Participants that joined at a later point must not see
+     * the messages that were written before they joined.
+     *
+     * @since 6.0.26
+     */
+    public function canReadFirstMessage(?int $userID = null): bool
+    {
+        if ($userID === null || $userID === WCF::getUser()->userID) {
+            $joinedAt = $this->joinedAt;
+        } else {
+            $joinedAt = self::getUserConversation($this->conversationID, $userID)?->joinedAt;
+        }
+
+        // Drafts have no participants at all and conversations that were not fetched
+        // through `UserConversationList` do not carry a join time. Both cases offer no
+        // restriction to apply, the read access itself is enforced by the callers.
+        return ($joinedAt ?? 0) === 0;
+    }
+
+    /**
      * Returns true if the active user has the permission to read this conversation.
      */
     public function canRead(): bool
@@ -430,13 +451,22 @@ class Conversation extends DatabaseObject implements IPopoverObject, IRouteContr
             $userID = WCF::getUser()->userID;
         }
 
-        // check if user is the initial author
+        // Check if the user is the initial author. Drafts have no rows in
+        // `conversation_to_user`, therefore a missing row is treated as an
+        // active participation.
         $conditions = new PreparedStatementConditionBuilder();
-        $conditions->add("conversationID IN (?)", [$conversationIDs]);
-        $conditions->add("userID = ?", [$userID]);
+        $conditions->add("conversation.conversationID IN (?)", [$conversationIDs]);
+        $conditions->add("conversation.userID = ?", [$userID]);
+        $conditions->add(
+            "(conversation_to_user.hideConversation IS NULL OR conversation_to_user.hideConversation <> ?)",
+            [self::STATE_LEFT]
+        );
 
-        $sql = "SELECT  conversationID
-                FROM    wcf" . WCF_N . "_conversation
+        $sql = "SELECT      conversation.conversationID
+                FROM        wcf" . WCF_N . "_conversation conversation
+                LEFT JOIN   wcf" . WCF_N . "_conversation_to_user conversation_to_user
+                ON          conversation_to_user.conversationID = conversation.conversationID
+                        AND conversation_to_user.participantID = conversation.userID
                 " . $conditions;
         $statement = WCF::getDB()->prepareStatement($sql);
         $statement->execute($conditions->getParameters());

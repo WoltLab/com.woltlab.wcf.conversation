@@ -50,6 +50,10 @@ class ConversationUserNotificationEvent extends AbstractUserNotificationEvent im
             'variables' => [
                 'author' => $this->author,
                 'conversation' => $this->userNotificationObject,
+                // The recipient is not the active user, therefore their participation
+                // must be resolved explicitly.
+                'canReadFirstMessage' => $this->getUserNotificationObject()
+                    ->canReadFirstMessage($this->notification->userID),
             ],
         ];
     }

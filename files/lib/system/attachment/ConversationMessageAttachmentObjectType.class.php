@@ -51,10 +51,13 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
      */
     public function canDownload($objectID)
     {
+        if (!$this->conversationsAreEnabled()) {
+            return false;
+        }
+
         if ($objectID) {
             $message = new ConversationMessage($objectID);
-            $conversation = Conversation::getUserConversation($message->conversationID, WCF::getUser()->userID);
-            if ($conversation !== null && $conversation->canRead()) {
+            if ($message->messageID && $message->canRead()) {
                 return true;
             }
         }
@@ -67,17 +70,21 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
      */
     public function canUpload($objectID, $parentObjectID = 0)
     {
+        if (!$this->conversationsAreEnabled()) {
+            return false;
+        }
+
         if (!WCF::getSession()->getPermission('user.conversation.canUploadAttachment')) {
             return false;
         }
 
         if ($objectID) {
+            // `canEdit()` covers the ownership of the message as well as the
+            // state of the conversation, both of which must not be bypassed
+            // through the attachment upload.
             $message = new ConversationMessage($objectID);
-            if ($message->userID == WCF::getUser()->userID) {
-                return true;
-            }
 
-            return false;
+            return $message->messageID && $message->getConversation() !== null && $message->canEdit();
         }
 
         return true;
@@ -88,14 +95,16 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
      */
     public function canDelete($objectID)
     {
-        if ($objectID) {
-            $message = new ConversationMessage($objectID);
-            if ($message->userID == WCF::getUser()->userID) {
-                return true;
-            }
+        return $this->canUpload($objectID);
+    }
+
+    private function conversationsAreEnabled(): bool
+    {
+        if (\MODULE_CONVERSATION === 0) {
+            return false;
         }
 
-        return false;
+        return (bool)WCF::getSession()->getPermission('user.conversation.canUseConversation');
     }
 
     /**
@@ -137,9 +146,15 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
                 'canViewPreview' => false,
             ]);
 
-            if ($this->getObject($attachment->objectID) === null) {
+            // Attachments that are still bound to a `tmpHash` have no object id
+            // yet and must never resolve to a message through the cache.
+            if ($attachment->objectID > 0 && $this->getObject($attachment->objectID) === null) {
                 $messageIDs[] = $attachment->objectID;
             }
+        }
+
+        if (!$this->conversationsAreEnabled()) {
+            return;
         }
 
         if (!empty($messageIDs)) {
@@ -147,8 +162,9 @@ class ConversationMessageAttachmentObjectType extends AbstractAttachmentObjectTy
         }
 
         foreach ($attachments as $attachment) {
-            if (($message = $this->getObject($attachment->objectID)) !== null) {
-                if (!$message->getConversation()->canRead()) {
+            $message = $attachment->objectID ? $this->getObject($attachment->objectID) : null;
+            if ($message !== null) {
+                if (!$message->canRead()) {
                     continue;
                 }
 
