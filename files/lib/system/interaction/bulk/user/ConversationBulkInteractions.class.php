@@ -26,7 +26,10 @@ final class ConversationBulkInteractions extends AbstractBulkInteractionProvider
 {
     public function __construct()
     {
-        if (\MODULE_CONVERSATION === 0) {
+        if (
+            \MODULE_CONVERSATION === 0
+            || !WCF::getSession()->getPermission('user.conversation.canUseConversation')
+        ) {
             return;
         }
 

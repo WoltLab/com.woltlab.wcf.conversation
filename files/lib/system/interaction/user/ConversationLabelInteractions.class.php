@@ -11,6 +11,7 @@ use wcf\system\interaction\DeleteInteraction;
 use wcf\system\interaction\Divider;
 use wcf\system\interaction\FormBuilderDialogInteraction;
 use wcf\system\request\LinkHandler;
+use wcf\system\WCF;
 
 /**
  * Interaction provider for conversation labels.
@@ -24,13 +25,24 @@ final class ConversationLabelInteractions extends AbstractInteractionProvider
 {
     public function __construct()
     {
+        if (
+            \MODULE_CONVERSATION === 0
+            || !WCF::getSession()->getPermission('user.conversation.canUseConversation')
+        ) {
+            return;
+        }
+
         $this->addInteractions([
-            new DeleteInteraction('core/conversations/labels/%s'),
+            new DeleteInteraction(
+                'core/conversations/labels/%s',
+                static fn(ConversationLabel $label) => $label->userID === WCF::getUser()->userID,
+            ),
             new Divider(),
             new FormBuilderDialogInteraction(
                 'edit',
                 LinkHandler::getInstance()->getControllerLink(ConversationLabelFormAction::class, ['labelID' => '%s']),
                 'wcf.global.button.edit',
+                static fn(ConversationLabel $label) => $label->userID === WCF::getUser()->userID,
             ),
         ]);
 

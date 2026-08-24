@@ -32,7 +32,10 @@ final class ConversationInteractions extends AbstractInteractionProvider
 {
     public function __construct()
     {
-        if (\MODULE_CONVERSATION === 0) {
+        if (
+            \MODULE_CONVERSATION === 0
+            || !WCF::getSession()->getPermission('user.conversation.canUseConversation')
+        ) {
             return;
         }
 
