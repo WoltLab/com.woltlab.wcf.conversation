@@ -49,6 +49,24 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
     /**
      * @inheritDoc
      */
+    public function validateAction()
+    {
+        // `$permissionsCreate`, `$permissionsUpdate` and `$permissionsDelete` only
+        // cover those three actions, every other action must be guarded here.
+        if (\MODULE_CONVERSATION === 0) {
+            throw new IllegalLinkException();
+        }
+
+        if (!WCF::getSession()->getPermission('user.conversation.canUseConversation')) {
+            throw new PermissionDeniedException();
+        }
+
+        parent::validateAction();
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function create()
     {
         // create conversation

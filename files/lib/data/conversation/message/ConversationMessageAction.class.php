@@ -15,6 +15,7 @@ use wcf\system\attachment\AttachmentHandler;
 use wcf\system\bbcode\BBCodeHandler;
 use wcf\system\conversation\ConversationHandler;
 use wcf\system\event\EventHandler;
+use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\NamedUserException;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
@@ -69,6 +70,24 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
      * @var ConversationMessage
      */
     public $message;
+
+    /**
+     * @inheritDoc
+     */
+    public function validateAction()
+    {
+        // `$permissionsCreate`, `$permissionsUpdate` and `$permissionsDelete` only
+        // cover those three actions, every other action must be guarded here.
+        if (\MODULE_CONVERSATION === 0) {
+            throw new IllegalLinkException();
+        }
+
+        if (!WCF::getSession()->getPermission('user.conversation.canUseConversation')) {
+            throw new PermissionDeniedException();
+        }
+
+        parent::validateAction();
+    }
 
     /**
      * @inheritDoc
