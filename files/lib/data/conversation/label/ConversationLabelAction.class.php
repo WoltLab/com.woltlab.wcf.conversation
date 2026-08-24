@@ -58,8 +58,8 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction
      */
     public function validateAction()
     {
-        // `$permissionsCreate`, `$permissionsUpdate` and `$permissionsDelete` only
-        // cover those three actions, every other action must be guarded here.
+        // Only `create`, `update` and `delete` consult the `$permissions*` properties,
+        // every other action has to be guarded here.
         if (\MODULE_CONVERSATION === 0) {
             throw new IllegalLinkException();
         }
