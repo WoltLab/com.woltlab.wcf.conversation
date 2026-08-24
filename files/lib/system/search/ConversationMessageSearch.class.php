@@ -110,6 +110,16 @@ final class ConversationMessageSearch extends AbstractSearchProvider
 
         $conditionBuilder = new PreparedStatementConditionBuilder();
         $conditionBuilder->add('conversation_to_user.hideConversation IN (0,1)');
+
+        // Participants must not be able to search the messages that were written
+        // outside of the timeframe of their participation. `leftAt = 0` marks the
+        // participants that are still part of the conversation.
+        $conditionBuilder->add("{$this->getTableName()}.time >= conversation_to_user.joinedAt");
+        $conditionBuilder->add(
+            "(conversation_to_user.leftAt = ? OR {$this->getTableName()}.time <= conversation_to_user.leftAt)",
+            [0]
+        );
+
         if ($this->conversationID) {
             $conditionBuilder->add('conversation.conversationID = ?', [$this->conversationID]);
         }
