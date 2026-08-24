@@ -60,9 +60,44 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction
     {
         parent::validateUpdate();
 
-        $label = $this->getSingleObject();
-        if ($label->userID != WCF::getUser()->userID) {
+        if (isset($this->parameters['counters'])) {
             throw new PermissionDeniedException();
+        }
+
+        $label = $this->getSingleObject();
+        if ($label->userID !== WCF::getUser()->userID) {
+            throw new PermissionDeniedException();
+        }
+
+        // `DatabaseObjectEditor::update()` interpolates the array keys into the SQL,
+        // therefore the writable columns must be restricted to the two editable ones.
+        if (
+            !isset($this->parameters['data'])
+            || !\is_array($this->parameters['data'])
+            || \array_diff(\array_keys($this->parameters['data']), ['label', 'cssClassName']) !== []
+        ) {
+            throw new UserInputException('data');
+        }
+
+        if (\array_key_exists('label', $this->parameters['data'])) {
+            $this->readString('label', false, 'data');
+        }
+
+        if (\array_key_exists('cssClassName', $this->parameters['data'])) {
+            $this->readString('cssClassName', true, 'data');
+
+            // An empty string is the stored representation of the pseudo value 'none'.
+            $cssClassNames = ConversationLabel::getLabelCssClassNames();
+            $cssClassNames[] = '';
+
+            if (!\in_array($this->parameters['data']['cssClassName'], $cssClassNames, true)) {
+                throw new UserInputException('cssClassName');
+            }
+
+            // 'none' is a pseudo value
+            if ($this->parameters['data']['cssClassName'] === 'none') {
+                $this->parameters['data']['cssClassName'] = '';
+            }
         }
     }
 
@@ -74,7 +109,7 @@ class ConversationLabelAction extends AbstractDatabaseObjectAction
         parent::validateDelete();
 
         $label = $this->getSingleObject();
-        if ($label->userID != WCF::getUser()->userID) {
+        if ($label->userID !== WCF::getUser()->userID) {
             throw new PermissionDeniedException();
         }
     }
