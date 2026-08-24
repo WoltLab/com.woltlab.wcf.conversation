@@ -38,15 +38,23 @@ trait TConversationOnlineLocationPageHandler
             return '';
         }
 
-        // Guest can never be reading a conversation.
-        if ($user->userID === 0) {
+        // Guest and spiders can never be reading a conversation.
+        if (!$user->userID) {
             return '';
         }
 
-        if ($conversation->userID != WCF::getUser()->userID && $user->userID != WCF::getUser()->userID) {
+        // `pageObjectID` is taken from the request of the visited page and is
+        // never validated against the permissions of that user, therefore the
+        // participation has to be verified here. Drafts have no rows in
+        // `conversation_to_user` at all, leaving the author as the only reader.
+        $participant = $conversation->getOtherParticipant($user->userID);
+        if ($participant === null && $conversation->userID !== $user->userID) {
+            return '';
+        }
+
+        if ($conversation->userID !== WCF::getUser()->userID && $user->userID !== WCF::getUser()->userID) {
             // Make sure that requests from invisible participants are not listed
             // if the active user is not the author of the conversation.
-            $participant = $conversation->getOtherParticipant($user->userID);
             if ($participant !== null && $participant->isInvisible) {
                 return '';
             }
