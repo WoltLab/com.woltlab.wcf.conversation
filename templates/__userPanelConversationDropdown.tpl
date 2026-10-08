@@ -9,7 +9,11 @@
 			aria-haspopup="true"
 			aria-expanded="false"
 		>
-			{icon size=32 name='comments' type='solid'}
+			{if $__wcf->getStyleHandler()->getStyle()->usesClassicPageHeader()}
+				{icon size=32 name='comments' type='solid'}
+			{else}
+				{icon size=32 name='comments'}
+			{/if}
 			<span>{lang}wcf.conversation.conversations{/lang}</span>
 			{if $__wcf->getConversationHandler()->getUnreadConversationCount()}
 				<span class="badge badgeUpdate">{#$__wcf->getConversationHandler()->getUnreadConversationCount()}</span>
