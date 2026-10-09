@@ -35,16 +35,13 @@ return [
                 ->defaultValue(''),
             NotNullInt10DatabaseTableColumn::create('time')
                 ->defaultValue(0),
-            IntDatabaseTableColumn::create('firstMessageID')
-                ->length(10),
-            IntDatabaseTableColumn::create('userID')
-                ->length(10),
+            IntDatabaseTableColumn::create('firstMessageID'),
+            IntDatabaseTableColumn::create('userID'),
             NotNullVarchar255DatabaseTableColumn::create('username')
                 ->defaultValue(''),
             NotNullInt10DatabaseTableColumn::create('lastPostTime')
                 ->defaultValue(0),
-            IntDatabaseTableColumn::create('lastPosterID')
-                ->length(10),
+            IntDatabaseTableColumn::create('lastPosterID'),
             NotNullVarchar255DatabaseTableColumn::create('lastPoster')
                 ->defaultValue(''),
             MediumintDatabaseTableColumn::create('replies')
@@ -83,12 +80,10 @@ return [
         ->columns([
             ObjectIdDatabaseTableColumn::create('conversationParticipantID'),
             NotNullInt10DatabaseTableColumn::create('conversationID'),
-            IntDatabaseTableColumn::create('participantID')
-                ->length(10),
+            IntDatabaseTableColumn::create('participantID'),
             NotNullVarchar255DatabaseTableColumn::create('username')
                 ->defaultValue(''),
             TinyintDatabaseTableColumn::create('hideConversation')
-                ->length(1)
                 ->notNull()
                 ->defaultValue(0),
             DefaultFalseBooleanDatabaseTableColumn::create('isInvisible'),
@@ -98,8 +93,7 @@ return [
                 ->defaultValue(0),
             NotNullInt10DatabaseTableColumn::create('leftAt')
                 ->defaultValue(0),
-            IntDatabaseTableColumn::create('lastMessageID')
-                ->length(10),
+            IntDatabaseTableColumn::create('lastMessageID'),
             DefaultTrueBooleanDatabaseTableColumn::create('leftByOwnChoice'),
         ])
         ->indices([
@@ -127,8 +121,7 @@ return [
         ->columns([
             ObjectIdDatabaseTableColumn::create('messageID'),
             NotNullInt10DatabaseTableColumn::create('conversationID'),
-            IntDatabaseTableColumn::create('userID')
-                ->length(10),
+            IntDatabaseTableColumn::create('userID'),
             NotNullVarchar255DatabaseTableColumn::create('username')
                 ->defaultValue(''),
             MediumtextDatabaseTableColumn::create('message')
@@ -146,7 +139,6 @@ return [
             NotNullInt10DatabaseTableColumn::create('lastEditTime')
                 ->defaultValue(0),
             MediumintDatabaseTableColumn::create('editCount')
-                ->length(7)
                 ->notNull()
                 ->defaultValue(0),
             DefaultFalseBooleanDatabaseTableColumn::create('hasEmbeddedObjects'),
