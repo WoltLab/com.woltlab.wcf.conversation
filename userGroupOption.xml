@@ -125,6 +125,7 @@
 				<optiontype>integer</optiontype>
 				<defaultvalue>10000</defaultvalue>
 				<minvalue>1000</minvalue>
+				<suffix>chars</suffix>
 				<admindefaultvalue>100000</admindefaultvalue>
 				<usersonly>1</usersonly>
 			</option>
