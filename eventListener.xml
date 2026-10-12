@@ -1,23 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/eventListener.xsd">
 	<import>
-		<eventlistener name="userMerge">
-			<eventclassname>wcf\acp\form\UserMergeForm</eventclassname>
-			<eventname>save</eventname>
-			<listenerclassname>wcf\system\event\listener\ConversationUserMergeListener</listenerclassname>
-			<environment>admin</environment>
-		</eventlistener>
-		<eventlistener name="userRenameUser">
-			<eventclassname>wcf\data\user\UserAction</eventclassname>
-			<eventname>rename</eventname>
-			<listenerclassname>wcf\system\event\listener\ConversationUserActionRenameListener</listenerclassname>
-		</eventlistener>
-		<eventlistener name="userRenameAdmin">
-			<eventclassname>wcf\data\user\UserAction</eventclassname>
-			<eventname>rename</eventname>
-			<listenerclassname>wcf\system\event\listener\ConversationUserActionRenameListener</listenerclassname>
-			<environment>admin</environment>
-		</eventlistener>
 		<eventlistener name="pruneIpAddresses">
 			<eventclassname>wcf\system\cronjob\PruneIpAddressesCronjob</eventclassname>
 			<eventname>execute</eventname>
@@ -44,4 +27,23 @@
 			<environment>admin</environment>
 		</eventlistener>
 	</import>
+	<delete>
+		<eventlistener name="userMerge">
+			<eventclassname>wcf\acp\form\UserMergeForm</eventclassname>
+			<eventname>save</eventname>
+			<listenerclassname>wcf\system\event\listener\ConversationUserMergeListener</listenerclassname>
+			<environment>admin</environment>
+		</eventlistener>
+		<eventlistener name="userRenameUser">
+			<eventclassname>wcf\data\user\UserAction</eventclassname>
+			<eventname>rename</eventname>
+			<listenerclassname>wcf\system\event\listener\ConversationUserActionRenameListener</listenerclassname>
+		</eventlistener>
+		<eventlistener name="userRenameAdmin">
+			<eventclassname>wcf\data\user\UserAction</eventclassname>
+			<eventname>rename</eventname>
+			<listenerclassname>wcf\system\event\listener\ConversationUserActionRenameListener</listenerclassname>
+			<environment>admin</environment>
+		</eventlistener>
+	</delete>
 </data>

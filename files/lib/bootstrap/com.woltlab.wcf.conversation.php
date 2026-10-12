@@ -19,6 +19,26 @@ return static function (): void {
         }
     );
 
+    $eventHandler->register(
+        \wcf\event\user\UsersMerging::class,
+        static function (\wcf\event\user\UsersMerging $event) {
+            $event->reassignUserColumn('wcf1_conversation', usernameColumn: 'username');
+            $event->reassignUserColumn('wcf1_conversation_message', usernameColumn: 'username');
+            $event->reassignUserColumn('wcf1_conversation_label');
+            $event->reassignUserColumn('wcf1_conversation_to_user', 'participantID', 'username', ignore: true);
+        }
+    );
+
+    $eventHandler->register(
+        \wcf\event\user\UserRenamed::class,
+        static function (\wcf\event\user\UserRenamed $event) {
+            $event->updateUsernameColumn('wcf1_conversation');
+            $event->updateUsernameColumn('wcf1_conversation_message');
+            $event->updateUsernameColumn('wcf1_conversation', 'lastPosterID', 'lastPoster');
+            $event->updateUsernameColumn('wcf1_conversation_to_user', 'participantID');
+        }
+    );
+
     if (
         \MODULE_CONVERSATION===1
         && !WCF::getUser()->isGuest()

@@ -12,5 +12,7 @@
 		<file>js/WoltLabSuite/Core/Conversation/Ui/Subject/Editor.js</file>
 		<file>lib/data/conversation/ViewableConversation.class.php</file>
 		<file>lib/system/clipboard/action/ConversationClipboardAction.class.php</file>
+		<file>lib/system/event/listener/ConversationUserMergeListener.class.php</file>
+		<file>lib/system/event/listener/ConversationUserActionRenameListener.class.php</file>
 	</delete>
 </data>
