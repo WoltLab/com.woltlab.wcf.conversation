@@ -6,7 +6,7 @@ use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use wcf\data\conversation\label\ConversationLabel;
-use wcf\data\conversation\label\ConversationLabelAction;
+use wcf\data\conversation\label\ConversationLabelBuilder;
 use wcf\http\Helper;
 use wcf\system\endpoint\DeleteRequest;
 use wcf\system\endpoint\IController;
@@ -30,7 +30,7 @@ final class DeleteConversationLabel implements IController
         $label = Helper::fetchObjectFromRequestParameter($variables['id'], ConversationLabel::class);
         $this->assertLabelCanBeDeleted($label);
 
-        (new ConversationLabelAction([$label], 'delete'))->executeAction();
+        ConversationLabelBuilder::delete($label);
 
         return new JsonResponse([]);
     }

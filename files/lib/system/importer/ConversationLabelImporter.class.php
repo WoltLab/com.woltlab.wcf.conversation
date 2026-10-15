@@ -3,7 +3,7 @@
 namespace wcf\system\importer;
 
 use wcf\data\conversation\label\ConversationLabel;
-use wcf\data\conversation\label\ConversationLabelAction;
+use wcf\data\conversation\label\ConversationLabelBuilder;
 
 /**
  * Imports conversation labels.
@@ -22,19 +22,32 @@ class ConversationLabelImporter extends AbstractImporter
     #[\Override]
     public function import(mixed $oldID, array $data, array $additionalData = [])
     {
-        $data['userID'] = ImportHandler::getInstance()->getNewID('com.woltlab.wcf.user', $data['userID']);
-        if ($data['userID'] === null) {
+        $userID = ImportHandler::getInstance()->getNewID('com.woltlab.wcf.user', $data['userID']);
+        if ($userID === null) {
             return 0;
         }
 
-        $action = new ConversationLabelAction([], 'create', [
-            'data' => $data,
-        ]);
-        $returnValues = $action->executeAction();
-        $newID = $returnValues['returnValues']->labelID;
+        $builder = ConversationLabelBuilder::forCreate()
+            ->setUserID($userID)
+            ->setLabel((string)($data['label'] ?? ''))
+            ->setCssClassName((string)($data['cssClassName'] ?? ''));
 
-        ImportHandler::getInstance()->saveNewID('com.woltlab.wcf.conversation.label', $oldID, $newID);
+        $handledColumns = ['labelID', 'userID', 'label', 'cssClassName'];
+        foreach ($data as $key => $value) {
+            if (\in_array($key, $handledColumns, true)) {
+                continue;
+            }
+            if ($value !== null && !\is_string($value) && !\is_int($value) && !\is_float($value)) {
+                continue;
+            }
 
-        return $newID;
+            $builder->setCustomProperty($key, $value);
+        }
+
+        $label = $builder->create();
+
+        ImportHandler::getInstance()->saveNewID('com.woltlab.wcf.conversation.label', $oldID, $label->labelID);
+
+        return $label->labelID;
     }
 }

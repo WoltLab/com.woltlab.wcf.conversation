@@ -7,7 +7,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use wcf\data\conversation\label\ConversationLabel;
-use wcf\data\conversation\label\ConversationLabelAction;
+use wcf\data\conversation\label\ConversationLabelBuilder;
 use wcf\data\IStorableObject;
 use wcf\http\Helper;
 use wcf\system\exception\NamedUserException;
@@ -74,15 +74,16 @@ final class ConversationLabelFormAction implements RequestHandlerInterface
             $data = $form->getData()['data'];
 
             if ($label !== null) {
-                (new ConversationLabelAction([$label], 'update', [
-                    'data' => $data,
-                ]))->executeAction();
+                ConversationLabelBuilder::forUpdate($label)
+                    ->setLabel($data['label'])
+                    ->setCssClassName($data['cssClassName'])
+                    ->update();
             } else {
-                (new ConversationLabelAction([], 'create', [
-                    'data' => \array_merge($data, [
-                        'userID' => WCF::getUser()->userID,
-                    ]),
-                ]))->executeAction();
+                ConversationLabelBuilder::forCreate()
+                    ->setUserID(WCF::getUser()->userID)
+                    ->setLabel($data['label'])
+                    ->setCssClassName($data['cssClassName'])
+                    ->create();
             }
 
             return new JsonResponse([
