@@ -462,9 +462,11 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
 
         $unreadConversationList = new UserConversationList(WCF::getUser()->userID);
         $unreadConversationList->sqlSelects .= $sqlSelect;
-        $unreadConversationList->getConditionBuilder()->add('conversation_to_user.lastVisitTime < lastPostTime');
+        $unreadConversationList->getConditionBuilder()->add(
+            'conversation_to_user.lastVisitTime < ' . UserConversationList::LAST_POST_TIME_SQL
+        );
         $unreadConversationList->sqlLimit = 10;
-        $unreadConversationList->sqlOrderBy = 'lastPostTime DESC';
+        $unreadConversationList->sqlOrderBy = UserConversationList::LAST_POST_TIME_SQL . ' DESC';
         $unreadConversationList->readObjects();
 
         $conversations = [];
@@ -477,9 +479,11 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
         if ($count < 10) {
             $conversationList = new UserConversationList(WCF::getUser()->userID);
             $conversationList->sqlSelects .= $sqlSelect;
-            $conversationList->getConditionBuilder()->add('conversation_to_user.lastVisitTime >= lastPostTime');
+            $conversationList->getConditionBuilder()->add(
+                'conversation_to_user.lastVisitTime >= ' . UserConversationList::LAST_POST_TIME_SQL
+            );
             $conversationList->sqlLimit = (10 - $count);
-            $conversationList->sqlOrderBy = 'lastPostTime DESC';
+            $conversationList->sqlOrderBy = UserConversationList::LAST_POST_TIME_SQL . ' DESC';
             $conversationList->readObjects();
 
             foreach ($conversationList as $conversation) {

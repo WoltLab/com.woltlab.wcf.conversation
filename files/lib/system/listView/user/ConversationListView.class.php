@@ -41,7 +41,12 @@ final class ConversationListView extends AbstractListView
         $this->addAvailableSortFields([
             new ListViewSortField('time', 'wcf.global.date'),
             new ListViewSortField('subject', 'wcf.global.title'),
-            new ListViewSortField('lastPostTime', 'wcf.conversation.lastPostTime'),
+            new ListViewSortField(
+                'lastPostTime',
+                'wcf.conversation.lastPostTime',
+                // Drafts are not joined with `wcf1_conversation_to_user`.
+                $this->filter === 'draft' ? '' : UserConversationList::LAST_POST_TIME_SQL
+            ),
             new ListViewSortField('username', 'wcf.user.username'),
             new ListViewSortField('replies', 'wcf.conversation.replies'),
             new ListViewSortField('participants', 'wcf.conversation.participants'),

@@ -30,7 +30,7 @@ class ConversationRssFeedPage extends AbstractRssFeedPage
 
         $this->conversations = new UserConversationList(WCF::getUser()->userID);
         $this->conversations->sqlLimit = 20;
-        $this->conversations->sqlOrderBy = 'conversation.lastPostTime DESC';
+        $this->conversations->sqlOrderBy = UserConversationList::LAST_POST_TIME_SQL . ' DESC';
         $this->conversations->readObjects();
     }
 

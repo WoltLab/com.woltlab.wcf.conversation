@@ -63,4 +63,10 @@
 	<instructions type="update" fromversion="6.2.3 dev 1">
 		<void/>
 	</instructions>
+
+	<!--
+	Required order of the following steps for the update to 6.3:
+	<instruction type="database" run="standalone">acp/database/update_com.woltlab.wcf.conversation_6.3.php</instruction>
+	<instruction type="script" run="standalone">acp/update_com.woltlab.wcf.conversation_6.3_lastMessageTime.php</instruction>
+	-->
 </package>

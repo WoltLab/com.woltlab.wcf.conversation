@@ -87,6 +87,8 @@ class ConversationEditor extends DatabaseObjectEditor
                     UPDATE      hideConversation = 0,
                                 isInvisible = 0,
                                 leftAt = 0,
+                                lastMessageID = NULL,
+                                lastMessageTime = 0,
                                 leftByOwnChoice = 1";
             $statement = WCF::getDB()->prepare($sql);
 
@@ -164,7 +166,7 @@ class ConversationEditor extends DatabaseObjectEditor
         $statement->execute([$this->conversationID, $userID]);
         $participantData = $statement->fetchSingleRow();
 
-        $sql = "SELECT      messageID
+        $sql = "SELECT      messageID, time
                 FROM        wcf1_conversation_message
                 WHERE       conversationID = ?
                         AND time >= ?
@@ -176,18 +178,20 @@ class ConversationEditor extends DatabaseObjectEditor
             $participantData['joinedAt'],
             \TIME_NOW,
         ]);
-        $lastMessageID = $statement->fetchSingleColumn();
+        $lastMessage = $statement->fetchSingleRow();
 
         $sql = "UPDATE  wcf1_conversation_to_user
                 SET     leftAt = ?,
                         lastMessageID = ?,
+                        lastMessageTime = ?,
                         leftByOwnChoice = ?
                 WHERE   conversationID = ?
                     AND participantID = ?";
         $statement = WCF::getDB()->prepare($sql);
         $statement->execute([
             \TIME_NOW,
-            $lastMessageID ?: null,
+            $lastMessage !== false ? $lastMessage['messageID'] : null,
+            $lastMessage !== false ? $lastMessage['time'] : 0,
             0,
             $this->conversationID,
             $userID,

@@ -53,6 +53,7 @@ use wcf\util\ArrayUtil;
  * @property-read   ?int $joinedAt          timestamp at which the user joined the conversation; is `null` if the conversation has not been fetched via `UserConversationList`
  * @property-read   ?int $leftAt            timestamp at which the user left the conversation or `0` if they did not leave the conversation; is `null` if the conversation has not been fetched via `UserConversationList`
  * @property-read   ?int $lastMessageID     id of the last message written before the user left the conversation or `0` if they did not leave the conversation; is `null` if the conversation has not been fetched via `UserConversationList`
+ * @property-read   ?int $lastMessageTime   timestamp of the last message written before the user left the conversation or `0` if they did not leave the conversation; is `null` if the conversation has not been fetched via `UserConversationList`
  * @property-read   ?int $leftByOwnChoice
  *
  * @extends CollectionDatabaseObject<ConversationCollection>
@@ -642,7 +643,7 @@ class Conversation extends CollectionDatabaseObject implements IPopoverObject, I
     {
         return match ($name) {
             'participantID', 'hideConversation', 'isInvisible', 'lastVisitTime',
-            'joinedAt', 'leftAt', 'lastMessageID', 'leftByOwnChoice' => $this->getParticipantData($name),
+            'joinedAt', 'leftAt', 'lastMessageID', 'lastMessageTime', 'leftByOwnChoice' => $this->getParticipantData($name),
             default => parent::__get($name),
         };
     }

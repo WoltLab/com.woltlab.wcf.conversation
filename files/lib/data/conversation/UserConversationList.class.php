@@ -19,6 +19,19 @@ class UserConversationList extends ConversationList
      */
     public static array $availableFilters = ['hidden', 'draft', 'outbox'];
 
+    /**
+     * SQL expression for the time of the last message that is accessible for the user.
+     * Users that have been removed from a conversation can only access the messages
+     * written before their removal.
+     *
+     * @since 6.3
+     */
+    public const LAST_POST_TIME_SQL = "(CASE
+        WHEN    conversation_to_user.leftAt <> 0
+        THEN    conversation_to_user.lastMessageTime
+        ELSE    conversation.lastPostTime
+    END)";
+
     public function __construct(
         ?int $userID = null,
         public readonly string $filter = '',
@@ -70,12 +83,7 @@ class UserConversationList extends ConversationList
         if ($this->filter !== 'draft') {
             $this->sqlSelects .= ",
             conversation.*,
-            (CASE
-                WHEN    conversation_to_user.leftAt <> 0
-                        AND conversation.lastPostTime > conversation_to_user.leftAt
-                THEN    conversation_to_user.leftAt
-                ELSE    conversation.lastPostTime
-            END) AS lastPostTime";
+            " . self::LAST_POST_TIME_SQL . " AS lastPostTime";
             // this avoids appending `conversation.*` to the SELECT list
             $this->useQualifiedShorthand = false;
         }
@@ -109,11 +117,7 @@ class UserConversationList extends ConversationList
         }
 
         $sql = "SELECT  conversation_to_user.conversationID AS objectID,
-                        (CASE
-                            WHEN    conversation_to_user.leftAt <> 0
-                            THEN    conversation_to_user.leftAt
-                            ELSE    conversation.lastPostTime
-                        END) AS lastPostTime
+                        " . self::LAST_POST_TIME_SQL . " AS lastPostTime
                 FROM    wcf1_conversation_to_user conversation_to_user
                     " . $this->sqlConditionJoins . "
                     " . $this->getConditionBuilder() . "

@@ -23,6 +23,7 @@ use wcf\system\WCF;
  * @property-read   int     $joinedAt
  * @property-read   int     $leftAt
  * @property-read   ?int    $lastMessageID
+ * @property-read   int     $lastMessageTime
  * @property-read   0|1     $leftByOwnChoice
  */
 class ConversationParticipant extends DatabaseObject

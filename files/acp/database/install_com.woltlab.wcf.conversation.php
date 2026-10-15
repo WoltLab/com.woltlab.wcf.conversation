@@ -94,6 +94,8 @@ return [
             NotNullInt10DatabaseTableColumn::create('leftAt')
                 ->defaultValue(0),
             IntDatabaseTableColumn::create('lastMessageID'),
+            NotNullInt10DatabaseTableColumn::create('lastMessageTime')
+                ->defaultValue(0),
             DefaultTrueBooleanDatabaseTableColumn::create('leftByOwnChoice'),
         ])
         ->indices([
