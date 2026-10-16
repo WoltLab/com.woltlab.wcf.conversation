@@ -6,7 +6,7 @@ use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use wcf\data\conversation\Conversation;
-use wcf\data\conversation\ConversationEditor;
+use wcf\data\conversation\ConversationBuilder;
 use wcf\http\Helper;
 use wcf\system\endpoint\IController;
 use wcf\system\endpoint\PostRequest;
@@ -51,8 +51,9 @@ final class OpenConversation implements IController
 
     private function openConversation(Conversation $conversation): void
     {
-        $editor = new ConversationEditor($conversation);
-        $editor->update(['isClosed' => 0]);
+        ConversationBuilder::forUpdate($conversation)
+            ->setIsClosed(false)
+            ->update();
 
         ConversationModificationLogHandler::getInstance()->open($conversation);
     }

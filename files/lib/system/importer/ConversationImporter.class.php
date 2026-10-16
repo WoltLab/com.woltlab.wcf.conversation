@@ -3,7 +3,7 @@
 namespace wcf\system\importer;
 
 use wcf\data\conversation\Conversation;
-use wcf\data\conversation\ConversationEditor;
+use wcf\data\conversation\ConversationBuilder;
 
 /**
  * Imports conversations.
@@ -23,17 +23,34 @@ class ConversationImporter extends AbstractImporter
     public function import(mixed $oldID, array $data, array $additionalData = [])
     {
         $oldUserID = $data['userID'];
-        $data['userID'] = ImportHandler::getInstance()->getNewID('com.woltlab.wcf.user', $data['userID']);
+
+        $builder = ConversationBuilder::forCreate()
+            ->setSubject((string)($data['subject'] ?? ''))
+            ->setTime((int)($data['time'] ?? 0))
+            ->setUserID(ImportHandler::getInstance()->getNewID('com.woltlab.wcf.user', $data['userID']))
+            ->setUsername((string)($data['username'] ?? ''));
 
         // check existing conversation
         if (\ctype_digit((string)$oldID)) {
             $existingConversation = new Conversation($oldID);
             if ($existingConversation->isNil()) {
-                $data['conversationID'] = $oldID;
+                $builder->setID((int)$oldID);
             }
         }
 
-        $conversation = ConversationEditor::create($data);
+        $handledColumns = ['conversationID', 'subject', 'time', 'userID', 'username'];
+        foreach ($data as $key => $value) {
+            if (\in_array($key, $handledColumns, true)) {
+                continue;
+            }
+            if ($value !== null && !\is_string($value) && !\is_int($value) && !\is_float($value)) {
+                continue;
+            }
+
+            $builder->setCustomProperty($key, $value);
+        }
+
+        $conversation = $builder->create();
 
         ImportHandler::getInstance()->saveNewID('com.woltlab.wcf.conversation', $oldID, $conversation->conversationID);
 

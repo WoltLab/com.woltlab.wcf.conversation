@@ -2,9 +2,8 @@
 
 namespace wcf\system\worker;
 
+use wcf\command\conversation\DeleteConversations;
 use wcf\data\conversation\Conversation;
-use wcf\data\conversation\ConversationAction;
-use wcf\data\conversation\ConversationEditor;
 use wcf\data\conversation\ConversationList;
 use wcf\system\WCF;
 
@@ -97,7 +96,7 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker
                     AND participantID IS NOT NULL";
         $existingParticipantStatement = WCF::getDB()->prepare($sql);
 
-        $obsoleteConversations = [];
+        $obsoleteConversationIDs = [];
         $updateData = [];
         /** @var Conversation $conversation */
         foreach ($this->objectList as $conversation) {
@@ -134,7 +133,7 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker
             }
 
             if ($obsolete) {
-                $obsoleteConversations[] = new ConversationEditor($conversation);
+                $obsoleteConversationIDs[] = $conversation->conversationID;
                 continue;
             }
 
@@ -198,9 +197,6 @@ class ConversationRebuildDataWorker extends AbstractRebuildDataWorker
         WCF::getDB()->commitTransaction();
 
         // delete obsolete conversations
-        if ($obsoleteConversations !== []) {
-            $action = new ConversationAction($obsoleteConversations, 'delete');
-            $action->executeAction();
-        }
+        new DeleteConversations($obsoleteConversationIDs)();
     }
 }

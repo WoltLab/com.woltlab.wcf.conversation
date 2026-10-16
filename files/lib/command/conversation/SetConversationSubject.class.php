@@ -3,8 +3,7 @@
 namespace wcf\command\conversation;
 
 use wcf\data\conversation\Conversation;
-use wcf\data\conversation\ConversationEditor;
-use wcf\system\search\SearchIndexManager;
+use wcf\data\conversation\ConversationBuilder;
 
 /**
  * Sets the subject of a conversation.
@@ -23,22 +22,9 @@ final class SetConversationSubject
 
     public function __invoke(): void
     {
-        $editor = new ConversationEditor($this->conversation);
-        $editor->update([
-            'subject' => $this->subject,
-        ]);
-
-        $message = $this->conversation->getFirstMessage();
-        \assert($message !== null);
-
-        SearchIndexManager::getInstance()->set(
-            'com.woltlab.wcf.conversation.message',
-            $message->messageID,
-            $message->message,
-            $this->subject,
-            $message->time,
-            $message->userID,
-            $message->username
-        );
+        new UpdateConversation(
+            ConversationBuilder::forUpdate($this->conversation)
+                ->setSubject($this->subject)
+        )();
     }
 }

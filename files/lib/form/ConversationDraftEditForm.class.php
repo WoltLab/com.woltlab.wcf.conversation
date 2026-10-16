@@ -6,9 +6,8 @@ use wcf\command\conversation\MarkConversationAsRead;
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\data\conversation\message\ConversationMessageList;
+use wcf\data\DatabaseObjectBuilder;
 use wcf\system\exception\IllegalLinkException;
-use wcf\system\form\builder\data\processor\CustomFormDataProcessor;
-use wcf\system\form\builder\IFormDocument;
 use wcf\system\WCF;
 
 /**
@@ -28,7 +27,7 @@ class ConversationDraftEditForm extends ConversationAddForm
     /**
      * @inheritDoc
      */
-    public $formAction = 'edit';
+    public string $formAction = 'edit';
 
     #[\Override]
     public function readParameters()
@@ -45,45 +44,26 @@ class ConversationDraftEditForm extends ConversationAddForm
     }
 
     #[\Override]
-    public function finalizeForm()
+    protected function getAttachmentObjectID(): ?int
     {
-        parent::finalizeForm();
-
-        $this->form->getDataHandler()
-            ->addProcessor(
-                new CustomFormDataProcessor(
-                    'messageDataProcessor',
-                    function (IFormDocument $document, array $parameters) {
-                        $messageData = [
-                            'htmlInputProcessor' => $parameters['message_htmlInputProcessor'],
-                            'attachmentHandler' => $parameters['message_attachmentHandler'],
-                            'data' => [],
-                        ];
-                        if ($parameters['data']['isDraft']) {
-                            $messageData['data']['time'] = \TIME_NOW;
-                        }
-
-                        unset($parameters['message_htmlInputProcessor'], $parameters['message_attachmentHandler']);
-
-                        $parameters['messageData'] = $messageData;
-
-                        return $parameters;
-                    }
-                )
-            )
-            ->addProcessor(
-                new CustomFormDataProcessor('timeProcessor', function (IFormDocument $document, array $parameters) {
-                    if (!$parameters['data']['isDraft']) {
-                        $parameters['data']['time'] = $parameters['data']['lastPostTime'] = \TIME_NOW;
-                    }
-
-                    return $parameters;
-                })
-            );
+        return $this->formObject->firstMessageID;
     }
 
     #[\Override]
-    public function saved()
+    protected function getCommand(DatabaseObjectBuilder $builder): callable
+    {
+        $builder->setTime(\TIME_NOW);
+        if (($builder->properties['isDraft'] ?? 0) === 1) {
+            $builder->getMessageBuilder()->setTime(\TIME_NOW);
+        } else {
+            $builder->setLastPostTime(\TIME_NOW);
+        }
+
+        return parent::getCommand($builder);
+    }
+
+    #[\Override]
+    public function saved(): void
     {
         // Reload conversation object to get updated data.
         $conversation = new Conversation($this->formObject->conversationID);

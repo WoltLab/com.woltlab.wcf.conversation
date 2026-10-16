@@ -3,8 +3,6 @@
 namespace wcf\command\conversation;
 
 use wcf\data\conversation\Conversation;
-use wcf\data\conversation\ConversationAction;
-use wcf\data\conversation\ConversationEditor;
 use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\WCF;
 
@@ -28,7 +26,7 @@ final class DeleteEmptyConversations
     public function __invoke(): void
     {
         // update participants count and participant summary
-        ConversationEditor::updateParticipantCounts($this->conversationIDs);
+        new UpdateConversationParticipantCounts($this->conversationIDs)();
 
         $conditionBuilder = new PreparedStatementConditionBuilder();
         $conditionBuilder->add('conversation.conversationID IN (?)', [$this->conversationIDs]);
@@ -44,9 +42,6 @@ final class DeleteEmptyConversations
         $statement->execute($conditionBuilder->getParameters());
         $conversationIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
 
-        if ($conversationIDs !== []) {
-            $action = new ConversationAction($conversationIDs, 'delete');
-            $action->executeAction();
-        }
+        new DeleteConversations($conversationIDs)();
     }
 }

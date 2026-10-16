@@ -3,9 +3,11 @@
 namespace wcf\form;
 
 use Laminas\Diactoros\Response\RedirectResponse;
+use wcf\command\conversation\CreateConversation;
+use wcf\command\conversation\UpdateConversation;
 use wcf\data\conversation\Conversation;
-use wcf\data\conversation\ConversationAction;
-use wcf\data\IStorableObject;
+use wcf\data\conversation\ConversationBuilder;
+use wcf\data\DatabaseObjectBuilder;
 use wcf\data\user\group\UserGroup;
 use wcf\data\user\UserProfile;
 use wcf\system\cache\builder\UserGroupCacheBuilder;
@@ -16,14 +18,15 @@ use wcf\system\exception\NamedUserException;
 use wcf\system\flood\FloodControl;
 use wcf\system\form\builder\container\FormContainer;
 use wcf\system\form\builder\container\wysiwyg\WysiwygFormContainer;
-use wcf\system\form\builder\data\processor\CustomFormDataProcessor;
 use wcf\system\form\builder\field\BooleanFormField;
+use wcf\system\form\builder\field\IFormField;
 use wcf\system\form\builder\field\MultipleSelectionFormField;
 use wcf\system\form\builder\field\TextFormField;
 use wcf\system\form\builder\field\user\UserFormField;
 use wcf\system\form\builder\field\validation\FormFieldValidationError;
 use wcf\system\form\builder\field\validation\FormFieldValidator;
-use wcf\system\form\builder\IFormDocument;
+use wcf\system\form\builder\field\wysiwyg\WysiwygAttachmentFormField;
+use wcf\system\form\builder\field\wysiwyg\WysiwygFormField;
 use wcf\system\page\PageLocationManager;
 use wcf\system\WCF;
 
@@ -34,9 +37,9 @@ use wcf\system\WCF;
  * @copyright   2001-2025 WoltLab GmbH
  * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  *
- * @extends AbstractFormBuilderForm<Conversation>
+ * @extends AbstractDatabaseObjectBuilderForm<Conversation, ConversationBuilder>
  */
-class ConversationAddForm extends AbstractFormBuilderForm
+class ConversationAddForm extends AbstractDatabaseObjectBuilderForm
 {
     use TConversationForm;
 
@@ -55,15 +58,10 @@ class ConversationAddForm extends AbstractFormBuilderForm
      */
     public $neededPermissions = ['user.conversation.canUseConversation'];
 
-    /**
-     * @inheritDoc
-     */
-    public $objectActionClass = ConversationAction::class;
-
     protected ?UserProfile $user = null;
 
     #[\Override]
-    public function readData()
+    public function readData(): void
     {
         parent::readData();
 
@@ -90,7 +88,7 @@ class ConversationAddForm extends AbstractFormBuilderForm
     }
 
     #[\Override]
-    public function createForm()
+    protected function createForm(): void
     {
         parent::createForm();
 
@@ -110,10 +108,20 @@ class ConversationAddForm extends AbstractFormBuilderForm
                         ->label('wcf.global.subject')
                         ->maximumLength(255)
                         ->censorship()
-                        ->required(),
+                        ->required()
+                        ->saveValueCallback(static function (ConversationBuilder $builder, IFormField $field) {
+                            $builder->setSubject((string)$field->getSaveValue());
+                        }),
                     BooleanFormField::create('isDraft')
-                        ->label('wcf.conversation.form.isDraft'),
+                        ->label('wcf.conversation.form.isDraft')
+                        ->saveValueCallback(static function (ConversationBuilder $builder, IFormField $field) {
+                            $builder->setIsDraft((bool)$field->getSaveValue());
+                        }),
                 ]),
+            // The save value callbacks of the participant fields are applied in
+            // the order of the fields: the groups are merged into the users
+            // selected before and invisible participants exclude the
+            // participants.
             FormContainer::create('participantsContainer')
                 ->label('wcf.conversation.participants')
                 ->appendChildren([
@@ -122,13 +130,25 @@ class ConversationAddForm extends AbstractFormBuilderForm
                         ->maximumMultiples(WCF::getSession()->getPermission('user.conversation.maxParticipants'))
                         ->addValidator($this->getParticipantsValidator())
                         ->addValidator($this->getMaximumParticipantsValidator())
-                        ->value($this->user !== null ? [$this->user->userID] : []),
+                        ->value($this->user !== null ? [$this->user->userID] : [])
+                        ->saveValueCallback(static function (ConversationBuilder $builder, UserFormField $field) {
+                            $builder->setParticipantIDs(\array_column($field->getUsers(), 'userID'));
+                        })
+                        ->loadValueCallback(static function (Conversation $object, IFormField $field) {
+                            $field->value(self::getDraftParticipantIDs($object, 'participants'));
+                        }),
                     MultipleSelectionFormField::create('participantGroups')
                         ->label('wcf.conversation.participantGroups')
                         ->available(WCF::getSession()->hasPermission('user.conversation.canAddGroupParticipants')
                             && \count($groupParticipants) > 0)
                         ->filterable(\count($groupParticipants) > 20)
-                        ->options($groupParticipants),
+                        ->options($groupParticipants)
+                        ->saveValueCallback(function (ConversationBuilder $builder, IFormField $field) {
+                            $builder->setParticipantIDs(\array_unique(\array_merge(
+                                $builder->participantIDs ?? [],
+                                $this->getUserByGroups($field->getSaveValue() ?: [])
+                            )));
+                        }),
                     UserFormField::create('invisibleParticipants')
                         ->label('wcf.conversation.invisibleParticipants')
                         ->description('wcf.conversation.invisibleParticipants.description')
@@ -165,7 +185,13 @@ class ConversationAddForm extends AbstractFormBuilderForm
                                     }
                                 }
                             )
-                        ),
+                        )
+                        ->saveValueCallback(static function (ConversationBuilder $builder, UserFormField $field) {
+                            $builder->setInvisibleParticipantIDs(\array_column($field->getUsers(), 'userID'));
+                        })
+                        ->loadValueCallback(static function (Conversation $object, IFormField $field) {
+                            $field->value(self::getDraftParticipantIDs($object, 'invisibleParticipants'));
+                        }),
                     MultipleSelectionFormField::create('invisibleParticipantGroups')
                         ->label('wcf.conversation.invisibleParticipantGroups')
                         ->available(
@@ -174,130 +200,106 @@ class ConversationAddForm extends AbstractFormBuilderForm
                                 && \count($groupParticipants) > 0
                         )
                         ->filterable(\count($groupParticipants) > 20)
-                        ->options($groupParticipants),
+                        ->options($groupParticipants)
+                        ->saveValueCallback(function (ConversationBuilder $builder, IFormField $field) {
+                            $builder->setInvisibleParticipantIDs(\array_unique(\array_merge(
+                                $builder->invisibleParticipantIDs ?? [],
+                                \array_diff(
+                                    $this->getUserByGroups($field->getSaveValue() ?: []),
+                                    $builder->participantIDs ?? []
+                                )
+                            )));
+                        }),
                     BooleanFormField::create('participantCanInvite')
                         ->label('wcf.conversation.participantCanInvite')
-                        ->available(WCF::getSession()->hasPermission('user.conversation.canSetCanInvite')),
+                        ->available(WCF::getSession()->hasPermission('user.conversation.canSetCanInvite'))
+                        ->saveValueCallback(static function (ConversationBuilder $builder, IFormField $field) {
+                            $builder->setParticipantCanInvite((bool)$field->getSaveValue());
+                        }),
                 ]),
-            WysiwygFormContainer::create('message')
-                ->label('wcf.conversation.message')
-                ->messageObjectType('com.woltlab.wcf.conversation.message')
-                ->attachmentData('com.woltlab.wcf.conversation.message')
-                ->supportMentions()
-                ->supportQuotes()
-                ->required(),
+            $this->createMessageContainer(),
         ]);
     }
 
-    #[\Override]
-    public function save()
+    protected function createMessageContainer(): WysiwygFormContainer
     {
-        $this->additionalFields = [
-            'time' => \TIME_NOW,
-            'userID' => WCF::getUser()->userID,
-            'username' => WCF::getUser()->username,
-        ];
+        $container = WysiwygFormContainer::create('message')
+            ->label('wcf.conversation.message')
+            ->messageObjectType('com.woltlab.wcf.conversation.message')
+            ->attachmentData('com.woltlab.wcf.conversation.message', objectID: $this->getAttachmentObjectID())
+            ->supportMentions()
+            ->supportQuotes()
+            ->required();
 
-        parent::save();
+        $container->getWysiwygField()
+            ->saveValueCallback(static function (ConversationBuilder $builder, WysiwygFormField $field) {
+                $builder->getMessageBuilder()->setHtmlInputProcessor($field->getHtmlInputProcessor());
+            })
+            ->loadValueCallback(static function (Conversation $object, IFormField $field) {
+                $field->value($object->getFirstMessage()?->message);
+            });
+        $container->getAttachmentField()->saveValueCallback(
+            static function (ConversationBuilder $builder, WysiwygAttachmentFormField $field) {
+                $builder->getMessageBuilder()->setAttachmentHandler($field->getAttachmentHandler());
+            }
+        );
+
+        return $container;
+    }
+
+    /**
+     * Returns the id of the message whose attachments are edited, `null` when
+     * creating a new conversation.
+     */
+    protected function getAttachmentObjectID(): ?int
+    {
+        return null;
     }
 
     #[\Override]
-    protected function finalizeForm()
+    protected function getDatabaseObjectBuilder(): ConversationBuilder
     {
-        parent::finalizeForm();
+        if ($this->formObject !== null) {
+            return ConversationBuilder::forUpdate($this->formObject);
+        }
 
-        $this->form->getDataHandler()
-            ->addProcessor(
-                new CustomFormDataProcessor('messageProcessor', static function (IFormDocument $document, array $parameters) {
-                    unset($parameters['data']['message']);
-
-                    return $parameters;
-                }, static function (IFormDocument $document, array $data, IStorableObject $object) {
-                    \assert($object instanceof Conversation);
-                    $data['message'] = $object->getFirstMessage()->message;
-
-                    return $data;
-                })
-            )
-            ->addProcessor(
-                new CustomFormDataProcessor(
-                    'participantsProcessor',
-                    function (IFormDocument $document, array $parameters) {
-                        $participants = $parameters['participants'] ?? [];
-                        $invisibleParticipants = $parameters['invisibleParticipants'] ?? [];
-
-                        if (isset($parameters['participantGroups'])) {
-                            $groupIDs = $parameters['participantGroups'];
-                            $participants = \array_unique(
-                                \array_merge(
-                                    $participants,
-                                    $this->getUserByGroups($groupIDs)
-                                )
-                            );
-                        }
-
-                        if (isset($parameters['invisibleParticipantGroups'])) {
-                            $groupIDs = $parameters['invisibleParticipantGroups'];
-                            $userIDs = $this->getUserByGroups($groupIDs);
-
-                            $invisibleParticipants = \array_unique(
-                                \array_merge(
-                                    $invisibleParticipants,
-                                    // filtere all users that are already in participants
-                                    \array_diff($userIDs, $participants)
-                                )
-                            );
-                        }
-
-                        $parameters['participants'] = $participants;
-                        $parameters['invisibleParticipants'] = $invisibleParticipants;
-
-                        return $parameters;
-                    }
-                )
-            )
-            ->addProcessor(
-                new CustomFormDataProcessor(
-                    'draftDataProcessor',
-                    static function (IFormDocument $document, array $parameters) {
-                        if ($parameters['data']['isDraft']) {
-                            $parameters['data']['draftData'] = \serialize([
-                                'participants' => $parameters['participants'] ?? [],
-                                'invisibleParticipants' => $parameters['invisibleParticipants'] ?? [],
-                            ]);
-
-                            unset($parameters['participants'], $parameters['invisibleParticipants']);
-                        } else {
-                            $parameters['data']['draftData'] = \serialize([]);
-                        }
-
-                        return $parameters;
-                    },
-                    static function (IFormDocument $document, array $data, IStorableObject $object) {
-                        \assert($object instanceof Conversation);
-
-                        $draftData = @\unserialize($object->draftData);
-
-                        $data['participants'] = $draftData['participants'];
-                        $data['invisibleParticipants'] = $draftData['invisibleParticipants'];
-
-                        return $data;
-                    }
-                )
-            );
+        return ConversationBuilder::forCreate()
+            ->setTime(\TIME_NOW)
+            ->setUserID(WCF::getUser()->userID)
+            ->setUsername(WCF::getUser()->username);
     }
 
     #[\Override]
-    public function saved()
+    protected function getCommand(DatabaseObjectBuilder $builder): callable
+    {
+        if ($builder->isUpdate()) {
+            return new UpdateConversation($builder);
+        }
+
+        return new CreateConversation($builder);
+    }
+
+    /**
+     * @param 'participants'|'invisibleParticipants' $type
+     * @return int[]
+     */
+    private static function getDraftParticipantIDs(Conversation $conversation, string $type): array
+    {
+        $draftData = @\unserialize($conversation->draftData ?? '');
+        if (!\is_array($draftData)) {
+            return [];
+        }
+
+        return $draftData[$type] ?? [];
+    }
+
+    #[\Override]
+    public function saved(): void
     {
         parent::saved();
 
-        if ($this->formAction === 'create') {
-            $conversation = $this->objectAction->getReturnValues()['returnValues'];
-            \assert($conversation instanceof Conversation);
-        } else {
-            $conversation = new Conversation($this->formObject->conversationID);
-        }
+        $conversation = $this->object;
+        \assert($conversation instanceof Conversation);
 
         if ($conversation->isDraft === 0) {
             FloodControl::getInstance()->registerContent('com.woltlab.wcf.conversation');

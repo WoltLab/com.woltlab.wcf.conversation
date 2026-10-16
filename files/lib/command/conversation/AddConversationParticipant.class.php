@@ -3,7 +3,7 @@
 namespace wcf\command\conversation;
 
 use wcf\data\conversation\Conversation;
-use wcf\data\conversation\ConversationAction;
+use wcf\data\conversation\ConversationBuilder;
 use wcf\system\log\modification\ConversationModificationLogHandler;
 
 /**
@@ -34,18 +34,17 @@ final class AddConversationParticipant
             return;
         }
 
+        $builder = ConversationBuilder::forUpdate($this->conversation);
         if ($this->conversation->isDraft === 1) {
             $draftData = \unserialize($this->conversation->draftData);
-            $draftData['participants'] = \array_merge($draftData['participants'], $this->participants);
-            $data = ['data' => ['draftData' => \serialize($draftData)]];
+            $builder->setParticipantIDs(\array_merge($draftData['participants'], $this->participants));
         } else {
-            $data = [
-                'participants' => $this->participants,
-                'visibility' => $this->messageVisibility,
-            ];
+            $builder
+                ->setParticipantIDs($this->participants)
+                ->setMessageVisibility($this->messageVisibility ?? 'all');
         }
 
-        (new ConversationAction([$this->conversation], 'update', $data))->executeAction();
+        new UpdateConversation($builder)();
 
         ConversationModificationLogHandler::getInstance()->addParticipants($this->conversation, $this->participants);
     }

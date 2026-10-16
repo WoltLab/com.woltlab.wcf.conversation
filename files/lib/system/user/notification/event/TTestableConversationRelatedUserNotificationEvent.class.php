@@ -2,8 +2,9 @@
 
 namespace wcf\system\user\notification\event;
 
+use wcf\command\conversation\CreateConversation;
 use wcf\data\conversation\Conversation;
-use wcf\data\conversation\ConversationAction;
+use wcf\data\conversation\ConversationBuilder;
 use wcf\data\conversation\message\ConversationMessage;
 use wcf\data\conversation\message\ConversationMessageAction;
 use wcf\data\user\UserProfile;
@@ -20,18 +21,16 @@ trait TTestableConversationRelatedUserNotificationEvent
 {
     public static function createTestConversation(UserProfile $conversationAuthor, UserProfile $participant): Conversation
     {
-        return (new ConversationAction([], 'create', [
-            'data' => [
-                'subject' => 'Test Conversation Subject',
-                'time' => \TIME_NOW,
-                'userID' => $conversationAuthor->userID,
-                'username' => $conversationAuthor->username,
-            ],
-            'messageData' => [
-                'message' => 'Test Conversation Message',
-            ],
-            'participants' => [$participant->userID],
-        ]))->executeAction()['returnValues'];
+        $builder = ConversationBuilder::forCreate()
+            ->setSubject('Test Conversation Subject')
+            ->setTime(\TIME_NOW)
+            ->setUserID($conversationAuthor->userID)
+            ->setUsername($conversationAuthor->username)
+            ->setParticipantIDs([$participant->userID]);
+        $builder->getMessageBuilder()
+            ->setMessage('Test Conversation Message');
+
+        return new CreateConversation($builder)();
     }
 
     public static function createTestConversationMessage(UserProfile $conversationAuthor, UserProfile $messageAuthor): ConversationMessage

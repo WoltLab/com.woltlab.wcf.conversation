@@ -2,10 +2,12 @@
 
 namespace wcf\data\conversation\message;
 
+use wcf\command\conversation\RebuildConversations;
+use wcf\command\conversation\UpdateConversationParticipantCounts;
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\data\conversation\Conversation;
 use wcf\data\conversation\ConversationAction;
-use wcf\data\conversation\ConversationEditor;
+use wcf\data\conversation\ConversationBuilder;
 use wcf\data\DatabaseObject;
 use wcf\data\IAttachmentMessageQuickReplyAction;
 use wcf\data\IMessageInlineEditorAction;
@@ -104,11 +106,14 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
 
         // get conversation
         $conversation = ($this->parameters['conversation'] ?? new Conversation($message->conversationID));
-        $conversationEditor = new ConversationEditor($conversation);
 
         if (($this->parameters['isFirstPost'] ?? false) === false) {
             // update last message
-            $conversationEditor->addMessage($message);
+            ConversationBuilder::forUpdate($conversation)
+                ->setLastPost($message->time, $message->userID, $message->username)
+                ->incrementReplies(1)
+                ->incrementAttachments($message->attachments)
+                ->update();
 
             $participant = $conversation->getOtherParticipant($message->userID);
             if ($participant !== null && $participant->isInvisible === 1) {
@@ -120,7 +125,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
                 $statement = WCF::getDB()->prepare($sql);
                 $statement->execute([$message->userID, $conversation->conversationID]);
 
-                $conversationEditor->updateParticipantCount();
+                new UpdateConversationParticipantCounts([$conversation->conversationID])();
             }
 
             // reset visibility if it was hidden but not left
@@ -244,10 +249,7 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         }
 
         // rebuild conversations
-        if ($conversationIDs !== []) {
-            $conversationAction = new ConversationAction($conversationIDs, 'rebuild');
-            $conversationAction->executeAction();
-        }
+        new RebuildConversations($conversationIDs)();
 
         if ($this->objectIDs !== []) {
             // delete notifications
