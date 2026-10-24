@@ -173,7 +173,6 @@ class ConversationMessageAction extends AbstractDatabaseObjectAction implements
         if (isset($this->parameters['removeQuoteIDs']) && $this->parameters['removeQuoteIDs'] !== []) {
             MessageQuoteManager::getInstance()->markQuotesForRemoval($this->parameters['removeQuoteIDs']);
         }
-        MessageQuoteManager::getInstance()->removeMarkedQuotes();
 
         // fire notification event
         if (($this->parameters['isFirstPost'] ?? false) === false && $conversation->isDraft === 0) {
