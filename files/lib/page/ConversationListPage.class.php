@@ -68,7 +68,7 @@ final class ConversationListPage extends AbstractListViewPage
 
     private function getConversationCount(string $filter): int
     {
-        return (new UserConversationList(WCF::getUser()->userID, $filter))->countObjects();
+        return new UserConversationList(WCF::getUser()->userID, $filter)->countObjects();
     }
 
     #[\Override]

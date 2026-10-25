@@ -86,6 +86,6 @@ final class DeleteConversations
             return;
         }
 
-        (new ConversationMessageAction($messageList->getObjectIDs(), 'delete'))->executeAction();
+        new ConversationMessageAction($messageList->getObjectIDs(), 'delete')->executeAction();
     }
 }

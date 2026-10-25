@@ -203,11 +203,11 @@ class ConversationAction extends AbstractDatabaseObjectAction implements IVisita
             }
 
             if ($messageIDs !== []) {
-                (new ConversationMessageAction(
+                new ConversationMessageAction(
                     $messageIDs,
                     'update',
                     $this->parameters['messageData']
-                ))->executeAction();
+                )->executeAction();
             }
         }
 

@@ -37,7 +37,7 @@ trait TTestableConversationRelatedUserNotificationEvent
     {
         $conversation = self::createTestConversation($conversationAuthor, $messageAuthor);
 
-        return (new ConversationMessageAction([], 'create', [
+        return new ConversationMessageAction([], 'create', [
             'data' => [
                 'conversationID' => $conversation->conversationID,
                 'message' => 'Test Conversation Message Message',
@@ -46,6 +46,6 @@ trait TTestableConversationRelatedUserNotificationEvent
                 'username' => $messageAuthor->username,
             ],
             'conversation' => $conversation,
-        ]))->executeAction()['returnValues'];
+        ])->executeAction()['returnValues'];
     }
 }

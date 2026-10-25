@@ -3,7 +3,7 @@ $finder = PhpCsFixer\Finder::create()
     ->exclude('*/vendor/*')
     ->in(__DIR__ . '/files/');
 
-return (new PhpCsFixer\Config())
+return new PhpCsFixer\Config()
     ->setRiskyAllowed(true)
     ->setRules([
         '@PSR1' => true,
