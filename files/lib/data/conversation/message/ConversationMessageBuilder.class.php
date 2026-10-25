@@ -2,7 +2,6 @@
 
 namespace wcf\data\conversation\message;
 
-use wcf\data\DatabaseObject;
 use wcf\data\DatabaseObjectBuilder;
 use wcf\system\attachment\AttachmentHandler;
 use wcf\system\html\input\HtmlInputProcessor;
@@ -124,22 +123,22 @@ final class ConversationMessageBuilder extends DatabaseObjectBuilder
     }
 
     #[\Override]
-    protected function afterCreate(DatabaseObject $object): void
+    protected function afterCreate(): void
     {
         if (isset($this->htmlInputProcessor)) {
-            $this->registerEmbeddedObjects($this->htmlInputProcessor, $object);
+            $this->registerEmbeddedObjects($this->htmlInputProcessor, $this->getObject());
         }
 
         if (isset($this->attachmentHandler)) {
-            $this->attachmentHandler->updateObjectID($object->messageID);
+            $this->attachmentHandler->updateObjectID($this->getObject()->messageID);
         }
     }
 
     #[\Override]
-    protected function afterUpdate(DatabaseObject $object): void
+    protected function afterUpdate(): void
     {
         if (isset($this->htmlInputProcessor)) {
-            $this->registerEmbeddedObjects($this->htmlInputProcessor, $object);
+            $this->registerEmbeddedObjects($this->htmlInputProcessor, $this->getObject());
         }
     }
 

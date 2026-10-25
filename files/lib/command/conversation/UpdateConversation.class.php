@@ -26,7 +26,7 @@ final class UpdateConversation
 
     public function __invoke(): Conversation
     {
-        $oldConversation = $this->builder->getObject();
+        $oldConversation = $this->builder->getExistingObject();
         $addedParticipantIDs = \array_merge(
             $this->builder->participantIDs ?? [],
             $this->builder->invisibleParticipantIDs ?? []

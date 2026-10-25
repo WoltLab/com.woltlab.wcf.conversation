@@ -4,7 +4,6 @@ namespace wcf\data\conversation;
 
 use wcf\command\conversation\InsertConversationParticipants;
 use wcf\data\conversation\message\ConversationMessageBuilder;
-use wcf\data\DatabaseObject;
 use wcf\data\DatabaseObjectBuilder;
 
 /**
@@ -206,7 +205,7 @@ final class ConversationBuilder extends DatabaseObjectBuilder
     public function getMessageBuilder(): ConversationMessageBuilder
     {
         if (!isset($this->messageBuilder)) {
-            $firstMessage = $this->object?->getFirstMessage();
+            $firstMessage = $this->existingObject?->getFirstMessage();
 
             $this->messageBuilder = $firstMessage !== null
                 ? ConversationMessageBuilder::forUpdate($firstMessage)
@@ -217,40 +216,40 @@ final class ConversationBuilder extends DatabaseObjectBuilder
     }
 
     #[\Override]
-    protected function afterCreate(DatabaseObject $object): void
+    protected function afterCreate(): void
     {
         if (isset($this->messageBuilder)) {
-            $this->createFirstMessage($object);
+            $this->createFirstMessage($this->getObject());
         }
 
-        if ($object->isDraft === 1) {
-            $this->saveDraftParticipants($object);
+        if ($this->getObject()->isDraft === 1) {
+            $this->saveDraftParticipants($this->getObject());
         } else {
-            $this->insertParticipants($object, true);
+            $this->insertParticipants($this->getObject(), true);
         }
     }
 
     #[\Override]
-    protected function afterUpdate(DatabaseObject $object): void
+    protected function afterUpdate(): void
     {
         if (isset($this->messageBuilder)) {
             if ($this->messageBuilder->isUpdate()) {
                 $this->messageBuilder->update();
             } else {
-                $this->createFirstMessage($object);
+                $this->createFirstMessage($this->getObject());
             }
         }
 
-        if ($object->isDraft === 1) {
+        if ($this->getObject()->isDraft === 1) {
             if (isset($this->participantIDs) || isset($this->invisibleParticipantIDs)) {
-                $this->saveDraftParticipants($object);
+                $this->saveDraftParticipants($this->getObject());
             }
         } else {
-            $isSent = $this->getObject()->isDraft === 1;
-            $this->insertParticipants($object, $isSent);
+            $isSent = $this->getExistingObject()->isDraft === 1;
+            $this->insertParticipants($this->getObject(), $isSent);
 
             if ($isSent) {
-                ConversationBuilder::forUpdate($object)
+                ConversationBuilder::forUpdate($this->getObject())
                     ->setDraftData([])
                     ->update();
             }
