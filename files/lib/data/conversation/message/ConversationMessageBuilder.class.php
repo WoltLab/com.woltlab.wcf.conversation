@@ -145,7 +145,7 @@ final class ConversationMessageBuilder extends DatabaseObjectBuilder
     private function registerEmbeddedObjects(HtmlInputProcessor $processor, ConversationMessage $message): void
     {
         $processor->setObjectID($message->messageID);
-        ConversationMessageBuilder::forUpdate($message)
+        $this->object = ConversationMessageBuilder::forUpdate($message)
             ->setHasEmbeddedObjects(
                 MessageEmbeddedObjectManager::getInstance()->registerObjects($processor)
             )

@@ -227,6 +227,8 @@ final class ConversationBuilder extends DatabaseObjectBuilder
         } else {
             $this->insertParticipants($this->getObject(), true);
         }
+
+        $this->reloadObject();
     }
 
     #[\Override]
@@ -254,6 +256,17 @@ final class ConversationBuilder extends DatabaseObjectBuilder
                     ->update();
             }
         }
+
+        $this->reloadObject();
+    }
+
+    /**
+     * Reloads the object to reflect the changes made by the follow-up writes
+     * in `afterCreate()` and `afterUpdate()`.
+     */
+    private function reloadObject(): void
+    {
+        $this->object = new Conversation($this->getObject()->conversationID);
     }
 
     private function createFirstMessage(Conversation $conversation): void
