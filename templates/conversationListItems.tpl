@@ -61,13 +61,13 @@
 
 			{hascontent}
 				<div class="discussionList__item__labels">
-					<ul class="labelList">
+					<div class="labelBadgeList">
 						{content}
 							{foreach from=$conversation->getAssignedLabels() item=label}
-								<li><span class="badge label{if $label->cssClassName} {$label->cssClassName}{/if}">{$label->label}</span></li>
+								{unsafe:$label->render()}
 							{/foreach}
 						{/content}
-					</ul>
+					</div>
 				</div>
 			{/hascontent}
 

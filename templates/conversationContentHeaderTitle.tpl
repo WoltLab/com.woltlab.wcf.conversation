@@ -5,13 +5,13 @@
 		{hascontent}
 			<li>
 				{icon name='tags'}
-				<ul class="labelList">
+				<div class="labelBadgeInlineList">
 					{content}
 						{foreach from=$conversation->getAssignedLabels() item=label}
-							<li><span class="label badge{if $label->cssClassName} {$label->cssClassName}{/if}">{$label->label}</span></li>
+							{unsafe:$label->render()}
 						{/foreach}
 					{/content}
-				</ul>
+				</div>
 			</li>
 		{/hascontent}
 

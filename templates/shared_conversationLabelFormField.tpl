@@ -1,7 +1,7 @@
 <ul class="labelList jsOnly">
 	<li class="dropdown labelChooser">
 		<div class="dropdownToggle">
-			<span class="badge label">{lang}wcf.label.none{/lang}</span>
+			<span class="labelBadge">{lang}wcf.label.none{/lang}</span>
 		</div>
 		<div class="dropdownMenu">
 			<ul class="scrollableDropdownMenu">

@@ -97,7 +97,7 @@ class ConversationLabel extends DatabaseObject
         $title = StringUtil::encodeHTML($this->label);
 
         return <<<HTML
-            <span class="badge label{$cssClassName}">{$title}</span>
+            <span class="labelBadge{$cssClassName}">{$title}</span>
         HTML;
     }
 }

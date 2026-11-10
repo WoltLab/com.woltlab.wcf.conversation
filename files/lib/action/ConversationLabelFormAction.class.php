@@ -109,6 +109,7 @@ final class ConversationLabelFormAction implements RequestHandlerInterface
 
         $cssClassNameFormField = BadgeColorFormField::create('cssClassName')
             ->supportCustomClassName(false)
+            ->previewClassName('labelBadge')
             ->label('wcf.conversation.label.cssClassName')
             ->textReferenceNodeId($form->getPrefix() . 'label')
             ->defaultLabelText(WCF::getLanguage()->get('wcf.conversation.label.placeholder'))
