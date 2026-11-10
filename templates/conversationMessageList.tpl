@@ -21,7 +21,7 @@
 						
 						<ul class="messageStatus">
 							{if $conversation->isNewMessage($message)}
-								<li><span class="badge label newMessageBadge">{lang}wcf.message.new{/lang}</span></li>
+								<li><span class="badge newMessageBadge">{lang}wcf.message.new{/lang}</span></li>
 							{/if}
 							
 							{event name='messageStatus'}
