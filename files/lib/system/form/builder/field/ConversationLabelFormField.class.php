@@ -4,6 +4,8 @@ namespace wcf\system\form\builder\field;
 
 use wcf\data\conversation\label\ConversationLabel;
 use wcf\system\form\builder\field\validation\FormFieldValidationError;
+use wcf\util\JSON;
+use wcf\util\StringUtil;
 
 /**
  * Implementation of a form field to select a conversation label.
@@ -29,7 +31,7 @@ final class ConversationLabelFormField extends AbstractFormField
     /**
      * @inheritDoc
      */
-    protected $javaScriptDataHandlerModule = 'WoltLabSuite/Core/Form/Builder/Field/Value';
+    protected $javaScriptDataHandlerModule = 'WoltLabSuite/Core/Form/Builder/Field/Label';
 
     /**
      * @inheritDoc
@@ -74,6 +76,48 @@ final class ConversationLabelFormField extends AbstractFormField
     public function isInvertible(): bool
     {
         return $this->invertible;
+    }
+
+    /**
+     * Renders a `<woltlab-core-label-picker>` to select one of the labels.
+     *
+     * The selected value is `0` for no selection, `-1` for conversations without
+     * any label (requires the field to be invertible) or a label id. Invalid
+     * values are treated as no selection.
+     *
+     * @since 6.3
+     */
+    public function renderPicker(): string
+    {
+        $labels = [];
+        foreach ($this->labels as $label) {
+            $labels[] = [$label->labelID, $label->render()];
+        }
+
+        $value = (int)$this->getValue();
+        if ($value === -1 ? !$this->isInvertible() : !\array_key_exists($value, $this->labels)) {
+            $value = 0;
+        }
+
+        $attributes = [
+            'name' => $this->getPrefixedId(),
+            'id' => $this->getPrefixedId(),
+            'labels' => JSON::encode($labels),
+            'value' => $value,
+        ];
+
+        $html = '';
+        foreach ($attributes as $attribute => $attributeValue) {
+            $html .= \sprintf(' %s="%s"', $attribute, StringUtil::encodeHTML((string)$attributeValue));
+        }
+        if ($this->isRequired()) {
+            $html .= ' required';
+        }
+        if ($this->isInvertible()) {
+            $html .= ' invertible';
+        }
+
+        return "<woltlab-core-label-picker{$html}></woltlab-core-label-picker>";
     }
 
     #[\Override]
