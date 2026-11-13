@@ -13,6 +13,7 @@ use wcf\system\interaction\bulk\user\ConversationBulkInteractions;
 use wcf\system\interaction\user\ConversationInteractions;
 use wcf\system\listView\AbstractListView;
 use wcf\system\view\filter\AbstractFilter;
+use wcf\system\view\filter\exception\InvalidFilterValue;
 use wcf\system\view\filter\TextFilter;
 use wcf\system\view\filter\UserFilter;
 use wcf\system\listView\ListViewSortField;
@@ -161,26 +162,62 @@ final class ConversationListView extends AbstractListView
             {
                 return ConversationLabelFormField::create('label')
                     ->label($this->languageItem)
-                    ->labels(ConversationLabel::getUserLabels());
+                    ->labels(ConversationLabel::getUserLabels())
+                    ->invertible();
             }
 
             #[\Override]
             public function applyFilter(DatabaseObjectList $list, string $value): void
             {
+                $labels = ConversationLabel::getUserLabels();
+                $labelID = (int)$value;
+
+                if ($labelID === -1) {
+                    if ($labels !== []) {
+                        $list->getConditionBuilder()->add(
+                            "{$list->getDatabaseTableAlias()}.{$list->getDatabaseTableIndexName()} NOT IN (
+                                SELECT  conversationID
+                                FROM    wcf1_conversation_label_to_object
+                                WHERE   labelID IN (?)
+                            )",
+                            [\array_keys($labels)]
+                        );
+                    }
+
+                    return;
+                }
+
+                if (!isset($labels[$labelID])) {
+                    throw new InvalidFilterValue("Invalid value '{$value}' for filter '{$this->id}' given.");
+                }
+
                 $list->getConditionBuilder()->add(
                     "{$list->getDatabaseTableAlias()}.{$list->getDatabaseTableIndexName()} IN (
                         SELECT  conversationID
                         FROM    wcf1_conversation_label_to_object
                         WHERE   labelID = ?
                     )",
-                    [$value]
+                    [$labelID]
                 );
             }
 
             #[\Override]
             public function renderValue(string $value): string
             {
-                return ConversationLabel::getUserLabels()[$value]->label;
+                if ((int)$value === -1) {
+                    return WCF::getLanguage()->get('wcf.label.withoutSelection');
+                }
+
+                return ConversationLabel::getUserLabels()[(int)$value]->label;
+            }
+
+            #[\Override]
+            public function serializeValue(mixed $value): string
+            {
+                // `0` represents "no selection" and must not result in an active filter.
+                $labelID = (int)$value;
+
+                return $labelID === 0 ? '' : (string)$labelID;
             }
         };
     }

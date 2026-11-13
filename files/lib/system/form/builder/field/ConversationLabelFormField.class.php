@@ -21,6 +21,12 @@ final class ConversationLabelFormField extends AbstractFormField
     public array $labels = [];
 
     /**
+     * `true` if the value `-1` can be selected for conversations without any label
+     * @since 6.3
+     */
+    protected bool $invertible = false;
+
+    /**
      * @inheritDoc
      */
     protected $javaScriptDataHandlerModule = 'WoltLabSuite/Core/Form/Builder/Field/Value';
@@ -48,6 +54,28 @@ final class ConversationLabelFormField extends AbstractFormField
         return $this->labels;
     }
 
+    /**
+     * Sets if the value `-1` can be selected for conversations without any label.
+     *
+     * @since 6.3
+     */
+    public function invertible(bool $invertible = true): static
+    {
+        $this->invertible = $invertible;
+
+        return $this;
+    }
+
+    /**
+     * Returns `true` if the value `-1` can be selected for conversations without any label.
+     *
+     * @since 6.3
+     */
+    public function isInvertible(): bool
+    {
+        return $this->invertible;
+    }
+
     #[\Override]
     public function readValue()
     {
@@ -65,7 +93,12 @@ final class ConversationLabelFormField extends AbstractFormField
             if ($this->value <= 0) {
                 $this->addValidationError(new FormFieldValidationError('empty'));
             }
-        } elseif ($this->value > 0 && !\array_key_exists($this->value, $this->labels)) {
+        } elseif ($this->value === -1 && $this->isInvertible()) {
+            return;
+        } elseif (
+            $this->value < 0
+            || ($this->value > 0 && !\array_key_exists($this->value, $this->labels))
+        ) {
             $this->addValidationError(new FormFieldValidationError(
                 'invalidValue',
                 'wcf.global.form.error.noValidSelection'

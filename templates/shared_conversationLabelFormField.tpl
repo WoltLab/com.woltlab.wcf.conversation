@@ -17,8 +17,12 @@
 
 <noscript>
 	<select name="{$field->getPrefixedId()}">
+		<option value="0">{lang}wcf.label.none{/lang}</option>
+		{if $field->isInvertible()}
+			<option value="-1"{if $field->getValue() == -1} selected{/if}>{lang}wcf.label.withoutSelection{/lang}</option>
+		{/if}
 		{foreach from=$field->getLabels() item=label}
-			<option value="{$label->labelID}">{$label->label}</option>
+			<option value="{$label->labelID}"{if $field->getValue() == $label->labelID} selected{/if}>{$label->label}</option>
 		{/foreach}
 	</select>
 </noscript>
@@ -31,6 +35,9 @@
 		new FormBuilderFieldLabel(
 			'{unsafe:$field->getPrefixedId()|encodeJS}',
 			{if $field->getValue()}'{unsafe:$field->getValue()|encodeJS}'{else}null{/if},
+			{
+				showWithoutSelection: {if $field->isInvertible()}true{else}false{/if},
+			},
 		);
 	});
 </script>
