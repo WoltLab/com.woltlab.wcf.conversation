@@ -244,13 +244,6 @@ class ConversationPage extends MultipleLinkPage
         }
         $userIDs = \array_unique($userIDs);
 
-        // fetch special trophies
-        if (\MODULE_TROPHY === 1) {
-            if ($userIDs !== []) {
-                UserProfile::prepareSpecialTrophies($userIDs);
-            }
-        }
-
         if (\MODULE_USER_SIGNATURE === 1) {
             if ($userIDs !== []) {
                 SignatureCache::getInstance()->cacheUserSignature($userIDs);
