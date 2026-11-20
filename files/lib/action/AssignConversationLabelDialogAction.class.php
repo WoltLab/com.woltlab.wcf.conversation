@@ -16,6 +16,7 @@ use wcf\system\exception\PermissionDeniedException;
 use wcf\system\form\builder\field\MultipleSelectionFormField;
 use wcf\system\form\builder\Psr15DialogForm;
 use wcf\system\WCF;
+use wcf\util\HtmlString;
 
 /**
  * Action for assigning label to a conversation.
@@ -91,8 +92,8 @@ final class AssignConversationLabelDialogAction implements RequestHandlerInterfa
 
         $form->appendChildren([
             MultipleSelectionFormField::create('labelIDs')
-                ->options(
-                    \array_map(static fn(ConversationLabel $label) => $label->render(), $labels)
+                ->choices(
+                    \array_map(static fn(ConversationLabel $label) => HtmlString::fromSafeHtml($label->render()), $labels)
                 )
                 ->value($this->getSelectedLabelIDs($conversationIDs, \array_keys($labels))),
         ]);

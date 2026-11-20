@@ -142,7 +142,7 @@ class ConversationAddForm extends AbstractDatabaseObjectBuilderForm
                         ->available(WCF::getSession()->hasPermission('user.conversation.canAddGroupParticipants')
                             && \count($groupParticipants) > 0)
                         ->filterable(\count($groupParticipants) > 20)
-                        ->options($groupParticipants)
+                        ->choices($groupParticipants)
                         ->saveValueCallback(function (ConversationBuilder $builder, IFormField $field) {
                             $builder->setParticipantIDs(\array_unique(\array_merge(
                                 $builder->participantIDs ?? [],
@@ -200,7 +200,7 @@ class ConversationAddForm extends AbstractDatabaseObjectBuilderForm
                                 && \count($groupParticipants) > 0
                         )
                         ->filterable(\count($groupParticipants) > 20)
-                        ->options($groupParticipants)
+                        ->choices($groupParticipants)
                         ->saveValueCallback(function (ConversationBuilder $builder, IFormField $field) {
                             $builder->setInvisibleParticipantIDs(\array_unique(\array_merge(
                                 $builder->invisibleParticipantIDs ?? [],
